@@ -1,21 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import BuildingPlan from './Components/BuildingPlan'
+import Header from './Components/Header'
+import SmartDevices from './Components/SmartDevices'
+import SmartItem from './Components/SmartItem'
 import './App.css';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
 
-export default App;
+	static img = "https://discuss.reactjs.org/uploads/default/7/72c8c07aaf4c414d.png";
+
+	componentWillMount() {
+		this.setState({"devices": []})
+	}
+	addSmartDevice(x,y) {
+		console.log(x + " " + y);
+		let devices = this.state.devices;
+		devices.push(new SmartItem(x,y));
+		this.setState({"devices": devices}, () => console.log(this.state));
+	}
+
+	render() {
+
+		return (
+			<div> 
+				<Header />  
+				<BuildingPlan imgSrc={App.img} onAddSmartDevice={(x,y) => this.addSmartDevice(x,y)}/> 
+				<SmartDevices devices={this.state.devices}/> 
+			</div>
+
+			);
+		}
+	}
+
+	export default App;
