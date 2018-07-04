@@ -12,7 +12,8 @@ class SmartDevices extends Component {
 	    			key={item.key} 
 	    			x={item.x} 
 	    			y={item.y} 
-	    			imgSrc={this.props.imgSrc}/>
+	    			imgSrc={this.props.imgSrc}
+	    			onClick={this.props.onSmartDeviceClick}/>
 	    		)
 	    	}
     	</div>
