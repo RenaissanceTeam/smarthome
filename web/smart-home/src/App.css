@@ -1,9 +1,10 @@
 #plan {
-	display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 25%;
+	position: absolute;
+	height: 500px;
+	width: 1000px;
+	object-fit: cover;
 }
+
 
 #title {
 	padding-top: 40px;
@@ -14,4 +15,14 @@
 	display: block;
 	height: 100px;
 	background-color: #f2f2f2;
+}
+
+.smartItem {
+	height: 10px;
+	width: 10px;
+	position: absolute;
+}
+
+.smartDevices {
+	position: absolute;
 }

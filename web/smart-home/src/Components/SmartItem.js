@@ -3,13 +3,18 @@ import '../App.css'
 
 
 class SmartItem extends Component {
-  constructor(x,y) {
-  	super();
+  constructor(props) {
+  	console.log("SmartItem.js: props " + props)
+  	super(props);
+  	let x,y
+  	x = props.x
+  	y = props.y
   	console.log("create smart item at " + x + ", " + y);
   }
+
   render() {
-    return (
-    	<img className="smartItem" src={this.props.imgSrc} alt="" />
+    return ( 
+    		<img className="smartItem" src={this.props.imgSrc} alt="" style = {{ top: this.props.y, left: this.props.x }} />
     	);
   }
 }
