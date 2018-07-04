@@ -11,35 +11,11 @@ import './App.css';
 var shift = 1
 var generateKey = (pre) => `${ pre }_${ new Date().getTime() + shift++ }`;
 
-class App extends Component {
-
-	constructor(props) {
-		super(props)
-		this.addSmartDevice = this.addSmartDevice.bind(this)
-		this.saveInfoFromPanel = this.saveInfoFromPanel.bind(this)
-	}
-	
-	componentWillMount() {
-		this.setState({"devices": []})
-		this.setState({"infoPanelProps": null})
-	}
-
-	addSmartDevice({x,y}) {
-		console.log("App.js: addSmartDevice " + x + " " + y);
-		let devices = this.state.devices;
-		let newDevice = {
-			"key": generateKey("device"),
-			"x": x,
-			"y": y,
-
-		}
-		devices.push(newDevice);
-		this.setState({"devices": devices}, () => console.log(this.state));
-		this.setState({"infoPanelProps": 
-			{
+function getPropsForSmartDevice(device) {
+		return {
 				type: "device",
-				title: "New smart device",
-				key: newDevice.key,
+				title: device.key,
+				key: device.key,
 				props: [
 					{
 						"key": generateKey("prop"),
@@ -58,13 +34,51 @@ class App extends Component {
 					}
 				]
 			}
-		})
+	}
+class App extends Component {
+
+	constructor(props) {
+		super(props)
+		this.addSmartDevice = this.addSmartDevice.bind(this)
+		this.saveInfoFromPanel = this.saveInfoFromPanel.bind(this)
+		this.onSmartDeviceClick = this.onSmartDeviceClick.bind(this)
+
+	}
+	
+	
+
+	componentWillMount() {
+		this.setState({"devices": []})
+		this.setState({"infoPanelProps": null})
+	}
+
+	addSmartDevice({x,y}) {
+		console.log("App.js: addSmartDevice " + x + " " + y);
+		let devices = this.state.devices;
+		let newDevice = {
+			"key": "device" + x + "-" + y,
+			"x": x,
+			"y": y,
+
+		}
+		devices.push(newDevice);
+		this.setState({"devices": devices}, () => console.log(this.state));
+		this.setState({"infoPanelProps":  getPropsForSmartDevice(newDevice) })
 	}
 
 	saveInfoFromPanel() {
 		console.log("Save info");
 		this.setState({
 			"infoPanelProps": null
+		})
+	}
+
+	onSmartDeviceClick(x,y) {
+
+		let clickedDevice = this.state.devices.filter(device => (device.x === x && device.y === y))[0]
+
+		this.setState({
+			"infoPanelProps": getPropsForSmartDevice(clickedDevice)
 		})
 	}
 
@@ -85,7 +99,7 @@ class App extends Component {
 
 				<div style={{position: "relative", left: "35%", top: "160px", margin: "0 0 0 -500px"}}>  
 					<BuildingPlan imgSrc={plan} onClick={this.addSmartDevice}/> 
-					<SmartDevices devices={this.state.devices} imgSrc={device}/> 
+					<SmartDevices devices={this.state.devices} imgSrc={device} onSmartDeviceClick={this.onSmartDeviceClick}/> 
 				</div>
 			</div>
 

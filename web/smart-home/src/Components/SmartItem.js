@@ -14,7 +14,8 @@ class SmartItem extends Component {
 
   render() {
     return ( 
-    		<img className="smartItem" src={this.props.imgSrc} alt="" style = {{ top: this.props.y, left: this.props.x }} />
+    		<img className="smartItem" src={this.props.imgSrc} alt="" style = {{ top: this.props.y, left: this.props.x }} 
+    		    onClick={e => this.props.onClick(this.props.x, this.props.y)}/>
     	);
   }
 }

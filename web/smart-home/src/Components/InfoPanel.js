@@ -26,10 +26,7 @@ class InfoPanel extends Component {
   	}
     return (
     	<div id="infoPanel">
-	    	<PropertyBlock type={Constants.HEADER} title="Add items" />
-	    	<PropertyBlock type={Constants.INPUT_BLOCK} title="Some prop" />
-	    	<PropertyBlock type={Constants.CHECKABLE} title="Some prop" />
-
+	    	
 	    	<input type="submit"/>
     	</div>
     	)
