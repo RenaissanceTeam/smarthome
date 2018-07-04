@@ -26,3 +26,14 @@
 .smartDevices {
 	position: absolute;
 }
+
+#infoPanel {
+	height: 100vh;
+	width: 300px;
+	float: right;
+	border: 1px solid black;
+}
+
+.inputField {
+	padding-left: 30px;
+} 
