@@ -10,6 +10,7 @@ import device from './res/img/device.png'
 import './App.css';
 var shift = 1
 var generateKey = (pre) => `${ pre }_${ new Date().getTime() + shift++ }`;
+var generateDeviceKey = (x,y) =>  "device" + x + "-" + y;
 
 function getPropsForSmartDevice(device) {
 		return {
@@ -42,9 +43,8 @@ class App extends Component {
 		this.addSmartDevice = this.addSmartDevice.bind(this)
 		this.saveInfoFromPanel = this.saveInfoFromPanel.bind(this)
 		this.onSmartDeviceClick = this.onSmartDeviceClick.bind(this)
-
+		
 	}
-	
 	
 
 	componentWillMount() {
@@ -53,14 +53,18 @@ class App extends Component {
 	}
 
 	addSmartDevice({x,y}) {
+		if (this.state.infoPanelProps != null) {
+			console.log("there is a not completely set up device")
+			return;
+		}
 		console.log("App.js: addSmartDevice " + x + " " + y);
 		let devices = this.state.devices;
 		let newDevice = {
-			"key": "device" + x + "-" + y,
+			"key": generateDeviceKey(x,y),
 			"x": x,
 			"y": y,
-
 		}
+
 		devices.push(newDevice);
 		this.setState({"devices": devices}, () => console.log(this.state));
 		this.setState({"infoPanelProps":  getPropsForSmartDevice(newDevice) })
@@ -82,6 +86,7 @@ class App extends Component {
 		})
 	}
 
+
 	render() {
 
 		return (
@@ -99,7 +104,8 @@ class App extends Component {
 
 				<div style={{position: "relative", left: "35%", top: "160px", margin: "0 0 0 -500px"}}>  
 					<BuildingPlan imgSrc={plan} onClick={this.addSmartDevice}/> 
-					<SmartDevices devices={this.state.devices} imgSrc={device} onSmartDeviceClick={this.onSmartDeviceClick}/> 
+					<SmartDevices devices={this.state.devices} imgSrc={device} onSmartDeviceClick={this.onSmartDeviceClick} 
+					onDrag={this.onSmartDeviceDrag} onDragEnd={this.onSmartDeviceDrag}/> 
 				</div>
 			</div>
 
