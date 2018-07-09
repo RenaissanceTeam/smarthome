@@ -35,7 +35,7 @@ function getPropsForSmartDevice(device) {
 					},
 					{
 						"key": generateKey("prop"),
-						"title": "prop3",
+						"title": "prop4",
 						"type": Constants.CHECKABLE
 					}
 				]

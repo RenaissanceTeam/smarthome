@@ -12,13 +12,11 @@ class InfoPanel extends Component {
 		this.onPropertyChanged = this.onPropertyChanged.bind(this)
 		this.getPropValueFromState = this.getPropValueFromState.bind(this)
 		
-		console.log("DEVICE " + this.props.device);
 		this.info = []
 		this.lastDevice = null
 	}
 
 	parseInfoFromPanel() {
-		console.log("info in panel before OK" + this.info);
 		this.props.onOkClicked(this.info)
 	}
 
@@ -52,7 +50,6 @@ class InfoPanel extends Component {
 
 		if (this.props.info.type === "device") {
 			let device = this.props.info
-			console.log(this.getPropValueFromState("prop2"));
 			return (
 				<div id="infoPanel">
 				<PropertyBlock type={Constants.HEADER} title={device.title} />
