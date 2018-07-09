@@ -14,12 +14,11 @@ class PropertyBlock extends Component {
     } 
 
     if (this.props.type === Constants.INPUT_BLOCK) {
-
       return ( 
           <div className="propertyBlock"> 
             
             <p> {this.props.title}  </p>
-            <p className = "inputField"> <input type="text"/> </p>
+            <p className = "inputField"> <input type="text" onChange={(e) => this.props.onChange(e.target.value)} value= {this.props.value}/> </p>
            </div>
         );
     }
@@ -29,7 +28,7 @@ class PropertyBlock extends Component {
           <div className="propertyBlock"> 
             
             <p> {this.props.title}  </p>
-            <p className = "inputField"> <input type="checkbox"/> </p>
+            <p className = "inputField"> <input type="checkbox" onChange={(e) => this.props.onChange(e.target.value)}/> </p>
            </div>
       );
     }

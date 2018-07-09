@@ -32,10 +32,24 @@ function getPropsForSmartDevice(device) {
 						"key": generateKey("prop"),
 						"title": "prop3",
 						"type": Constants.CHECKABLE
+					},
+					{
+						"key": generateKey("prop"),
+						"title": "prop3",
+						"type": Constants.CHECKABLE
 					}
 				]
 			}
 	}
+
+function getDefaultPropsValuesSmartDevice() {
+	return [
+		{"title": "prop1", "value":  null},
+			{"title": "prop2", "value":  "def"},
+			{"title": "prop3", "value":  true},
+			{"title": "prop4", "value":  false}
+	]
+}
 class App extends Component {
 
 	constructor(props) {
@@ -52,27 +66,34 @@ class App extends Component {
 		this.setState({"infoPanelProps": null})
 	}
 
+
+
 	addSmartDevice({x,y}) {
 		if (this.state.infoPanelProps != null) {
-			console.log("there is a not completely set up device")
+			// console.log("there is a not completely set up device")
 			return;
 		}
-		console.log("App.js: addSmartDevice " + x + " " + y);
+		// console.log("App.js: addSmartDevice " + x + " " + y);
 		let devices = this.state.devices;
 		let newDevice = {
 			"key": generateDeviceKey(x,y),
 			"x": x,
 			"y": y,
+			"infoState": getDefaultPropsValuesSmartDevice()
 		}
 
 		devices.push(newDevice);
+		// console.log("new device added");
 		this.setState({"devices": devices}, () => console.log(this.state));
 		this.setState({"infoPanelProps":  getPropsForSmartDevice(newDevice) })
 	}
 
-	saveInfoFromPanel() {
-		console.log("Save info");
+	saveInfoFromPanel(info) {
+		console.log("Save info " + info);
+		let devices = this.state.devices
+		devices.filter(device => device.key === this.state.infoPanelProps.key)[0].infoState = info
 		this.setState({
+			"devices": devices,
 			"infoPanelProps": null
 		})
 	}
@@ -85,7 +106,6 @@ class App extends Component {
 			"infoPanelProps": getPropsForSmartDevice(clickedDevice)
 		})
 	}
-
 
 	render() {
 
@@ -100,6 +120,9 @@ class App extends Component {
 							 "devices": this.state.devices.filter((device) => device.key !== this.state.infoPanelProps.key)
 							}
 						)}
+					device={ this.state.infoPanelProps === null? 
+						null :
+						 this.state.devices.filter((device) => device.key === this.state.infoPanelProps.key)[0] }
 				/>
 
 				<div style={{position: "relative", left: "35%", top: "160px", margin: "0 0 0 -500px"}}>  
