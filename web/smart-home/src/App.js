@@ -57,7 +57,6 @@ class App extends Component {
 		this.addSmartDevice = this.addSmartDevice.bind(this)
 		this.saveInfoFromPanel = this.saveInfoFromPanel.bind(this)
 		this.onSmartDeviceClick = this.onSmartDeviceClick.bind(this)
-		
 	}
 	
 
