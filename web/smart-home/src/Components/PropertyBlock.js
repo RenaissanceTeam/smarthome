@@ -28,7 +28,9 @@ class PropertyBlock extends Component {
           <div className="propertyBlock"> 
             
             <p> {this.props.title}  </p>
-            <p className = "inputField"> <input type="checkbox" onChange={(e) => this.props.onChange(e.target.value)}/> </p>
+            <p className = "inputField"> 
+              <input type="checkbox" onChange={(e) => this.props.onChange(e.target.checked)} defaultChecked={this.props.value} /> 
+            </p>
            </div>
       );
     }
