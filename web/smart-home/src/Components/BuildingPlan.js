@@ -6,7 +6,6 @@ class BuildingPlan extends Component {
   
   constructor(prop) {	
   	super(prop)
-  	console.log("building plan created " + prop)
     this.onPlanClick = this.onPlanClick.bind(this)
   }
 

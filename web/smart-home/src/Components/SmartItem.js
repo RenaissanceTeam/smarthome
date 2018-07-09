@@ -3,14 +3,14 @@ import '../App.css'
 
 
 class SmartItem extends Component {
-  constructor(props) {
-  	console.log("SmartItem.js: props " + props)
-  	super(props);
-  	let x,y
-  	x = props.x
-  	y = props.y
-  	console.log("create smart item at " + x + ", " + y);
-  }
+  // constructor(props) {
+  // 	// console.log("SmartItem.js: props " + props)
+  // 	// super(props);
+  // 	// let x,y
+  // 	// x = props.x
+  // 	// y = props.y
+  // 	// console.log("create smart item at " + x + ", " + y);
+  // }
 
   render() {
     return ( 
