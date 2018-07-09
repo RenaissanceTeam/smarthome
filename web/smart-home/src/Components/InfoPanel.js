@@ -39,9 +39,11 @@ class InfoPanel extends Component {
 	}
 
 	render() {
+
 		if (! this.props.info) {
 			return null;
 		} 
+
 		if (this.lastDevice !== this.props.device.key) {
 			console.log("saving new info about device");
 			this.info = this.props.device.infoState
@@ -50,9 +52,10 @@ class InfoPanel extends Component {
 
 		if (this.props.info.type === "device") {
 			let device = this.props.info
+			console.log(this.getPropValueFromState("prop2"));
 			return (
 				<div id="infoPanel">
-				<PropertyBlock type={Constants.HEADER} title={device.title}/>
+				<PropertyBlock type={Constants.HEADER} title={device.title} />
 				{ device.props.map( ({key, title, type}) => <PropertyBlock key={key} type={type} title = {title}
 									value={this.getPropValueFromState(title)} 
 									onChange={ value => this.onPropertyChanged(title, value)} /> ) }

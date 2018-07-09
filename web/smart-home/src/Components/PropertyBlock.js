@@ -18,7 +18,7 @@ class PropertyBlock extends Component {
           <div className="propertyBlock"> 
             
             <p> {this.props.title}  </p>
-            <p className = "inputField"> <input type="text" onChange={(e) => this.props.onChange(e.target.value)} value= {this.props.value}/> </p>
+            <p className = "inputField"> <input type="text" onChange={(e) => this.props.onChange(e.target.value)} defaultValue= {this.props.value}/> </p>
            </div>
         );
     }
