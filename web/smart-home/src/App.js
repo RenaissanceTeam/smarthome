@@ -63,6 +63,7 @@ class App extends Component {
 	componentWillMount() {
 		this.setState({"devices": []})
 		this.setState({"infoPanelProps": null})
+		this.setState({"initialSetup": false})
 	}
 
 
@@ -85,15 +86,17 @@ class App extends Component {
 		// console.log("new device added");
 		this.setState({"devices": devices}, () => console.log(this.state));
 		this.setState({"infoPanelProps":  getPropsForSmartDevice(newDevice) })
+		this.setState({"initialSetup": true})
 	}
 
 	saveInfoFromPanel(info) {
-		console.log("Save info " + info);
+		console.log(this.state.devices[0].infoState)
 		let devices = this.state.devices
 		devices.filter(device => device.key === this.state.infoPanelProps.key)[0].infoState = info
 		this.setState({
 			"devices": devices,
-			"infoPanelProps": null
+			"infoPanelProps": null,
+			initialSetup: false
 		})
 	}
 
@@ -107,21 +110,27 @@ class App extends Component {
 	}
 
 	render() {
-
 		return (
 			<div> 
 				<Header />
 				<InfoPanel 
 					info = {this.state.infoPanelProps} 
 					onOkClicked={this.saveInfoFromPanel} 
-					onCancelClicked={() => this.setState(
-							{"infoPanelProps": null,
-							 "devices": this.state.devices.filter((device) => device.key !== this.state.infoPanelProps.key)
-							}
-						)}
+					onCancelClicked={() => {
+						if (this.state.initialSetup) {
+							this.setState(
+								{
+								 "devices": this.state.devices.filter((device) => device.key !== this.state.infoPanelProps.key)
+								})
+						}
+						this.setState({ "infoPanelProps": null })
+						}
+					}
 					device={ this.state.infoPanelProps === null? 
 						null :
-						 this.state.devices.filter((device) => device.key === this.state.infoPanelProps.key)[0] }
+						this.state.devices.filter((device) => device.key === this.state.infoPanelProps.key)[0] 
+					}
+					initialSetup= { this.state.initialSetup }
 				/>
 
 				<div style={{position: "relative", left: "35%", top: "160px", margin: "0 0 0 -500px"}}>  
