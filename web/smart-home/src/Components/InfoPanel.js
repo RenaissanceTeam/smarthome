@@ -22,7 +22,6 @@ class InfoPanel extends Component {
 
 	onPropertyChanged(title, value) {
 		let allInfo = this.info
-		console.log("property changed, info: " + allInfo);
 		allInfo.filter( prop => prop.title === title )[0].value = value
 		this.info = allInfo
 		this.render()
@@ -35,7 +34,6 @@ class InfoPanel extends Component {
 		}
 		return prop.value
 	}
-
 	render() {
 
 		if (! this.props.info) {
@@ -50,16 +48,22 @@ class InfoPanel extends Component {
 
 		if (this.props.info.type === "device") {
 			let device = this.props.info
+			let submit = (init) => init ?  
+						<div className="submitField">
+							<button className="cancelButton" onClick={() => this.props.onCancelClicked()}> CANCEL </button>  
+							<button className="okButton" onClick={() => this.parseInfoFromPanel() }> OK </button>
+						</div>
+						: 
+						<div className="submitField">
+							<button className="okButton" onClick={() => this.parseInfoFromPanel() }> UPDATE </button>
+						</div>
 			return (
 				<div id="infoPanel">
 				<PropertyBlock type={Constants.HEADER} title={device.title} />
 				{ device.props.map( ({key, title, type}) => <PropertyBlock key={key} type={type} title = {title}
 									value={this.getPropValueFromState(title)} 
 									onChange={ value => this.onPropertyChanged(title, value)} /> ) }
-
-
-				<button className="cancelButton" onClick={() => this.props.onCancelClicked()}> CANCEL </button>
-				<button className="okButton" onClick={() => this.parseInfoFromPanel() }> OK </button>
+				{submit(this.props.initialSetup)}
 				</div>
 				)
 		}
