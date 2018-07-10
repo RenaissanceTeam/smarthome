@@ -35,6 +35,33 @@ class PropertyBlock extends Component {
       );
     }
 
+    if (this.props.type === Constants.OPTIONS) {
+      let index = 0
+
+      return (
+        <div className="propertyBlock">
+          <p> {this.props.title} </p>
+          <p className="inputField">
+            <select onChange={e => this.props.onChange(e.target.value)} defaultValue={this.props.value}> 
+            {
+              this.props.options.map( option => 
+                <option key={index++} value= {option} > {option} </option>
+              )
+            }
+            </select>
+          </p>
+        </div>
+      )
+    }
+
+    if (this.props.type === Constants.MULTIPLE) {
+      return (
+        <div className="propertyBlock">
+          MULTIPLE
+        </div>
+      )
+    }
+
 
     
     return (

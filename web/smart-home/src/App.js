@@ -37,6 +37,17 @@ function getPropsForSmartDevice(device) {
 						"key": generateKey("prop"),
 						"title": "prop4",
 						"type": Constants.CHECKABLE
+					},
+					{
+						"key": generateKey("prop"),
+						"title": "prop5",
+						"type": Constants.OPTIONS,
+						"options": ["a", "b", "c", "d", "e"]
+					},
+					{
+						"key": generateKey("prop"),
+						"title": "prop6",
+						"type": Constants.MULTIPLE
 					}
 				]
 			}
@@ -47,7 +58,9 @@ function getDefaultPropsValuesSmartDevice() {
 		{"title": "prop1", "value":  null},
 			{"title": "prop2", "value":  "def"},
 			{"title": "prop3", "value":  true},
-			{"title": "prop4", "value":  false}
+			{"title": "prop4", "value":  false},
+			{"title": "prop5", "value":  "c"},
+			{"title": "prop6", "value":  false},
 	]
 }
 class App extends Component {
