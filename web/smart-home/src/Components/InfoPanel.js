@@ -56,6 +56,8 @@ class InfoPanel extends Component {
 						: 
 						<div className="submitField">
 							<button className="okButton" onClick={() => this.parseInfoFromPanel() }> UPDATE </button>
+							<button className="cancelButton" onClick={() => this.props.onCancelClicked() }> DELETE </button>
+							<button className="hideButton" onClick={() => this.props.onHideClicked() }> HIDE </button>
 						</div>
 			return (
 				<div id="infoPanel">
