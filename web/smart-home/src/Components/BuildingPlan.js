@@ -17,7 +17,7 @@ class BuildingPlan extends Component {
 
   render() {
     return (
-    	<img id="plan" src={this.props.imgSrc} alt="" onClick={e => this.onPlanClick(e)} />
+    	<img droppable= "true" id="plan" src={this.props.imgSrc} alt="" onClick={e => this.onPlanClick(e)} />
     	);
   }
 

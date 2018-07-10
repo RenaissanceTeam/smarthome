@@ -65,6 +65,7 @@ class App extends Component {
 		this.addSmartDevice = this.addSmartDevice.bind(this)
 		this.saveInfoFromPanel = this.saveInfoFromPanel.bind(this)
 		this.onSmartDeviceClick = this.onSmartDeviceClick.bind(this)
+		this.onSmartDeviceDrag = this.onSmartDeviceDrag.bind(this)
 	}
 	
 
@@ -117,6 +118,17 @@ class App extends Component {
 		})
 	}
 
+	onSmartDeviceDrag(key, x,y) {
+		console.log("new " + x + " " + y);
+		let draggedDevice = this.state.devices.filter(device => (device.key === key))[0]
+		draggedDevice.x = x
+		draggedDevice.y = y
+		draggedDevice.key = generateDeviceKey(x,y)
+		this.setState({
+			"devices": this.state.devices,
+			"infoPanelProps": null
+		})
+	}
 
 	render() {
 		return (
@@ -145,7 +157,7 @@ class App extends Component {
 				<div style={{position: "relative", left: "35%", top: "160px", margin: "0 0 0 -500px"}}>  
 					<BuildingPlan imgSrc={plan} onClick={this.addSmartDevice}/> 
 					<SmartDevices devices={this.state.devices} imgSrc={device} onSmartDeviceClick={this.onSmartDeviceClick} 
-					onDrag={this.onSmartDeviceDrag} onDragEnd={this.onSmartDeviceDrag}/> 
+					onDragged={this.onSmartDeviceDrag}/> 
 				</div>
 			</div>
 

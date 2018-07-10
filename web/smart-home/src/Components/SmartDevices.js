@@ -3,7 +3,7 @@ import SmartItem from './SmartItem'
 import '../App.css'
 
 
-class SmartDevices extends Component {
+class SmartDevices extends Component {	
 	
 
 	render() {
@@ -12,10 +12,12 @@ class SmartDevices extends Component {
 		    	{this.props.devices.map( item =>  
 		    		<SmartItem 
 		    			key={item.key} 
+		    			itemKey={item.key}
 		    			x={item.x} 
 		    			y={item.y} 
 		    			imgSrc={this.props.imgSrc}
 		    			onClick={this.props.onSmartDeviceClick}
+		    			onDragged={this.props.onDragged}
 		    			/>
 		    		)
 		    	}
