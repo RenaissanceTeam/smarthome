@@ -44,11 +44,7 @@ function getPropsForSmartDevice(device) {
 						"type": Constants.OPTIONS,
 						"options": ["a", "b", "c", "d", "e"]
 					},
-					{
-						"key": generateKey("prop"),
-						"title": "prop6",
-						"type": Constants.MULTIPLE
-					}
+
 				]
 			}
 	}
@@ -60,7 +56,6 @@ function getDefaultPropsValuesSmartDevice() {
 			{"title": "prop3", "value":  true},
 			{"title": "prop4", "value":  false},
 			{"title": "prop5", "value":  "c"},
-			{"title": "prop6", "value":  false},
 	]
 }
 class App extends Component {
@@ -122,6 +117,7 @@ class App extends Component {
 		})
 	}
 
+
 	render() {
 		return (
 			<div> 
@@ -130,15 +126,15 @@ class App extends Component {
 					info = {this.state.infoPanelProps} 
 					onOkClicked={this.saveInfoFromPanel} 
 					onCancelClicked={() => {
-						if (this.state.initialSetup) {
-							this.setState(
-								{
-								 "devices": this.state.devices.filter((device) => device.key !== this.state.infoPanelProps.key)
-								})
-						}
+						this.setState(
+							{
+							 "devices": this.state.devices.filter((device) => device.key !== this.state.infoPanelProps.key)
+							})
+						
 						this.setState({ "infoPanelProps": null })
 						}
 					}
+					onHideClicked={() => this.setState({ "infoPanelProps": null })}
 					device={ this.state.infoPanelProps === null? 
 						null :
 						this.state.devices.filter((device) => device.key === this.state.infoPanelProps.key)[0] 
