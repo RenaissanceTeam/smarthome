@@ -60,7 +60,7 @@ class InfoPanel extends Component {
 			return (
 				<div id="infoPanel">
 				<PropertyBlock type={Constants.HEADER} title={device.title} />
-				{ device.props.map( ({key, title, type}) => <PropertyBlock key={key} type={type} title = {title}
+				{ device.props.map( ({key, title, type, options}) => <PropertyBlock key={key} type={type} title = {title} options={options}
 									value={this.getPropValueFromState(title)} 
 									onChange={ value => this.onPropertyChanged(title, value)} /> ) }
 				{submit(this.props.initialSetup)}
