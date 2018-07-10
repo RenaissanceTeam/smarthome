@@ -4,15 +4,7 @@ import '../App.css'
 
 
 class SmartDevices extends Component {
-	constructor(props) {
-		super(props)
-		this.onRightClick = this.onRightClick.bind(this)
-	}
-
-	onRightClick(e) {
-		e.preventDefault()
-		console.log("pkm")
-	}
+	
 
 	render() {
 	    return (
@@ -24,7 +16,6 @@ class SmartDevices extends Component {
 		    			y={item.y} 
 		    			imgSrc={this.props.imgSrc}
 		    			onClick={this.props.onSmartDeviceClick}
-		    			onRightClick={this.onRightClick}
 		    			/>
 		    		)
 		    	}
