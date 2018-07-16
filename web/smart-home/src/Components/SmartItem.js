@@ -15,11 +15,14 @@ class SmartItem extends Component {
   	this.props.onDragged(this.props.itemKey, x, y)
   }
 
+
   render() {
     return ( 
     		<img draggable="true" className="smartItem" src={this.props.imgSrc} alt="" style = {{ top: this.props.y, left: this.props.x }} 
     		    onClick={e => this.props.onClick(this.props.x, this.props.y)} 
     		    onDragEnd={this.onDragEnd}
+    		    onMouseOver={this.props.onHover}
+    		    onMouseOut={this.props.hideInfoWindow}
     		    />
     	);
   }
