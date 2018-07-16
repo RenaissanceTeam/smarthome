@@ -53,3 +53,10 @@
 .infoWindowInvisible {
 	visibility: hidden;
 }
+
+.propertyBlock {
+	margin-left: 30px;
+}
+.propertyBlock.deviceTitle {
+	font-size: xx-large;
+}

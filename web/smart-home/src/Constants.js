@@ -3,6 +3,7 @@ const HEADER = "header";
 const INPUT_BLOCK = "input_block";
 const CHECKABLE = "checkable";
 const OPTIONS = "options"
+const DEVICE_TITLE = "device title"
 
 class Constants {
 	static get HEADER() {
@@ -19,6 +20,10 @@ class Constants {
 
 	static get OPTIONS() {
 		return OPTIONS;
+	}
+
+	static get DEVICE_TITLE() {
+		return DEVICE_TITLE;
 	}
 }
 
