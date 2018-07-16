@@ -157,7 +157,8 @@ class App extends Component {
 				<div style={{position: "relative", left: "35%", top: "160px", margin: "0 0 0 -500px"}}>  
 					<BuildingPlan imgSrc={plan} onClick={this.addSmartDevice}/> 
 					<SmartDevices devices={this.state.devices} imgSrc={device} onSmartDeviceClick={this.onSmartDeviceClick} 
-					onDragged={this.onSmartDeviceDrag}/> 
+					onDragged={this.onSmartDeviceDrag}
+					/> 
 				</div>
 			</div>
 
