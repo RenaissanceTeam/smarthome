@@ -27,7 +27,9 @@ class SmartDevices extends Component {
   	let y = e.target.offsetTop + e.target.height
   	setTimeout( () => {
   		if (this.isHovered)  {
-  			this.showInfoWindow(x, y, device.infoState[1].value)}
+  			let deviceTitle = device.infoState.filter( i => i.title === "Device Title" )[0].value
+  			let deviceDescription = device.infoState.filter( i => i.title === "Description" )[0].value
+  			this.showInfoWindow(x, y, {title: deviceTitle, description: deviceDescription})}
 		}
   		, 1000)
   }
@@ -48,7 +50,7 @@ class SmartDevices extends Component {
   		infoWindowClass: visibleClassName,
   		x: x,
   		y: y,
-  		info: info,
+  		info: info
   	})
   }	
 
@@ -75,7 +77,8 @@ class SmartDevices extends Component {
 				</div>
 
 				<div className={this.state.infoWindowClass} id="smartItemInfoWindow" style = {{ top: this.state.y, left: this.state.x }}>
-					{this.state.info}
+					<h3> {this.state.info.title} </h3>
+					<p> {this.state.info.description} </p>
 				</div>
 	    	</div>
 	    )
