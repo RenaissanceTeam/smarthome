@@ -93,13 +93,13 @@ class App extends Component {
 
 		devices.push(newDevice);
 		// console.log("new device added");
-		this.setState({"devices": devices}, () => console.log(this.state));
+		this.setState({"devices": devices});
 		this.setState({"infoPanelProps":  getPropsForSmartDevice(newDevice) })
 		this.setState({"initialSetup": true})
 	}
 
 	saveInfoFromPanel(info) {
-		console.log(this.state.devices[0].infoState)
+		// console.log(this.state.devices[0].infoState)
 		let devices = this.state.devices
 		devices.filter(device => device.key === this.state.infoPanelProps.key)[0].infoState = info
 		this.setState({
@@ -119,7 +119,7 @@ class App extends Component {
 	}
 
 	onSmartDeviceDrag(key, x,y) {
-		console.log("new " + x + " " + y);
+		// console.log("new " + x + " " + y);
 		let draggedDevice = this.state.devices.filter(device => (device.key === key))[0]
 		draggedDevice.x = x
 		draggedDevice.y = y

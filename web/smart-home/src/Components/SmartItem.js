@@ -11,7 +11,7 @@ class SmartItem extends Component {
   onDragEnd(e) {
   	let x = this.props.x + e.nativeEvent.offsetX
   	let y = this.props.y + e.nativeEvent.offsetY
-  	console.log(this.props);
+  	// console.log(this.props);
   	this.props.onDragged(this.props.itemKey, x, y)
   }
 

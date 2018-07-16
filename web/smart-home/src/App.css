@@ -39,11 +39,11 @@
 } 
 
 #smartItemInfoWindow {
-	height: 300px;
 	width: 150px;	
 	background-color: green;
 	border: 1px solid black;
 	position: absolute;
+
 }
 
 .infoWindowVisible {
