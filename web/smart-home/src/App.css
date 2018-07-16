@@ -2,7 +2,7 @@
 	position: absolute;
 	height: 500px;
 	width: 1000px;
-	object-fit: cover;
+	object-fit: scale-down;
 }
 
 
@@ -43,7 +43,6 @@
 	background-color: green;
 	border: 1px solid black;
 	position: absolute;
-
 }
 
 .infoWindowVisible {
