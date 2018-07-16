@@ -41,7 +41,7 @@ class InfoPanel extends Component {
 		} 
 
 		if (this.lastDevice !== this.props.device.key) {
-			console.log("saving new info about device");
+			// console.log("saving new info about device");
 			this.info = this.props.device.infoState
 			this.lastDevice = this.props.device.key
 		}
