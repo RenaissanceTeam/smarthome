@@ -20,7 +20,7 @@ function getPropsForSmartDevice(device) {
 				props: [
 					{
 						"key": generateKey("prop"),
-						"title": "deviceTitle",
+						"title": "Device Title",
 						"type": Constants.DEVICE_TITLE,
 					},
 					{
@@ -30,7 +30,7 @@ function getPropsForSmartDevice(device) {
 					}, 
 					{
 						"key": generateKey("prop"),
-						"title": "prop2",
+						"title": "Description",
 						"type": Constants.INPUT_BLOCK
 					},
 					{
@@ -57,12 +57,12 @@ function getPropsForSmartDevice(device) {
 
 function getDefaultPropsValuesSmartDevice(title="default title") {
 	return [
-		{"title": "prop1", "value":  "default header value"},
-			{"title": "prop2", "value":  "def"},
+			{"title": "prop1", "value":  "default header value"},
+			{"title": "Description", "value":  "def"},
 			{"title": "prop3", "value":  true},
 			{"title": "prop4", "value":  false},
 			{"title": "prop5", "value":  "c"},
-			{"title": "deviceTitle", "value":  title},
+			{"title": "Device Title", "value":  title},
 	]
 }
 class App extends Component {
