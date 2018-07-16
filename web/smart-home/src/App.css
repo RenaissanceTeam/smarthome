@@ -37,3 +37,19 @@
 .inputField {
 	padding-left: 30px;
 } 
+
+#smartItemInfoWindow {
+	height: 300px;
+	width: 150px;	
+	background-color: green;
+	border: 1px solid black;
+	position: absolute;
+}
+
+.infoWindowVisible {
+	visibility: visible;
+}
+
+.infoWindowInvisible {
+	visibility: hidden;
+}
