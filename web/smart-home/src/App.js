@@ -161,7 +161,7 @@ class App extends Component {
 					initialSetup= { this.state.initialSetup }
 				/>
 
-				<div style={{position: "relative", left: "35%", top: "160px", margin: "0 0 0 -500px"}}>  
+				<div style={{position: "relative"}}>  
 					<BuildingPlan imgSrc={plan} onClick={this.addSmartDevice}/> 
 					<SmartDevices devices={this.state.devices} imgSrc={device} onSmartDeviceClick={this.onSmartDeviceClick} 
 					onDragged={this.onSmartDeviceDrag}
