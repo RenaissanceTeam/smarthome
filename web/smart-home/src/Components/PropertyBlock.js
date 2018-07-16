@@ -9,9 +9,17 @@ class PropertyBlock extends Component {
   render() {
     if (this.props.type === Constants.HEADER) {
       return ( 
-          <div className="propertyBlock"> {this.props.title} </div>
+          <div className="propertyBlock"> {this.props.value} </div>
       	);
     } 
+
+    if (this.props.type === Constants.DEVICE_TITLE) {
+      return <div 
+                className="propertyBlock deviceTitle" 
+                contentEditable="true" 
+                onInput={e => this.props.onChange(e.nativeEvent.target.textContent) }
+              > {this.props.value}  </div>
+    }
 
     if (this.props.type === Constants.INPUT_BLOCK) {
       return ( 

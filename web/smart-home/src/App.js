@@ -20,6 +20,11 @@ function getPropsForSmartDevice(device) {
 				props: [
 					{
 						"key": generateKey("prop"),
+						"title": "deviceTitle",
+						"type": Constants.DEVICE_TITLE,
+					},
+					{
+						"key": generateKey("prop"),
 						"title": "prop1",
 						"type": Constants.HEADER
 					}, 
@@ -44,18 +49,20 @@ function getPropsForSmartDevice(device) {
 						"type": Constants.OPTIONS,
 						"options": ["a", "b", "c", "d", "e"]
 					},
+					
 
 				]
 			}
 	}
 
-function getDefaultPropsValuesSmartDevice() {
+function getDefaultPropsValuesSmartDevice(title="default title") {
 	return [
-		{"title": "prop1", "value":  null},
+		{"title": "prop1", "value":  "default header value"},
 			{"title": "prop2", "value":  "def"},
 			{"title": "prop3", "value":  true},
 			{"title": "prop4", "value":  false},
 			{"title": "prop5", "value":  "c"},
+			{"title": "deviceTitle", "value":  title},
 	]
 }
 class App extends Component {
@@ -76,7 +83,6 @@ class App extends Component {
 	}
 
 
-
 	addSmartDevice({x,y}) {
 		if (this.state.infoPanelProps != null) {
 			// console.log("there is a not completely set up device")
@@ -84,11 +90,12 @@ class App extends Component {
 		}
 		// console.log("App.js: addSmartDevice " + x + " " + y);
 		let devices = this.state.devices;
+		let deviceKey = generateDeviceKey(x,y)
 		let newDevice = {
-			"key": generateDeviceKey(x,y),
+			"key": deviceKey,
 			"x": x,
 			"y": y,
-			"infoState": getDefaultPropsValuesSmartDevice()
+			"infoState": getDefaultPropsValuesSmartDevice(deviceKey)
 		}
 
 		devices.push(newDevice);
