@@ -12,39 +12,45 @@ class InfoPanel extends Component {
 		this.onPropertyChanged = this.onPropertyChanged.bind(this)
 		this.getPropValueFromState = this.getPropValueFromState.bind(this)
 		
-		this.info = []
-		this.lastDevice = null
+		this.state = {
+			info: null,
+			lastDevice: null	
+		}
+	}
+
+	componentWillReceiveProps(props) {
+		if (props.info !== null) {
+			this.setState({info: props.device.infoState, lastDevice: props.device.key})
+		}
 	}
 
 	parseInfoFromPanel() {
-		this.props.onOkClicked(this.info)
+		this.props.onOkClicked(this.state.info)
 	}
 
 	onPropertyChanged(title, value) {
-		let allInfo = this.info
+		// console.log(value);
+
+		// completely rewrite value of one item (filtered by title)
+		let allInfo = this.state.info
 		allInfo.filter( prop => prop.title === title )[0].value = value
-		this.info = allInfo
-		this.render()
+		this.setState({info: allInfo})
 	}
 
 	getPropValueFromState(title) {
-		let prop = this.info.filter( prop=> prop.title === title)[0]
+		let prop = this.state.info.filter( prop=> prop.title === title)[0]
 		if (prop == null) {
+			console.log("prop is null for " + title);
 			return null
 		}
 		return prop.value
 	}
-	render() {
 
-		if (! this.props.info) {
+	render() {
+		if (! this.props.info) { // not the same as info in state
 			return null;
 		} 
-
-		if (this.lastDevice !== this.props.device.key) {
-			// console.log("saving new info about device");
-			this.info = this.props.device.infoState
-			this.lastDevice = this.props.device.key
-		}
+		console.log(this.state.info);
 
 		if (this.props.info.type === "device") {
 			let device = this.props.info
