@@ -88,8 +88,16 @@ class App extends Component {
 			// console.log("there is a not completely set up device")
 			return;
 		}
+
 		// console.log("App.js: addSmartDevice " + x + " " + y);
 		let devices = this.state.devices;
+		let epsilon = 350
+		let r = devices.map( device => (Math.pow(device.x - x, 2) + Math.pow(device.y - y, 2) ))
+		let isTooClose = r.some( i => i < epsilon)
+		if (isTooClose) {
+			console.log("too close");
+			return;
+		}
 		let deviceKey = generateDeviceKey(x,y)
 		let newDevice = {
 			"key": deviceKey,

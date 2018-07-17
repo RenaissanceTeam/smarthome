@@ -18,6 +18,7 @@
 }
 
 .smartItem {
+	/*before changing, check SmartItem.js and change them as well*/
 	height: 20px;
 	width: 20px;
 	position: absolute;
