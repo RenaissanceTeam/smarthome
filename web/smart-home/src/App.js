@@ -6,6 +6,8 @@ import InfoPanel from './Components/InfoPanel'
 import Constants from './Constants'
 import plan from './res/img/plan.png'
 import device from './res/img/device.png'
+import deviceImg from './res/img/device.png'
+import plus from './res/img/plus.png'
 
 import './App.css';
 var shift = 1
@@ -13,6 +15,7 @@ var generateKey = (pre) => `${ pre }_${ new Date().getTime() + shift++ }`;
 var generateDeviceKey = (x,y) =>  "device" + x + "-" + y;
 
 function getPropsForSmartDevice(device) {
+	
 		return {
 				type: "device",
 				title: device.key,
@@ -23,31 +26,41 @@ function getPropsForSmartDevice(device) {
 						"title": "Device Title",
 						"type": Constants.DEVICE_TITLE,
 					},
+					// {
+					// 	"key": generateKey("prop"),
+					// 	"title": "prop1",
+					// 	"type": Constants.HEADER
+					// }, 
+					// {
+					// 	"key": generateKey("prop"),
+					// 	"title": "Description",
+					// 	"type": Constants.INPUT_BLOCK
+					// },
+					// {
+					// 	"key": generateKey("prop"),
+					// 	"title": "prop3",
+					// 	"type": Constants.CHECKABLE
+					// },
+					// {
+					// 	"key": generateKey("prop"),
+					// 	"title": "prop4",
+					// 	"type": Constants.CHECKABLE
+					// },
+					// {
+					// 	"key": generateKey("prop"),
+					// 	"title": "prop5",
+					// 	"type": Constants.OPTIONS,
+					// 	"options": ["a", "b", "c", "d", "e"]
+					// },
 					{
 						"key": generateKey("prop"),
-						"title": "prop1",
-						"type": Constants.HEADER
-					}, 
-					{
-						"key": generateKey("prop"),
-						"title": "Description",
-						"type": Constants.INPUT_BLOCK
-					},
-					{
-						"key": generateKey("prop"),
-						"title": "prop3",
-						"type": Constants.CHECKABLE
-					},
-					{
-						"key": generateKey("prop"),
-						"title": "prop4",
-						"type": Constants.CHECKABLE
-					},
-					{
-						"key": generateKey("prop"),
-						"title": "prop5",
-						"type": Constants.OPTIONS,
-						"options": ["a", "b", "c", "d", "e"]
+						"title": "prop6",
+						"type": Constants.MODULES_BLOCK,
+						"options": [
+							{title: "module#1", img: plus},
+							{title: "module#2", img: deviceImg},
+
+						]
 					},
 					
 
@@ -57,12 +70,15 @@ function getPropsForSmartDevice(device) {
 
 function getDefaultPropsValuesSmartDevice(title="default title") {
 	return [
+			{"title": "Device Title", "value":  title},
 			{"title": "prop1", "value":  "default header value"},
 			{"title": "Description", "value":  "def"},
 			{"title": "prop3", "value":  true},
 			{"title": "prop4", "value":  false},
 			{"title": "prop5", "value":  "c"},
-			{"title": "Device Title", "value":  title},
+			{"title": "prop6", "value":  []
+			},
+
 	]
 }
 class App extends Component {

@@ -1,10 +1,55 @@
 import React, { Component } from 'react';
 import '../App.css'
-
+import plus from '../res/img/plus.png'
 import Constants from '../Constants'
 
+var shift = 1
+var generateKey = (pre) => `${ pre }_${ new Date().getTime() + shift++ }`;
+function myFunction(module, target) {
+
+    let moduleContainer = target.parentElement.parentElement
+
+    let y = target.offsetTop + target.parentElement.offsetTop + moduleContainer.offsetTop
+    let x =  target.offsetLeft + target.parentElement.offsetLeft + moduleContainer.offsetLeft
+
+    let selectOptions = document.getElementById("myDropdown")
+    selectOptions.style.top = y + "px"
+    selectOptions.style.left = x + "px"
+    console.log(selectOptions);
+    selectOptions.classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+
 class PropertyBlock extends Component {
-  
+  constructor(props) {
+    super(props)
+    this.onOptionSelected = this.onOptionSelected.bind(this)
+    this.index = -1;
+
+  }
+
+  onOptionSelected(value ) {
+    console.log("selected " + value +" for index " + this.index);
+
+    let currentState = this.props.value;
+    currentState[this.index] = this.props.options.filter(o => o.title === value)[0]
+    this.props.onChange(currentState)
+  }
 
   render() {
     if (this.props.type === Constants.HEADER) {
@@ -26,7 +71,9 @@ class PropertyBlock extends Component {
           <div className="propertyBlock"> 
             
             <p> {this.props.title}  </p>
-            <p className = "inputField"> <input type="text" onChange={(e) => this.props.onChange(e.target.value)} defaultValue= {this.props.value}/> </p>
+            <p className = "inputField"> 
+              <input type="text" onChange={(e) => this.props.onChange(e.target.value)} defaultValue= {this.props.value}/> 
+            </p>
            </div>
         );
     }
@@ -37,12 +84,49 @@ class PropertyBlock extends Component {
             
             <p> {this.props.title}  </p>
             <p className = "inputField"> 
-              <input type="checkbox" onChange={(e) => this.props.onChange(e.target.checked)} defaultChecked={this.props.value} /> 
+              <input type="checkbox" onChange={e => this.props.onChange(e.target.checked)} defaultChecked={this.props.value} /> 
             </p>
            </div>
       );
     }
 
+    if (this.props.type === Constants.MODULES_BLOCK) {
+
+      return  (
+        <div className = "propertyBlock modulesBlock">
+          <div className="dropdown">
+            <div id="myDropdown" className="dropdown-content" >
+              {this.props.options.map((module) => <a key={generateKey("dropdown")} onClick={e => this.onOptionSelected(e.nativeEvent.target.textContent)} >{module.title}</a>)}
+            </div>
+          </div>
+
+          {this.props.value.map( (module, index) => 
+              <div key={generateKey("module")} className="moduleBlock">
+                <div className="moduleBlockImageContainer" >
+                  <div 
+                      className="editButton dropbtn" 
+                      onClick={e => {
+                          myFunction(module, e.nativeEvent.target); this.index = index;
+                          }}>
+                        e
+                  </div>
+                  <img alt="" className="moduleBlockImage" src={module.img}/>
+                </div>
+
+                <p>{module.title}</p>
+              </div>
+          )}
+
+
+          <div className="moduleBlock">
+            <img alt="" className="moduleBlockImage" 
+                  src={plus}
+                  onClick={e => this.props.onChange([...this.props.value, {title: "new module", img: plus} ])}/>
+          </div>
+
+        </div>
+        )
+    }
     if (this.props.type === Constants.OPTIONS) {
       let index = 0
 
