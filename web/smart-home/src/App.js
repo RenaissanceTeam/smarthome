@@ -8,6 +8,7 @@ import plan from './res/img/plan.png'
 import device from './res/img/device.png'
 import deviceImg from './res/img/device.png'
 import plus from './res/img/plus.png'
+ 
 
 import './App.css';
 var shift = 1
@@ -26,15 +27,16 @@ function getPropsForSmartDevice(device) {
 						"title": "Device Title",
 						"type": Constants.DEVICE_TITLE,
 					},
+					// {
+					// 	"key": generateKey("prop"),
+					// 	"title": "prop1",
+					// 	"type": Constants.HEADER
+					// }, 
 					{
 						"key": generateKey("prop"),
-						"title": "prop1",
-						"type": Constants.HEADER
-					}, 
-					{
-						"key": generateKey("prop"),
-						"title": "Description",
-						"type": Constants.INPUT_BLOCK
+						"title": "Device type",
+						"type": Constants.OPTIONS,
+						"options": ["Smart Light", "Smart curtains", "Server", "Camera", "Thermostat", "Smart switch", "Smart Kitchen Stuff"]
 					},
 					{
 						"key": generateKey("prop"),
@@ -43,22 +45,20 @@ function getPropsForSmartDevice(device) {
 					},
 					{
 						"key": generateKey("prop"),
-						"title": "prop4",
-						"type": Constants.CHECKABLE
+						"title": "Description",
+						"type": Constants.INPUT_BLOCK
 					},
 					{
 						"key": generateKey("prop"),
-						"title": "prop5",
-						"type": Constants.OPTIONS,
-						"options": ["a", "b", "c", "d", "e"]
-					},
-					{
-						"key": generateKey("prop"),
-						"title": "prop6",
+						"title": "Modules",
 						"type": Constants.MODULES_BLOCK,
 						"options": [
-							{title: "module#1", img: plus},
-							{title: "module#2", img: deviceImg},
+							{title: "Arduino Uno", img: deviceImg},
+							{title: "Arduino Nano", img: deviceImg},
+							{title: "Raspberry Pi", img: deviceImg},
+							{title: "Engine", img: deviceImg},
+							{title: "WiFi module", img: deviceImg},
+							{title: "Relay", img: deviceImg},
 
 						]
 					},
@@ -71,13 +71,10 @@ function getPropsForSmartDevice(device) {
 function getDefaultPropsValuesSmartDevice(title="default title") {
 	return [
 			{"title": "Device Title", "value":  title},
-			{"title": "prop1", "value":  "default header value"},
+			{"title": "Device type", "value":  "Smart Light"},
 			{"title": "Description", "value":  "def"},
 			{"title": "Can be controlled from Android app? ", "value":  true},
-			{"title": "prop4", "value":  false},
-			{"title": "prop5", "value":  "c"},
-			{"title": "prop6", "value":  []
-			},
+			{"title": "Modules", "value":  []},
 
 	]
 }
@@ -89,6 +86,22 @@ class App extends Component {
 		this.saveInfoFromPanel = this.saveInfoFromPanel.bind(this)
 		this.onSmartDeviceClick = this.onSmartDeviceClick.bind(this)
 		this.onSmartDeviceDrag = this.onSmartDeviceDrag.bind(this)
+			
+		// var config = {
+		// 	apiKey: "AIzaSyAMPO-acgVmKxnB0sBfv7tzpxo5G-yuhfY",
+		// 	authDomain: "smarthome-47922.firebaseapp.com",
+		// 	databaseURL: "https://smarthome-47922.firebaseio.com",
+		// 	projectId: "smarthome-47922",
+		// 	storageBucket: "smarthome-47922.appspot.com",
+		// 	messagingSenderId: "700180913950"
+		// 	};
+
+		// firebase.initializeApp(config);
+
+		// this.database = firebase.database();
+
+		// console.log(this.database);
+
 	}
 	
 
