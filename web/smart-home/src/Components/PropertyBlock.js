@@ -94,6 +94,8 @@ class PropertyBlock extends Component {
 
       return  (
         <div className = "propertyBlock modulesBlock">
+          <div > {this.props.title} </div>
+
           <div className="dropdown">
             <div id="myDropdown" className="dropdown-content" >
               {this.props.options.map((module) => <a key={generateKey("dropdown")} onClick={e => this.onOptionSelected(e.nativeEvent.target.textContent)} >{module.title}</a>)}
