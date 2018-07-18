@@ -70,10 +70,10 @@ class PropertyBlock extends Component {
       return ( 
           <div className="propertyBlock"> 
             
-            <p> {this.props.title}  </p>
-            <p className = "inputField"> 
+            <div className="propertyTitle"> {this.props.title}  </div>
+            <div className = "inputField"> 
               <input type="text" onChange={(e) => this.props.onChange(e.target.value)} defaultValue= {this.props.value}/> 
-            </p>
+            </div>
            </div>
         );
     }
@@ -82,10 +82,10 @@ class PropertyBlock extends Component {
       return ( 
           <div className="propertyBlock"> 
             
-            <p> {this.props.title}  </p>
-            <p className = "inputField"> 
+            <div className="propertyTitle"> {this.props.title}  </div>
+            <div className = "inputField"> 
               <input type="checkbox" onChange={e => this.props.onChange(e.target.checked)} defaultChecked={this.props.value} /> 
-            </p>
+            </div>
            </div>
       );
     }
@@ -113,7 +113,7 @@ class PropertyBlock extends Component {
                   <img alt="" className="moduleBlockImage" src={module.img}/>
                 </div>
 
-                <p>{module.title}</p>
+                <div>{module.title}</div>
               </div>
           )}
 
@@ -132,8 +132,8 @@ class PropertyBlock extends Component {
 
       return (
         <div className="propertyBlock">
-          <p> {this.props.title} </p>
-          <p className="inputField">
+          <div className="propertyTitle"> {this.props.title} </div>
+          <div className="inputField">
             <select onChange={e => this.props.onChange(e.target.value)} defaultValue={this.props.value} > 
             {
               this.props.options.map( option => 
@@ -141,7 +141,7 @@ class PropertyBlock extends Component {
               )
             }
             </select>
-          </p>
+          </div>
         </div>
       )
     }

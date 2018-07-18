@@ -32,10 +32,12 @@
 	width: 300px;
 	float: right;
 	border: 1px solid black;
+	display: block;
 }
 
 .inputField {
 	padding-left: 30px;
+	display: inline-block;
 } 
 
 #smartItemInfoWindow {
@@ -56,16 +58,79 @@
 
 .propertyBlock {
 	margin-left: 30px;
+	margin-top: 25px;
+
 }
 .propertyBlock.deviceTitle {
 	font-size: xx-large;
 }
 
+.propertyTitle {
+	width: 100px;
+	overflow: auto;
+	display: inline-block;
+}
+
+.cancelButton:hover {
+	opacity: 1;
+}
+.okButton:hover {
+	opacity: 1;
+}
+.hideButton:hover {
+	opacity: 1;
+}
+
+
+.cancelButton {
+	margin-top: 20px;
+	margin-left: 10px;
+	opacity: 0.5;
+	background-color: #e22; 
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.okButton {
+	margin-top: 20px;
+	margin-left: 10px;
+	opacity: 0.5;
+	background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+
+}
+
+.hideButton {
+	margin-top: 20px;
+	margin-left: 10px;
+	opacity: 0.7;
+	background-color: #eee; /* Green */
+    border: none;
+    color: #222;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+
+}
 /*image in info panel for adding modules block*/
 .moduleBlockImage {
 	width: inherit;
 }
 
+/*in MODULES property block (to the right top corner of module's image)*/
 .editButton {
 	background-color: red;
 	width: 20px;
@@ -73,7 +138,6 @@
 	position: absolute;
 	top: 0px;
 	right: 0px;
-
 }
 
 /*image with edit button in info panel for adding modules block*/
