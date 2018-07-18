@@ -14,7 +14,6 @@ import i3 from './res/img/i3.svg'
 import i4 from './res/img/i4.svg'
 import i5 from './res/img/i5.svg'
 import i6 from './res/img/i6.svg'
-import frebase from 'firebase'
 import './App.css';
 import myFirebase from './firebase'
 
@@ -73,6 +72,7 @@ function getPropsForSmartDevice(device) {
 							{title: "Engine", img: deviceImg},
 							{title: "WiFi module", img: deviceImg},
 							{title: "Relay", img: deviceImg},
+
 						]
 					},
 				]
@@ -86,6 +86,7 @@ function getDefaultPropsValuesSmartDevice(title="default title") {
 			{"title": "Description", "value":  "def"},
 			{"title": "Can be controlled from Android app? ", "value":  true},
 			{"title": "Modules", "value":  []},
+
 	]
 }
 class App extends Component {
