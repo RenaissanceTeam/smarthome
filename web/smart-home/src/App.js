@@ -26,32 +26,32 @@ function getPropsForSmartDevice(device) {
 						"title": "Device Title",
 						"type": Constants.DEVICE_TITLE,
 					},
-					// {
-					// 	"key": generateKey("prop"),
-					// 	"title": "prop1",
-					// 	"type": Constants.HEADER
-					// }, 
-					// {
-					// 	"key": generateKey("prop"),
-					// 	"title": "Description",
-					// 	"type": Constants.INPUT_BLOCK
-					// },
-					// {
-					// 	"key": generateKey("prop"),
-					// 	"title": "prop3",
-					// 	"type": Constants.CHECKABLE
-					// },
-					// {
-					// 	"key": generateKey("prop"),
-					// 	"title": "prop4",
-					// 	"type": Constants.CHECKABLE
-					// },
-					// {
-					// 	"key": generateKey("prop"),
-					// 	"title": "prop5",
-					// 	"type": Constants.OPTIONS,
-					// 	"options": ["a", "b", "c", "d", "e"]
-					// },
+					{
+						"key": generateKey("prop"),
+						"title": "prop1",
+						"type": Constants.HEADER
+					}, 
+					{
+						"key": generateKey("prop"),
+						"title": "Description",
+						"type": Constants.INPUT_BLOCK
+					},
+					{
+						"key": generateKey("prop"),
+						"title": "Can be controlled from Android app? ",
+						"type": Constants.CHECKABLE
+					},
+					{
+						"key": generateKey("prop"),
+						"title": "prop4",
+						"type": Constants.CHECKABLE
+					},
+					{
+						"key": generateKey("prop"),
+						"title": "prop5",
+						"type": Constants.OPTIONS,
+						"options": ["a", "b", "c", "d", "e"]
+					},
 					{
 						"key": generateKey("prop"),
 						"title": "prop6",
@@ -73,7 +73,7 @@ function getDefaultPropsValuesSmartDevice(title="default title") {
 			{"title": "Device Title", "value":  title},
 			{"title": "prop1", "value":  "default header value"},
 			{"title": "Description", "value":  "def"},
-			{"title": "prop3", "value":  true},
+			{"title": "Can be controlled from Android app? ", "value":  true},
 			{"title": "prop4", "value":  false},
 			{"title": "prop5", "value":  "c"},
 			{"title": "prop6", "value":  []
