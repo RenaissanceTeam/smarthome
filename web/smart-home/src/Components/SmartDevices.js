@@ -66,7 +66,7 @@ class SmartDevices extends Component {
 			    			itemKey={item.key}
 			    			x={item.x} 
 			    			y={item.y} 
-			    			imgSrc={this.props.imgSrc}
+			    			imgSrc={item.img}
 			    			onClick={this.props.onSmartDeviceClick}
 			    			onDragged={this.props.onDragged}
 			    			onHover={this.onHover}

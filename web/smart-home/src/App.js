@@ -8,15 +8,19 @@ import plan from './res/img/plan.png'
 import device from './res/img/device.png'
 import deviceImg from './res/img/device.png'
 import plus from './res/img/plus.png'
+import i1 from './res/img/i1.svg'
+import i2 from './res/img/i2.svg'
+import i3 from './res/img/i3.svg'
+import i4 from './res/img/i4.svg'
+import i5 from './res/img/i5.svg'
+import i6 from './res/img/i6.svg'
  
 
 import './App.css';
 var shift = 1
 var generateKey = (pre) => `${ pre }_${ new Date().getTime() + shift++ }`;
 var generateDeviceKey = (x,y) =>  "device" + x + "-" + y;
-
 function getPropsForSmartDevice(device) {
-	
 		return {
 				type: "device",
 				title: device.key,
@@ -36,7 +40,15 @@ function getPropsForSmartDevice(device) {
 						"key": generateKey("prop"),
 						"title": "Device type",
 						"type": Constants.OPTIONS,
-						"options": ["Smart Light", "Smart curtains", "Server", "Camera", "Thermostat", "Smart switch", "Smart Kitchen Stuff"]
+						"options": [
+								{"title": "Smart Light", "img": i1},
+								{"title": "Smart curtains", "img":i2},
+								{"title": "Server", "img": i2},
+								{"title": "Camera", "img": i3},
+								{"title": "Thermostat", "img": i4},
+								{"title": "Smart switch", "img": i5},
+								{"title": "Smart Kitchen Stuff", "img": i6}
+						]
 					},
 					{
 						"key": generateKey("prop"),
@@ -62,8 +74,6 @@ function getPropsForSmartDevice(device) {
 
 						]
 					},
-					
-
 				]
 			}
 	}
@@ -86,6 +96,7 @@ class App extends Component {
 		this.saveInfoFromPanel = this.saveInfoFromPanel.bind(this)
 		this.onSmartDeviceClick = this.onSmartDeviceClick.bind(this)
 		this.onSmartDeviceDrag = this.onSmartDeviceDrag.bind(this)
+		this.onNewDeviceType = this.onNewDeviceType.bind(this)
 			
 		// var config = {
 		// 	apiKey: "AIzaSyAMPO-acgVmKxnB0sBfv7tzpxo5G-yuhfY",
@@ -132,7 +143,8 @@ class App extends Component {
 			"key": deviceKey,
 			"x": x,
 			"y": y,
-			"infoState": getDefaultPropsValuesSmartDevice(deviceKey)
+			"infoState": getDefaultPropsValuesSmartDevice(deviceKey),
+			"img": i1
 		}
 
 		devices.push(newDevice);
@@ -174,6 +186,17 @@ class App extends Component {
 		})
 	}
 
+	onNewDeviceType(deviceKey, type) {
+		let img = getPropsForSmartDevice("").props.filter( prop => prop.title === "Device type")[0].options.filter(option => option.title === type)[0].img
+		let devices = this.state.devices
+		devices.filter( i => i.key === deviceKey)[0].img = img
+
+		this.setState({
+			devices: devices
+		})
+
+	}
+
 	render() {
 		return (
 			<div> 
@@ -181,6 +204,7 @@ class App extends Component {
 				<InfoPanel 
 					info = {this.state.infoPanelProps} 
 					onOkClicked={this.saveInfoFromPanel} 
+					onNewDeviceType={this.onNewDeviceType}
 					onCancelClicked={() => {
 						this.setState(
 							{
@@ -200,7 +224,7 @@ class App extends Component {
 
 				<div style={{position: "relative"}}>  
 					<BuildingPlan imgSrc={plan} onClick={this.addSmartDevice}/> 
-					<SmartDevices devices={this.state.devices} imgSrc={device} onSmartDeviceClick={this.onSmartDeviceClick} 
+					<SmartDevices devices={this.state.devices} onSmartDeviceClick={this.onSmartDeviceClick} 
 					onDragged={this.onSmartDeviceDrag}
 					/> 
 				</div>
