@@ -14,9 +14,11 @@ import i3 from './res/img/i3.svg'
 import i4 from './res/img/i4.svg'
 import i5 from './res/img/i5.svg'
 import i6 from './res/img/i6.svg'
- 
-
+import frebase from 'firebase'
 import './App.css';
+import myFirebase from './firebase'
+
+
 var shift = 1
 var generateKey = (pre) => `${ pre }_${ new Date().getTime() + shift++ }`;
 var generateDeviceKey = (x,y) =>  "device" + x + "-" + y;
@@ -97,22 +99,6 @@ class App extends Component {
 		this.onSmartDeviceClick = this.onSmartDeviceClick.bind(this)
 		this.onSmartDeviceDrag = this.onSmartDeviceDrag.bind(this)
 		this.onNewDeviceType = this.onNewDeviceType.bind(this)
-			
-		// var config = {
-		// 	apiKey: "AIzaSyAMPO-acgVmKxnB0sBfv7tzpxo5G-yuhfY",
-		// 	authDomain: "smarthome-47922.firebaseapp.com",
-		// 	databaseURL: "https://smarthome-47922.firebaseio.com",
-		// 	projectId: "smarthome-47922",
-		// 	storageBucket: "smarthome-47922.appspot.com",
-		// 	messagingSenderId: "700180913950"
-		// 	};
-
-		// firebase.initializeApp(config);
-
-		// this.database = firebase.database();
-
-		// console.log(this.database);
-
 	}
 	
 
@@ -120,6 +106,12 @@ class App extends Component {
 		this.setState({"devices": []})
 		this.setState({"infoPanelProps": null})
 		this.setState({"initialSetup": false})
+		let ref = myFirebase.database().ref("devices")
+		console.log("got ref from firebase");
+		ref.on('child_added', snapshot => {
+			let devices = snapshot.val()
+			this.setState({devices: devices })
+		})
 	}
 
 
@@ -200,7 +192,9 @@ class App extends Component {
 	render() {
 		return (
 			<div> 
-				<Header />
+		
+				<Header 
+					onSaveClicked={ () =>  myFirebase.database().ref("devices/state").set( this.state.devices ) } />
 				<InfoPanel 
 					info = {this.state.infoPanelProps} 
 					onOkClicked={this.saveInfoFromPanel} 
