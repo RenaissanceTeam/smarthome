@@ -19,7 +19,7 @@ class InfoPanel extends Component {
 	}
 
 	componentWillReceiveProps(props) {
-		if (props.info !== null) {
+		if (props.info !== null && props.device != null) {
 			this.setState({info: props.device.infoState, lastDevice: props.device.key})
 		}
 	}
