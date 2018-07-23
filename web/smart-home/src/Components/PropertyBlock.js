@@ -139,7 +139,7 @@ class PropertyBlock extends Component {
             <select onChange={e => this.props.onChange(e.target.value)} defaultValue={this.props.value} > 
             {
               this.props.options.map( option => 
-                <option key={index++} value= {option} > {option} </option>
+                <option key={index++} value= {option.title} > {option.title} </option>
               )
             }
             </select>

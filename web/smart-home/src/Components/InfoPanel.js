@@ -34,6 +34,9 @@ class InfoPanel extends Component {
 		// completely rewrite value of one item (filtered by title)
 		let allInfo = this.state.info
 		allInfo.filter( prop => prop.title === title )[0].value = value
+		if (title === "Device type") {
+			this.props.onNewDeviceType(this.props.device.key, value)
+		}
 		this.setState({info: allInfo})
 	}
 
@@ -50,7 +53,6 @@ class InfoPanel extends Component {
 		if (! this.props.info) { // not the same as info in state
 			return null;
 		} 
-		console.log(this.state.info);
 
 		if (this.props.info.type === "device") {
 			let device = this.props.info
