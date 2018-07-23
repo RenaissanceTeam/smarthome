@@ -110,7 +110,7 @@ class App extends Component {
 		console.log("got ref from firebase");
 		ref.on('child_added', snapshot => {
 			let devices = snapshot.val()
-			this.setState({devices: devices })
+			this.setState({devices: devices, infoPanelProps: null})
 		})
 	}
 
