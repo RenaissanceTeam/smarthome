@@ -102,56 +102,49 @@ select#soflow-color {
 	color: #000;
 }
 
-/* .slideThree */
-.slideThree {
-  width: 80px;
-  height: 26px;
-  background: #ddd;
+/* .squaredThree */
+.squaredThree {
+  width: 20px;
   position: relative;
-  border-radius: 50px;
-  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+  margin: 20px 0;
 }
-.slideThree:after {
-  content: 'OFF';
-  color: #000;
-  position: absolute;
-  right: 10px;
-  z-index: 0;
-  font: 12px/26px Arial, sans-serif;
-  font-weight: bold;
-  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15);
-}
-.slideThree:before {
-  content: 'ON';
-  color: #27ae60;
-  position: absolute;
-  left: 10px;
-  z-index: 0;
-  font: 12px/26px Arial, sans-serif;
-  font-weight: bold;
-}
-.slideThree label {
-  display: block;
-  width: 34px;
+.squaredThree label {
+  width: 20px;
   height: 20px;
   cursor: pointer;
   position: absolute;
-  top: 3px;
-  left: 3px;
-  z-index: 1;
-  background: #fcfff4;
-  background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-  border-radius: 50px;
-  transition: all 0.4s ease;
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+  top: 0;
+  left: 0;
+  background: linear-gradient(to bottom, #222222 0%, #45484d 100%);
+  border-radius: 4px;
+  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
 }
-.slideThree input[type=checkbox] {
+.squaredThree label:after {
+  content: '';
+  width: 9px;
+  height: 5px;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  border: 3px solid #fcfff4;
+  border-top: none;
+  border-right: none;
+  background: transparent;
+  opacity: 0;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+}
+.squaredThree label:hover::after {
+  opacity: 0.3;
+}
+.squaredThree input[type=checkbox] {
   visibility: hidden;
 }
-.slideThree input[type=checkbox]:checked + label {
-  left: 43px;
+.squaredThree input[type=checkbox]:checked + label:after {
+  opacity: 1;
 }
-/* end .slideThree */
+
+/* end .squaredThree */
 
 .infoWindowVisible {
 	visibility: visible;
@@ -168,12 +161,22 @@ select#soflow-color {
 }
 .propertyBlock.deviceTitle {
 	font-size: x-large;
+	margin-right: 20px; 
+}
+
+.propertyBlock label {
+	margin-left: 20px;
+}
+
+.propertyBlock textarea {
+	width: 200px;
+	max-width: 400px;
 }
 
 .propertyTitle {
 	width: auto;
 	max-width: 200px;
-	display: inline-block;
+	padding-right: 20px;
 }
 
 .cancelButton:hover {
