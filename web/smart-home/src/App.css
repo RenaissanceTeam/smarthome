@@ -5,18 +5,21 @@
 	object-fit: scale-down;
 }
 
+body {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
 
 #title {
-	padding-top: 40px;
 	margin-left: 20px;
 	display: inline-block;
+	font-family: "Lucida Console", Monaco, monospace;
+	color: #444;
+	font-size: 28px;
 }
 
 #header {
 	display: block;
 	height: 100px;
-	background-color: #f2f2f2;
-
 }
 
 .smartItem {
@@ -24,6 +27,7 @@
 	height: 20px;
 	width: 20px;
 	position: absolute;
+	cursor: pointer;
 }
 
 .smartDevices {
@@ -31,7 +35,8 @@
 }
 
 #infoPanel {
-	width: 300px;
+	width: auto;
+	max-width: 500px;
 	float: right;
 	border: 1px solid black;
 	display: block;
@@ -39,16 +44,114 @@
 
 .inputField {
 	padding-left: 30px;
-	display: inline-block;
 } 
 
 #smartItemInfoWindow {
 	width: 150px;	
-	border: 1px solid black;
+	border: 1px solid #999;
 	position: absolute;
-	background-color: #eee;
+	background-color: rgba(255,255,255, 0.8);
+
 	text-align: center;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
+
+/*title*/
+#smartItemInfoWindow h3 {
+	overflow: visible;
+}
+
+/*description*/
+#smartItemInfoWindow p {
+	padding: 0px 10px 0px 10px;
+}
+
+/* -------------------- Select Box Styles: stackoverflow.com Method */
+/* -------------------- Source: http://stackoverflow.com/a/5809186 */
+select#soflow, select#soflow-color {
+   -webkit-appearance: button;
+   -webkit-border-radius: 2px;
+   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+   -webkit-padding-end: 20px;
+   -webkit-padding-start: 2px;
+   -webkit-user-select: none;
+   background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#eee, #fff 40%, #fff);
+   background-position: 97% center;
+   background-repeat: no-repeat;
+   border: 1px solid #AAA;
+   color: #555;
+   font-size: inherit;
+   margin: 20px;
+   overflow: hidden;
+   padding: 5px 10px;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   width: 200px;
+}
+
+select#soflow-color {
+   color: #eee;
+   background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#3b8ec2, #3b8ec2 40%, #3b8ec2);
+   background-color: #fff;
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 5px;
+   padding-left: 15px;
+}
+#soflow-color option {
+	color: #000;
+}
+
+/* .slideThree */
+.slideThree {
+  width: 80px;
+  height: 26px;
+  background: #ddd;
+  position: relative;
+  border-radius: 50px;
+  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+}
+.slideThree:after {
+  content: 'OFF';
+  color: #000;
+  position: absolute;
+  right: 10px;
+  z-index: 0;
+  font: 12px/26px Arial, sans-serif;
+  font-weight: bold;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15);
+}
+.slideThree:before {
+  content: 'ON';
+  color: #27ae60;
+  position: absolute;
+  left: 10px;
+  z-index: 0;
+  font: 12px/26px Arial, sans-serif;
+  font-weight: bold;
+}
+.slideThree label {
+  display: block;
+  width: 34px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  z-index: 1;
+  background: #fcfff4;
+  background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  border-radius: 50px;
+  transition: all 0.4s ease;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+}
+.slideThree input[type=checkbox] {
+  visibility: hidden;
+}
+.slideThree input[type=checkbox]:checked + label {
+  left: 43px;
+}
+/* end .slideThree */
 
 .infoWindowVisible {
 	visibility: visible;
@@ -61,15 +164,15 @@
 .propertyBlock {
 	margin-left: 30px;
 	margin-top: 25px;
-
+	padding-right: 30px;
 }
 .propertyBlock.deviceTitle {
-	font-size: xx-large;
+	font-size: x-large;
 }
 
 .propertyTitle {
-	width: 100px;
-	overflow: auto;
+	width: auto;
+	max-width: 200px;
 	display: inline-block;
 }
 
@@ -84,8 +187,7 @@
 }
 
 .save {
-	margin-top: 20px;
-	margin-left: 10px;
+	margin-left: 60px;
 	opacity: 0.7;
 	background-color: #eee; 
     border: none;

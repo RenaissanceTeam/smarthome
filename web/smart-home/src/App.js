@@ -21,7 +21,7 @@ import myFirebase from './firebase'
 
 var shift = 1
 var generateKey = (pre) => `${ pre }_${ new Date().getTime() + shift++ }`;
-var generateDeviceKey = (x,y) =>  "device" + x + "-" + y;
+var generateDeviceKey = (x,y) =>  "Device " + x + "-" + y;
 function getPropsForSmartDevice(device) {
 		return {
 				type: "device",
@@ -73,7 +73,6 @@ function getPropsForSmartDevice(device) {
 							{title: "Engine", img: deviceImg},
 							{title: "WiFi module", img: deviceImg},
 							{title: "Relay", img: deviceImg},
-
 						]
 					},
 				]
@@ -87,7 +86,6 @@ function getDefaultPropsValuesSmartDevice(title="default title") {
 			{"title": "Description", "value":  "def"},
 			{"title": "Can be controlled from Android app? ", "value":  true},
 			{"title": "Modules", "value":  []},
-
 	]
 }
 class App extends Component {
