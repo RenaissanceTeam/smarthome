@@ -91,18 +91,27 @@ class PropertyBlock extends Component {
     }
 
     if (this.props.type === Constants.MODULES_BLOCK) {
-
+      let value = this.props.value
+      if (!value) {
+        value = []
+      }
       return  (
         <div className = "propertyBlock modulesBlock">
           <div > {this.props.title} </div>
 
           <div className="dropdown">
             <div id="myDropdown" className="dropdown-content" >
-              {this.props.options.map((module) => <a key={generateKey("dropdown")} onClick={e => this.onOptionSelected(e.nativeEvent.target.textContent)} >{module.title}</a>)}
+              {
+               this.props.options.map(
+                  (module) => 
+                      <a key={generateKey("dropdown")} onClick={e => this.onOptionSelected(e.nativeEvent.target.textContent)} >{module.title}</a>
+                  )
+              }
             </div>
           </div>
 
-          {this.props.value.map( (module, index) => 
+          { 
+            value.map( (module, index) => 
               <div key={generateKey("module")} className="moduleBlock">
                 <div className="moduleBlockImageContainer" >
                   <div 
