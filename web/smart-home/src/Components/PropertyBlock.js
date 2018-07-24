@@ -72,7 +72,7 @@ class PropertyBlock extends Component {
             
             <div className="propertyTitle"> {this.props.title}  </div>
             <div className = "inputField"> 
-              <input type="text" onChange={(e) => this.props.onChange(e.target.value)} defaultValue= {this.props.value}/> 
+              <textArea rows="5" type="text" onChange={(e) => this.props.onChange(e.target.value)}> {this.props.value} </textArea> 
             </div>
            </div>
         );
@@ -83,8 +83,10 @@ class PropertyBlock extends Component {
           <div className="propertyBlock"> 
             
             <div className="propertyTitle"> {this.props.title}  </div>
-            <div className = "inputField"> 
-              <input type="checkbox" onChange={e => this.props.onChange(e.target.checked)} defaultChecked={this.props.value} /> 
+            <div className = "slideThree"> 
+              <input type="checkbox" value="None" id="slideThree" name="check"
+                   onChange={e => this.props.onChange(e.target.checked)} defaultChecked={this.props.value} /> 
+              <label for="slideThree"></label>
             </div>
            </div>
       );
@@ -145,7 +147,7 @@ class PropertyBlock extends Component {
         <div className="propertyBlock">
           <div className="propertyTitle"> {this.props.title} </div>
           <div className="inputField">
-            <select onChange={e => this.props.onChange(e.target.value)} defaultValue={this.props.value} > 
+            <select id="soflow-color" onChange={e => this.props.onChange(e.target.value)} defaultValue={this.props.value} > 
             {
               this.props.options.map( option => 
                 <option key={index++} value= {option.title} > {option.title} </option>
