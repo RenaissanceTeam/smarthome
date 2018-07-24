@@ -83,10 +83,10 @@ class PropertyBlock extends Component {
           <div className="propertyBlock"> 
             
             <div className="propertyTitle"> {this.props.title}  </div>
-            <div className = "slideThree"> 
-              <input type="checkbox" value="None" id="slideThree" name="check"
+            <div className = "inputField squaredThree"> 
+              <input type="checkbox" value="None" id="squaredThree" name="check"
                    onChange={e => this.props.onChange(e.target.checked)} defaultChecked={this.props.value} /> 
-              <label for="slideThree"></label>
+              <label for="squaredThree"></label>
             </div>
            </div>
       );
