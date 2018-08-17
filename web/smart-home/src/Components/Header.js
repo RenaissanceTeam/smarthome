@@ -8,6 +8,7 @@ class Header extends Component {
     return (
     		<div id="header"> 
     			<p id="title">Smart house project </p>
+    			<div className="save" onClick={this.props.onSaveClicked}> Save </div>
     		</div>
     	);
   }
