@@ -72,7 +72,7 @@ class PropertyBlock extends Component {
             
             <div className="propertyTitle"> {this.props.title}  </div>
             <div className = "inputField"> 
-              <input type="text" onChange={(e) => this.props.onChange(e.target.value)} defaultValue= {this.props.value}/> 
+              <textArea rows="5" type="text" onChange={(e) => this.props.onChange(e.target.value)}> {this.props.value} </textArea> 
             </div>
            </div>
         );
@@ -83,26 +83,37 @@ class PropertyBlock extends Component {
           <div className="propertyBlock"> 
             
             <div className="propertyTitle"> {this.props.title}  </div>
-            <div className = "inputField"> 
-              <input type="checkbox" onChange={e => this.props.onChange(e.target.checked)} defaultChecked={this.props.value} /> 
+            <div className = "inputField squaredThree"> 
+              <input type="checkbox" value="None" id="squaredThree" name="check"
+                   onChange={e => this.props.onChange(e.target.checked)} defaultChecked={this.props.value} /> 
+              <label for="squaredThree"></label>
             </div>
            </div>
       );
     }
 
     if (this.props.type === Constants.MODULES_BLOCK) {
-
+      let value = this.props.value
+      if (!value) {
+        value = []
+      }
       return  (
         <div className = "propertyBlock modulesBlock">
           <div > {this.props.title} </div>
 
           <div className="dropdown">
             <div id="myDropdown" className="dropdown-content" >
-              {this.props.options.map((module) => <a key={generateKey("dropdown")} onClick={e => this.onOptionSelected(e.nativeEvent.target.textContent)} >{module.title}</a>)}
+              {
+               this.props.options.map(
+                  (module) => 
+                      <a key={generateKey("dropdown")} onClick={e => this.onOptionSelected(e.nativeEvent.target.textContent)} >{module.title}</a>
+                  )
+              }
             </div>
           </div>
 
-          {this.props.value.map( (module, index) => 
+          { 
+            value.map( (module, index) => 
               <div key={generateKey("module")} className="moduleBlock">
                 <div className="moduleBlockImageContainer" >
                   <div 
@@ -136,10 +147,10 @@ class PropertyBlock extends Component {
         <div className="propertyBlock">
           <div className="propertyTitle"> {this.props.title} </div>
           <div className="inputField">
-            <select onChange={e => this.props.onChange(e.target.value)} defaultValue={this.props.value} > 
+            <select id="soflow-color" onChange={e => this.props.onChange(e.target.value)} defaultValue={this.props.value} > 
             {
               this.props.options.map( option => 
-                <option key={index++} value= {option} > {option} </option>
+                <option key={index++} value= {option.title} > {option.title} </option>
               )
             }
             </select>
