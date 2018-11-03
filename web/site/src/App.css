@@ -1,0 +1,333 @@
+#plan {
+	position: absolute;
+	height: 500px;
+	width: 1000px;
+	object-fit: scale-down;
+}
+
+body {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+#title {
+	margin-left: 20px;
+	display: inline-block;
+	font-family: "Lucida Console", Monaco, monospace;
+	color: #444;
+	font-size: 28px;
+}
+
+#header {
+	display: block;
+	height: 100px;
+}
+
+.smartItem {
+	/*before changing, check SmartItem.js and change them as well*/
+	height: 20px;
+	width: 20px;
+	position: absolute;
+	cursor: pointer;
+}
+
+.smartDevices {
+	position: absolute;
+}
+
+#infoPanel {
+	width: auto;
+	max-width: 500px;
+	float: right;
+	border: 1px solid black;
+	display: block;
+}
+
+.inputField {
+	padding-left: 30px;
+} 
+
+#smartItemInfoWindow {
+	width: 150px;	
+	border: 1px solid #999;
+	position: absolute;
+	background-color: rgba(255,255,255, 0.8);
+
+	text-align: center;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+/*title*/
+#smartItemInfoWindow h3 {
+	overflow: visible;
+}
+
+/*description*/
+#smartItemInfoWindow p {
+	padding: 0px 10px 0px 10px;
+}
+
+/* -------------------- Select Box Styles: stackoverflow.com Method */
+/* -------------------- Source: http://stackoverflow.com/a/5809186 */
+select#soflow, select#soflow-color {
+   -webkit-appearance: button;
+   -webkit-border-radius: 2px;
+   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+   -webkit-padding-end: 20px;
+   -webkit-padding-start: 2px;
+   -webkit-user-select: none;
+   background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#eee, #fff 40%, #fff);
+   background-position: 97% center;
+   background-repeat: no-repeat;
+   border: 1px solid #AAA;
+   color: #555;
+   font-size: inherit;
+   margin: 20px;
+   overflow: hidden;
+   padding: 5px 10px;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   width: 200px;
+}
+
+select#soflow-color {
+   color: #eee;
+   background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#3b8ec2, #3b8ec2 40%, #3b8ec2);
+   background-color: #fff;
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 5px;
+   padding-left: 15px;
+}
+#soflow-color option {
+	color: #000;
+}
+
+/* .squaredThree */
+.squaredThree {
+  width: 20px;
+  position: relative;
+  margin: 20px 0;
+}
+.squaredThree label {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(to bottom, #222222 0%, #45484d 100%);
+  border-radius: 4px;
+  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
+}
+.squaredThree label:after {
+  content: '';
+  width: 9px;
+  height: 5px;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  border: 3px solid #fcfff4;
+  border-top: none;
+  border-right: none;
+  background: transparent;
+  opacity: 0;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+}
+.squaredThree label:hover::after {
+  opacity: 0.3;
+}
+.squaredThree input[type=checkbox] {
+  visibility: hidden;
+}
+.squaredThree input[type=checkbox]:checked + label:after {
+  opacity: 1;
+}
+
+/* end .squaredThree */
+
+.infoWindowVisible {
+	visibility: visible;
+}
+
+.infoWindowInvisible {
+	visibility: hidden;
+}
+
+.propertyBlock {
+	margin-left: 30px;
+	margin-top: 25px;
+	padding-right: 30px;
+}
+.propertyBlock.deviceTitle {
+	font-size: x-large;
+	margin-right: 20px; 
+}
+
+.propertyBlock label {
+	margin-left: 20px;
+}
+
+.propertyBlock textarea {
+	width: 200px;
+	max-width: 400px;
+}
+
+.propertyTitle {
+	width: auto;
+	max-width: 200px;
+	padding-right: 20px;
+}
+
+.cancelButton:hover {
+	opacity: 1;
+}
+.okButton:hover {
+	opacity: 1;
+}
+.hideButton:hover {
+	opacity: 1;
+}
+
+.save {
+	margin-left: 60px;
+	opacity: 0.7;
+	background-color: #eee; 
+    border: none;
+    color: #222;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+.save:hover {
+	opacity: 1
+}
+.save:active {
+	background-color: #ddd;
+}
+
+.cancelButton {
+	margin-top: 20px;
+	margin-left: 10px;
+	opacity: 0.5;
+	background-color: #e22; 
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.okButton {
+	margin-top: 20px;
+	margin-left: 10px;
+	opacity: 0.5;
+	background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+
+}
+
+.hideButton {
+	margin-top: 20px;
+	margin-left: 10px;
+	opacity: 0.7;
+	background-color: #eee; 
+    border: none;
+    color: #222;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+
+}
+/*image in info panel for adding modules block*/
+.moduleBlockImage {
+	width: inherit;
+}
+
+/*in MODULES property block (to the right top corner of module's image)*/
+.editButton {
+	background-color: red;
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+/*image with edit button in info panel for adding modules block*/
+.moduleBlockImageContainer {
+	width: inherit;
+	background-color: green;
+	position: relative;
+}
+/*block with image and title in info panel for adding modules block*/
+.moduleBlock {
+	border: 1px dashed black;
+	float: left;
+	margin-right: 10px;
+	width: 50px;
+	height: auto;
+	padding-left: 10px;
+	padding-right: 10px;
+	text-align: center;
+	position: relative;
+}
+
+/*outer block*/
+.modulesBlock {
+	overflow: auto;
+	position: relative;
+}
+
+/* Dropdown Button */
+.dropbtn {
+    cursor: pointer;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: absolute;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
