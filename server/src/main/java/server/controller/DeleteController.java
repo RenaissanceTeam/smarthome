@@ -25,7 +25,7 @@ public class DeleteController {
      */
     @ResponseStatus(value = HttpStatus.OK)
     @RequestMapping(value = "/user", method = RequestMethod.DELETE)
-    public void material (@RequestParam(value="id") long id) {
+    public void deleteUser(@RequestParam(value="id") long id) {
 
         User instance = em.find(User.class, id);
 
