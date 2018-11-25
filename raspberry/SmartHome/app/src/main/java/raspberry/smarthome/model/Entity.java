@@ -2,13 +2,9 @@ package raspberry.smarthome.model;
 
 public class Entity {
 
-
-    private long GUID;
-
     public String name;
-
     public String description;
-
+    private long GUID;
 
     public Entity() {
         GUID = 1;
