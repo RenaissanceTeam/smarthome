@@ -15,7 +15,7 @@ public class Entity {
     public long GUID;
 
     public Entity(){
-        GUID = new GuidGenerator().issuenewguid();
+        GUID = new GuidGenerator().issueNewGuid();
     }
 
 }

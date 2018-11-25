@@ -14,7 +14,7 @@ public class GuidGenerator {
         storage = GuidStorage.getInstance();
     }
 
-    public long issuenewguid(){
+    public long issueNewGuid(){
         date = LocalDate.now();
 
         long res = 0;
@@ -26,7 +26,7 @@ public class GuidGenerator {
             isUnique = storage.addGuid(res);
         }
 
-        return generateNext();
+        return res;
     }
 
     private long generateNext(){
