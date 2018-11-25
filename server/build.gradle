@@ -1,0 +1,68 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+
+plugins {
+    id 'java'
+}
+
+group 'Server'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+
+tasks.withType(CreateStartScripts) {
+    classpath += files('application.properties')
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compileOnly('org.projectlombok:lombok:1.16.18')
+
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-web')
+
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.7'
+
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
+
+    compile('org.liquibase:liquibase-core')
+
+    runtime('org.postgresql:postgresql:42.1.4')
+
+    compile 'com.google.code.gson:gson:2.8.4'
+    
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class' : 'server.Main'
+    }
+    baseName = 'server'
+    version = '0.1.0'
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+}
