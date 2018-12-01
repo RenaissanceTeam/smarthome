@@ -23,7 +23,8 @@ import io.moquette.server.config.MemoryConfig;
 import raspberry.smarthome.model.device.constants.Constants;
 import raspberry.smarthome.mqtt.SmartHomeMqttClient;
 
-import static raspberry.smarthome.constants.Constants.RC_SIGN_IN;
+import static raspberry.smarthome.model.device.constants.Constants.RC_SIGN_IN;
+
 
 public class MainActivity extends Activity implements SmartHomeMqttClient.OnConnectionChange{
 
@@ -38,7 +39,7 @@ public class MainActivity extends Activity implements SmartHomeMqttClient.OnConn
         setContentView(R.layout.activity_main);
         if (DEBUG) Log.d(TAG, "onCreate");
 
-        auth();
+//        auth();
 
         if (!tryStartServer()) return;
         setupLocalMqttClient();
@@ -67,9 +68,8 @@ public class MainActivity extends Activity implements SmartHomeMqttClient.OnConn
 
     private void setupLocalMqttClient() {
         try {
-            smartHomeMqttClient = new SmartHomeMqttClient(this,
-                    Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
-
+            smartHomeMqttClient = SmartHomeMqttClient.getInstance();
+            smartHomeMqttClient.init(this, Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
             smartHomeMqttClient.connect(this);
         } catch (Exception e) {
             if (DEBUG) Log.d(TAG, "can't create mqtt client " + e);
@@ -96,6 +96,8 @@ public class MainActivity extends Activity implements SmartHomeMqttClient.OnConn
 
         // todo if crashes like java.lang.NoSuchMethodException: <init>
         // temp solution: remove moquette_store.mapdb in /sdcard
+        // adb shell rm -rf /sdcard/moquette_store.mapdb
+        new File(path).delete();
         server.startServer(memoryConfig);
         if (DEBUG) Log.d(TAG, "server started");
         return server;

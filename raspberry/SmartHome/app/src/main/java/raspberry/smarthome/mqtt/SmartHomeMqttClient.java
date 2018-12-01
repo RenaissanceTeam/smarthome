@@ -27,18 +27,31 @@ public class SmartHomeMqttClient {
     public static final int QOS_EXACTLY_ONCE = 2;
     private MqttAndroidClient mqttClient;
     public static final String CLIENT_THEME = "client/";
-    public static final String IOT_WELCOME_THEME = "iot/welcome";
-    public static final String IOT_DEVICE_THEME = "iot/device/+";
-    private static final String[] THEMES = new String[]{CLIENT_THEME, IOT_WELCOME_THEME, IOT_DEVICE_THEME};
+    public static final String IOT_WELCOME_THEME = "raspberry/welcome";
+    public static final String IOT_DEVICE_THEME = "raspberry/device/+";
+    public static final String INITIALIZE_RASP_THEME = "raspberry/initialize";
+    public static final String INITIALIZE_IOT_THEME = "iot/initialize";
+    public static final String RESULT_FROM_IP_THEME = "raspberry/device/result/ip/+";
+    private static final String[] THEMES = new String[]{CLIENT_THEME, IOT_WELCOME_THEME,
+            IOT_DEVICE_THEME, INITIALIZE_RASP_THEME, RESULT_FROM_IP_THEME};
+    private static SmartHomeMqttClient instance;
 
-    public SmartHomeMqttClient(Context context, String brokerUrl, String clientId) {
+    public static SmartHomeMqttClient getInstance() {
+        if (instance == null) {
+            instance = new SmartHomeMqttClient();
+        }
+        return instance;
+    }
+
+    private SmartHomeMqttClient() {}
+
+    public void init(Context context, String brokerUrl, String clientId) {
         mqttClient = new MqttAndroidClient(context, brokerUrl, clientId);
     }
 
     public void connect(final OnConnectionChange listener) throws MqttException {
 
-        mqttClient
-                .connect(getMqttConnectionOption())
+        mqttClient.connect(getMqttConnectionOption())
                 .setActionCallback(new IMqttActionListener() {
             @Override
             public void onSuccess(IMqttToken asyncActionToken) {
