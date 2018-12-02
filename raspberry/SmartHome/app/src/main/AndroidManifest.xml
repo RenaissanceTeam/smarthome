@@ -25,6 +25,14 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".auth.GoogleSignInActivity">
+            <intent-filter>
+                <action android:name="raspberry.smarthome.auth" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>
 

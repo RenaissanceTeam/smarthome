@@ -6,20 +6,18 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 
-import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
 
 import io.moquette.BrokerConstants;
 import io.moquette.server.Server;
 import io.moquette.server.config.MemoryConfig;
+import raspberry.smarthome.auth.GoogleSignInActivity;
 import raspberry.smarthome.model.device.constants.Constants;
 import raspberry.smarthome.mqtt.SmartHomeMqttClient;
 
@@ -33,27 +31,31 @@ public class MainActivity extends Activity implements SmartHomeMqttClient.OnConn
     private Server mqttServer;
     private SmartHomeMqttClient smartHomeMqttClient;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (DEBUG) Log.d(TAG, "onCreate");
 
-//        auth();
-
         if (!tryStartServer()) return;
         setupLocalMqttClient();
     }
 
-    private void auth() {
-        List<AuthUI.IdpConfig> providers = Collections.singletonList(
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        auth();
+    }
 
-        startActivityForResult(AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
+    private void auth() {
+        // check for auth
+        mAuth = FirebaseAuth.getInstance();
+
+        if(mAuth.getCurrentUser() == null)
+            startActivity(new Intent(this, GoogleSignInActivity.class));
     }
 
     private boolean tryStartServer() {
