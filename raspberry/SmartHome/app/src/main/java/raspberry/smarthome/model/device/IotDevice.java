@@ -1,26 +1,24 @@
 package raspberry.smarthome.model.device;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import raspberry.smarthome.model.Entity;
+import raspberry.smarthome.model.GUID;
 import raspberry.smarthome.model.device.controllers.BaseController;
 
-public abstract class IotDevice extends Entity {
-    List<BaseController> controllers;
+public abstract class IotDevice {
+    public String name;
+    public String description;
+    public final long guid;
+    public List<BaseController> controllers; // todo incapsulation (everywhere)
 
-    public abstract boolean connect();
-
-    public abstract boolean disconnect();
-
-    public IotDevice(String... params) {
+    public IotDevice(String name, String description) {
         super();
-        GUID = generateGUID(params);
-    }
+        this.name = name;
+        this.description = description;
+        this.controllers = new ArrayList<>();
 
-    @Override
-    protected long generateGUID(String... params) {
-        return params.length == 0 ? new Random().nextLong() : params[0].hashCode();
+        guid = GUID.getInstance().getGuidForIotDevice(this);
     }
 
     public List<BaseController> getControllers() {
@@ -29,13 +27,13 @@ public abstract class IotDevice extends Entity {
 
     @Override
     public int hashCode() {
-        return (int)GUID;
+        return (int)guid;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof IotDevice) {
-            return ((IotDevice) obj).GUID == GUID;
+            return ((IotDevice) obj).guid == guid;
         }
         return super.equals(obj);
     }
@@ -46,7 +44,7 @@ public abstract class IotDevice extends Entity {
                 "controllers=" + controllers +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", GUID=" + GUID +
+                ", GUID=" + guid +
                 '}';
     }
 }

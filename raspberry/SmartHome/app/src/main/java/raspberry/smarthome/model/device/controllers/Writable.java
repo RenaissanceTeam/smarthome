@@ -1,5 +1,5 @@
 package raspberry.smarthome.model.device.controllers;
 
-public interface Writable<T> {
-    void write(T value);
+public interface Writable {
+    void write(String value);
 }

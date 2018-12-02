@@ -7,7 +7,7 @@
 char ssid[] = "NETGEAR";
 char pass[] = "smarthome";
 
-char DEVICE_NAME[] = "random name"; // hardware name of the device
+char DEVICE_NAME[] = "random_name"; // hardware name of the device
 char IOT_INITIALIZE[] = "iot/initialize";  // wait till raspberry wants to know about IoT devices
 char IOT_DEVICE_IP[] = "iot/device/ip/";   // with ip - wait for client actions requests
 char RASP_WELCOME[] = "raspberry/welcome"; // publish services & ip to this theme
@@ -16,8 +16,8 @@ int status = WL_IDLE_STATUS;
 int MQTT_SERVER_PORT = 1883;
 int QUALITY_OF_SERVICE = 1;
 
-int TEMPERATURE = 0;
-int ON_OFF = 1;
+int TEMPERATURE = 1000;
+int ON_OFF = 1001;
 
 int SERVICES_COUNT = 1;
 int SERVICES[] = { ON_OFF };
@@ -83,20 +83,27 @@ void callback(char* topic, byte* raw_payload, unsigned int length) {
   Serial.println(topic);
   
   char payload[length + 1];
-  memcpy(payload, raw_payload, length);
+  memcpy(payload, (char*)raw_payload, length);
   payload[length] = '\0';
   Serial.println(payload);
 
   if (strcmp(topic, IOT_INITIALIZE) == 0) {
-    String respPayload = "name=\"" + String(DEVICE_NAME) + "\";ip=\"" +
-        toString(WiFi.localIP()) + "\"'services=[" + int_array_to_string(SERVICES, SERVICES_COUNT) + "];";
+    String respPayload = "type=0;name=" + String(DEVICE_NAME) + ";ip=" +
+        toString(WiFi.localIP()) + ";services=[" + int_array_to_string(SERVICES, SERVICES_COUNT) + "]; ";
     Serial.print("initialize request, send \"");
     Serial.print(respPayload);
     Serial.println("\" to mqtt server");
     int n = respPayload.length();
-    char buffer[n];
+    char buffer[n + 1];
+    buffer[n] = '\0';
     respPayload.toCharArray(buffer, n); 
-    client.publish(RASP_WELCOME, buffer);
+    
+    bool sendResult = false;
+    do {
+      Serial.println("Trying to send message");
+      client.publish(RASP_WELCOME, buffer);
+    } while (sendResult);
+    Serial.println("Successfully published message");
   } else if (String(topic) == IOT_DEVICE_IP + toString(WiFi.localIP())) {
     // take action
     Serial.println("Take action");
@@ -150,7 +157,7 @@ void subscribeToThemes() {
   theme.toCharArray(buff_iot_device_theme, theme.length() + 1);
   buff_iot_device_theme[theme.length()] = '\0';
   Serial.println(buff_iot_device_theme);
-  client.subscribe(IOT_INITIALIZE); // to send ip & services, when raspberry asks to
-  client.subscribe(buff_iot_device_theme);  // to perform some action, initiated by raspberry or client
+  client.subscribe(IOT_INITIALIZE, QUALITY_OF_SERVICE); // to send ip & services, when raspberry asks to
+  client.subscribe(buff_iot_device_theme, QUALITY_OF_SERVICE);  // to perform some action, initiated by raspberry or client
   Serial.println("Subscribed");
 }

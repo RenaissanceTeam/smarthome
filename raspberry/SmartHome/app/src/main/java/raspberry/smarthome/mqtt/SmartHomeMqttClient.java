@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import static raspberry.smarthome.MainActivity.DEBUG;
+import static raspberry.smarthome.mqtt.MqttThemes.*;
 
 public class SmartHomeMqttClient {
     public interface OnConnectionChange {
@@ -26,14 +27,8 @@ public class SmartHomeMqttClient {
     public static final int QOS_AT_LEAST_ONCE = 1;
     public static final int QOS_EXACTLY_ONCE = 2;
     private MqttAndroidClient mqttClient;
-    public static final String CLIENT_THEME = "client/";
-    public static final String IOT_WELCOME_THEME = "raspberry/welcome";
-    public static final String IOT_DEVICE_THEME = "raspberry/device/+";
-    public static final String INITIALIZE_RASP_THEME = "raspberry/initialize";
-    public static final String INITIALIZE_IOT_THEME = "iot/initialize";
-    public static final String RESULT_FROM_IP_THEME = "raspberry/device/result/ip/+";
     private static final String[] THEMES = new String[]{CLIENT_THEME, IOT_WELCOME_THEME,
-            IOT_DEVICE_THEME, INITIALIZE_RASP_THEME, RESULT_FROM_IP_THEME};
+            RASPBERRY_DEVICE_THEME, INITIALIZE_RASP_THEME, RESULT_FROM_IP_THEME};
     private static SmartHomeMqttClient instance;
 
     public static SmartHomeMqttClient getInstance() {
@@ -115,7 +110,7 @@ public class SmartHomeMqttClient {
         encodedPayload = message.getBytes("UTF-8");
 
         MqttMessage mqttMessage = new MqttMessage(encodedPayload);
-        mqttMessage.setId(320);
+        mqttMessage.setId(message.hashCode());
         mqttMessage.setRetained(true);
         mqttMessage.setQos(QOS_AT_LEAST_ONCE);
 

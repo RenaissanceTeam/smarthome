@@ -1,36 +1,24 @@
 package raspberry.smarthome.model.device;
 
-import java.util.ArrayList;
-
-import raspberry.smarthome.model.device.controllers.ControllerTypes;
+import raspberry.smarthome.model.device.controllers.ArduinoController;
+import raspberry.smarthome.model.device.controllers.BaseController;
 
 public class ArduinoIotDevice extends IotDevice {
 
     public final String ip;
-    public ArduinoIotDevice(String name, String description, String ip,
-                            ControllerTypes... controllerTypes) {
-        super(name);
-        this.name = name;
-        this.description = description;
-        this.controllers = new ArrayList<>();
+    public ArduinoIotDevice(String name, String description, String ip) {
+        super(name, description);
         this.ip = ip;
+    }
 
-        for (int i = 0; i < controllerTypes.length; i++) {
-            controllers.add(controllerTypes[i].createArduinoController(this, i));
+    public ArduinoController getControllerByGuid(long guid) {
+        for (BaseController controller : controllers) {
+            if (((ArduinoController) controller).guid == guid) {
+                return (ArduinoController) controller;
+            }
         }
+        throw new IllegalArgumentException("No controller with guid=" + guid + " for iotDevice=" + this);
     }
-
-    @Override
-    public boolean connect() {
-        return false;
-    }
-
-    @Override
-    public boolean disconnect() {
-        return false;
-    }
-
-
     @Override
     public String toString() {
         return "ArduinoIotDevice{" +
@@ -38,7 +26,7 @@ public class ArduinoIotDevice extends IotDevice {
                 ", controllers=" + controllers +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", GUID=" + GUID +
+                ", GUID=" + guid +
                 '}';
     }
 }
