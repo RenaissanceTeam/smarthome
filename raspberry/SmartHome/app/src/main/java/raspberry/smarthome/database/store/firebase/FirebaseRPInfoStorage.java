@@ -11,27 +11,27 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import raspberry.smarthome.database.Constants;
-import raspberry.smarthome.database.model.RaspberryInfo;
 import raspberry.smarthome.database.store.RPInfoStorage;
 import raspberry.smarthome.database.store.listeners.RPInfoListener;
 
 import static raspberry.smarthome.MainActivity.DEBUG;
+import static raspberry.smarthome.database.Constants.RP_IP_REF;
 
 public class FirebaseRPInfoStorage implements RPInfoStorage {
 
     private static FirebaseRPInfoStorage instance;
 
-    private DatabaseReference ref;
+    private DatabaseReference ipRef;
 
 
-    public FirebaseRPInfoStorage getInstance() {
+    public static FirebaseRPInfoStorage getInstance() {
         if(instance == null)
             instance = instantiate();
 
         return instance;
     }
 
-    private FirebaseRPInfoStorage instantiate() {
+    private static FirebaseRPInfoStorage instantiate() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser() == null)
@@ -43,27 +43,28 @@ public class FirebaseRPInfoStorage implements RPInfoStorage {
     private FirebaseRPInfoStorage(String uid) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-        ref = database.getReference()
+        ipRef = database.getReference()
                 .child(uid)
-                .child(Constants.RP_INFO_REF);
+                .child(RP_IP_REF);
+
     }
 
     @Override
-    public void postRaspberryInfo(RaspberryInfo info) {
-        ref.setValue(info);
+    public void postRaspberryIp(String ip) {
+        ipRef.setValue(ip);
     }
 
     @Override
-    public void postRaspberryInfo(RaspberryInfo info, DatabaseReference.CompletionListener listener) {
-        ref.setValue(info, listener);
+    public void postRaspberryIp(String ip, DatabaseReference.CompletionListener listener) {
+        ipRef.setValue(ip, listener);
     }
 
     @Override
     public void getRaspberryInfo(final RPInfoListener listener) {
-        ref.addValueEventListener(new ValueEventListener() {
+        ipRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                listener.onRaspberryInfoReceived(dataSnapshot.getValue(RaspberryInfo.class));
+                listener.onRaspberryIpReceived(dataSnapshot.getValue(String.class));
             }
 
             @Override

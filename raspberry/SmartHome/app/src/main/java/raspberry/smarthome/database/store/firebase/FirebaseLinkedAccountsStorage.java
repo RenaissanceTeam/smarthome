@@ -24,14 +24,14 @@ public class FirebaseLinkedAccountsStorage implements LinkedAccountsStorage {
     private DatabaseReference ref;
 
 
-    public FirebaseLinkedAccountsStorage getInstance() {
+    public static FirebaseLinkedAccountsStorage getInstance() {
         if(instance == null)
             instance = instantiate();
 
         return instance;
     }
 
-    private FirebaseLinkedAccountsStorage instantiate() {
+    private static FirebaseLinkedAccountsStorage instantiate() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser() == null)
