@@ -18,6 +18,9 @@ public class IpObtainTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String ip) {
+        if (ip == null)
+            return;
+
         RPInfoStorage storage = FirebaseRPInfoStorage.getInstance();
         storage.postRaspberryIp(ip);
     }
