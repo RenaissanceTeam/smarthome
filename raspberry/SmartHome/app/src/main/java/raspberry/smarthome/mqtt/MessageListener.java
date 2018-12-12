@@ -47,26 +47,11 @@ public class MessageListener implements IMqttMessageListener {
         // todo maybe rewrite, but not now.
 
         // some mqtt themes are defined as generic, so we are checking the start, without wildcard
-        if (topic.startsWith(takeStartFromGenericTheme(RASPBERRY_DEVICE_THEME))) {
-            performAction(topic, messageValue);
+        if (topic.startsWith(takeStartFromGenericTheme(RESULT_FROM_IP_THEME))) {
+            handleResult(topic, messageValue);
             return;
-        } else if (topic.startsWith(takeStartFromGenericTheme(RESULT_FROM_IP_THEME))) {
-            String ip = getStringByPattern(".+\\/(.+)$", topic, 1);
-            String serviceIndex = getStringByPattern("service_index=(-?\\d+);", messageValue, 1);
-            ArduinoIotDevice arduinoByIp = DevicesStorage.getInstance().getArduinoByIp(ip);
-            ArduinoController controller = (ArduinoController) arduinoByIp.controllers.get(Integer.parseInt(serviceIndex));
-            String result = getStringByPattern("result=(.+);", messageValue, 1);
-
-            if (DEBUG) Log.d(TAG, "result= " + result + ", for device=" +
-                    arduinoByIp + ". For controller=" + controller);
-            try {
-                SmartHomeMqttClient.getInstance().publishMessage(
-                        "controller_guid=" + controller.guid + ";result=" + result + ";", // message
-                        CLIENT_RESULT_FROM_DEVICE + arduinoByIp.guid // theme
-                        );
-            } catch (MqttException | UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+        } else if (topic.startsWith(takeStartFromGenericTheme(RASPBERRY_DEVICE_THEME))) {
+            performAction(topic, messageValue);
             return;
         }
 
@@ -82,8 +67,29 @@ public class MessageListener implements IMqttMessageListener {
             case INITIALIZE_RASP_THEME: {
                 publishInitializeIotRequest();
                 DevicesStorage.getInstance().reset();
+                ClientResponseTimeoutListener.getInstance().stopAllTimeouts();
                 break;
             }
+        }
+    }
+
+    private void handleResult(String topic, String messageValue) {
+        String ip = getStringByPattern(".+\\/(.+)$", topic, 1);
+        String serviceIndex = getStringByPattern("service_index=(-?\\d+);", messageValue, 1);
+        ArduinoIotDevice arduinoByIp = DevicesStorage.getInstance().getArduinoByIp(ip);
+        ArduinoController controller = (ArduinoController) arduinoByIp.controllers.get(Integer.parseInt(serviceIndex));
+        String result = getStringByPattern("result=(.+);", messageValue, 1);
+
+        ClientResponseTimeoutListener.getInstance().stopTimeout(controller.guid);
+        if (DEBUG) Log.d(TAG, "result= " + result + ", for device=" +
+                arduinoByIp + ". For controller=" + controller);
+        try {
+            SmartHomeMqttClient.getInstance().publishMessage(
+                    "controller_guid=" + controller.guid + ";result=" + result + ";", // message
+                    CLIENT_RESULT_FROM_DEVICE + arduinoByIp.guid // theme
+                    );
+        } catch (MqttException | UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 

@@ -21,6 +21,7 @@ import io.moquette.BrokerConstants;
 import io.moquette.server.Server;
 import io.moquette.server.config.MemoryConfig;
 import raspberry.smarthome.model.device.constants.Constants;
+import raspberry.smarthome.mqtt.ClientResponseTimeoutListener;
 import raspberry.smarthome.mqtt.SmartHomeMqttClient;
 
 import static raspberry.smarthome.model.device.constants.Constants.RC_SIGN_IN;
@@ -38,6 +39,7 @@ public class MainActivity extends Activity implements SmartHomeMqttClient.OnConn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (DEBUG) Log.d(TAG, "onCreate");
+        ClientResponseTimeoutListener.getInstance().init(this);
 
 //        auth();
 

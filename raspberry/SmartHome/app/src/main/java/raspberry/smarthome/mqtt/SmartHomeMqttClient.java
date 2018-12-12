@@ -104,7 +104,12 @@ public class SmartHomeMqttClient {
     }
 
 
-    public void publishMessage(String message, String topic)
+    public void publishMessage(String message, String topic) throws MqttException,
+            UnsupportedEncodingException {
+        publishMessage(message, topic, false, 0);
+    }
+
+    public void publishMessage(String message, String topic, boolean shouldDoTimeoutRetry, long timeoutRetry)
             throws MqttException, UnsupportedEncodingException {
         byte[] encodedPayload = new byte[0];
         encodedPayload = message.getBytes("UTF-8");

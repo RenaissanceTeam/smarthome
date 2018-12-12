@@ -16,6 +16,10 @@ public class ArduinoController implements BaseController {
         this.guid = GUID.getInstance().getGuidForController(this);
     }
 
+    public String getTopic() {
+        return "iot/device/ip/" + device.ip;
+    }
+
     @Override
     public String toString() {
         return "ArduinoController{" +
