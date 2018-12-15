@@ -39,8 +39,8 @@ dependencies {
     compileOnly 'com.google.android.things:androidthings:1.0'
 
     // Firebase
-    implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-database:16.0.5'
 
 }
 
