@@ -119,7 +119,7 @@
 // before including WebServer.h to have incoming requests logged to
 // the serial port.
 #ifndef WEBDUINO_SERIAL_DEBUGGING
-#define WEBDUINO_SERIAL_DEBUGGING 2
+#define WEBDUINO_SERIAL_DEBUGGING 0
 #endif
 #if WEBDUINO_SERIAL_DEBUGGING
 #include <HardwareSerial.h>
@@ -488,6 +488,12 @@ void WebServer::printf(const __FlashStringHelper *format, ... )
 bool WebServer::dispatchCommand(ConnectionType requestType, char *verb,
         bool tail_complete)
 {
+
+	#if WEBDUINO_SERIAL_DEBUGGING > 1
+      Serial.print("*** dispatch: verb=");
+      Serial.print(verb);
+      Serial.println(" ****");
+#endif
   // if there is no URL, i.e. we have a prefix and it's requested without a
   // trailing slash or if the URL is just the slash
   if ((verb[0] == 0) || ((verb[0] == '/') && (verb[1] == 0)))
@@ -627,6 +633,9 @@ void WebServer::processConnection(char *buff, int *bufflen)
     else if (!dispatchCommand(requestType, buff + urlPrefixLen,
              (*bufflen) >= 0))
     {
+    	#if WEBDUINO_SERIAL_DEBUGGING > 1
+      Serial.println("*** dispatchCommand returned false ***");
+#endif
       m_failureCmd(*this, requestType, buff, (*bufflen) >= 0);
     }
 
