@@ -1,29 +1,16 @@
 package raspberry.smarthome.model.device.controllers;
 
 import raspberry.smarthome.model.device.ArduinoIotDevice;
-import raspberry.smarthome.model.device.IotDevice;
 
-public class ArduinoReadFloat implements BaseController, Readable<Float> {
-    private ArduinoIotDevice device;
-    private int id;
+public class ArduinoReadFloat extends ArduinoController implements Readable<Float> {
 
-    public ArduinoReadFloat(ArduinoIotDevice device, int id) {
-        this.device = device;
-        this.id = id;
+    public ArduinoReadFloat(ArduinoIotDevice device, ControllerTypes type,
+                            int indexInArduinoServicesArray) {
+        super(device, type, indexInArduinoServicesArray);
     }
 
     @Override
     public Float read() {
-        return 123.1f; // todo mqtt request here
-    }
-
-    @Override
-    public IotDevice getDevice() {
-        return device;
-    }
-
-    @Override
-    public int getId() {
-        return id;
+        return 123.1f; // todo http request here
     }
 }
