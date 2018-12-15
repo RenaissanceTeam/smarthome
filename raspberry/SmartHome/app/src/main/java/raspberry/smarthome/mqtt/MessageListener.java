@@ -1,13 +1,7 @@
 package raspberry.smarthome.mqtt;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -22,9 +16,8 @@ import raspberry.smarthome.model.device.controllers.ControllerTypes;
 import raspberry.smarthome.model.device.controllers.Writable;
 
 import static raspberry.smarthome.MainActivity.DEBUG;
-import static raspberry.smarthome.mqtt.MqttThemes.*;
 
-public class MessageListener implements IMqttMessageListener {
+public class MessageListener {
     public static final String TAG = MessageListener.class.getSimpleName();
     private static MessageListener sInstance;
 
@@ -38,86 +31,27 @@ public class MessageListener implements IMqttMessageListener {
         return sInstance;
     }
 
-    @Override
-    public void messageArrived(String topic, MqttMessage message) {
-        if (DEBUG) Log.d(TAG, "messageArrived() called with: topic = [" + topic +
-                "], message = [" + message + "]");
-
-        String messageValue = getMessageValue(message);
-        // todo maybe rewrite, but not now.
-
-        // some mqtt themes are defined as generic, so we are checking the start, without wildcard
-        if (topic.startsWith(takeStartFromGenericTheme(RESULT_FROM_IP_THEME))) {
-            handleResult(topic, messageValue);
-            return;
-        } else if (topic.startsWith(takeStartFromGenericTheme(RASPBERRY_DEVICE_THEME))) {
-            performAction(topic, messageValue);
-            return;
-        }
-
-        switch (topic) {
-            case CLIENT_THEME: {
-                setupNewClient(message);
-                break;
-            }
-            case IOT_WELCOME_THEME: {
-                setupNewIotDevice(message);
-                break;
-            }
-            case INITIALIZE_RASP_THEME: {
-                publishInitializeIotRequest();
-                DevicesStorage.getInstance().reset();
-                ClientResponseTimeoutListener.getInstance().stopAllTimeouts();
-                break;
-            }
-        }
-    }
-
-    private void handleResult(String topic, String messageValue) {
+    private void handleResultFromIot(String topic, String messageValue) {
         String ip = getStringByPattern(".+\\/(.+)$", topic, 1);
         String serviceIndex = getStringByPattern("service_index=(-?\\d+);", messageValue, 1);
         ArduinoIotDevice arduinoByIp = DevicesStorage.getInstance().getArduinoByIp(ip);
         ArduinoController controller = (ArduinoController) arduinoByIp.controllers.get(Integer.parseInt(serviceIndex));
         String result = getStringByPattern("result=(.+);", messageValue, 1);
 
-        ClientResponseTimeoutListener.getInstance().stopTimeout(controller.guid);
         if (DEBUG) Log.d(TAG, "result= " + result + ", for device=" +
                 arduinoByIp + ". For controller=" + controller);
-        try {
-            SmartHomeMqttClient.getInstance().publishMessage(
-                    "controller_guid=" + controller.guid + ";result=" + result + ";", // message
-                    CLIENT_RESULT_FROM_DEVICE + arduinoByIp.guid // theme
-                    );
-        } catch (MqttException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        // todo send response to android client
     }
 
-    @NonNull
-    private String takeStartFromGenericTheme(String theme) {
-        return theme.substring(0, theme.length() - 1);
-    }
 
-    private void publishInitializeIotRequest() {
-        try {
-            if (DEBUG) Log.d(TAG, "publish init iot request");
-            SmartHomeMqttClient.getInstance()
-                    .publishMessage("", INITIALIZE_IOT_THEME);
-        } catch (MqttException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setupNewClient(MqttMessage message) {
+    private void setupNewClient() {
         // todo implement
     }
 
-    private void setupNewIotDevice(MqttMessage message) {
-        String messageValue = getMessageValue(message);
+    private void setupNewIotDevice() {
+        String messageValue = ""; // todo message value from http body response
         String type = getStringByPattern("type=(\\d+);", messageValue, 1);
-        if (!type.equals("0")) {
-            throw new RuntimeException("Mqtt init not from arduino (0) device");
-        }
+
 
         String name = getName(messageValue);
         String description = getDescription(messageValue);
@@ -181,11 +115,6 @@ public class MessageListener implements IMqttMessageListener {
         }
 
         device.controllers = controllers;
-    }
-
-    @NonNull
-    private String getMessageValue(MqttMessage message) {
-        return new String(message.getPayload());
     }
 
     private String getStringByPattern(String pattern, String from, int group) {

@@ -11,6 +11,6 @@ public class ArduinoReadFloat extends ArduinoController implements Readable<Floa
 
     @Override
     public Float read() {
-        return 123.1f; // todo mqtt request here
+        return 123.1f; // todo http request here
     }
 }
