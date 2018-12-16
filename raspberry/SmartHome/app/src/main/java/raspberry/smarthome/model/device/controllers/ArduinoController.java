@@ -1,13 +1,15 @@
 package raspberry.smarthome.model.device.controllers;
 
+import com.google.gson.annotations.Expose;
+
 import raspberry.smarthome.model.GUID;
 import raspberry.smarthome.model.device.ArduinoIotDevice;
 
 public class ArduinoController implements BaseController {
     public final ArduinoIotDevice device;
-    public final long guid;
+    @Expose public final long guid;
     public final int indexInArduinoServicesArray;
-    public final ControllerTypes type;
+    @Expose public final ControllerTypes type;
 
     public ArduinoController(ArduinoIotDevice device, ControllerTypes type, int indexInArduinoServicesArray) {
         this.device = device;

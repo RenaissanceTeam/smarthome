@@ -2,6 +2,9 @@ package raspberry.smarthome.model;
 
 import android.util.Log;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +16,7 @@ import static raspberry.smarthome.MainActivity.DEBUG;
 public class DevicesStorage {
     public static final String TAG = DevicesStorage.class.getSimpleName();
     private static DevicesStorage sInstance;
-    public final List<IotDevice> devices = new ArrayList<>();
+    @Expose public final List<IotDevice> devices = new ArrayList<>();
 
     private DevicesStorage() {}
 
@@ -53,5 +56,10 @@ public class DevicesStorage {
             }
         }
         throw new IllegalArgumentException("No device with ip=" + ip);
+    }
+
+    @Override
+    public String toString() {
+        return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(this);
     }
 }

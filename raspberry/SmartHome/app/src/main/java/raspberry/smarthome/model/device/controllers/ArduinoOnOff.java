@@ -1,10 +1,20 @@
 package raspberry.smarthome.model.device.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
+
 import raspberry.smarthome.model.device.ArduinoIotDevice;
+import raspberry.smarthome.model.device.requests.ArduinoDeviceAPI;
+import raspberry.smarthome.model.device.requests.ControllerResponse;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ArduinoOnOff extends ArduinoController implements Writable {
+public class ArduinoOnOff extends ArduinoController implements Writable, Readable {
 
-    public static final int TIMEOUT_RETRY = 1000;
+    public static final String TAG = ArduinoOnOff.class.getSimpleName();
 
     public ArduinoOnOff(ArduinoIotDevice device, ControllerTypes type,
                         int indexInArduinoServicesArray) {
@@ -12,9 +22,34 @@ public class ArduinoOnOff extends ArduinoController implements Writable {
     }
 
     @Override
-    public void write(String value) {
-        // TODO: 11/30/2018 message into strings
-        String message = indexInArduinoServicesArray + ";" + value;
-        // todo make http request to this device web server
+    public ControllerResponse write(String value) throws IOException {
+        ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
+        Call<ControllerResponse> call = arduinoApi.controllerWriteRequest(indexInArduinoServicesArray, value);
+
+        // todo check for null
+        return call.execute().body();
+    }
+
+    @Override
+    public ControllerResponse read() throws IOException {
+        ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
+        Call<ControllerResponse> call = arduinoApi.controllerReadRequest(indexInArduinoServicesArray);
+
+        // todo check for null
+        return call.execute().body();
+    }
+
+    private ArduinoDeviceAPI getArduinoDeviceAPI() {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        String baseUrl = "http://" + this.device.ip + ":8080/";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        return retrofit.create(ArduinoDeviceAPI.class);
     }
 }

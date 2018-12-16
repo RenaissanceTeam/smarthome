@@ -9,18 +9,9 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
-import io.moquette.BrokerConstants;
-import io.moquette.server.Server;
-import io.moquette.server.config.MemoryConfig;
 import raspberry.smarthome.auth.GoogleSignInActivity;
-import raspberry.smarthome.model.device.constants.Constants;
-import raspberry.smarthome.mqtt.SmartHomeMqttClient;
-import java.util.Collections;
-import java.util.List;
 
 import static raspberry.smarthome.model.device.constants.Constants.RC_SIGN_IN;
 
@@ -29,8 +20,9 @@ public class MainActivity extends Activity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final boolean DEBUG = BuildConfig.DEBUG;
-
+    private WebServer server;
     private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +30,26 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         if (DEBUG) Log.d(TAG, "onCreate");
         // todo start web server to receive notifications from Arduino
+
+        server = new WebServer();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            server.start();
+        } catch (IOException e) {
+            Log.d(TAG, "onStart: start server" + e);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        
-        auth();
+
+
+//        auth();
     }
 
     private void auth() {
@@ -55,6 +60,13 @@ public class MainActivity extends Activity {
             startActivity(new Intent(this, GoogleSignInActivity.class));
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (server != null) {
+            server.stop();
+        }
+    }
 
     @Override
     protected void onDestroy() {

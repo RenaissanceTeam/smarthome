@@ -1,39 +1,50 @@
 #include "WebServer.h"
+#include <HttpClient.h>
 #include "SoftwareSerial.h"
+#define DEBUG 1
+
+//////////////////CONFIGURATION//////////////////////////////
+// same as in raspberry!!
+int ANALOG = 1000;
+int ON_OFF = 1001;
+char DEVICE_NAME[] = "arduino1";
+char raspberry[] = "192.168.1.3"; // raspberry is there (hopefully:)
+
+int SERVICES[] = {1000, 1001, 1001};
+char SERVICES_STR[] = "1000;1001;1001";
+int PINS[] = {A0, 2, 3};
+int services_count = 3;
+
+//////////////////END OF CONFIGURATION///////////////////////
+
+
+
 SoftwareSerial Serial1(6, 7); // RX, TX
+
+int port = 8080;
+
+WiFiEspClient wifi;
+HttpClient client(wifi, raspberry, port);  // eats 280 bytes of dynamic memory :(
+WebServer server("", 8080);
 
 char ssid[] = "NETGEAR";            // your network SSID (name)
 char pass[] = "smarthome";        // your network password
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int reqCount = 0;                // number of requests received
 
-int ON_OFF = 0;
-int TEMPERATURE = 1;
-
-int ON_OFF_PIN_1 = 2;
-int ON_OFF_PIN_2 = 3;
 
 
-struct SERVICE {
-  int serviceId;
-  int pin;
-  SERVICE(int serviceId, int pin) : serviceId(serviceId), pin(pin) {}
-};
-SERVICE on_off_1(ON_OFF, ON_OFF_PIN_1);
-SERVICE on_off_2(ON_OFF, ON_OFF_PIN_2);
 
-SERVICE services[] = {on_off_1, on_off_2};
-int services_count = 2;
-
-
-// Initialize the Ethernet client object
-
-WebServer server("", 8080);
+String get_home_info() {
+  return "name=" + String(DEVICE_NAME) + "&services=" + String(SERVICES_STR);
+}
 
 void setup()
 {
   // initialize serial for debugging
   Serial.begin(9600);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
   // initialize serial for ESP module
   Serial1.begin(9600);
   // initialize ESP module
@@ -48,29 +59,39 @@ void setup()
 
   // attempt to connect to WiFi network
   while ( status != WL_CONNECTED) {
+#if DEBUG > 0
     Serial.print("Attempting to connect to WPA SSID: ");
+#endif
+#if DEBUG > 0
     Serial.println(ssid);
+#endif
     // Connect to WPA/WPA2 network
     status = WiFi.begin(ssid, pass);
   }
 
-  // you're connected now, so print out the data
-  Serial.println("You're connected to the network");
 
+#if DEBUG > 0
   printWifiStatus();
+#endif
   server.setDefaultCommand(&home);
   server.addCommand("service", &service);
   server.begin();
-  Serial.println("Server started");
+  client.post("/init?" + get_home_info(), "text", "");
+
+  delay(2000);
+
+#if DEBUG > 0
+  Serial.println("setup end");
+#endif
 }
 
 void home(WebServer &server, WebServer::ConnectionType type, char * params, bool complete)
 {
   server.httpSuccess();
-  // todo return here info about device with its services, etc..
+  server.print(get_home_info());
 }
 
-int parseIntParam(char *from, int shift, char key[], int &val) {
+int parseIntParam(char *from, int& shift, char key[], int &val) {
   int i;
   for (i = 0; i < strlen(key); ++i) {
     if (key[i] != from[i + shift]) {
@@ -94,71 +115,99 @@ int parseIntParam(char *from, int shift, char key[], int &val) {
 
 void service(WebServer &server, WebServer::ConnectionType type, char * params, bool complete)
 {
+#if DEBUG > 1
   Serial.print("service params=");
   Serial.println(params);
+#endif
 
   int serviceIndex = -1;
   int parsedValue = -1;
 
   int shift = 0;
   shift = parseIntParam(params, shift, "index=", serviceIndex);
-
+#if DEBUG > 1
   Serial.print("read index = ");
   Serial.println(serviceIndex);
-
+#endif
   if (type == WebServer::POST) {
     // skip '&'
     ++shift;
     shift = parseIntParam(params, shift, "value=", parsedValue);
     if (shift < 0) {
+#if DEBUG > 1
       Serial.println("Failed to read value");
+#endif
       server.httpFail();
       return;
     }
   }
 
   if (serviceIndex >= 0 && serviceIndex < services_count) {
-    if (services[serviceIndex].serviceId == ON_OFF) {
-      if (type == WebServer::GET) {
+
+    if (type == WebServer::GET) {
+      if (SERVICES[serviceIndex] == ON_OFF) {
+#if DEBUG > 1
         Serial.print("read ON_OFF on pin ");
-        Serial.println(services[serviceIndex].pin);
-      } else if (type == WebServer::POST) {
+        Serial.println(PINS[serviceIndex]);
+#endif
+        server.httpSuccess();
+        server.print("{\"response\":\"");
+        server.print(digitalRead(PINS[serviceIndex]));
+        server.print("\"}");
+        server.print(CRLF);
+        return;
+      }
+      else if (SERVICES[serviceIndex == ANALOG]) {
+#if DEBUG > 1
+        Serial.print("read ANALOG on pin ");
+        Serial.println(PINS[serviceIndex]);
+#endif
+
+        server.httpSuccess();
+        server.print("{\"response\":\"");
+        server.print(analogRead(PINS[serviceIndex]));
+        server.print("\"}");
+        server.print(CRLF);
+        return;
+      }
+    } else if (type == WebServer::POST) {
+      if (SERVICES[serviceIndex] == ON_OFF) {
+#if DEBUG > 1
         Serial.print("set ON_OFF on pin ");
-        Serial.print(services[serviceIndex].pin);
+        Serial.print(PINS[serviceIndex]);
         Serial.print(" to value ");
         Serial.println(parsedValue);
+#endif
+        digitalWrite(PINS[serviceIndex], parsedValue);
+        server.httpSuccess();
+        server.print("{\"response\":\"");
+        server.print(parsedValue);
+        server.print("\"}");
+        server.print(CRLF);
+        return;
       }
     }
     // todo read other types
 
   } else {
+#if DEBUG > 0
     Serial.println("index out of bounds");
     Serial.println("Failed to read value");
+#endif
     server.httpFail();
     return;
   }
- 
+
   server.httpSuccess();
-  
 }
 
 
 void printWifiStatus()
 {
-  // print the SSID of the network you're attached to
-  Serial.print("SSID: ");
-  Serial.println(WiFi.SSID());
-
   // print your WiFi shield's IP address
-  IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
 
-  // print the received signal strength
-  long rssi = WiFi.RSSI();
-  Serial.print("Signal strength (RSSI):");
-  Serial.print(rssi);
-  Serial.println(" dBm");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
 }
 
 void loop() {

@@ -1,5 +1,7 @@
 package raspberry.smarthome.model.device;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,10 +9,10 @@ import raspberry.smarthome.model.GUID;
 import raspberry.smarthome.model.device.controllers.BaseController;
 
 public abstract class IotDevice {
-    public String name;
-    public String description;
-    public final long guid;
-    public List<BaseController> controllers; // todo incapsulation (everywhere)
+    @Expose public String name;
+    @Expose public String description;
+    @Expose public final long guid;
+    @Expose public List<BaseController> controllers; // todo incapsulation (everywhere)
 
     public IotDevice(String name, String description) {
         super();
