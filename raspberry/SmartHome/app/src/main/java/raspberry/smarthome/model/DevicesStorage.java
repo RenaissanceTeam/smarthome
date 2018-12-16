@@ -54,4 +54,9 @@ public class DevicesStorage {
         }
         throw new IllegalArgumentException("No device with ip=" + ip);
     }
+
+    @Override
+    public String toString() {
+        return devices.toString();
+    }
 }

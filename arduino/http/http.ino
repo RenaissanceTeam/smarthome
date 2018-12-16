@@ -43,6 +43,8 @@ void setup()
 {
   // initialize serial for debugging
   Serial.begin(9600);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
   // initialize serial for ESP module
   Serial1.begin(9600);
   // initialize ESP module
@@ -75,8 +77,6 @@ void setup()
   server.addCommand("service", &service);
   server.begin();
   client.post("/init?" + get_home_info(), "text", "");
-  client.responseStatusCode();
-  client.responseBody();
 
   delay(2000);
 
@@ -143,13 +143,35 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
   }
 
   if (serviceIndex >= 0 && serviceIndex < services_count) {
-    if (SERVICES[serviceIndex] == ON_OFF) {
-      if (type == WebServer::GET) {
+
+    if (type == WebServer::GET) {
+      if (SERVICES[serviceIndex] == ON_OFF) {
 #if DEBUG > 1
         Serial.print("read ON_OFF on pin ");
         Serial.println(PINS[serviceIndex]);
 #endif
-      } else if (type == WebServer::POST) {
+        server.httpSuccess();
+        server.print("{\"response\":\"");
+        server.print(digitalRead(PINS[serviceIndex]));
+        server.print("\"}");
+        server.print(CRLF);
+        return;
+      }
+      else if (SERVICES[serviceIndex == ANALOG]) {
+#if DEBUG > 1
+        Serial.print("read ANALOG on pin ");
+        Serial.println(PINS[serviceIndex]);
+#endif
+
+        server.httpSuccess();
+        server.print("{\"response\":\"");
+        server.print(analogRead(PINS[serviceIndex]));
+        server.print("\"}");
+        server.print(CRLF);
+        return;
+      }
+    } else if (type == WebServer::POST) {
+      if (SERVICES[serviceIndex] == ON_OFF) {
 #if DEBUG > 1
         Serial.print("set ON_OFF on pin ");
         Serial.print(PINS[serviceIndex]);

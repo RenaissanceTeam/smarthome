@@ -2,6 +2,8 @@ package raspberry.smarthome.model.device.controllers;
 
 import java.io.IOException;
 
+import raspberry.smarthome.model.device.requests.ControllerResponse;
+
 public interface Writable {
     /**
      * NOTE !! Synchronous !! http post request to device's web server
@@ -9,5 +11,5 @@ public interface Writable {
      * @return return body of response from device's web server
      * @throws IOException
      */
-    String write(String value) throws IOException;
+    ControllerResponse write(String value) throws IOException;
 }

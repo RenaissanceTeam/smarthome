@@ -12,9 +12,8 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ArduinoOnOff extends ArduinoController implements Writable {
+public class ArduinoOnOff extends ArduinoController implements Writable, Readable {
 
-    public static final int TIMEOUT_RETRY = 1000;
     public static final String TAG = ArduinoOnOff.class.getSimpleName();
 
     public ArduinoOnOff(ArduinoIotDevice device, ControllerTypes type,
@@ -23,9 +22,24 @@ public class ArduinoOnOff extends ArduinoController implements Writable {
     }
 
     @Override
-    public String write(String value) throws IOException {
+    public ControllerResponse write(String value) throws IOException {
+        ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
+        Call<ControllerResponse> call = arduinoApi.controllerWriteRequest(indexInArduinoServicesArray, value);
 
-        // todo make http request to this device web server
+        // todo check for null
+        return call.execute().body();
+    }
+
+    @Override
+    public ControllerResponse read() throws IOException {
+        ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
+        Call<ControllerResponse> call = arduinoApi.controllerReadRequest(indexInArduinoServicesArray);
+
+        // todo check for null
+        return call.execute().body();
+    }
+
+    private ArduinoDeviceAPI getArduinoDeviceAPI() {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -36,11 +50,6 @@ public class ArduinoOnOff extends ArduinoController implements Writable {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        ArduinoDeviceAPI arduinoApi = retrofit.create(ArduinoDeviceAPI.class);
-
-        Call<ControllerResponse> call = arduinoApi.controllerWriteRequest(indexInArduinoServicesArray, value);
-
-        // todo check for null
-        return call.execute().body().response;
+        return retrofit.create(ArduinoDeviceAPI.class);
     }
 }

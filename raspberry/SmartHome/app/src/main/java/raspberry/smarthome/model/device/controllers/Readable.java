@@ -1,6 +1,12 @@
 package raspberry.smarthome.model.device.controllers;
 
-// TODO: 11/30/2018 actually won't return value immediately, instead return with request
-public interface Readable<T> {
-    public T read();
+import java.io.IOException;
+
+import raspberry.smarthome.model.device.requests.ControllerResponse;
+
+public interface Readable {
+    /**
+     * Synchronous http request, returns json {@link raspberry.smarthome.model.device.requests.ControllerResponse}
+     */
+    ControllerResponse read() throws IOException;
 }

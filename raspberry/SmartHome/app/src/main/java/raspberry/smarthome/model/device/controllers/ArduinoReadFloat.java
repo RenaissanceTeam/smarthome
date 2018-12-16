@@ -1,8 +1,9 @@
 package raspberry.smarthome.model.device.controllers;
 
 import raspberry.smarthome.model.device.ArduinoIotDevice;
+import raspberry.smarthome.model.device.requests.ControllerResponse;
 
-public class ArduinoReadFloat extends ArduinoController implements Readable<Float> {
+public class ArduinoReadFloat extends ArduinoController implements Readable {
 
     public ArduinoReadFloat(ArduinoIotDevice device, ControllerTypes type,
                             int indexInArduinoServicesArray) {
@@ -10,7 +11,9 @@ public class ArduinoReadFloat extends ArduinoController implements Readable<Floa
     }
 
     @Override
-    public Float read() {
-        return 123.1f; // todo http request here
+    public ControllerResponse read() {
+        ControllerResponse response = new ControllerResponse();
+        response.response = "123.1";
+        return response; // todo http request here
     }
 }
