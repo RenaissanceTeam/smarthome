@@ -3,10 +3,24 @@
 #include "SoftwareSerial.h"
 #define DEBUG 1
 
-SoftwareSerial Serial1(6, 7); // RX, TX
-
+//////////////////CONFIGURATION//////////////////////////////
+// same as in raspberry!!
+int ANALOG = 1000;
+int ON_OFF = 1001;
 char DEVICE_NAME[] = "arduino1";
 char raspberry[] = "192.168.1.3"; // raspberry is there (hopefully:)
+
+int SERVICES[] = {1000, 1001, 1001};
+char SERVICES_STR[] = "1000;1001;1001";
+int PINS[] = {A0, 2, 3};
+int services_count = 3;
+
+//////////////////END OF CONFIGURATION///////////////////////
+
+
+
+SoftwareSerial Serial1(6, 7); // RX, TX
+
 int port = 8080;
 
 WiFiEspClient wifi;
@@ -19,18 +33,6 @@ int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int reqCount = 0;                // number of requests received
 
 
-
-//////////////////CONFIGURATION//////////////////////////////
-// same as in raspberry!!
-int ANALOG = 1000;
-int ON_OFF = 1001;
-
-int SERVICES[] = {1000, 1001, 1001};
-char SERVICES_STR[] = "1001, 1001, 1000";
-int PINS[] = {A0, 2, 3};
-int services_count = 3;
-
-//////////////////END OF CONFIGURATION///////////////////////
 
 
 String get_home_info() {
@@ -65,10 +67,6 @@ void setup()
     status = WiFi.begin(ssid, pass);
   }
 
-  // you're connected now, so print out the data
-#if DEBUG > 0
-  Serial.println("You're connected to the network");
-#endif
 
 #if DEBUG > 0
   printWifiStatus();
@@ -76,21 +74,15 @@ void setup()
   server.setDefaultCommand(&home);
   server.addCommand("service", &service);
   server.begin();
-#if DEBUG > 0
-  Serial.println("Server started");
-#endif
-  client.post("/init?"+get_home_info(), "text", "");
-#if DEBUG > 0
-  Serial.println("made post request with info to raspberry");
-#endif
-
+  client.post("/init?" + get_home_info(), "text", "");
   client.responseStatusCode();
   client.responseBody();
 
-#if DEBUG > 0
-  Serial.println("Wait 2 sec");
-#endif
   delay(2000);
+
+#if DEBUG > 0
+  Serial.println("setup end");
+#endif
 }
 
 void home(WebServer &server, WebServer::ConnectionType type, char * params, bool complete)
@@ -123,7 +115,7 @@ int parseIntParam(char *from, int& shift, char key[], int &val) {
 
 void service(WebServer &server, WebServer::ConnectionType type, char * params, bool complete)
 {
-#if DEBUG > 0
+#if DEBUG > 1
   Serial.print("service params=");
   Serial.println(params);
 #endif
@@ -133,7 +125,7 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
   int shift = 0;
   shift = parseIntParam(params, shift, "index=", serviceIndex);
-#if DEBUG > 0
+#if DEBUG > 1
   Serial.print("read index = ");
   Serial.println(serviceIndex);
 #endif
@@ -142,7 +134,7 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
     ++shift;
     shift = parseIntParam(params, shift, "value=", parsedValue);
     if (shift < 0) {
-#if DEBUG > 0
+#if DEBUG > 1
       Serial.println("Failed to read value");
 #endif
       server.httpFail();
@@ -153,17 +145,24 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
   if (serviceIndex >= 0 && serviceIndex < services_count) {
     if (SERVICES[serviceIndex] == ON_OFF) {
       if (type == WebServer::GET) {
-#if DEBUG > 0
+#if DEBUG > 1
         Serial.print("read ON_OFF on pin ");
         Serial.println(PINS[serviceIndex]);
 #endif
       } else if (type == WebServer::POST) {
-#if DEBUG > 0
+#if DEBUG > 1
         Serial.print("set ON_OFF on pin ");
         Serial.print(PINS[serviceIndex]);
         Serial.print(" to value ");
         Serial.println(parsedValue);
 #endif
+        digitalWrite(PINS[serviceIndex], parsedValue);
+        server.httpSuccess();
+        server.print("{\"response\":\"");
+        server.print(parsedValue);
+        server.print("\"}");
+        server.print(CRLF);
+        return;
       }
     }
     // todo read other types
