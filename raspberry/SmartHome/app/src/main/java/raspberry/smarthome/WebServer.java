@@ -3,6 +3,8 @@ package raspberry.smarthome;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +16,8 @@ import raspberry.smarthome.model.device.ArduinoIotDevice;
 import raspberry.smarthome.model.device.IotDevice;
 import raspberry.smarthome.model.device.controllers.BaseController;
 import raspberry.smarthome.model.device.controllers.ControllerTypes;
-import raspberry.smarthome.model.device.controllers.Writable;
 import raspberry.smarthome.model.device.controllers.Readable;
+import raspberry.smarthome.model.device.controllers.Writable;
 import raspberry.smarthome.model.device.requests.ControllerResponse;
 
 public class WebServer extends NanoHTTPD {
@@ -40,7 +42,6 @@ public class WebServer extends NanoHTTPD {
                 // todo implement basic web interface with info about current controllers state ??
                 return new Response(Response.Status.OK, MIME_PLAINTEXT, DevicesStorage.getInstance().toString());
             }
-
         } else if (method == Method.POST) {
             if (uri.startsWith("/init")) {
                 // todo add check if it's really arduino if other devices will be added the same way
@@ -64,7 +65,7 @@ public class WebServer extends NanoHTTPD {
         if (controller instanceof Readable) {
             try {
                 ControllerResponse response = ((Readable) controller).read();
-                return new Response(response.response);
+                return new Response(Response.Status.OK, "text/json", new Gson().toJson(response));
             } catch (IOException e) {
                 return getArduinoHttpError();
             }
@@ -83,7 +84,7 @@ public class WebServer extends NanoHTTPD {
             try {
                 String value = params.get("value");
                 ControllerResponse response = ((Writable) controller).write(value);
-                return new Response(response.response);
+                return new Response(Response.Status.OK, "text/json", new Gson().toJson(response));
             } catch (IOException e) {
                 Log.d(TAG, "request to arduino web server failed: " + e);
                 return getArduinoHttpError();
