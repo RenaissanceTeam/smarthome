@@ -1,7 +1,11 @@
 package raspberry.smarthome.model.device.controllers;
 
+import java.io.IOException;
+
 import raspberry.smarthome.model.device.ArduinoIotDevice;
+import raspberry.smarthome.model.device.requests.ArduinoDeviceAPI;
 import raspberry.smarthome.model.device.requests.ControllerResponse;
+import retrofit2.Call;
 
 public class ArduinoReadFloat extends ArduinoController implements Readable {
 
@@ -11,9 +15,17 @@ public class ArduinoReadFloat extends ArduinoController implements Readable {
     }
 
     @Override
-    public ControllerResponse read() {
-        ControllerResponse response = new ControllerResponse();
-        response.response = "123.1";
-        return response; // todo http request here
+    public ControllerResponse read() throws IOException {
+        ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
+        Call<ControllerResponse> call = arduinoApi.controllerReadRequest(indexInArduinoServicesArray);
+
+        ControllerResponse controllerResponse = call.execute().body();
+        if (controllerResponse != null) {
+            String response = controllerResponse.response;
+            double val = Double.parseDouble(response);
+            controllerResponse.response = ((int)(val * 100 / 1025)) + " %";
+            setNewState(controllerResponse.response);
+        }
+        return controllerResponse;
     }
 }

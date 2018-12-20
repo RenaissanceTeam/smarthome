@@ -206,7 +206,7 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
       
 #ifdef TEMPERATURE
-      if (SERVICES[serviceIndex == TEMPERATURE_ID]) {
+      if (SERVICES[serviceIndex] == TEMPERATURE_ID) {
 #if DEBUG > 1
         Serial.print("read TEMPERATURE on pin ");
         Serial.println(PINS[serviceIndex]);

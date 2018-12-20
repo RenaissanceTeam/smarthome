@@ -232,7 +232,8 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (controller.type.equals("ARDUINO_ON_OFF")) {
                 if (UNKNOWN_STATE.equals(state.getText())) {
-
+                    readState();
+                    return;
                 }
                 if ("1".equals(controller.state)) {
                     changeStateTo("0");
@@ -240,8 +241,8 @@ public class MainActivity extends AppCompatActivity {
                     changeStateTo("1");
                 }
 
-            } else if (controller.type.equals("ARDUINO_ANALOG")) {
-                // TODO: 12/17/18 implement
+            } else {
+                readState();
             }
         }
 
