@@ -3,6 +3,7 @@ package ru.smarthome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ru.smarthome.library.ArduinoDevice;
+import ru.smarthome.library.Controller;
+import ru.smarthome.library.RaspberryResponse;
 
 import static ru.smarthome.constants.Constants.RC_SIGN_IN;
 
@@ -122,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             this.smartHome = smartHome;
             notifyDataSetChanged();
         }
+
         @NonNull
         @Override
         public ControllerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -131,8 +136,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ControllerViewHolder holder, int position) {
-            ArduinoDevice device = smartHome.devices.get(0); // todo this is bullshit
-            holder.bind(device, device.controllers.get(position));
+            ArduinoDevice device = getDeviceByControllerPosition(position);
+            Controller controller = getControllerByPosition(position);
+            holder.bind(device, controller);
         }
 
         @Override
@@ -140,11 +146,50 @@ public class MainActivity extends AppCompatActivity {
             if (smartHome == null || smartHome.devices == null) {
                 return 0;
             }
-            return smartHome.devices.get(0).controllers.size();
+            return countAllControllers();
+        }
+
+        private int countAllControllers() {
+            int res = 0;
+            for (ArduinoDevice device : smartHome.devices) {
+                res += device.controllers.size();
+            }
+            return res;
+        }
+
+        @Nullable
+        private ArduinoDevice getDeviceByControllerPosition(int position) {
+            int skippedContrCount = 0;
+            for (ArduinoDevice device : smartHome.devices) {
+                // 2 contr
+                // 3 contr
+                // pos=4
+                int thisContrCount = device.controllers.size();
+                if (position <= skippedContrCount + thisContrCount - 1) {
+                    return device;
+                }
+                skippedContrCount += thisContrCount;
+            }
+            return null;
+        }
+
+        // TODO: 12/20/18 need better solution, but not now!
+        @Nullable
+        private Controller getControllerByPosition(int position) {
+            int skippedContrCount = 0;
+            for (ArduinoDevice device : smartHome.devices) {
+                int thisContrCount = device.controllers.size();
+                if (position <= skippedContrCount + thisContrCount - 1) {
+                    return device.controllers.get(position - skippedContrCount);
+                }
+                skippedContrCount += thisContrCount;
+            }
+            return null;
         }
     }
 
-    private static class ControllerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private static class ControllerViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener{
         private TextView guid;
         private TextView type;
         private TextView state;
@@ -199,10 +244,10 @@ public class MainActivity extends AppCompatActivity {
         private void changeStateTo(String value) {
             startStateChange();
             RaspberryApi api = getRaspberryApi();
-            Call<ControllerResponse> call = api.changeControllerState(device.guid, controller.guid, value);
-            call.enqueue(new Callback<ControllerResponse>() {
+            Call<RaspberryResponse> call = api.changeControllerState(device.guid, controller.guid, value);
+            call.enqueue(new Callback<RaspberryResponse>() {
                 @Override
-                public void onResponse(Call<ControllerResponse> call, Response<ControllerResponse> response) {
+                public void onResponse(Call<RaspberryResponse> call, Response<RaspberryResponse> response) {
                     String newValue = response.body().response;
                     state.setText(newValue);
                     controller.state = newValue;
@@ -210,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<ControllerResponse> call, Throwable t) {
+                public void onFailure(Call<RaspberryResponse> call, Throwable t) {
                     state.setText("error");
                     endStateChange();
                 }
