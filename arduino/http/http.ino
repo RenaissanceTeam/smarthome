@@ -3,35 +3,54 @@
 #include "SoftwareSerial.h"
 #define DEBUG 1
 
-//////////////////CONFIGURATION//////////////////////////////
-// same as in raspberry!!
-int ANALOG = 1000;
-int ON_OFF = 1001;
-char DEVICE_NAME[] = "arduino1";
-char raspberry[] = "192.168.1.3"; // raspberry is there (hopefully:)
 
-int SERVICES[] = {1000, 1001, 1001};
-char SERVICES_STR[] = "1000;1001;1001";
-int PINS[] = {A0, 2, 3};
-int services_count = 3;
+
+
+
+//////////////////CONFIGURATION//////////////////////////////
+// used services //
+#define TEMPERATURE
+#define HUMIDITY
+
+#define analog_1 A0
+#define onoff_1 2
+#define onoff_2 3
+#define RX 6
+#define TX 7
+#define DHT11_PIN 8
+
+
+// ids are the same as in raspberry!!
+#define ANALOG 1000
+#define ON_OFF 1001
+#define TEMPERATURE_ID 1002
+#define HUMIDITY_ID 1003
+
+#define DEVICE_NAME "arduino1"
+#define raspberry "192.168.1.3"
+
+int SERVICES[] = {ANALOG, ON_OFF, ON_OFF, TEMPERATURE_ID, HUMIDITY_ID};
+char SERVICES_STR[] = "1000;1001;1001;1002;1003";
+int PINS[] = {analog_1, onoff_1, onoff_2, DHT11_PIN, DHT11_PIN};
+#define services_count 5
 
 //////////////////END OF CONFIGURATION///////////////////////
 
-
+#ifdef TEMPERATURE || HUMIDITY
+#include <dht.h>
+dht DHT;
+#endif
 
 SoftwareSerial Serial1(6, 7); // RX, TX
 
-int port = 8080;
-
 WiFiEspClient wifi;
-HttpClient client(wifi, raspberry, port);  // eats 280 bytes of dynamic memory :(
+HttpClient client(wifi, raspberry, 8080);  // eats 280 bytes of dynamic memory :(
 WebServer server("", 8080);
 
 char ssid[] = "NETGEAR";            // your network SSID (name)
 char pass[] = "smarthome";        // your network password
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int reqCount = 0;                // number of requests received
-
 
 
 
@@ -82,6 +101,26 @@ void setup()
 #if DEBUG > 0
   Serial.println("setup end");
 #endif
+}
+
+void baseResponse(int val) {
+  Serial.println(val);
+  server.httpSuccess();
+  server.print("{\"response\" : \"");
+  server.print(val);
+  server.print("\"}");
+  server.print(CRLF);
+  return;
+}
+
+void baseResponse(double val) {
+  Serial.println(val);
+  server.httpSuccess();
+  server.print("{\"response\" : \"");
+  server.print(val);
+  server.print("\"}");
+  server.print(CRLF);
+  return;
 }
 
 void home(WebServer &server, WebServer::ConnectionType type, char * params, bool complete)
@@ -149,26 +188,50 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
         Serial.print("read ON_OFF on pin ");
         Serial.println(PINS[serviceIndex]);
 #endif
-        server.httpSuccess();
-        server.print("{\"response\":\"");
-        server.print(digitalRead(PINS[serviceIndex]));
-        server.print("\"}");
-        server.print(CRLF);
+        baseResponse(digitalRead(PINS[serviceIndex]));
         return;
       }
-      else if (SERVICES[serviceIndex == ANALOG]) {
+      
+      
+      
+      if (SERVICES[serviceIndex] == ANALOG) {
 #if DEBUG > 1
         Serial.print("read ANALOG on pin ");
         Serial.println(PINS[serviceIndex]);
 #endif
+        baseResponse(analogRead(PINS[serviceIndex]));
+        return;
+      } 
 
-        server.httpSuccess();
-        server.print("{\"response\":\"");
-        server.print(analogRead(PINS[serviceIndex]));
-        server.print("\"}");
-        server.print(CRLF);
+
+      
+#ifdef TEMPERATURE
+      if (SERVICES[serviceIndex == TEMPERATURE_ID]) {
+#if DEBUG > 1
+        Serial.print("read TEMPERATURE on pin ");
+        Serial.println(PINS[serviceIndex]);
+#endif
+        int chk = DHT.read11(DHT11_PIN);
+        baseResponse(DHT.temperature);
         return;
       }
+#endif
+
+
+
+
+#ifdef HUMIDITY
+      if (SERVICES[serviceIndex] == HUMIDITY_ID) {
+#if DEBUG > 1
+        Serial.print("read HUMIDITY on pin ");
+        Serial.println(PINS[serviceIndex]);
+#endif
+        baseResponse(DHT.humidity);
+        return;
+      }
+#endif
+
+
     } else if (type == WebServer::POST) {
       if (SERVICES[serviceIndex] == ON_OFF) {
 #if DEBUG > 1
@@ -178,11 +241,7 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
         Serial.println(parsedValue);
 #endif
         digitalWrite(PINS[serviceIndex], parsedValue);
-        server.httpSuccess();
-        server.print("{\"response\":\"");
-        server.print(parsedValue);
-        server.print("\"}");
-        server.print(CRLF);
+        baseResponse(parsedValue);
         return;
       }
     }

@@ -18,21 +18,11 @@ public class ArduinoOnOff extends ArduinoController implements Writable, Readabl
 
     @Override
     public ControllerResponse write(String value) throws IOException {
-        ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
-        Call<ControllerResponse> call = arduinoApi.controllerWriteRequest(indexInArduinoServicesArray, value);
-
-        ControllerResponse controllerResponse = call.execute().body();
-        setNewState(controllerResponse.response);
-        return controllerResponse;
+        return baseWrite(value);
     }
 
     @Override
     public ControllerResponse read() throws IOException {
-        ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
-        Call<ControllerResponse> call = arduinoApi.controllerReadRequest(indexInArduinoServicesArray);
-
-        ControllerResponse controllerResponse = call.execute().body();
-        setNewState(controllerResponse.response);
-        return controllerResponse;
+        return baseRead();
     }
 }
