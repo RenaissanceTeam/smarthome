@@ -28,9 +28,12 @@ Rx -> Rx (with arduino as Rx is realy Tx)
 ```
 
 ### First, I've flashed AiThinker firmware v 1.1.1
++ RST to 3.3V 
++ GPIO_0 to GND
 + To go into flash mode hold reset button and unplug-plug the esp module.
 + Then open MCU flasher and flash bin file
 + Reset
++ RST to None, GPIO_0 to 10k 3.3v
 + Set baud to 115200 and check AT commands. 
 `AT` should return `OK` , `AT+GMR` should return current firmware version
 
