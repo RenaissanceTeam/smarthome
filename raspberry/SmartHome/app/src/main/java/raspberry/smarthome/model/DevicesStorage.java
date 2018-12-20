@@ -27,11 +27,10 @@ public class DevicesStorage {
         return sInstance;
     }
 
-    public void addDevice(IotDevice device) {
+    public boolean addDevice(IotDevice device) {
         if (DEBUG) Log.d(TAG, "addDevice: " + device);
-        if (devices.contains(device)) return;
-        devices.add(device);
-        if (DEBUG) Log.d(TAG, "addDevice: device added. Current devices=" + devices);
+        if (devices.contains(device)) return false;
+        return devices.add(device);
     }
 
     public void reset() {

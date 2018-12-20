@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -210,6 +212,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void bind(ArduinoDevice device, Controller controller) {
+            if (controller == null || device == null) {
+                return;
+            }
             this.controller = controller;
             this.device = device;
 
@@ -248,15 +253,30 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback<RaspberryResponse>() {
                 @Override
                 public void onResponse(Call<RaspberryResponse> call, Response<RaspberryResponse> response) {
-                    String newValue = response.body().response;
-                    state.setText(newValue);
-                    controller.state = newValue;
+                    if (response.isSuccessful()) {
+
+                        RaspberryResponse raspberryResponse = response.body();
+                        if (raspberryResponse == null) {
+                            endStateChange();
+                            return;
+                        }
+                        String newState = raspberryResponse.response;
+                        state.setText(newState);
+                        controller.state = newState;
+                    } else {
+                        String message = null;
+                        message = "Returned code: " + response.code();
+                        try {
+                             message += ", " + response.raw().body().string();
+                        } catch (Exception ignored) {}
+                        Toast.makeText(guid.getContext(), message, Toast.LENGTH_LONG).show();
+                    }
                     endStateChange();
                 }
 
                 @Override
                 public void onFailure(Call<RaspberryResponse> call, Throwable t) {
-                    state.setText("error");
+                    Log.d(TAG, "onFailure: " + t);
                     endStateChange();
                 }
             });
