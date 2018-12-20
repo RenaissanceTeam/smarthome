@@ -24,6 +24,10 @@ public class GUID {
         return instance;
     }
 
+    public void remove(long guid) {
+        mGuids.remove(guid);
+    }
+
     public long getGuidForIotDevice(IotDevice device) {
         return getGuidForName(device.name);
     }

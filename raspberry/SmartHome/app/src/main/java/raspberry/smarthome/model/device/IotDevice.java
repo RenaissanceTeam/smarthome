@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import raspberry.smarthome.model.GUID;
+import raspberry.smarthome.model.device.controllers.ArduinoController;
 import raspberry.smarthome.model.device.controllers.BaseController;
 
 public abstract class IotDevice {
@@ -48,5 +49,14 @@ public abstract class IotDevice {
                 ", description='" + description + '\'' +
                 ", GUID=" + guid +
                 '}';
+    }
+
+    public void remove() {
+        GUID.getInstance().remove(guid);
+        for (BaseController controller : controllers) {
+            if (controller instanceof ArduinoController) {
+                GUID.getInstance().remove(((ArduinoController) controller).guid);
+            }
+        }
     }
 }
