@@ -192,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static class ControllerViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener{
+        public static final String UNKNOWN_STATE = "-";
         private TextView guid;
         private TextView type;
         private TextView state;
@@ -220,11 +221,19 @@ public class MainActivity extends AppCompatActivity {
 
             guid.setText(controller.guid + "");
             type.setText(controller.type);
+            if (controller.state != null) {
+                state.setText(controller.state);
+            } else {
+                state.setText(UNKNOWN_STATE);
+            }
         }
 
         @Override
         public void onClick(View v) {
             if (controller.type.equals("ARDUINO_ON_OFF")) {
+                if (UNKNOWN_STATE.equals(state.getText())) {
+
+                }
                 if ("1".equals(controller.state)) {
                     changeStateTo("0");
                 } else {
@@ -246,32 +255,14 @@ public class MainActivity extends AppCompatActivity {
             state.setVisibility(View.VISIBLE);
         }
 
-        private void changeStateTo(String value) {
+        private void readState() {
             startStateChange();
             RaspberryApi api = getRaspberryApi();
-            Call<RaspberryResponse> call = api.changeControllerState(device.guid, controller.guid, value);
+            Call<RaspberryResponse> call = api.readControllerState(device.guid, controller.guid);
             call.enqueue(new Callback<RaspberryResponse>() {
                 @Override
                 public void onResponse(Call<RaspberryResponse> call, Response<RaspberryResponse> response) {
-                    if (response.isSuccessful()) {
-
-                        RaspberryResponse raspberryResponse = response.body();
-                        if (raspberryResponse == null) {
-                            endStateChange();
-                            return;
-                        }
-                        String newState = raspberryResponse.response;
-                        state.setText(newState);
-                        controller.state = newState;
-                    } else {
-                        String message = null;
-                        message = "Returned code: " + response.code();
-                        try {
-                             message += ", " + response.raw().body().string();
-                        } catch (Exception ignored) {}
-                        Toast.makeText(guid.getContext(), message, Toast.LENGTH_LONG).show();
-                    }
-                    endStateChange();
+                    handleResponseWithState(response);
                 }
 
                 @Override
@@ -281,6 +272,46 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+        }
+        private void changeStateTo(String value) {
+            startStateChange();
+            RaspberryApi api = getRaspberryApi();
+            Call<RaspberryResponse> call = api.changeControllerState(device.guid, controller.guid, value);
+            call.enqueue(new Callback<RaspberryResponse>() {
+                @Override
+                public void onResponse(Call<RaspberryResponse> call, Response<RaspberryResponse> response) {
+                    handleResponseWithState(response);
+                }
+
+                @Override
+                public void onFailure(Call<RaspberryResponse> call, Throwable t) {
+                    Log.d(TAG, "onFailure: " + t);
+                    endStateChange();
+                }
+            });
+
+        }
+
+        private void handleResponseWithState(Response<RaspberryResponse> response) {
+            if (response.isSuccessful()) {
+
+                RaspberryResponse raspberryResponse = response.body();
+                if (raspberryResponse == null) {
+                    endStateChange();
+                    return;
+                }
+                String newState = raspberryResponse.response;
+                state.setText(newState);
+                controller.state = newState;
+            } else {
+                String message = null;
+                message = "Returned code: " + response.code();
+                try {
+                     message += ", " + response.raw().body().string();
+                } catch (Exception ignored) {}
+                Toast.makeText(guid.getContext(), message, Toast.LENGTH_LONG).show();
+            }
+            endStateChange();
         }
     }
 }

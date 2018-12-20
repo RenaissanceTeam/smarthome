@@ -53,6 +53,11 @@ public class WebServer extends NanoHTTPD {
                 return new Response("Device was not added");
             }
 
+            if (uri.startsWith("/reset")) {
+                DevicesStorage.getInstance().removeAll();
+                return new Response("Everything is deleted");
+            }
+
             if (uri.startsWith("/controller")) {
                 return makeWriteRequestToDevice(session);
             }

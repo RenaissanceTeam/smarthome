@@ -78,7 +78,6 @@ void setup()
   server.begin();
   client.post("/init?" + get_home_info(), "text", "");
 
-  delay(2000);
 
 #if DEBUG > 0
   Serial.println("setup end");

@@ -1,16 +1,11 @@
 package raspberry.smarthome.model.device.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.IOException;
 
 import raspberry.smarthome.model.device.ArduinoIotDevice;
 import raspberry.smarthome.model.device.requests.ArduinoDeviceAPI;
 import raspberry.smarthome.model.device.requests.ControllerResponse;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ArduinoOnOff extends ArduinoController implements Writable, Readable {
 
@@ -26,8 +21,9 @@ public class ArduinoOnOff extends ArduinoController implements Writable, Readabl
         ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
         Call<ControllerResponse> call = arduinoApi.controllerWriteRequest(indexInArduinoServicesArray, value);
 
-        // todo check for null
-        return call.execute().body();
+        ControllerResponse controllerResponse = call.execute().body();
+        setNewState(controllerResponse.response);
+        return controllerResponse;
     }
 
     @Override
@@ -35,21 +31,8 @@ public class ArduinoOnOff extends ArduinoController implements Writable, Readabl
         ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
         Call<ControllerResponse> call = arduinoApi.controllerReadRequest(indexInArduinoServicesArray);
 
-        // todo check for null
-        return call.execute().body();
-    }
-
-    private ArduinoDeviceAPI getArduinoDeviceAPI() {
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-
-        String baseUrl = "http://" + this.device.ip + ":8080/";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        return retrofit.create(ArduinoDeviceAPI.class);
+        ControllerResponse controllerResponse = call.execute().body();
+        setNewState(controllerResponse.response);
+        return controllerResponse;
     }
 }
