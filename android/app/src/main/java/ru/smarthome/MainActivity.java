@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +41,7 @@ import static ru.smarthome.constants.Constants.RC_SIGN_IN;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    private Button load;
+    private SwipeRefreshLayout refreshLayout;
     private RecyclerView controllers;
     private SmartHomeControllersAdapter adapter;
 
@@ -49,19 +50,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        load = findViewById(R.id.load);
+        refreshLayout = findViewById(R.id.refresh_controllers);
         controllers = findViewById(R.id.controllers);
         controllers.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SmartHomeControllersAdapter();
         controllers.setAdapter(adapter);
 
-        load.setOnClickListener(new View.OnClickListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onClick(View v) {
+            public void onRefresh() {
                 requestInfoFromRaspberry();
             }
         });
 //        auth();
+        requestInfoFromRaspberry(); // todo after auth successful
+    }
+
+    private void stopRefreshing() {
+        refreshLayout.setRefreshing(false);
     }
 
     private void auth() {
@@ -98,11 +104,13 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<SmartHome> call, Response<SmartHome> response) {
                 Log.d(TAG, "onResponse: " + response.body());
                 adapter.setSmartHome(response.body());
+                stopRefreshing();
             }
 
             @Override
             public void onFailure(Call<SmartHome> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t);
+                stopRefreshing();
             }
         });
     }

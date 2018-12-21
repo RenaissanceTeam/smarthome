@@ -9,21 +9,34 @@
         android:text="type"
         android:layout_width="wrap_content"
         android:layout_margin="20dp"
+        android:textColor="@android:color/black"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/guid_label"
+        android:text="GUID="
+        android:layout_alignBaseline="@id/type"
+        android:layout_toEndOf="@id/type"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="8sp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/controller_guid"
         android:text="1231231231"
         android:layout_alignBaseline="@id/type"
         android:layout_width="wrap_content"
+        android:textSize="8sp"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/type"/>
+        android:textColor="@android:color/darker_gray"
+        android:layout_toEndOf="@id/guid_label"/>
     <TextView
         android:id="@+id/state"
-        android:text="0"
+        android:text="-"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/type"
         android:layout_margin="20dp"
+        android:textColor="@android:color/black"
         android:textSize="24sp"
         android:layout_alignParentEnd="true"/>
     <ProgressBar
