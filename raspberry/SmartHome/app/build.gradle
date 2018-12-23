@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "raspberry.smarthome"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -37,14 +37,20 @@ dependencies {
     implementation 'com.android.support:support-annotations:28.0.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     compileOnly 'com.google.android.things:androidthings:1.0'
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    // http server
+    implementation 'com.nanohttpd:nanohttpd-webserver:2.1.1'
+    // Firebase
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
-    // Mqtt server
-    implementation 'io.moquette:moquette-netty-parser:0.8.1'
-    implementation 'io.moquette:moquette-broker:0.8.1'
-    implementation 'io.moquette:moquette-parser-commons:0.8.1'
 
-    // Mqtt client
-    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
-    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+    implementation 'com.firebase:firebase-client-android:2.5.2'
 
 }
+
+apply plugin: 'com.google.gms.google-services'

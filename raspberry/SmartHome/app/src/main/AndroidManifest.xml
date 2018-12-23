@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <application android:label="@string/app_name">
+    <application android:label="@string/app_name" android:name=".App">
         <uses-library android:name="com.google.android.things" />
 
         <activity android:name=".MainActivity">
@@ -21,6 +21,14 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".auth.GoogleSignInActivity">
+            <intent-filter>
+                <action android:name="raspberry.smarthome.auth" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

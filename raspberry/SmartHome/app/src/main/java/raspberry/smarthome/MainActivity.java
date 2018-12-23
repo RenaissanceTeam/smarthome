@@ -1,90 +1,86 @@
 package raspberry.smarthome;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 
-import java.io.File;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.io.IOException;
-import java.util.Properties;
 
-import io.moquette.BrokerConstants;
-import io.moquette.server.Server;
-import io.moquette.server.config.MemoryConfig;
-import raspberry.smarthome.model.device.constants.Constants;
-import raspberry.smarthome.mqtt.SmartHomeMqttClient;
+import raspberry.smarthome.auth.GoogleSignInActivity;
 
-public class MainActivity extends Activity implements SmartHomeMqttClient.OnConnectionChange{
+import static raspberry.smarthome.model.device.constants.Constants.RC_SIGN_IN;
+
+
+public class MainActivity extends Activity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final boolean DEBUG = BuildConfig.DEBUG;
-    private Server mqttServer;
-    private SmartHomeMqttClient smartHomeMqttClient;
+    private WebServer server;
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (DEBUG) Log.d(TAG, "onCreate");
+        // todo start web server to receive notifications from Arduino
 
-        if (!tryStartServer()) return;
-        setupLocalMqttClient();
+        server = new WebServer();
     }
 
-    private boolean tryStartServer() {
+    @Override
+    protected void onStart() {
+        super.onStart();
         try {
-            mqttServer = startMqttServer();
-            return true;
+            server.start();
         } catch (IOException e) {
-            if (DEBUG) Log.d(TAG, "can't start mqtt server " + e);
-            return false;
+            Log.d(TAG, "onStart: start server" + e);
         }
     }
 
-    private void setupLocalMqttClient() {
-        try {
-            smartHomeMqttClient = new SmartHomeMqttClient(this,
-                    Constants.MQTT_BROKER_URL, Constants.CLIENT_ID);
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-            smartHomeMqttClient.connect(this);
-        } catch (Exception e) {
-            if (DEBUG) Log.d(TAG, "can't create mqtt client " + e);
+
+//        auth();
+    }
+
+    private void auth() {
+        // check for auth
+        mAuth = FirebaseAuth.getInstance();
+
+        if(mAuth.getCurrentUser() == null)
+            startActivity(new Intent(this, GoogleSignInActivity.class));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (server != null) {
+            server.stop();
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        smartHomeMqttClient.disconnect();
-        smartHomeMqttClient = null;
-
-        mqttServer.stopServer();
-        mqttServer = null;
-    }
-
-    private Server startMqttServer() throws IOException {
-        MemoryConfig memoryConfig = new MemoryConfig(new Properties());
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator
-                + BrokerConstants.DEFAULT_MOQUETTE_STORE_MAP_DB_FILENAME;
-        memoryConfig.setProperty(BrokerConstants.PERSISTENT_STORE_PROPERTY_NAME, path);
-        Server server = new Server();
-
-        // todo if crashes like java.lang.NoSuchMethodException: <init>
-        // temp solution: remove moquette_store.mapdb in /sdcard
-        server.startServer(memoryConfig);
-        if (DEBUG) Log.d(TAG, "server started");
-        return server;
     }
 
     @Override
-    public void onConnected() {
-        smartHomeMqttClient.subscribe();
-    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-    @Override
-    public void onFail() {
-        if (DEBUG) Log.d(TAG, "on client connection Fail");
+        if (requestCode == RC_SIGN_IN) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        } else {
+            // retry login
+        }
     }
 }
