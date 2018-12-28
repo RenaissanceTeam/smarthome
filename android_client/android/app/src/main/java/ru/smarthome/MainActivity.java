@@ -35,6 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import ru.smarthome.library.ArduinoDevice;
 import ru.smarthome.library.Controller;
 import ru.smarthome.library.RaspberryResponse;
+import ru.smarthome.shlibrary.asdf;
 
 import static ru.smarthome.constants.Constants.RC_SIGN_IN;
 
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 requestInfoFromRaspberry();
             }
         });
+        ru.smarthome.shlibrary.
 //        auth();
         requestInfoFromRaspberry(); // todo after auth successful
     }
