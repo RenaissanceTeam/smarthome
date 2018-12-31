@@ -34,6 +34,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.smarthome.library.ArduinoDevice;
 import ru.smarthome.library.Controller;
+import ru.smarthome.library.MyClass;
 import ru.smarthome.library.RaspberryResponse;
 
 
