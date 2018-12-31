@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import raspberry.smarthome.model.device.ArduinoIotDevice;
-import raspberry.smarthome.model.device.IotDevice;
-import raspberry.smarthome.model.device.controllers.BaseController;
 import raspberry.smarthome.model.device.controllers.Readable;
+import ru.smarthome.library.BaseController;
+import ru.smarthome.library.GUID;
+import ru.smarthome.library.IotDevice;
 
 import static raspberry.smarthome.MainActivity.DEBUG;
 
@@ -98,7 +99,7 @@ public class DevicesStorage {
 
     public void removeAll() {
         for (IotDevice device : devices) {
-            device.remove();
+            GUID.getInstance().remove(device.guid);
         }
         devices.clear();
     }

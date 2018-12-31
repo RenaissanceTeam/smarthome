@@ -13,12 +13,13 @@ import java.util.Map;
 import fi.iki.elonen.NanoHTTPD;
 import raspberry.smarthome.model.DevicesStorage;
 import raspberry.smarthome.model.device.ArduinoIotDevice;
-import raspberry.smarthome.model.device.IotDevice;
-import raspberry.smarthome.model.device.controllers.BaseController;
-import raspberry.smarthome.model.device.controllers.ControllerTypes;
+import raspberry.smarthome.model.device.controllers.ControllersFactory;
 import raspberry.smarthome.model.device.controllers.Readable;
 import raspberry.smarthome.model.device.controllers.Writable;
 import raspberry.smarthome.model.device.requests.ControllerResponse;
+import ru.smarthome.library.BaseController;
+import ru.smarthome.library.ControllerType;
+import ru.smarthome.library.IotDevice;
 
 public class WebServer extends NanoHTTPD {
 
@@ -144,7 +145,8 @@ public class WebServer extends NanoHTTPD {
         int index = 0;
         for (String rawService : rawServices) {
             int id = Integer.parseInt(rawService.trim());
-            controllers.add(ControllerTypes.getById(id).createArduinoController(device, index));
+            ControllerType type = ControllerType.getById(id);
+            controllers.add(ControllersFactory.getArduionController(type, device, index));
             ++index;
         }
         device.controllers = controllers;

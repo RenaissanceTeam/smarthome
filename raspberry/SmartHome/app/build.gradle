@@ -31,6 +31,23 @@ android {
     }
 }
 
+
+// ========================= auto import library on each build =====================================
+task importLibrary(type: Copy) {
+    copy {
+        from "../../../smarthomelibary/shlibrary/library/build/libs/library.jar"
+        into "libs"
+    }
+}
+project.afterEvaluate {
+    preBuild.dependsOn importLibrary
+}
+clean.dependsOn importLibrary
+clean.mustRunAfter importLibrary
+//==================================================================================================
+
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'

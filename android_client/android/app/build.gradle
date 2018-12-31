@@ -18,6 +18,7 @@ android {
     }
 }
 
+// ========================= auto import library on each build =====================================
 task importLibrary(type: Copy) {
     copy {
         from "../../../smarthomelibary/shlibrary/library/build/libs/library.jar"
@@ -29,6 +30,8 @@ project.afterEvaluate {
 }
 clean.dependsOn importLibrary
 clean.mustRunAfter importLibrary
+//==================================================================================================
+
 
 dependencies {
     // here we include smart home lib with common classes for raspberry-android communication
