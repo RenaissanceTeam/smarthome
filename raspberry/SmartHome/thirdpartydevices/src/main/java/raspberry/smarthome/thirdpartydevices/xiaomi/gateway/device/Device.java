@@ -12,6 +12,7 @@ public abstract class Device {
     public static final String WIRED_DUAL_WALL_SWITCH_TYPE = "ctrl_neutral2";
     public static final String WIRED_SINGLE_WALL_SWITCH_TYPE = "ctrl_neutral1";
 
+    static final String IP_KEY = "ip";
     static final String RGB_KEY = "rgb";
     static final String ILLUMINATION_KEY = "illumination";
     static final String PROTO_VERSION_KEY = "proto_version";

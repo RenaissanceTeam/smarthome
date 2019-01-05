@@ -1,7 +1,5 @@
 package raspberry.smarthome.thirdpartydevices;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
@@ -11,8 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.GatewayEnv;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device.Gateway;
-
-import static org.junit.Assert.*;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -37,7 +33,7 @@ public class Tests {
         init();
 
         try {
-            TimeUnit.MILLISECONDS.sleep(5000);
+            TimeUnit.MILLISECONDS.sleep(9000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -49,12 +45,64 @@ public class Tests {
         gateway.enableLight();
 
         try {
-            TimeUnit.MILLISECONDS.sleep(5000);
+            TimeUnit.MILLISECONDS.sleep(9000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        gateway.enableLight((byte) 255, (byte) 0, (byte) 0, 1000);
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(9000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        gateway.enableLight((byte) 0, (byte) 255, (byte) 0, 1000);
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(9000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        gateway.enableLight((byte) 0, (byte) 0, (byte) 255, 1000);
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(9000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        gateway.disableLight();
+
+    }
+
+    @Test
+    public void testHeartBeat() {
+        init();
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Gateway gateway = env.getGateway();
+
+        System.out.println(gateway.toString());
+
+        gateway.enableLight();
+
+        try {
+            TimeUnit.MINUTES.sleep(30000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         gateway.disableLight();
+
     }
 
     /*@Test

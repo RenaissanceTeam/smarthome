@@ -10,6 +10,8 @@ public class Gateway extends Device {
 
     private UdpTransport udpTransport;
 
+    private String ip = "224.0.0.50";
+
     private String rgb;
     private String illumination;
     private String protoVersion;
@@ -17,6 +19,16 @@ public class Gateway extends Device {
     public Gateway(String sid, UdpTransport transport) {
         super(sid, GATEWAY_TYPE);
         udpTransport = transport;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+
+        udpTransport.setGatewayIp(ip);
     }
 
     public String getRgb() {
@@ -41,6 +53,9 @@ public class Gateway extends Device {
         try {
             JSONObject o = new JSONObject(cmd);
 
+            if(!o.isNull(IP_KEY))
+                setIp(o.getString(IP_KEY));
+
             if(!o.isNull(RGB_KEY))
                 rgb = o.getString(RGB_KEY);
 
@@ -48,7 +63,7 @@ public class Gateway extends Device {
                 illumination = o.getString(ILLUMINATION_KEY);
 
             if(!o.isNull(PROTO_VERSION_KEY))
-                protoVersion = o.getString(protoVersion);
+                protoVersion = o.getString(PROTO_VERSION_KEY);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -61,7 +76,7 @@ public class Gateway extends Device {
     }
 
     public void enableLight(byte r, byte g, byte b, int illumination) {
-        long rgb = 4294967295L; //0xFF000000 | r << 16 | g << 8 | b;
+        long rgb = 0xFF000000 | r << 16 | g << 8 | b;
 
         if (illumination < 300 || illumination > 1300) throw new IllegalArgumentException("Illumination must be in range 300 - 1300");
 

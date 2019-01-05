@@ -4,8 +4,11 @@ import android.os.CancellationSignal;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -26,7 +29,7 @@ import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.utils.UdpTransport;
 public class GatewayEnv {
 
     private Gateway gateway;
-    private List<Device> devices = new ArrayList<>();
+    private List<Device> devices = Collections.synchronizedList(new ArrayList<>());
     private static UdpTransport transport;
 
     private Map<String, Consumer<ResponseCmd>> commandsToActions = new HashMap<>();
@@ -34,7 +37,8 @@ public class GatewayEnv {
 
     private Gson gson = new Gson();
     private CancellationSignal cs = new CancellationSignal();
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ExecutorService executor = Executors.newFixedThreadPool(2);
+
 
     private final int readInterval = 100;
 
@@ -44,7 +48,8 @@ public class GatewayEnv {
 
         transport = new UdpTransport(password);
 
-        executor.submit(() -> startObserve(cs));
+        executor.submit(() -> startReceivingUpdates(cs));
+        executor.submit(() -> startReceivingMulticastMessages(cs));
 
         transport.sendCommand(new DiscoverGatewayCmd());
     }
@@ -58,7 +63,14 @@ public class GatewayEnv {
     }
 
     private void processReport(ResponseCmd response) {
-        findDeviceBySid(response.sid).parseData(response.data);
+        System.out.println("Processing report...");
+        try {
+            Optional.of(findDeviceBySid(response.sid)).ifPresent(d -> d.parseData(response.data));
+        } catch (Exception e) {
+            System.out.println("FUCK UP");
+            e.printStackTrace();
+        }
+        System.out.println("Report processed!");
     }
 
     private void processHeartBeat(ResponseCmd response) {
@@ -74,17 +86,24 @@ public class GatewayEnv {
     }
 
     private void updateDeviceList(ResponseCmd response) {
-        if(response.model.equals(Device.GATEWAY_TYPE)) return;
+        if(response.model.equals(Device.GATEWAY_TYPE)) {
+            if(gateway != null && gateway.getSid().equals(response.sid))
+                gateway.parseData(response.data);
+
+            return;
+        }
 
         Device device = findDeviceBySid(response.sid);
 
         if(device != null) return;
 
-        device = Objects.requireNonNull(deviceDictionary.get(response.model)).apply(response.sid);
+        device = deviceDictionary.get(response.model).apply(response.sid);
 
         if(response.data != null) device.parseData(response.data);
 
-        devices.add(device);
+        synchronized (devices) {
+            devices.add(device);
+        }
     }
 
     private void discover(ResponseCmd response) {
@@ -97,7 +116,7 @@ public class GatewayEnv {
 
         transport.sendCommand(new ReadDeviceCmd(response.sid));
 
-        /*for(String sid : gson.fromJson(response.data, String[].class)) {
+        for(String sid : gson.fromJson(response.data, String[].class)) {
             transport.sendCommand(new ReadDeviceCmd(sid));
 
             try {
@@ -105,18 +124,17 @@ public class GatewayEnv {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }*/
+        }
     }
 
 
-    private void startObserve(CancellationSignal cs) {
-        System.out.println("Waiting for messages");
-
+    private void startReceivingUpdates(CancellationSignal cs) {
         while (!cs.isCanceled()) {
+            System.out.println("Waiting for messages");
 
             try {
 
-                String s = transport.receiveAsync().get();
+                String s = transport.receive().get();
 
                 System.out.println("GatewayEnv, message received: " + s);
 
@@ -124,7 +142,7 @@ public class GatewayEnv {
 
                 if (!commandsToActions.containsKey(responseCmd.cmd)) continue;
 
-                Objects.requireNonNull(commandsToActions.get(responseCmd.cmd)).accept(responseCmd);
+                commandsToActions.get(responseCmd.cmd).accept(responseCmd);
 
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -133,11 +151,40 @@ public class GatewayEnv {
 
     }
 
+    private void startReceivingMulticastMessages(CancellationSignal cs) {
+        while (!cs.isCanceled()) {
+            System.out.println("Waiting for heartbeat");
+            try {
+
+                String s = new String(transport.getIncomingMulticastChannel().receive());
+
+                System.out.println("GatewayEnv, multicast message received: " + s);
+
+                ResponseCmd responseCmd = gson.fromJson(s, ResponseCmd.class);
+
+                if (!commandsToActions.containsKey(responseCmd.cmd)) continue;
+
+                commandsToActions.get(responseCmd.cmd).accept(responseCmd);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
     private Device findDeviceBySid(String sid) {
-        return devices.stream()
-                .filter(d -> d.getSid().equals(sid))
-                .findFirst()
-                .orElse(null);
+        synchronized (devices) {
+            Device buff;
+            Iterator<Device> it = devices.iterator();
+            while (it.hasNext()) {
+                buff = it.next();
+                if(buff.getSid().equals(sid))
+                    return buff;
+            }
+        }
+
+        return null;
     }
 
 
