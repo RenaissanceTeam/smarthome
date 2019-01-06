@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.GatewayLightCmd;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.ReadDeviceCmd;
-import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.SocketPlugCmd;
+import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.SmartPlugCmd;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.WriteCmd;
 
 public class XiaomiGatewayApiCommandsTest {
@@ -26,7 +26,7 @@ public class XiaomiGatewayApiCommandsTest {
 
     @Test
     public void printSocketPlugCmd() {
-        System.out.println("SocketPlugCmd: " + new SocketPlugCmd(SocketPlugCmd.STATUS_OFF).toString());
+        System.out.println("SmartPlugCmd: " + new SmartPlugCmd("off").toString());
     }
 
     @Test

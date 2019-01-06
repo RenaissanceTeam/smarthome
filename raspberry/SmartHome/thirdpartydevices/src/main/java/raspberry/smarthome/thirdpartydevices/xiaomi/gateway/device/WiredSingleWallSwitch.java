@@ -5,26 +5,33 @@ import org.json.JSONObject;
 
 import java.util.Optional;
 
-public class WiredSingleWallSwitch extends Device {
+import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.WiredSingleWallSwitchCmd;
+import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.utils.UdpTransport;
 
-    private OnSwitchChangeListener listener;
+public class WiredSingleWallSwitch extends Device {
 
     private String status = "idle";
 
-    private boolean statustBin = false;
+    private boolean statusBin = false;
 
-    public WiredSingleWallSwitch(String sid) {
+    private OnSwitchChangeListener listener;
+
+    private UdpTransport transport;
+
+    public WiredSingleWallSwitch(String sid, UdpTransport transport) {
         super(sid, WIRED_SINGLE_WALL_SWITCH_TYPE);
+
+        this.transport = transport;
     }
 
     public void setStatus(String status) {
         this.status = status;
 
         if(status.equals(STATUS_ON))
-            statustBin = true;
+            statusBin = true;
 
         else if(status.equals(STATUS_OFF))
-            statustBin = false;
+            statusBin = false;
     }
 
 
@@ -35,7 +42,7 @@ public class WiredSingleWallSwitch extends Device {
 
             if(!o.isNull(STATUS_KEY)) {
                 setStatus(o.getString(STATUS_KEY));
-                Optional.ofNullable(listener).ifPresent(listener -> listener.onSwitch(statustBin));
+                Optional.ofNullable(listener).ifPresent(listener -> listener.onSwitch(statusBin));
             }
 
         } catch (JSONException | NumberFormatException e) {
@@ -46,6 +53,22 @@ public class WiredSingleWallSwitch extends Device {
     @Override
     public String toString() {
         return super.toString() + "\nstatus: " + status;
+    }
+
+    public void on() {
+        sendCmd(STATUS_ON);
+    }
+
+    public void off() {
+        sendCmd(STATUS_OFF);
+    }
+
+    private void sendCmd(String status) {
+        try {
+            transport.sendWriteCommand(getSid(), getType(), new WiredSingleWallSwitchCmd(status));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public interface OnSwitchChangeListener {

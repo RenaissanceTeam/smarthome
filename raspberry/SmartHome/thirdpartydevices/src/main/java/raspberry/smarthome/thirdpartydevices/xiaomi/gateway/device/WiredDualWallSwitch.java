@@ -5,9 +5,10 @@ import org.json.JSONObject;
 
 import java.util.Optional;
 
-public class WiredDualWallSwitch extends Device {
+import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.WiredDualWallSwitchCmd;
+import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.utils.UdpTransport;
 
-    private OnSwitchChannelChangeListener listener;
+public class WiredDualWallSwitch extends Device {
 
     private String statusLeft = "idle";
     private String statusRight = "idle";
@@ -15,11 +16,17 @@ public class WiredDualWallSwitch extends Device {
     private boolean statusLeftBin = false;
     private boolean statusRightBin = false;
 
-    public WiredDualWallSwitch(String sid) {
+    private OnSwitchChannelChangeListener listener;
+
+    private UdpTransport transport;
+
+    public WiredDualWallSwitch(String sid, UdpTransport transport) {
         super(sid, WIRED_DUAL_WALL_SWITCH_TYPE);
+
+        this.transport = transport;
     }
 
-    public void setStatusLeft(String statusLeft) {
+    private void setStatusLeft(String statusLeft) {
         this.statusLeft = statusLeft;
 
         if(statusLeft.equals(STATUS_ON))
@@ -29,7 +36,7 @@ public class WiredDualWallSwitch extends Device {
             statusLeftBin = false;
     }
 
-    public void setStatusRight(String statusRight) {
+    private void setStatusRight(String statusRight) {
         this.statusRight = statusRight;
 
         if(statusRight.equals(STATUS_ON))
@@ -46,7 +53,7 @@ public class WiredDualWallSwitch extends Device {
 
             if(!o.isNull(STATUS_CHANNEL_0)) {
                 setStatusLeft(o.getString(STATUS_CHANNEL_0));
-                Optional.ofNullable(listener).ifPresent(listener -> listener.onSwitchlLeft(statusLeftBin));
+                Optional.ofNullable(listener).ifPresent(listener -> listener.onSwitchLeft(statusLeftBin));
             }
 
             if(!o.isNull(STATUS_CHANNEL_1)) {
@@ -59,6 +66,30 @@ public class WiredDualWallSwitch extends Device {
         }
     }
 
+    public void onLeft() {
+        sendCmd(STATUS_ON, statusRight);
+    }
+
+    public void offLeft() {
+        sendCmd(STATUS_OFF, statusRight);
+    }
+
+    public void onRight() {
+        sendCmd(statusLeft, STATUS_ON);
+    }
+
+    public void offRight() {
+        sendCmd(statusLeft, STATUS_OFF);
+    }
+
+    private void sendCmd(String statusLeft, String statusRight) {
+        try {
+            transport.sendWriteCommand(getSid(), getType(), new WiredDualWallSwitchCmd(statusLeft, statusRight));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public String toString() {
         return super.toString() + "\nstatus left: " + statusLeft + ", status right: " + statusRight;
@@ -66,7 +97,7 @@ public class WiredDualWallSwitch extends Device {
 
     public interface OnSwitchChannelChangeListener {
 
-        void onSwitchlLeft(boolean on);
+        void onSwitchLeft(boolean on);
 
         void onSwitchRight(boolean on);
     }

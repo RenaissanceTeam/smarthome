@@ -5,19 +5,21 @@ public abstract class Device {
     public static final String GATEWAY_TYPE = "gateway";
     public static final String DOOR_WINDOW_SENSOR_TYPE = "magnet";
     public static final String MOTION_SENSOR_TYPE = "motion";
-    public static final String SWITCH_TYPE = "switch";
+    public static final String WIRELESS_SWITCH_TYPE = "switch";
     public static final String TEMPERATURE_HUMIDITY_SENSOR_TYPE = "sensor_ht";
     public static final String WATER_LEAK_SENSOR_TYPE = "sensor_wleak.aq1";
     public static final String WEATHER_SENSOR_TYPE = "weather.v1";
     public static final String WIRED_DUAL_WALL_SWITCH_TYPE = "ctrl_neutral2";
     public static final String WIRED_SINGLE_WALL_SWITCH_TYPE = "ctrl_neutral1";
+    public static final String SMART_PLUG_TYPE = "plug";
+    public static final String SMOKE_SENSOR_TYPE = "smoke";
 
     static final String IP_KEY = "ip";
     static final String RGB_KEY = "rgb";
     static final String ILLUMINATION_KEY = "illumination";
     static final String PROTO_VERSION_KEY = "proto_version";
 
-    static final String STATUS_KEY = "status";
+    public static final String STATUS_KEY = "status";
     static final String STATUS_OPEN = "open";
     static final String STATUS_CLOSE = "close";
     static final String STATUS_MOTION = "motion";
@@ -30,13 +32,18 @@ public abstract class Device {
     static final String STATUS_WATER_LEAK = "leak";
     static final String STATUS_NO_WATER_LEAK = "no_leak";
     static final String STATUS_PRESSURE = "pressure";
-    static final String STATUS_CHANNEL_0 = "channel_0";
-    static final String STATUS_CHANNEL_1 = "channel_1";
+    public static final String STATUS_CHANNEL_0 = "channel_0";
+    public static final String STATUS_CHANNEL_1 = "channel_1";
 
     static final String STATUS_ON = "on";
     static final String STATUS_OFF = "off";
 
     static final String VOLTAGE_KEY = "voltage";
+    static final String IN_USE_KEY = "inuse";
+    static final String POWER_CONSUMED_KEY = "power_consumed";
+    static final String LOAD_POWER_KEY = "load_power";
+    static final String ALARM_KEY = "alarm";
+    static final String DENSITY_KEY = "density";
 
     public String name = "";
 

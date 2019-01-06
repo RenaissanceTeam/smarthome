@@ -192,15 +192,17 @@ public class GatewayEnv {
         commandsToActions.put("report", this::processReport);
     }
 
-    private void initDeviceDictionary() {
+    private void initDeviceDictionary() {//TODO: add devices
         deviceDictionary.put(Device.DOOR_WINDOW_SENSOR_TYPE, DoorWindowSensor::new);
         deviceDictionary.put(Device.MOTION_SENSOR_TYPE, MotionSensor::new);
-        deviceDictionary.put(Device.SWITCH_TYPE, Switch::new);
+        deviceDictionary.put(Device.WIRELESS_SWITCH_TYPE, sid -> new WirelessSwitch(sid, transport));
         deviceDictionary.put(Device.TEMPERATURE_HUMIDITY_SENSOR_TYPE, THSensor::new);
         deviceDictionary.put(Device.WATER_LEAK_SENSOR_TYPE, WaterLeakSensor::new);
         deviceDictionary.put(Device.WEATHER_SENSOR_TYPE, WeatherSensor::new);
-        deviceDictionary.put(Device.WIRED_DUAL_WALL_SWITCH_TYPE, WiredDualWallSwitch::new);
-        deviceDictionary.put(Device.WIRED_SINGLE_WALL_SWITCH_TYPE, WiredSingleWallSwitch::new);
+        deviceDictionary.put(Device.WIRED_DUAL_WALL_SWITCH_TYPE, sid -> new WiredDualWallSwitch(sid, transport));
+        deviceDictionary.put(Device.WIRED_SINGLE_WALL_SWITCH_TYPE, sid -> new WiredSingleWallSwitch(sid, transport));
+        deviceDictionary.put(Device.SMART_PLUG_TYPE, sid -> new SmartPlug(sid, transport));
+        deviceDictionary.put(Device.SMOKE_SENSOR_TYPE, SmokeSensor::new);
     }
 
     public static Builder builder() {
