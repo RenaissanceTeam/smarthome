@@ -192,7 +192,7 @@ public class GatewayEnv {
         commandsToActions.put("report", this::processReport);
     }
 
-    private void initDeviceDictionary() {//TODO: add devices
+    private void initDeviceDictionary() {
         deviceDictionary.put(Device.DOOR_WINDOW_SENSOR_TYPE, DoorWindowSensor::new);
         deviceDictionary.put(Device.MOTION_SENSOR_TYPE, MotionSensor::new);
         deviceDictionary.put(Device.WIRELESS_SWITCH_TYPE, sid -> new WirelessSwitch(sid, transport));

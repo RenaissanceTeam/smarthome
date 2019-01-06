@@ -30,11 +30,7 @@ public class DoorWindowSensor extends ExtendedDevice  {
             if(!o.isNull(STATUS_KEY)) {
                 setStatus(o.getString(STATUS_KEY));
 
-                if(getStatus().equals(STATUS_OPEN))
-                    report(true);
-
-                else if(getStatus().equals(STATUS_CLOSE))
-                    report(false);
+                report(getStatus());
             }
 
             if(!o.isNull(VOLTAGE_KEY)) {
@@ -48,13 +44,13 @@ public class DoorWindowSensor extends ExtendedDevice  {
     }
 
 
-    private void report(boolean state) {
+    private void report(String state) {
         if(listener != null)
             listener.onStateChanged(state);
     }
 
     public interface OnStateChangeListener {
 
-        void onStateChanged(boolean state);
+        void onStateChanged(String state);
     }
 }

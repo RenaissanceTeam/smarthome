@@ -3,12 +3,12 @@ package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Optional;
+
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.SmartPlugCmd;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.utils.UdpTransport;
 
 public class SmartPlug extends ExtendedDevice {
-
-    private UdpTransport transport;
 
     private int inUse;
 
@@ -16,10 +16,18 @@ public class SmartPlug extends ExtendedDevice {
 
     private float loadPower;
 
+    private OnStateChangeListener listener;
+
+    private UdpTransport transport;
+
     public SmartPlug(String sid, UdpTransport transport) {
         super(sid, SMART_PLUG_TYPE);
 
         this.transport = transport;
+    }
+
+    public void setListener(OnStateChangeListener listener) {
+        this.listener = listener;
     }
 
     public int getInUse() {
@@ -46,6 +54,7 @@ public class SmartPlug extends ExtendedDevice {
 
             if (!o.isNull(STATUS_KEY)) {
                 setStatus(o.getString(STATUS_KEY));
+                Optional.ofNullable(listener).ifPresent(l -> l.onStateChanged(getStatus()));
             }
 
             if (!o.isNull(IN_USE_KEY)) {
@@ -84,5 +93,10 @@ public class SmartPlug extends ExtendedDevice {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public interface OnStateChangeListener {
+
+        void onStateChanged(String state);
     }
 }
