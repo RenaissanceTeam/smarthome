@@ -1,6 +1,7 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway;
 
 import android.os.CancellationSignal;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -11,7 +12,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -39,8 +39,9 @@ public class GatewayEnv {
     private CancellationSignal cs = new CancellationSignal();
     private ExecutorService executor = Executors.newFixedThreadPool(2);
 
-
     private final int readInterval = 100;
+
+    private final String TAG = getClass().getName();
 
     private GatewayEnv(String sid, String password, boolean useCache) {
         initConsumersMap();
@@ -63,29 +64,25 @@ public class GatewayEnv {
     }
 
     private void processReport(ResponseCmd response) {
-        System.out.println("Processing report...");
-        try {
-            Optional.of(findDeviceBySid(response.sid)).ifPresent(d -> d.parseData(response.data));
-        } catch (Exception e) {
-            System.out.println("FUCK UP");
-            e.printStackTrace();
-        }
-        System.out.println("Report processed!");
+        Log.i(TAG, "Processing report...");
+        Optional.ofNullable(findDeviceBySid(response.sid)).ifPresent(d -> d.parseData(response.data));
     }
 
     private void processHeartBeat(ResponseCmd response) {
-        System.out.println("processHeartBeat");
+        Log.i(TAG,"processing heartbeat");
         if(gateway != null && response.sid.equals(gateway.getSid())) {
             transport.setCurrentToken(response.token);
             gateway.parseData(response.data);
 
-            System.out.println("new token received: " + response.token);
+            Log.i(TAG,"new token received: " + response.token);
         } else {
-            Optional.of(findDeviceBySid(response.sid)).ifPresent(d -> d.parseData(response.data));
+            Optional.ofNullable(findDeviceBySid(response.sid)).ifPresent(d -> d.parseData(response.data));
         }
     }
 
     private void updateDeviceList(ResponseCmd response) {
+        Log.i(TAG, "Updating devices info");
+
         if(response.model.equals(Device.GATEWAY_TYPE)) {
             if(gateway != null && gateway.getSid().equals(response.sid))
                 gateway.parseData(response.data);
@@ -107,7 +104,7 @@ public class GatewayEnv {
     }
 
     private void discover(ResponseCmd response) {
-        System.out.println("Discovering...");
+        Log.i(TAG, "Discovering devices");
 
         transport.setCurrentToken(response.token);
 
@@ -130,13 +127,13 @@ public class GatewayEnv {
 
     private void startReceivingUpdates(CancellationSignal cs) {
         while (!cs.isCanceled()) {
-            System.out.println("Waiting for messages");
+            Log.d(TAG, "Waiting for messages");
 
             try {
 
                 String s = transport.receive().get();
 
-                System.out.println("GatewayEnv, message received: " + s);
+                Log.d(TAG,"Message received: " + s);
 
                 ResponseCmd responseCmd = gson.fromJson(s, ResponseCmd.class);
 
@@ -153,12 +150,12 @@ public class GatewayEnv {
 
     private void startReceivingMulticastMessages(CancellationSignal cs) {
         while (!cs.isCanceled()) {
-            System.out.println("Waiting for heartbeat");
+            Log.d(TAG,"Waiting for multicast messages");
             try {
 
                 String s = new String(transport.getIncomingMulticastChannel().receive());
 
-                System.out.println("GatewayEnv, multicast message received: " + s);
+                Log.d(TAG,"Multicast message received: " + s);
 
                 ResponseCmd responseCmd = gson.fromJson(s, ResponseCmd.class);
 
@@ -245,7 +242,7 @@ public class GatewayEnv {
 
     @Override
     protected void finalize() throws Throwable {
-        Objects.requireNonNull(cs).cancel();
+        cs.cancel();
         super.finalize();
     }
 }

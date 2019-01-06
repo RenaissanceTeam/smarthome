@@ -61,6 +61,6 @@ public abstract class Device {
 
     @Override
     public String toString() {
-        return "--- Xiaomi gateway device ---\n" + "type: " + type + ", sid: " + sid + ", name: " + name;
+        return "|\n--- Xiaomi gateway device ---\n" + "type: " + type + ", sid: " + sid + ", name: " + name;
     }
 }

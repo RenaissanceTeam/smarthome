@@ -1,6 +1,7 @@
 package raspberry.smarthome.thirdpartydevices;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,10 +19,12 @@ import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device.Gateway;
 @RunWith(AndroidJUnit4.class)
 public class Tests {
 
+    private final String TAG = getClass().getName();
+
     public GatewayEnv env;
 
     public void init() {
-        System.out.println("Setting up environment...");
+        Log.i(TAG, "Setting up environment...");
 
         env = GatewayEnv.builder()
                 .setGatewayPassword("tl3o393ndev67kv2")
@@ -40,7 +43,7 @@ public class Tests {
 
         Gateway gateway = env.getGateway();
 
-        System.out.println(gateway.toString());
+        Log.v(TAG, gateway.toString());
 
         gateway.enableLight();
 
@@ -80,23 +83,24 @@ public class Tests {
     }
 
     @Test
-    public void testHeartBeat() {
+    public void testBlue() {
         init();
 
         try {
-            TimeUnit.MILLISECONDS.sleep(10000);
+            TimeUnit.MILLISECONDS.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         Gateway gateway = env.getGateway();
 
-        System.out.println(gateway.toString());
+        Log.v(TAG, gateway.toString());
 
-        gateway.enableLight();
+        gateway.enableLight((byte) 0, (byte) 0, (byte) 255
+                , 1000);
 
         try {
-            TimeUnit.MINUTES.sleep(30000);
+            TimeUnit.MILLISECONDS.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

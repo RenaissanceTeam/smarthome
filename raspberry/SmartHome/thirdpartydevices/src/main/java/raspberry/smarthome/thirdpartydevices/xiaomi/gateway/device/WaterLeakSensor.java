@@ -31,10 +31,10 @@ public class WaterLeakSensor extends ExtendedDevice {
                 setStatus(o.getString(STATUS_KEY));
 
                 if(getStatus().equals(STATUS_WATER_LEAK))
-                    Optional.of(listener).ifPresent(OnWaterLeakListener::onWaterLeak);
+                    Optional.ofNullable(listener).ifPresent(OnWaterLeakListener::onWaterLeak);
 
                 else if(getStatus().equals(STATUS_NO_WATER_LEAK))
-                    Optional.of(listener).ifPresent(OnWaterLeakListener::onNoWaterLeak);
+                    Optional.ofNullable(listener).ifPresent(OnWaterLeakListener::onNoWaterLeak);
             }
 
             if(!o.isNull(VOLTAGE_KEY)) {

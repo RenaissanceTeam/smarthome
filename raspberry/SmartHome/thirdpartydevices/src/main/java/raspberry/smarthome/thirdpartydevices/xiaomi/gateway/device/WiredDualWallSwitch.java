@@ -46,12 +46,12 @@ public class WiredDualWallSwitch extends Device {
 
             if(!o.isNull(STATUS_CHANNEL_0)) {
                 setStatusLeft(o.getString(STATUS_CHANNEL_0));
-                Optional.of(listener).ifPresent(listener -> listener.onSwitchlLeft(statusLeftBin));
+                Optional.ofNullable(listener).ifPresent(listener -> listener.onSwitchlLeft(statusLeftBin));
             }
 
             if(!o.isNull(STATUS_CHANNEL_1)) {
                 setStatusRight(o.getString(STATUS_CHANNEL_1));
-                Optional.of(listener).ifPresent(listener -> listener.onSwitchRight(statusRightBin));
+                Optional.ofNullable(listener).ifPresent(listener -> listener.onSwitchRight(statusRightBin));
             }
 
         } catch (JSONException | NumberFormatException e) {

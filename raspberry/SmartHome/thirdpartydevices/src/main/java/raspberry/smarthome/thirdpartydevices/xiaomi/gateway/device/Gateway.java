@@ -1,5 +1,8 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
+import android.graphics.Color;
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -76,7 +79,7 @@ public class Gateway extends Device {
     }
 
     public void enableLight(byte r, byte g, byte b, int illumination) {
-        long rgb = 0xFF000000 | r << 16 | g << 8 | b;
+        int rgb = 0xFF000000 | ((r & 0x0ff) << 16) | ((g & 0x0ff) << 8) | (b & 0x0ff);
 
         if (illumination < 300 || illumination > 1300) throw new IllegalArgumentException("Illumination must be in range 300 - 1300");
 

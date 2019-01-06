@@ -35,7 +35,7 @@ public class WiredSingleWallSwitch extends Device {
 
             if(!o.isNull(STATUS_KEY)) {
                 setStatus(o.getString(STATUS_KEY));
-                Optional.of(listener).ifPresent(listener -> listener.onSwitch(statustBin));
+                Optional.ofNullable(listener).ifPresent(listener -> listener.onSwitch(statustBin));
             }
 
         } catch (JSONException | NumberFormatException e) {

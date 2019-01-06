@@ -1,5 +1,7 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.utils;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -25,7 +27,7 @@ public class UdpTransport {
 
     private String gatewayIp = "224.0.0.50";
     private InetAddress multicastAdress = null;
-    public static final int serverPort = 9898;
+    private static final int serverPort = 9898;
     private DatagramSocket socket = null;
     private IncomingMulticastChannel incomingMulticastChannel;
 
@@ -36,6 +38,8 @@ public class UdpTransport {
     private String currentToken;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    private final String TAG = getClass().getName();
 
     public UdpTransport() {
         this(null);
@@ -57,7 +61,7 @@ public class UdpTransport {
     }
 
     public void setGatewayIp(String gatewayIp) {
-        System.out.println("--- Gateway ip updated ---");
+        Log.i(TAG, "--- Gateway ip updated ---");
         this.gatewayIp = gatewayIp;
     }
 
@@ -89,7 +93,7 @@ public class UdpTransport {
     }
 
     public void sendCommand(Command command) {
-        System.out.println("Sending command: " + command.toString());
+        Log.v(TAG,"Sending command: " + command.toString());
 
         sendCommand(command.toString());
     }

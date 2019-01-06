@@ -54,7 +54,7 @@ public class THSensor extends ExtendedDevice {
                 float currTemp = Float.parseFloat(o.getString(STATUS_TEMPERATURE)) / 100;
 
                 if(temperature != null && Math.abs(currTemp - temperature) > 0.01) {
-                    Optional.of(onTemperatureChangeListener).ifPresent(onTemperatureChangeListener -> onTemperatureChangeListener.onTemperatureChanged(currTemp));
+                    Optional.ofNullable(onTemperatureChangeListener).ifPresent(onTemperatureChangeListener -> onTemperatureChangeListener.onTemperatureChanged(currTemp));
                 }
 
                 temperature = currTemp;
@@ -64,7 +64,7 @@ public class THSensor extends ExtendedDevice {
                 float currHumidity = Float.parseFloat(o.getString(STATUS_HUMIDITY)) / 100;
 
                 if(humidity != null && Math.abs(currHumidity - humidity) > 0.01) {
-                    Optional.of(onHumidityChangeListener).ifPresent(onHumidityChangeListener -> onHumidityChangeListener.onHumidityChanged(currHumidity));
+                    Optional.ofNullable(onHumidityChangeListener).ifPresent(onHumidityChangeListener -> onHumidityChangeListener.onHumidityChanged(currHumidity));
                 }
 
                 humidity = currHumidity;

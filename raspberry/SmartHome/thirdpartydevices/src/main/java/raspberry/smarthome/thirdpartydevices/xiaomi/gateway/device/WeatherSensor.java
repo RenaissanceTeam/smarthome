@@ -30,7 +30,7 @@ public class WeatherSensor extends THSensor {
                 float currPress = Float.parseFloat(o.getString(STATUS_PRESSURE)) / 100;
 
                 if(pressure != null && Math.abs(currPress - pressure) > 0.01) {
-                    Optional.of(listener).ifPresent(onPressureChangeListener -> onPressureChangeListener.onPressureChanged(currPress));
+                    Optional.ofNullable(listener).ifPresent(onPressureChangeListener -> onPressureChangeListener.onPressureChanged(currPress));
                 }
 
                 pressure = currPress;
