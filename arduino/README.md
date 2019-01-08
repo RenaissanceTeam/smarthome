@@ -26,8 +26,10 @@ GND -> GND
 Tx -> Tx (with arduino as Tx is realy Rx)
 Rx -> Rx (with arduino as Rx is realy Tx)
 ```
-
-### First, I've flashed AiThinker firmware v 1.1.1
+***
+<b>All steps are correct on Windows, Linux is failing for no reason</b>
+***
+### First, I've flashed AiThinker firmware v 1.1.1 
 + RST to 3.3V 
 + GPIO_0 to GND
 + To go into flash mode hold reset button and unplug-plug the esp module.
