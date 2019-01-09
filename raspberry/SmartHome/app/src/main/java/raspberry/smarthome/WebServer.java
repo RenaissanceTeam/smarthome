@@ -11,14 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
-import raspberry.smarthome.model.DevicesStorage;
+import raspberry.smarthome.model.RaspberrySmartHome;
 import raspberry.smarthome.model.device.ArduinoIotDevice;
-import raspberry.smarthome.model.device.IotDevice;
-import raspberry.smarthome.model.device.controllers.BaseController;
-import raspberry.smarthome.model.device.controllers.ControllerTypes;
+import raspberry.smarthome.model.device.controllers.ControllersFactory;
 import raspberry.smarthome.model.device.controllers.Readable;
 import raspberry.smarthome.model.device.controllers.Writable;
 import raspberry.smarthome.model.device.requests.ControllerResponse;
+import ru.smarthome.library.BaseController;
+import ru.smarthome.library.ControllerType;
+import ru.smarthome.library.IotDevice;
 
 public class WebServer extends NanoHTTPD {
 
@@ -42,7 +43,7 @@ public class WebServer extends NanoHTTPD {
 
             if (uri.startsWith("/info")) {
                 // todo implement basic web interface with info about current controllers state ??
-                return new Response(Response.Status.OK, MIME_PLAINTEXT, DevicesStorage.getInstance().toString());
+                return new Response(Response.Status.OK, MIME_PLAINTEXT, RaspberrySmartHome.getInstance().toString());
             }
         } else if (method == Method.POST) {
             if (uri.startsWith("/init")) {
@@ -54,7 +55,7 @@ public class WebServer extends NanoHTTPD {
             }
 
             if (uri.startsWith("/reset")) {
-                DevicesStorage.getInstance().removeAll();
+                RaspberrySmartHome.getInstance().removeAll();
                 return new Response("Everything is deleted");
             }
 
@@ -124,7 +125,7 @@ public class WebServer extends NanoHTTPD {
         long deviceGuid = Long.parseLong(params.get("device_guid"));
         long controllerGuid = Long.parseLong(params.get("controller_guid"));
 
-        IotDevice device = DevicesStorage.getInstance().getByGuid(deviceGuid);
+        IotDevice device = RaspberrySmartHome.getInstance().getByGuid(deviceGuid);
         if (device instanceof ArduinoIotDevice) {
             return ((ArduinoIotDevice) device).getControllerByGuid(controllerGuid);
         }
@@ -144,11 +145,12 @@ public class WebServer extends NanoHTTPD {
         int index = 0;
         for (String rawService : rawServices) {
             int id = Integer.parseInt(rawService.trim());
-            controllers.add(ControllerTypes.getById(id).createArduinoController(device, index));
+            ControllerType type = ControllerType.getById(id);
+            controllers.add(ControllersFactory.createArduinoController(type, device, index));
             ++index;
         }
         device.controllers = controllers;
 
-        return DevicesStorage.getInstance().addDevice(device);
+        return RaspberrySmartHome.getInstance().addDevice(device);
     }
 }

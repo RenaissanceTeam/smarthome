@@ -7,8 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.smarthome.library.ArduinoDevice;
-import ru.smarthome.library.Controller;
+import ru.smarthome.library.BaseController;
+import ru.smarthome.library.IotDevice;
+import ru.smarthome.library.SmartHome;
 
 class ControllersAdapter extends RecyclerView.Adapter<ControllerViewHolder> {
 
@@ -34,8 +35,8 @@ class ControllersAdapter extends RecyclerView.Adapter<ControllerViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ControllerViewHolder holder, int position) {
-        ArduinoDevice device = getDeviceByControllerPosition(position);
-        Controller controller = getControllerByPosition(position);
+        IotDevice device = getDeviceByControllerPosition(position);
+        BaseController controller = getControllerByPosition(position);
         holder.bind(device, controller);
     }
 
@@ -49,16 +50,16 @@ class ControllersAdapter extends RecyclerView.Adapter<ControllerViewHolder> {
 
     private int countAllControllers() {
         int res = 0;
-        for (ArduinoDevice device : smartHome.devices) {
+        for (IotDevice device : smartHome.devices) {
             res += device.controllers.size();
         }
         return res;
     }
 
     @Nullable
-    private ArduinoDevice getDeviceByControllerPosition(int position) {
+    private IotDevice getDeviceByControllerPosition(int position) {
         int skippedContrCount = 0;
-        for (ArduinoDevice device : smartHome.devices) {
+        for (IotDevice device : smartHome.devices) {
             int thisContrCount = device.controllers.size();
             if (position <= skippedContrCount + thisContrCount - 1) {
                 return device;
@@ -70,9 +71,9 @@ class ControllersAdapter extends RecyclerView.Adapter<ControllerViewHolder> {
 
     // TODO: 12/20/18 need better solution, but not now!
     @Nullable
-    private Controller getControllerByPosition(int position) {
+    private BaseController getControllerByPosition(int position) {
         int skippedContrCount = 0;
-        for (ArduinoDevice device : smartHome.devices) {
+        for (IotDevice device : smartHome.devices) {
             int thisContrCount = device.controllers.size();
             if (position <= skippedContrCount + thisContrCount - 1) {
                 return device.controllers.get(position - skippedContrCount);

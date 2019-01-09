@@ -1,0 +1,4 @@
+# Save jar, so we don't have to recompile when cloning repo
+build/*
+!build/libs
+

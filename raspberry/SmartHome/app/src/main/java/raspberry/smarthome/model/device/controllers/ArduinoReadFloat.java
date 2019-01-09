@@ -6,10 +6,11 @@ import raspberry.smarthome.model.device.ArduinoIotDevice;
 import raspberry.smarthome.model.device.requests.ArduinoDeviceAPI;
 import raspberry.smarthome.model.device.requests.ControllerResponse;
 import retrofit2.Call;
+import ru.smarthome.library.ControllerType;
 
 public class ArduinoReadFloat extends ArduinoController implements Readable {
 
-    public ArduinoReadFloat(ArduinoIotDevice device, ControllerTypes type,
+    public ArduinoReadFloat(ArduinoIotDevice device, ControllerType type,
                             int indexInArduinoServicesArray) {
         super(device, type, indexInArduinoServicesArray);
     }

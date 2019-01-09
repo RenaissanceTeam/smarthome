@@ -10,8 +10,9 @@ import android.widget.Toast;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.smarthome.library.ArduinoDevice;
-import ru.smarthome.library.Controller;
+import ru.smarthome.library.BaseController;
+import ru.smarthome.library.ControllerType;
+import ru.smarthome.library.IotDevice;
 import ru.smarthome.library.RaspberryResponse;
 
 import static ru.smarthome.MainActivity.getRaspberryApi;
@@ -24,8 +25,8 @@ public class ControllerViewHolder extends RecyclerView.ViewHolder implements Vie
     private TextView state;
     private ProgressBar progressBar;
 
-    private ArduinoDevice device;
-    private Controller controller;
+    private IotDevice device;
+    private BaseController controller;
 
     public ControllerViewHolder(View itemView) {
         super(itemView);
@@ -38,7 +39,7 @@ public class ControllerViewHolder extends RecyclerView.ViewHolder implements Vie
         itemView.setOnClickListener(this);
     }
 
-    public void bind(ArduinoDevice device, Controller controller) {
+    public void bind(IotDevice device, BaseController controller) {
         if (controller == null || device == null) {
             return;
         }
@@ -46,7 +47,7 @@ public class ControllerViewHolder extends RecyclerView.ViewHolder implements Vie
         this.device = device;
 
         guid.setText(controller.guid + "");
-        type.setText(controller.type);
+        type.setText(controller.type.toString());
         if (controller.state != null) {
             state.setText(controller.state);
         } else {
@@ -56,8 +57,8 @@ public class ControllerViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-        if (controller.type.equals("ARDUINO_ON_OFF")) {
-            if (UNKNOWN_STATE.equals(state.getText())) {
+        if (controller.type == ControllerType.ARDUINO_ON_OFF) {
+            if (UNKNOWN_STATE.equals(state.getText().toString())) {
                 readState();
                 return;
             }
