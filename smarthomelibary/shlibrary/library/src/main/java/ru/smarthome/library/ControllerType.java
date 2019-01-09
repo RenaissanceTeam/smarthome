@@ -1,7 +1,12 @@
 package ru.smarthome.library;
 
+import static ru.smarthome.library.constants.ControllerIds.*;
+
 public enum ControllerType {
-    ARDUINO_ANALOG(1000), ARDUINO_ON_OFF(1001), TEMPERATURE(1002), HUMIDITY(1003);
+    ARDUINO_ANALOG(A_ANALOG),
+    ARDUINO_ON_OFF(A_ONOFF),
+    TEMPERATURE(A_TEMPERATURE),
+    HUMIDITY(A_HUMIDITY);
 
     public final int id;
 

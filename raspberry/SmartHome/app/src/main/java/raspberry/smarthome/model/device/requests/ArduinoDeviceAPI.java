@@ -11,6 +11,7 @@ public interface ArduinoDeviceAPI {
     Call<ControllerResponse> controllerReadRequest(@Query("index") int serviceIndex);
 
     @POST("service")
-    Call<ControllerResponse> controllerWriteRequest(@Query("index") int serviceIndex, @Query("value") String value);
+    Call<ControllerResponse> controllerWriteRequest(
+            @Query("index") int serviceIndex, @Query("value") String value);
 
 }

@@ -24,7 +24,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ru.smarthome.library.SmartHome;
 
+import static ru.smarthome.constants.Constants.RASPBERRY_URL;
 import static ru.smarthome.constants.Constants.RC_SIGN_IN;
 
 public class MainActivity extends AppCompatActivity {
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(SmartHome.baseUrl)
+                .baseUrl(RASPBERRY_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 

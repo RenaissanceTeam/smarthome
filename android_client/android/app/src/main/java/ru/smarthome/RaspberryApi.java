@@ -5,6 +5,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import ru.smarthome.library.RaspberryResponse;
+import ru.smarthome.library.SmartHome;
 
 public interface RaspberryApi {
 

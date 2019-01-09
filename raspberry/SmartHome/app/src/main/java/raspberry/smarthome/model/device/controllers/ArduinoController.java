@@ -21,7 +21,6 @@ public class ArduinoController extends BaseController {
     public final ArduinoIotDevice device;
     public final int indexInArduinoServicesArray;
 
-
     public ArduinoController(ArduinoIotDevice device, ControllerType type, int indexInArduinoServicesArray) {
         this.device = device;
         this.type = type;
@@ -37,33 +36,22 @@ public class ArduinoController extends BaseController {
     }
 
     public ControllerResponse baseRead() throws IOException {
-        ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
-        Call<ControllerResponse> call = arduinoApi.controllerReadRequest(indexInArduinoServicesArray);
+        Call<ControllerResponse> call =
+                getArduinoDeviceAPI().controllerReadRequest(indexInArduinoServicesArray);
 
-        ControllerResponse controllerResponse = call.execute().body();
+        ControllerResponse controllerResponse = call.execute().body(); // synchronous
         if (controllerResponse != null) setNewState(controllerResponse.response);
         return controllerResponse;
     }
 
     public ControllerResponse baseWrite(String value) throws IOException{
-        ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
-        Call<ControllerResponse> call = arduinoApi.controllerWriteRequest(indexInArduinoServicesArray, value);
+        Call<ControllerResponse> call =
+                getArduinoDeviceAPI().controllerWriteRequest(indexInArduinoServicesArray, value);
 
-        ControllerResponse controllerResponse = call.execute().body();
+        ControllerResponse controllerResponse = call.execute().body(); // synchronous
         if (controllerResponse != null) setNewState(controllerResponse.response);
         return controllerResponse;
     }
-
-    @Override
-    public String toString() {
-        return "ArduinoController{" +
-                "device guid=" + device.guid +
-                ", guid=" + guid +
-                ", indexInArduinoServicesArray=" + indexInArduinoServicesArray +
-                ", type=" + type +
-                '}';
-    }
-
 
     ArduinoDeviceAPI getArduinoDeviceAPI() {
         Gson gson = new GsonBuilder()
@@ -77,5 +65,15 @@ public class ArduinoController extends BaseController {
                 .build();
 
         return retrofit.create(ArduinoDeviceAPI.class);
+    }
+
+    @Override
+    public String toString() {
+        return "ArduinoController{" +
+                "device guid=" + device.guid +
+                ", guid=" + guid +
+                ", indexInArduinoServicesArray=" + indexInArduinoServicesArray +
+                ", type=" + type +
+                '}';
     }
 }

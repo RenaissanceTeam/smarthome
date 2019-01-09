@@ -28,7 +28,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (DEBUG) Log.d(TAG, "onCreate");
-        // todo start web server to receive notifications from Arduino
 
         server = new WebServer();
     }
@@ -46,8 +45,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
-
 //        auth();
     }
 
@@ -78,7 +75,6 @@ public class MainActivity extends Activity {
 
         if (requestCode == RC_SIGN_IN) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         } else {
             // retry login
         }

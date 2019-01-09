@@ -5,11 +5,13 @@ import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class IotDevice {
+public class IotDevice {
     @Expose public String name;
     @Expose public String description;
-    @Expose public final long guid;
+    @Expose public long guid;
     @Expose public List<BaseController> controllers; // todo incapsulation (everywhere)
+
+    public IotDevice() {} // needed for deserialization
 
     public IotDevice(String name, String description) {
         super();

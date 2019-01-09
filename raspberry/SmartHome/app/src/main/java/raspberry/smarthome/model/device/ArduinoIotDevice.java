@@ -12,7 +12,6 @@ public class ArduinoIotDevice extends IotDevice {
         this.ip = ip;
     }
 
-
     public ArduinoController getControllerByGuid(long guid) {
         for (BaseController controller : controllers) {
             if (((ArduinoController) controller).guid == guid) {
@@ -21,6 +20,7 @@ public class ArduinoIotDevice extends IotDevice {
         }
         throw new IllegalArgumentException("No controller with guid=" + guid + " for iotDevice=" + this);
     }
+
     @Override
     public String toString() {
         return "ArduinoIotDevice{" +

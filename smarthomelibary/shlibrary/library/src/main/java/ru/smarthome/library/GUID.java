@@ -36,6 +36,7 @@ public class GUID {
         }
 
         // so we've created a unique guid for the controller
+        mGuids.add(guid);
         return guid;
     }
 

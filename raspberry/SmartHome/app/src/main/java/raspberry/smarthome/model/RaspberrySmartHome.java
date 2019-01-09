@@ -3,32 +3,29 @@ package raspberry.smarthome.model;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import raspberry.smarthome.model.device.ArduinoIotDevice;
 import raspberry.smarthome.model.device.controllers.Readable;
 import ru.smarthome.library.BaseController;
 import ru.smarthome.library.GUID;
 import ru.smarthome.library.IotDevice;
+import ru.smarthome.library.SmartHome;
 
 import static raspberry.smarthome.MainActivity.DEBUG;
 
-public class DevicesStorage {
-    public static final String TAG = DevicesStorage.class.getSimpleName();
-    private static DevicesStorage sInstance;
-    @Expose
-    public final List<IotDevice> devices = new ArrayList<>();
+public class RaspberrySmartHome extends SmartHome {
+    public static final String TAG = RaspberrySmartHome.class.getSimpleName();
+    private static RaspberrySmartHome sInstance;
 
-    private DevicesStorage() {
-    }
+    private RaspberrySmartHome() {}
 
-    public static DevicesStorage getInstance() {
+    public static RaspberrySmartHome getInstance() {
         if (sInstance == null) {
-            sInstance = new DevicesStorage();
+            sInstance = new RaspberrySmartHome();
+            sInstance.devices = new ArrayList<>();
         }
         return sInstance;
     }
