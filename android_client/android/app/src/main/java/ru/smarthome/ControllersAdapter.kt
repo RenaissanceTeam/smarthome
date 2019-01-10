@@ -15,6 +15,7 @@ class ControllersAdapter(private val inflater: LayoutInflater) : RecyclerView.Ad
         smartHome = newHome
         notifyDataSetChanged()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ControllerViewHolder {
         val view = inflater.inflate(R.layout.controller_item, parent, false)
         return ControllerViewHolder(view)

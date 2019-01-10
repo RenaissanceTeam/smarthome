@@ -10,6 +10,7 @@ import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.smarthome.MainActivity.Companion.raspberryApi
 import ru.smarthome.library.BaseController
 import ru.smarthome.library.ControllerType
 import ru.smarthome.library.IotDevice
@@ -69,52 +70,44 @@ class ControllerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), 
     private fun readState() {
         startStateChange()
 
-        val api = MainActivity.raspberryApi
-
         val deviceGuid = device?.guid ?: return
         val controllerGuid = controller?.guid ?: return
-        val call = api.readControllerState(deviceGuid, controllerGuid)
 
-        call.enqueue(object : Callback<RaspberryResponse> {
-            override fun onResponse(call: Call<RaspberryResponse>, response: Response<RaspberryResponse>) {
-                handleResponseWithState(response)
+        raspberryApi.readControllerState(deviceGuid, controllerGuid).enqueue {
+            onResponse = {
+                handleResponseWithState(it)
             }
 
-            override fun onFailure(call: Call<RaspberryResponse>, t: Throwable) {
-                Log.d(TAG, "onFailure: $t")
+            onFailure = {
+                Log.d(TAG, "onFailure: $it")
                 endStateChange()
             }
-        })
-
+        }
     }
 
     private fun changeStateTo(value: String) {
         startStateChange()
 
-        val api = MainActivity.raspberryApi
         val deviceGuid = device?.guid ?: return
         val controllerGuid = controller?.guid ?: return
-        val call = api.changeControllerState(deviceGuid, controllerGuid, value)
 
-        call.enqueue(object : Callback<RaspberryResponse> {
-            override fun onResponse(call: Call<RaspberryResponse>, response: Response<RaspberryResponse>) {
-                handleResponseWithState(response)
+        raspberryApi.changeControllerState(deviceGuid, controllerGuid, value).enqueue {
+            onResponse = {
+                handleResponseWithState(it)
             }
 
-            override fun onFailure(call: Call<RaspberryResponse>, t: Throwable) {
-                Log.d(TAG, "onFailure: $t")
+            onFailure = {
+                Log.d(TAG, "onFailure: $it")
                 endStateChange()
             }
-        })
-
+        }
     }
 
     private fun handleResponseWithState(response: Response<RaspberryResponse>) {
         if (response.isSuccessful) {
             response.body()?.let {
-                val newState = it.response
-                state.text = newState
-                controller?.state = newState
+                state.text = it.response
+                controller?.state = it.response
             }
         } else {
             val message = "Returned code: ${response.code()}, body=${response.raw().body()?.string()}"
@@ -123,6 +116,5 @@ class ControllerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), 
 
         endStateChange()
     }
-
 }
 
