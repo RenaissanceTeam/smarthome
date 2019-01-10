@@ -1,6 +1,6 @@
 package ru.smarthome
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import ru.smarthome.library.BaseController

@@ -1,14 +1,11 @@
 package ru.smarthome
 
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-
-import retrofit2.Call
-import retrofit2.Callback
+import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Response
 import ru.smarthome.MainActivity.Companion.raspberryApi
 import ru.smarthome.library.BaseController
