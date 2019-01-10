@@ -1,9 +1,15 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Optional;
+
+import raspberry.smarthome.thirdpartydevices.R;
 
 public class WeatherSensor extends THSensor {
 
@@ -44,6 +50,11 @@ public class WeatherSensor extends THSensor {
     @Override
     public String toString() {
         return super.toString() + "pressure: " + pressure + "kPA";
+    }
+
+    @Override
+    public Bitmap getDevicePicture(Resources resources) {
+        return BitmapFactory.decodeResource(resources, R.drawable.xiaomi_thp_sensor);
     }
 
     public interface OnPressureChangeListener {

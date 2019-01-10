@@ -1,8 +1,8 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
-public abstract class Device {
+public abstract class Device extends raspberry.smarthome.thirdpartydevices.Device {
 
-    public static final String GATEWAY_TYPE = "gateway";
+    public static final String GATEWAY_TYPE = "xiaomi_gateway_2";
     public static final String DOOR_WINDOW_SENSOR_TYPE = "magnet";
     public static final String MOTION_SENSOR_TYPE = "motion";
     public static final String WIRELESS_SWITCH_TYPE = "switch";
@@ -68,6 +68,6 @@ public abstract class Device {
 
     @Override
     public String toString() {
-        return "|\n--- Xiaomi gateway device ---\n" + "type: " + type + ", sid: " + sid + ", name: " + name;
+        return "|\n--- Xiaomi xiaomi_gateway_2 device ---\n" + "type: " + type + ", sid: " + sid + ", name: " + name;
     }
 }

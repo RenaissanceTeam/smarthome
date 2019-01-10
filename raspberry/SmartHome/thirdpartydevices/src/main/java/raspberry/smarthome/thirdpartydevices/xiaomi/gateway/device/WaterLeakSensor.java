@@ -1,9 +1,15 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Optional;
+
+import raspberry.smarthome.thirdpartydevices.R;
 
 public class WaterLeakSensor extends ExtendedDevice {
 
@@ -45,6 +51,11 @@ public class WaterLeakSensor extends ExtendedDevice {
         } catch (JSONException | NumberFormatException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Bitmap getDevicePicture(Resources resources) {
+        return BitmapFactory.decodeResource(resources, R.drawable.xiaomi_water_leak_sensor);
     }
 
     public interface OnWaterLeakListener {

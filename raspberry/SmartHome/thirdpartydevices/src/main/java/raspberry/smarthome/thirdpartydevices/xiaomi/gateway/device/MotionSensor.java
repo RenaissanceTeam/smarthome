@@ -1,9 +1,15 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
+
+import raspberry.smarthome.thirdpartydevices.R;
 
 public class MotionSensor extends ExtendedDevice {
 
@@ -72,6 +78,11 @@ public class MotionSensor extends ExtendedDevice {
     @Override
     public String toString() {
         return super.toString() + "\nlast motion datetime: " + motionDateTime.toString() + ", no motion for: " + noMotion + " seconds";
+    }
+
+    @Override
+    public Bitmap getDevicePicture(Resources resources) {
+        return BitmapFactory.decodeResource(resources, R.drawable.xiaomi_motion_sensor);
     }
 
     public interface OnMotionListener {

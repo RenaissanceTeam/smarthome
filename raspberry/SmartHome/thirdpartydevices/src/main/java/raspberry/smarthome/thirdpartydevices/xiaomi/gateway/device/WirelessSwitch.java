@@ -1,8 +1,13 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import raspberry.smarthome.thirdpartydevices.R;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.WirelessSwitchCmd;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.utils.UdpTransport;
 
@@ -88,6 +93,11 @@ public class WirelessSwitch extends ExtendedDevice {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Bitmap getDevicePicture(Resources resources) {
+        return BitmapFactory.decodeResource(resources, R.drawable.xiaomi_wireless_switch);
     }
 
     public interface OnSwitchListener {

@@ -1,9 +1,15 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Optional;
+
+import raspberry.smarthome.thirdpartydevices.R;
 
 public class SmokeSensor extends ExtendedDevice {
 
@@ -76,6 +82,11 @@ public class SmokeSensor extends ExtendedDevice {
     @Override
     public String toString() {
         return super.toString() + "\nalarm: " + (alarm ? "on" : "off") + ", density: " + density;
+    }
+
+    @Override
+    public Bitmap getDevicePicture(Resources resources) {
+        return BitmapFactory.decodeResource(resources, R.drawable.xiaomi_smoke_sensor);
     }
 
     public interface AlarmListener {

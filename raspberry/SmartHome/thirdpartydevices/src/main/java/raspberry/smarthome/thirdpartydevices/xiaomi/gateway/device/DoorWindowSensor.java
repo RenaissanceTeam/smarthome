@@ -1,7 +1,13 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import raspberry.smarthome.thirdpartydevices.R;
 
 public class DoorWindowSensor extends ExtendedDevice  {
 
@@ -47,6 +53,11 @@ public class DoorWindowSensor extends ExtendedDevice  {
     private void report(String state) {
         if(listener != null)
             listener.onStateChanged(state);
+    }
+
+    @Override
+    public Bitmap getDevicePicture(Resources resources) {
+        return BitmapFactory.decodeResource(resources, R.drawable.xiaomi_door_window_sensor);
     }
 
     public interface OnStateChangeListener {
