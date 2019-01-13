@@ -15,11 +15,9 @@ interface RaspberryApi {
     // TODO: 12/20/18 maybe read/write should return different responses? or create many read responses
     // e.g. for temperature, ON/OFF, light, etc..
     @GET("controller")
-    fun readControllerState(@Query("device_guid") deviceGuid: Long,
-                            @Query("controller_guid") controllerGuid: Long): Call<RaspberryResponse>
+    fun readControllerState(@Query("controller_guid") controllerGuid: Long): Call<RaspberryResponse>
 
     @POST("controller")
-    fun changeControllerState(@Query("device_guid") deviceGuid: Long,
-                              @Query("controller_guid") controllerGuid: Long,
+    fun changeControllerState(@Query("controller_guid") controllerGuid: Long,
                               @Query("value") value: String): Call<RaspberryResponse>
 }
