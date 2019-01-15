@@ -1,6 +1,7 @@
 package ru.smarthome
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,22 +14,31 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class DashboardFragment : Fragment() {
 
-    private var viewModel: DashboardViewModel? = null
+    private val TAG = DashboardFragment::class.java.simpleName
+    private val viewModel
+            by lazy { ViewModelProviders.of(this).get(DashboardViewModel::class.java) }
 
     private var refreshLayout: SwipeRefreshLayout? = null
-    private var controllers: RecyclerView? = null
+    private var controllersView: RecyclerView? = null
     private var adapterForControllersList: ControllersAdapter? = null
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        viewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        viewModel?.controllers?.observe(this, Observer {
+        
+        if (BuildConfig.DEBUG) Log.d(TAG, "onActivity created, create viewModel")
+        viewModel.controllers.observe(this, Observer {
+            if (BuildConfig.DEBUG) Log.d(TAG, "controllersView've changed, now its ${viewModel.controllers.value}")
             adapterForControllersList?.notifyDataSetChanged()
-            viewModel?.receivedNewSmartHomeState()
+            viewModel.receivedNewSmartHomeState()
         })
-        viewModel?.allHomeUpdateState?.observe(this, Observer { refreshLayout?.isRefreshing = it })
+        viewModel.allHomeUpdateState.observe(this, Observer {
+            if (BuildConfig.DEBUG) Log.d(TAG, "allHomeUpdateState's changed")
+            refreshLayout?.isRefreshing = it 
+        })
+
+        adapterForControllersList = ControllersAdapter(layoutInflater, viewModel)
+        controllersView?.adapter = adapterForControllersList
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -39,13 +49,11 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (BuildConfig.DEBUG) Log.d(TAG, "onViewCreated")
         refreshLayout = view.findViewById(R.id.refresh_controllers)
-        controllers = view.findViewById(R.id.controllers)
-        controllers?.layoutManager = LinearLayoutManager(view.context)
+        controllersView = view.findViewById(R.id.controllers)
+        controllersView?.layoutManager = LinearLayoutManager(view.context)
 
-        adapterForControllersList = ControllersAdapter(layoutInflater, viewModel)
-        controllers?.adapter = adapterForControllersList
-
-        refreshLayout?.setOnRefreshListener { viewModel?.requestSmartHomeState() }
+        refreshLayout?.setOnRefreshListener { viewModel.requestSmartHomeState() }
     }
 }

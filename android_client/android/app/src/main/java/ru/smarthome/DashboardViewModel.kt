@@ -1,5 +1,7 @@
 package ru.smarthome
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.smarthome.library.BaseController
@@ -8,25 +10,32 @@ import ru.smarthome.library.IotDevice
 
 class DashboardViewModel : ViewModel() {
     val TAG = DashboardViewModel::class.java.simpleName
-    val devices = mutableListOf<IotDevice>()
     val controllersCount
         get() = controllers.value?.size ?: 0
 
+    private val _controllers = Model.getHomeState()
+    private val _allHomeUpdateState = MutableLiveData<Boolean>()
 
-    var controllers = MutableLiveData<MutableList<BaseController>>()
-    var allHomeUpdateState = MutableLiveData<Boolean>()
-    var refreshingState = MutableLiveData<Boolean>()
+
+    val controllers: LiveData<MutableList<BaseController>>
+        get() = _controllers
+
+    val allHomeUpdateState: LiveData<Boolean>
+        get() = _allHomeUpdateState
 
     fun requestSmartHomeState() {
-        refreshingState.value = true
-        controllers = Model.requestHomeStateFromRaspberry()
+        if (BuildConfig.DEBUG) Log.d(TAG, "request smart home state")
+        _allHomeUpdateState.value = true
+        Model.requestHomeStateFromRaspberry()
     }
 
     fun receivedNewSmartHomeState() {
-        refreshingState.value = false
+        if (BuildConfig.DEBUG) Log.d(TAG, "set refreshing state to false")
+        _allHomeUpdateState.value = false
     }
 
     fun clickOnController(controller: BaseController) {
+        _allHomeUpdateState.value = true
         if (controller.type == ControllerType.ARDUINO_ON_OFF) {
             when (controller.state) {
                 "0" -> changeStateTo(controller, "1")
@@ -39,12 +48,12 @@ class DashboardViewModel : ViewModel() {
 
     private fun readState(controller: BaseController) {
 // todo        startStateChange()
-        controllers = Model.readController(controller) // returns livedata, when fetching finished, this object will be notified of update
+        Model.readController(controller)
     }
 
     private fun changeStateTo(controller: BaseController, value: String) {
 // todo        startStateChange()
-        controllers = Model.changeControllerState(controller, value)
+        Model.changeControllerState(controller, value)
     }
 
     fun getDevice(position: Int) : IotDevice? {
