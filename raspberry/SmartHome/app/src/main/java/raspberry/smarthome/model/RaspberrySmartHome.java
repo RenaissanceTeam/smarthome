@@ -78,6 +78,17 @@ public class RaspberrySmartHome extends SmartHome {
         throw new IllegalArgumentException("No device with guid=" + guid);
     }
 
+    public BaseController getController(long guid) {
+        for (IotDevice device : devices) {
+            for (BaseController controller : device.controllers) {
+                if (controller.guid == guid) {
+                    return controller;
+                }
+            }
+        }
+        throw new IllegalArgumentException("No controller with guid=" + guid);
+    }
+
     public ArduinoIotDevice getArduinoByIp(String ip) {
         for (IotDevice device : devices) {
             if (device instanceof ArduinoIotDevice) {

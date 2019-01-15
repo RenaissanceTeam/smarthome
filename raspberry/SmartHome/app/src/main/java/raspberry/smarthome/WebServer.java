@@ -19,7 +19,6 @@ import raspberry.smarthome.model.device.controllers.Writable;
 import raspberry.smarthome.model.device.requests.ControllerResponse;
 import ru.smarthome.library.BaseController;
 import ru.smarthome.library.ControllerType;
-import ru.smarthome.library.IotDevice;
 
 public class WebServer extends NanoHTTPD {
 
@@ -122,14 +121,8 @@ public class WebServer extends NanoHTTPD {
 
     private BaseController getController(Map<String, String> params) {
         // todo add checks so it won't crash
-        long deviceGuid = Long.parseLong(params.get("device_guid"));
         long controllerGuid = Long.parseLong(params.get("controller_guid"));
-
-        IotDevice device = RaspberrySmartHome.getInstance().getByGuid(deviceGuid);
-        if (device instanceof ArduinoIotDevice) {
-            return ((ArduinoIotDevice) device).getControllerByGuid(controllerGuid);
-        }
-        throw new IllegalStateException("not arduino devices are not supported");
+        return RaspberrySmartHome.getInstance().getController(controllerGuid);
     }
 
     private boolean initNewArduinoDevice(IHTTPSession session) {
