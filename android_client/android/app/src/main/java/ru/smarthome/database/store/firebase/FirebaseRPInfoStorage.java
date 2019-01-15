@@ -1,6 +1,6 @@
 package ru.smarthome.database.store.firebase;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -10,12 +10,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import ru.smarthome.database.Constants;
 import ru.smarthome.database.store.RPInfoStorage;
 import ru.smarthome.database.store.listeners.RPInfoListener;
 
 import static ru.smarthome.BuildConfig.DEBUG;
-import static ru.smarthome.database.Constants.RP_IP_REF;
+import static ru.smarthome.constants.Constants.*;
 
 public class FirebaseRPInfoStorage implements RPInfoStorage {
 
@@ -69,7 +68,7 @@ public class FirebaseRPInfoStorage implements RPInfoStorage {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                if(DEBUG) Log.d(instance.getClass().getName(), Constants.FIREBASE_READ_VALUE_ERROR, databaseError.toException());
+                if(DEBUG) Log.d(instance.getClass().getName(), FIREBASE_READ_VALUE_ERROR, databaseError.toException());
             }
         });
     }
