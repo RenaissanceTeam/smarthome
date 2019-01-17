@@ -21,7 +21,7 @@ public class IpObtainTask extends AsyncTask<Void, Void, String> {
         if (ip == null)
             return;
 
-        RPInfoStorage storage = FirebaseRPInfoStorage.getInstance();
+        RPInfoStorage storage = FirebaseRPInfoStorage.Companion.getInstance();
         if (storage != null) {
             storage.postRaspberryIp(ip);
         }

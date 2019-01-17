@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
@@ -46,7 +48,10 @@ clean.dependsOn importLibrary
 clean.mustRunAfter importLibrary
 //==================================================================================================
 
-
+// "changing" dependencies gradle cache lifetime
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -65,8 +70,19 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.firebase:firebase-client-android:2.5.2'
+    implementation 'com.google.firebase:firebase-firestore:17.1.5'
 
-    implementation(name:'datalibrary-release', ext:'aar')
+    implementation(name:'datalibrary-release', ext:'aar') {
+        transitive=true
+        changing=true
+    }
+
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
+
+
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}

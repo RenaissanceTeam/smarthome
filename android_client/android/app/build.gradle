@@ -32,6 +32,10 @@ clean.dependsOn importLibrary
 clean.mustRunAfter importLibrary
 //==================================================================================================
 
+// "changing" dependencies gradle cache lifetime
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
 
 dependencies {
 
@@ -61,7 +65,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
-    implementation(name:'datalibrary-release', ext:'aar')
+    implementation(name:'datalibrary-release', ext:'aar') {
+        transitive=true
+        changing=true
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'
