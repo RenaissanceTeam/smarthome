@@ -2,10 +2,10 @@ package raspberry.smarthome.tasks;
 
 import android.os.AsyncTask;
 
-import raspberry.smarthome.database.store.RPInfoStorage;
-import raspberry.smarthome.database.store.firebase.FirebaseRPInfoStorage;
 import raspberry.smarthome.utils.ip.IpFinder;
 import raspberry.smarthome.utils.ip.IpObserver;
+import smarthome.datalibrary.database.store.RPInfoStorage;
+import smarthome.datalibrary.database.store.firebase.FirebaseRPInfoStorage;
 
 public class IpObtainTask extends AsyncTask<Void, Void, String> {
 
