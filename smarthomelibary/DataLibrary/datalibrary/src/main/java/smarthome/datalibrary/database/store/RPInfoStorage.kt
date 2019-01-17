@@ -1,8 +1,8 @@
-package ru.smarthome.database.store
+package smarthome.datalibrary.database.store
 
 import com.google.firebase.database.DatabaseReference
 
-import ru.smarthome.database.store.listeners.RPInfoListener
+import smarthome.datalibrary.database.store.listeners.RPInfoListener
 
 interface RPInfoStorage {
     fun postRaspberryIp(ip: String)

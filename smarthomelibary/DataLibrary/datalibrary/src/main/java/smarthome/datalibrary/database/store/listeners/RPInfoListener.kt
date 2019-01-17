@@ -1,4 +1,4 @@
-package ru.smarthome.database.store.listeners
+package smarthome.datalibrary.database.store.listeners
 
 interface RPInfoListener {
     fun onRaspberryIpReceived(ip: String)

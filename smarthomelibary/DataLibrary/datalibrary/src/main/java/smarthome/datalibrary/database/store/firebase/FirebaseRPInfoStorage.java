@@ -1,20 +1,15 @@
-package ru.smarthome.database.store.firebase;
+package smarthome.datalibrary.database.store.firebase;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import android.util.Log;
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
+import smarthome.datalibrary.database.store.RPInfoStorage;
+import smarthome.datalibrary.database.store.listeners.RPInfoListener;
 
-import ru.smarthome.database.store.RPInfoStorage;
-import ru.smarthome.database.store.listeners.RPInfoListener;
-
-import static ru.smarthome.BuildConfig.DEBUG;
-import static ru.smarthome.constants.Constants.*;
+import static smarthome.datalibrary.database.constants.Constants.FIREBASE_READ_VALUE_ERROR;
+import static smarthome.datalibrary.database.constants.Constants.RP_IP_REF;
+import static smarthome.datalibrary.BuildConfig.DEBUG;
 
 public class FirebaseRPInfoStorage implements RPInfoStorage {
 

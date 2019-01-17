@@ -1,19 +1,11 @@
-package ru.smarthome.database.store.firebase
-
-import android.util.Log
+package smarthome.datalibrary.database.store.firebase
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-
-import ru.smarthome.database.model.LinkedAccounts
-import ru.smarthome.database.store.LinkedAccountsStorage
-import ru.smarthome.database.store.listeners.LinkedAccountsListener
-
-import ru.smarthome.constants.Constants.LINKED_ACCS_REF
+import com.google.firebase.database.*
+import smarthome.datalibrary.database.constants.Constants.LINKED_ACCS_REF
+import smarthome.datalibrary.database.store.LinkedAccountsStorage
+import smarthome.datalibrary.database.store.listeners.LinkedAccountsListener
+import smarthome.datalibrary.database.model.LinkedAccounts
 
 object FirebaseLinkedAccountsStorage : LinkedAccountsStorage {
 

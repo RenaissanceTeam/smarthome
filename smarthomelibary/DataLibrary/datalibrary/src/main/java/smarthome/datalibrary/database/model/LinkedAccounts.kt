@@ -1,4 +1,4 @@
-package ru.smarthome.database.model
+package smarthome.datalibrary.database.model
 
 import java.util.ArrayList
 
