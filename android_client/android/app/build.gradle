@@ -66,6 +66,7 @@ dependencies {
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     implementation(name:'datalibrary-release', ext:'aar') {
+        exclude group: 'ru.smarthome.library'
         transitive=true
         changing=true
     }

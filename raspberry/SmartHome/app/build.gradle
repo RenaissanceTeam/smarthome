@@ -73,6 +73,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:17.1.5'
 
     implementation(name:'datalibrary-release', ext:'aar') {
+        exclude group: 'ru.smarthome.library'
         transitive=true
         changing=true
     }
