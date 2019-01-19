@@ -18,20 +18,6 @@ android {
     }
 }
 
-// ========================= auto import library on each build =====================================
-task importLibrary(type: Copy) {
-    copy {
-        from "../../../smarthomelibary/shlibrary/library/build/libs/library.jar"
-        into "libs"
-    }
-}
-project.afterEvaluate {
-    preBuild.dependsOn importLibrary
-}
-clean.dependsOn importLibrary
-clean.mustRunAfter importLibrary
-//==================================================================================================
-
 // "changing" dependencies gradle cache lifetime
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
@@ -51,6 +37,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.google.firebase:firebase-core:16.0.6'
     implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
@@ -66,7 +53,6 @@ dependencies {
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     implementation(name:'datalibrary-release', ext:'aar') {
-        exclude group: 'ru.smarthome.library'
         transitive=true
         changing=true
     }
