@@ -35,17 +35,17 @@ android {
 
 
 // ========================= auto import library on each build =====================================
-task importLibrary(type: Copy) {
-    copy {
-        from "../../../smarthomelibary/shlibrary/library/build/libs/library.jar"
-        into "libs"
-    }
-}
-project.afterEvaluate {
-    preBuild.dependsOn importLibrary
-}
-clean.dependsOn importLibrary
-clean.mustRunAfter importLibrary
+//task importLibrary(type: Copy) {
+//    copy {
+//        from "../../../smarthomelibary/shlibrary/library/build/libs/library.jar"
+//        into "libs"
+//    }
+//}
+//project.afterEvaluate {
+//    preBuild.dependsOn importLibrary
+//}
+//clean.dependsOn importLibrary
+//clean.mustRunAfter importLibrary
 //==================================================================================================
 
 // "changing" dependencies gradle cache lifetime
@@ -77,7 +77,10 @@ dependencies {
         transitive=true
         changing=true
     }
-
+    implementation(project(path: ':arduinodevices')) {
+        exclude group: 'ru.smarthome.library'
+        transitive=false
+    }
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 

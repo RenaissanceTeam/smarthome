@@ -1,8 +1,8 @@
-package raspberry.smarthome.model.device.requests;
+package ru.smarthome.arduinodevices;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ControllerResponse {
+public class ArduinoControllerResponse {
     @SerializedName("response")
     public String response;
 }
