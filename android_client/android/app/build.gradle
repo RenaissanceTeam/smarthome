@@ -18,20 +18,6 @@ android {
     }
 }
 
-// ========================= auto import library on each build =====================================
-task importLibrary(type: Copy) {
-    copy {
-        from "../../../smarthomelibary/shlibrary/library/build/libs/library.jar"
-        into "libs"
-    }
-}
-project.afterEvaluate {
-    preBuild.dependsOn importLibrary
-}
-clean.dependsOn importLibrary
-clean.mustRunAfter importLibrary
-//==================================================================================================
-
 // "changing" dependencies gradle cache lifetime
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
