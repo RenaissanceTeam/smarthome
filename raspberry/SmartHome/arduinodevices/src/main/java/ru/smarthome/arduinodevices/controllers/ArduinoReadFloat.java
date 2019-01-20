@@ -1,26 +1,26 @@
-package raspberry.smarthome.model.device.controllers;
+package ru.smarthome.arduinodevices.controllers;
 
 import java.io.IOException;
 
-import raspberry.smarthome.model.device.ArduinoIotDevice;
-import raspberry.smarthome.model.device.requests.ArduinoDeviceAPI;
-import raspberry.smarthome.model.device.requests.ControllerResponse;
 import retrofit2.Call;
+import ru.smarthome.arduinodevices.ArduinoControllerResponse;
+import ru.smarthome.arduinodevices.ArduinoDevice;
+import ru.smarthome.arduinodevices.ArduinoDeviceAPI;
 import ru.smarthome.library.ControllerType;
 
-public class ArduinoReadFloat extends ArduinoController implements Readable {
+public class ArduinoReadFloat extends ArduinoController implements ArduinoReadable {
 
-    public ArduinoReadFloat(ArduinoIotDevice device, ControllerType type,
+    public ArduinoReadFloat(ArduinoDevice device, ControllerType type,
                             int indexInArduinoServicesArray) {
         super(device, type, indexInArduinoServicesArray);
     }
 
     @Override
-    public ControllerResponse read() throws IOException {
+    public ArduinoControllerResponse read() throws IOException {
         ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
-        Call<ControllerResponse> call = arduinoApi.controllerReadRequest(indexInArduinoServicesArray);
+        Call<ArduinoControllerResponse> call = arduinoApi.controllerReadRequest(indexInArduinoServicesArray);
 
-        ControllerResponse controllerResponse = call.execute().body();
+        ArduinoControllerResponse controllerResponse = call.execute().body();
         if (controllerResponse != null) {
             String response = controllerResponse.response;
             double val = Double.parseDouble(response);

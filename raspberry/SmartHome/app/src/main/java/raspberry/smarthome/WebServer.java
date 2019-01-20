@@ -12,11 +12,11 @@ import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
 import raspberry.smarthome.model.RaspberrySmartHome;
-import raspberry.smarthome.model.device.ArduinoIotDevice;
-import raspberry.smarthome.model.device.controllers.ControllersFactory;
-import raspberry.smarthome.model.device.controllers.Readable;
-import raspberry.smarthome.model.device.controllers.Writable;
-import raspberry.smarthome.model.device.requests.ControllerResponse;
+import ru.smarthome.arduinodevices.ArduinoDevice;
+import ru.smarthome.arduinodevices.controllers.ArduinoControllersFactory;
+import ru.smarthome.arduinodevices.controllers.ArduinoReadable;
+import ru.smarthome.arduinodevices.controllers.ArduinoWritable;
+import ru.smarthome.arduinodevices.ArduinoControllerResponse;
 import ru.smarthome.library.BaseController;
 import ru.smarthome.library.ControllerType;
 
@@ -50,7 +50,7 @@ public class WebServer extends NanoHTTPD {
                 if (initNewArduinoDevice(session)) {
                     return new Response("Added successfully");
                 }
-                return new Response("Device was not added");
+                return new Response("ArduinoDevice was not added");
             }
 
             if (uri.startsWith("/reset")) {
@@ -80,9 +80,9 @@ public class WebServer extends NanoHTTPD {
     private Response makeReadRequestToDevice(IHTTPSession session) {
         Map<String, String> params = session.getParms();
         BaseController controller = getController(params);
-        if (controller instanceof Readable) {
+        if (controller instanceof ArduinoReadable) {
             try {
-                ControllerResponse response = ((Readable) controller).read();
+                ArduinoControllerResponse response = ((ArduinoReadable) controller).read();
                 return new Response(Response.Status.OK, "text/json", new Gson().toJson(response));
             } catch (IOException e) {
                 return getArduinoHttpError();
@@ -99,9 +99,9 @@ public class WebServer extends NanoHTTPD {
         try {
             BaseController controller = getController(params);
 
-            if (controller instanceof Writable) {
+            if (controller instanceof ArduinoWritable) {
                 String value = params.get("value");
-                ControllerResponse response = ((Writable) controller).write(value);
+                ArduinoControllerResponse response = ((ArduinoWritable) controller).write(value);
                 return new Response(Response.Status.OK, "text/json", new Gson().toJson(response));
             }
 
@@ -131,7 +131,7 @@ public class WebServer extends NanoHTTPD {
         String description = params.get("description");
         String ip = session.getHeaders().get("http-client-ip");
 
-        ArduinoIotDevice device = new ArduinoIotDevice(name, description, ip);
+        ArduinoDevice device = new ArduinoDevice(name, description, ip);
 
         String[] rawServices = params.get("services").split(";");
         List<BaseController> controllers = new ArrayList<>();
@@ -139,7 +139,7 @@ public class WebServer extends NanoHTTPD {
         for (String rawService : rawServices) {
             int id = Integer.parseInt(rawService.trim());
             ControllerType type = ControllerType.getById(id);
-            controllers.add(ControllersFactory.createArduinoController(type, device, index));
+            controllers.add(ArduinoControllersFactory.createArduinoController(type, device, index));
             ++index;
         }
         device.controllers = controllers;

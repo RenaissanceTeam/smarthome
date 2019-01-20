@@ -1,13 +1,13 @@
-package raspberry.smarthome.model.device;
+package ru.smarthome.arduinodevices;
 
-import raspberry.smarthome.model.device.controllers.ArduinoController;
+import ru.smarthome.arduinodevices.controllers.ArduinoController;
 import ru.smarthome.library.BaseController;
 import ru.smarthome.library.IotDevice;
 
-public class ArduinoIotDevice extends IotDevice {
+public class ArduinoDevice extends IotDevice {
     public final String ip;
 
-    public ArduinoIotDevice(String name, String description, String ip) {
+    public ArduinoDevice(String name, String description, String ip) {
         super(name, description);
         this.ip = ip;
     }
@@ -23,7 +23,7 @@ public class ArduinoIotDevice extends IotDevice {
 
     @Override
     public String toString() {
-        return "ArduinoIotDevice{" +
+        return "ArduinoDevice{" +
                 "ip='" + ip + '\'' +
                 ", controllers=" + controllers +
                 ", name='" + name + '\'' +

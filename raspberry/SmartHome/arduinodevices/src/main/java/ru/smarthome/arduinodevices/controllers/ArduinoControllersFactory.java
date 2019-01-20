@@ -1,12 +1,11 @@
-package raspberry.smarthome.model.device.controllers;
-
-import raspberry.smarthome.model.device.ArduinoIotDevice;
+package ru.smarthome.arduinodevices.controllers;
+import ru.smarthome.arduinodevices.ArduinoDevice;
 import ru.smarthome.library.ControllerType;
 
-public class ControllersFactory {
+public class ArduinoControllersFactory {
 
     public static ArduinoController createArduinoController(ControllerType type,
-                                                            ArduinoIotDevice device,
+                                                            ArduinoDevice device,
                                                             int index) {
         switch (type) {
             case HUMIDITY: return new ArduinoHumidity(device, type, index);

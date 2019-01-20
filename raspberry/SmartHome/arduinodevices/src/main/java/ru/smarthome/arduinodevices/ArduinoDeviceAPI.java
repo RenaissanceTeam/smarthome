@@ -1,4 +1,4 @@
-package raspberry.smarthome.model.device.requests;
+package ru.smarthome.arduinodevices;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -8,10 +8,10 @@ import retrofit2.http.Query;
 public interface ArduinoDeviceAPI {
 
     @GET("service")
-    Call<ControllerResponse> controllerReadRequest(@Query("index") int serviceIndex);
+    Call<ArduinoControllerResponse> controllerReadRequest(@Query("index") int serviceIndex);
 
     @POST("service")
-    Call<ControllerResponse> controllerWriteRequest(
+    Call<ArduinoControllerResponse> controllerWriteRequest(
             @Query("index") int serviceIndex, @Query("value") String value);
 
 }

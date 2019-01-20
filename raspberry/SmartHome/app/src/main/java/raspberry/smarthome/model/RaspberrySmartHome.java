@@ -7,8 +7,8 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import raspberry.smarthome.model.device.ArduinoIotDevice;
-import raspberry.smarthome.model.device.controllers.Readable;
+import ru.smarthome.arduinodevices.ArduinoDevice;
+import ru.smarthome.arduinodevices.controllers.ArduinoReadable;
 import ru.smarthome.library.BaseController;
 import ru.smarthome.library.GUID;
 import ru.smarthome.library.IotDevice;
@@ -39,14 +39,14 @@ public class RaspberrySmartHome extends SmartHome {
             @Override
             public void run() {
                 for (BaseController controller : device.controllers) {
-                    if (controller instanceof Readable) {
+                    if (controller instanceof ArduinoReadable) {
                         boolean isRead = false;
                         int count = 1;
                         int maxCount = 3;
                         while (!isRead && count <= maxCount) {
                             try {
                                 Log.d(TAG, "run: trying for " + count + " time to read " + controller);
-                                ((Readable) controller).read();
+                                ((ArduinoReadable) controller).read();
                                 isRead = true;
                             } catch (IOException ignored) {
                                 Log.d(TAG, "couldn't read initial state of " + controller);
@@ -89,11 +89,11 @@ public class RaspberrySmartHome extends SmartHome {
         throw new IllegalArgumentException("No controller with guid=" + guid);
     }
 
-    public ArduinoIotDevice getArduinoByIp(String ip) {
+    public ArduinoDevice getArduinoByIp(String ip) {
         for (IotDevice device : devices) {
-            if (device instanceof ArduinoIotDevice) {
-                if (((ArduinoIotDevice) device).ip.equals(ip)) {
-                    return (ArduinoIotDevice) device;
+            if (device instanceof ArduinoDevice) {
+                if (((ArduinoDevice) device).ip.equals(ip)) {
+                    return (ArduinoDevice) device;
                 }
             }
         }

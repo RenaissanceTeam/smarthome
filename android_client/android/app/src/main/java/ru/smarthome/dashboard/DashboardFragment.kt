@@ -1,4 +1,4 @@
-package ru.smarthome
+package ru.smarthome.dashboard
 
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import ru.smarthome.BuildConfig
+import ru.smarthome.R
 
 class DashboardFragment : Fragment() {
 

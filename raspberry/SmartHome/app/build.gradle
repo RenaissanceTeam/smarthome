@@ -61,7 +61,10 @@ dependencies {
         transitive=true
         changing=true
     }
-
+    implementation(project(path: ':arduinodevices')) {
+        exclude group: 'ru.smarthome.library'
+        transitive=false
+    }
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
