@@ -1,9 +1,11 @@
-package ru.smarthome
+package ru.smarthome.dashboard
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.google.firebase.auth.FirebaseAuth
+import ru.smarthome.BuildConfig
+import ru.smarthome.Model
+import ru.smarthome.auth.Authenticator
 import ru.smarthome.library.BaseController
 import ru.smarthome.library.ControllerType
 import ru.smarthome.library.IotDevice

@@ -1,10 +1,9 @@
-package ru.smarthome
+package ru.smarthome.dashboard
 
-import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ru.smarthome.R
 import ru.smarthome.library.BaseController
 import ru.smarthome.library.IotDevice
 
