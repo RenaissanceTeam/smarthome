@@ -1,5 +1,9 @@
 package smarthome.datalibrary.database.constants
 
+import android.util.Log
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+
 object Constants {
 
     // database
@@ -12,4 +16,8 @@ object Constants {
     const val RP_PORT_REF = "port"
 
     const val FIREBASE_READ_VALUE_ERROR = "Failed to read value"
+
+    // default listeners for requests
+    val defSuccessListener: OnSuccessListener<Void> = OnSuccessListener { Log.d(javaClass.name, "data updated successfully") }
+    val defFailureListener: OnFailureListener = OnFailureListener { e -> Log.w(javaClass.name, "firestore error", e) }
 }

@@ -18,20 +18,6 @@ android {
     }
 }
 
-// ========================= auto import library on each build =====================================
-task importLibrary(type: Copy) {
-    copy {
-        from "../../../smarthomelibary/shlibrary/library/build/libs/library.jar"
-        into "libs"
-    }
-}
-project.afterEvaluate {
-    preBuild.dependsOn importLibrary
-}
-clean.dependsOn importLibrary
-clean.mustRunAfter importLibrary
-//==================================================================================================
-
 // "changing" dependencies gradle cache lifetime
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
@@ -66,7 +52,6 @@ dependencies {
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     implementation(name:'datalibrary-release', ext:'aar') {
-        exclude group: 'ru.smarthome.library'
         transitive=true
         changing=true
     }

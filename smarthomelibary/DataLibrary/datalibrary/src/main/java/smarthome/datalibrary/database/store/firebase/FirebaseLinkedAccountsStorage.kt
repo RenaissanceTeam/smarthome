@@ -1,6 +1,7 @@
 package smarthome.datalibrary.database.store.firebase
 
 import android.util.Log
+import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -17,13 +18,14 @@ class FirebaseLinkedAccountsStorage(private val uid: String,
 
     private val ref: DocumentReference = db.collection(uid).document(LINKED_ACCS_REF)
 
-    override fun postLinkedAccounts(linkedAccounts: LinkedAccounts) {
+    override fun postLinkedAccounts(
+        linkedAccounts: LinkedAccounts,
+        successListener: OnSuccessListener<Void>,
+        failureListener: OnFailureListener
+    ) {
         ref.set(linkedAccounts)
-    }
-
-    override fun postLinkedAccounts(linkedAccounts: LinkedAccounts, listener: OnSuccessListener<Void>) {
-        ref.set(linkedAccounts)
-            .addOnSuccessListener(listener)
+            .addOnSuccessListener(successListener)
+            .addOnFailureListener(failureListener)
     }
 
     override fun getLinkedAccounts(listener: LinkedAccountsListener) {
