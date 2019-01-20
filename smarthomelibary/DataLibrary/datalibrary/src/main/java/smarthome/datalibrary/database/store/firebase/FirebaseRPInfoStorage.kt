@@ -1,6 +1,7 @@
 package smarthome.datalibrary.database.store.firebase
 
 import android.util.Log
+import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -21,26 +22,26 @@ class FirebaseRPInfoStorage private constructor(
 
     private var rpInfoMap = HashMap<String, Any>()
 
-    override fun postRaspberryIp(ip: String) {
+    override fun postRaspberryIp(
+        ip: String,
+        successListener: OnSuccessListener<Void>,
+        failureListener: OnFailureListener
+    ) {
         rpInfoMap[RP_IP_REF] = ip
         ref.set(rpInfoMap)
+            .addOnSuccessListener(successListener)
+            .addOnFailureListener(failureListener)
     }
 
-    override fun postRaspberryIp(ip: String, listener: OnSuccessListener<Void>) {
-        rpInfoMap[RP_IP_REF] = ip
-        ref.set(rpInfoMap)
-            .addOnSuccessListener(listener)
-    }
-
-    override fun postRaspberryPort(port: String) {
+    override fun postRaspberryPort(
+        port: String,
+        successListener: OnSuccessListener<Void>,
+        failureListener: OnFailureListener
+    ) {
         rpInfoMap[RP_PORT_REF] = port
         ref.set(rpInfoMap)
-    }
-
-    override fun postRaspberryPort(port: String, listener: OnSuccessListener<Void>) {
-        rpInfoMap[RP_PORT_REF] = port
-        ref.set(rpInfoMap)
-            .addOnSuccessListener(listener)
+            .addOnSuccessListener(successListener)
+            .addOnFailureListener(failureListener)
     }
 
     override fun getRaspberryInfo(listener: RPInfoListener) {
