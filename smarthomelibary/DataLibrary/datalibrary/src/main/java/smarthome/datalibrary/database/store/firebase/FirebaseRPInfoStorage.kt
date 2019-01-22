@@ -49,9 +49,9 @@ class FirebaseRPInfoStorage private constructor(
             .addOnSuccessListener { res ->
                 run {
                     if (res != null) {
-                        val r = res.data
-                        listener.onRaspberryIpReceived(r?.get(RP_IP_REF) as String)
-                        listener.onRaspberryPortReceived(r[RP_PORT_REF] as String)
+                        val responseInfoMap = res.data
+                        listener.onRaspberryIpReceived(responseInfoMap?.get(RP_IP_REF) as String)
+                        listener.onRaspberryPortReceived(responseInfoMap[RP_PORT_REF] as String)
                     }
                 }
             }
@@ -73,10 +73,7 @@ class FirebaseRPInfoStorage private constructor(
         private fun instantiate(): FirebaseRPInfoStorage? {
             val auth = FirebaseAuth.getInstance()
 
-            return if (auth.currentUser == null)
-                null
-            else
-                FirebaseRPInfoStorage(auth.currentUser!!.uid)
+            auth.currentUser?.let { return FirebaseRPInfoStorage(it.uid) } ?: return null
         }
     }
 }

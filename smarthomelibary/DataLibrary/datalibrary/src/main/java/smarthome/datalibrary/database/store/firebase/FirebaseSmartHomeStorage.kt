@@ -39,8 +39,8 @@ class FirebaseSmartHomeStorage(
         successListener: OnSuccessListener<Void>,
         failureListener: OnFailureListener
     ) {
-        if(device.getControllers().contains(controller))
-            controller?.setPending()
+        if(controller != null && device.getControllers().contains(controller))
+            controller.setPending()
 
         ref.update("devices", FieldValue.arrayUnion(device))
             .addOnSuccessListener(successListener)
@@ -70,10 +70,7 @@ class FirebaseSmartHomeStorage(
         private fun instantiate(): FirebaseSmartHomeStorage? {
             val auth = FirebaseAuth.getInstance()
 
-            return if (auth.currentUser == null)
-                null
-            else
-                FirebaseSmartHomeStorage(auth.currentUser!!.uid)
+            auth.currentUser?.let { return FirebaseSmartHomeStorage(it.uid) } ?: return null
         }
     }
 }

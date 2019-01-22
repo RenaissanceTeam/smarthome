@@ -51,10 +51,7 @@ class FirebaseLinkedAccountsStorage(private val uid: String,
         private fun instantiate(): FirebaseLinkedAccountsStorage? {
             val auth = FirebaseAuth.getInstance()
 
-            return if (auth.currentUser == null)
-                null
-            else
-                FirebaseLinkedAccountsStorage(auth.currentUser!!.uid)
+            auth.currentUser?.let { return FirebaseLinkedAccountsStorage(it.uid) } ?: return null
         }
     }
 }
