@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
-import raspberry.smarthome.model.DevicesStorage;
-import raspberry.smarthome.model.device.ArduinoIotDevice;
-import raspberry.smarthome.model.device.IotDevice;
-import raspberry.smarthome.model.device.controllers.BaseController;
-import raspberry.smarthome.model.device.controllers.ControllerTypes;
-import raspberry.smarthome.model.device.controllers.Readable;
-import raspberry.smarthome.model.device.controllers.Writable;
-import raspberry.smarthome.model.device.requests.ControllerResponse;
+import raspberry.smarthome.model.RaspberrySmartHome;
+import ru.smarthome.arduinodevices.ArduinoDevice;
+import ru.smarthome.arduinodevices.controllers.ArduinoControllersFactory;
+import ru.smarthome.arduinodevices.controllers.ArduinoReadable;
+import ru.smarthome.arduinodevices.controllers.ArduinoWritable;
+import ru.smarthome.arduinodevices.ArduinoControllerResponse;
+import ru.smarthome.library.BaseController;
+import ru.smarthome.library.ControllerType;
 
 public class WebServer extends NanoHTTPD {
 
@@ -42,7 +42,7 @@ public class WebServer extends NanoHTTPD {
 
             if (uri.startsWith("/info")) {
                 // todo implement basic web interface with info about current controllers state ??
-                return new Response(Response.Status.OK, MIME_PLAINTEXT, DevicesStorage.getInstance().toString());
+                return new Response(Response.Status.OK, MIME_PLAINTEXT, RaspberrySmartHome.getInstance().toString());
             }
         } else if (method == Method.POST) {
             if (uri.startsWith("/init")) {
@@ -50,11 +50,11 @@ public class WebServer extends NanoHTTPD {
                 if (initNewArduinoDevice(session)) {
                     return new Response("Added successfully");
                 }
-                return new Response("Device was not added");
+                return new Response("ArduinoDevice was not added");
             }
 
             if (uri.startsWith("/reset")) {
-                DevicesStorage.getInstance().removeAll();
+                RaspberrySmartHome.getInstance().removeAll();
                 return new Response("Everything is deleted");
             }
 
@@ -80,9 +80,9 @@ public class WebServer extends NanoHTTPD {
     private Response makeReadRequestToDevice(IHTTPSession session) {
         Map<String, String> params = session.getParms();
         BaseController controller = getController(params);
-        if (controller instanceof Readable) {
+        if (controller instanceof ArduinoReadable) {
             try {
-                ControllerResponse response = ((Readable) controller).read();
+                ArduinoControllerResponse response = ((ArduinoReadable) controller).read();
                 return new Response(Response.Status.OK, "text/json", new Gson().toJson(response));
             } catch (IOException e) {
                 return getArduinoHttpError();
@@ -99,9 +99,9 @@ public class WebServer extends NanoHTTPD {
         try {
             BaseController controller = getController(params);
 
-            if (controller instanceof Writable) {
+            if (controller instanceof ArduinoWritable) {
                 String value = params.get("value");
-                ControllerResponse response = ((Writable) controller).write(value);
+                ArduinoControllerResponse response = ((ArduinoWritable) controller).write(value);
                 return new Response(Response.Status.OK, "text/json", new Gson().toJson(response));
             }
 
@@ -121,14 +121,8 @@ public class WebServer extends NanoHTTPD {
 
     private BaseController getController(Map<String, String> params) {
         // todo add checks so it won't crash
-        long deviceGuid = Long.parseLong(params.get("device_guid"));
         long controllerGuid = Long.parseLong(params.get("controller_guid"));
-
-        IotDevice device = DevicesStorage.getInstance().getByGuid(deviceGuid);
-        if (device instanceof ArduinoIotDevice) {
-            return ((ArduinoIotDevice) device).getControllerByGuid(controllerGuid);
-        }
-        throw new IllegalStateException("not arduino devices are not supported");
+        return RaspberrySmartHome.getInstance().getController(controllerGuid);
     }
 
     private boolean initNewArduinoDevice(IHTTPSession session) {
@@ -137,18 +131,19 @@ public class WebServer extends NanoHTTPD {
         String description = params.get("description");
         String ip = session.getHeaders().get("http-client-ip");
 
-        ArduinoIotDevice device = new ArduinoIotDevice(name, description, ip);
+        ArduinoDevice device = new ArduinoDevice(name, description, ip);
 
         String[] rawServices = params.get("services").split(";");
         List<BaseController> controllers = new ArrayList<>();
         int index = 0;
         for (String rawService : rawServices) {
             int id = Integer.parseInt(rawService.trim());
-            controllers.add(ControllerTypes.getById(id).createArduinoController(device, index));
+            ControllerType type = ControllerType.getById(id);
+            controllers.add(ArduinoControllersFactory.createArduinoController(type, device, index));
             ++index;
         }
         device.controllers = controllers;
 
-        return DevicesStorage.getInstance().addDevice(device);
+        return RaspberrySmartHome.getInstance().addDevice(device);
     }
 }
