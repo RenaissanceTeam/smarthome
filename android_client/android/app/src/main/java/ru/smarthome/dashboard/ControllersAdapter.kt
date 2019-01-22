@@ -19,15 +19,17 @@ class ControllersAdapter(private val inflater: LayoutInflater,
 
     override fun onBindViewHolder(holder: ControllerViewHolder, position: Int) {
         if (BuildConfig.DEBUG) Log.v(TAG, "bind viewHolder $position")
-        val device = viewModel.getDevice(position)
-        val controller = viewModel.getController(position)
+        viewModel.controllers.value?.let { controllers ->
+            val controller = controllers[position]
+            val device = viewModel.getDevice(controller)
 
-        if (BuildConfig.DEBUG) Log.v(TAG, "device= $device, controller=$controller")
-        holder.bind(device, controller)
+            if (BuildConfig.DEBUG) Log.v(TAG, "device= $device, controller=$controller")
+            holder.bind(device, controller)
+        }
     }
 
     override fun getItemCount(): Int {
-        if (BuildConfig.DEBUG) Log.v(TAG, "getItemCount controllersCount = ${viewModel.controllersCount}")
-        return viewModel.controllersCount
+        if (BuildConfig.DEBUG) Log.v(TAG, "getItemCount controllersCount = ${viewModel.controllers.value?.size}")
+        return viewModel.controllers.value?.size ?: 0
     }
 }

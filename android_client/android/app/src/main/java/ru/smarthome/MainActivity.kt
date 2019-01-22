@@ -40,8 +40,6 @@ class MainActivity : FragmentActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
-
             if (resultCode == RESULT_OK) {
                 viewModel.onAuthSuccessful()
             } else {

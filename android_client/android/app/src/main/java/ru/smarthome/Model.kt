@@ -131,28 +131,4 @@ object Model {
         Log.d(TAG, "onFailure: $it")
         // todo notify user about error
     }
-
-//    private fun auth() {
-//        val providers = listOf(AuthUI.IdpConfig.GoogleBuilder().build())
-//
-//        startActivityForResult(AuthUI.getInstance()
-//                .createSignInIntentBuilder()
-//                .setAvailableProviders(providers)
-//                .build(), Constants.RC_SIGN_IN)
-//    }
-//
-//    // todo move to model layer
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (requestCode == Constants.RC_SIGN_IN) {
-//            val response = IdpResponse.fromResultIntent(data)
-//
-//            if (resultCode == AppCompatActivity.RESULT_OK) {
-//                val user = FirebaseAuth.getInstance().currentUser
-//            } else {
-//                // TODO: guide user to the xuy
-//            }
-//        }
-//    }
 }

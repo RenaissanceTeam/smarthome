@@ -12,8 +12,6 @@ import ru.smarthome.library.IotDevice
 
 class DashboardViewModel : ViewModel() {
     val TAG = DashboardViewModel::class.java.simpleName
-    val controllersCount
-        get() = controllers.value?.size ?: 0
 
     private val _controllers = Model.getHomeState()
     private val _allHomeUpdateState = MutableLiveData<Boolean>()
@@ -58,12 +56,7 @@ class DashboardViewModel : ViewModel() {
         Model.changeControllerState(controller, value)
     }
 
-    fun getDevice(position: Int) : IotDevice? {
-        val controller = getController(position) ?: return null
+    fun getDevice(controller: BaseController) : IotDevice? {
         return Model.getDevice(controller)
-    }
-
-    fun getController(position: Int): BaseController? {
-        return controllers.value?.get(position)
     }
 }
