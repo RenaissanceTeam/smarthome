@@ -1,76 +1,25 @@
 #include "WebServer.h"
+#include "configuration.h"
 #include <HttpClient.h>
 #include "SoftwareSerial.h"
 #define DEBUG 1
-
-
-
-
-
-//////////////////CONFIGURATION//////////////////////////////
-// used services //
-#define TEMPERATURE
-#define HUMIDITY
-
-#define onoff_1 2
-#define onoff_2 3
-#define onoff_3 4
-#define DHT11_PIN 5
-#define RX 6
-#define TX 7
-
-
-
-// ids are the same as in raspberry!!
-#define ANALOG 1000
-#define ON_OFF 1001
-#define TEMPERATURE_ID 1002
-#define HUMIDITY_ID 1003
-
-#define DEVICE_NAME "arduino1"
-#define raspberry "192.168.1.3"
-
-int SERVICES[] = {ON_OFF, ON_OFF, ON_OFF, TEMPERATURE_ID, HUMIDITY_ID};
-char SERVICES_STR[] = "1001;1001;1001;1002;1003";
-int PINS[] = {onoff_1, onoff_2, onoff_3, DHT11_PIN, DHT11_PIN};
-#define services_count 5
-
-//////////////////END OF CONFIGURATION///////////////////////
 
 #ifdef TEMPERATURE || HUMIDITY
 #include <dht.h>
 dht DHT;
 #endif
 
-SoftwareSerial Serial1(RX, TX); // RX, TX
+SoftwareSerial esp_serial(RX, TX);
+WiFiEspClient wifiClient;
+HttpClient client(wifiClient, RASPBERRY_IP, RASPBERRY_PORT);  // eats 280 bytes of dynamic memory :(
+WebServer server("", ARDUINO_PORT);
+int connectionStatus = WL_IDLE_STATUS;
 
-WiFiEspClient wifi;
-HttpClient client(wifi, raspberry, 8080);  // eats 280 bytes of dynamic memory :(
-WebServer server("", 8080);
+#define home_info "name=" DEVICE_NAME "&services=" SERVICES_STR
 
-char ssid[] = "NETGEAR";            // your network SSID (name)
-char pass[] = "smarthome";        // your network password
-int status = WL_IDLE_STATUS;     // the Wifi radio's status
-int reqCount = 0;                // number of requests received
-
-
-
-String get_home_info() {
-  return "name=" + String(DEVICE_NAME) + "&services=" + String(SERVICES_STR);
-}
-
-void setup()
-{
-  // initialize serial for debugging
-  Serial.begin(9600);
-  pinMode(onoff_1, OUTPUT);
-  pinMode(onoff_2, OUTPUT);
-  pinMode(onoff_3, OUTPUT);
-  pinMode(DHT11_PIN, INPUT);
-  // initialize serial for ESP module
-  Serial1.begin(9600);
-  // initialize ESP module
-  WiFi.init(&Serial1);
+void connectToWifi() {
+  // start communication with esp on selected serial
+  WiFi.init(&esp_serial);
 
   // check for the presence of the shield
   if (WiFi.status() == WL_NO_SHIELD) {
@@ -79,27 +28,42 @@ void setup()
     while (true);
   }
 
-  // attempt to connect to WiFi network
-  while ( status != WL_CONNECTED) {
+  // actual connection to wifi
+  while (connectionStatus != WL_CONNECTED) {
 #if DEBUG > 0
     Serial.print("Attempting to connect to WPA SSID: ");
-#endif
-#if DEBUG > 0
-    Serial.println(ssid);
+    Serial.println(WIFI_SSID);
 #endif
     // Connect to WPA/WPA2 network
-    status = WiFi.begin(ssid, pass);
+    connectionStatus = WiFi.begin(WIFI_SSID, PASSWORD);
   }
+}
 
+void runHttpServer() {
+  server.setDefaultCommand(&homePage);    // callback to home page request
+  server.addCommand("service", &service); // smart home server request to do something with service
+  server.begin();
+}
 
+void sendHomeInfoToServer() {
+  // smart home server will process this info
+  // and will be able to work with this device
+  Serial.println(home_info);
+  client.post("/init?" home_info, "text", ""); 
+}
+
+void setup()
+{
+  Serial    .begin(9600); // initialize serial for debugging
+  esp_serial.begin(9600); // initialize serial for ESP module
+  connectToWifi();        // blocking call, won't return until the wifi connection is established
+  setupConfiguration();   // method from configuration.h
 #if DEBUG > 0
   printWifiStatus();
 #endif
-  server.setDefaultCommand(&home);
-  server.addCommand("service", &service);
-  server.begin();
-  client.post("/init?" + get_home_info(), "text", "");
 
+  runHttpServer();
+  sendHomeInfoToServer();
 
 #if DEBUG > 0
   Serial.println("setup end");
@@ -113,7 +77,6 @@ void baseResponse(int val) {
   server.print(val);
   server.print("\"}");
   server.print(CRLF);
-  return;
 }
 
 void baseResponse(double val) {
@@ -123,13 +86,12 @@ void baseResponse(double val) {
   server.print(val);
   server.print("\"}");
   server.print(CRLF);
-  return;
 }
 
-void home(WebServer &server, WebServer::ConnectionType type, char * params, bool complete)
+void homePage(WebServer &server, WebServer::ConnectionType type, char * params, bool complete)
 {
   server.httpSuccess();
-  server.print(get_home_info());
+  server.print(home_info);
 }
 
 int parseIntParam(char *from, int& shift, char key[], int &val) {
@@ -183,10 +145,10 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
     }
   }
 
-  if (serviceIndex >= 0 && serviceIndex < services_count) {
+  if (serviceIndex >= 0 && serviceIndex < SERVICES_COUNT) {
 
     if (type == WebServer::GET) {
-      if (SERVICES[serviceIndex] == ON_OFF) {
+      if (SERVICES[serviceIndex] == ONOFF_ID) {
 #if DEBUG > 1
         Serial.print("read ON_OFF on pin ");
         Serial.println(PINS[serviceIndex]);
@@ -194,20 +156,20 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
         baseResponse(digitalRead(PINS[serviceIndex]));
         return;
       }
-      
-      
-      
-      if (SERVICES[serviceIndex] == ANALOG) {
+
+
+
+      if (SERVICES[serviceIndex] == ANALOG_ID) {
 #if DEBUG > 1
         Serial.print("read ANALOG on pin ");
         Serial.println(PINS[serviceIndex]);
 #endif
         baseResponse(analogRead(PINS[serviceIndex]));
         return;
-      } 
+      }
 
 
-      
+
 #ifdef TEMPERATURE
       if (SERVICES[serviceIndex] == TEMPERATURE_ID) {
 #if DEBUG > 1
@@ -236,7 +198,7 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
 
     } else if (type == WebServer::POST) {
-      if (SERVICES[serviceIndex] == ON_OFF) {
+      if (SERVICES[serviceIndex] == ONOFF_ID) {
 #if DEBUG > 1
         Serial.print("set ON_OFF on pin ");
         Serial.print(PINS[serviceIndex]);
@@ -246,6 +208,19 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
         digitalWrite(PINS[serviceIndex], parsedValue);
         baseResponse(parsedValue);
         return;
+
+#ifdef HUMIDITY
+      if (SERVICES[serviceIndex] == HUMIDITY_ID) {
+#if DEBUG > 1
+        Serial.print("read HUMIDITY on pin ");
+        Serial.println(PINS[serviceIndex]);
+#endif
+        baseResponse(DHT.humidity);
+        return;
+      }
+#endif
+
+
       }
     }
     // todo read other types
@@ -265,9 +240,6 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
 void printWifiStatus()
 {
-  // print your WiFi shield's IP address
-
-  Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
 }
 
