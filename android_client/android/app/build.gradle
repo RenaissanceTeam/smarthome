@@ -51,7 +51,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
-    implementation(name:'datalibrary-release', ext:'aar') {
+    implementation(name:'datalibrary-debug', ext:'aar') {
         transitive=true
         changing=true
     }

@@ -31,9 +31,9 @@ public class WebServer extends NanoHTTPD {
 
     @Override
     public Response serve(IHTTPSession session) {
-        Log.d(TAG, "serve: " + session + ", thread=" + Thread.currentThread());
         Method method = session.getMethod();
         String uri = session.getUri();
+        Log.d(TAG, "serve: " + method + ":" + uri + " " + session.getQueryParameterString());
 
         if (method == Method.GET) {
             if (uri.startsWith("/controller")) {
@@ -63,12 +63,27 @@ public class WebServer extends NanoHTTPD {
             }
 
             if (uri.startsWith("/alert")) {
-                // todo implement post request for arduino controllers (notify android client about
-                // some state change)
+                try {
+                    serveAlertRequest(session);
+                } catch (Exception e) {}
             }
         }
 
         return getInvalidRequestResponse("No suitable method found");
+    }
+
+    private void serveAlertRequest(IHTTPSession session) throws NumberFormatException{
+        Map<String, String> params = session.getParms();
+        int index = Integer.parseInt(params.get("ind"));
+        String value = params.get("value");
+        String ip = session.getHeaders().get("http-client-ip");
+
+
+        ArduinoDevice arduino = RaspberrySmartHome.getInstance().getArduinoByIp(ip);
+        BaseController controller = arduino.controllers.get(index);
+        controller.state = value;
+        Log.d(TAG, "alert! new state=" + value + "for controller " + controller);
+        // todo save to firestore (notify android client, send FCM)
     }
 
     @NonNull

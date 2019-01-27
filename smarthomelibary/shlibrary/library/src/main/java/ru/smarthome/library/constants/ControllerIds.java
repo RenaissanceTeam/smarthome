@@ -9,4 +9,5 @@ public class ControllerIds {
     public static final int A_ONOFF = 1001;
     public static final int A_TEMPERATURE = 1002;
     public static final int A_HUMIDITY = 1003;
+    public static final int A_DIGITAL_ALERT = 1004;
 }

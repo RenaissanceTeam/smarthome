@@ -2,6 +2,7 @@
 #include "SoftwareSerial.h"
 #include <HttpClient.h>
 #include "configuration.h"
+#define DEBUG 1
 
 
 #define home_info "name=" DEVICE_NAME "&services=" SERVICES_STR
@@ -34,7 +35,7 @@ void baseResponse(WebServer& server, double val) {
 
 dht DHT;
 
-void humidityGetRequest(WebServer& server) {
+void humidityGetRequest(WebServer& server, int serviceIndex) {
 	#if DEBUG > 1
       Serial.print("read HUMIDITY on pin ");
       Serial.println(PINS[serviceIndex]);
@@ -43,7 +44,7 @@ void humidityGetRequest(WebServer& server) {
 }
 
 
-void temperatureGetRequest(WebServer& server) {
+void temperatureGetRequest(WebServer& server, int serviceIndex) {
 	#if DEBUG > 1
       Serial.print("read TEMPERATURE on pin ");
       Serial.println(PINS[serviceIndex]);
@@ -56,6 +57,68 @@ void temperatureGetRequest(WebServer& server) {
 // ==========================================================================
 // ==========================================================================
 
+
+
+// ==========================================================================
+// ONOFF
+// ==========================================================================
+#ifdef ONOFF
+void onoffGetRequest(WebServer& server, int serviceIndex) {
+#if DEBUG > 1
+      Serial.print("read ON_OFF on pin ");
+      Serial.println(PINS[serviceIndex]);
+#endif
+      baseResponse(server, digitalRead(PINS[serviceIndex]));
+} 
+
+void onoffPostRequest(WebServer& server, int serviceIndex, int value) {
+#if DEBUG > 1
+      Serial.print("set ON_OFF on pin ");
+      Serial.print(PINS[serviceIndex]);
+      Serial.print(" to value ");
+      Serial.println(value);
+#endif
+      digitalWrite(PINS[serviceIndex], value);
+      baseResponse(server, value);
+}
+
+#endif
+// ==========================================================================
+// ==========================================================================
+
+
+// ==========================================================================
+// ANALOG
+// ==========================================================================
+#ifdef ANALOG
+void analogGetRequest(WebServer& server, int serviceIndex) {
+#if DEBUG > 1
+      Serial.print("read ANALOG on pin ");
+      Serial.println(PINS[serviceIndex]);
+#endif
+      baseResponse(server, analogRead(PINS[serviceIndex]));
+} 
+
+#endif
+// ==========================================================================
+// ==========================================================================
+
+
+// ==========================================================================
+// DIGITAL ALERT
+// ==========================================================================
+#ifdef DIGITAL_ALERT
+void digitalAlertGetRequest(WebServer& server, int serviceIndex) {
+#if DEBUG > 1
+      Serial.print("read digitalAlert on pin ");
+      Serial.println(PINS[serviceIndex]);
+#endif
+      baseResponse(server, digitalRead(PINS[serviceIndex]));
+} 
+
+#endif
+// ==========================================================================
+// ==========================================================================
 
 
 
@@ -104,7 +167,7 @@ bool tryParseRequestValues(WebServer &server, WebServer::ConnectionType type,
     }
   }
 
-  if (serviceIndex >= 0 && serviceIndex < SERVICES_COUNT) {
+  if (serviceIndex < 0 || serviceIndex >= SERVICES_COUNT) {
     return false;
   }
 
@@ -128,61 +191,52 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
   if (!tryParseRequestValues(server, type, params, serviceIndex, parsedValue)) return;
 
 
-
-
   if (type == WebServer::GET) {
+    
+#ifdef ONOFF   
     if (SERVICES[serviceIndex] == ONOFF_ID) {
-#if DEBUG > 1
-      Serial.print("read ON_OFF on pin ");
-      Serial.println(PINS[serviceIndex]);
-#endif
-      baseResponse(server, digitalRead(PINS[serviceIndex]));
+      onoffGetRequest(server, serviceIndex);
       return;
     }
+#endif
 
-
-
+#ifdef ANALOG
     if (SERVICES[serviceIndex] == ANALOG_ID) {
-#if DEBUG > 1
-      Serial.print("read ANALOG on pin ");
-      Serial.println(PINS[serviceIndex]);
-#endif
-      baseResponse(server, analogRead(PINS[serviceIndex]));
+      analogGetRequest(server, serviceIndex);
       return;
     }
-
+#endif
 
 
 #ifdef TEMPERATURE
     if (SERVICES[serviceIndex] == TEMPERATURE_ID) {
-      temperatureGetRequest(server);	
+      temperatureGetRequest(server, serviceIndex);	
       return;
     }
 #endif
-
-
-
 
 #ifdef HUMIDITY
     if (SERVICES[serviceIndex] == HUMIDITY_ID) {
-      humidityGetRequest(server);
+      humidityGetRequest(server, serviceIndex);
       return;
     }
 #endif
 
+#ifdef DIGITAL_ALERT
+    if (SERVICES[serviceIndex] == DIGITAL_ALERT_ID) {
+      digitalAlertGetRequest(server, serviceIndex);
+      return;
+    }
+#endif
 
   } else if (type == WebServer::POST) {
+
+#ifdef ONOFF   
     if (SERVICES[serviceIndex] == ONOFF_ID) {
-#if DEBUG > 1
-      Serial.print("set ON_OFF on pin ");
-      Serial.print(PINS[serviceIndex]);
-      Serial.print(" to value ");
-      Serial.println(parsedValue);
-#endif
-      digitalWrite(PINS[serviceIndex], parsedValue);
-      baseResponse(server, parsedValue);
+      onoffPostRequest(server, serviceIndex, parsedValue);
       return;
     }
+#endif
 
     // todo read other types
 
@@ -195,7 +249,7 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
     return;
   }
 
-  server.httpSuccess();
+  server.httpFail();
 }
 
 
@@ -245,5 +299,11 @@ void sendHomeInfoToServer(HttpClient& client) {
   Serial.println(home_info);
   client.post("/init?" home_info, "text", "");
 }
+
+#ifdef DIGITAL_ALERT
+void sendAlertToServer(HttpClient& client, int serviceIndex, int value) {
+	client.post("/alert?ind=" + String(serviceIndex) + "&value=" + value, "text", "");
+}
+#endif
 
 

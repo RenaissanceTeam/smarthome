@@ -1,5 +1,10 @@
 #include "connection_impl.h"
-#define DEBUG 1
+
+#ifdef DIGITAL_ALERT 
+#include "sensor_checker.h"
+#endif
+
+#define DEBUG 2
 
 SoftwareSerial esp_serial(RX, TX);
 WiFiEspClient wifiClient;
@@ -12,7 +17,9 @@ void setup()
   esp_serial.begin(9600); // initialize serial for ESP module
   connectToWifi(esp_serial);        // blocking call, won't return until the wifi connection is established
   setupConfiguration();   // method from configuration.h
-
+#ifdef DIGITAL_ALERT 
+  alertSetup();
+#endif
 #if DEBUG > 0
   Serial.println(WiFi.localIP());
 #endif
@@ -27,4 +34,7 @@ void setup()
 
 void loop() {
   server.processConnection();
+  #ifdef DIGITAL_ALERT
+  if (timeToCheckAlerts()) notifyIfHighOnAnyDigitalAlert(client);
+  #endif
 }
