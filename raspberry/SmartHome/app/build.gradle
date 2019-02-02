@@ -57,7 +57,7 @@ dependencies {
     implementation 'com.firebase:firebase-client-android:2.5.2'
     implementation 'com.google.firebase:firebase-firestore:17.1.5'
 
-    implementation(name:'datalibrary-release', ext:'aar') {
+    implementation(name:'datalibrary-debug', ext:'aar') {
         transitive=true
         changing=true
     }
