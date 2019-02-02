@@ -65,7 +65,10 @@ public class WebServer extends NanoHTTPD {
             if (uri.startsWith("/alert")) {
                 try {
                     serveAlertRequest(session);
-                } catch (Exception e) {}
+                    return new Response("alert ok");
+                } catch (Exception e) {
+                    return new Response("alert exception " + e);
+                }
             }
         }
 

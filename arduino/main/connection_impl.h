@@ -298,12 +298,14 @@ void sendHomeInfoToServer(HttpClient& client) {
   // and will be able to work with this device
   Serial.println(home_info);
   client.post("/init?" home_info, "text", "");
+  client.flush();
+  client.stop();
 }
 
 #ifdef DIGITAL_ALERT
 void sendAlertToServer(HttpClient& client, int serviceIndex, int value) {
 	client.post("/alert?ind=" + String(serviceIndex) + "&value=" + value, "text", "");
+  client.flush();
+  client.stop();
 }
 #endif
-
-
