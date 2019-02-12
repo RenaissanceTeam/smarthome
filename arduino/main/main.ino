@@ -4,19 +4,24 @@
 #include "sensor_checker.h"
 #endif
 
-#define DEBUG 2
+#ifdef INIT_SERVICE
+#include "init_checker.h"
+#endif
+
+#define DEBUG 0
 
 SoftwareSerial esp_serial(RX, TX);
-WiFiEspClient wifiClient;
-HttpClient client(wifiClient, RASPBERRY_IP, RASPBERRY_PORT);  // eats 280 bytes of dynamic memory :(
+
 WebServer server("", ARDUINO_PORT);
+
+
 
 void setup()
 {
-  Serial    .begin(9600); // initialize serial for debugging
-  esp_serial.begin(9600); // initialize serial for ESP module
+  Serial    .begin(9600);           // initialize serial for debugging
+  esp_serial.begin(9600);           // initialize serial for ESP module
   connectToWifi(esp_serial);        // blocking call, won't return until the wifi connection is established
-  setupConfiguration();   // method from configuration.h
+  setupConfiguration();             // method from configuration.h
 #ifdef DIGITAL_ALERT 
   alertSetup();
 #endif
@@ -25,7 +30,8 @@ void setup()
 #endif
 
   runHttpServer(server);
-  sendHomeInfoToServer(client);
+    
+  // sendHomeInfoToServer(client);
 
 #if DEBUG > 0
   Serial.println("setup end");
@@ -34,7 +40,12 @@ void setup()
 
 void loop() {
   server.processConnection();
+  
   #ifdef DIGITAL_ALERT
-  if (timeToCheckAlerts()) notifyIfHighOnAnyDigitalAlert(client);
+  if (timeToCheckAlerts()) notifyIfHighOnAnyDigitalAlert();
+  #endif
+
+  #ifdef INIT_SERVICE
+  if (timeToCheckInitButton()) notifyIfHighOnInitButton();
   #endif
 }

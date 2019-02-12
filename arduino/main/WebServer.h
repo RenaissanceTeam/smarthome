@@ -277,6 +277,8 @@ public:
 
   // Close the current connection and flush ethernet buffers
   void reset(); 
+
+  void getRemoteIp(char *ip);
 private:
   WiFiEspServer m_server;
   WiFiEspClient m_client;
@@ -287,6 +289,7 @@ private:
 
   int m_contentLength;
   char m_authCredentials[51];
+  char m_remoteIp[15];
   bool m_readingContent;
 
   Command *m_failureCmd;
@@ -320,7 +323,11 @@ private:
 /********************************************************************
  * IMPLEMENTATION
  ********************************************************************/
-
+void WebServer::getRemoteIp(char* ip) {
+  for(int i=0; i < 15; ++i){
+    ip[i] = m_remoteIp[i];
+  }
+}
 WebServer::WebServer(const char *urlPrefix, uint16_t port) :
   m_server(port),
   m_client(),
@@ -931,6 +938,11 @@ void WebServer::processHeaders()
       Serial.print(m_authCredentials);
       Serial.print(" ***");
 #endif
+      continue;
+    }
+
+    if (expect("Remote_Addr")) {
+      readHeader(m_remoteIp,15);
       continue;
     }
 
