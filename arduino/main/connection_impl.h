@@ -13,9 +13,7 @@
 
 WiFiEspClient wifiClient;
 HttpClient* client;
-#ifdef INIT_SERVICE
-WiFiEspUDP udpClient;
-#endif
+
 
 
 void baseResponse(WebServer& server, int val) {
@@ -298,9 +296,12 @@ void homePage(WebServer &server, WebServer::ConnectionType type,
 
 void init(WebServer &server, WebServer::ConnectionType type, char * params, bool complete) {
   Serial.println(home_info);
-  char ip[15];
+  char ip[IP_BUFFER_LENGTH];
   server.getRemoteIp(ip);
+  Serial.print(F("remote ip="));
   Serial.println(ip);
+  
+  if (client != 0) delete client;
   client = new HttpClient(wifiClient, ip, RASPBERRY_PORT);
   client->post("/init?" home_info, "text", "");
   client->flush();
@@ -316,6 +317,8 @@ void runHttpServer(WebServer& server) {
 
 #ifdef INIT_SERVICE
 void sendUdpInitToHomeServer() {
+  
+  WiFiEspUDP udpClient;
   IPAddress broadcastIp(192,168,1,255);
   udpClient.begin(UDP_PORT);
   udpClient.beginPacket(broadcastIp, UDP_PORT);

@@ -40,6 +40,7 @@
 
 // standard END-OF-LINE marker in HTTP
 #define CRLF "\r\n"
+#define IP_BUFFER_LENGTH 15
 
 // If processConnection is called without a buffer, it allocates one
 // of 32 bytes
@@ -906,7 +907,6 @@ void WebServer::getRequest(WebServer::ConnectionType &type,
   // NUL terminate
   *request = 0;
 }
-
 void WebServer::processHeaders()
 {
   // look for three things: the Content-Length header, the Authorization
@@ -941,8 +941,8 @@ void WebServer::processHeaders()
       continue;
     }
 
-    if (expect("Remote_Addr")) {
-      readHeader(m_remoteIp,15);
+    if (expect("Remote_Addr:")) {
+      readHeader(m_remoteIp, IP_BUFFER_LENGTH);
       continue;
     }
 
