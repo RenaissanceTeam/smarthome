@@ -3,6 +3,7 @@
 
 #define DEVICE_NAME "arduino1"
 #define RASPBERRY_PORT 8080
+#define UDP_PORT       59743
 #define ARDUINO_PORT   8080
 
 // used services
@@ -10,7 +11,7 @@
 #define HUMIDITY
 #define ONOFF
 #define DIGITAL_ALERT
-#define INIT_SERVICE
+#define INIT_SERVICE // 107 bytes, without it 1381
 
 
 // pins for services

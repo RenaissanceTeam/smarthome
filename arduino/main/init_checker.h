@@ -8,8 +8,6 @@ void notifyIfHighOnInitButton() {
 	if (newState != initState) {
 		initState = newState; 
 		if (newState == HIGH) {
-
-			Serial.print("Init button is pushed");
 			sendUdpInitToHomeServer();
 		}
 	}

@@ -11,10 +11,7 @@
 #define DEBUG 0
 
 SoftwareSerial esp_serial(RX, TX);
-
 WebServer server("", ARDUINO_PORT);
-
-
 
 void setup()
 {
@@ -30,8 +27,6 @@ void setup()
 #endif
 
   runHttpServer(server);
-    
-  // sendHomeInfoToServer(client);
 
 #if DEBUG > 0
   Serial.println("setup end");

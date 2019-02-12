@@ -1,8 +1,11 @@
 #include "WebServer.h"
 #include "SoftwareSerial.h"
-#include <HttpClient.h>
+#include <ArduinoHttpClient.h>
 #include "configuration.h"
+
+#ifdef INIT_SERVICE
 #include <WiFiEspUdp.h>
+#endif
 
 #define DEBUG 0
 
@@ -10,8 +13,10 @@
 
 WiFiEspClient wifiClient;
 HttpClient* client;
+#ifdef INIT_SERVICE
 WiFiEspUDP udpClient;
-IPAddress broadcastIp(192,168,1,255);
+#endif
+
 
 void baseResponse(WebServer& server, int val) {
   Serial.println(val);
@@ -311,9 +316,12 @@ void runHttpServer(WebServer& server) {
 
 #ifdef INIT_SERVICE
 void sendUdpInitToHomeServer() {
-  udpClient.beginPacket(broadcastIp, RASPBERRY_PORT);
+  IPAddress broadcastIp(192,168,1,255);
+  udpClient.begin(UDP_PORT);
+  udpClient.beginPacket(broadcastIp, UDP_PORT);
   udpClient.write(DEVICE_NAME); // todo some key instead (encryption needed)
   udpClient.endPacket();
+  udpClient.stop();
 }
 #endif
 
