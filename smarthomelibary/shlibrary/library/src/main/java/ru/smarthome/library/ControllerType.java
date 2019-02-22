@@ -7,7 +7,8 @@ public enum ControllerType {
     ARDUINO_ON_OFF(A_ONOFF),
     TEMPERATURE(A_TEMPERATURE),
     HUMIDITY(A_HUMIDITY),
-    DIGITAL_ALERT(A_DIGITAL_ALERT);
+    DIGITAL_ALERT(A_DIGITAL_ALERT),
+    INIT(A_INIT);
 
     public final int id;
 

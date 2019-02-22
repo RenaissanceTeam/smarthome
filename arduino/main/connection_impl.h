@@ -300,12 +300,14 @@ void init(WebServer &server, WebServer::ConnectionType type, char * params, bool
   server.getRemoteIp(ip);
   Serial.print(F("remote ip="));
   Serial.println(ip);
+  server.httpSuccess();
   
   if (client != 0) delete client;
   client = new HttpClient(wifiClient, ip, RASPBERRY_PORT);
   client->post("/init?" home_info, "text", "");
   client->flush();
   client->stop();
+  
 }
 
 void runHttpServer(WebServer& server) {
@@ -317,9 +319,9 @@ void runHttpServer(WebServer& server) {
 
 #ifdef INIT_SERVICE
 void sendUdpInitToHomeServer() {
-  
+  Serial.println("send udp");
   WiFiEspUDP udpClient;
-  IPAddress broadcastIp(192,168,1,255);
+  IPAddress broadcastIp(192,168,0,255);
   udpClient.begin(UDP_PORT);
   udpClient.beginPacket(broadcastIp, UDP_PORT);
   udpClient.write(DEVICE_NAME); // todo some key instead (encryption needed)

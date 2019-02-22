@@ -30,7 +30,7 @@
 // static services array, pay attention to the defined pins
 int SERVICES[] = {ONOFF_ID, ONOFF_ID, ONOFF_ID, TEMPERATURE_ID, HUMIDITY_ID, INIT_SERVICE_ID};
 int PINS[] = {onoff_1, onoff_2, onoff_3, DHT11_PIN, DHT11_PIN, INIT_PIN};
-#define SERVICES_STR "1001;1001;1001;1002;1003;1005"
+#define SERVICES_STR "1001;1001;1001;1002;1003"
 #define SERVICES_COUNT 6
 #define DIGITAL_ALERT_COUNT 0
 
