@@ -17,7 +17,9 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import raspberry.smarthome.utils.ip.Helpers;
 import retrofit2.Retrofit;
 
 import static raspberry.smarthome.MainActivity.DEBUG;
@@ -26,13 +28,19 @@ public class UdpServer implements StoppableServer {
 
     public static final String TAG = UdpServer.class.getSimpleName();
     public static final int PORT = 59743;
+    public static final String ARDUINO_INIT_URL = "http://%s:8080/init";
+    public static final int THREAD_POOL_SIZE = 4;
+    public static final String REMOTE_ADDR_HEADER = "Remote_Addr";
+
+    private AtomicBoolean isRunning = new AtomicBoolean(false);
 
     public void startListening() {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        // todo does it really gives 4 parallel connections?
+        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
         executorService.submit(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                while (isRunning.get()) {
                     DatagramSocket serverSocket = null;
                     try {
                         serverSocket = new DatagramSocket(PORT);
@@ -43,7 +51,7 @@ public class UdpServer implements StoppableServer {
 
                         onReceiveFromUpd(receivePacket); // blocking call
                     } catch (IOException e) {
-                        Log.e(TAG, "failed to listen for udp requests ", e);
+                        Log.e(TAG, "", e);
                     } finally {
                         if (serverSocket != null) {
                             serverSocket.close();
@@ -69,32 +77,17 @@ public class UdpServer implements StoppableServer {
         // todo check if udp packet from iot device
 
         InetAddress ip = receivePacket.getAddress();
-        int port = receivePacket.getPort();
-
 
         Request request = new Request.Builder()
-                .url("http://" + ip.getHostAddress() + ":8080" + "/init")
-                .header("Remote_Addr", getLocalIpAddress())
+                .url(getArduinoInitUrl(ip))
+                .header(REMOTE_ADDR_HEADER, Helpers.getLocalIpAddress())
                 .build();
 
-        new OkHttpClient().newCall(request).execute(); // blocking call
+        new OkHttpClient().newCall(request).execute(); // blocking call // todo make with retrofit
     }
 
-    public static String getLocalIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                        return inetAddress.getHostAddress();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            ex.printStackTrace();
-        }
-        return null;
+    private String getArduinoInitUrl(InetAddress address) {
+        return String.format(ARDUINO_INIT_URL, address.getHostAddress());
     }
 
     public void send(String data) throws Exception {
@@ -107,13 +100,14 @@ public class UdpServer implements StoppableServer {
         clientSocket.close();
     }
 
-
     @Override
     public void startServer() {
+        isRunning.set(true);
         startListening();
     }
 
     @Override
     public void stopServer() {
+        isRunning.set(false);
     }
 }
