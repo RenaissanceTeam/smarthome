@@ -23,20 +23,10 @@ android {
     }
 }
 
-// ========================= auto import library on each build =====================================
-task importLibrary(type: Copy) {
-    copy {
-        from "../../../smarthomelibary/shlibrary/library/build/libs/library.jar"
-        into "libs"
-    }
+// "changing" dependencies gradle cache lifetime
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
-project.afterEvaluate {
-    preBuild.dependsOn importLibrary
-}
-clean.dependsOn importLibrary
-clean.mustRunAfter importLibrary
-//==================================================================================================
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -45,4 +35,9 @@ dependencies {
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+
+    implementation(name:'commonlibrary-debug', ext:'aar') {
+        transitive=true
+        changing=true
+    }
 }

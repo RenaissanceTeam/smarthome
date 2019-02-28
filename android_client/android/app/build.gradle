@@ -52,7 +52,12 @@ dependencies {
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     implementation(name:'datalibrary-debug', ext:'aar') {
-        transitive=true
+        transitive=false
+        changing=true
+    }
+
+    implementation(name:'commonlibrary-debug', ext:'aar') {
+        transitive=false
         changing=true
     }
 }
