@@ -1,11 +1,19 @@
 #include "WebServer.h"
 #include "SoftwareSerial.h"
-#include <HttpClient.h>
+#include <ArduinoHttpClient.h>
 #include "configuration.h"
-#define DEBUG 1
 
+#ifdef INIT_SERVICE
+#include <WiFiEspUdp.h>
+#endif
+
+#define DEBUG 0
 
 #define home_info "name=" DEVICE_NAME "&services=" SERVICES_STR
+
+WiFiEspClient wifiClient;
+HttpClient* client;
+
 
 
 void baseResponse(WebServer& server, int val) {
@@ -144,7 +152,6 @@ int parseIntParam(char *from, int& shift, char key[], int &val) {
   //  Serial.println();
   return i;
 }
-
 
 bool tryParseRequestValues(WebServer &server, WebServer::ConnectionType type,
                            char * params, int& serviceIndex, int& parsedValue) {
@@ -286,26 +293,48 @@ void homePage(WebServer &server, WebServer::ConnectionType type,
   server.print(home_info);
 }
 
+
+void init(WebServer &server, WebServer::ConnectionType type, char * params, bool complete) {
+  Serial.println(home_info);
+  char ip[IP_BUFFER_LENGTH];
+  server.getRemoteIp(ip);
+  Serial.print(F("remote ip="));
+  Serial.println(ip);
+  server.httpSuccess();
+  
+  if (client != 0) delete client;
+  client = new HttpClient(wifiClient, ip, RASPBERRY_PORT);
+  client->post("/init?" home_info, "text", "");
+  client->flush();
+  client->stop();
+  
+}
+
 void runHttpServer(WebServer& server) {
   server.setDefaultCommand(&homePage);    // callback to home page request
   server.addCommand("service", &service); // smart home server request to do something with service
+  server.addCommand("init", &init);
   server.begin();
 }
 
-
-void sendHomeInfoToServer(HttpClient& client) {
-  // smart home server will process this info
-  // and will be able to work with this device
-  Serial.println(home_info);
-  client.post("/init?" home_info, "text", "");
-  client.flush();
-  client.stop();
+#ifdef INIT_SERVICE
+void sendUdpInitToHomeServer() {
+  Serial.println("send udp");
+  WiFiEspUDP udpClient;
+  IPAddress broadcastIp(192,168,0,255);
+  udpClient.begin(UDP_PORT);
+  udpClient.beginPacket(broadcastIp, UDP_PORT);
+  udpClient.write(DEVICE_NAME); // todo some key instead (encryption needed)
+  udpClient.endPacket();
+  udpClient.stop();
 }
+#endif
 
 #ifdef DIGITAL_ALERT
-void sendAlertToServer(HttpClient& client, int serviceIndex, int value) {
-	client.post("/alert?ind=" + String(serviceIndex) + "&value=" + value, "text", "");
-  client.flush();
-  client.stop();
+void sendAlertToServer(int serviceIndex, int value) {
+	if (client == 0) return;
+	client->post("/alert?ind=" + String(serviceIndex) + "&value=" + value, "text", "");
+  client->flush();
+  client->stop();
 }
 #endif

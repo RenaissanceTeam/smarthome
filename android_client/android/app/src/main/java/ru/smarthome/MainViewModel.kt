@@ -21,7 +21,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun authCheck() {
         if (BuildConfig.DEBUG) Log.d(TAG, "on create in viewmodel, so auth")
-        if (authenticator.isAuthenticated()) return
+        if (true || authenticator.isAuthenticated()) return
 
         _needAuth.value = true
     }

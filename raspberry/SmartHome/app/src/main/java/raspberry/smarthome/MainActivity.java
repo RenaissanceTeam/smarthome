@@ -11,6 +11,9 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.IOException;
 
 import raspberry.smarthome.auth.GoogleSignInActivity;
+import raspberry.smarthome.server.StoppableServer;
+import raspberry.smarthome.server.UdpServer;
+import raspberry.smarthome.server.WebServer;
 
 import static raspberry.smarthome.model.device.constants.Constants.RC_SIGN_IN;
 
@@ -19,9 +22,9 @@ public class MainActivity extends Activity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final boolean DEBUG = BuildConfig.DEBUG;
-    private WebServer server;
+    private WebServer httpServer;
+    private UdpServer udpServer;
     private FirebaseAuth mAuth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,17 +32,16 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         if (DEBUG) Log.d(TAG, "onCreate");
 
-        server = new WebServer();
+        // todo consider moving these out of the activity, maybe to service
+        httpServer = new WebServer();
+        udpServer = new UdpServer();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        try {
-            server.start();
-        } catch (IOException e) {
-            Log.d(TAG, "onStart: start server" + e);
-        }
+        startServer(httpServer);
+        startServer(udpServer);
     }
 
     @Override
@@ -52,16 +54,15 @@ public class MainActivity extends Activity {
         // check for auth
         mAuth = FirebaseAuth.getInstance();
 
-        if(mAuth.getCurrentUser() == null)
+        if (mAuth.getCurrentUser() == null)
             startActivity(new Intent(this, GoogleSignInActivity.class));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (server != null) {
-            server.stop();
-        }
+        stopServer(httpServer);
+        stopServer(udpServer);
     }
 
     @Override
@@ -78,5 +79,15 @@ public class MainActivity extends Activity {
         } else {
             // retry login
         }
+    }
+
+    private void startServer(StoppableServer server) {
+        if (server == null) return;
+        server.startServer();
+    }
+
+    private void stopServer(StoppableServer server) {
+        if (server == null) return;
+        server.stopServer();
     }
 }
