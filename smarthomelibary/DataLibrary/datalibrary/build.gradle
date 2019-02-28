@@ -18,22 +18,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
-// ========================= auto import library on each build =====================================
-task importLibrary(type: Copy) {
-    copy {
-        from "../../../smarthomelibary/shlibrary/library/build/libs/library.jar"
-        into "libs"
-    }
+// "changing" dependencies gradle cache lifetime
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
-project.afterEvaluate {
-    preBuild.dependsOn importLibrary
-}
-clean.dependsOn importLibrary
-clean.mustRunAfter importLibrary
-//==================================================================================================
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -43,6 +33,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.5'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.firebase:firebase-firestore:17.1.5'
+
+    implementation(name:'commonlibrary-debug', ext:'aar') {
+        transitive=true
+        changing=true
+    }
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }

@@ -25,6 +25,9 @@ allprojects {
         flatDir {
             dirs '../../../smarthomelibary/DataLibrary/datalibrary/build/outputs/aar'
         }
+        flatDir {
+            dirs '../../../smarthomelibary/shlibrary/commonlibrary/build/outputs/aar'
+        }
     }
 }
 

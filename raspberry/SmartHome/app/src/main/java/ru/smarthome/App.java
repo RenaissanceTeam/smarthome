@@ -3,16 +3,17 @@ package ru.smarthome;
 import android.app.Application;
 import android.util.Log;
 
-import ru.smarthome.tasks.IpObtainTask;
 
 import static ru.smarthome.BuildConfig.DEBUG;
 
 public class App extends Application {
 
-    // execute smth once per app startServer
-    public App() {
-        if(DEBUG) Log.d(getClass().getName(), "App started");
+    public static final String APP_TAG = App.class.getName();
 
-        new IpObtainTask().execute();
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        if (DEBUG) Log.d(APP_TAG, "App created");
     }
 }

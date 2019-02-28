@@ -1,0 +1,104 @@
+{
+  "project_info": {
+    "project_number": "639836271498",
+    "firebase_url": "https://smarthome-f2242.firebaseio.com",
+    "project_id": "smarthome-f2242",
+    "storage_bucket": "smarthome-f2242.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639836271498:android:afdd336b1da13722",
+        "android_client_info": {
+          "package_name": "ru.smarthome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639836271498-kberoihpjm32utgpl2rjjom9qsbbkvl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfW2LK14G7rIuZp0MkSzbAlOCI0-RwouY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639836271498:android:c25774b849630fe0",
+        "android_client_info": {
+          "package_name": "ru.smarthome.commonlibrary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639836271498-kberoihpjm32utgpl2rjjom9qsbbkvl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfW2LK14G7rIuZp0MkSzbAlOCI0-RwouY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639836271498:android:ac8e1488b4ee3f78",
+        "android_client_info": {
+          "package_name": "ru.smarthome.database"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639836271498-kberoihpjm32utgpl2rjjom9qsbbkvl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfW2LK14G7rIuZp0MkSzbAlOCI0-RwouY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
