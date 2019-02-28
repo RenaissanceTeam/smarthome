@@ -1,5 +1,4 @@
 #ifdef DIGITAL_ALERT
-// #include "connection_impl.h"
 int digitalAlertStates[DIGITAL_ALERT_COUNT];
 int period = 1000;
 unsigned long time_now = 0;
@@ -10,7 +9,7 @@ void alertSetup() {
 	}
 }
 
-void notifyIfStateChanged(HttpClient& client, int cur, int serviceIndex) {
+void notifyIfStateChanged(int cur, int serviceIndex) {
 	
 	int newState = digitalRead(PINS[serviceIndex]);
 	if (newState != digitalAlertStates[cur]) {
@@ -19,15 +18,15 @@ void notifyIfStateChanged(HttpClient& client, int cur, int serviceIndex) {
 		Serial.print(PINS[serviceIndex]);
 		Serial.print(", new state is "); Serial.println(newState);
 
-		sendAlertToServer(client, serviceIndex, newState);
+		sendAlertToServer(serviceIndex, newState);
 	}
 }
 
-void notifyIfHighOnAnyDigitalAlert(HttpClient& client) {
+void notifyIfHighOnAnyDigitalAlert() {
 	int cur = 0; // index in states array
 	for (int i = 0; i < SERVICES_COUNT; ++i) {
 		if (SERVICES[i] == DIGITAL_ALERT_ID) {
-			notifyIfStateChanged(client, cur, i);
+			notifyIfStateChanged(cur, i);
 			++cur;
 		}
 	}

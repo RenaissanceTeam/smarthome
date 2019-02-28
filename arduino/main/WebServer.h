@@ -40,6 +40,7 @@
 
 // standard END-OF-LINE marker in HTTP
 #define CRLF "\r\n"
+#define IP_BUFFER_LENGTH 15
 
 // If processConnection is called without a buffer, it allocates one
 // of 32 bytes
@@ -277,6 +278,8 @@ public:
 
   // Close the current connection and flush ethernet buffers
   void reset(); 
+
+  void getRemoteIp(char *ip);
 private:
   WiFiEspServer m_server;
   WiFiEspClient m_client;
@@ -287,6 +290,7 @@ private:
 
   int m_contentLength;
   char m_authCredentials[51];
+  char m_remoteIp[15];
   bool m_readingContent;
 
   Command *m_failureCmd;
@@ -320,7 +324,11 @@ private:
 /********************************************************************
  * IMPLEMENTATION
  ********************************************************************/
-
+void WebServer::getRemoteIp(char* ip) {
+  for(int i=0; i < 15; ++i){
+    ip[i] = m_remoteIp[i];
+  }
+}
 WebServer::WebServer(const char *urlPrefix, uint16_t port) :
   m_server(port),
   m_client(),
@@ -899,7 +907,6 @@ void WebServer::getRequest(WebServer::ConnectionType &type,
   // NUL terminate
   *request = 0;
 }
-
 void WebServer::processHeaders()
 {
   // look for three things: the Content-Length header, the Authorization
@@ -931,6 +938,11 @@ void WebServer::processHeaders()
       Serial.print(m_authCredentials);
       Serial.print(" ***");
 #endif
+      continue;
+    }
+
+    if (expect("Remote_Addr:")) {
+      readHeader(m_remoteIp, IP_BUFFER_LENGTH);
       continue;
     }
 

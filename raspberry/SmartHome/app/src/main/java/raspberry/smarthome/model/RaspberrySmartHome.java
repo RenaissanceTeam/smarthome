@@ -34,7 +34,7 @@ public class RaspberrySmartHome extends SmartHome {
         if (DEBUG) Log.d(TAG, "addDevice: " + device);
         if (devices.contains(device)) return false;
         // todo decompose into pubsub, notify every sub about new device added
-        Log.d(TAG, "run: start initial controllers reading");
+        Log.d(TAG, "run: startServer initial controllers reading");
         new Thread() {
             @Override
             public void run() {

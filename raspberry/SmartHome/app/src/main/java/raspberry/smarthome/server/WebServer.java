@@ -1,4 +1,4 @@
-package raspberry.smarthome;
+package raspberry.smarthome.server;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -20,7 +20,7 @@ import ru.smarthome.arduinodevices.ArduinoControllerResponse;
 import ru.smarthome.library.BaseController;
 import ru.smarthome.library.ControllerType;
 
-public class WebServer extends NanoHTTPD {
+public class WebServer extends NanoHTTPD implements StoppableServer{
 
     public static final String TAG = WebServer.class.getSimpleName();
 
@@ -163,5 +163,19 @@ public class WebServer extends NanoHTTPD {
         device.controllers = controllers;
 
         return RaspberrySmartHome.getInstance().addDevice(device);
+    }
+
+    @Override
+    public void startServer() {
+        try {
+            start();
+        } catch (IOException e) {
+            Log.e(TAG, "startServer: ", e);
+        }
+    }
+
+    @Override
+    public void stopServer() {
+        stop();
     }
 }
