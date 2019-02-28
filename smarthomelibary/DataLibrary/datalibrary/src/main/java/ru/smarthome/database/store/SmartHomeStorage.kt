@@ -1,17 +1,20 @@
-package smarthome.datalibrary.database.store
+package ru.smarthome.database.store
 
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import ru.smarthome.library.BaseController
 import ru.smarthome.library.IotDevice
 import ru.smarthome.library.SmartHome
-import smarthome.datalibrary.database.constants.Constants.defFailureListener
-import smarthome.datalibrary.database.constants.Constants.defSuccessListener
-import smarthome.datalibrary.database.store.listeners.SmartHomeListener
+import ru.smarthome.database.constants.*
+import ru.smarthome.database.store.listeners.SmartHomeListener
 
 interface SmartHomeStorage {
 
-    fun postSmartHome(smartHome: SmartHome, successListener: OnSuccessListener<Void> = defSuccessListener, failureListener: OnFailureListener = defFailureListener)
+    fun postSmartHome(
+        smartHome: SmartHome,
+        successListener: OnSuccessListener<Void> = defSuccessListener,
+        failureListener: OnFailureListener = defFailureListener
+    )
 
     /**
      * IotDevice update function <br>
@@ -21,6 +24,11 @@ interface SmartHomeStorage {
      * @param successListener OnSuccessListener, default implementation perform logging
      * @param failureListener OnFailureListener, default implementation perform logging
      */
-    fun updateSmartHomeDevice(device: IotDevice, controller: BaseController? = null, successListener: OnSuccessListener<Void> = defSuccessListener, failureListener: OnFailureListener = defFailureListener)
+    fun updateSmartHomeDevice(
+        device: IotDevice, controller: BaseController? = null,
+        successListener: OnSuccessListener<Void> = defSuccessListener,
+        failureListener: OnFailureListener = defFailureListener
+    )
+
     fun getSmartHome(listener: SmartHomeListener)
 }

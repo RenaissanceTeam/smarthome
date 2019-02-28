@@ -1,4 +1,4 @@
-package smarthome.datalibrary.database.store.firebase
+package ru.smarthome.database.store.firebase
 
 import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
@@ -10,10 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import ru.smarthome.library.BaseController
 import ru.smarthome.library.IotDevice
 import ru.smarthome.library.SmartHome
-import smarthome.datalibrary.database.constants.Constants.FIREBASE_READ_VALUE_ERROR
-import smarthome.datalibrary.database.constants.Constants.SMART_HOME_REF
-import smarthome.datalibrary.database.store.SmartHomeStorage
-import smarthome.datalibrary.database.store.listeners.SmartHomeListener
+import ru.smarthome.database.constants.*
+import ru.smarthome.database.store.SmartHomeStorage
+import ru.smarthome.database.store.listeners.SmartHomeListener
 
 class FirebaseSmartHomeStorage(
     uid: String,
@@ -23,8 +22,7 @@ class FirebaseSmartHomeStorage(
     private val ref: DocumentReference = db.collection(uid).document(SMART_HOME_REF)
 
     override fun postSmartHome(
-        smartHome: SmartHome,
-        successListener: OnSuccessListener<Void>,
+        smartHome: SmartHome, successListener: OnSuccessListener<Void>,
         failureListener: OnFailureListener
     ) {
         ref.set(smartHome)
@@ -39,10 +37,11 @@ class FirebaseSmartHomeStorage(
         successListener: OnSuccessListener<Void>,
         failureListener: OnFailureListener
     ) {
-        if(controller != null && device.getControllers().contains(controller))
+
+        if (controller != null && device.getControllers().contains(controller))
             controller.setPending()
 
-        ref.update("devices", FieldValue.arrayUnion(device))
+        ref.update(DEVICES_FIELD_KEY, FieldValue.arrayUnion(device))
             .addOnSuccessListener(successListener)
             .addOnFailureListener(failureListener)
     }
@@ -58,7 +57,6 @@ class FirebaseSmartHomeStorage(
     companion object {
 
         private var instance: FirebaseSmartHomeStorage? = null
-
 
         fun getInstance(): FirebaseSmartHomeStorage? {
             if (instance == null)

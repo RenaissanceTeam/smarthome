@@ -1,4 +1,4 @@
-package smarthome.datalibrary.database.store.listeners
+package ru.smarthome.database.store.listeners
 
 import ru.smarthome.library.SmartHome
 
