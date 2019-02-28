@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "raspberry.smarthome"
+        applicationId "ru.smarthome"
         minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
@@ -61,8 +61,11 @@ dependencies {
         transitive=true
         changing=true
     }
+    implementation(name:'commonlibrary-debug', ext:'aar') {
+        transitive=true
+        changing=true
+    }
     implementation(project(path: ':arduinodevices')) {
-        exclude group: 'ru.smarthome.library'
         transitive=false
     }
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
