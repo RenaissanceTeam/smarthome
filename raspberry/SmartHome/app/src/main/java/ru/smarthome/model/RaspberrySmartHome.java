@@ -1,11 +1,15 @@
 package ru.smarthome.model;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.smarthome.arduinodevices.ArduinoDevice;
 import ru.smarthome.arduinodevices.controllers.ArduinoReadable;
@@ -20,12 +24,13 @@ public class RaspberrySmartHome extends SmartHome {
     public static final String TAG = RaspberrySmartHome.class.getSimpleName();
     private static RaspberrySmartHome sInstance;
 
-    private RaspberrySmartHome() {}
+    private RaspberrySmartHome() {
+    }
 
     public static RaspberrySmartHome getInstance() {
         if (sInstance == null) {
             sInstance = new RaspberrySmartHome();
-            sInstance.devices = new ArrayList<>();
+            sInstance.devices = HomeStateStorage.get();
         }
         return sInstance;
     }
@@ -35,38 +40,43 @@ public class RaspberrySmartHome extends SmartHome {
         if (devices.contains(device)) return false;
         // todo decompose into pubsub, notify every sub about new device added
         Log.d(TAG, "run: startServer initial controllers reading");
-        new Thread() {
+        AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                for (BaseController controller : device.controllers) {
-                    if (controller instanceof ArduinoReadable) {
-                        boolean isRead = false;
-                        int count = 1;
-                        int maxCount = 3;
-                        while (!isRead && count <= maxCount) {
-                            try {
-                                Log.d(TAG, "run: trying for " + count + " time to read " + controller);
-                                ((ArduinoReadable) controller).read();
-                                isRead = true;
-                            } catch (IOException ignored) {
-                                Log.d(TAG, "couldn't read initial state of " + controller);
-                                // todo retry in some time. Have to create some helper class for alarms/retries
-                                // remove this temporary solution
-                                ++count;
-                            }
-                        }
-                    }
-                }
+                readEachController(device.controllers);
             }
-        }.start();
+        });
 
         // todo set alarms for auto refresh for each controller
 
-        return devices.add(device);
+        boolean wasAdded = devices.add(device);
+        if (wasAdded) {
+            HomeStateStorage.set(devices);
+        }
+
+        return wasAdded;
     }
 
-    public void reset() {
-        devices.clear();
+    private void readEachController(List<BaseController> controllers) {
+        for (BaseController controller : controllers) {
+            if (controller instanceof ArduinoReadable) {
+                boolean isRead = false;
+                int count = 1;
+                int maxCount = 3;
+                while (!isRead && count <= maxCount) {
+                    try {
+                        Log.d(TAG, "run: trying for " + count + " time to read " + controller);
+                        ((ArduinoReadable) controller).read();
+                        isRead = true;
+                    } catch (IOException ignored) {
+                        Log.d(TAG, "couldn't read initial state of " + controller);
+                        // todo retry in some time. Have to create some helper class for alarms/retries
+                        // remove this temporary solution
+                        ++count;
+                    }
+                }
+            }
+        }
     }
 
     public IotDevice getByGuid(long guid) {
@@ -100,6 +110,7 @@ public class RaspberrySmartHome extends SmartHome {
         throw new IllegalArgumentException("No device with ip=" + ip);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(this);

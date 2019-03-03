@@ -28,7 +28,6 @@ public class WebServer extends NanoHTTPD implements StoppableServer{
         super(8080);
     }
 
-
     @Override
     public Response serve(IHTTPSession session) {
         Method method = session.getMethod();
