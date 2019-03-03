@@ -13,17 +13,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ru.smarthome.utils.ip.Helpers;
+import ru.smarthome.utils.Helpers;
 
 import static ru.smarthome.MainActivity.DEBUG;
 
 public class UdpServer implements StoppableServer {
 
-    public static final String TAG = UdpServer.class.getSimpleName();
-    public static final int PORT = 59743;
-    public static final String ARDUINO_INIT_URL = "http://%s:8080/init";
-    public static final int THREAD_POOL_SIZE = 4;
-    public static final String REMOTE_ADDR_HEADER = "Remote_Addr";
+    private static final String TAG = UdpServer.class.getSimpleName();
+    private static final int PORT = 59743;
+    private static final String ARDUINO_INIT_URL = "http://%s:8080/init";
+    private static final int THREAD_POOL_SIZE = 4;
+    private static final String REMOTE_ADDR_HEADER = "Remote_Addr";
 
     private AtomicBoolean isRunning = new AtomicBoolean(false);
 
