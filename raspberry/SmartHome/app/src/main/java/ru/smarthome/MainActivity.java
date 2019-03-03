@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseUser;
 import ru.smarthome.auth.GoogleSignInActivity;
 import ru.smarthome.server.StoppableServer;
 import ru.smarthome.server.UdpServer;
-import ru.smarthome.server.WebServer;
+import ru.smarthome.server.http.WebServer;
 
 import static ru.smarthome.model.device.constants.Constants.RC_SIGN_IN;
 
