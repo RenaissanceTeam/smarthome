@@ -1,4 +1,4 @@
-package ru.smarthome.server;
+package ru.smarthome.server.http;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -14,22 +14,25 @@ import fi.iki.elonen.NanoHTTPD;
 import ru.smarthome.model.RaspberrySmartHome;
 import ru.smarthome.arduinodevices.ArduinoDevice;
 import ru.smarthome.arduinodevices.controllers.ArduinoControllersFactory;
-import ru.smarthome.arduinodevices.controllers.ArduinoReadable;
 import ru.smarthome.arduinodevices.controllers.ArduinoWritable;
 import ru.smarthome.arduinodevices.ArduinoControllerResponse;
 import ru.smarthome.library.BaseController;
 import ru.smarthome.library.ControllerType;
+import ru.smarthome.server.StoppableServer;
 
-public class WebServer extends NanoHTTPD implements StoppableServer{
+public class WebServer extends NanoHTTPD implements StoppableServer {
 
     public static final String TAG = WebServer.class.getSimpleName();
+    public static final int PORT = 8080;
+    List<HandlerType> requestHandlers;
 
     public WebServer() {
-        super(8080);
+        super(PORT);
     }
 
     @Override
     public Response serve(IHTTPSession session) {
+
         Method method = session.getMethod();
         String uri = session.getUri();
         Log.d(TAG, "serve: " + method + ":" + uri + " " + session.getQueryParameterString());
@@ -94,23 +97,6 @@ public class WebServer extends NanoHTTPD implements StoppableServer{
     }
 
     @NonNull
-    private Response makeReadRequestToDevice(IHTTPSession session) {
-        Map<String, String> params = session.getParms();
-        BaseController controller = getController(params);
-        if (controller instanceof ArduinoReadable) {
-            try {
-                ArduinoControllerResponse response = ((ArduinoReadable) controller).read();
-                return new Response(Response.Status.OK, "text/json", new Gson().toJson(response));
-            } catch (IOException e) {
-                return getArduinoHttpError();
-            }
-        } else {
-            throw new IllegalStateException("get request to non readable service");
-        }
-    }
-
-
-    @NonNull
     private Response makeWriteRequestToDevice(IHTTPSession session) {
         Map<String, String> params = session.getParms();
         try {
@@ -131,16 +117,7 @@ public class WebServer extends NanoHTTPD implements StoppableServer{
         }
     }
 
-    @NonNull
-    private Response getArduinoHttpError() {
-        return new Response(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "arduino web server not available");
-    }
 
-    private BaseController getController(Map<String, String> params) {
-        // todo add checks so it won't crash
-        long controllerGuid = Long.parseLong(params.get("controller_guid"));
-        return RaspberrySmartHome.getInstance().getController(controllerGuid);
-    }
 
     private boolean initNewArduinoDevice(IHTTPSession session) {
         Map<String, String> params = session.getParms();
