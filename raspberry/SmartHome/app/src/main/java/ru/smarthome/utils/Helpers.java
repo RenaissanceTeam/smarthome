@@ -1,4 +1,4 @@
-package ru.smarthome.utils.ip;
+package ru.smarthome.utils;
 
 import java.io.IOException;
 import java.net.Inet4Address;
