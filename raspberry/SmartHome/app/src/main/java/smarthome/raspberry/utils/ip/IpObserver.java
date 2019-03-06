@@ -1,4 +1,4 @@
-package ru.smarthome.utils.ip;
+package smarthome.raspberry.utils.ip;
 
 public interface IpObserver {
 

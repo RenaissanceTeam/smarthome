@@ -1,4 +1,4 @@
-package ru.smarthome;
+package smarthome.raspberry;
 
 import android.app.Application;
 import android.util.Log;

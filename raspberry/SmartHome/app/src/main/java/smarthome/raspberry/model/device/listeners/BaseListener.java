@@ -1,6 +1,6 @@
-package ru.smarthome.model.device.listeners;
+package smarthome.raspberry.model.device.listeners;
 
-import ru.smarthome.model.device.constants.States;
+import smarthome.raspberry.model.device.constants.States;
 
 /**
  * Basic callback interface

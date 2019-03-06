@@ -1,4 +1,4 @@
-package ru.smarthome.server;
+package smarthome.raspberry.server;
 
 public interface StoppableServer {
     void startServer();

@@ -1,4 +1,4 @@
-package ru.smarthome;
+package smarthome.raspberry;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,12 +8,14 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import ru.smarthome.auth.GoogleSignInActivity;
-import ru.smarthome.server.StoppableServer;
-import ru.smarthome.server.UdpServer;
-import ru.smarthome.server.WebServer;
+import ru.smarthome.BuildConfig;
+import ru.smarthome.R;
+import smarthome.raspberry.auth.GoogleSignInActivity;
+import smarthome.raspberry.server.StoppableServer;
+import smarthome.raspberry.server.UdpServer;
+import smarthome.raspberry.server.WebServer;
 
-import static ru.smarthome.model.device.constants.Constants.RC_SIGN_IN;
+import static smarthome.raspberry.model.device.constants.Constants.RC_SIGN_IN;
 
 
 public class MainActivity extends Activity {

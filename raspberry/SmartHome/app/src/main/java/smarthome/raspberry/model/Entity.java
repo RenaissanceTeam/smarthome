@@ -1,4 +1,4 @@
-package ru.smarthome.model;
+package smarthome.raspberry.model;
 
 public abstract class Entity {
 

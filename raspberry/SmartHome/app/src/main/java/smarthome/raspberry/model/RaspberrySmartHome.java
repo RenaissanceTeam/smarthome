@@ -1,4 +1,4 @@
-package ru.smarthome.model;
+package smarthome.raspberry.model;
 
 import android.util.Log;
 
@@ -7,14 +7,13 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import smarthome.raspberry.MainActivity;
 import ru.smarthome.arduinodevices.ArduinoDevice;
 import ru.smarthome.arduinodevices.controllers.ArduinoReadable;
 import ru.smarthome.library.BaseController;
 import ru.smarthome.library.GUID;
 import ru.smarthome.library.IotDevice;
 import ru.smarthome.library.SmartHome;
-
-import static ru.smarthome.MainActivity.DEBUG;
 
 public class RaspberrySmartHome extends SmartHome {
     public static final String TAG = RaspberrySmartHome.class.getSimpleName();
@@ -31,7 +30,7 @@ public class RaspberrySmartHome extends SmartHome {
     }
 
     public boolean addDevice(final IotDevice device) {
-        if (DEBUG) Log.d(TAG, "addDevice: " + device);
+        if (MainActivity.DEBUG) Log.d(TAG, "addDevice: " + device);
         if (devices.contains(device)) return false;
         // todo decompose into pubsub, notify every sub about new device added
         Log.d(TAG, "run: startServer initial controllers reading");

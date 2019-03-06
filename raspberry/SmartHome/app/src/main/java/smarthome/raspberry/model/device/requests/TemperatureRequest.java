@@ -1,4 +1,4 @@
-package ru.smarthome.model.device.requests;
+package smarthome.raspberry.model.device.requests;
 
 public interface TemperatureRequest {
 

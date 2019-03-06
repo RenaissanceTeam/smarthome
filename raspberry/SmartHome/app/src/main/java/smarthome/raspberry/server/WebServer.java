@@ -1,4 +1,4 @@
-package ru.smarthome.server;
+package smarthome.raspberry.server;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
-import ru.smarthome.model.RaspberrySmartHome;
+import smarthome.raspberry.model.RaspberrySmartHome;
 import ru.smarthome.arduinodevices.ArduinoDevice;
 import ru.smarthome.arduinodevices.controllers.ArduinoControllersFactory;
 import ru.smarthome.arduinodevices.controllers.ArduinoReadable;

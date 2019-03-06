@@ -1,4 +1,4 @@
-package ru.smarthome.utils.ip;
+package smarthome.raspberry.utils.ip;
 
 import java.io.IOException;
 import java.net.Inet4Address;

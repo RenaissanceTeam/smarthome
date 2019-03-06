@@ -1,6 +1,6 @@
-package ru.smarthome.model.scripts;
+package smarthome.raspberry.model.scripts;
 
-import ru.smarthome.model.Entity;
+import smarthome.raspberry.model.Entity;
 
 public class Script extends Entity {
 

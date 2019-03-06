@@ -1,4 +1,4 @@
-package ru.smarthome.server;
+package smarthome.raspberry.server;
 
 import android.util.Log;
 
@@ -13,9 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ru.smarthome.utils.ip.Helpers;
-
-import static ru.smarthome.MainActivity.DEBUG;
+import smarthome.raspberry.MainActivity;
+import smarthome.raspberry.utils.ip.Helpers;
 
 public class UdpServer implements StoppableServer {
 
@@ -65,7 +64,7 @@ public class UdpServer implements StoppableServer {
 
     private void onReceiveFromUpd(DatagramPacket receivePacket) throws IOException {
         String sentence = new String(receivePacket.getData());
-        if (DEBUG) Log.d(TAG, "received: " + sentence); // todo how to get only valid info??
+        if (MainActivity.DEBUG) Log.d(TAG, "received: " + sentence); // todo how to get only valid info??
         // todo check if secured udp packet received
         // todo check if udp packet from iot device
 

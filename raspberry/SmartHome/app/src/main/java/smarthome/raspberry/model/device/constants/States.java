@@ -1,4 +1,4 @@
-package ru.smarthome.model.device.constants;
+package smarthome.raspberry.model.device.constants;
 
 public enum States {
     /**
