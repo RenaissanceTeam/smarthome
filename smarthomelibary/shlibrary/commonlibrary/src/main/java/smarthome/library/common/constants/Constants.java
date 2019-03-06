@@ -1,4 +1,4 @@
-package ru.smarthome.library.constants;
+package smarthome.library.common.constants;
 
 public class Constants {
 

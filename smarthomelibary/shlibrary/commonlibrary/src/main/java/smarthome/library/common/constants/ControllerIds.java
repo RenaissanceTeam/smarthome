@@ -1,4 +1,4 @@
-package ru.smarthome.library.constants;
+package smarthome.library.common.constants;
 
 /**
  * Contains ids for all supported controllers, they should be the same in

@@ -1,9 +1,9 @@
-package ru.smarthome.library;
+package smarthome.library.common;
 
 import com.google.gson.annotations.Expose;
 
-import static ru.smarthome.library.constants.Constants.STATE_PENDING;
-import static ru.smarthome.library.constants.Constants.STATE_UP_TO_DATE;
+import static smarthome.library.common.constants.Constants.STATE_PENDING;
+import static smarthome.library.common.constants.Constants.STATE_UP_TO_DATE;
 
 /**
  * Basic controller interface

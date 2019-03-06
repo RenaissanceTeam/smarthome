@@ -1,4 +1,4 @@
-package ru.smarthome.library;
+package smarthome.library.common;
 
 import java.util.HashSet;
 import java.util.Set;

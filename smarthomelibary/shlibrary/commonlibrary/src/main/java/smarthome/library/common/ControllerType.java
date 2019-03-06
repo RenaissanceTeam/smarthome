@@ -1,6 +1,6 @@
-package ru.smarthome.library;
+package smarthome.library.common;
 
-import static ru.smarthome.library.constants.ControllerIds.*;
+import static smarthome.library.common.constants.ControllerIds.*;
 
 public enum ControllerType {
     ARDUINO_ANALOG(A_ANALOG),
