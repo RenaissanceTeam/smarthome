@@ -3,8 +3,8 @@ package smarthome.raspberry;
 import android.app.Application;
 import android.util.Log;
 
+import static smarthome.raspberry.BuildConfig.DEBUG;
 
-import static ru.smarthome.BuildConfig.DEBUG;
 
 public class App extends Application {
 

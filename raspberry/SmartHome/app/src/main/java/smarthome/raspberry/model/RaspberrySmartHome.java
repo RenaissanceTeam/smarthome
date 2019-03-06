@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import smarthome.raspberry.MainActivity;
-import ru.smarthome.arduinodevices.ArduinoDevice;
-import ru.smarthome.arduinodevices.controllers.ArduinoReadable;
+import smarthome.raspberry.arduinodevices.ArduinoDevice;
+import smarthome.raspberry.arduinodevices.controllers.ArduinoReadable;
 import ru.smarthome.library.BaseController;
 import ru.smarthome.library.GUID;
 import ru.smarthome.library.IotDevice;

@@ -32,7 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import smarthome.raspberry.MainActivity;
-import ru.smarthome.R;
+import smarthome.raspberry.R;
 
 
 public class GoogleSignInActivity extends FragmentActivity implements

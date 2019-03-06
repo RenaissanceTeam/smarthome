@@ -1,6 +1,6 @@
-package ru.smarthome.arduinodevices;
+package smarthome.raspberry.arduinodevices;
 
-import ru.smarthome.arduinodevices.controllers.ArduinoController;
+import smarthome.raspberry.arduinodevices.controllers.ArduinoController;
 import ru.smarthome.library.BaseController;
 import ru.smarthome.library.IotDevice;
 

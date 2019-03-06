@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import static ru.smarthome.BuildConfig.DEBUG;
+import static smarthome.raspberry.BuildConfig.DEBUG;
 
 public class IpFinder implements IpObserver {
 

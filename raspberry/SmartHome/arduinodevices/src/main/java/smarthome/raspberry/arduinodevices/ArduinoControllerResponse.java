@@ -1,4 +1,4 @@
-package ru.smarthome.arduinodevices;
+package smarthome.raspberry.arduinodevices;
 
 import com.google.gson.annotations.SerializedName;
 

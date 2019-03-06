@@ -1,9 +1,9 @@
-package ru.smarthome.arduinodevices.controllers;
+package smarthome.raspberry.arduinodevices.controllers;
 
 import java.io.IOException;
 
-import ru.smarthome.arduinodevices.ArduinoDevice;
-import ru.smarthome.arduinodevices.ArduinoControllerResponse;
+import smarthome.raspberry.arduinodevices.ArduinoControllerResponse;
+import smarthome.raspberry.arduinodevices.ArduinoDevice;
 import ru.smarthome.library.ControllerType;
 
 public class ArduinoHumidity extends ArduinoController implements ArduinoReadable {

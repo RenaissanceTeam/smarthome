@@ -1,5 +1,5 @@
-package ru.smarthome.arduinodevices.controllers;
-import ru.smarthome.arduinodevices.ArduinoDevice;
+package smarthome.raspberry.arduinodevices.controllers;
+import smarthome.raspberry.arduinodevices.ArduinoDevice;
 import ru.smarthome.library.ControllerType;
 
 public class ArduinoControllersFactory {

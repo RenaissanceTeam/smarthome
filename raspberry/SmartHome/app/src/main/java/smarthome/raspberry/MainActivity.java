@@ -8,8 +8,7 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import ru.smarthome.BuildConfig;
-import ru.smarthome.R;
+
 import smarthome.raspberry.auth.GoogleSignInActivity;
 import smarthome.raspberry.server.StoppableServer;
 import smarthome.raspberry.server.UdpServer;
