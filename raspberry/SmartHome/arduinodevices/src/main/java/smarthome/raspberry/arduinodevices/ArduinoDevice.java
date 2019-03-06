@@ -1,8 +1,8 @@
 package smarthome.raspberry.arduinodevices;
 
+import smarthome.library.common.BaseController;
+import smarthome.library.common.IotDevice;
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController;
-import ru.smarthome.library.BaseController;
-import ru.smarthome.library.IotDevice;
 
 public class ArduinoDevice extends IotDevice {
     public final String ip;

@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import smarthome.raspberry.MainActivity;
 import smarthome.raspberry.arduinodevices.ArduinoDevice;
 import smarthome.raspberry.arduinodevices.controllers.ArduinoReadable;
-import ru.smarthome.library.BaseController;
-import ru.smarthome.library.GUID;
-import ru.smarthome.library.IotDevice;
-import ru.smarthome.library.SmartHome;
+import smarthome.library.common.BaseController;
+import smarthome.library.common.GUID;
+import smarthome.library.common.IotDevice;
+import smarthome.library.common.SmartHome;
 
 public class RaspberrySmartHome extends SmartHome {
     public static final String TAG = RaspberrySmartHome.class.getSimpleName();

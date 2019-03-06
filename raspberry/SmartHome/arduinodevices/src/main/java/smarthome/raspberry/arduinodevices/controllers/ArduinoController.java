@@ -13,9 +13,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import smarthome.raspberry.arduinodevices.ArduinoControllerResponse;
 import smarthome.raspberry.arduinodevices.ArduinoDevice;
 import smarthome.raspberry.arduinodevices.ArduinoDeviceAPI;
-import ru.smarthome.library.BaseController;
-import ru.smarthome.library.ControllerType;
-import ru.smarthome.library.GUID;
+import smarthome.library.common.BaseController;
+import smarthome.library.common.ControllerType;
+import smarthome.library.common.GUID;
 
 public class ArduinoController extends BaseController {
     public final ArduinoDevice device;

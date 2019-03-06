@@ -1,14 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.3.11'
+    ext.kotlin_version = '1.3.21'
 
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         classpath 'com.google.gms:google-services:4.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
@@ -22,10 +22,10 @@ allprojects {
         google()
         jcenter()
         flatDir {
-            dirs '../../../smarthomelibary/DataLibrary/datalibrary/build/outputs/aar'
+            dirs '../../../smarthome_libraries/DataLibrary/datalibrary/build/outputs/aar'
         }
         flatDir {
-            dirs '../../../smarthomelibary/shlibrary/commonlibrary/build/outputs/aar'
+            dirs '../../../smarthome_libraries/CommonLibrary/commonlibrary/build/outputs/aar'
         }
     }
 }

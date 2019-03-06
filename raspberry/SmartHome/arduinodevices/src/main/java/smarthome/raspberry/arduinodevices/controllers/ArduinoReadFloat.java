@@ -3,10 +3,10 @@ package smarthome.raspberry.arduinodevices.controllers;
 import java.io.IOException;
 
 import retrofit2.Call;
+import smarthome.library.common.ControllerType;
 import smarthome.raspberry.arduinodevices.ArduinoControllerResponse;
 import smarthome.raspberry.arduinodevices.ArduinoDevice;
 import smarthome.raspberry.arduinodevices.ArduinoDeviceAPI;
-import ru.smarthome.library.ControllerType;
 
 public class ArduinoReadFloat extends ArduinoController implements ArduinoReadable {
 

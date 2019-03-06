@@ -17,8 +17,8 @@ import smarthome.raspberry.arduinodevices.controllers.ArduinoControllersFactory;
 import smarthome.raspberry.arduinodevices.controllers.ArduinoReadable;
 import smarthome.raspberry.arduinodevices.controllers.ArduinoWritable;
 import smarthome.raspberry.arduinodevices.ArduinoControllerResponse;
-import ru.smarthome.library.BaseController;
-import ru.smarthome.library.ControllerType;
+import smarthome.library.common.BaseController;
+import smarthome.library.common.ControllerType;
 
 public class WebServer extends NanoHTTPD implements StoppableServer{
 
