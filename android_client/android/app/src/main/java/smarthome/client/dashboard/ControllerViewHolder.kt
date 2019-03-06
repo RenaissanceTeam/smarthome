@@ -1,11 +1,11 @@
-package ru.smarthome.dashboard
+package smarthome.client.dashboard
 
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import ru.smarthome.R
-import ru.smarthome.library.BaseController
-import ru.smarthome.library.IotDevice
+import smarthome.client.R
+import smarthome.library.common.BaseController
+import smarthome.library.common.IotDevice
 
 class ControllerViewHolder(itemView: View,
                            handler: (controller: BaseController?) -> Unit) : RecyclerView.ViewHolder(itemView) {

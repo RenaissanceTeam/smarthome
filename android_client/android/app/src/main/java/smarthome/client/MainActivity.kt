@@ -1,15 +1,12 @@
-package ru.smarthome
+package smarthome.client
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ViewModelProviders
-import com.firebase.ui.auth.IdpResponse
-import ru.smarthome.constants.Constants
-import ru.smarthome.dashboard.DashboardFragment
+import smarthome.client.constants.Constants
+import smarthome.client.dashboard.DashboardFragment
 
 class MainActivity : FragmentActivity() {
 

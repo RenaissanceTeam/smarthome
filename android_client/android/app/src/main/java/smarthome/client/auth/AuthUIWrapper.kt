@@ -1,4 +1,4 @@
-package ru.smarthome.auth
+package smarthome.client.auth
 
 import android.content.Intent
 import com.firebase.ui.auth.AuthUI

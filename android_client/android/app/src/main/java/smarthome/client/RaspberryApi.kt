@@ -1,11 +1,11 @@
-package ru.smarthome
+package smarthome.client
 
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
-import ru.smarthome.library.RaspberryResponse
-import ru.smarthome.library.SmartHome
+import smarthome.library.common.RaspberryResponse
+import smarthome.library.common.SmartHome
 
 interface RaspberryApi {
 

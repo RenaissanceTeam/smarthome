@@ -1,11 +1,11 @@
-package ru.smarthome
+package smarthome.client
 
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
-import ru.smarthome.auth.AuthUIWrapper
-import ru.smarthome.auth.Authenticator
+import smarthome.client.auth.AuthUIWrapper
+import smarthome.client.auth.Authenticator
 
 // todo maybe change to dagger injection of context
 class MainViewModel(application: Application) : AndroidViewModel(application) {

@@ -1,4 +1,4 @@
-package ru.smarthome.auth
+package smarthome.client.auth
 
 import com.google.firebase.auth.FirebaseAuth
 

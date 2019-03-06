@@ -1,14 +1,12 @@
-package ru.smarthome.dashboard
+package smarthome.client.dashboard
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.google.firebase.auth.FirebaseAuth
-import ru.smarthome.BuildConfig
-import ru.smarthome.Model
-import ru.smarthome.auth.Authenticator
-import ru.smarthome.library.BaseController
-import ru.smarthome.library.ControllerType
-import ru.smarthome.library.IotDevice
+import smarthome.client.BuildConfig
+import smarthome.client.Model
+import smarthome.library.common.BaseController
+import smarthome.library.common.ControllerType
+import smarthome.library.common.IotDevice
 
 class DashboardViewModel : ViewModel() {
     val TAG = DashboardViewModel::class.java.simpleName

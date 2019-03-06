@@ -1,4 +1,4 @@
-package ru.smarthome.constants
+package smarthome.client.constants
 
 object Constants {
     const val SERVER_URL = "http://195.225.57.253:48050/"

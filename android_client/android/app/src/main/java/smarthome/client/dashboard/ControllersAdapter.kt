@@ -1,11 +1,11 @@
-package ru.smarthome.dashboard
+package smarthome.client.dashboard
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.smarthome.BuildConfig
-import ru.smarthome.R
+import smarthome.client.BuildConfig
+import smarthome.client.R
 
 class ControllersAdapter(private val inflater: LayoutInflater,
                          private val viewModel: DashboardViewModel) : RecyclerView.Adapter<ControllerViewHolder>() {

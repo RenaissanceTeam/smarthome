@@ -1,4 +1,4 @@
-package ru.smarthome
+package smarthome.client
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,11 +7,11 @@ import com.google.gson.GsonBuilder
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.smarthome.constants.Constants
-import ru.smarthome.library.BaseController
-import ru.smarthome.library.IotDevice
-import ru.smarthome.library.RaspberryResponse
-import ru.smarthome.library.SmartHome
+import smarthome.client.constants.Constants
+import smarthome.library.common.BaseController
+import smarthome.library.common.IotDevice
+import smarthome.library.common.RaspberryResponse
+import smarthome.library.common.SmartHome
 
 // todo should not be a singleton
 object Model {
