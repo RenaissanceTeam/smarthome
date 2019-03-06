@@ -1,4 +1,4 @@
-package ru.smarthome.database.constants
+package smarthome.library.datalibrary.constants
 
 import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener

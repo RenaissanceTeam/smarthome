@@ -1,4 +1,4 @@
-package ru.smarthome.database.store.firebase
+package smarthome.library.datalibrary.store.firebase
 
 import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
@@ -7,12 +7,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import smarthome.library.datalibrary.constants.DEVICES_FIELD_KEY
+import smarthome.library.datalibrary.constants.FIREBASE_READ_VALUE_ERROR
+import smarthome.library.datalibrary.constants.SMART_HOME_REF
 import ru.smarthome.library.BaseController
 import ru.smarthome.library.IotDevice
 import ru.smarthome.library.SmartHome
-import ru.smarthome.database.constants.*
-import ru.smarthome.database.store.SmartHomeStorage
-import ru.smarthome.database.store.listeners.SmartHomeListener
+import smarthome.library.datalibrary.store.SmartHomeStorage
+import smarthome.library.datalibrary.store.listeners.SmartHomeListener
 
 class FirebaseSmartHomeStorage(
     uid: String,
@@ -51,7 +53,8 @@ class FirebaseSmartHomeStorage(
             .addOnSuccessListener { res ->
                 res.toObject(SmartHome::class.java)?.let { listener.onSmartHomeReceived(it) }
             }
-            .addOnFailureListener { exception -> Log.d(javaClass.name, FIREBASE_READ_VALUE_ERROR, exception) }
+            .addOnFailureListener { exception -> Log.d(javaClass.name,
+                FIREBASE_READ_VALUE_ERROR, exception) }
     }
 
     companion object {
@@ -60,7 +63,8 @@ class FirebaseSmartHomeStorage(
 
         fun getInstance(): FirebaseSmartHomeStorage? {
             if (instance == null)
-                instance = instantiate()
+                instance =
+                    instantiate()
 
             return instance
         }

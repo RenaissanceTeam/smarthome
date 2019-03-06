@@ -1,12 +1,13 @@
-package ru.smarthome.database.store
+package smarthome.library.datalibrary.store
 
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import smarthome.library.datalibrary.constants.defFailureListener
+import smarthome.library.datalibrary.constants.defSuccessListener
 import ru.smarthome.library.BaseController
 import ru.smarthome.library.IotDevice
 import ru.smarthome.library.SmartHome
-import ru.smarthome.database.constants.*
-import ru.smarthome.database.store.listeners.SmartHomeListener
+import smarthome.library.datalibrary.store.listeners.SmartHomeListener
 
 interface SmartHomeStorage {
 

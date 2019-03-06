@@ -1,11 +1,12 @@
-package ru.smarthome.database.store
+package smarthome.library.datalibrary.store
 
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
-import ru.smarthome.database.constants.*
+import smarthome.library.datalibrary.constants.defFailureListener
+import smarthome.library.datalibrary.constants.defSuccessListener
 
-import ru.smarthome.database.model.LinkedAccounts
-import ru.smarthome.database.store.listeners.LinkedAccountsListener
+import smarthome.library.datalibrary.model.LinkedAccounts
+import smarthome.library.datalibrary.store.listeners.LinkedAccountsListener
 
 interface LinkedAccountsStorage {
     fun postLinkedAccounts(
