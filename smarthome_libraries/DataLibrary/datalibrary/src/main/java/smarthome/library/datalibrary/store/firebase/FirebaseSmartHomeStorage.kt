@@ -10,9 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import smarthome.library.datalibrary.constants.DEVICES_FIELD_KEY
 import smarthome.library.datalibrary.constants.FIREBASE_READ_VALUE_ERROR
 import smarthome.library.datalibrary.constants.SMART_HOME_REF
-import ru.smarthome.library.BaseController
-import ru.smarthome.library.IotDevice
-import ru.smarthome.library.SmartHome
+import smarthome.library.common.BaseController
+import smarthome.library.common.IotDevice
+import smarthome.library.common.SmartHome
 import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.listeners.SmartHomeListener
 

@@ -4,9 +4,9 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import smarthome.library.datalibrary.constants.defFailureListener
 import smarthome.library.datalibrary.constants.defSuccessListener
-import ru.smarthome.library.BaseController
-import ru.smarthome.library.IotDevice
-import ru.smarthome.library.SmartHome
+import smarthome.library.common.BaseController
+import smarthome.library.common.IotDevice
+import smarthome.library.common.SmartHome
 import smarthome.library.datalibrary.store.listeners.SmartHomeListener
 
 interface SmartHomeStorage {

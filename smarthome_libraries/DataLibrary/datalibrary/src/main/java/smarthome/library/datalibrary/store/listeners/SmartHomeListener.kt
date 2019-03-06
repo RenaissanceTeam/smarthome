@@ -1,6 +1,6 @@
 package smarthome.library.datalibrary.store.listeners
 
-import ru.smarthome.library.SmartHome
+import smarthome.library.common.SmartHome
 
 interface SmartHomeListener {
     fun onSmartHomeReceived(smartHome: SmartHome)
