@@ -26,6 +26,8 @@ import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.ResponseCmd;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device.*;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.utils.UdpTransport;
 
+import static smarthome.library.common.constants.DeviceTypes.*;
+
 public class GatewayEnv {
 
     private Gateway gateway;
@@ -83,7 +85,7 @@ public class GatewayEnv {
     private void updateDeviceList(ResponseCmd response) {
         Log.i(TAG, "Updating devices info");
 
-        if(response.model.equals(Device.GATEWAY_TYPE)) {
+        if(response.model.equals(GATEWAY_TYPE)) {
             if(gateway != null && gateway.getSid().equals(response.sid))
                 gateway.parseData(response.data);
 
@@ -193,16 +195,16 @@ public class GatewayEnv {
     }
 
     private void initDeviceDictionary() {
-        deviceDictionary.put(Device.DOOR_WINDOW_SENSOR_TYPE, DoorWindowSensor::new);
-        deviceDictionary.put(Device.MOTION_SENSOR_TYPE, MotionSensor::new);
-        deviceDictionary.put(Device.WIRELESS_SWITCH_TYPE, sid -> new WirelessSwitch(sid, transport));
-        deviceDictionary.put(Device.TEMPERATURE_HUMIDITY_SENSOR_TYPE, THSensor::new);
-        deviceDictionary.put(Device.WATER_LEAK_SENSOR_TYPE, WaterLeakSensor::new);
-        deviceDictionary.put(Device.WEATHER_SENSOR_TYPE, WeatherSensor::new);
-        deviceDictionary.put(Device.WIRED_DUAL_WALL_SWITCH_TYPE, sid -> new WiredDualWallSwitch(sid, transport));
-        deviceDictionary.put(Device.WIRED_SINGLE_WALL_SWITCH_TYPE, sid -> new WiredSingleWallSwitch(sid, transport));
-        deviceDictionary.put(Device.SMART_PLUG_TYPE, sid -> new SmartPlug(sid, transport));
-        deviceDictionary.put(Device.SMOKE_SENSOR_TYPE, SmokeSensor::new);
+        deviceDictionary.put(DOOR_WINDOW_SENSOR_TYPE, DoorWindowSensor::new);
+        deviceDictionary.put(MOTION_SENSOR_TYPE, MotionSensor::new);
+        deviceDictionary.put(WIRELESS_SWITCH_TYPE, sid -> new WirelessSwitch(sid, transport));
+        deviceDictionary.put(TEMPERATURE_HUMIDITY_SENSOR_TYPE, THSensor::new);
+        deviceDictionary.put(WATER_LEAK_SENSOR_TYPE, WaterLeakSensor::new);
+        deviceDictionary.put(WEATHER_SENSOR_TYPE, WeatherSensor::new);
+        deviceDictionary.put(WIRED_DUAL_WALL_SWITCH_TYPE, sid -> new WiredDualWallSwitch(sid, transport));
+        deviceDictionary.put(WIRED_SINGLE_WALL_SWITCH_TYPE, sid -> new WiredSingleWallSwitch(sid, transport));
+        deviceDictionary.put(SMART_PLUG_TYPE, sid -> new SmartPlug(sid, transport));
+        deviceDictionary.put(SMOKE_SENSOR_TYPE, SmokeSensor::new);
     }
 
     public static Builder builder() {

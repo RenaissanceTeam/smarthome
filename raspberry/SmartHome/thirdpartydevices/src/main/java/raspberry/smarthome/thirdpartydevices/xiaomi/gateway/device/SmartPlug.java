@@ -1,17 +1,14 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Optional;
 
-import raspberry.smarthome.thirdpartydevices.R;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.SmartPlugCmd;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.utils.UdpTransport;
+
+import static smarthome.library.common.constants.DeviceTypes.SMART_PLUG_TYPE;
 
 public class SmartPlug extends ExtendedDevice {
 
@@ -94,15 +91,10 @@ public class SmartPlug extends ExtendedDevice {
 
     private void sendCmd(String status) {
         try {
-            transport.sendWriteCommand(getSid(), getType(), new SmartPlugCmd(status));
+            transport.sendWriteCommand(getSid(), getDeviceType(), new SmartPlugCmd(status));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public Bitmap getDevicePicture(Resources resources) {
-        return BitmapFactory.decodeResource(resources, R.drawable.xiaomi_smart_plug);
     }
 
     public interface OnStateChangeListener {

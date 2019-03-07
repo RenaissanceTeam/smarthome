@@ -5,11 +5,14 @@ import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 import java.util.List;
 
+import static smarthome.library.common.constants.DeviceTypes.DEFAULT_TYPE;
+
 public class IotDevice {
     @Expose public String name;
     @Expose public String description;
     @Expose public long guid;
     @Expose public List<BaseController> controllers; // todo incapsulation (everywhere)
+    @Expose private String deviceType = DEFAULT_TYPE;
 
     public IotDevice() {} // needed for deserialization
 
@@ -24,6 +27,14 @@ public class IotDevice {
 
     public List<BaseController> getControllers() {
         return controllers;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
     }
 
     @Override

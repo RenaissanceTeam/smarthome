@@ -1,17 +1,14 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Optional;
 
-import raspberry.smarthome.thirdpartydevices.R;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.WiredDualWallSwitchCmd;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.utils.UdpTransport;
+
+import static smarthome.library.common.constants.DeviceTypes.WIRED_DUAL_WALL_SWITCH_TYPE;
 
 public class WiredDualWallSwitch extends Device {
 
@@ -89,7 +86,7 @@ public class WiredDualWallSwitch extends Device {
 
     private void sendCmd(String statusLeft, String statusRight) {
         try {
-            transport.sendWriteCommand(getSid(), getType(), new WiredDualWallSwitchCmd(statusLeft, statusRight));
+            transport.sendWriteCommand(getSid(), getDeviceType(), new WiredDualWallSwitchCmd(statusLeft, statusRight));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,11 +95,6 @@ public class WiredDualWallSwitch extends Device {
     @Override
     public String toString() {
         return super.toString() + "\nstatus left: " + statusLeft + ", status right: " + statusRight;
-    }
-
-    @Override
-    public Bitmap getDevicePicture(Resources resources) {
-        return BitmapFactory.decodeResource(resources, R.drawable.xiaomi_wired_dual_wall_switch);
     }
 
     public interface OnSwitchChannelChangeListener {
