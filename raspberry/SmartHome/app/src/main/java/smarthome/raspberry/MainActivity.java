@@ -8,10 +8,6 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import ru.smarthome.auth.GoogleSignInActivity;
-import ru.smarthome.server.StoppableServer;
-import ru.smarthome.server.UdpServer;
-import ru.smarthome.server.WebServer;
 
 import smarthome.raspberry.auth.GoogleSignInActivity;
 import smarthome.raspberry.server.StoppableServer;

@@ -1,2 +1,4 @@
-build/
+build/*
+!build/outputs
+build/outputs/logs
 google-services.json
