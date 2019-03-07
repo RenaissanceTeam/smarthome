@@ -15,6 +15,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import smarthome.raspberry.MainActivity;
 import smarthome.raspberry.utils.ip.Helpers;
 
+import static smarthome.raspberry.MainActivity.DEBUG;
+
 public class UdpServer implements StoppableServer {
 
     private static final String TAG = UdpServer.class.getSimpleName();

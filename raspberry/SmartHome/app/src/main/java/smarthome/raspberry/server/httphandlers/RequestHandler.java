@@ -1,4 +1,4 @@
-package ru.smarthome.server.http.handlers;
+package smarthome.raspberry.server.httphandlers;
 
 import fi.iki.elonen.NanoHTTPD;
 

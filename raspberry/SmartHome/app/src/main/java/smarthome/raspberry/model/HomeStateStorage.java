@@ -1,9 +1,10 @@
-package ru.smarthome.model;
+package smarthome.raspberry.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.smarthome.library.IotDevice;
+import smarthome.library.common.IotDevice;
+
 
 public class HomeStateStorage {
 

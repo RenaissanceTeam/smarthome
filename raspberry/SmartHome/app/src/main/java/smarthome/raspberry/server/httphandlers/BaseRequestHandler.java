@@ -1,16 +1,21 @@
-package ru.smarthome.server.http.handlers;
+package smarthome.raspberry.server.httphandlers;
 
 import android.support.annotation.NonNull;
 
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
-import ru.smarthome.library.BaseController;
-import ru.smarthome.model.RaspberrySmartHome;
+import smarthome.library.common.BaseController;
+import smarthome.raspberry.model.RaspberrySmartHome;
 
 import static fi.iki.elonen.NanoHTTPD.MIME_PLAINTEXT;
 
 public abstract class BaseRequestHandler implements RequestHandler{
+
+    @NonNull
+    protected NanoHTTPD.Response getInvalidRequestResponse(String message) {
+        return new NanoHTTPD.Response(NanoHTTPD.Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "Invalid request: " + message);
+    }
 
     protected BaseController getController(Map<String, String> params) {
         // todo add checks so it won't crash

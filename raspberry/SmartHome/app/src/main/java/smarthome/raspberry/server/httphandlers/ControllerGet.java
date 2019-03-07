@@ -1,6 +1,4 @@
-package ru.smarthome.server.http.handlers;
-
-import android.support.annotation.NonNull;
+package smarthome.raspberry.server.httphandlers;
 
 import com.google.gson.Gson;
 
@@ -8,9 +6,9 @@ import java.io.IOException;
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
-import ru.smarthome.arduinodevices.ArduinoControllerResponse;
-import ru.smarthome.arduinodevices.controllers.ArduinoReadable;
-import ru.smarthome.library.BaseController;
+import smarthome.library.common.BaseController;
+import smarthome.raspberry.arduinodevices.ArduinoControllerResponse;
+import smarthome.raspberry.arduinodevices.controllers.ArduinoReadable;
 
 public class ControllerGet extends BaseRequestHandler{
 
