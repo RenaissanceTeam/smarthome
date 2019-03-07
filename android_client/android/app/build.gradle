@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "ru.smarthome"
+        applicationId "smarthome.client"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
