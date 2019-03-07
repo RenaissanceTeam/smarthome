@@ -7,7 +7,7 @@ import java.util.Map;
 import fi.iki.elonen.NanoHTTPD;
 import smarthome.library.common.BaseController;
 import smarthome.raspberry.arduinodevices.ArduinoDevice;
-import smarthome.raspberry.model.RaspberrySmartHome;
+import smarthome.raspberry.model.SmartHomeRepository;
 
 public class AlertPost extends BaseRequestHandler {
 
@@ -29,7 +29,7 @@ public class AlertPost extends BaseRequestHandler {
         String value = params.get("value");
         String ip = session.getHeaders().get("http-client-ip");
 
-        ArduinoDevice arduino = RaspberrySmartHome.getInstance().getArduinoByIp(ip);
+        ArduinoDevice arduino = SmartHomeRepository.getInstance().getArduinoByIp(ip);
         BaseController controller = arduino.controllers.get(index);
         controller.state = value;
         Log.d(TAG, "alert! new state=" + value + "for controller " + controller);

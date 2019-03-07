@@ -11,7 +11,7 @@ import smarthome.library.common.BaseController;
 import smarthome.library.common.ControllerType;
 import smarthome.raspberry.arduinodevices.ArduinoDevice;
 import smarthome.raspberry.arduinodevices.controllers.ArduinoControllersFactory;
-import smarthome.raspberry.model.RaspberrySmartHome;
+import smarthome.raspberry.model.SmartHomeRepository;
 
 public class InitPost extends BaseRequestHandler {
     @Override
@@ -33,7 +33,7 @@ public class InitPost extends BaseRequestHandler {
         ArduinoDevice device = new ArduinoDevice(name, description, ip);
         device.controllers = parseControllers(device, rawServices);
 
-        return RaspberrySmartHome.getInstance().addDevice(device);
+        return SmartHomeRepository.getInstance().addDevice(device);
     }
 
     @NotNull
