@@ -6,7 +6,7 @@ import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
 import smarthome.library.common.BaseController;
-import smarthome.raspberry.model.RaspberrySmartHome;
+import smarthome.raspberry.model.SmartHomeRepository;
 
 import static fi.iki.elonen.NanoHTTPD.MIME_PLAINTEXT;
 
@@ -20,7 +20,7 @@ public abstract class BaseRequestHandler implements RequestHandler{
     protected BaseController getController(Map<String, String> params) {
         // todo add checks so it won't crash
         long controllerGuid = Long.parseLong(params.get("controller_guid"));
-        return RaspberrySmartHome.getInstance().getController(controllerGuid);
+        return SmartHomeRepository.getInstance().getController(controllerGuid);
     }
 
     @NonNull
