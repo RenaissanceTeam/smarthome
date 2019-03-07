@@ -1,18 +1,8 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
-public abstract class Device extends raspberry.smarthome.thirdpartydevices.Device {
+import smarthome.library.common.IotDevice;
 
-    public static final String GATEWAY_TYPE = "xiaomi_gateway_2";
-    public static final String DOOR_WINDOW_SENSOR_TYPE = "magnet";
-    public static final String MOTION_SENSOR_TYPE = "motion";
-    public static final String WIRELESS_SWITCH_TYPE = "switch";
-    public static final String TEMPERATURE_HUMIDITY_SENSOR_TYPE = "sensor_ht";
-    public static final String WATER_LEAK_SENSOR_TYPE = "sensor_wleak.aq1";
-    public static final String WEATHER_SENSOR_TYPE = "weather.v1";
-    public static final String WIRED_DUAL_WALL_SWITCH_TYPE = "ctrl_neutral2";
-    public static final String WIRED_SINGLE_WALL_SWITCH_TYPE = "ctrl_neutral1";
-    public static final String SMART_PLUG_TYPE = "plug";
-    public static final String SMOKE_SENSOR_TYPE = "smoke";
+public abstract class Device extends IotDevice {
 
     static final String IP_KEY = "ip";
     static final String RGB_KEY = "rgb";
@@ -45,29 +35,21 @@ public abstract class Device extends raspberry.smarthome.thirdpartydevices.Devic
     static final String ALARM_KEY = "alarm";
     static final String DENSITY_KEY = "density";
 
-    public String name = "";
-
     private String sid;
-
-    private String type;
 
     public Device(String sid, String type) {
         this.sid = sid;
-        this.type = type;
+        setDeviceType(type);
     }
 
     public String getSid() {
         return sid;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public abstract void parseData(String cmd);
 
     @Override
     public String toString() {
-        return "|\n--- Xiaomi xiaomi_gateway_2 device ---\n" + "type: " + type + ", sid: " + sid + ", name: " + name;
+        return "|\n--- Xiaomi gateway device ---\n" + "type: " + getDeviceType() + ", sid: " + sid + ", name: " + name;
     }
 }

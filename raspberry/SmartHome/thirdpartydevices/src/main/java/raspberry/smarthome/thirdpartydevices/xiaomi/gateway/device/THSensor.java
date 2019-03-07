@@ -1,15 +1,11 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Optional;
 
-import raspberry.smarthome.thirdpartydevices.R;
+import static smarthome.library.common.constants.DeviceTypes.TEMPERATURE_HUMIDITY_SENSOR_TYPE;
 
 public class THSensor extends ExtendedDevice {
 
@@ -89,11 +85,6 @@ public class THSensor extends ExtendedDevice {
     @Override
     public String toString() {
         return super.toString() + "\ntemperature: " + temperature + "C, humidity: " + humidity + "%";
-    }
-
-    @Override
-    public Bitmap getDevicePicture(Resources resources) {
-        return BitmapFactory.decodeResource(resources, R.drawable.xiaomi_th_sensor);
     }
 
     public interface OnTemperatureChangeListener {

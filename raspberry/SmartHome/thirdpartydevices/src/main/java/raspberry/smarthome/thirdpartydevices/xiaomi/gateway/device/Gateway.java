@@ -1,15 +1,12 @@
 package raspberry.smarthome.thirdpartydevices.xiaomi.gateway.device;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import raspberry.smarthome.thirdpartydevices.R;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.command.GatewayLightCmd;
 import raspberry.smarthome.thirdpartydevices.xiaomi.gateway.utils.UdpTransport;
+
+import static smarthome.library.common.constants.DeviceTypes.GATEWAY_TYPE;
 
 public class Gateway extends Device {
 
@@ -86,7 +83,7 @@ public class Gateway extends Device {
         if (illumination < 300 || illumination > 1300) throw new IllegalArgumentException("Illumination must be in range 300 - 1300");
 
         try {
-            udpTransport.sendWriteCommand(getSid(), getType(), new GatewayLightCmd(rgb, illumination));
+            udpTransport.sendWriteCommand(getSid(), getDeviceType(), new GatewayLightCmd(rgb, illumination));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,14 +91,9 @@ public class Gateway extends Device {
 
     public void disableLight() {
         try {
-            udpTransport.sendWriteCommand(getSid(), getType(), new GatewayLightCmd(0, 0));
+            udpTransport.sendWriteCommand(getSid(), getDeviceType(), new GatewayLightCmd(0, 0));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public Bitmap getDevicePicture(Resources resources) {
-        return BitmapFactory.decodeResource(resources, R.drawable.xiaomi_gateway_2);
     }
 }
