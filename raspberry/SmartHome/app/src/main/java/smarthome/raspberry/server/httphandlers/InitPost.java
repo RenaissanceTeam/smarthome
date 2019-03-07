@@ -1,5 +1,7 @@
 package smarthome.raspberry.server.httphandlers;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,21 +28,24 @@ public class InitPost extends BaseRequestHandler {
         String name = params.get("name");
         String description = params.get("description");
         String ip = session.getHeaders().get("http-client-ip");
+        String[] rawServices = params.get("services").split(";");
 
         ArduinoDevice device = new ArduinoDevice(name, description, ip);
-
-        String[] rawServices = params.get("services").split(";");
-        List<BaseController> controllers = new ArrayList<>();
-        int index = 0;
-        for (String rawService : rawServices) {
-            int id = Integer.parseInt(rawService.trim());
-            ControllerType type = ControllerType.getById(id);
-            controllers.add(ArduinoControllersFactory.createArduinoController(type, device, index));
-            ++index;
-        }
-        device.controllers = controllers;
+        device.controllers = parseControllers(device, rawServices);
 
         return RaspberrySmartHome.getInstance().addDevice(device);
     }
 
+    @NotNull
+    private List<BaseController> parseControllers(ArduinoDevice device, String[] rawServices) {
+        List<BaseController> controllers = new ArrayList<>();
+
+        for (int i = 0; i < rawServices.length; i++) {
+            int id = Integer.parseInt(rawServices[i].trim());
+            ControllerType type = ControllerType.getById(id);
+            controllers.add(ArduinoControllersFactory.createArduinoController(type, device, i));
+        }
+
+        return controllers;
+    }
 }
