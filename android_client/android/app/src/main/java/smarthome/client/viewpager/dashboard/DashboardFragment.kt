@@ -1,4 +1,4 @@
-package smarthome.client.dashboard
+package smarthome.client.viewpager.dashboard
 
 import android.os.Bundle
 import android.util.Log

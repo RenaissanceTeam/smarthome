@@ -2,9 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/dashboard"
+        android:icon="@drawable/list"
         android:title="@string/dashboard" />
 
     <item
+        android:id="@+id/scripts"
+        android:icon="@drawable/script"
+        android:title="@string/scripts" />
+
+    <item
+        android:id="@+id/addition"
+        android:icon="@drawable/add"
+        android:title="@string/new_device" />
+
+    <item
         android:id="@+id/settings"
+        android:icon="@drawable/settings"
         android:title="@string/settings" />
 </menu>
