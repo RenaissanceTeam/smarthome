@@ -1,11 +1,10 @@
-package smarthome.client.dashboard
+package smarthome.client.viewpager.dashboard
 
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import org.w3c.dom.Text
 import smarthome.client.R
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice

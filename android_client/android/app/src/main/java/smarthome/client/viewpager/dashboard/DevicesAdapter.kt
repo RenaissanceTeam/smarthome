@@ -1,4 +1,4 @@
-package smarthome.client.dashboard
+package smarthome.client.viewpager.dashboard
 
 import android.util.Log
 import android.view.LayoutInflater
