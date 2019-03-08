@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import smarthome.client.BuildConfig
 import smarthome.client.R
+import smarthome.library.common.BaseController
+import smarthome.library.common.IotDevice
 
 class DashboardFragment : Fragment() {
 
@@ -22,15 +24,15 @@ class DashboardFragment : Fragment() {
 
     private var refreshLayout: SwipeRefreshLayout? = null
     private var controllersView: RecyclerView? = null
-    private var adapterForControllersList: ControllersAdapter? = null
+    private var adapterForControllersList: DevicesAdapter? = null
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         
         if (BuildConfig.DEBUG) Log.d(TAG, "onActivity created, create viewModel")
-        viewModel.controllers.observe(this, Observer {
-            if (BuildConfig.DEBUG) Log.d(TAG, "controllersView've changed, now its ${viewModel.controllers.value}")
+        viewModel.devices.observe(this, Observer {
+            if (BuildConfig.DEBUG) Log.d(TAG, "controllersView've changed, now its ${viewModel.devices.value}")
             adapterForControllersList?.notifyDataSetChanged()
             viewModel.receivedNewSmartHomeState()
         })
@@ -39,7 +41,8 @@ class DashboardFragment : Fragment() {
             refreshLayout?.isRefreshing = it 
         })
 
-        adapterForControllersList = ControllersAdapter(layoutInflater, viewModel)
+        adapterForControllersList = DevicesAdapter(layoutInflater, viewModel,
+                ::onDeviceClick, ::onControllerClick)
         controllersView?.adapter = adapterForControllersList
     }
 
@@ -57,5 +60,14 @@ class DashboardFragment : Fragment() {
         controllersView?.layoutManager = LinearLayoutManager(view.context)
 
         refreshLayout?.setOnRefreshListener { viewModel.requestSmartHomeState() }
+    }
+
+    private fun onDeviceClick(device: IotDevice?) {
+        Log.d(TAG, "clicked on $device")
+    }
+
+    private fun onControllerClick(controller: BaseController) {
+        Log.d(TAG, "clicked on $controller")
+
     }
 }
