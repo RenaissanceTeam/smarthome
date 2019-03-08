@@ -44,7 +44,9 @@ public class UdpServer implements StoppableServer {
                 while (isRunning.get()) {
                     try (DatagramSocket serverSocket = new DatagramSocket(PORT)) {
 
+                        Log.d(TAG, "run: block to receive udp packet");
                         DatagramPacket receivePacket = listen(serverSocket); // blocking call
+                        Log.d(TAG, "run: cancel blocking, received packet");
                         serverSocket.close();
 
                         onReceiveFromUpd(receivePacket); // blocking call
