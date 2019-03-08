@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:18.1.0'
 
     implementation(name:'commonlibrary-debug', ext:'aar') {
-        transitive=true
+        transitive=false
         changing=true
     }
 
