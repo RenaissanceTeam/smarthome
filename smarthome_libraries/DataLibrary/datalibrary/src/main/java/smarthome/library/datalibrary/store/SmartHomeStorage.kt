@@ -2,17 +2,27 @@ package smarthome.library.datalibrary.store
 
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
-import smarthome.library.datalibrary.constants.defFailureListener
-import smarthome.library.datalibrary.constants.defSuccessListener
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
+import smarthome.library.datalibrary.constants.defFailureListener
+import smarthome.library.datalibrary.constants.defSuccessListener
+import smarthome.library.datalibrary.store.listeners.DeviceListener
+import smarthome.library.datalibrary.store.listeners.DevicesObserver
 import smarthome.library.datalibrary.store.listeners.SmartHomeListener
 
 interface SmartHomeStorage {
 
     fun postSmartHome(
         smartHome: SmartHome,
+        successListener: OnSuccessListener<Void> = defSuccessListener,
+        failureListener: OnFailureListener = defFailureListener
+    )
+
+    fun getSmartHome(listener: SmartHomeListener)
+
+    fun addDevice(
+        iotDevice: IotDevice,
         successListener: OnSuccessListener<Void> = defSuccessListener,
         failureListener: OnFailureListener = defFailureListener
     )
@@ -25,11 +35,27 @@ interface SmartHomeStorage {
      * @param successListener OnSuccessListener, default implementation perform logging
      * @param failureListener OnFailureListener, default implementation perform logging
      */
-    fun updateSmartHomeDevice(
+    fun updateDevice(
         device: IotDevice, controller: BaseController? = null,
         successListener: OnSuccessListener<Void> = defSuccessListener,
         failureListener: OnFailureListener = defFailureListener
     )
 
-    fun getSmartHome(listener: SmartHomeListener)
+    fun getDevice(
+        guid: Long,
+        listener: DeviceListener,
+        failureListener: OnFailureListener = defFailureListener
+    )
+
+    fun removeDevice(
+        iotDevice: IotDevice,
+        successListener: OnSuccessListener<Void> = defSuccessListener,
+        failureListener: OnFailureListener = defFailureListener
+    )
+
+    fun observeDevicesUpdates(
+        observer: DevicesObserver
+    )
+
+    fun detachDevicesUpdatesObserver()
 }

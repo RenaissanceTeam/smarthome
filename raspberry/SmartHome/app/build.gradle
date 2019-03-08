@@ -50,19 +50,18 @@ dependencies {
     // http server
     implementation 'com.nanohttpd:nanohttpd-webserver:2.1.1'
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.6'
-    implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-firestore:18.1.0'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.firebase:firebase-client-android:2.5.2'
-    implementation 'com.google.firebase:firebase-firestore:17.1.5'
 
     implementation(name:'datalibrary-debug', ext:'aar') {
-        transitive=true
+        transitive=false
         changing=true
     }
     implementation(name:'commonlibrary-debug', ext:'aar') {
-        transitive=true
+        transitive=false
         changing=true
     }
     implementation(project(path: ':arduinodevices')) {
