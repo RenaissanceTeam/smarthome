@@ -1,35 +1,24 @@
 package smarthome.client.dashboard
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
 import smarthome.library.common.BaseController
-import smarthome.library.common.IotDevice
 
-class ControllerViewHolder(itemView: View,
-                           handler: (controller: BaseController?) -> Unit) : RecyclerView.ViewHolder(itemView) {
-    val TAG = ControllerViewHolder::class.java.simpleName
-    val UNKNOWN_STATE = "-"
+class ControllerViewHolder(inflater: LayoutInflater, root: ViewGroup) {
 
+    private val itemView = inflater.inflate(R.layout.controller_item, root, false)
     private val guid: TextView = itemView.findViewById(R.id.controller_guid)
     private val type: TextView = itemView.findViewById(R.id.type)
     private val state: TextView = itemView.findViewById(R.id.state)
+    val UNKNOWN_STATE = "-"
 
-    private var device: IotDevice? = null
-    private var controller: BaseController? = null
-
-    init {
-        itemView.setOnClickListener { handler.invoke(controller) }
-    }
-
-    fun bind(device: IotDevice?, controller: BaseController?) {
-        this.controller = controller
-        this.device = device
-
-        guid.text = "${controller?.guid}"
-        type.text = "${controller?.type}"
-        state.text = controller?.state ?: UNKNOWN_STATE
+    fun filled(controller: BaseController): View {
+        guid.text = "${controller.guid}"
+        type.text = "${controller.type ?: UNKNOWN_STATE}"
+        state.text = controller.state ?: UNKNOWN_STATE
+        return itemView
     }
 }
-

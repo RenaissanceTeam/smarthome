@@ -17,9 +17,8 @@ import smarthome.library.common.SmartHome
 object Model {
     private val TAG = Model::class.java.simpleName
 
-    private val mutableControllers = MutableLiveData<MutableList<BaseController>>()
+    private val mutableDevices = MutableLiveData<MutableList<IotDevice>>()
 
-    private var controllers = mutableListOf<BaseController>()
     private var smartHomeState: SmartHome? = null
 
     private val raspberryApi: RaspberryApi
@@ -34,12 +33,12 @@ object Model {
             return retrofit.create(RaspberryApi::class.java)
         }
 
-    fun getHomeState() : LiveData<MutableList<BaseController>> {
-        mutableControllers.value?.let { return mutableControllers }
+    fun getHomeState() : LiveData<MutableList<IotDevice>> {
+        mutableDevices.value?.let { return mutableDevices }
         return requestHomeStateFromRaspberry()
     }
 
-    fun requestHomeStateFromRaspberry(): LiveData<MutableList<BaseController>> {
+    fun requestHomeStateFromRaspberry(): LiveData<MutableList<IotDevice>> {
         if (BuildConfig.DEBUG) Log.d(TAG, "make http request to raspberry to get state")
 
         raspberryApi.getSmartHomeState().enqueue {
@@ -49,9 +48,8 @@ object Model {
                     if (BuildConfig.DEBUG) Log.d(TAG, "responseBody= ${response.body()}")
                     response.body()?.let { newHomeState ->
                         smartHomeState = newHomeState
-                        controllers = getAllControllersFrom(newHomeState)
-                        mutableControllers.value = controllers
-                        if (BuildConfig.DEBUG) Log.d(TAG, "set newHome value to ${mutableControllers.value}")
+                        mutableDevices.value = newHomeState.devices
+                        if (BuildConfig.DEBUG) Log.d(TAG, "set newHome value to ${mutableDevices.value}")
                     }
                     // todo notify about error
                 } else {
@@ -63,7 +61,7 @@ object Model {
                 handleRequestFailure(it)
             }
         }
-        return mutableControllers
+        return mutableDevices
     }
 
     fun getDevice(controller: BaseController) : IotDevice? {
@@ -77,7 +75,7 @@ object Model {
     }
 
     // todo should return LiveData<ControllerState> but now String is controller state
-    fun readController(controller: BaseController): LiveData<MutableList<BaseController>> {
+    fun readController(controller: BaseController): LiveData<MutableList<IotDevice>> {
         if (BuildConfig.DEBUG) Log.d(TAG, "read $controller")
         val controllerGuid = controller.guid
 
@@ -92,11 +90,11 @@ object Model {
 
             onFailure = { handleRequestFailure(it) }
         }
-        return mutableControllers
+        return mutableDevices
     }
 
     fun changeControllerState(controller: BaseController,
-                              value: String): LiveData<MutableList<BaseController>> {
+                              value: String): LiveData<MutableList<IotDevice>> {
         if (BuildConfig.DEBUG) Log.d(TAG, "change ${controller.state} to $value in $controller")
         val controllerGuid = controller.guid
 
@@ -111,14 +109,19 @@ object Model {
 
             onFailure = { handleRequestFailure(it) }
         }
-        return mutableControllers
+        return mutableDevices
     }
 
     private fun handleReadControllerStateResponse(controller: BaseController,
                                                   response: Response<RaspberryResponse>) {
         if (BuildConfig.DEBUG) Log.d(TAG, "change state in mutable controllersLD")
-        controllers.find { it == controller }?.state = response.body()?.response
-        mutableControllers.value = controllers
+        // todo can it be replaced with 'controller.state = ...' because controller should be the same object
+        val devices = mutableDevices.value ?: return
+        val changedDevice = devices.find { it.controllers.contains(controller) }
+        val changedController = changedDevice?.controllers?.find { it == controller }
+        changedController?.state = response.body()?.response
+
+        mutableDevices.value = devices
     }
 
     private fun handleResponseError(response: Response<RaspberryResponse>) {

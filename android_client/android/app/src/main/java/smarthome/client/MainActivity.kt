@@ -19,7 +19,7 @@ class MainActivity : FragmentActivity() {
 
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.root_view, DashboardFragment(), DashboardFragment::class.java.simpleName)
+                .add(R.id.main_content, DashboardFragment(), DashboardFragment::class.java.simpleName)
                 .commit()
 
         viewModel.needAuth.observe(this, Observer { needAuth -> if (needAuth) launchAuthActivity()})
