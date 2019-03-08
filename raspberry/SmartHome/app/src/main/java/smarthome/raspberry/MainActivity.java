@@ -31,7 +31,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         if (DEBUG) Log.d(TAG, "onCreate");
 
-        // todo consider moving these out of the activity, maybe to service
         httpServer = new WebServer();
         udpServer = new UdpServer();
     }
@@ -49,14 +48,6 @@ public class MainActivity extends Activity {
 //        auth();
     }
 
-    private void auth() {
-        // check for auth
-        mAuth = FirebaseAuth.getInstance();
-
-        if (mAuth.getCurrentUser() == null)
-            startActivity(new Intent(this, GoogleSignInActivity.class));
-    }
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -64,9 +55,12 @@ public class MainActivity extends Activity {
         stopServer(udpServer);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    private void auth() {
+        // check for auth
+        mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() == null)
+            startActivity(new Intent(this, GoogleSignInActivity.class));
     }
 
     @Override
