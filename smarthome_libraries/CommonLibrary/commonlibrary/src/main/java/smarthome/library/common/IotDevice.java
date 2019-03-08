@@ -1,5 +1,6 @@
 package smarthome.library.common;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
@@ -35,6 +36,13 @@ public class IotDevice {
 
     public void setDeviceType(String deviceType) {
         this.deviceType = deviceType;
+    }
+
+    /**
+     * Serialize to json using Gson, the class later can be deserialized using Gson
+     */
+    public String gsonned() {
+        return new Gson().toJson(this);
     }
 
     @Override
