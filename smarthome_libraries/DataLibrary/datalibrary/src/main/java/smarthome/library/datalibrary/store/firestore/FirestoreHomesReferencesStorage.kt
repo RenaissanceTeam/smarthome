@@ -8,14 +8,15 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import smarthome.library.datalibrary.constants.ACCOUNTS_NODE
 import smarthome.library.datalibrary.constants.ACCOUNT_HOMES_ARRAY_REF
-import smarthome.library.datalibrary.constants.defFailureListener
+import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.model.HomesReferences
 import smarthome.library.datalibrary.store.HomesReferencesStorage
+import smarthome.library.datalibrary.store.listeners.HomeExistenceListener
 import smarthome.library.datalibrary.store.listeners.HomesReferencesListener
 
 class FirestoreHomesReferencesStorage(
     uid: String,
-    db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 ) : HomesReferencesStorage {
 
     private val ref: DocumentReference = db.collection(ACCOUNTS_NODE).document(uid)
@@ -50,12 +51,29 @@ class FirestoreHomesReferencesStorage(
             .addOnFailureListener(failureListener)
     }
 
-    override fun getHomesReferences(listener: HomesReferencesListener) {
+    override fun getHomesReferences(
+        listener: HomesReferencesListener,
+        onFailureListener: OnFailureListener) {
         ref.get()
             .addOnSuccessListener { res ->
                 res.toObject(HomesReferences::class.java)?.let { listener.onHomesReferencesReceived(it) }
             }
-            .addOnFailureListener(defFailureListener)
+            .addOnFailureListener(onFailureListener)
+    }
+
+    override fun checkIfHomeExists(
+        homeId: String,
+        listener: HomeExistenceListener,
+        failureListener: OnFailureListener
+    ) {
+        db.collection(HOMES_NODE).document(homeId)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists())
+                    listener.onHomeAlreadyExists()
+                else listener.onHomeDoesNotExist()
+            }
+            .addOnFailureListener(failureListener)
     }
 
     companion object {

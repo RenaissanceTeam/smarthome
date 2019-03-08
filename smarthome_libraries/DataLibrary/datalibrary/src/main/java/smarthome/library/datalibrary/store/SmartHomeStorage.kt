@@ -2,11 +2,11 @@ package smarthome.library.datalibrary.store
 
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
-import smarthome.library.datalibrary.constants.defFailureListener
-import smarthome.library.datalibrary.constants.defSuccessListener
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
+import smarthome.library.datalibrary.constants.defFailureListener
+import smarthome.library.datalibrary.constants.defSuccessListener
 import smarthome.library.datalibrary.store.listeners.DeviceListener
 import smarthome.library.datalibrary.store.listeners.DevicesObserver
 import smarthome.library.datalibrary.store.listeners.SmartHomeListener
@@ -43,7 +43,8 @@ interface SmartHomeStorage {
 
     fun getDevice(
         guid: Long,
-        listener: DeviceListener
+        listener: DeviceListener,
+        failureListener: OnFailureListener = defFailureListener
     )
 
     fun removeDevice(
