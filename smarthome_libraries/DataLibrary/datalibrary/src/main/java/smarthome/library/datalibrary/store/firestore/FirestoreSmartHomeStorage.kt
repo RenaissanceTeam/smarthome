@@ -75,12 +75,17 @@ class FirestoreSmartHomeStorage(
             .addOnFailureListener(failureListener)
     }
 
-    override fun getDevice(guid: Long, listener: DeviceListener) {
+    override fun getDevice(
+        guid: Long,
+        listener: DeviceListener,
+        failureListener: OnFailureListener
+    ) {
         getDeviceRef(guid)
             .get()
             .addOnSuccessListener { document ->
                 listener.onDeviceReceived(document.toObject(IotDevice::class.java)!!)
             }
+            .addOnFailureListener(failureListener)
     }
 
     override fun removeDevice(
