@@ -5,24 +5,37 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import smarthome.client.constants.Constants
-import smarthome.client.dashboard.DashboardFragment
+import smarthome.client.viewpager.Pages
+import smarthome.client.viewpager.ViewpagerAdapter
 
 class MainActivity : FragmentActivity() {
 
     private val viewModel
             by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
 
+    private val bottomNavigation by lazy { findViewById<BottomNavigationView>(R.id.bottom_navigation) }
+    private val viewpager by lazy { findViewById<ViewPager>(R.id.viewpager) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportFragmentManager
-                .beginTransaction()
-                .add(R.id.root_view, DashboardFragment(), DashboardFragment::class.java.simpleName)
-                .commit()
+        viewModel.needAuth.observe(this, Observer { needAuth -> if (needAuth) launchAuthActivity() })
+        viewModel.page.observe(this, Observer { viewpager.currentItem = it })
 
-        viewModel.needAuth.observe(this, Observer { needAuth -> if (needAuth) launchAuthActivity()})
+        viewpager.adapter = ViewpagerAdapter(supportFragmentManager)
+        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(a: Int) = Unit
+            override fun onPageScrolled(a: Int, b: Float, c: Int) = Unit
+            override fun onPageSelected(position: Int) {
+                bottomNavigation.selectedItemId = Pages.values()[position].menuItemId
+            }
+        })
+
+        bottomNavigation.setOnNavigationItemSelectedListener { viewModel.onBottomNavigationClick(it) }
     }
 
     override fun onStart() {
@@ -44,4 +57,6 @@ class MainActivity : FragmentActivity() {
             }
         }
     }
+
+
 }
