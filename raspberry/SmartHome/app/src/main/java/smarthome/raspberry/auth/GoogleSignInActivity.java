@@ -33,6 +33,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import smarthome.raspberry.MainActivity;
 import smarthome.raspberry.R;
+import smarthome.raspberry.utils.HomeController;
 
 
 public class GoogleSignInActivity extends FragmentActivity implements
@@ -130,6 +131,8 @@ public class GoogleSignInActivity extends FragmentActivity implements
 
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "Authorization succeeded.", Toast.LENGTH_SHORT).show();
+
+                            new HomeController(getApplicationContext()).start();
 
                             finish();
                         } else {

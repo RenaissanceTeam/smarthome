@@ -36,9 +36,23 @@ class FirestoreHomesReferencesStorage(
         successListener: OnSuccessListener<Void>,
         failureListener: OnFailureListener
     ) {
-        ref.update(ACCOUNT_HOMES_ARRAY_REF, FieldValue.arrayUnion(homeReference))
-            .addOnSuccessListener(successListener)
+        ref.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    ref.update(ACCOUNT_HOMES_ARRAY_REF, FieldValue.arrayUnion(homeReference))
+                        .addOnSuccessListener(successListener)
+                        .addOnFailureListener(failureListener)
+
+                } else {
+                    val data = HomesReferences()
+                    data.homes.add(homeReference)
+                    ref.set(data)
+                        .addOnSuccessListener(successListener)
+                        .addOnFailureListener(failureListener)
+                }
+            }
             .addOnFailureListener(failureListener)
+
     }
 
     override fun updateHomesReferences(
@@ -53,12 +67,12 @@ class FirestoreHomesReferencesStorage(
 
     override fun getHomesReferences(
         listener: HomesReferencesListener,
-        onFailureListener: OnFailureListener) {
+        failureListener: OnFailureListener) {
         ref.get()
             .addOnSuccessListener { res ->
                 res.toObject(HomesReferences::class.java)?.let { listener.onHomesReferencesReceived(it) }
             }
-            .addOnFailureListener(onFailureListener)
+            .addOnFailureListener(failureListener)
     }
 
     override fun checkIfHomeExists(
