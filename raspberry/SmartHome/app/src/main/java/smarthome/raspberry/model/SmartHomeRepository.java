@@ -26,7 +26,6 @@ public class SmartHomeRepository extends SmartHome {
     public static SmartHomeRepository getInstance() {
         if (sInstance == null) {
             sInstance = new SmartHomeRepository();
-            sInstance.devices = HomeStateStorage.get();
         }
         return sInstance;
     }

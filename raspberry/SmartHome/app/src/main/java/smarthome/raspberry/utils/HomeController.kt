@@ -9,6 +9,7 @@ import smarthome.library.datalibrary.store.firestore.FirestoreHomesReferencesSto
 import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
 import smarthome.library.datalibrary.store.listeners.HomeExistenceListener
 import smarthome.raspberry.BuildConfig.DEBUG
+import smarthome.raspberry.model.SmartHomeRepository
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -22,8 +23,10 @@ class HomeController(context: Context) {
     fun start() {
         if (DEBUG) Log.d(javaClass.name, "start")
 
-        if (sharedPreferencesHelper.isHomeIdExists())
+        if (sharedPreferencesHelper.isHomeIdExists()) {
+            if (DEBUG) Log.d(javaClass.name, "home id already saved in shared prefs")
             return
+        }
 
         checkAndSaveHome()
     }
@@ -40,6 +43,8 @@ class HomeController(context: Context) {
             }
 
             override fun onHomeDoesNotExist() {
+                if (DEBUG) Log.d(javaClass.name, "home does not exist")
+
                 sharedPreferencesHelper.setHomeId(homeId)
 
                 storage.addHomeReference(
@@ -53,11 +58,8 @@ class HomeController(context: Context) {
                             }
                         })
 
-                FirestoreSmartHomeStorage.getInstance(homeId)!!.createSmartHome(
-                        successListener = OnSuccessListener {
-                            if (DEBUG) Log.d(javaClass.name, "home node created")
-                        }
-                )
+                val homeStorage = FirestoreSmartHomeStorage.getInstance(homeId) ?: return
+                homeStorage.postSmartHome(SmartHomeRepository.getInstance())
             }
         })
     }
