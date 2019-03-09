@@ -31,10 +31,10 @@ public class BaseController {
     }
 
     public boolean isPending() {
-        return serveState.equals(STATE_PENDING);
+        return STATE_PENDING.equals(serveState);
     }
 
     public boolean isUpToDate() {
-       return serveState.equals(STATE_UP_TO_DATE);
+       return STATE_UP_TO_DATE.equals(serveState);
     }
 }

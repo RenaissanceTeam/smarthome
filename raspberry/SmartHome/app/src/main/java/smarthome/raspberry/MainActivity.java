@@ -49,7 +49,20 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        auth();
+
+        if (!isAuthenticated()) {
+            authenticate();
+        } else {
+            new HomeController(this).start();
+        }
+    }
+
+    private boolean isAuthenticated() {
+        return FirebaseAuth.getInstance().getCurrentUser() != null;
+    }
+
+    private void authenticate() {
+        startActivity(new Intent(this, GoogleSignInActivity.class));
     }
 
     @Override
@@ -57,14 +70,6 @@ public class MainActivity extends Activity {
         super.onStop();
         stopServer(httpServer);
         stopServer(udpServer);
-    }
-
-    private void auth() {
-        // check for auth
-        mAuth = FirebaseAuth.getInstance();
-
-        if (mAuth.getCurrentUser() == null)
-            startActivity(new Intent(this, GoogleSignInActivity.class));
     }
 
     private void startServer(StoppableServer server) {
