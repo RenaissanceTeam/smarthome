@@ -3,6 +3,7 @@ package smarthome.raspberry.utils
 import android.content.Context
 import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import smarthome.library.datalibrary.store.HomesReferencesStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreHomesReferencesStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
@@ -41,17 +42,22 @@ class HomeController(context: Context) {
             override fun onHomeDoesNotExist() {
                 sharedPreferencesHelper.setHomeId(homeId)
 
-                storage.addHomeReference(homeId, failureListener = object : OnFailureListener {
-                    override fun onFailure(p0: Exception) {
-                        Log.d(javaClass.name, "adding home reference failed", p0)
-                    }
-                })
+                storage.addHomeReference(
+                        homeId,
+                        successListener = OnSuccessListener {
+                            if (DEBUG) Log.d(javaClass.name, "new homeId added: $homeId")
+                        },
+                        failureListener = object : OnFailureListener {
+                            override fun onFailure(p0: Exception) {
+                                if (DEBUG) Log.d(javaClass.name, "adding home reference failed", p0)
+                            }
+                        })
 
-                if (DEBUG) Log.d(javaClass.name, "new homeId added: $homeId")
-
-                FirestoreSmartHomeStorage.getInstance(homeId)!!.createSmartHome()
-
-                if (DEBUG) Log.d(javaClass.name, "home node created")
+                FirestoreSmartHomeStorage.getInstance(homeId)!!.createSmartHome(
+                        successListener = OnSuccessListener {
+                            if (DEBUG) Log.d(javaClass.name, "home node created")
+                        }
+                )
             }
         })
     }
