@@ -18,13 +18,17 @@ import smarthome.library.datalibrary.store.listeners.DevicesObserver
 import smarthome.library.datalibrary.store.listeners.SmartHomeListener
 
 class FirestoreSmartHomeStorage(
-    homeId: String,
-    db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val homeId: String,
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 ) : SmartHomeStorage {
 
     private val ref: CollectionReference = db.collection(HOMES_NODE).document(homeId).collection(HOME_DEVICES_NODE)
 
     private var registration: ListenerRegistration? = null
+
+    override fun createSmartHome(successListener: OnSuccessListener<Void>, failureListener: OnFailureListener) {
+        db.collection(HOMES_NODE).document(homeId).set(mapOf(Pair("exists", "true")))
+    }
 
     override fun postSmartHome(
         smartHome: SmartHome, successListener: OnSuccessListener<Void>,

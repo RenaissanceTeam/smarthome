@@ -13,6 +13,10 @@ import smarthome.library.datalibrary.store.listeners.SmartHomeListener
 
 interface SmartHomeStorage {
 
+    fun createSmartHome(
+        successListener: OnSuccessListener<Void> = defSuccessListener,
+        failureListener: OnFailureListener = defFailureListener)
+
     fun postSmartHome(
         smartHome: SmartHome,
         successListener: OnSuccessListener<Void> = defSuccessListener,

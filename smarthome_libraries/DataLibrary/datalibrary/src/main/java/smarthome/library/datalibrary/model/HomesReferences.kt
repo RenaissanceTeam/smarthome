@@ -4,6 +4,6 @@ import java.util.ArrayList
 
 class HomesReferences {
 
-    var homes: List<String> = ArrayList()
+    var homes = ArrayList<String>()
 
 }
