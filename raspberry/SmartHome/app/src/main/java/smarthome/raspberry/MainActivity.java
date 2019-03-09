@@ -2,6 +2,7 @@ package smarthome.raspberry;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -9,10 +10,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
+import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage;
 import smarthome.raspberry.auth.GoogleSignInActivity;
 import smarthome.raspberry.server.StoppableServer;
 import smarthome.raspberry.server.UdpServer;
 import smarthome.raspberry.server.WebServer;
+import smarthome.raspberry.utils.HomeController;
+import smarthome.raspberry.utils.SharedPreferencesHelper;
 
 import static smarthome.raspberry.model.device.constants.Constants.RC_SIGN_IN;
 
@@ -61,17 +65,6 @@ public class MainActivity extends Activity {
 
         if (mAuth.getCurrentUser() == null)
             startActivity(new Intent(this, GoogleSignInActivity.class));
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        } else {
-            // retry login
-        }
     }
 
     private void startServer(StoppableServer server) {
