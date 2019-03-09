@@ -78,7 +78,7 @@ public class UdpServer implements StoppableServer {
                 .header(REMOTE_ADDR_HEADER, Helpers.getLocalIpAddress())
                 .build();
 
-        new OkHttpClient().newCall(request).execute(); // blocking call
+        new OkHttpClient().newCall(request).execute().body().close(); // blocking call
     }
 
     private String getArduinoInitUrl(InetAddress address) {
