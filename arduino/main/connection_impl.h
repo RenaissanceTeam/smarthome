@@ -35,35 +35,72 @@ void baseResponse(WebServer& server, double val) {
 }
 
 // ==========================================================================
-// DHT
+// DHT11
 // ==========================================================================
-#ifdef TEMPERATURE || HUMIDITY
+#ifdef TEMPERATURE_DHT11 || HUMIDITY_DHT11
 
 #include <dht.h>
 
-dht DHT;
+dht DHT11;
 
-void humidityGetRequest(WebServer& server, int serviceIndex) {
-	#if DEBUG > 1
+void humidityDht11GetRequest(WebServer& server, int serviceIndex) {
+  #if DEBUG > 1
       Serial.print("read HUMIDITY on pin ");
       Serial.println(PINS[serviceIndex]);
 #endif
-      baseResponse(server, DHT.humidity);
+      DHT11.read11(PINS[serviceIndex]);
+      baseResponse(server, DHT11.humidity);
 }
 
 
-void temperatureGetRequest(WebServer& server, int serviceIndex) {
-	#if DEBUG > 1
+void temperatureDht11GetRequest(WebServer& server, int serviceIndex) {
+  #if DEBUG > 1
       Serial.print("read TEMPERATURE on pin ");
       Serial.println(PINS[serviceIndex]);
 #endif
-      int chk = DHT.read11(DHT11_PIN);
-      baseResponse(server, DHT.temperature);
+      DHT11.read11(PINS[serviceIndex]);
+      baseResponse(server, DHT11.temperature);
 }
 
 #endif
 // ==========================================================================
 // ==========================================================================
+
+// ==========================================================================
+// DHT22
+// ==========================================================================
+#ifdef TEMPERATURE_DHT22 || HUMIDITY_DHT22
+
+#include <dht.h>
+
+
+dht DHT22;
+
+void humidityDht22GetRequest(WebServer& server, int serviceIndex) {
+  #if DEBUG > 1
+      Serial.print("read HUMIDITY on pin ");
+      Serial.println(PINS[serviceIndex]);
+#endif
+      DHT22.read22(PINS[serviceIndex]);
+      baseResponse(server, DHT22.humidity);
+}
+
+
+void temperatureDht22GetRequest(WebServer& server, int serviceIndex) {
+  #if DEBUG > 1
+      Serial.print("read TEMPERATURE on pin ");
+      Serial.println(PINS[serviceIndex]);
+#endif
+      DHT22.read22(PINS[serviceIndex]);
+      baseResponse(server, DHT22.temperature);
+}
+
+#endif
+// ==========================================================================
+// ==========================================================================
+
+
+
 
 
 
@@ -215,16 +252,30 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 #endif
 
 
-#ifdef TEMPERATURE
-    if (SERVICES[serviceIndex] == TEMPERATURE_ID) {
-      temperatureGetRequest(server, serviceIndex);	
+#ifdef TEMPERATURE_DHT11
+    if (SERVICES[serviceIndex] == TEMPERATURE_DHT11_ID) {
+      temperatureDht11GetRequest(server, serviceIndex);  
       return;
     }
 #endif
 
-#ifdef HUMIDITY
-    if (SERVICES[serviceIndex] == HUMIDITY_ID) {
-      humidityGetRequest(server, serviceIndex);
+#ifdef HUMIDITY_DHT11
+    if (SERVICES[serviceIndex] == HUMIDITY_DHT11_ID) {
+      humidityDht11GetRequest(server, serviceIndex);
+      return;
+    }
+#endif
+
+#ifdef TEMPERATURE_DHT22
+    if (SERVICES[serviceIndex] == TEMPERATURE_DHT22_ID) {
+      temperatureDht22GetRequest(server, serviceIndex);  
+      return;
+    }
+#endif
+
+#ifdef HUMIDITY_DHT22
+    if (SERVICES[serviceIndex] == HUMIDITY_DHT22_ID) {
+      humidityDht22GetRequest(server, serviceIndex);
       return;
     }
 #endif
@@ -321,7 +372,7 @@ void runHttpServer(WebServer& server) {
 void sendUdpInitToHomeServer() {
   Serial.println("send udp");
   WiFiEspUDP udpClient;
-  IPAddress broadcastIp(192,168,0,255);
+  IPAddress broadcastIp(192,168,1,255);
   udpClient.begin(UDP_PORT);
   udpClient.beginPacket(broadcastIp, UDP_PORT);
   udpClient.write(DEVICE_NAME); // todo some key instead (encryption needed)
