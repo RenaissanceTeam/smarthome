@@ -3,16 +3,11 @@ package smarthome.client
 import android.app.Application
 import android.util.Log
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
-import smarthome.client.viewpager.addition.AdditionFragment
 import smarthome.client.auth.AuthUIWrapper
 import smarthome.client.auth.Authenticator
 import smarthome.client.viewpager.Pages
-import smarthome.client.viewpager.dashboard.DashboardFragment
-import smarthome.client.viewpager.scripts.ScriptsFragment
-import smarthome.client.viewpager.settings.SettingsFragment
 
 // todo maybe change to dagger injection of context
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -32,13 +27,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun authCheck() {
         if (BuildConfig.DEBUG) Log.d(TAG, "on create in viewmodel, so auth")
-        if (authenticator.isAuthenticated()) return
+        if (authenticator.isAuthenticated()) {
+            Model.setupFirestore(authenticator.getUserId()!!)
+            return
+        }
 
         _needAuth.value = true
     }
 
     fun onAuthSuccessful() {
         if (BuildConfig.DEBUG) Log.d(TAG, "auth successful, user id=${authenticator.getUserId()}")
+        Model.setupFirestore(authenticator.getUserId()!!)
     }
 
     fun onAuthFailed() {

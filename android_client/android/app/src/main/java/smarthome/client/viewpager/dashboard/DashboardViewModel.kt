@@ -14,6 +14,9 @@ class DashboardViewModel : ViewModel() {
     private val _devices = MutableLiveData<MutableList<IotDevice>>()
     private val _allHomeUpdateState = MutableLiveData<Boolean>()
 
+    init {
+        Model.waitForFirestoreReady { requestSmartHomeState() }
+    }
 
     val devices: LiveData<MutableList<IotDevice>>
         get() = _devices
