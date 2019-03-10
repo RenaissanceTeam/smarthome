@@ -1,72 +1,74 @@
 package smarthome.client
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import smarthome.client.constants.Constants
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
-import smarthome.library.datalibrary.store.HomesReferencesStorage
 import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreHomesReferencesStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
 import smarthome.library.datalibrary.store.listeners.HomesReferencesListener
 import smarthome.library.datalibrary.store.listeners.SmartHomeListener
+import kotlin.coroutines.suspendCoroutine
 
 // todo should not be a singleton
 object Model {
     private val TAG = Model::class.java.simpleName
-    private var homesReferences: HomesReferencesStorage? = null
     private var homeStorage: SmartHomeStorage? = null
     private var smartHome: SmartHome? = null
-
-    private var firestoreReady = false
-    private val firestoreWaiters = mutableListOf<() -> Unit>()
 
     val raspberryApi: RaspberryApi
         get() {
             val gson = GsonBuilder().setLenient().create()
 
             val retrofit = Retrofit.Builder()
-                    .baseUrl(Constants.RASPBERRY_URL)
+                    .baseUrl(RASPBERRY_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build()
 
             return retrofit.create(RaspberryApi::class.java)
         }
 
-    fun waitForFirestoreReady(onReady: () -> Unit  ) {
-        if (firestoreReady) {
-            onReady()
-        } else {
-            firestoreWaiters.add(onReady)
+    suspend fun getDevice(guid: Long): IotDevice {
+        var device = getDevices().find { it.guid == guid }
+        if (device == null) {
+            loadHome() // maybe local home instance is out of data // todo rethink this method later
+            device = getDevices().find { it.guid == guid } ?: throw NoDeviceException(guid)
+        }
+
+        return device
+    }
+
+    suspend fun getDevices(): MutableList<IotDevice> {
+        val home = smartHome ?: loadHome()
+        return home.devices
+    }
+
+    private suspend fun loadHome(): SmartHome {
+        val storage = homeStorage ?: setupFirestore()
+
+        return suspendCoroutine { continuation ->
+            val listener = SmartHomeListener {
+                smartHome = it
+                continuation.resumeWith(Result.success(it))
+            }
+            storage.getSmartHome(listener)
         }
     }
 
-    fun getDevices(listener: (MutableList<IotDevice>) -> Unit) {
-        homeStorage?.getSmartHome(SmartHomeListener { listener(it.devices) })
-    }
+    private suspend fun setupFirestore(): SmartHomeStorage {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: throw AuthenticationFailed()
 
-    fun setupFirestore(userId: String) {
         val references = FirestoreHomesReferencesStorage(userId)
-        references.getHomesReferences(HomesReferencesListener { setupHomeStorage(it.homes) })
-
-        homesReferences = references
-    }
-
-    private fun setupHomeStorage(homeIds: List<String>) {
-        if (homeIds.isNullOrEmpty()) {
-            if (BuildConfig.DEBUG) Log.d(TAG, "no home ids for current user")
-            return
+        val homeIds = suspendCoroutine<List<String>> { continuation ->
+            references.getHomesReferences(HomesReferencesListener { continuation.resumeWith(Result.success(it.homes)) })
         }
+        if (homeIds.isNullOrEmpty()) throw NoHomeid()
 
-        // todo user should choose one home. For now we just choose the first one
-        homeStorage = FirestoreSmartHomeStorage(homeIds[0])
-
-        firestoreReady = true
-        firestoreWaiters.forEach { it() }
+        val storage: SmartHomeStorage = FirestoreSmartHomeStorage(homeIds[0])
+        homeStorage = storage
+        return storage
     }
 }
