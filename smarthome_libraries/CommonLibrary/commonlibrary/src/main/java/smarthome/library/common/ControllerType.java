@@ -5,10 +5,13 @@ import static smarthome.library.common.constants.ControllerIds.*;
 public enum ControllerType {
     ARDUINO_ANALOG(A_ANALOG),
     ARDUINO_ON_OFF(A_ONOFF),
-    TEMPERATURE(A_TEMPERATURE),
-    HUMIDITY(A_HUMIDITY),
+    TEMPERATURE_DHT11(A_TEMPERATURE_DHT11),
+    TEMPERATURE_DHT22(A_TEMPERATURE_DHT22),
+    HUMIDITY_DHT11(A_HUMIDITY_DHT_11),
+    HUMIDITY_DHT22(A_HUMIDITY_DHT_22),
     DIGITAL_ALERT(A_DIGITAL_ALERT),
-    INIT(A_INIT);
+    INIT(A_INIT),
+    PRESSURE(A_PRESSURE);
 
     public final int id;
 
