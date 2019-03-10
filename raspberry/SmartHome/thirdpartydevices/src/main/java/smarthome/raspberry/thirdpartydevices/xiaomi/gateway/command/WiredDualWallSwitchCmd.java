@@ -1,6 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command;
 
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device;
+import static smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device.STATUS_CHANNEL_0;
+import static smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device.STATUS_CHANNEL_1;
 
 public class WiredDualWallSwitchCmd extends Command {
 
@@ -14,6 +15,6 @@ public class WiredDualWallSwitchCmd extends Command {
 
     @Override
     public String toString() {
-        return "{\"" + Device.STATUS_CHANNEL_0 + "\":\"" + channel_0_status + ",\"" + Device.STATUS_CHANNEL_1 + "\":" + channel_1_status + "\"}";
+        return "{\"" + STATUS_CHANNEL_0 + "\":\"" + channel_0_status + ",\"" + STATUS_CHANNEL_1 + "\":" + channel_1_status + "\"}";
     }
 }
