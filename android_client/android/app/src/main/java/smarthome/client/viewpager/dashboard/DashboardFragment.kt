@@ -1,5 +1,6 @@
 package smarthome.client.viewpager.dashboard
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import smarthome.client.BuildConfig
+import smarthome.client.DEVICE_GUID
+import smarthome.client.DetailsActivity
 import smarthome.client.R
+import smarthome.client.fragments.devicedetail.DeviceDetails
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
@@ -64,6 +68,12 @@ class DashboardFragment : Fragment() {
 
     private fun onDeviceClick(device: IotDevice?) {
         Log.d(TAG, "clicked on $device")
+        device ?: return
+
+        val intent = Intent(context, DetailsActivity::class.java)
+        intent.putExtra(DEVICE_GUID, device.guid)
+
+        activity?.startActivity(intent)
     }
 
     private fun onControllerClick(controller: BaseController) {
