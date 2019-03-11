@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
 import smarthome.client.DEVICE_GUID
@@ -55,7 +55,9 @@ class DeviceDetails : Fragment() {
         deviceDescription = view.findViewById(R.id.device_description)
         deviceImage = view.findViewById(R.id.device_image)
         progressBar = view.findViewById(R.id.progress_bar)
-        controllers = view.findViewById(R.id.controllers)
+        controllers = view.findViewById(R.id.devices)
+        controllers?.layoutManager = LinearLayoutManager(view.context)
+        controllers?.adapter = ControllersAdapter(viewModel)
 
         var deviceGuid: Long? = arguments?.getLong(DEVICE_GUID)
         if (arguments?.containsKey(DEVICE_GUID) != true) {

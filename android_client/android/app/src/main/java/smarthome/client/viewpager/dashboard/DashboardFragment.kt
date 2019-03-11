@@ -16,7 +16,6 @@ import smarthome.client.BuildConfig
 import smarthome.client.DEVICE_GUID
 import smarthome.client.DetailsActivity
 import smarthome.client.R
-import smarthome.client.fragments.devicedetail.DeviceDetails
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
@@ -27,27 +26,23 @@ class DashboardFragment : Fragment() {
             by lazy { ViewModelProviders.of(this).get(DashboardViewModel::class.java) }
 
     private var refreshLayout: SwipeRefreshLayout? = null
-    private var controllersView: RecyclerView? = null
-    private var adapterForControllersList: DevicesAdapter? = null
+    private var devicesView: RecyclerView? = null
+    private var adapterForDevices: DevicesAdapter? = null
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        
+
         if (BuildConfig.DEBUG) Log.d(TAG, "onActivity created, create viewModel")
         viewModel.devices.observe(this, Observer {
-            if (BuildConfig.DEBUG) Log.d(TAG, "controllersView've changed, now its ${viewModel.devices.value}")
-            adapterForControllersList?.notifyDataSetChanged()
+            if (BuildConfig.DEBUG) Log.d(TAG, "devicesView've changed, now its ${viewModel.devices.value}")
+            adapterForDevices?.notifyDataSetChanged()
             viewModel.receivedNewSmartHomeState()
         })
         viewModel.allHomeUpdateState.observe(this, Observer {
             if (BuildConfig.DEBUG) Log.d(TAG, "allHomeUpdateState's changed")
-            refreshLayout?.isRefreshing = it 
+            refreshLayout?.isRefreshing = it
         })
-
-        adapterForControllersList = DevicesAdapter(layoutInflater, viewModel,
-                ::onDeviceClick, ::onControllerClick)
-        controllersView?.adapter = adapterForControllersList
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -59,21 +54,30 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (BuildConfig.DEBUG) Log.d(TAG, "onViewCreated")
-        refreshLayout = view.findViewById(R.id.refresh_controllers)
-        controllersView = view.findViewById(R.id.controllers)
-        controllersView?.layoutManager = LinearLayoutManager(view.context)
+        refreshLayout = view.findViewById(R.id.refresh_layout)
+        devicesView = view.findViewById(R.id.devices)
+        devicesView?.layoutManager = LinearLayoutManager(view.context)
 
         refreshLayout?.setOnRefreshListener { viewModel.requestSmartHomeState() }
+        adapterForDevices = DevicesAdapter(layoutInflater, viewModel,
+                ::onDeviceClick, ::onControllerClick)
+        devicesView?.adapter = adapterForDevices
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        refreshLayout = null
+        devicesView = null
+        adapterForDevices = null
     }
 
     private fun onDeviceClick(device: IotDevice?) {
         Log.d(TAG, "clicked on $device")
         device ?: return
 
-        val intent = Intent(context, DetailsActivity::class.java)
-        intent.putExtra(DEVICE_GUID, device.guid)
-
-        activity?.startActivity(intent)
+        activity?.startActivity(Intent(context, DetailsActivity::class.java)
+                .putExtra(DEVICE_GUID, device.guid))
     }
 
     private fun onControllerClick(controller: BaseController) {
