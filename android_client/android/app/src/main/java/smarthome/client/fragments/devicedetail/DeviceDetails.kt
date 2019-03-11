@@ -14,8 +14,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import smarthome.client.CONTROLLER_GUID
 import smarthome.client.R
 import smarthome.client.DEVICE_GUID
+import smarthome.client.DetailsActivity
 import smarthome.library.common.IotDevice
 
 class DeviceDetails : Fragment() {
@@ -33,7 +35,7 @@ class DeviceDetails : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.device_details, container, false)
+        return inflater.inflate(R.layout.fragment_device_details, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -41,13 +43,21 @@ class DeviceDetails : Fragment() {
 
         viewModel.refresh.observe(this, Observer { progressBar?.visibility = if (it) VISIBLE else GONE })
         viewModel.device.observe(this, Observer { bindDevice(it); viewModel.deviceSet() })
+        viewModel.controllerDetails.observe(this, Observer { it?.let { openControllerDetails(it) } })
     }
 
     private fun bindDevice(device: IotDevice) {
         deviceName?.setText(device.name)
         deviceDescription?.setText(device.description)
+        controllers?.adapter?.notifyDataSetChanged()
+        viewModel.deviceSet()
+    }
 
-        // todo bind controllers
+    private fun openControllerDetails(guid: Long) {
+        val bundle = Bundle()
+        bundle.putLong(CONTROLLER_GUID, guid)
+        (activity as? DetailsActivity)?.replaceFragment(bundle)
+        viewModel.controllerDetailsShowed()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

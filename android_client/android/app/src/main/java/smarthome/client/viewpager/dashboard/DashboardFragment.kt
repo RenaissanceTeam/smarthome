@@ -12,10 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import smarthome.client.BuildConfig
-import smarthome.client.DEVICE_GUID
-import smarthome.client.DetailsActivity
-import smarthome.client.R
+import smarthome.client.*
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
@@ -47,7 +44,7 @@ class DashboardFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dashboard, container, false)
+        return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,5 +80,7 @@ class DashboardFragment : Fragment() {
     private fun onControllerClick(controller: BaseController) {
         Log.d(TAG, "clicked on $controller")
 
+        activity?.startActivity(Intent(context, DetailsActivity::class.java)
+                .putExtra(CONTROLLER_GUID, controller.guid))
     }
 }

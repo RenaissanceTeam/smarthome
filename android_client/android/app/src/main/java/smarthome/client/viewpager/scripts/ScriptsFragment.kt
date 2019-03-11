@@ -14,6 +14,6 @@ class ScriptsFragment : Fragment() {
             by lazy { ViewModelProviders.of(this).get(ScriptsViewModel::class.java) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.scripts, container, false)
+        return inflater.inflate(R.layout.fragment_scripts, container, false)
     }
 }

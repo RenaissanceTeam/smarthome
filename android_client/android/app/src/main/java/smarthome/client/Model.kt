@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
 import smarthome.library.datalibrary.store.SmartHomeStorage
@@ -31,14 +32,22 @@ object Model {
             return retrofit.create(RaspberryApi::class.java)
         }
 
-    suspend fun getDevice(guid: Long): IotDevice {
-        var device = getDevices().find { it.guid == guid }
-        if (device == null) {
-            loadHome() // maybe local home instance is out of data // todo rethink this method later
-            device = getDevices().find { it.guid == guid } ?: throw NoDeviceException(guid)
+    suspend fun getController(guid: Long): BaseController {
+        var controller: BaseController? = null
+        getDevices().find {
+            controller = it.controllers.find { it.guid == guid }
+            controller != null
         }
 
-        return device
+        return controller ?: throw NoControllerException(guid)
+    }
+
+    suspend fun getDevice(guid: Long): IotDevice {
+        return getDevices().find { it.guid == guid } ?: throw NoDeviceException(guid)
+    }
+
+    suspend fun getDevice(controller: BaseController): IotDevice {
+        return getDevices().find {it.controllers.contains(controller)} ?: throw NoDeviceWithControllerException(controller)
     }
 
     suspend fun getDevices(): MutableList<IotDevice> {
