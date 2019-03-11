@@ -13,12 +13,20 @@ class ControllerView(root: ViewGroup) {
     private val guid: TextView = itemView.findViewById(R.id.controller_guid)
     private val type: TextView = itemView.findViewById(R.id.type)
     private val state: TextView = itemView.findViewById(R.id.state)
+    private val UNKNOWN_STATE = "-"
 
-    val UNKNOWN_STATE = "-"
+    private var boundGuid: Long? = null
+
 
     fun bind(controller: BaseController) {
         guid.text = "${controller.guid}"
         type.text = "${controller.type ?: UNKNOWN_STATE}"
         state.text = controller.state ?: UNKNOWN_STATE
+
+        boundGuid = controller.guid
+    }
+
+    fun onClick(listener: (Long?) -> Unit) {
+        itemView.setOnClickListener { listener(boundGuid) }
     }
 }
