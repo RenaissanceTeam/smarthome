@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import smarthome.client.fragments.devicedetail.DeviceDetails
 
-class DetailsActivity: FragmentActivity() {
+class DetailsActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -12,6 +12,6 @@ class DetailsActivity: FragmentActivity() {
         val deviceDetails = DeviceDetails()
         deviceDetails.arguments = intent.extras
 
-        supportFragmentManager?.apply { beginTransaction().add(R.id.root_view, deviceDetails, DeviceDetails.FRAGMENT_TAG).commit()}
+        supportFragmentManager?.apply { beginTransaction().add(R.id.root_view, deviceDetails, DeviceDetails.FRAGMENT_TAG).commit() }
     }
 }
