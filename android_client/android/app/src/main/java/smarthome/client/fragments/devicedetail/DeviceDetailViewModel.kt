@@ -50,4 +50,10 @@ class DeviceDetailViewModel : ViewModel() {
     fun controllerDetailsShowed() {
         _controllerDetails.value = null
     }
+
+    fun deviceNameChanged(name: String) {
+        val device = _device.value ?: return
+        device.name = name
+        _device.value = device
+    }
 }
