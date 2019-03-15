@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -18,14 +20,16 @@ import smarthome.client.CONTROLLER_GUID
 import smarthome.client.R
 import smarthome.client.DEVICE_GUID
 import smarthome.client.DetailsActivity
+import smarthome.client.ui.DialogParameters
+import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.IotDevice
 
 class DeviceDetails : Fragment() {
 
     private val viewModel by lazy { ViewModelProviders.of(this).get(DeviceDetailViewModel::class.java) }
 
-    private var deviceName: EditText? = null
-    private var deviceDescription: EditText? = null
+    private var deviceName: TextView? = null
+    private var deviceDescription: TextView? = null
     private var deviceImage: ImageView? = null
     private var progressBar: ProgressBar? = null
     private var controllers: RecyclerView? = null
@@ -47,8 +51,9 @@ class DeviceDetails : Fragment() {
     }
 
     private fun bindDevice(device: IotDevice) {
-        deviceName?.setText(device.name)
-        deviceDescription?.setText(device.description)
+        deviceName?.text = device.name
+        deviceDescription?.text = device.description
+
         controllers?.adapter?.notifyDataSetChanged()
         viewModel.deviceSet()
     }
@@ -61,6 +66,20 @@ class DeviceDetails : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupViews(view)
+        passGuidToViewModel()
+
+        deviceName?.setOnClickListener {
+            EditTextDialog.create(view.context,
+                    DialogParameters("device name", viewModel.device.value?.name ?: "") { name ->
+                        viewModel.deviceNameChanged(name)
+                    }
+            ).show()
+        }
+        deviceDescription?.setOnClickListener {}
+    }
+
+    private fun setupViews(view: View) {
         deviceName = view.findViewById(R.id.device_name)
         deviceDescription = view.findViewById(R.id.device_description)
         deviceImage = view.findViewById(R.id.device_image)
@@ -68,7 +87,9 @@ class DeviceDetails : Fragment() {
         controllers = view.findViewById(R.id.devices)
         controllers?.layoutManager = LinearLayoutManager(view.context)
         controllers?.adapter = ControllersAdapter(viewModel)
+    }
 
+    private fun passGuidToViewModel() {
         var deviceGuid: Long? = arguments?.getLong(DEVICE_GUID)
         if (arguments?.containsKey(DEVICE_GUID) != true) {
             deviceGuid = null
