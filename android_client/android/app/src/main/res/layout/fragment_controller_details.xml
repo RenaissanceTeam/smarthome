@@ -110,5 +110,13 @@
         app:layout_constraintStart_toEndOf="@+id/state_label"
         tools:text="ON" />
 
+    <FrameLayout
+        android:id="@+id/state_changer"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/state_label"
+        app:layout_constraintStart_toStartOf="@id/state_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

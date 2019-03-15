@@ -11,6 +11,8 @@ import kotlinx.coroutines.launch
 import smarthome.client.BuildConfig
 import smarthome.client.HomeModelException
 import smarthome.client.Model
+import smarthome.client.fragments.controllerdetail.statechanger.ControllerTypeAdapter
+import smarthome.client.fragments.controllerdetail.statechanger.StateChangerType
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
@@ -29,6 +31,10 @@ class ControllerDetailViewModel : ViewModel() {
     val device: LiveData<IotDevice>
         get() = _device
 
+    private val _stateChangerType = MutableLiveData<StateChangerType>()
+    val stateChangerType: LiveData<StateChangerType>
+        get() = _stateChangerType
+
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
@@ -39,11 +45,11 @@ class ControllerDetailViewModel : ViewModel() {
             try {
                 val foundController = Model.getController(controllerGuid)
                 _controller.value = foundController
+                _stateChangerType.value = ControllerTypeAdapter.toStateChangerType(foundController.type)
                 _device.value = Model.getDevice(foundController)
             } catch (e: HomeModelException) {
                 // todo handle
                 if (BuildConfig.DEBUG) Log.w(TAG, "exception when setting controller guid=$controllerGuid", e)
-
             }
         }
     }
@@ -55,6 +61,18 @@ class ControllerDetailViewModel : ViewModel() {
 
     fun controllerSet() {
         _refresh.value = false
+    }
+
+    fun newStateRequest(state: String?) {
+        if (BuildConfig.DEBUG) Log.d(TAG, "new state request $state")
+        val device = _device.value ?: return
+        val controller = _controller.value ?: return
+
+        uiScope.launch {
+            _refresh.value = true
+            controller.state = state
+            Model.changeController(device, controller)
+        }
     }
 
 }

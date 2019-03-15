@@ -1,5 +1,7 @@
 package smarthome.client
 
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
@@ -51,12 +53,23 @@ object Model {
     }
 
     suspend fun getDevices(): MutableList<IotDevice> {
-        val home = smartHome ?: loadHome()
+        val home = getSmartHome()
         return home.devices
     }
 
+    suspend fun changeController(device: IotDevice, controller: BaseController) {
+        val storage = getSmartHomeStorage()
+        suspendCoroutine<Unit> {continuation ->
+            storage.updateDevice(device, controller,
+                    OnSuccessListener { continuation.resumeWith(Result.success(Unit)) },
+                    OnFailureListener { throw RemoteFailure(it) })
+        }
+    }
+
+    private suspend fun getSmartHome() = smartHome ?: loadHome()
+
     private suspend fun loadHome(): SmartHome {
-        val storage = homeStorage ?: setupFirestore()
+        val storage = getSmartHomeStorage()
 
         return suspendCoroutine { continuation ->
             val listener = SmartHomeListener {
@@ -66,6 +79,8 @@ object Model {
             storage.getSmartHome(listener)
         }
     }
+
+    private suspend fun getSmartHomeStorage() = homeStorage ?: setupFirestore()
 
     private suspend fun setupFirestore(): SmartHomeStorage {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: throw AuthenticationFailed()
@@ -80,4 +95,5 @@ object Model {
         homeStorage = storage
         return storage
     }
+
 }
