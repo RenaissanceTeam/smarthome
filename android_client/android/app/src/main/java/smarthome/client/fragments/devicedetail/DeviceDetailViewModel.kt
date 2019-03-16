@@ -73,11 +73,20 @@ class DeviceDetailViewModel : ViewModel() {
 
     fun deviceNameChanged(name: String) {
         val device = _device.value ?: return
+        device.name = name
+        updateDevice(device)
+    }
+
+    fun deviceDescriptionChanged(description: String) {
+        val device = _device.value ?: return
+        device.description = description
+        updateDevice(device)
+    }
+
+    private fun updateDevice(device: IotDevice) {
         uiScope.launch {
             _refresh.value = true
-            device.name = name
             Model.changeDevice(device)
         }
-
     }
 }
