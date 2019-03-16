@@ -3,11 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_controllers"
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/controllers"
+            android:id="@+id/devices"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

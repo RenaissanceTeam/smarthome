@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/device_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/device"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/device_label"
+        app:layout_constraintStart_toEndOf="@+id/device_label"
+        tools:text="device1" />
+
+    <TextView
+        android:id="@+id/controller_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:labelFor="@id/controller_name"
+        android:text="@string/controller_name"
+        app:layout_constraintStart_toStartOf="@id/device_label"
+        app:layout_constraintTop_toBottomOf="@+id/device_label" />
+
+    <EditText
+        android:id="@+id/controller_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="default"
+        app:layout_constraintBaseline_toBaselineOf="@id/controller_name_label"
+        app:layout_constraintStart_toEndOf="@+id/controller_name_label" />
+
+    <TextView
+        android:id="@+id/type_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/controller_type"
+        app:layout_constraintStart_toStartOf="@id/controller_name_label"
+        app:layout_constraintTop_toBottomOf="@id/controller_name_label" />
+
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/type_label"
+        app:layout_constraintStart_toEndOf="@id/type_label"
+        tools:text="ON_OFF" />
+
+
+    <TextView
+        android:id="@+id/serve_state_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/serve_state"
+        app:layout_constraintStart_toStartOf="@id/type_label"
+        app:layout_constraintTop_toBottomOf="@id/type_label" />
+
+    <TextView
+        android:id="@+id/serve_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/serve_state_label"
+        app:layout_constraintStart_toEndOf="@id/serve_state_label"
+        tools:text="PENDING" />
+
+
+    <TextView
+        android:id="@+id/state_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/state"
+        app:layout_constraintStart_toStartOf="@id/serve_state_label"
+        app:layout_constraintTop_toBottomOf="@id/serve_state_label" />
+
+    <TextView
+        android:id="@+id/state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/state_label"
+        app:layout_constraintStart_toEndOf="@+id/state_label"
+        tools:text="ON" />
+
+    <FrameLayout
+        android:id="@+id/state_changer"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/state_label"
+        app:layout_constraintStart_toStartOf="@id/state_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

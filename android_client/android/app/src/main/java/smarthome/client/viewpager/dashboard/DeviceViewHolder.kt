@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
+import smarthome.client.ui.ControllerView
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
@@ -19,7 +20,7 @@ class DeviceViewHolder(itemView: View,
     }
 
     private var device: IotDevice? = null
-    private val controllers: LinearLayout = itemView.findViewById(R.id.controllers)
+    private val controllers: LinearLayout = itemView.findViewById(R.id.devices)
     private val deviceName: TextView = itemView.findViewById(R.id.device_name)
     private val deviceDescription: TextView = itemView.findViewById(R.id.device_description)
 
@@ -33,9 +34,11 @@ class DeviceViewHolder(itemView: View,
     }
 
     private fun filledControllerVH(controller: BaseController) : View {
-        val view = ControllerViewHolder(LayoutInflater.from(itemView.context), controllers).filled(controller)
-        view.setOnClickListener { clickOnController(controller) }
-        return view
+        val controllerView = ControllerView(controllers)
+        controllerView.bind(controller)
+
+        controllerView.itemView.setOnClickListener { clickOnController(controller) }
+        return controllerView.itemView
     }
 
 }

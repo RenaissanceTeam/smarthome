@@ -15,6 +15,6 @@ class AdditionFragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.device_addition, container, false)
+        return inflater.inflate(R.layout.fragment_device_addition, container, false)
     }
 }

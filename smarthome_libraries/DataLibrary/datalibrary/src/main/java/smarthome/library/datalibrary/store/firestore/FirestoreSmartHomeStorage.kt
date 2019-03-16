@@ -1,6 +1,7 @@
 package smarthome.library.datalibrary.store.firestore
 
 import android.util.Log
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +29,8 @@ class FirestoreSmartHomeStorage(
 
     override fun createSmartHome(successListener: OnSuccessListener<Void>, failureListener: OnFailureListener) {
         db.collection(HOMES_NODE).document(homeId).set(mapOf(Pair("exists", "true")))
+            .addOnSuccessListener(successListener)
+            .addOnFailureListener(failureListener)
     }
 
     override fun postSmartHome(
