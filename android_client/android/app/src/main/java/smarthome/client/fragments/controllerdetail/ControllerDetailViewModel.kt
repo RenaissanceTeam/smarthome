@@ -1,10 +1,8 @@
 package smarthome.client.fragments.controllerdetail
 
 import android.util.Log
-import androidx.arch.core.util.Function
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
@@ -74,15 +72,17 @@ class ControllerDetailViewModel : ViewModel() {
         disposable?.dispose()
     }
 
-    fun newStateRequest(state: String?) {
+    fun newStateRequest(state: String?, serveState: String) {
         if (BuildConfig.DEBUG) Log.d(TAG, "new state request $state")
         val device = _device.value ?: return
         val controller = _controller.value ?: return
 
         uiScope.launch {
             _refresh.value = true
-            controller.state = state
-            Model.changeController(device, controller)
+            state?.let { controller.state = it }
+            controller.serveState = serveState
+
+            Model.changeDevice(device)
         }
     }
     fun controllerNameChanged(name: String) {
