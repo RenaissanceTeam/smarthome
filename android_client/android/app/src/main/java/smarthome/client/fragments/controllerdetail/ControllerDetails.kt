@@ -43,16 +43,16 @@ class ControllerDetails : Fragment() {
         viewModel.refresh.observe(this, Observer { progressBar?.visibility = if (it) View.VISIBLE else View.GONE })
         viewModel.controller.observe(this, Observer {
             bindController(it)
-            stateChanger?.invalidateNewState(it.state)
+            it.state?.let { state -> stateChanger?.invalidateNewState(state) }
         })
         viewModel.device.observe(this, Observer { bindDevice(it) })
         viewModel.stateChangerType.observe(this, Observer { invalidateStateChanger(it) })
     }
 
     private fun bindController(controller: BaseController) {
-        name?.setText("${controller.hashCode()}") // todo name for controller
+        name?.setText(controller.name)
         type?.text = controller.type.toString()
-        serveState?.text = if (controller.isPending) "Pending" else "Up to date" // todo make serveState accessible
+        serveState?.text = if (controller.isPending) "Pending" else "Up to date"
         state?.text = controller.state
     }
 
