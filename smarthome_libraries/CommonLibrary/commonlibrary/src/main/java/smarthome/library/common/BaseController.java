@@ -19,8 +19,11 @@ public class BaseController {
     @Expose public ControllerType type;
     @Expose public long guid;
     @Expose public String state;
+    @Expose public String deviceType;
 
-    public void setNewState(String newState) {}// todo is "String" enough for state?
+    public void setNewState(String state) {
+        this.state = state;
+    }// todo is "String" enough for state?
 
     public void setPending() {
         serveState = STATE_PENDING;
