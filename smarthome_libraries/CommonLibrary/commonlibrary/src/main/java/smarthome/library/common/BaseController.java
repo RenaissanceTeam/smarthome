@@ -15,7 +15,8 @@ public class BaseController {
      * 1. "pending" - raspberry processing controller state
      * 2. "up to date" - synchronized with real controller state
      */
-    @Expose private String serveState;
+    @Expose public String name;
+    @Expose public String serveState;
     @Expose public ControllerType type;
     @Expose public long guid;
     @Expose public String state;

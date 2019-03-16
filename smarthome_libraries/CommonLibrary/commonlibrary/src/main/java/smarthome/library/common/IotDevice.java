@@ -10,7 +10,7 @@ public class IotDevice {
     @Expose public String name;
     @Expose public String description;
     @Expose public long guid;
-    @Expose public List<BaseController> controllers; // todo incapsulation (everywhere)
+    @Expose public List<BaseController> controllers;
 
     public IotDevice() {} // needed for deserialization
 

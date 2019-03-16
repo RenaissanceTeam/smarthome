@@ -41,7 +41,10 @@ class ControllerDetails : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.refresh.observe(this, Observer { progressBar?.visibility = if (it) View.VISIBLE else View.GONE })
-        viewModel.controller.observe(this, Observer { bindController(it); viewModel.controllerSet() })
+        viewModel.controller.observe(this, Observer {
+            bindController(it)
+            stateChanger?.invalidateNewState(it.state)
+        })
         viewModel.device.observe(this, Observer { bindDevice(it) })
         viewModel.stateChangerType.observe(this, Observer { invalidateStateChanger(it) })
     }
@@ -64,7 +67,7 @@ class ControllerDetails : Fragment() {
             StateChangerType.ONOFF -> OnOffStateChanger(container) { viewModel.newStateRequest(it) }
             StateChangerType.ONLY_READ -> ReadStateChanger(container) { viewModel.newStateRequest(null) }
         }
-
+        stateChanger = changer
         viewModel.controller.value?.state?.let { changer.invalidateNewState(it) }
     }
 

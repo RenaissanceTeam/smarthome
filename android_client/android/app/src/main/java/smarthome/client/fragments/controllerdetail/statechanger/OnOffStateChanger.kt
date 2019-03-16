@@ -11,13 +11,14 @@ class OnOffStateChanger(container: ViewGroup, listener: (String) -> Unit):
         get() = R.layout.state_changer_onoff
 
     val switchCompat = rootView.findViewById<SwitchCompat>(R.id.controller_switch)
+
     init {
-        switchCompat.setOnCheckedChangeListener {
-            _, isChecked -> listener(clickToState(isChecked) )
+        switchCompat.setOnClickListener {
+            listener(clickToState())
         }
     }
 
-    private fun clickToState(isChecked: Boolean): String = if (isChecked) "1" else "0"
+    private fun clickToState(): String = if (switchCompat.isChecked) "1" else "0"
 
     override fun invalidateNewState(state: String) {
         switchCompat.isChecked = "1" == state
