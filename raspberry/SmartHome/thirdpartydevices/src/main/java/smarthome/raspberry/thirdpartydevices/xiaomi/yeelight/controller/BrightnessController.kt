@@ -7,14 +7,15 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.utils.Utils.Companion.adjust
 
-class ColorTemperatureController(device: Device) : Controller(device, Property.COLOR_TEMPERATURE.property), Readable, Writable {
-
-    override fun write(vararg params: Any): Result {
-        val colorTemp: Int = adjust(params[0] as Int, 1700, 6500)
-        return super.controllerWrite("set_ct_abx", colorTemp, device.effect.effect, device.duration)
-    }
+class BrightnessController(device: Device) : Controller(device, Property.BRIGHTNESS.property), Readable, Writable {
 
     override fun read(): String {
-        return super.controllerRead(Property.COLOR_TEMPERATURE)
+        return super.controllerRead(Property.BRIGHTNESS)
+    }
+
+    override fun write(vararg params: Any): Result {
+        val brightness: Int = adjust(params[0] as Int, 1, 100)
+        setNewState(brightness.toString())
+        return super.controllerWrite("set_bright", brightness, device.effect.effect, device.duration)
     }
 }
