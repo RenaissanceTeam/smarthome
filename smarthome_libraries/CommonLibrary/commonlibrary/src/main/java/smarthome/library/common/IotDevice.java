@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class IotDevice {
     @Expose public String name;
@@ -37,6 +38,12 @@ public class IotDevice {
     @Override
     public int hashCode() {
         return (int)guid;
+    }
+
+    public boolean isIdentical(IotDevice device) {
+        return equals(device)
+                && Objects.equals(name, device.name)
+                && Objects.equals(description, device.description);
     }
 
     @Override

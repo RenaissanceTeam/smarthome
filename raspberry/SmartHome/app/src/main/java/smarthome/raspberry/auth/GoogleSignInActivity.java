@@ -1,5 +1,6 @@
 package smarthome.raspberry.auth;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +35,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import smarthome.raspberry.MainActivity;
 import smarthome.raspberry.R;
 import smarthome.raspberry.utils.HomeController;
+
+import static smarthome.raspberry.BuildConfig.DEBUG;
 
 
 public class GoogleSignInActivity extends FragmentActivity implements
@@ -106,7 +109,7 @@ public class GoogleSignInActivity extends FragmentActivity implements
 
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                if(MainActivity.DEBUG) Log.d(TAG, "Google sign in failed", e);
+                if (DEBUG) Log.d(TAG, "Google sign in failed", e);
                 Toast.makeText(GoogleSignInActivity.this, "Auth failed, try later", Toast.LENGTH_SHORT).show();
                 updateUI(null);
 
@@ -127,17 +130,15 @@ public class GoogleSignInActivity extends FragmentActivity implements
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            if(MainActivity.DEBUG) Log.d(TAG, "signInWithCredential:success");
+                            if (DEBUG) Log.d(TAG, "signInWithCredential:success");
 
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "Authorization succeeded.", Toast.LENGTH_SHORT).show();
 
-                            new HomeController(getApplicationContext()).start();
-
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
-                            if(MainActivity.DEBUG) Log.d(TAG, "signInWithCredential:failure", task.getException());
+                            if (DEBUG) Log.d(TAG, "signInWithCredential:failure", task.getException());
 
                             Toast.makeText(getApplicationContext(), "Authorization failed.", Toast.LENGTH_SHORT).show();
                             updateUI(null);
