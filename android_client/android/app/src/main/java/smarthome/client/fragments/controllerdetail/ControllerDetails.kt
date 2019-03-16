@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -21,6 +20,8 @@ import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
+import smarthome.library.common.constants.Constants.STATE_PENDING_READ
+import smarthome.library.common.constants.Constants.STATE_PENDING_WRITE
 
 class ControllerDetails : Fragment() {
 
@@ -54,7 +55,7 @@ class ControllerDetails : Fragment() {
     private fun bindController(controller: BaseController) {
         setControllerName(controller)
         type?.text = controller.type.toString()
-        serveState?.text = if (controller.isPending) "Pending" else "Up to date"
+        serveState?.text = controller.serveState
         state?.text = controller.state
     }
 
@@ -76,8 +77,8 @@ class ControllerDetails : Fragment() {
         val container = stateChangerContainer ?: return
 
         val changer = when (changerType) {
-            StateChangerType.ONOFF -> OnOffStateChanger(container) { viewModel.newStateRequest(it) }
-            StateChangerType.ONLY_READ -> ReadStateChanger(container) { viewModel.newStateRequest(null) }
+            StateChangerType.ONOFF -> OnOffStateChanger(container) { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }
+            StateChangerType.ONLY_READ -> ReadStateChanger(container) { viewModel.newStateRequest(null, STATE_PENDING_READ) }
         }
         stateChanger = changer
         viewModel.controller.value?.state?.let { changer.invalidateNewState(it) }

@@ -67,14 +67,9 @@ class FirestoreSmartHomeStorage(
 
     override fun updateDevice(
         device: IotDevice,
-        controller: BaseController?,
         successListener: OnSuccessListener<Void>,
         failureListener: OnFailureListener
     ) {
-
-        if (controller != null && device.getControllers().contains(controller))
-            controller.setPending()
-
         getDeviceRef(device)
             .set(device, SetOptions.merge())
             .addOnSuccessListener(successListener)

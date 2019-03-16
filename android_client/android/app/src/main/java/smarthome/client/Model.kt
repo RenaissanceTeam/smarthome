@@ -43,7 +43,7 @@ object Model {
     private suspend fun createDevicesObservable(): Observable<MutableList<IotDevice>> {
         val storage = getSmartHomeStorage()
         val observable = Observable.create<MutableList<IotDevice>> { emitter ->
-            storage.observeDevicesUpdates(DevicesObserver { devices, _ ->
+            storage.observeDevicesUpdates(DevicesObserver { devices, isInner ->
                 val newHome = SmartHome()
                 newHome.devices = devices
                 smartHome = newHome
@@ -93,13 +93,9 @@ object Model {
 
 
     suspend fun changeDevice(device: IotDevice) {
-        changeController(device, null)
-    }
-
-    suspend fun changeController(device: IotDevice, controller: BaseController?) {
         val storage = getSmartHomeStorage()
         suspendCoroutine<Unit> { continuation ->
-            storage.updateDevice(device, controller,
+            storage.updateDevice(device,
                     OnSuccessListener { continuation.resumeWith(Result.success(Unit)) },
                     OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }
             )
