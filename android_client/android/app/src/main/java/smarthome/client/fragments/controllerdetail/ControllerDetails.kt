@@ -17,6 +17,8 @@ import smarthome.client.fragments.controllerdetail.statechanger.ControllerStateC
 import smarthome.client.fragments.controllerdetail.statechanger.OnOffStateChanger
 import smarthome.client.fragments.controllerdetail.statechanger.ReadStateChanger
 import smarthome.client.fragments.controllerdetail.statechanger.StateChangerType
+import smarthome.client.ui.DialogParameters
+import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
@@ -30,7 +32,7 @@ class ControllerDetails : Fragment() {
             by lazy { ViewModelProviders.of(this).get(ControllerDetailViewModel::class.java) }
 
     private var device: TextView? = null
-    private var name: EditText? = null
+    private var name: TextView? = null
     private var type: TextView? = null
     private var serveState: TextView? = null
     private var state: TextView? = null
@@ -50,10 +52,20 @@ class ControllerDetails : Fragment() {
     }
 
     private fun bindController(controller: BaseController) {
-        name?.setText(controller.name)
+        setControllerName(controller)
         type?.text = controller.type.toString()
         serveState?.text = if (controller.isPending) "Pending" else "Up to date"
         state?.text = controller.state
+    }
+
+    private fun setControllerName(controller: BaseController) {
+        if (controller.name.isNullOrEmpty()) {
+            name?.setTextColor(resources.getColor(android.R.color.darker_gray))
+            name?.text = getString(R.string.empty_name)
+        } else {
+            name?.setTextColor(resources.getColor(android.R.color.black))
+            name?.text = controller.name
+        }
     }
 
     private fun bindDevice(iotDevice: IotDevice) {
@@ -85,6 +97,15 @@ class ControllerDetails : Fragment() {
         state = view.findViewById(R.id.state)
         progressBar = view.findViewById(R.id.progress_bar)
         stateChangerContainer = view.findViewById(R.id.state_changer)
+
+        name?.setOnClickListener {
+            EditTextDialog.create(view.context,
+                    DialogParameters("controller name", viewModel.controller.value?.name
+                            ?: "") {
+                        viewModel.controllerNameChanged(it)
+                    }
+            ).show()
+        }
 
         var controllerGuid: Long? = arguments?.getLong(CONTROLLER_GUID)
         if (arguments?.containsKey(CONTROLLER_GUID) != true) {
