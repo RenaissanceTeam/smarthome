@@ -58,7 +58,7 @@ class DeviceDetails : Fragment() {
 
     private fun setDescription(device: IotDevice) {
         val description = device.description
-        if (description == null || description.isEmpty()) {
+        if (description.isNullOrEmpty()) {
             deviceDescription?.setTextColor(resources.getColor(android.R.color.darker_gray))
             deviceDescription?.text = getString(R.string.empty_description)
         } else {

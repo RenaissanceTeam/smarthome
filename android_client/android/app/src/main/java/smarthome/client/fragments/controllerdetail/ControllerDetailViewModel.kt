@@ -85,5 +85,19 @@ class ControllerDetailViewModel : ViewModel() {
             Model.changeController(device, controller)
         }
     }
+    fun controllerNameChanged(name: String) {
+        val controller = _controller.value ?: return
+        val device = _device.value ?: return
+        device.controllers.find { it == controller }?.name = name
+
+        updateDevice(device)
+    }
+
+    private fun updateDevice(device: IotDevice) {
+        uiScope.launch {
+            _refresh.value = true
+            Model.changeDevice(device)
+        }
+    }
 
 }
