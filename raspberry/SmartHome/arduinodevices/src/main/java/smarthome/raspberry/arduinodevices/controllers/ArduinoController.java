@@ -2,6 +2,7 @@ package smarthome.raspberry.arduinodevices.controllers;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -19,8 +20,8 @@ import smarthome.library.common.ControllerType;
 import smarthome.library.common.GUID;
 
 public class ArduinoController extends BaseController {
-    public final ArduinoDevice device;
-    @Expose public final int indexInArduinoServicesArray;
+    @Exclude public final ArduinoDevice device;
+    @Exclude @Expose public final int indexInArduinoServicesArray;
 
     public ArduinoController(ArduinoDevice device, ControllerType type, int indexInArduinoServicesArray) {
         this.device = device;
@@ -54,7 +55,7 @@ public class ArduinoController extends BaseController {
         return controllerResponse;
     }
 
-    ArduinoDeviceAPI getArduinoDeviceAPI() {
+    @Exclude ArduinoDeviceAPI getArduinoDeviceAPI() {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();

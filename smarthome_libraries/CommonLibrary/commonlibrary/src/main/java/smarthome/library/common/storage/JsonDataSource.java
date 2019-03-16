@@ -5,13 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import smarthome.library.common.BaseController;
 import smarthome.library.common.DeviceDataSource;
 import smarthome.library.common.IotDevice;
 
@@ -31,14 +32,17 @@ public class JsonDataSource extends SQLiteOpenHelper implements DeviceDataSource
             "DROP TABLE IF EXISTS %s";
 
     private Gson gson;
-    private Class<? extends IotDevice> type;
+    private Class<? extends IotDevice> deviceType;
+    private Class<? extends BaseController> controllerType;
     private String tableName;
 
-    public JsonDataSource(Context context, Class<? extends IotDevice> type) {
-        super(context, type.getSimpleName() + ".db", null, VERSION);
+    public JsonDataSource(Context context, Class<? extends IotDevice> deviceType,
+                          Class<? extends BaseController> controllerType) {
+        super(context, deviceType.getSimpleName() + ".db", null, VERSION);
         gson = new Gson();
-        this.type = type;
-        tableName = type.getSimpleName();
+        this.deviceType = deviceType;
+        this.controllerType = controllerType;
+        tableName = deviceType.getSimpleName();
         onCreate(getWritableDatabase());
     }
 
@@ -67,7 +71,7 @@ public class JsonDataSource extends SQLiteOpenHelper implements DeviceDataSource
                 do
                 {
                     String json = query.getString(JSON_INDEX);
-                    IotDevice device = gson.fromJson(json, type);
+                    IotDevice device = gson.fromJson(json, deviceType);
                     result.add(device);
                 }
                 while (query.moveToNext());
@@ -86,26 +90,26 @@ public class JsonDataSource extends SQLiteOpenHelper implements DeviceDataSource
 
     private ContentValues getContentValues(IotDevice device) {
         ContentValues cv = new ContentValues();
-        cv.put(GUID_COLUMN, device.guid);
+        cv.put(GUID_COLUMN, device.getGuid());
         cv.put(JSON_COLUMN, device.gsonned());
         return cv;
     }
 
     @Override
     public boolean contains(IotDevice device) {
-        String rawQuery = "SELECT * FROM " + tableName + " WHERE " + GUID_COLUMN + " = " + device.guid;
+        String rawQuery = "SELECT * FROM " + tableName + " WHERE " + GUID_COLUMN + " = " + device.getGuid();
         try (Cursor query = getReadableDatabase().rawQuery(rawQuery, null)) {
             return (query != null && query.moveToFirst());
         }
     }
     @Override
     public void update(IotDevice device) {
-        getWritableDatabase().update(tableName, getContentValues(device), GUID_COLUMN + "=" + device.guid, null);
+        getWritableDatabase().update(tableName, getContentValues(device), GUID_COLUMN + "=" + device.getGuid(), null);
     }
 
     @Override
     public void delete(IotDevice device) {
-        String rawQuery = "DELETE FROM " + tableName + " WHERE " + GUID_COLUMN + " = " + device.guid;
+        String rawQuery = "DELETE FROM " + tableName + " WHERE " + GUID_COLUMN + " = " + device.getGuid();
         getWritableDatabase().execSQL(rawQuery);
     }
 
