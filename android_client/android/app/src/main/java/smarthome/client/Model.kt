@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.GsonBuilder
+import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import smarthome.library.common.BaseController
@@ -12,6 +13,7 @@ import smarthome.library.common.SmartHome
 import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreHomesReferencesStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
+import smarthome.library.datalibrary.store.listeners.DevicesObserver
 import smarthome.library.datalibrary.store.listeners.HomesReferencesListener
 import smarthome.library.datalibrary.store.listeners.SmartHomeListener
 import kotlin.coroutines.suspendCoroutine
@@ -21,6 +23,7 @@ object Model {
     private val TAG = Model::class.java.simpleName
     private var homeStorage: SmartHomeStorage? = null
     private var smartHome: SmartHome? = null
+    private var _devices: Observable<MutableList<IotDevice>>? = null
 
     val raspberryApi: RaspberryApi
         get() {
@@ -34,9 +37,31 @@ object Model {
             return retrofit.create(RaspberryApi::class.java)
         }
 
+    suspend fun getDevicesObservable(): Observable<MutableList<IotDevice>> = _devices
+            ?: createDevicesObservable()
+
+    private suspend fun createDevicesObservable(): Observable<MutableList<IotDevice>> {
+        val storage = getSmartHomeStorage()
+        val observable = Observable.create<MutableList<IotDevice>> { emitter ->
+            storage.observeDevicesUpdates(DevicesObserver { devices, _ ->
+                val newHome = SmartHome()
+                newHome.devices = devices
+                smartHome = newHome
+                emitter.onNext(devices)
+            }
+            )
+        }
+        _devices = observable
+        return observable
+    }
+
     suspend fun getController(guid: Long): BaseController {
+        return getController(getDevices(), guid)
+    }
+
+    fun getController(devices: List<IotDevice>, guid: Long): BaseController {
         var controller: BaseController? = null
-        getDevices().find {
+        devices.find {
             controller = it.controllers.find { it.guid == guid }
             controller != null
         }
@@ -45,11 +70,20 @@ object Model {
     }
 
     suspend fun getDevice(guid: Long): IotDevice {
-        return getDevices().find { it.guid == guid } ?: throw NoDeviceException(guid)
+        return getDevice(getDevices(), guid)
     }
 
     suspend fun getDevice(controller: BaseController): IotDevice {
-        return getDevices().find {it.controllers.contains(controller)} ?: throw NoDeviceWithControllerException(controller)
+        return getDevice(getDevices(), controller)
+    }
+
+    fun getDevice(devices: List<IotDevice>, controller: BaseController): IotDevice {
+        return devices.find { it.controllers.contains(controller) }
+                ?: throw NoDeviceWithControllerException(controller)
+    }
+
+    fun getDevice(devices: List<IotDevice>, deviceGuid: Long): IotDevice {
+        return devices.find { it.guid == deviceGuid } ?: throw NoDeviceException(deviceGuid)
     }
 
     suspend fun getDevices(): MutableList<IotDevice> {
@@ -57,12 +91,18 @@ object Model {
         return home.devices
     }
 
-    suspend fun changeController(device: IotDevice, controller: BaseController) {
+
+    suspend fun changeDevice(device: IotDevice) {
+        changeController(device, null)
+    }
+
+    suspend fun changeController(device: IotDevice, controller: BaseController?) {
         val storage = getSmartHomeStorage()
-        suspendCoroutine<Unit> {continuation ->
+        suspendCoroutine<Unit> { continuation ->
             storage.updateDevice(device, controller,
                     OnSuccessListener { continuation.resumeWith(Result.success(Unit)) },
-                    OnFailureListener { throw RemoteFailure(it) })
+                    OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }
+            )
         }
     }
 
@@ -72,11 +112,13 @@ object Model {
         val storage = getSmartHomeStorage()
 
         return suspendCoroutine { continuation ->
-            val listener = SmartHomeListener {
-                smartHome = it
-                continuation.resumeWith(Result.success(it))
-            }
-            storage.getSmartHome(listener)
+            storage.getSmartHome(
+                    SmartHomeListener {
+                        smartHome = it
+                        continuation.resumeWith(Result.success(it))
+                    },
+                    OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }
+            )
         }
     }
 
@@ -87,7 +129,10 @@ object Model {
 
         val references = FirestoreHomesReferencesStorage(userId)
         val homeIds = suspendCoroutine<List<String>> { continuation ->
-            references.getHomesReferences(HomesReferencesListener { continuation.resumeWith(Result.success(it.homes)) })
+            references.getHomesReferences(
+                    HomesReferencesListener { continuation.resumeWith(Result.success(it.homes)) },
+                    OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }
+            )
         }
         if (homeIds.isNullOrEmpty()) throw NoHomeid()
 

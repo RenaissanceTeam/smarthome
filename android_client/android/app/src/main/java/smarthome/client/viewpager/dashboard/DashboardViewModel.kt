@@ -2,6 +2,7 @@ package smarthome.client.viewpager.dashboard
 
 import android.util.Log
 import androidx.lifecycle.*
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -22,9 +23,17 @@ class DashboardViewModel : ViewModel() {
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
+    private var disposable: Disposable? = null
+
     init {
         requestSmartHomeState()
+        uiScope.launch {
+            disposable = Model.getDevicesObservable().subscribe {
+                _devices.value = it
+            }
+        }
     }
+
 
     val devices: LiveData<MutableList<IotDevice>>
         get() = _devices
@@ -47,6 +56,7 @@ class DashboardViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         job.cancel()
+        disposable?.dispose()
     }
 
     fun receivedNewSmartHomeState() {

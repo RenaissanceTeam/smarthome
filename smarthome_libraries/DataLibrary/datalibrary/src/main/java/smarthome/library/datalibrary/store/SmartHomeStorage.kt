@@ -15,7 +15,8 @@ interface SmartHomeStorage {
 
     fun createSmartHome(
         successListener: OnSuccessListener<Void> = defSuccessListener,
-        failureListener: OnFailureListener = defFailureListener)
+        failureListener: OnFailureListener = defFailureListener
+    )
 
     fun postSmartHome(
         smartHome: SmartHome,
@@ -23,7 +24,7 @@ interface SmartHomeStorage {
         failureListener: OnFailureListener = defFailureListener
     )
 
-    fun getSmartHome(listener: SmartHomeListener)
+    fun getSmartHome(listener: SmartHomeListener, failureListener: OnFailureListener = defFailureListener)
 
     fun addDevice(
         iotDevice: IotDevice,

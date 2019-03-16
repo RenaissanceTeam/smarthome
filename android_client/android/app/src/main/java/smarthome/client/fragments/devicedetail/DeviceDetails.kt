@@ -46,7 +46,7 @@ class DeviceDetails : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.refresh.observe(this, Observer { progressBar?.visibility = if (it) VISIBLE else GONE })
-        viewModel.device.observe(this, Observer { bindDevice(it); viewModel.deviceSet() })
+        viewModel.device.observe(this, Observer { bindDevice(it) })
         viewModel.controllerDetails.observe(this, Observer { it?.let { openControllerDetails(it) } })
     }
 
@@ -55,7 +55,6 @@ class DeviceDetails : Fragment() {
         deviceDescription?.text = device.description
 
         controllers?.adapter?.notifyDataSetChanged()
-        viewModel.deviceSet()
     }
 
     private fun openControllerDetails(guid: Long) {
