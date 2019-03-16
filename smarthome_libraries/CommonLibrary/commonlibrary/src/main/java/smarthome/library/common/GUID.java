@@ -24,7 +24,7 @@ public class GUID {
     }
 
     public long getGuidForIotDevice(IotDevice device) {
-        return getGuidForName(device.getName());
+        return getGuidForName(device.name);
     }
 
     public long generateGuidForController(BaseController controller) {
@@ -43,6 +43,5 @@ public class GUID {
     private long getGuidForName(String name) {
         return name.hashCode();
     }
-
 
 }

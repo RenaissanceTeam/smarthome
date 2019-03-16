@@ -8,21 +8,17 @@ import com.google.android.gms.tasks.OnSuccessListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-
-import java.util.ArrayList
-
 import smarthome.library.common.BaseController
 import smarthome.library.common.GUID
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
 import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.listeners.DevicesObserver
-import smarthome.raspberry.arduinodevices.ArduinoDevice
-import smarthome.raspberry.utils.HomeController
-
 import smarthome.raspberry.BuildConfig.DEBUG
 import smarthome.raspberry.OddDeviceInCloud
+import smarthome.raspberry.arduinodevices.ArduinoDevice
+import smarthome.raspberry.utils.HomeController
+import java.util.*
 import kotlin.coroutines.suspendCoroutine
 
 
@@ -43,19 +39,23 @@ object SmartHomeRepository : SmartHome() {
 
             devices = ArrayList()
 
-            for (dataSource in DataSources.values()) {
-                dataSource.init(context)
-                devices.addAll(dataSource.source.all)
-            }
+            loadSavedDevices()
+        }
+    }
+
+    private fun loadSavedDevices() {
+        for (dataSource in DataSources.values()) {
+            dataSource.init(context)
+//            devices.addAll(dataSource.source.all) // todo fix polymorphic controller list problem
         }
     }
 
     suspend fun listenForCloudChanges() {
         if (DEBUG) Log.d(TAG, "listenForCloudChanges")
 
-
         storage.observeDevicesUpdates(DevicesObserver { cloudDevices, isInner ->
-            runBlocking {
+            if (isInner) return@DevicesObserver
+            ioScope.launch {
                 if (DEBUG) Log.d(TAG, "new devices update: $cloudDevices isInner=$isInner")
 
                 if (cloudDevices.size < devices.size) {
@@ -103,7 +103,7 @@ object SmartHomeRepository : SmartHome() {
         if (DEBUG) Log.d(TAG, "addDevice: $device")
 
         for (dataSource in DataSources.values()) {
-            if (dataSource.type != device.javaClass) {
+            if (dataSource.deviceType != device.javaClass) {
                 continue
             }
 
@@ -113,7 +113,7 @@ object SmartHomeRepository : SmartHome() {
                 return true
             }
 
-            val wasAdded = dataSource.source.add(device)
+            val wasAdded = true || dataSource.source.add(device) // todo fix polymorphic list then remove true ||
             if (wasAdded) {
                 // todo set alarms for auto refresh for each controller
 

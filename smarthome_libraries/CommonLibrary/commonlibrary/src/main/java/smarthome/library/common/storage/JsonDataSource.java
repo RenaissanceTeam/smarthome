@@ -90,26 +90,26 @@ public class JsonDataSource extends SQLiteOpenHelper implements DeviceDataSource
 
     private ContentValues getContentValues(IotDevice device) {
         ContentValues cv = new ContentValues();
-        cv.put(GUID_COLUMN, device.getGuid());
+        cv.put(GUID_COLUMN, device.guid);
         cv.put(JSON_COLUMN, device.gsonned());
         return cv;
     }
 
     @Override
     public boolean contains(IotDevice device) {
-        String rawQuery = "SELECT * FROM " + tableName + " WHERE " + GUID_COLUMN + " = " + device.getGuid();
+        String rawQuery = "SELECT * FROM " + tableName + " WHERE " + GUID_COLUMN + " = " + device.guid;
         try (Cursor query = getReadableDatabase().rawQuery(rawQuery, null)) {
             return (query != null && query.moveToFirst());
         }
     }
     @Override
     public void update(IotDevice device) {
-        getWritableDatabase().update(tableName, getContentValues(device), GUID_COLUMN + "=" + device.getGuid(), null);
+        getWritableDatabase().update(tableName, getContentValues(device), GUID_COLUMN + "=" + device.guid, null);
     }
 
     @Override
     public void delete(IotDevice device) {
-        String rawQuery = "DELETE FROM " + tableName + " WHERE " + GUID_COLUMN + " = " + device.getGuid();
+        String rawQuery = "DELETE FROM " + tableName + " WHERE " + GUID_COLUMN + " = " + device.guid;
         getWritableDatabase().execSQL(rawQuery);
     }
 
