@@ -18,6 +18,5 @@ public class App extends Application {
         instance = this;
 
         SmartHomeRepository.getInstance().init(getApplicationContext());
-
     }
 }
