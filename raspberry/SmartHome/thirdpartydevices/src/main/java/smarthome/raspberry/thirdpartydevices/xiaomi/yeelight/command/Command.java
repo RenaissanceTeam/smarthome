@@ -2,7 +2,9 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.command;
 
 import com.google.gson.annotations.Expose;
 
-public class Cmd {
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.utils.Utils;
+
+public class Command {
 
     private static int ID_GENERATOR = 1;
 
@@ -20,8 +22,8 @@ public class Cmd {
     }
 
 
-    public Cmd(String method, Object... params) {
-        this.id = Cmd.generateId();
+    public Command(String method, Object... params) {
+        this.id = Command.generateId();
         this.method = method;
         this.params = params;
     }
@@ -31,7 +33,7 @@ public class Cmd {
     }
 
     public String toJson() {
-        return null; //TODO: implement
+        return Utils.Companion.getGSON().toJson(this);
     }
 
 }
