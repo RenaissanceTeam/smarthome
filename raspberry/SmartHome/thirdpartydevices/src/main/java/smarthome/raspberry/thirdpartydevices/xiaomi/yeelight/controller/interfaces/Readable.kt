@@ -3,5 +3,5 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfa
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 
 interface Readable {
-    fun read(property: Property): String
+    fun read(): String
 }

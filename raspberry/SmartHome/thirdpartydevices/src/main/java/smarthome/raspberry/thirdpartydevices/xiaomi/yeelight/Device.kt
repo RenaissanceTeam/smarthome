@@ -36,9 +36,15 @@ class Device(ip: String,
     }
 
     fun getProperty(property: Property): String {
-        val request: Command = Command(GET_PROPERTY_METHOD_HEADER, arrayOf(property.property))
-        val res: Result = sendCommand(request)
-        return res.result!![0]
+        val request = Command(GET_PROPERTY_METHOD_HEADER, arrayOf(property.property))
+        return sendCommand(request).result!![0]
+    }
+
+    fun getProperties(vararg properties: Property): Array<String> {
+        val expectedProperties: Array<out Property> = if (properties.count() == 0) Property.values() else properties
+        val expectedPropertiesValues: List<String> = expectedProperties.map { it.property }
+        val request = Command(GET_PROPERTY_METHOD_HEADER, expectedPropertiesValues)
+        return sendCommand(request).result!!
     }
 
 }
