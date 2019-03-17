@@ -25,9 +25,9 @@ public class ArduinoController extends BaseController {
 
     public ArduinoController(ArduinoDevice device, ControllerType type, int indexInArduinoServicesArray) {
         this.device = device;
-        this.type = type;
+        this.type = type.toString();
         this.indexInArduinoServicesArray = indexInArduinoServicesArray;
-        this.guid = GUID.getInstance().generateGuidForController(this);
+        this.guid = GUID.getInstance().generateGuidForController(device, this);
     }
 
     @Override

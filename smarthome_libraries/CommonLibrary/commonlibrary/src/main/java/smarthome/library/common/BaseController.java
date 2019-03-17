@@ -21,7 +21,7 @@ public class BaseController {
      */
     @Expose public String name;
     @Expose public String serveState;
-    @Expose public ControllerType type;
+    @Expose public String type;
     @Expose public long guid;
     @Expose public String state;
     @Exclude @Expose public String classType = getClass().getSimpleName();

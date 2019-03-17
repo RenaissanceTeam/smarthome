@@ -15,6 +15,7 @@ import smarthome.client.Model
 import smarthome.client.fragments.controllerdetail.statechanger.ControllerTypeAdapter
 import smarthome.client.fragments.controllerdetail.statechanger.StateChangerType
 import smarthome.library.common.BaseController
+import smarthome.library.common.ControllerType
 import smarthome.library.common.IotDevice
 
 class ControllerDetailViewModel : ViewModel() {
