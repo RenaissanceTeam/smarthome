@@ -13,7 +13,7 @@ public class IotDevice {
     @Expose public String name;
     @Expose public String description;
     @Expose public long guid;
-    @Expose public List<BaseController> controllers; // todo incapsulation (everywhere)
+    @Expose public List<BaseController> controllers = new ArrayList<>();
     @Expose private String deviceType = DEFAULT_TYPE;
 
     public IotDevice() {} // needed for deserialization
@@ -22,7 +22,6 @@ public class IotDevice {
         super();
         this.name = name;
         this.description = description;
-        this.controllers = new ArrayList<>();
 
         guid = GUID.getInstance().getGuidForIotDevice(this);
     }

@@ -8,6 +8,7 @@ import kotlin.math.min
 class Utils {
     companion object {
         val GSON: Gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+        val DEF_GSON: Gson = GsonBuilder().create()
 
         fun adjust(value: Int, min: Int, max: Int): Int {
             return max(min, min(max, value))
@@ -17,8 +18,12 @@ class Utils {
             return r * 65536 + g * 256 + b
         }
 
-        fun <T> mapJson(json: String, c: Class<T>): T {
+        fun <T> mapJsonExpose(json: String, c: Class<T>): T {
             return GSON.fromJson(json, c)
+        }
+
+        fun <T> mapJson(json: String, c: Class<T>): T {
+            return DEF_GSON.fromJson(json, c)
         }
     }
 }
