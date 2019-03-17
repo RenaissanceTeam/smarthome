@@ -13,6 +13,9 @@ class BrightnessController(device: Device) : Controller(device, Property.BRIGHTN
         return super.controllerRead(Property.BRIGHTNESS)
     }
 
+    /**
+     * @param params {brightness} (int from 1 to 100)
+     */
     override fun write(vararg params: Any): Result {
         val brightness: Int = adjust(params[0] as Int, 1, 100)
         setNewState(brightness.toString())

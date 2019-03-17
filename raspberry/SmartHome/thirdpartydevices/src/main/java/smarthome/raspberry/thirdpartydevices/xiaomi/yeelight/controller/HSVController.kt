@@ -16,6 +16,9 @@ class HSVController(device: Device) : Controller(device, HSV_CONTROLLER_TYPE), R
         return res.joinToString(" ")
     }
 
+    /**
+     * @param params {hue} (int from 0 to 359), {saturation} (int from 0 to 100)
+     */
     override fun write(vararg params: Any): Result {
         val hue: Int = adjust(params[0] as Int, 0, 359)
         val saturation: Int = adjust(params[1] as Int, 0, 100)

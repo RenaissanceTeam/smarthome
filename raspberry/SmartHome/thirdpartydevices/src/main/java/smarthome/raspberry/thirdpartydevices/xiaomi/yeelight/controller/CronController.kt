@@ -14,6 +14,9 @@ class CronController(device: Device) : Controller(device, CRON_CONTROLLER_TYPE),
     }
 
 
+    /**
+     * @param params {delay} (int)
+     */
     override fun write(vararg params: Any): Result {
         setNewState((params[0] as Int).toString())
         return super.controllerWrite("cron_add", 0, params[0])

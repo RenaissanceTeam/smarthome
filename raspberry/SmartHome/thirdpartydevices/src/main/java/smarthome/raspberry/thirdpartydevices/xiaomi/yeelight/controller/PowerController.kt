@@ -13,7 +13,7 @@ class PowerController(device: Device) : Controller(device, Property.POWER.proper
     }
 
     /**
-     * @param params should be "on" or "off"
+     * @param params should be "on" or "off" (String)
      */
     override fun write(vararg params: Any): Result {
         val power: String = params[0] as String
