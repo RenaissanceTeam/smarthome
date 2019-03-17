@@ -23,6 +23,6 @@ class HSVController(device: Device) : Controller(device, HSV_CONTROLLER_TYPE), R
         val hue: Int = adjust(params[0] as Int, 0, 359)
         val saturation: Int = adjust(params[1] as Int, 0, 100)
         setNewState("$hue $saturation")
-        return super.controllerWrite("set_hsv", hue, saturation, device.effect.effect, device.duration)
+        return super.controllerWrite(HSV_CONTROLLER_TYPE, hue, saturation, device.effect.effect, device.duration)
     }
 }

@@ -16,6 +16,6 @@ class AdjustController(device: Device) : Controller(device, ADJUST_CONTROLLER_TY
     override fun write(vararg params: Any): Result {
         val action: String = (params[0] as Adjustment).action
         val property: String = (params[0] as AdjustAction).action
-        return super.controllerWrite("set_adjust", action, property)
+        return super.controllerWrite(ADJUST_CONTROLLER_TYPE, action, property)
     }
 }

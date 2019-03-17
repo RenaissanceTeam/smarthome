@@ -18,7 +18,7 @@ open class Controller(val device: Device,
     : BaseController() {
 
     init {
-        this.guid = GUID.getInstance().issueNewControllerGuid(this)
+        this.guid = 1 //GUID.getInstance().issueNewControllerGuid(this)
         this.deviceType = type
     }
 
