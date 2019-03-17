@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import smarthome.client.HomeModelException
 import smarthome.client.Model
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
@@ -29,22 +31,40 @@ class DeviceDetailViewModel : ViewModel() {
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
+    private var disposable: Disposable? = null
 
     fun setDeviceGuid(deviceGuid: Long?) {
         deviceGuid ?: return
 
         uiScope.launch {
-            _refresh.value = true
-            _device.value = Model.getDevice(deviceGuid)
+            try {
+                _refresh.value = true
+                _device.value = Model.getDevice(deviceGuid)
+                _refresh.value = false
+
+                listenForModelChanges(deviceGuid)
+            } catch (e: HomeModelException) {
+
+            }
         }
+    }
+
+    private suspend fun listenForModelChanges(deviceGuid: Long) {
+        disposable = Model.getDevicesObservable().subscribe {
+            val changedDevice = Model.getDevice(it, deviceGuid)
+            _device.value = changedDevice
+            _refresh.value = false
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
+        disposable?.dispose()
     }
 
     fun onControllerClick(controllerGuid: Long) {
         _controllerDetails.value = controllerGuid
-    }
-
-    fun deviceSet() {
-        _refresh.value = false
     }
 
     fun controllerDetailsShowed() {
@@ -54,6 +74,19 @@ class DeviceDetailViewModel : ViewModel() {
     fun deviceNameChanged(name: String) {
         val device = _device.value ?: return
         device.name = name
-        _device.value = device
+        updateDevice(device)
+    }
+
+    fun deviceDescriptionChanged(description: String) {
+        val device = _device.value ?: return
+        device.description = description
+        updateDevice(device)
+    }
+
+    private fun updateDevice(device: IotDevice) {
+        uiScope.launch {
+            _refresh.value = true
+            Model.changeDevice(device)
+        }
     }
 }

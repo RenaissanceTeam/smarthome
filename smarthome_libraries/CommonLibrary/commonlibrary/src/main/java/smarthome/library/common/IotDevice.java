@@ -5,12 +5,13 @@ import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class IotDevice {
     @Expose public String name;
     @Expose public String description;
     @Expose public long guid;
-    @Expose public List<BaseController> controllers; // todo incapsulation (everywhere)
+    @Expose public List<BaseController> controllers;
 
     public IotDevice() {} // needed for deserialization
 
@@ -37,6 +38,12 @@ public class IotDevice {
     @Override
     public int hashCode() {
         return (int)guid;
+    }
+
+    public boolean isIdentical(IotDevice device) {
+        return equals(device)
+                && Objects.equals(name, device.name)
+                && Objects.equals(description, device.description);
     }
 
     @Override

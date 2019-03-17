@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -17,8 +16,12 @@ import smarthome.client.fragments.controllerdetail.statechanger.ControllerStateC
 import smarthome.client.fragments.controllerdetail.statechanger.OnOffStateChanger
 import smarthome.client.fragments.controllerdetail.statechanger.ReadStateChanger
 import smarthome.client.fragments.controllerdetail.statechanger.StateChangerType
+import smarthome.client.ui.DialogParameters
+import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
+import smarthome.library.common.constants.Constants.STATE_PENDING_READ
+import smarthome.library.common.constants.Constants.STATE_PENDING_WRITE
 
 class ControllerDetails : Fragment() {
 
@@ -30,7 +33,7 @@ class ControllerDetails : Fragment() {
             by lazy { ViewModelProviders.of(this).get(ControllerDetailViewModel::class.java) }
 
     private var device: TextView? = null
-    private var name: EditText? = null
+    private var name: TextView? = null
     private var type: TextView? = null
     private var serveState: TextView? = null
     private var state: TextView? = null
@@ -41,16 +44,29 @@ class ControllerDetails : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.refresh.observe(this, Observer { progressBar?.visibility = if (it) View.VISIBLE else View.GONE })
-        viewModel.controller.observe(this, Observer { bindController(it); viewModel.controllerSet() })
+        viewModel.controller.observe(this, Observer {
+            bindController(it)
+            it.state?.let { state -> stateChanger?.invalidateNewState(state) }
+        })
         viewModel.device.observe(this, Observer { bindDevice(it) })
         viewModel.stateChangerType.observe(this, Observer { invalidateStateChanger(it) })
     }
 
     private fun bindController(controller: BaseController) {
-        name?.setText("${controller.hashCode()}") // todo name for controller
+        setControllerName(controller)
         type?.text = controller.type.toString()
-        serveState?.text = if (controller.isPending) "Pending" else "Up to date" // todo make serveState accessible
+        serveState?.text = controller.serveState
         state?.text = controller.state
+    }
+
+    private fun setControllerName(controller: BaseController) {
+        if (controller.name.isNullOrEmpty()) {
+            name?.setTextColor(resources.getColor(android.R.color.darker_gray))
+            name?.text = getString(R.string.empty_name)
+        } else {
+            name?.setTextColor(resources.getColor(android.R.color.black))
+            name?.text = controller.name
+        }
     }
 
     private fun bindDevice(iotDevice: IotDevice) {
@@ -61,10 +77,10 @@ class ControllerDetails : Fragment() {
         val container = stateChangerContainer ?: return
 
         val changer = when (changerType) {
-            StateChangerType.ONOFF -> OnOffStateChanger(container) { viewModel.newStateRequest(it) }
-            StateChangerType.ONLY_READ -> ReadStateChanger(container) { viewModel.newStateRequest(null) }
+            StateChangerType.ONOFF -> OnOffStateChanger(container) { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }
+            StateChangerType.ONLY_READ -> ReadStateChanger(container) { viewModel.newStateRequest(null, STATE_PENDING_READ) }
         }
-
+        stateChanger = changer
         viewModel.controller.value?.state?.let { changer.invalidateNewState(it) }
     }
 
@@ -82,6 +98,15 @@ class ControllerDetails : Fragment() {
         state = view.findViewById(R.id.state)
         progressBar = view.findViewById(R.id.progress_bar)
         stateChangerContainer = view.findViewById(R.id.state_changer)
+
+        name?.setOnClickListener {
+            EditTextDialog.create(view.context,
+                    DialogParameters("controller name", viewModel.controller.value?.name
+                            ?: "") {
+                        viewModel.controllerNameChanged(it)
+                    }
+            ).show()
+        }
 
         var controllerGuid: Long? = arguments?.getLong(CONTROLLER_GUID)
         if (arguments?.containsKey(CONTROLLER_GUID) != true) {

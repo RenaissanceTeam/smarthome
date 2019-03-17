@@ -41,7 +41,7 @@ class FirestoreSmartHomeStorage(
             addDevice(device)
     }
 
-    override fun getSmartHome(listener: SmartHomeListener) {
+    override fun getSmartHome(listener: SmartHomeListener, failureListener: OnFailureListener) {
         val smartHome = SmartHome()
 
         ref.get()
@@ -51,8 +51,7 @@ class FirestoreSmartHomeStorage(
 
                 listener.onSmartHomeReceived(smartHome)
             }
-            .addOnFailureListener { exception -> Log.d(javaClass.name,
-                FIREBASE_READ_VALUE_ERROR, exception) }
+            .addOnFailureListener { failureListener }
     }
 
     override fun addDevice(
@@ -68,14 +67,9 @@ class FirestoreSmartHomeStorage(
 
     override fun updateDevice(
         device: IotDevice,
-        controller: BaseController?,
         successListener: OnSuccessListener<Void>,
         failureListener: OnFailureListener
     ) {
-
-        if (controller != null && device.getControllers().contains(controller))
-            controller.setPending()
-
         getDeviceRef(device)
             .set(device, SetOptions.merge())
             .addOnSuccessListener(successListener)
