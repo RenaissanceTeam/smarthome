@@ -1,6 +1,7 @@
 package smarthome.library.common;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -40,9 +41,20 @@ public class GUID {
         return guid;
     }
 
+    public long issueNewControllerGuid(BaseController controller) {
+        long deviceHash = controller.deviceType.hashCode();
+        long guid = deviceHash;
+
+        Random r = new Random();
+
+        while (!mGuids.add(guid))
+            guid = deviceHash + Math.abs(r.nextInt(99999));
+
+        return guid;
+    }
+
     private long getGuidForName(String name) {
         return name.hashCode();
     }
-
 
 }

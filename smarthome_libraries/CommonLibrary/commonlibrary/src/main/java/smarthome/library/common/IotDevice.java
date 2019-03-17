@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static smarthome.library.common.constants.DeviceTypes.DEFAULT_TYPE;
 
@@ -12,7 +13,7 @@ public class IotDevice {
     @Expose public String name;
     @Expose public String description;
     @Expose public long guid;
-    @Expose public List<BaseController> controllers; // todo incapsulation (everywhere)
+    @Expose public List<BaseController> controllers = new ArrayList<>();
     @Expose private String deviceType = DEFAULT_TYPE;
 
     public IotDevice() {} // needed for deserialization
@@ -21,7 +22,6 @@ public class IotDevice {
         super();
         this.name = name;
         this.description = description;
-        this.controllers = new ArrayList<>();
 
         guid = GUID.getInstance().getGuidForIotDevice(this);
     }
@@ -48,6 +48,12 @@ public class IotDevice {
     @Override
     public int hashCode() {
         return (int)guid;
+    }
+
+    public boolean isIdentical(IotDevice device) {
+        return equals(device)
+                && Objects.equals(name, device.name)
+                && Objects.equals(description, device.description);
     }
 
     @Override

@@ -17,4 +17,6 @@ public class DeviceTypes {
     public static final String SMART_PLUG_TYPE = "plug";
     public static final String SMOKE_SENSOR_TYPE = "smoke";
 
+    public static final String YEELIGHT_DEVICE_TYPE = "yeelight_device";
+
 }

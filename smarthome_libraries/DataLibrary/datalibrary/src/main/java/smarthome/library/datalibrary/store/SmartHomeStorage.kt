@@ -15,7 +15,8 @@ interface SmartHomeStorage {
 
     fun createSmartHome(
         successListener: OnSuccessListener<Void> = defSuccessListener,
-        failureListener: OnFailureListener = defFailureListener)
+        failureListener: OnFailureListener = defFailureListener
+    )
 
     fun postSmartHome(
         smartHome: SmartHome,
@@ -23,7 +24,7 @@ interface SmartHomeStorage {
         failureListener: OnFailureListener = defFailureListener
     )
 
-    fun getSmartHome(listener: SmartHomeListener)
+    fun getSmartHome(listener: SmartHomeListener, failureListener: OnFailureListener = defFailureListener)
 
     fun addDevice(
         iotDevice: IotDevice,
@@ -31,16 +32,8 @@ interface SmartHomeStorage {
         failureListener: OnFailureListener = defFailureListener
     )
 
-    /**
-     * IotDevice update function <br>
-     * If controller is not null and belongs to current IotDevice, then controllers serveState changes to pending
-     * @param device device which need to be updated
-     * @param controller BaseController which serveState should be pending
-     * @param successListener OnSuccessListener, default implementation perform logging
-     * @param failureListener OnFailureListener, default implementation perform logging
-     */
     fun updateDevice(
-        device: IotDevice, controller: BaseController? = null,
+        device: IotDevice,
         successListener: OnSuccessListener<Void> = defSuccessListener,
         failureListener: OnFailureListener = defFailureListener
     )
