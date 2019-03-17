@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +34,24 @@ public class JsonDataSource extends SQLiteOpenHelper implements DeviceDataSource
 
     private Gson gson;
     private Class<? extends IotDevice> deviceType;
-    private Class<? extends BaseController> controllerType;
     private String tableName;
 
     public JsonDataSource(Context context, Class<? extends IotDevice> deviceType,
-                          Class<? extends BaseController> controllerType) {
+                          List<Class<? extends BaseController>> controllerTypes) {
         super(context, deviceType.getSimpleName() + ".db", null, VERSION);
-        gson = new Gson();
+
+        RuntimeTypeAdapterFactory<BaseController> adapter =
+                RuntimeTypeAdapterFactory
+                        .of(BaseController.class, "classType");
+        for (Class<? extends BaseController> controllerType : controllerTypes) {
+            adapter.registerSubtype(controllerType);
+        }
+
+        gson = new GsonBuilder().registerTypeAdapterFactory(adapter).create();
+
         this.deviceType = deviceType;
-        this.controllerType = controllerType;
+
+
         tableName = deviceType.getSimpleName();
         onCreate(getWritableDatabase());
     }

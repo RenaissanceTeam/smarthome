@@ -20,7 +20,7 @@ import smarthome.library.common.ControllerType;
 import smarthome.library.common.GUID;
 
 public class ArduinoController extends BaseController {
-    @Exclude public final ArduinoDevice device;
+    @Exclude public ArduinoDevice device;
     @Exclude @Expose public final int indexInArduinoServicesArray;
 
     public ArduinoController(ArduinoDevice device, ControllerType type, int indexInArduinoServicesArray) {
