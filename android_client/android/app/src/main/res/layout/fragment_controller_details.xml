@@ -45,12 +45,11 @@
         app:layout_constraintStart_toStartOf="@id/device_label"
         app:layout_constraintTop_toBottomOf="@+id/device_label" />
 
-    <EditText
+    <TextView
         android:id="@+id/controller_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="default"
         app:layout_constraintBaseline_toBaselineOf="@id/controller_name_label"
         app:layout_constraintStart_toEndOf="@+id/controller_name_label" />
 

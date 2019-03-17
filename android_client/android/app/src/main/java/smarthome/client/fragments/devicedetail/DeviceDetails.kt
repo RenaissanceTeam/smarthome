@@ -46,16 +46,25 @@ class DeviceDetails : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.refresh.observe(this, Observer { progressBar?.visibility = if (it) VISIBLE else GONE })
-        viewModel.device.observe(this, Observer { bindDevice(it); viewModel.deviceSet() })
+        viewModel.device.observe(this, Observer { bindDevice(it) })
         viewModel.controllerDetails.observe(this, Observer { it?.let { openControllerDetails(it) } })
     }
 
     private fun bindDevice(device: IotDevice) {
         deviceName?.text = device.name
-        deviceDescription?.text = device.description
-
+        setDescription(device)
         controllers?.adapter?.notifyDataSetChanged()
-        viewModel.deviceSet()
+    }
+
+    private fun setDescription(device: IotDevice) {
+        val description = device.description
+        if (description.isNullOrEmpty()) {
+            deviceDescription?.setTextColor(resources.getColor(android.R.color.darker_gray))
+            deviceDescription?.text = getString(R.string.empty_description)
+        } else {
+            deviceDescription?.setTextColor(resources.getColor(android.R.color.black))
+            deviceDescription?.text = device.description
+        }
     }
 
     private fun openControllerDetails(guid: Long) {
@@ -71,12 +80,19 @@ class DeviceDetails : Fragment() {
 
         deviceName?.setOnClickListener {
             EditTextDialog.create(view.context,
-                    DialogParameters("device name", viewModel.device.value?.name ?: "") { name ->
-                        viewModel.deviceNameChanged(name)
+                    DialogParameters("device name", viewModel.device.value?.name ?: "") {
+                        viewModel.deviceNameChanged(it)
                     }
             ).show()
         }
-        deviceDescription?.setOnClickListener {}
+
+        deviceDescription?.setOnClickListener {
+            EditTextDialog.create(view.context,
+                    DialogParameters("device description", viewModel.device.value?.description ?: "") {
+                        viewModel.deviceDescriptionChanged(it)
+                    }
+            ).show()
+        }
     }
 
     private fun setupViews(view: View) {

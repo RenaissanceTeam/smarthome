@@ -11,7 +11,7 @@ class ControllerView(root: ViewGroup) {
     private val inflater = LayoutInflater.from(root.context)
     val itemView = inflater.inflate(R.layout.controller_item, root, false)
     private val guid: TextView = itemView.findViewById(R.id.controller_guid)
-    private val type: TextView = itemView.findViewById(R.id.type)
+    private val name: TextView = itemView.findViewById(R.id.name)
     private val state: TextView = itemView.findViewById(R.id.state)
     private val UNKNOWN_STATE = "-"
 
@@ -20,7 +20,12 @@ class ControllerView(root: ViewGroup) {
 
     fun bind(controller: BaseController) {
         guid.text = "${controller.guid}"
-        type.text = "${controller.type ?: UNKNOWN_STATE}"
+        if (controller.name.isNullOrEmpty()) {
+            name.text = "${controller.type ?: UNKNOWN_STATE}"
+        } else {
+            name.text = controller.name
+        }
+
         state.text = controller.state ?: UNKNOWN_STATE
 
         boundGuid = controller.guid
