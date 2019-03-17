@@ -28,7 +28,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun authCheck() {
         if (BuildConfig.DEBUG) Log.d(TAG, "on create in viewmodel, so auth")
         if (authenticator.isAuthenticated()) {
-            Model.setupFirestore(authenticator.getUserId()!!)
             return
         }
 
@@ -37,7 +36,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onAuthSuccessful() {
         if (BuildConfig.DEBUG) Log.d(TAG, "auth successful, user id=${authenticator.getUserId()}")
-        Model.setupFirestore(authenticator.getUserId()!!)
     }
 
     fun onAuthFailed() {

@@ -1,79 +1,105 @@
 package smarthome.raspberry.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import smarthome.library.common.BaseController
+import smarthome.library.common.IotDevice
+import smarthome.library.common.SmartHome
 import smarthome.library.datalibrary.store.HomesReferencesStorage
+import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreHomesReferencesStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
+import smarthome.library.datalibrary.store.listeners.DevicesObserver
 import smarthome.library.datalibrary.store.listeners.HomeExistenceListener
+import smarthome.raspberry.*
 import smarthome.raspberry.BuildConfig.DEBUG
+import smarthome.raspberry.arduinodevices.controllers.ArduinoReadable
+import smarthome.raspberry.arduinodevices.controllers.ArduinoWritable
 import smarthome.raspberry.model.SmartHomeRepository
-import java.lang.Exception
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.coroutines.suspendCoroutine
 import kotlin.random.Random
 
-class HomeController(context: Context) {
+private const val HOME_ID_PREFIX = "home_id"
+private const val TAG = "HomeController"
 
-    val sharedPreferencesHelper: SharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
+class HomeController(context: Context) {
+    val sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
     val storage: HomesReferencesStorage = FirestoreHomesReferencesStorage.getInstance()!!
 
-    fun start() {
-        if (DEBUG) Log.d(javaClass.name, "start")
-
-        if (sharedPreferencesHelper.isHomeIdExists()) {
-            if (DEBUG) Log.d(javaClass.name, "home id already saved in shared prefs")
-            return
+    suspend fun getHomeId(): String {
+        if (!sharedPreferencesHelper.isHomeIdExists()) {
+            saveNewHomeId()
         }
-
-        checkAndSaveHome()
+        return sharedPreferencesHelper.getHomeId()
     }
 
-    private fun checkAndSaveHome() {
-        if (DEBUG) Log.d(javaClass.name, "checkAndSaveHome")
-
-        val homeId = generateHomeId()
-
-        storage.checkIfHomeExists(homeId, object : HomeExistenceListener {
-            override fun onHomeAlreadyExists() {
-                if (DEBUG) Log.d(javaClass.name, "homeId already exists")
-                checkAndSaveHome()
-            }
-
-            override fun onHomeDoesNotExist() {
-                if (DEBUG) Log.d(javaClass.name, "home does not exist")
-
-                sharedPreferencesHelper.setHomeId(homeId)
-
-                storage.addHomeReference(
-                        homeId,
-                        successListener = OnSuccessListener {
-                            if (DEBUG) Log.d(javaClass.name, "new homeId added: $homeId")
-                        },
-                        failureListener = object : OnFailureListener {
-                            override fun onFailure(p0: Exception) {
-                                if (DEBUG) Log.d(javaClass.name, "adding home reference failed", p0)
-                            }
-                        })
-
-                val homeStorage = FirestoreSmartHomeStorage.getInstance(homeId) ?: return
-                homeStorage.postSmartHome(SmartHomeRepository.getInstance())
-            }
-        })
+    fun getSmartHomeStorage(homeId: String): FirestoreSmartHomeStorage {
+        return FirestoreSmartHomeStorage.getInstance(homeId)
+                ?: throw UnableToCreateHomeStorage(homeId)
     }
 
-    private fun generateHomeId(): String {
-        var homeId = "home_id"
+    private suspend fun saveNewHomeId() {
+        val homeId = generateFirestoreUniqueHomeId()
+        sharedPreferencesHelper.setHomeId(homeId)
 
-        val now = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+        createHomeReference(homeId)
+        postSmartHomeToReference(homeId)
+    }
 
-        homeId += now.format(formatter)
-        homeId += Random.nextInt(0, 9999).toString()
+    private suspend fun postSmartHomeToReference(homeId: String) {
+        suspendCoroutine<Unit> { continuation ->
+            getSmartHomeStorage(homeId).postSmartHome(SmartHomeRepository,
+                    OnSuccessListener { continuation.resumeWith(Result.success(Unit)) },
+                    OnFailureListener { continuation.resumeWith(Result.failure(it)) })
+        }
+    }
 
+    private suspend fun createHomeReference(homeId: String) {
+        suspendCoroutine<Unit> { continuation ->
+            storage.addHomeReference(
+                    homeId,
+                    OnSuccessListener {
+                        if (DEBUG) Log.d(TAG, "new homeId added: $homeId")
+                        continuation.resumeWith(Result.success(Unit))
+                    },
+                    OnFailureListener {
+                        if (DEBUG) Log.d(TAG, "adding home reference failed", it)
+                        continuation.resumeWith(Result.failure(it))
+                    }
+            )
+        }
+    }
+
+    private suspend fun generateFirestoreUniqueHomeId(): String {
+        if (DEBUG) Log.d(TAG, "generateFirestoreUniqueHomeId")
+        var homeId: String
+        do {
+            homeId = generateHomeId()
+            val isUnique = suspendCoroutine<Boolean> { continuation ->
+                storage.checkIfHomeExists(homeId, object : HomeExistenceListener {
+                    override fun onHomeAlreadyExists() = continuation.resumeWith(Result.success(false))
+                    override fun onHomeDoesNotExist() = continuation.resumeWith(Result.success(true))
+                })
+            }
+        } while (!isUnique)
+        if (DEBUG) Log.d(TAG, "generated homeid=$homeId, that is unique")
         return homeId
     }
 
+    private fun generateHomeId(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+        val currentTime = LocalDateTime.now().format(formatter)
+
+        val randomPart = Random.nextInt(0, 9999).toString()
+
+        return "$HOME_ID_PREFIX$currentTime$randomPart"
+    }
 }
