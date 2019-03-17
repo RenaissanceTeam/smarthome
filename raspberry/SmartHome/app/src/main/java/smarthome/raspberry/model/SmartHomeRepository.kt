@@ -17,6 +17,7 @@ import smarthome.library.datalibrary.store.listeners.DevicesObserver
 import smarthome.raspberry.BuildConfig.DEBUG
 import smarthome.raspberry.OddDeviceInCloud
 import smarthome.raspberry.arduinodevices.ArduinoDevice
+import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 import smarthome.raspberry.utils.HomeController
 import java.util.*
 import kotlin.coroutines.suspendCoroutine
@@ -46,7 +47,13 @@ object SmartHomeRepository : SmartHome() {
     private fun loadSavedDevices() {
         for (dataSource in DataSources.values()) {
             dataSource.init(context)
-//            devices.addAll(dataSource.source.all) // todo fix polymorphic controller list problem
+            devices.addAll(dataSource.source.all)
+            devices.forEach { device ->
+                (device as? ArduinoDevice)?.controllers?.forEach {
+                    (it as? ArduinoController)?.device = device
+                }
+                // todo add code here to fix some links after deserializing from db
+            }
         }
     }
 
@@ -113,7 +120,7 @@ object SmartHomeRepository : SmartHome() {
                 return true
             }
 
-            val wasAdded = true || dataSource.source.add(device) // todo fix polymorphic list then remove true ||
+            val wasAdded = dataSource.source.add(device)
             if (wasAdded) {
                 // todo set alarms for auto refresh for each controller
 
