@@ -46,11 +46,20 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    def lifecycle_version = "2.0.0"
     // ViewModel and LiveData
+    def lifecycle_version = "2.0.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    // coroutines
+    def coroutines_version = "1.1.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+    // rx
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
 
     implementation(name:'datalibrary-debug', ext:'aar') {
         transitive=false

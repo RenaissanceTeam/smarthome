@@ -7,7 +7,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import smarthome.client.constants.Constants
 import smarthome.client.viewpager.Pages
 import smarthome.client.viewpager.ViewpagerAdapter
 
@@ -44,12 +43,12 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun launchAuthActivity() {
-        startActivityForResult(viewModel.authUiWrapper.getAuthIntent(), Constants.RC_SIGN_IN)
+        startActivityForResult(viewModel.authUiWrapper.getAuthIntent(), RC_SIGN_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constants.RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 viewModel.onAuthSuccessful()
             } else {

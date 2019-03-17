@@ -6,10 +6,15 @@ import android.util.Log;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayEnv;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Gateway;
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.Device;
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.Controller;
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.ToggleController;
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.discover.DeviceDetector;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -23,7 +28,7 @@ public class Tests {
 
     public GatewayEnv env;
 
-    public void init() {
+    public void initGateway() {
         Log.i(TAG, "Setting up environment...");
 
         env = GatewayEnv.builder()
@@ -33,7 +38,7 @@ public class Tests {
 
     @Test
     public void testGateWay() {
-        init();
+        initGateway();
 
         try {
             TimeUnit.MILLISECONDS.sleep(9000);
@@ -83,30 +88,11 @@ public class Tests {
     }
 
     @Test
-    public void testBlue() {
-        init();
-
-        try {
-            TimeUnit.MILLISECONDS.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        Gateway gateway = env.getGateway();
-
-        Log.v(TAG, gateway.toString());
-
-        gateway.enableLight((byte) 0, (byte) 0, (byte) 255
-                , 1000);
-
-        try {
-            TimeUnit.MILLISECONDS.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        gateway.disableLight();
-
+    public void testYeelight() {
+        Set<Device> devices = DeviceDetector.Companion.getInstance().discover();
+        Device bulb = (Device) devices.toArray()[0];
+        Log.v(TAG, bulb.toString());
+        ((ToggleController)bulb.controllers.get(2)).write();
     }
 
     /*@Test
