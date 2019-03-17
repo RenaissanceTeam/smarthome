@@ -24,6 +24,7 @@ public class BaseController {
     @Expose public ControllerType type;
     @Expose public long guid;
     @Expose public String state;
+    @Exclude @Expose public String classType = getClass().getSimpleName();
 
     public void setNewState(String newState) {
         state = newState;
