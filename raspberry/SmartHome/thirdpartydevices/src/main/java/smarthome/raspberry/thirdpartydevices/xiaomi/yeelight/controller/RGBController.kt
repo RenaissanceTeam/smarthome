@@ -14,6 +14,9 @@ class RGBController(device: Device) : Controller(device, Property.RGB.property),
         return super.controllerRead(Property.RGB)
     }
 
+    /**
+     * @param params {r}, {g}, {b} (ints from 0 to 255)
+     */
     override fun write(vararg params: Any): Result {
         val r: Int = Utils.adjust(params[0] as Int, 0, 255)
         val g: Int = Utils.adjust(params[1] as Int, 0, 255)

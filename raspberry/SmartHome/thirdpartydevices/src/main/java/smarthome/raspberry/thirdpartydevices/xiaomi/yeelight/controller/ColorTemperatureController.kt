@@ -9,6 +9,9 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.utils.Utils.Compani
 
 class ColorTemperatureController(device: Device) : Controller(device, Property.COLOR_TEMPERATURE.property), Readable, Writable {
 
+    /**
+     * @param params {color_temperature} (int from 1700 to 6500)
+     */
     override fun write(vararg params: Any): Result {
         val colorTemp: Int = adjust(params[0] as Int, 1700, 6500)
         return super.controllerWrite("set_ct_abx", colorTemp, device.effect.effect, device.duration)

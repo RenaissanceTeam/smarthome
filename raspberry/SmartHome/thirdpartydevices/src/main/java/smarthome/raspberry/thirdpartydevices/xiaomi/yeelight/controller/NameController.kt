@@ -11,6 +11,9 @@ class NameController(device: Device) : Controller(device, Property.NAME.property
         return super.controllerRead(Property.NAME)
     }
 
+    /**
+     * @param params {name} (String)
+     */
     override fun write(vararg params: Any): Result {
         val name: String = params[0] as String
         return super.controllerWrite("set_name", name)
