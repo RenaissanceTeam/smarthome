@@ -1,5 +1,6 @@
 package smarthome.raspberry.arduinodevices;
 
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -9,7 +10,7 @@ import smarthome.library.common.IotDevice;
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController;
 
 public class ArduinoDevice extends IotDevice {
-    @Expose public final String ip;
+    @Exclude @Expose public final String ip;
 
     private final Gson gson;
     public ArduinoDevice(String name, String description, String ip) {
