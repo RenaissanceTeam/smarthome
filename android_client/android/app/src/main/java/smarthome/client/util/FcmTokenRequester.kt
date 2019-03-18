@@ -3,16 +3,17 @@ package smarthome.client.util
 import android.content.Context
 import android.util.Log
 import com.google.firebase.iid.FirebaseInstanceId
+import smarthome.client.App
 import smarthome.client.BuildConfig
 import java.lang.RuntimeException
 import kotlin.Result.Companion.failure
 import kotlin.Result.Companion.success
 import kotlin.coroutines.suspendCoroutine
 
-class FcmTokenRequester(private val context: Context) {
+class FcmTokenRequester {
 
     private val TAG = "FcmTokenRequester"
-    private val storage = FcmTokenStorage(context)
+    private val storage = FcmTokenStorage(App.appContext)
 
     suspend fun initFcmToken() {
         if (!storage.isSaved) saveToken()

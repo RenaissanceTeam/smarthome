@@ -3,6 +3,7 @@ package smarthome.client.util
 import android.content.Context
 import android.util.Log
 import smarthome.client.BuildConfig.DEBUG
+import smarthome.client.Model
 
 class FcmTokenStorage(context: Context) {
     val INVALID_TOKEN = ""
@@ -15,9 +16,12 @@ class FcmTokenStorage(context: Context) {
         get() = prefs.getString(STORAGE_KEY, INVALID_TOKEN)!!
         set(token) {
             if (DEBUG) Log.d(TAG, "saving new token=$token")
-            // todo change token in firestore
+
             prefs.edit().putString(STORAGE_KEY, token).apply()
+            Model.saveInstanceToken(token, this)
         }
 
     val isSaved = prefs.contains(STORAGE_KEY)
+
+    fun removeToken() = prefs.edit().remove(STORAGE_KEY).apply()
 }
