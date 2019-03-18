@@ -56,6 +56,4 @@ class MainActivity : FragmentActivity() {
             }
         }
     }
-
-
 }
