@@ -32,7 +32,7 @@ public class GatewayEnv {
 
     private Gateway gateway;
     private List<Device> devices = Collections.synchronizedList(new ArrayList<>());
-    private static UdpTransport transport;
+    private UdpTransport transport;
 
     private Map<String, Consumer<ResponseCmd>> commandsToActions = new HashMap<>();
     private Map<String, Function<String, Device>> deviceDictionary = new HashMap<>();
@@ -63,6 +63,10 @@ public class GatewayEnv {
 
     public List<Device> getDevices() {
         return devices;
+    }
+
+    public void discover() {
+        transport.sendCommand(new DiscoverGatewayCmd());
     }
 
     private void processReport(ResponseCmd response) {

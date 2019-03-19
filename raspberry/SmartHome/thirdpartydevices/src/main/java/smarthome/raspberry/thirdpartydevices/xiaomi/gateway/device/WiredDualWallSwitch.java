@@ -86,7 +86,7 @@ public class WiredDualWallSwitch extends Device {
 
     private void sendCmd(String statusLeft, String statusRight) {
         try {
-            transport.sendWriteCommand(getSid(), getDeviceType(), new WiredDualWallSwitchCmd(statusLeft, statusRight));
+            transport.sendWriteCommand(getSid(), getType(), new WiredDualWallSwitchCmd(statusLeft, statusRight));
         } catch (Exception e) {
             e.printStackTrace();
         }

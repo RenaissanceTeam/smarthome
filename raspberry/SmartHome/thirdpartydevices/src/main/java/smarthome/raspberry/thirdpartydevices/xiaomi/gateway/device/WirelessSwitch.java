@@ -86,7 +86,7 @@ public class WirelessSwitch extends ExtendedDevice {
 
     private void sendCmd(String status) {
         try {
-            transport.sendWriteCommand(getSid(), getDeviceType(), new WirelessSwitchCmd(status));
+            transport.sendWriteCommand(getSid(), getType(), new WirelessSwitchCmd(status));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -22,7 +22,7 @@ class Device(private val id: String,
     : IotDevice() {
 
     init {
-        deviceType = YEELIGHT_DEVICE_TYPE
+        type = YEELIGHT_DEVICE_TYPE
     }
 
     constructor(discoverResponse: DiscoverResponse) : this(
