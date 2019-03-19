@@ -1,6 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller
 
 import smarthome.library.common.BaseController
+import smarthome.library.common.GUID
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.command.Command
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.defStateChangeListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.listeners.StateChangeListener
@@ -14,7 +15,8 @@ open class Controller(val device: Device,
     : BaseController() {
 
     init {
-        this.guid = 1
+        this.type = type
+        this.guid = GUID.getInstance().generateGuidForController(device, this)
     }
 
     fun controllerWrite(command: Command) {
