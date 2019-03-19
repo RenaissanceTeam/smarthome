@@ -39,7 +39,7 @@ public abstract class Device extends IotDevice {
 
     public Device(String sid, String type) {
         this.sid = sid;
-        setDeviceType(type);
+        setType(type);
     }
 
     public String getSid() {
@@ -50,6 +50,6 @@ public abstract class Device extends IotDevice {
 
     @Override
     public String toString() {
-        return "|\n--- Xiaomi gateway device ---\n" + "type: " + getDeviceType() + ", sid: " + sid + ", name: " + name;
+        return "|\n--- Xiaomi gateway device ---\n" + "type: " + getType() + ", sid: " + sid + ", name: " + name;
     }
 }

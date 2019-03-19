@@ -37,6 +37,31 @@ public class Tests {
     }
 
     @Test
+    public void testGatewayDevicesDiscovering() {
+        initGateway();
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(9000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Gateway gateway = env.getGateway();
+
+        Log.v(TAG, gateway.toString());
+
+        Log.d(TAG, "\n\n\nREADY TO DISCOVER DEVICES\n\n\n");
+
+        env.discover();
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(60000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void testGateWay() {
         initGateway();
 

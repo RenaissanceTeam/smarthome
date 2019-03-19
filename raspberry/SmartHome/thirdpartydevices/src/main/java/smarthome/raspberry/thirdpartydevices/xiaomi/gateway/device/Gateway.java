@@ -83,7 +83,7 @@ public class Gateway extends Device {
         if (illumination < 300 || illumination > 1300) throw new IllegalArgumentException("Illumination must be in range 300 - 1300");
 
         try {
-            udpTransport.sendWriteCommand(getSid(), getDeviceType(), new GatewayLightCmd(rgb, illumination));
+            udpTransport.sendWriteCommand(getSid(), getType(), new GatewayLightCmd(rgb, illumination));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,7 +91,7 @@ public class Gateway extends Device {
 
     public void disableLight() {
         try {
-            udpTransport.sendWriteCommand(getSid(), getDeviceType(), new GatewayLightCmd(0, 0));
+            udpTransport.sendWriteCommand(getSid(), getType(), new GatewayLightCmd(0, 0));
         } catch (Exception e) {
             e.printStackTrace();
         }

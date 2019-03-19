@@ -91,7 +91,7 @@ public class SmartPlug extends ExtendedDevice {
 
     private void sendCmd(String status) {
         try {
-            transport.sendWriteCommand(getSid(), getDeviceType(), new SmartPlugCmd(status));
+            transport.sendWriteCommand(getSid(), getType(), new SmartPlugCmd(status));
         } catch (Exception e) {
             e.printStackTrace();
         }

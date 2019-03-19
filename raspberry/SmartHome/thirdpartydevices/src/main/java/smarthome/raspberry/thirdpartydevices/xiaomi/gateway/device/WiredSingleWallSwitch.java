@@ -67,7 +67,7 @@ public class WiredSingleWallSwitch extends Device {
 
     private void sendCmd(String status) {
         try {
-            transport.sendWriteCommand(getSid(), getDeviceType(), new WiredSingleWallSwitchCmd(status));
+            transport.sendWriteCommand(getSid(), getType(), new WiredSingleWallSwitchCmd(status));
         } catch (Exception e) {
             e.printStackTrace();
         }
