@@ -3,12 +3,13 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device
 import android.util.Log
 import org.json.JSONException
 import org.json.JSONObject
+import smarthome.library.common.BaseController
+import smarthome.library.common.GUID
 import smarthome.library.common.IotDevice
 import smarthome.library.common.constants.GATEWAY_VOLTAGE_CONTROLLER
 import smarthome.raspberry.thirdpartydevices.BuildConfig
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.IDLE_STATUS
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.VOLTAGE_KEY
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.Controller
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.listeners.SmokeAlarmListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.listeners.StateChangeListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.listeners.WaterLeakListener
@@ -23,7 +24,9 @@ abstract class Device(val sid: String,
     var status: String = IDLE_STATUS
 
     init {
+        this.name = sid
         this.type = type
+        this.guid = GUID.getInstance().getGuidForIotDevice(this)
     }
 
     abstract fun parseData(json: String)
@@ -34,8 +37,12 @@ abstract class Device(val sid: String,
                     (o.getString(VOLTAGE_KEY).toFloat() / 1000).toString()
     }
 
-    fun getControllerByType(type: String): Controller {
-        TODO()
+    fun getControllerByType(type: String): BaseController {
+        for (controller in getControllers())
+            if (controller.type == type)
+                return controller
+
+        throw IllegalArgumentException("This device does not have controller with type: $type")
     }
 
     fun invokeStateListener(state: String) {
