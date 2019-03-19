@@ -15,29 +15,19 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.Tempe
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.VoltageController
 
 class WeatherSensor(sid: String)
-    : Device(sid, WEATHER_SENSOR_TYPE) {
+    : THSensor(sid, WEATHER_SENSOR_TYPE) {
 
     init {
-        addControllers(TemperatureController(this),
-                HumidityController(this),
-                PressureController(this),
-                VoltageController(this))
+        addControllers(PressureController(this))
     }
 
     override fun parseData(json: String) {
+        super.parseData(json)
         try {
             val o = JSONObject(json)
 
-            if (!o.isNull(STATUS_TEMPERATURE))
-                getControllerByType(GATEWAY_TEMPERATURE_CONTROLLER).state = (o.getString(STATUS_TEMPERATURE).toFloat() / 100).toString() + "C"
-
-            if (!o.isNull(STATUS_HUMIDITY))
-                getControllerByType(GATEWAY_HUMIDITY_CONTROLLER).state = (o.getString(STATUS_HUMIDITY).toFloat() / 100).toString() + "%"
-
             if (!o.isNull(STATUS_PRESSURE))
                 getControllerByType(GATEWAY_PRESSURE_CONTROLLER).state = (o.getString(STATUS_PRESSURE).toFloat() / 100).toString() + "kPa"
-
-            setVoltage(o)
 
         } catch (e: JSONException) {
             reportDataParseError(e)
