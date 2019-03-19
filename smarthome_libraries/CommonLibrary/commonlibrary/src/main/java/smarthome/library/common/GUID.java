@@ -28,8 +28,8 @@ public class GUID {
         return getGuidForName(device.name);
     }
 
-    public long generateGuidForController(BaseController controller) {
-        long guid = controller.type.id + 1;
+    public long generateGuidForController(IotDevice device, BaseController controller) {
+        long guid = device.guid + controller.type.hashCode();
 
         long shift = 1;
         while (mGuids.contains(guid)) {
