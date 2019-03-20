@@ -1,4 +1,4 @@
-package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.utils.channel;
+package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.channel;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

@@ -1,5 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight
 
+import smarthome.library.common.GUID
 import smarthome.library.common.IotDevice
 import smarthome.library.common.constants.DeviceTypes.YEELIGHT_DEVICE_TYPE
 import smarthome.raspberry.thirdpartydevices.network.SocketHolder
@@ -11,7 +12,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.model.DeviceMetaData
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.model.DiscoverResponse
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.utils.Utils
+import smarthome.raspberry.thirdpartydevices.utils.Utils
 
 class Device(private val id: String,
              val metaData: DeviceMetaData,
@@ -22,7 +23,9 @@ class Device(private val id: String,
     : IotDevice() {
 
     init {
-        deviceType = YEELIGHT_DEVICE_TYPE
+        name = id
+        guid = GUID.getInstance().getGuidForIotDevice(this)
+        type = YEELIGHT_DEVICE_TYPE
     }
 
     constructor(discoverResponse: DiscoverResponse) : this(
@@ -38,7 +41,7 @@ class Device(private val id: String,
         }
     }
 
-    val socketHolder: SocketHolder = SocketHolder(ip, port)
+    private val socketHolder: SocketHolder = SocketHolder(ip, port)
 
     fun readUntilResult(id: Int): Result {
         while (true) {

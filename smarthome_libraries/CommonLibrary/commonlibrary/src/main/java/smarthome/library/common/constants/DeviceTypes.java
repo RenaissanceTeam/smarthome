@@ -5,7 +5,7 @@ public class DeviceTypes {
     public static String DEFAULT_TYPE = "default_type";
 
     // -- Xiaomi devices
-    public static final String GATEWAY_TYPE = "xiaomi_gateway_2";
+    public static final String GATEWAY_TYPE = "gateway";
     public static final String DOOR_WINDOW_SENSOR_TYPE = "magnet";
     public static final String MOTION_SENSOR_TYPE = "motion";
     public static final String WIRELESS_SWITCH_TYPE = "switch";
