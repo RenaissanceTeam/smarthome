@@ -5,8 +5,10 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.command.Wireless
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.interfaces.Readable
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.interfaces.Writable
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.net.UdpTransport
 
-class ButtonClickController(device: Device) : Controller(device, GATEWAY_BUTTON_CLICK_CONTROLLER), Readable, Writable {
+class ButtonClickController(device: Device, transport: UdpTransport)
+    : Controller(device, GATEWAY_BUTTON_CLICK_CONTROLLER, transport), Readable, Writable {
     /**
      * STATUS_CLICK, STATUS_DOUBLE_CLICK, STATUS_LONG_PRESS
      */

@@ -5,8 +5,10 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.command.SmartPlu
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.interfaces.Readable
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.interfaces.Writable
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.net.UdpTransport
 
-class SmartPlugOnOffController(device: Device) : Controller(device, GATEWAY_SMART_PLUG_ON_OFF_CONTROLLER), Readable, Writable {
+class SmartPlugOnOffController(device: Device, transport: UdpTransport)
+    : Controller(device, GATEWAY_SMART_PLUG_ON_OFF_CONTROLLER, transport), Readable, Writable {
     /**
      * "on" or "off" (String)
      */

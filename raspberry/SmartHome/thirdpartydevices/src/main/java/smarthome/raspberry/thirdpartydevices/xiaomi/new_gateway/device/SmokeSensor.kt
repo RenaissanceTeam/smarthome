@@ -13,9 +13,10 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.Volta
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.listeners.SmokeAlarmListener
 
 class SmokeSensor(sid: String,
-                  private var alarm: Boolean = false,
                   smokeAlarmListener: SmokeAlarmListener? = null)
     : Device(sid, SMOKE_SENSOR_TYPE, smokeAlarmListener = smokeAlarmListener) {
+
+    private var alarm: Boolean = false
 
     init {
         addControllers(SmokeAlarmController(this),

@@ -6,7 +6,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.command.Command
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.defStateChangeListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.listeners.StateChangeListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device.Device
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.utils.UdpTransport
+import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.net.UdpTransport
 
 open class Controller(val device: Device,
                       type: String,

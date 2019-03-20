@@ -8,8 +8,10 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.inter
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device.Device
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device.WiredDualWallSwitch
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device.WiredSingleWallSwitch
+import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.net.UdpTransport
 
-class ButtonController(device: Device, type: String) : Controller(device, type), Readable, Writable {
+class ButtonController(device: Device, type: String, transport: UdpTransport)
+    : Controller(device, type, transport), Readable, Writable {
     /**
      * for WiredDualWallSwitch: "on" or "off" (String), status_channel (String)
      * for WiredSingleWallSwitch: "on" or "off" (String)
@@ -21,7 +23,7 @@ class ButtonController(device: Device, type: String) : Controller(device, type),
                     sendCommand(params[0] as String, device.statusRight)
                 else sendCommand(device.statusLeft, params[0] as String)
             }
-            is WiredSingleWallSwitch -> WiredSingleWallSwitchCmd(params[0] as String)
+            is WiredSingleWallSwitch -> controllerWrite(WiredSingleWallSwitchCmd(params[0] as String))
         }
     }
 

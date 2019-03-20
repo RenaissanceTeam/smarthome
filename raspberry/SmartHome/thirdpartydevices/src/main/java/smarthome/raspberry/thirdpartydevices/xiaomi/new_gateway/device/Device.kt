@@ -17,8 +17,8 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.liste
 abstract class Device(val sid: String,
                       type: String,
                       private val stateChangeListener: StateChangeListener? = null,
-                      val smokeAlarmListener: SmokeAlarmListener? = null,
-                      val waterLeakListener: WaterLeakListener? = null)
+                      var smokeAlarmListener: SmokeAlarmListener? = null,
+                      var waterLeakListener: WaterLeakListener? = null)
     : IotDevice () {
 
     var status: String = IDLE_STATUS

@@ -3,6 +3,7 @@ package smarthome.library.common.constants
 const val GATEWAY_BUTTON_CLICK_CONTROLLER          = "gateway_button_click_controller"
 const val GATEWAY_LEFT_BUTTON_CONTROLLER           = "gateway_left_button_controller"
 const val GATEWAY_RIGHT_BUTTON_CONTROLLER          = "gateway_right_button_controller"
+const val GATEWAY_SINGLE_BUTTON_CONTROLLER         = "gateway_single_button_controller"
 const val GATEWAY_DOOR_WINDOW_CONTROLLER           = "gateway_door_window_controller"
 const val GATEWAY_HUMIDITY_CONTROLLER              = "gateway_humidity_controller"
 const val GATEWAY_ILLUMINATION_CONTROLLER          = "gateway_illumination_controller"
@@ -18,3 +19,4 @@ const val GATEWAY_TEMPERATURE_CONTROLLER           = "gateway_ temperature_contr
 const val GATEWAY_TIME_IN_USE_CONTROLLER           = "gateway_time_in_use_controller"
 const val GATEWAY_VOLTAGE_CONTROLLER               = "gateway_voltage_controller"
 const val GATEWAY_WATER_LEAK_CONTROLLER            = "gateway_water_leak_controller"
+const val GATEWAY_LIGHT_ON_OFF_CONTROLLER          = "gateway_light_on_off_controller"

@@ -1,4 +1,4 @@
-package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.utils
+package smarthome.raspberry.thirdpartydevices.utils
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
