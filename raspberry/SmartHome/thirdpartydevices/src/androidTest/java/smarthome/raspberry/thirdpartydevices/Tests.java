@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.GatewayService;
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.interfaces.Readable;
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.interfaces.Writable;
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device.Gateway;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayService;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Readable;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Writable;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Gateway;
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.Device;
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.ToggleController;
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.discover.DeviceDetector;
@@ -24,8 +24,8 @@ import static smarthome.library.common.constants.ControllerTypesKt.GATEWAY_PRESS
 import static smarthome.library.common.constants.ControllerTypesKt.GATEWAY_RGB_CONTROLLER;
 import static smarthome.library.common.constants.ControllerTypesKt.GATEWAY_TEMPERATURE_CONTROLLER;
 import static smarthome.library.common.constants.DeviceTypes.WEATHER_SENSOR_TYPE;
-import static smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.ConstantsKt.STATUS_OFF;
-import static smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.ConstantsKt.STATUS_ON;
+import static smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.ConstantsKt.STATUS_OFF;
+import static smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.ConstantsKt.STATUS_ON;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -121,7 +121,7 @@ public class Tests {
 
         ((Writable) gateway.getControllerByType(GATEWAY_LIGHT_ON_OFF_CONTROLLER)).write(STATUS_OFF);
 
-        List<smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device.Device> initedDevices = gatewayService.getDevices();
+        List<smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device> initedDevices = gatewayService.getDevices();
         String weather = "Temperature: " +  ((Readable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_TEMPERATURE_CONTROLLER)).read() +
                 ", Humidity: " +  ((Readable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_HUMIDITY_CONTROLLER)).read() +
                 ", Pressure: " +  ((Readable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_PRESSURE_CONTROLLER)).read();
