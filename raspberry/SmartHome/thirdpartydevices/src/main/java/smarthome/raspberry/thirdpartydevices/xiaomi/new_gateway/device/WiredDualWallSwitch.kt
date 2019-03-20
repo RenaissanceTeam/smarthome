@@ -9,15 +9,17 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.IDLE_S
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.STATUS_CHANNEL_0
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.STATUS_CHANNEL_1
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.ButtonController
+import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.net.UdpTransport
 
-class WiredDualWallSwitch (sid: String,
-                           var statusLeft: String = IDLE_STATUS,
-                           var statusRight: String = IDLE_STATUS)
+class WiredDualWallSwitch (sid: String, transport: UdpTransport)
     : Device(sid, WIRED_DUAL_WALL_SWITCH_TYPE) {
 
+    var statusLeft: String = IDLE_STATUS
+    var statusRight: String = IDLE_STATUS
+
     init {
-        addControllers(ButtonController(this, GATEWAY_LEFT_BUTTON_CONTROLLER),
-                ButtonController(this, GATEWAY_RIGHT_BUTTON_CONTROLLER))
+        addControllers(ButtonController(this, GATEWAY_LEFT_BUTTON_CONTROLLER, transport),
+                ButtonController(this, GATEWAY_RIGHT_BUTTON_CONTROLLER, transport))
     }
 
     override fun parseData(json: String) {

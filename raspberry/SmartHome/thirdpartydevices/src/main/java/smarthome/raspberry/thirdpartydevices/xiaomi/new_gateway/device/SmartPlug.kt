@@ -12,12 +12,13 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.LOAD_P
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.POWER_CONSUMED_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.STATUS_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.*
+import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.net.UdpTransport
 
-class SmartPlug(sid: String)
+class SmartPlug(sid: String, transport: UdpTransport)
     : Device(sid, SMART_PLUG_TYPE) {
 
     init {
-        addControllers(SmartPlugOnOffController(this),
+        addControllers(SmartPlugOnOffController(this, transport),
                 TimeInUseController(this),
                 PowerConsumedController(this),
                 LoadPowerController(this),

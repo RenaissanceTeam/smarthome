@@ -6,12 +6,13 @@ import smarthome.library.common.constants.DeviceTypes.WIRELESS_SWITCH_TYPE
 import smarthome.library.common.constants.GATEWAY_BUTTON_CLICK_CONTROLLER
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.STATUS_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.ButtonClickController
+import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.net.UdpTransport
 
-class WirelessSwitch(sid: String)
+class WirelessSwitch(sid: String, transport: UdpTransport)
     : Device(sid, WIRELESS_SWITCH_TYPE) {
 
     init {
-        addControllers(ButtonClickController(this))
+        addControllers(ButtonClickController(this, transport))
     }
 
     override fun parseData(json: String) {

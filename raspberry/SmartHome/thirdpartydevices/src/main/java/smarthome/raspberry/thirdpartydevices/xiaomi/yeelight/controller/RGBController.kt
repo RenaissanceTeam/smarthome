@@ -6,8 +6,8 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfac
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Writable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.utils.Utils
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.utils.Utils.Companion.calculateRGB
+import smarthome.raspberry.thirdpartydevices.utils.Utils
+import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.calculateRGB
 
 class RGBController(device: Device) : Controller(device, RGB_CONTROLLER_TYPE), Readable, Writable {
 

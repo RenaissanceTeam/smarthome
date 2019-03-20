@@ -6,13 +6,8 @@ import smarthome.library.common.constants.DeviceTypes.WEATHER_SENSOR_TYPE
 import smarthome.library.common.constants.GATEWAY_HUMIDITY_CONTROLLER
 import smarthome.library.common.constants.GATEWAY_PRESSURE_CONTROLLER
 import smarthome.library.common.constants.GATEWAY_TEMPERATURE_CONTROLLER
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.STATUS_HUMIDITY
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.STATUS_PRESSURE
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.STATUS_TEMPERATURE
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.HumidityController
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.PressureController
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.TemperatureController
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.VoltageController
 
 class WeatherSensor(sid: String)
     : THSensor(sid, WEATHER_SENSOR_TYPE) {
@@ -27,7 +22,7 @@ class WeatherSensor(sid: String)
             val o = JSONObject(json)
 
             if (!o.isNull(STATUS_PRESSURE))
-                getControllerByType(GATEWAY_PRESSURE_CONTROLLER).state = (o.getString(STATUS_PRESSURE).toFloat() / 100).toString() + "kPa"
+                getControllerByType(GATEWAY_PRESSURE_CONTROLLER).state = (o.getString(STATUS_PRESSURE).toFloat() / 1000).toString() + "kPa"
 
         } catch (e: JSONException) {
             reportDataParseError(e)

@@ -12,7 +12,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.model.DeviceMetaData
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.model.DiscoverResponse
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.utils.Utils
+import smarthome.raspberry.thirdpartydevices.utils.Utils
 
 class Device(private val id: String,
              val metaData: DeviceMetaData,

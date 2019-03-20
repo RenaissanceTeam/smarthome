@@ -1,25 +1,28 @@
-package smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway
+package smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device
 
 import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.GATEWAY_TYPE
 import smarthome.library.common.constants.GATEWAY_ILLUMINATION_CONTROLLER
+import smarthome.library.common.constants.GATEWAY_LIGHT_ON_OFF_CONTROLLER
 import smarthome.library.common.constants.GATEWAY_RGB_CONTROLLER
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.constants.*
+import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.GatewayLightOnOffController
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.IlluminationController
 import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.controller.RGBController
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.device.Device
-import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.utils.UdpTransport
+import smarthome.raspberry.thirdpartydevices.xiaomi.new_gateway.net.UdpTransport
 
-class Gateway(sid: String, var ip: String, val transport: UdpTransport) : Device(sid, GATEWAY_TYPE) {
+class Gateway(sid: String, val transport: UdpTransport) : Device(sid, GATEWAY_TYPE) {
 
+    var ip: String = ""
     var rgb: Long = 0
     var illumination: Int = 0
     private var protoVersion: String = IDLE_STATUS
 
     init {
         addControllers(RGBController(this, transport),
-                IlluminationController(this, transport))
+                IlluminationController(this, transport),
+                GatewayLightOnOffController(this, transport))
     }
 
     private fun configureIp(ip: String) {
@@ -31,21 +34,34 @@ class Gateway(sid: String, var ip: String, val transport: UdpTransport) : Device
         try {
             val o = JSONObject(json)
 
+            var light = false
+
             if (!o.isNull(IP_KEY))
                 configureIp(o.getString(IP_KEY))
 
             if (!o.isNull(RGB_KEY)) {
                 rgb = o.getLong(RGB_KEY)
                 getControllerByType(GATEWAY_RGB_CONTROLLER).state = rgb.toString()
+
+                if(rgb > 0)
+                    light = true
             }
 
             if (!o.isNull(ILLUMINATION_KEY)) {
                 illumination = o.getInt(ILLUMINATION_KEY)
                 getControllerByType(GATEWAY_ILLUMINATION_CONTROLLER).state = illumination.toString()
+
+                if(illumination > 0)
+                    light = true
             }
 
             if (!o.isNull(PROTO_VERSION_KEY))
                 protoVersion = o.getString(PROTO_VERSION_KEY)
+
+            var lightStatus = STATUS_OFF
+            if (light) lightStatus = STATUS_ON
+
+            getControllerByType(GATEWAY_LIGHT_ON_OFF_CONTROLLER).state = lightStatus
 
         } catch (e: JSONException) {
             reportDataParseError(e)
@@ -54,7 +70,7 @@ class Gateway(sid: String, var ip: String, val transport: UdpTransport) : Device
     }
 
     override fun toString(): String {
-        return super.toString() + "\nrgb: $rgb, illumination: $illumination, protoVersion: $protoVersion"
+        return super.toString() + "\nip: $ip, rgb: $rgb, illumination: $illumination, protoVersion: $protoVersion"
     }
 
 }
