@@ -18,8 +18,8 @@ open class Controller(val device: Device,
     : BaseController() {
 
     init {
-        this.guid = 1 //GUID.getInstance().issueNewControllerGuid(this)
-        this.deviceType = type
+        this.type = type
+        this.guid = GUID.getInstance().generateGuidForController(device, this)
     }
 
     fun controllerWrite(method: String, vararg params: Any): Result {

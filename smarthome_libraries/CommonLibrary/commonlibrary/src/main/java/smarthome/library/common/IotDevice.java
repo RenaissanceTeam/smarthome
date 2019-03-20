@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ public class IotDevice {
     @Expose public String description;
     @Expose public long guid;
     @Expose public List<BaseController> controllers = new ArrayList<>();
-    @Expose private String deviceType = DEFAULT_TYPE;
+    @Expose private String type = DEFAULT_TYPE;
 
     public IotDevice() {} // needed for deserialization
 
@@ -26,16 +27,24 @@ public class IotDevice {
         guid = GUID.getInstance().getGuidForIotDevice(this);
     }
 
+    public void addControllers(BaseController... controllers) {
+        this.controllers.addAll(Arrays.asList(controllers));
+    }
+
+    public void addControllers(List<BaseController> controllers) {
+        this.controllers.addAll(controllers);
+    }
+
     public List<BaseController> getControllers() {
         return controllers;
     }
 
-    public String getDeviceType() {
-        return deviceType;
+    public String getType() {
+        return type;
     }
 
-    public void setDeviceType(String deviceType) {
-        this.deviceType = deviceType;
+    public void setType(String type) {
+        this.type = type;
     }
 
     /**

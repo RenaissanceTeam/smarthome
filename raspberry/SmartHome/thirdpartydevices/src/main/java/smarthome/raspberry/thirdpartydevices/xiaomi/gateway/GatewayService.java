@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,16 +22,37 @@ import java.util.function.Function;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.DiscoverGatewayCmd;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.ReadDeviceCmd;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.ResponseCmd;
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.*;
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.utils.UdpTransport;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.DoorWindowSensor;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Gateway;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.MotionSensor;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.SmartPlug;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.SmokeSensor;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.THSensor;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WaterLeakSensor;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WeatherSensor;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WiredDualWallSwitch;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WiredSingleWallSwitch;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WirelessSwitch;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport;
 
-import static smarthome.library.common.constants.DeviceTypes.*;
+import static smarthome.library.common.constants.DeviceTypes.DOOR_WINDOW_SENSOR_TYPE;
+import static smarthome.library.common.constants.DeviceTypes.GATEWAY_TYPE;
+import static smarthome.library.common.constants.DeviceTypes.MOTION_SENSOR_TYPE;
+import static smarthome.library.common.constants.DeviceTypes.SMART_PLUG_TYPE;
+import static smarthome.library.common.constants.DeviceTypes.SMOKE_SENSOR_TYPE;
+import static smarthome.library.common.constants.DeviceTypes.TEMPERATURE_HUMIDITY_SENSOR_TYPE;
+import static smarthome.library.common.constants.DeviceTypes.WATER_LEAK_SENSOR_TYPE;
+import static smarthome.library.common.constants.DeviceTypes.WEATHER_SENSOR_TYPE;
+import static smarthome.library.common.constants.DeviceTypes.WIRED_DUAL_WALL_SWITCH_TYPE;
+import static smarthome.library.common.constants.DeviceTypes.WIRED_SINGLE_WALL_SWITCH_TYPE;
+import static smarthome.library.common.constants.DeviceTypes.WIRELESS_SWITCH_TYPE;
 
-public class GatewayEnv {
+public class GatewayService {
 
     private Gateway gateway;
-    private List<Device> devices = Collections.synchronizedList(new ArrayList<>());
-    private static UdpTransport transport;
+    private Map<String, Device> devices = Collections.synchronizedMap(new HashMap<>());
+    private UdpTransport transport;
 
     private Map<String, Consumer<ResponseCmd>> commandsToActions = new HashMap<>();
     private Map<String, Function<String, Device>> deviceDictionary = new HashMap<>();
@@ -45,7 +65,7 @@ public class GatewayEnv {
 
     private final String TAG = getClass().getName();
 
-    private GatewayEnv(String sid, String password, boolean useCache) {
+    private GatewayService(String sid, String password) {
         initConsumersMap();
         initDeviceDictionary();
 
@@ -62,7 +82,20 @@ public class GatewayEnv {
     }
 
     public List<Device> getDevices() {
-        return devices;
+        return new ArrayList<>(devices.values());
+    }
+
+    public Device getDeviceByType(String type) {
+        for (Device device : getDevices()) {
+            if(device.getType().equals(type))
+                return device;
+        }
+
+        return null;
+    }
+
+    public void discover() {
+        transport.sendCommand(new DiscoverGatewayCmd());
     }
 
     private void processReport(ResponseCmd response) {
@@ -101,7 +134,7 @@ public class GatewayEnv {
         if(response.data != null) device.parseData(response.data);
 
         synchronized (devices) {
-            devices.add(device);
+            devices.put(device.getSid(), device);
         }
     }
 
@@ -110,8 +143,10 @@ public class GatewayEnv {
 
         transport.setCurrentToken(response.token);
 
-        if(gateway == null)
+        if(gateway == null) {
             gateway = new Gateway(response.sid, transport);
+            devices.put(gateway.getSid(), gateway);
+        }
 
         transport.sendCommand(new ReadDeviceCmd(response.sid));
 
@@ -174,16 +209,8 @@ public class GatewayEnv {
 
     private Device findDeviceBySid(String sid) {
         synchronized (devices) {
-            Device buff;
-            Iterator<Device> it = devices.iterator();
-            while (it.hasNext()) {
-                buff = it.next();
-                if(buff.getSid().equals(sid))
-                    return buff;
-            }
+            return devices.get(sid);
         }
-
-        return null;
     }
 
 
@@ -198,48 +225,41 @@ public class GatewayEnv {
         deviceDictionary.put(DOOR_WINDOW_SENSOR_TYPE, DoorWindowSensor::new);
         deviceDictionary.put(MOTION_SENSOR_TYPE, MotionSensor::new);
         deviceDictionary.put(WIRELESS_SWITCH_TYPE, sid -> new WirelessSwitch(sid, transport));
-        deviceDictionary.put(TEMPERATURE_HUMIDITY_SENSOR_TYPE, THSensor::new);
-        deviceDictionary.put(WATER_LEAK_SENSOR_TYPE, WaterLeakSensor::new);
+        deviceDictionary.put(TEMPERATURE_HUMIDITY_SENSOR_TYPE, sid -> new THSensor(sid, TEMPERATURE_HUMIDITY_SENSOR_TYPE));
+        deviceDictionary.put(WATER_LEAK_SENSOR_TYPE, sid -> new WaterLeakSensor(sid, null));
         deviceDictionary.put(WEATHER_SENSOR_TYPE, WeatherSensor::new);
         deviceDictionary.put(WIRED_DUAL_WALL_SWITCH_TYPE, sid -> new WiredDualWallSwitch(sid, transport));
         deviceDictionary.put(WIRED_SINGLE_WALL_SWITCH_TYPE, sid -> new WiredSingleWallSwitch(sid, transport));
         deviceDictionary.put(SMART_PLUG_TYPE, sid -> new SmartPlug(sid, transport));
-        deviceDictionary.put(SMOKE_SENSOR_TYPE, SmokeSensor::new);
+        deviceDictionary.put(SMOKE_SENSOR_TYPE, sid -> new SmokeSensor(sid, null));
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public static GatewayService.Builder builder() {
+        return new GatewayService.Builder();
     }
 
     public static class Builder {
 
         private String psw;
         private String sid;
-        private boolean useCache = true;
 
         private Builder() {
         }
 
-        public Builder setGatewayPassword(String psw) {
+        public GatewayService.Builder setGatewayPassword(String psw) {
             this.psw = psw;
 
             return this;
         }
 
-        public Builder setGatewaySid(String sid) {
+        public GatewayService.Builder setGatewaySid(String sid) {
             this.sid = sid;
 
             return this;
         }
 
-        public Builder useCache(boolean useCache) {
-            this.useCache = useCache;
-
-            return this;
-        }
-
-        public GatewayEnv build() {
-            return new GatewayEnv(sid, psw, useCache);
+        public GatewayService build() {
+            return new GatewayService(sid, psw);
         }
 
     }

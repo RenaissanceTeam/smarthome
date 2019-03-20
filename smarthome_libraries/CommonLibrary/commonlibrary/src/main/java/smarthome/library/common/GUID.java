@@ -28,8 +28,8 @@ public class GUID {
         return getGuidForName(device.name);
     }
 
-    public long generateGuidForController(BaseController controller) {
-        long guid = controller.type.id + 1;
+    public long generateGuidForController(IotDevice device, BaseController controller) {
+        long guid = device.guid + controller.type.hashCode();
 
         long shift = 1;
         while (mGuids.contains(guid)) {
@@ -38,18 +38,6 @@ public class GUID {
 
         // so we've created a unique guid for the controller
         mGuids.add(guid);
-        return guid;
-    }
-
-    public long issueNewControllerGuid(BaseController controller) {
-        long deviceHash = controller.deviceType.hashCode();
-        long guid = deviceHash;
-
-        Random r = new Random();
-
-        while (!mGuids.add(guid))
-            guid = deviceHash + Math.abs(r.nextInt(99999));
-
         return guid;
     }
 

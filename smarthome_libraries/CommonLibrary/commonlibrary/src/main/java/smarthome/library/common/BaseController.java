@@ -21,10 +21,10 @@ public class BaseController {
      */
     @Expose public String name;
     @Expose public String serveState;
-    @Expose public ControllerType type;
+    @Expose public String type;
     @Expose public long guid;
     @Expose public String state;
-    @Expose public String deviceType;
+    @Exclude @Expose public String classType = getClass().getSimpleName();
 
     public void setNewState(String newState) {
         state = newState;

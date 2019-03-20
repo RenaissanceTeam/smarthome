@@ -6,7 +6,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfac
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Writable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.utils.Utils.Companion.adjust
+import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.adjust
 
 class ColorTemperatureController(device: Device) : Controller(device, COLOR_TEMPERATURE_CONTROLLER_TYPE), Readable, Writable {
 

@@ -2,7 +2,7 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.command;
 
 import com.google.gson.annotations.Expose;
 
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.utils.Utils;
+import smarthome.raspberry.thirdpartydevices.utils.Utils;
 
 public class Command {
 
