@@ -12,7 +12,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.Illuminat
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.RGBController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-class Gateway(sid: String, val transport: UdpTransport) : Device(sid, GATEWAY_TYPE) {
+class Gateway(sid: String, val transport: UdpTransport) : GatewayDevice(sid, GATEWAY_TYPE) {
 
     var ip: String = ""
     var rgb: Long = 0

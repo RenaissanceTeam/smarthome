@@ -1,12 +1,11 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.*
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 
 object ControllersFactory {
 
-    fun createController(device: Device, type: String): Controller {
+    fun createController(device: YeelightDevice, type: String): Controller {
         return when (type) {
             ADJUST_CONTROLLER_TYPE -> AdjustController(device)
             BRIGHTNESS_CONTROLLER_TYPE -> BrightnessController(device)

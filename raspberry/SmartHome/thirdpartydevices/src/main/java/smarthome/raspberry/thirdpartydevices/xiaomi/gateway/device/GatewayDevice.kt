@@ -14,14 +14,13 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.StateChangeListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.WaterLeakListener
 
-abstract class Device(val sid: String,
-                      type: String,
-                      private val stateChangeListener: StateChangeListener? = null,
-                      var smokeAlarmListener: SmokeAlarmListener? = null,
-                      var waterLeakListener: WaterLeakListener? = null)
+abstract class GatewayDevice(val sid: String,
+                             type: String,
+                             val parentGatewaySid: String = IDLE_STATUS,
+                             private val stateChangeListener: StateChangeListener? = null,
+                             var smokeAlarmListener: SmokeAlarmListener? = null,
+                             var waterLeakListener: WaterLeakListener? = null)
     : IotDevice () {
-
-    var status: String = IDLE_STATUS
 
     init {
         this.name = sid

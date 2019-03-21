@@ -14,12 +14,12 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.model.DiscoverRespo
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 import smarthome.raspberry.thirdpartydevices.utils.Utils
 
-class Device(private val id: String,
-             val metaData: DeviceMetaData,
-             val ip: String,
-             val port: Int = 55443,
-             var effect: Effect = Effect.SUDDEN,
-             var duration: Int = 0)
+class YeelightDevice(private val id: String,
+                     val metaData: DeviceMetaData,
+                     val ip: String,
+                     val port: Int = 55443,
+                     var effect: Effect = Effect.SUDDEN,
+                     var duration: Int = 0)
     : IotDevice() {
 
     init {
@@ -73,7 +73,7 @@ class Device(private val id: String,
     }
 
     override fun equals(other: Any?): Boolean {
-        val second = other as Device
+        val second = other as YeelightDevice
         return second.id == this.id
     }
 

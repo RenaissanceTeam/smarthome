@@ -1,6 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.discover
 
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.model.DiscoverResponse
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -17,8 +17,8 @@ class DeviceDetector {
         socket.soTimeout = SOCKET_TIMEOUT
     }
 
-    fun discover(): Set<Device> {
-        val devices: MutableSet<Device> = HashSet()
+    fun discover(): Set<YeelightDevice> {
+        val devices: MutableSet<YeelightDevice> = HashSet()
 
         socket.send(requestPack)
 
@@ -26,7 +26,7 @@ class DeviceDetector {
             while (true) {
                 socket.receive(responsePack)
 
-                val device: Device = createDevice(String(buffer, 0, responsePack.length))
+                val device: YeelightDevice = createDevice(String(buffer, 0, responsePack.length))
                 devices.add(device)
             }
         } catch (e: SocketTimeoutException) { }
@@ -34,7 +34,7 @@ class DeviceDetector {
         return devices
     }
 
-    private fun createDevice(response: String): Device {
+    private fun createDevice(response: String): YeelightDevice {
         val data: List<String> = response.split("\r\n")
 
         val discoverResponse = DiscoverResponse()
@@ -61,7 +61,7 @@ class DeviceDetector {
             }
         }
 
-        return Device(discoverResponse)
+        return YeelightDevice(discoverResponse)
     }
 
     companion object {

@@ -11,7 +11,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.MotionCon
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.VoltageController
 import java.time.LocalDateTime
 
-class MotionSensor(sid: String) : Device(sid, MOTION_SENSOR_TYPE) {
+class MotionSensor(sid: String, gatewaySid: String) : GatewayDevice(sid, MOTION_SENSOR_TYPE, gatewaySid) {
 
     private var lastMotion: LocalDateTime = LocalDateTime.now()
 

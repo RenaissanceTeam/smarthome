@@ -1,6 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command;
 
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device;
+import static smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.ConstantsKt.STATUS_KEY;
 
 public class WiredSingleWallSwitchCmd extends Command {
 
@@ -12,6 +12,6 @@ public class WiredSingleWallSwitchCmd extends Command {
 
     @Override
     public String toString() {
-        return "{\"" + Device.STATUS_KEY + "\":\"" + status + "\"}";
+        return "{\"" + STATUS_KEY + "\":\"" + status + "\"}";
     }
 }

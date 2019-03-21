@@ -2,9 +2,9 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller
 
 import smarthome.library.common.constants.GATEWAY_TEMPERATURE_CONTROLLER
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Readable
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
 
-class TemperatureController (device: Device) : Controller(device, GATEWAY_TEMPERATURE_CONTROLLER), Readable {
+class TemperatureController (device: GatewayDevice) : Controller(device, GATEWAY_TEMPERATURE_CONTROLLER), Readable {
 
     override fun read(): String {
         return controllerRead()

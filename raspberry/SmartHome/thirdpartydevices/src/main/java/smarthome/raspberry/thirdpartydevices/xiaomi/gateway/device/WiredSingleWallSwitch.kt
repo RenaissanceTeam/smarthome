@@ -8,8 +8,8 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.ButtonController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-class WiredSingleWallSwitch(sid: String, transport: UdpTransport)
-    : Device(sid, WIRED_SINGLE_WALL_SWITCH_TYPE) {
+class WiredSingleWallSwitch(sid: String, transport: UdpTransport, gatewaySid: String)
+    : GatewayDevice(sid, WIRED_SINGLE_WALL_SWITCH_TYPE, gatewaySid) {
 
     init {
         addControllers(ButtonController(this, GATEWAY_SINGLE_BUTTON_CONTROLLER, transport))

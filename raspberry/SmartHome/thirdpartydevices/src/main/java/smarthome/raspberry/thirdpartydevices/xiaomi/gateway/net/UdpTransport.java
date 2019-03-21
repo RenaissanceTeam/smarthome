@@ -19,9 +19,9 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.utils.channel.IncomingMulticastChannel;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.Command;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.WriteCmd;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.channel.IncomingMulticastChannel;
 
 public class UdpTransport {
 

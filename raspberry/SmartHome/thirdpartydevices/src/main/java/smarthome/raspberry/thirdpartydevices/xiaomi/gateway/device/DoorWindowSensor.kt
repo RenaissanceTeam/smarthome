@@ -8,7 +8,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.DoorWindowController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.VoltageController
 
-class DoorWindowSensor(sid: String) : Device(sid, DOOR_WINDOW_SENSOR_TYPE) {
+class DoorWindowSensor(sid: String, gatewaySid: String) : GatewayDevice(sid, DOOR_WINDOW_SENSOR_TYPE, gatewaySid) {
 
     init {
         addControllers(DoorWindowController(this),

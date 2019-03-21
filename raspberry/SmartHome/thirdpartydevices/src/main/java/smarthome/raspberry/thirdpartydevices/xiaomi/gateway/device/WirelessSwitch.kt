@@ -8,8 +8,8 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.ButtonClickController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-class WirelessSwitch(sid: String, transport: UdpTransport)
-    : Device(sid, WIRELESS_SWITCH_TYPE) {
+class WirelessSwitch(sid: String, transport: UdpTransport, gatewaySid: String)
+    : GatewayDevice(sid, WIRELESS_SWITCH_TYPE, gatewaySid) {
 
     init {
         addControllers(ButtonClickController(this, transport))

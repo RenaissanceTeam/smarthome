@@ -14,7 +14,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayService;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Readable;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Writable;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Gateway;
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.Device;
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice;
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.ToggleController;
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.discover.DeviceDetector;
 
@@ -121,7 +121,7 @@ public class Tests {
 
         ((Writable) gateway.getControllerByType(GATEWAY_LIGHT_ON_OFF_CONTROLLER)).write(STATUS_OFF);
 
-        List<smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device> initedDevices = gatewayService.getDevices();
+        List<smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice> initedDevices = gatewayService.getDevices();
         String weather = "Temperature: " +  ((Readable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_TEMPERATURE_CONTROLLER)).read() +
                 ", Humidity: " +  ((Readable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_HUMIDITY_CONTROLLER)).read() +
                 ", Pressure: " +  ((Readable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_PRESSURE_CONTROLLER)).read();
@@ -132,8 +132,8 @@ public class Tests {
 
     @Test
     public void testYeelight() {
-        Set<Device> devices = DeviceDetector.Companion.getInstance().discover();
-        Device bulb = (Device) devices.toArray()[0];
+        Set<YeelightDevice> devices = DeviceDetector.Companion.getInstance().discover();
+        YeelightDevice bulb = (YeelightDevice) devices.toArray()[0];
         Log.v(TAG, bulb.toString());
         ((ToggleController)bulb.controllers.get(2)).write();
     }

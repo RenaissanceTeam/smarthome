@@ -5,11 +5,11 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.GatewayLight
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_ON
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Readable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Writable
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.utils.Utils.calculateRGB
 
-class GatewayLightOnOffController(device: Device, transport: UdpTransport)
+class GatewayLightOnOffController(device: GatewayDevice, transport: UdpTransport)
     : Controller(device, GATEWAY_LIGHT_ON_OFF_CONTROLLER, transport), Writable, Readable {
 
     /**

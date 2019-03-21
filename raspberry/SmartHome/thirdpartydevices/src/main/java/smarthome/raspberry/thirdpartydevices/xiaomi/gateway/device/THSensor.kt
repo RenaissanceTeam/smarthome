@@ -11,8 +11,10 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.HumidityC
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.TemperatureController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.VoltageController
 
-open class THSensor (sid: String, type: String = TEMPERATURE_HUMIDITY_SENSOR_TYPE)
-    : Device(sid, type) {
+open class THSensor (sid: String,
+                     type: String = TEMPERATURE_HUMIDITY_SENSOR_TYPE,
+                     gatewaySid: String)
+    : GatewayDevice(sid, type, gatewaySid) {
 
     init {
         addControllers(TemperatureController(this),

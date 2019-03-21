@@ -1,6 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.RGB_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Readable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Writable
@@ -9,7 +9,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 import smarthome.raspberry.thirdpartydevices.utils.Utils
 import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.calculateRGB
 
-class RGBController(device: Device) : Controller(device, RGB_CONTROLLER_TYPE), Readable, Writable {
+class RGBController(device: YeelightDevice) : Controller(device, RGB_CONTROLLER_TYPE), Readable, Writable {
 
     override fun read(): String {
         return super.controllerRead(Property.RGB)

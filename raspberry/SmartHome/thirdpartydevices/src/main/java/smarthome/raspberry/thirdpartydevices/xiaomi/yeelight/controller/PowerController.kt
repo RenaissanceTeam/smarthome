@@ -1,13 +1,13 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.POWER_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Readable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Writable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 
-class PowerController(device: Device) : Controller(device, POWER_CONTROLLER_TYPE), Readable, Writable {
+class PowerController(device: YeelightDevice) : Controller(device, POWER_CONTROLLER_TYPE), Readable, Writable {
 
     override fun read(): String {
         return super.controllerRead(Property.POWER)
