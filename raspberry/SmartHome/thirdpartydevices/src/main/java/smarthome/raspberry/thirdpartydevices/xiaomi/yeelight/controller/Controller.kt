@@ -1,18 +1,15 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
 import smarthome.library.common.BaseController
-import smarthome.library.common.ControllerType
 import smarthome.library.common.GUID
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.command.Command
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.defWriteCommandListener
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Readable
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Writable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.WriteCommandListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 
-open class Controller(val device: Device,
+open class Controller(val device: YeelightDevice,
                       type: String,
                       val writeCommandListener: WriteCommandListener = defWriteCommandListener)
     : BaseController() {

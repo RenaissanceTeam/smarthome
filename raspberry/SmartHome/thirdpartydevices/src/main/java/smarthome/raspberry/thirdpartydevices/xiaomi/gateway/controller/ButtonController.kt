@@ -5,12 +5,12 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.WiredSingleW
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_CHANNEL_0
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Readable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Writable
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WiredDualWallSwitch
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WiredSingleWallSwitch
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-class ButtonController(device: Device, type: String, transport: UdpTransport)
+class ButtonController(device: GatewayDevice, type: String, transport: UdpTransport)
     : Controller(device, type, transport), Readable, Writable {
     /**
      * for WiredDualWallSwitch: "on" or "off" (String), status_channel (String)

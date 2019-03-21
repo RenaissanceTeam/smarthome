@@ -1,6 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.HSV_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Readable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Writable
@@ -8,7 +8,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.adjust
 
-class HSVController(device: Device) : Controller(device, HSV_CONTROLLER_TYPE), Readable, Writable {
+class HSVController(device: YeelightDevice) : Controller(device, HSV_CONTROLLER_TYPE), Readable, Writable {
 
     override fun read(): String {
         val res = super.controllerRead(Property.HUE, Property.SAT)

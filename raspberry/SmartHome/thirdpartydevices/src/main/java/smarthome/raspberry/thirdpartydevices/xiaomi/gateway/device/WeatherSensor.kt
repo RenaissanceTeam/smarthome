@@ -9,8 +9,8 @@ import smarthome.library.common.constants.GATEWAY_TEMPERATURE_CONTROLLER
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_PRESSURE
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.PressureController
 
-class WeatherSensor(sid: String)
-    : THSensor(sid, WEATHER_SENSOR_TYPE) {
+class WeatherSensor(sid: String, gatewaySid: String)
+    : THSensor(sid, WEATHER_SENSOR_TYPE, gatewaySid) {
 
     init {
         addControllers(PressureController(this))

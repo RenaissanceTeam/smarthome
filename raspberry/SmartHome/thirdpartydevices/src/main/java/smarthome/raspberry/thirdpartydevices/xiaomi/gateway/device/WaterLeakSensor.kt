@@ -11,8 +11,9 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.WaterLeak
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.WaterLeakListener
 
 class WaterLeakSensor(sid: String,
+                      gatewaySid: String,
                       waterLeakListener: WaterLeakListener? = null)
-    : Device(sid, WATER_LEAK_SENSOR_TYPE, waterLeakListener = waterLeakListener) {
+    : GatewayDevice(sid, WATER_LEAK_SENSOR_TYPE, gatewaySid, waterLeakListener = waterLeakListener) {
 
     private var leak: Boolean = false
 

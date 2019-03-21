@@ -11,8 +11,8 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_CHA
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.ButtonController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-class WiredDualWallSwitch (sid: String, transport: UdpTransport)
-    : Device(sid, WIRED_DUAL_WALL_SWITCH_TYPE) {
+class WiredDualWallSwitch (sid: String, transport: UdpTransport, gatewaySid: String)
+    : GatewayDevice(sid, WIRED_DUAL_WALL_SWITCH_TYPE, gatewaySid) {
 
     var statusLeft: String = IDLE_STATUS
     var statusRight: String = IDLE_STATUS

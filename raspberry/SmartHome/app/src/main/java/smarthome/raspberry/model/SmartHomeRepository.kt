@@ -45,7 +45,7 @@ object SmartHomeRepository : SmartHome() {
     }
 
     private fun loadSavedDevices() {
-        for (dataSource in DataSources.values()) {
+        for (dataSource in KDataSources.values()) {
             dataSource.init(context)
             devices.addAll(dataSource.source.all)
             devices.forEach { device ->
@@ -109,7 +109,7 @@ object SmartHomeRepository : SmartHome() {
     fun addDevice(device: IotDevice): Boolean {
         if (DEBUG) Log.d(TAG, "addDevice: $device")
 
-        for (dataSource in DataSources.values()) {
+        for (dataSource in KDataSources.values()) {
             if (dataSource.deviceType != device.javaClass) {
                 continue
             }
@@ -160,7 +160,7 @@ object SmartHomeRepository : SmartHome() {
     }
 
     fun removeAll() {
-        DataSources.values().forEach { it.source.clearAll() }
+        KDataSources.values().forEach { it.source.clearAll() }
 
         for (device in devices) {
             GUID.getInstance().remove(device.guid)

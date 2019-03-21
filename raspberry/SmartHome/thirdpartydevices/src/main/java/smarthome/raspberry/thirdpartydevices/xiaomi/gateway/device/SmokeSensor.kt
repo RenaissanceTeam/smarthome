@@ -13,8 +13,9 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.VoltageCo
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.SmokeAlarmListener
 
 class SmokeSensor(sid: String,
+                  gatewaySid: String,
                   smokeAlarmListener: SmokeAlarmListener? = null)
-    : Device(sid, SMOKE_SENSOR_TYPE, smokeAlarmListener = smokeAlarmListener) {
+    : GatewayDevice(sid, SMOKE_SENSOR_TYPE, gatewaySid, smokeAlarmListener = smokeAlarmListener) {
 
     private var alarm: Boolean = false
 

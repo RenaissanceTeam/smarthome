@@ -5,10 +5,10 @@ import smarthome.library.common.GUID
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.Command
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.defStateChangeListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.StateChangeListener
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Device
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-open class Controller(val device: Device,
+open class Controller(val device: GatewayDevice,
                       type: String,
                       private val transport: UdpTransport? = null,
                       private val stateChangedListener: StateChangeListener = defStateChangeListener)

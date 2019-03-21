@@ -14,8 +14,8 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.*
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-class SmartPlug(sid: String, transport: UdpTransport)
-    : Device(sid, SMART_PLUG_TYPE) {
+class SmartPlug(sid: String, transport: UdpTransport, gatewaySid: String)
+    : GatewayDevice(sid, SMART_PLUG_TYPE, gatewaySid) {
 
     init {
         addControllers(SmartPlugOnOffController(this, transport),
