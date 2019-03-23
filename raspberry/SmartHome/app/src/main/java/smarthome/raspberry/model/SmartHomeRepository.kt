@@ -5,6 +5,8 @@ import android.content.Context
 import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,23 +14,28 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.GUID
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
+import smarthome.library.datalibrary.model.InstanceToken
+import smarthome.library.datalibrary.store.InstanceTokenStorage
 import smarthome.library.datalibrary.store.SmartHomeStorage
-import smarthome.library.datalibrary.store.listeners.DevicesObserver
 import smarthome.raspberry.BuildConfig.DEBUG
-import smarthome.raspberry.OddDeviceInCloud
+import smarthome.raspberry.FirestoreUnreachable
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
+import smarthome.raspberry.model.cloudchanges.DeviceChangesListener
 import smarthome.raspberry.utils.HomeController
 import java.util.*
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
 @SuppressLint("StaticFieldLeak")
 object SmartHomeRepository : SmartHome() {
     const val TAG = "SmartHomeRepository"
-    lateinit var context: Context
-    lateinit var storage: SmartHomeStorage
+    lateinit var devicesStorage: SmartHomeStorage
+    private lateinit var context: Context
+    private lateinit var tokenStorage: InstanceTokenStorage
     private val ioScope = CoroutineScope(Dispatchers.IO)
+    private var tokens: List<InstanceToken> = listOf()
 
     fun init(appContext: Context) {
         context = appContext
@@ -36,8 +43,8 @@ object SmartHomeRepository : SmartHome() {
         ioScope.launch {
             val homeController = HomeController(context)
             val homeId = homeController.getHomeId()
-            storage = homeController.getSmartHomeStorage(homeId)
-
+            devicesStorage = homeController.getSmartHomeStorage(homeId)
+            tokenStorage = homeController.getTokenStorage(homeId)
             devices = ArrayList()
 
             loadSavedDevices()
@@ -57,48 +64,10 @@ object SmartHomeRepository : SmartHome() {
         }
     }
 
-    suspend fun listenForCloudChanges() {
+    fun listenForCloudChanges() {
         if (DEBUG) Log.d(TAG, "listenForCloudChanges")
-
-        storage.observeDevicesUpdates(DevicesObserver { cloudDevices, isInner ->
-            if (isInner) return@DevicesObserver
-            ioScope.launch {
-                if (DEBUG) Log.d(TAG, "new devices update: $cloudDevices isInner=$isInner")
-
-                if (cloudDevices.size < devices.size) {
-                    deleteLocalDevices(cloudDevices)
-                }
-
-                try {
-                    handleChanges(cloudDevices, storage)
-                } catch (e: Throwable) {
-                    if (DEBUG) Log.w(TAG, "while handling changes: ", e)
-                }
-            }
-        })
-    }
-
-    private suspend fun handleChanges(cloudDevices: List<IotDevice>, storage: SmartHomeStorage) {
-        for (device in cloudDevices) {
-            val localDevice = devices.find { it == device } ?: throw OddDeviceInCloud(device)
-
-            val changesHandler = DeviceChangesHandler(localDevice, device)
-            changesHandler.handleChanges()
-
-            if (changesHandler.changesMade) {
-                storage.updateDevice(localDevice)
-            }
-        }
-    }
-
-    private fun deleteLocalDevices(cloudDevices: MutableList<IotDevice>) {
-        // some devices were deleted
-        val removed = mutableListOf<IotDevice>()
-        for (localDevice in devices) {
-            if (cloudDevices.contains(localDevice)) continue
-            removed.add(localDevice)
-        }
-//        removed.forEach { repository.delete(it) } // todo add delete() to repository
+        devicesStorage.observeDevicesUpdates(DeviceChangesListener)
+        tokenStorage.observeTokenChanges { tokens = it }
     }
 
 
@@ -110,9 +79,7 @@ object SmartHomeRepository : SmartHome() {
         if (DEBUG) Log.d(TAG, "addDevice: $device")
 
         for (dataSource in DataSources.values()) {
-            if (dataSource.deviceType != device.javaClass) {
-                continue
-            }
+            if (!device.belongsTo(dataSource)) continue
 
             if (dataSource.source.contains(device)) {
                 dataSource.source.update(device)
@@ -120,29 +87,37 @@ object SmartHomeRepository : SmartHome() {
                 return true
             }
 
-            val wasAdded = dataSource.source.add(device)
-            if (wasAdded) {
-                // todo set alarms for auto refresh for each controller
+            if (!dataSource.source.add(device)) continue
 
-                devices.add(device)
-                ioScope.launch {
-                    suspendCoroutine<Unit> { continuation ->
-                        storage.addDevice(device,
-                                OnSuccessListener {
-                                    if (DEBUG) Log.d(TAG, "success adding device to firestore")
-                                    continuation.resumeWith(Result.success(Unit))
-                                },
-                                OnFailureListener { if (DEBUG) Log.d(TAG, "failed $it")
-                                    continuation.resumeWith(Result.failure(it))
-                                }
-                        )
-                    }
+            // todo set alarms for auto refresh for each controller
+
+            devices.add(device)
+            ioScope.launch {
+                try {
+                    addDeviceToStorage(device)
+                } catch (e: Throwable) {
+                    if (DEBUG) Log.d(TAG, "addDevice failure: ", e)
                 }
-                return true
             }
-
+            return true
         }
         return false
+    }
+
+
+    private suspend fun addDeviceToStorage(device: IotDevice) {
+        suspendCoroutine<Unit> { continuation ->
+            devicesStorage.addDevice(device,
+                    OnSuccessListener {
+                        if (DEBUG) Log.d(TAG, "success adding device to firestore")
+                        continuation.resumeWith(Result.success(Unit))
+                    },
+                    OnFailureListener {
+                        if (DEBUG) Log.d(TAG, "failed $it")
+                        continuation.resumeWithException(it)
+                    }
+            )
+        }
     }
 
     fun getController(guid: Long): BaseController {
@@ -169,4 +144,38 @@ object SmartHomeRepository : SmartHome() {
 
         devices.clear()
     }
+
+    fun handleAlert(device: IotDevice, controller: BaseController) {
+        // todo save to firestore (notify android client, send FCM)
+        ioScope.launch {
+            try {
+                updateDeviceInRemoteStorage(device)
+                sendFcm(controller)
+            } catch (e: Throwable) {
+                if (DEBUG) Log.d(TAG, "can't handle alert: ", e)
+            }
+        }
+    }
+
+    private fun sendFcm(controller: BaseController) {
+        val msg = RemoteMessage.Builder(tokens[0].token + "@gcm.googleapis.com")
+                .setMessageId("${controller.guid}${controller.state}")
+                .addData("controller_guid", controller.guid.toString())
+                .addData("alert_state", controller.state)
+                .build()
+
+
+        if (DEBUG) Log.d(TAG, "send fcm msg=$msg")
+        FirebaseMessaging.getInstance().send(msg)
+    }
+
+    private suspend fun updateDeviceInRemoteStorage(device: IotDevice) {
+        suspendCoroutine<Unit> { c ->
+            devicesStorage.updateDevice(device,
+                    OnSuccessListener { c.resumeWith(Result.success(Unit))},
+                    OnFailureListener { c.resumeWithException(FirestoreUnreachable()) })
+        }
+    }
 }
+
+private fun IotDevice.belongsTo(dataSource: DataSources) = dataSource.deviceType == this.javaClass
