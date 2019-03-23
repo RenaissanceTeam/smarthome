@@ -22,7 +22,7 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel.needAuth.observe(this, Observer { needAuth -> if (needAuth) launchAuthActivity() })
+        viewModel.isAuthenticated.observe(this, Observer { if (!it) launchAuthActivity() })
         viewModel.page.observe(this, Observer { viewpager.currentItem = it })
 
         viewpager.adapter = ViewpagerAdapter(supportFragmentManager)
@@ -35,11 +35,6 @@ class MainActivity : FragmentActivity() {
         })
 
         bottomNavigation.setOnNavigationItemSelectedListener { viewModel.onBottomNavigationClick(it) }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.authCheck()
     }
 
     private fun launchAuthActivity() {
