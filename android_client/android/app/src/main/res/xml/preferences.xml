@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="Account">
+        <Preference
+            android:enabled="false"
+            android:key="current_account"
+            android:title="Current account" />
+
+        <Preference
+            android:key="sign_out"
+            android:title="Sign out" />
+
+    </PreferenceCategory>
+
+    <SwitchPreference
+        app:key="do_not_disturb"
+        app:title="Do not disturb" />
+
+    <Preference
+        app:key="feedback"
+        app:summary="Report technical issues or suggest new features"
+        app:title="Send feedback" />
+</PreferenceScreen>
