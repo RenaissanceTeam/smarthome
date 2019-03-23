@@ -15,6 +15,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import smarthome.client.*
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
+
 
 class DashboardFragment : Fragment() {
 
@@ -59,6 +62,7 @@ class DashboardFragment : Fragment() {
         adapterForDevices = DevicesAdapter(layoutInflater, viewModel,
                 ::onDeviceClick, ::onControllerClick)
         devicesView?.adapter = adapterForDevices
+        devicesView?.addItemDecoration(DividerItemDecoration(context, VERTICAL))
     }
 
     override fun onDestroyView() {
