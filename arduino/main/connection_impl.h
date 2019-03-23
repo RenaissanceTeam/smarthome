@@ -13,6 +13,7 @@
 
 WiFiEspClient wifiClient;
 HttpClient* client;
+char ip[IP_BUFFER_LENGTH];
 
 
 
@@ -346,19 +347,20 @@ void homePage(WebServer &server, WebServer::ConnectionType type,
 
 
 void init(WebServer &server, WebServer::ConnectionType type, char * params, bool complete) {
+  server.httpSuccess();
   Serial.println(home_info);
-  char ip[IP_BUFFER_LENGTH];
   server.getRemoteIp(ip);
   Serial.print(F("remote ip="));
   Serial.println(ip);
-  server.httpSuccess();
+  
   
   if (client != 0) delete client;
   client = new HttpClient(wifiClient, ip, RASPBERRY_PORT);
   client->post("/init?" home_info, "text", "");
+  delay(100);
   client->flush();
+  delay(100);
   client->stop();
-  
 }
 
 void runHttpServer(WebServer& server) {
@@ -377,15 +379,21 @@ void sendUdpInitToHomeServer() {
   udpClient.beginPacket(broadcastIp, UDP_PORT);
   udpClient.write(DEVICE_NAME); // todo some key instead (encryption needed)
   udpClient.endPacket();
+  udpClient.flush();
   udpClient.stop();
 }
 #endif
 
 #ifdef DIGITAL_ALERT
 void sendAlertToServer(int serviceIndex, int value) {
-	if (client == 0) return;
+	if (client == 0) {
+	  return;
+	}
 	client->post("/alert?ind=" + String(serviceIndex) + "&value=" + value, "text", "");
+  delay(200);
   client->flush();
+  delay(200);
   client->stop();
+  delay(100);
 }
 #endif

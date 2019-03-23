@@ -8,7 +8,7 @@
 #include "init_checker.h"
 #endif
 
-#define DEBUG 0
+#define DEBUG 1
 
 SoftwareSerial esp_serial(RX, TX);
 WebServer server("", ARDUINO_PORT);

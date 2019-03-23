@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import smarthome.library.datalibrary.constants.defFailureListener
 import smarthome.library.datalibrary.constants.defSuccessListener
+import smarthome.library.datalibrary.model.InstanceToken
 
 interface InstanceTokenStorage {
 
@@ -25,4 +26,6 @@ interface InstanceTokenStorage {
         successListener: OnSuccessListener<Void> = defSuccessListener,
         failureListener: OnFailureListener = defFailureListener
     )
+
+    fun observeTokenChanges(observer: (List<InstanceToken>) -> Unit)
 }

@@ -8,6 +8,7 @@ import smarthome.client.BuildConfig
 import java.lang.RuntimeException
 import kotlin.Result.Companion.failure
 import kotlin.Result.Companion.success
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class FcmTokenRequester {
@@ -34,11 +35,11 @@ class FcmTokenRequester {
             FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     task.result?.token?.let { c.resumeWith(success(it)) }
-                            ?: c.resumeWith(failure(RuntimeException("received null instanceId token")))
+                            ?: c.resumeWithException(RuntimeException("received null instanceId token"))
                 } else {
                     val exception: Throwable = task.exception as? Throwable
                             ?: RuntimeException("instanceId task was not successfull")
-                    c.resumeWith(failure(exception))
+                    c.resumeWithException(exception)
                 }
             }
         }

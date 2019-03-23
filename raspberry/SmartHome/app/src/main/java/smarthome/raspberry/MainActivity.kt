@@ -51,16 +51,10 @@ class MainActivity : Activity() {
     override fun onResume() {
         super.onResume()
 
-        if (!isAuthenticated) {
-            startActivity(Intent(this, GoogleSignInActivity::class.java))
+        if (isAuthenticated) {
+            SmartHomeRepository.listenForCloudChanges()
         } else {
-            uiScope.launch {
-                try {
-                    SmartHomeRepository.listenForCloudChanges()
-                } catch (e: Throwable) {
-                    Toast.makeText(baseContext, e.message, Toast.LENGTH_SHORT).show()
-                }
-            }
+            startActivity(Intent(this, GoogleSignInActivity::class.java))
         }
     }
 
