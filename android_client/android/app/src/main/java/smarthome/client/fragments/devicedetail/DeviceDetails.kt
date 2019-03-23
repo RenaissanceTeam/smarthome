@@ -6,20 +6,19 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.CONTROLLER_GUID
-import smarthome.client.R
 import smarthome.client.DEVICE_GUID
 import smarthome.client.DetailsActivity
+import smarthome.client.R
 import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.IotDevice
@@ -103,6 +102,7 @@ class DeviceDetails : Fragment() {
         controllers = view.findViewById(R.id.devices)
         controllers?.layoutManager = LinearLayoutManager(view.context)
         controllers?.adapter = ControllersAdapter(viewModel)
+        controllers?.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 
     private fun passGuidToViewModel() {

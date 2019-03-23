@@ -53,6 +53,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
+    // jetpack
+    implementation "androidx.preference:preference:1.1.0-alpha04"
+
     // coroutines
     def coroutines_version = "1.1.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
