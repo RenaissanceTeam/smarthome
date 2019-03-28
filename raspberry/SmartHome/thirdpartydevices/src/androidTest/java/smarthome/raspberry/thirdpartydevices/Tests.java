@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayService;
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Readable;
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Writable;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayReadable;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayWritable;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Gateway;
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice;
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.ToggleController;
@@ -74,6 +74,7 @@ public class Tests {
 
     @Test
     public void testGateWay() {
+        String gateway_RGB_Tag = "GATEWAY_RGB";
         initGateway();
 
         try {
@@ -86,7 +87,7 @@ public class Tests {
 
         Log.v(TAG, gateway.toString());
 
-        ((Writable) gateway.getControllerByType(GATEWAY_LIGHT_ON_OFF_CONTROLLER)).write(STATUS_ON);
+        ((GatewayWritable) gateway.getControllerByType(GATEWAY_LIGHT_ON_OFF_CONTROLLER)).write(STATUS_ON);
 
         try {
             TimeUnit.MILLISECONDS.sleep(9000);
@@ -94,7 +95,7 @@ public class Tests {
             e.printStackTrace();
         }
 
-        ((Writable) gateway.getControllerByType(GATEWAY_RGB_CONTROLLER)).write(255, 0, 0);
+        ((GatewayWritable) gateway.getControllerByType(GATEWAY_RGB_CONTROLLER)).write("255 0 0");
 
         try {
             TimeUnit.MILLISECONDS.sleep(9000);
@@ -102,7 +103,9 @@ public class Tests {
             e.printStackTrace();
         }
 
-        ((Writable) gateway.getControllerByType(GATEWAY_RGB_CONTROLLER)).write(0, 255, 0);
+        Log.d(gateway_RGB_Tag, String.valueOf(gateway.getRgb()));
+
+        ((GatewayWritable) gateway.getControllerByType(GATEWAY_RGB_CONTROLLER)).write("0 255 0");
 
         try {
             TimeUnit.MILLISECONDS.sleep(9000);
@@ -110,7 +113,9 @@ public class Tests {
             e.printStackTrace();
         }
 
-        ((Writable) gateway.getControllerByType(GATEWAY_RGB_CONTROLLER)).write(0, 0, 255);
+        Log.d(gateway_RGB_Tag, String.valueOf(gateway.getRgb()));
+
+        ((GatewayWritable) gateway.getControllerByType(GATEWAY_RGB_CONTROLLER)).write("0 0 255");
 
         try {
             TimeUnit.MILLISECONDS.sleep(9000);
@@ -119,12 +124,14 @@ public class Tests {
         }
 
 
-        ((Writable) gateway.getControllerByType(GATEWAY_LIGHT_ON_OFF_CONTROLLER)).write(STATUS_OFF);
+        Log.d(gateway_RGB_Tag, String.valueOf(gateway.getRgb()));
+
+        ((GatewayWritable) gateway.getControllerByType(GATEWAY_LIGHT_ON_OFF_CONTROLLER)).write(STATUS_OFF);
 
         List<smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice> initedDevices = gatewayService.getDevices();
-        String weather = "Temperature: " +  ((Readable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_TEMPERATURE_CONTROLLER)).read() +
-                ", Humidity: " +  ((Readable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_HUMIDITY_CONTROLLER)).read() +
-                ", Pressure: " +  ((Readable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_PRESSURE_CONTROLLER)).read();
+        String weather = "Temperature: " +  ((GatewayReadable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_TEMPERATURE_CONTROLLER)).read() +
+                ", Humidity: " +  ((GatewayReadable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_HUMIDITY_CONTROLLER)).read() +
+                ", Pressure: " +  ((GatewayReadable) gatewayService.getDeviceByType(WEATHER_SENSOR_TYPE).getControllerByType(GATEWAY_PRESSURE_CONTROLLER)).read();
         Log.v(TAG, weather);
         System.out.println("Test finished");
 
@@ -135,7 +142,7 @@ public class Tests {
         Set<YeelightDevice> devices = DeviceDetector.Companion.getInstance().discover();
         YeelightDevice bulb = (YeelightDevice) devices.toArray()[0];
         Log.v(TAG, bulb.toString());
-        ((ToggleController)bulb.controllers.get(2)).write();
+        ((ToggleController)bulb.controllers.get(2)).write("");
     }
 
     /*@Test

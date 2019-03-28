@@ -22,7 +22,7 @@ class WiredSingleWallSwitch(sid: String, transport: UdpTransport, gatewaySid: St
             if (!o.isNull(STATUS_KEY))
                 getControllerByType("left").state = o.getString(STATUS_KEY)
 
-
+            super.parseData(json)
         } catch (e: JSONException) {
             reportDataParseError(e)
         }

@@ -1,6 +1,8 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device
 
 import android.util.Log
+import com.google.firebase.firestore.Exclude
+import com.google.gson.annotations.Expose
 import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.BaseController
@@ -14,13 +16,22 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.StateChangeListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.WaterLeakListener
 
-abstract class GatewayDevice(val sid: String,
+abstract class GatewayDevice(sid: String,
                              type: String,
-                             val parentGatewaySid: String = IDLE_STATUS,
-                             private val stateChangeListener: StateChangeListener? = null,
-                             var smokeAlarmListener: SmokeAlarmListener? = null,
-                             var waterLeakListener: WaterLeakListener? = null)
+                             parentGatewaySid: String = IDLE_STATUS,
+                             @Expose private val stateChangeListener: StateChangeListener? = null,
+                             smokeAlarmListener: SmokeAlarmListener? = null,
+                             waterLeakListener: WaterLeakListener? = null)
     : IotDevice () {
+
+    @Exclude @Expose val sid: String = sid
+        @Exclude get
+    @Exclude @Expose val parentGatewaySid: String = parentGatewaySid
+        @Exclude get
+    @Exclude @Expose var smokeAlarmListener: SmokeAlarmListener? = smokeAlarmListener
+        @Exclude get
+    @Exclude @Expose var waterLeakListener: WaterLeakListener? = waterLeakListener
+        @Exclude get
 
     init {
         this.name = sid
@@ -28,7 +39,10 @@ abstract class GatewayDevice(val sid: String,
         this.guid = GUID.getInstance().getGuidForIotDevice(this)
     }
 
-    abstract fun parseData(json: String)
+    open fun parseData(json: String) {
+        for (controller in controllers)
+            controller.setUpToDate()
+    }
 
     fun setVoltage(o: JSONObject) {
         if (!o.isNull(VOLTAGE_KEY))

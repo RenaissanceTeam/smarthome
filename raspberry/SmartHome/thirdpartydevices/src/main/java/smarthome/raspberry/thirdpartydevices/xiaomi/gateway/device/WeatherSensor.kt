@@ -24,6 +24,7 @@ class WeatherSensor(sid: String, gatewaySid: String)
             if (!o.isNull(STATUS_PRESSURE))
                 getControllerByType(GATEWAY_PRESSURE_CONTROLLER).state = (o.getString(STATUS_PRESSURE).toFloat() / 1000).toString() + "kPa"
 
+            super.parseData(json)
         } catch (e: JSONException) {
             reportDataParseError(e)
         }

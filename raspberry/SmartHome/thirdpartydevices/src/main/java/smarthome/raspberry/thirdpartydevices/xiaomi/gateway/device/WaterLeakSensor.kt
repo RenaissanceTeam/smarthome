@@ -1,5 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device
 
+import com.google.gson.annotations.Expose
 import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.WATER_LEAK_SENSOR_TYPE
@@ -15,7 +16,7 @@ class WaterLeakSensor(sid: String,
                       waterLeakListener: WaterLeakListener? = null)
     : GatewayDevice(sid, WATER_LEAK_SENSOR_TYPE, gatewaySid, waterLeakListener = waterLeakListener) {
 
-    private var leak: Boolean = false
+    @Expose private var leak: Boolean = false
 
     init {
         addControllers(WaterLeakController(this),
@@ -39,6 +40,7 @@ class WaterLeakSensor(sid: String,
 
             setVoltage(o)
 
+            super.parseData(json)
         } catch (e: JSONException) {
             reportDataParseError(e)
         }

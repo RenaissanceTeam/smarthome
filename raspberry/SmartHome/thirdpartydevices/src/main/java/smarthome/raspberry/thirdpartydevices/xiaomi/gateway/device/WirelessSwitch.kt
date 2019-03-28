@@ -24,6 +24,7 @@ class WirelessSwitch(sid: String, transport: UdpTransport, gatewaySid: String)
 
             setVoltage(o)
 
+            super.parseData(json)
         } catch (e: JSONException) {
             reportDataParseError(e)
         }

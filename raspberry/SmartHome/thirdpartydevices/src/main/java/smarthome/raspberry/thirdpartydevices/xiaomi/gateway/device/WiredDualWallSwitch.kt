@@ -1,5 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device
 
+import com.google.firebase.firestore.Exclude
+import com.google.gson.annotations.Expose
 import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.WIRED_DUAL_WALL_SWITCH_TYPE
@@ -14,8 +16,10 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 class WiredDualWallSwitch (sid: String, transport: UdpTransport, gatewaySid: String)
     : GatewayDevice(sid, WIRED_DUAL_WALL_SWITCH_TYPE, gatewaySid) {
 
-    var statusLeft: String = IDLE_STATUS
-    var statusRight: String = IDLE_STATUS
+    @Exclude @Expose var statusLeft: String = IDLE_STATUS
+        @Exclude get
+    @Exclude @Expose var statusRight: String = IDLE_STATUS
+        @Exclude get
 
     init {
         addControllers(ButtonController(this, GATEWAY_LEFT_BUTTON_CONTROLLER, transport),
@@ -36,6 +40,7 @@ class WiredDualWallSwitch (sid: String, transport: UdpTransport, gatewaySid: Str
                 getControllerByType(GATEWAY_RIGHT_BUTTON_CONTROLLER).state = statusRight
             }
 
+            super.parseData(json)
         } catch (e: JSONException) {
             reportDataParseError(e)
         }

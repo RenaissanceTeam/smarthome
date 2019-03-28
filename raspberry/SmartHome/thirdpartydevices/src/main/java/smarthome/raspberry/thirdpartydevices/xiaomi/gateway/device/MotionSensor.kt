@@ -1,5 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device
 
+import com.google.gson.annotations.Expose
 import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.MOTION_SENSOR_TYPE
@@ -13,7 +14,7 @@ import java.time.LocalDateTime
 
 class MotionSensor(sid: String, gatewaySid: String) : GatewayDevice(sid, MOTION_SENSOR_TYPE, gatewaySid) {
 
-    private var lastMotion: LocalDateTime = LocalDateTime.now()
+    @Expose private var lastMotion: LocalDateTime = LocalDateTime.now()
 
     init {
         addControllers(MotionController(this),
@@ -41,6 +42,7 @@ class MotionSensor(sid: String, gatewaySid: String) : GatewayDevice(sid, MOTION_
 
             setVoltage(o)
 
+            super.parseData(json)
         } catch (e: JSONException) {
             reportDataParseError(e)
         }

@@ -3,28 +3,29 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller
 import smarthome.library.common.constants.GATEWAY_RGB_CONTROLLER
 import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.adjust
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.GatewayLightCmd
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Readable
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.Writable
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayReadable
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Gateway
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.utils.Utils.calculateRGB
 
 class RGBController(device: GatewayDevice, transport: UdpTransport)
-    : Controller(device, GATEWAY_RGB_CONTROLLER, transport), Writable, Readable {
+    : Controller(device, GATEWAY_RGB_CONTROLLER, transport), GatewayWritable, GatewayReadable {
 
     /**
-     * r, g, b (int)
+     * r, g, b (int) or calculated on client rgb (long)
      */
-    override fun write(vararg params: Any) {
-        if(params.size > 1) {
-            val r = adjust(params[0] as Int, 0, 255)
-            val g = adjust(params[1] as Int, 0, 255)
-            val b = adjust(params[2] as Int, 0, 255)
+    override fun write(params: String) {
+        val args = params.split(" ")
+        if(args.size > 1) {
+            val r = adjust(args[0].toInt(), 0, 255)
+            val g = adjust(args[1].toInt(), 0, 255)
+            val b = adjust(args[2].toInt(), 0, 255)
             val rgb = calculateRGB(r.toByte(), g.toByte(), b.toByte())
             super.controllerWrite(GatewayLightCmd(rgb, (device as Gateway).illumination))
         } else {
-            super.controllerWrite(GatewayLightCmd(params[0] as Long, (device as Gateway).illumination))
+            super.controllerWrite(GatewayLightCmd(params.toLong(), (device as Gateway).illumination))
         }
     }
 

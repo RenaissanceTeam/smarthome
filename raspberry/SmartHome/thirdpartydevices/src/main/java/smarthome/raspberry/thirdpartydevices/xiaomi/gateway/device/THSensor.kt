@@ -34,6 +34,7 @@ open class THSensor (sid: String,
 
             setVoltage(o)
 
+            super.parseData(json)
         } catch (e: JSONException) {
             reportDataParseError(e)
         }

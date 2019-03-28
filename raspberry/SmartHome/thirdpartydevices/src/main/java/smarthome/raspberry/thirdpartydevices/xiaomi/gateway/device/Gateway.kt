@@ -1,5 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device
 
+import com.google.firebase.firestore.Exclude
+import com.google.gson.annotations.Expose
 import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.GATEWAY_TYPE
@@ -14,10 +16,13 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
 class Gateway(sid: String, val transport: UdpTransport) : GatewayDevice(sid, GATEWAY_TYPE) {
 
-    var ip: String = ""
-    var rgb: Long = 0
-    var illumination: Int = 0
-    private var protoVersion: String = IDLE_STATUS
+    @Exclude @Expose var ip: String = ""
+        @Exclude get
+    @Exclude @Expose var rgb: Long = 0
+        @Exclude get
+    @Exclude @Expose var illumination: Int = 0
+        @Exclude get
+    @Expose private var protoVersion: String = IDLE_STATUS
 
     init {
         addControllers(RGBController(this, transport),
@@ -63,6 +68,7 @@ class Gateway(sid: String, val transport: UdpTransport) : GatewayDevice(sid, GAT
 
             getControllerByType(GATEWAY_LIGHT_ON_OFF_CONTROLLER).state = lightStatus
 
+            super.parseData(json)
         } catch (e: JSONException) {
             reportDataParseError(e)
         }

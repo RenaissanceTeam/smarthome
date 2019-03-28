@@ -2,6 +2,6 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfa
 
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 
-interface Writable {
-    fun write(vararg params: Any): Result
+interface YeelightWritable {
+    fun write(params: String): Result
 }
