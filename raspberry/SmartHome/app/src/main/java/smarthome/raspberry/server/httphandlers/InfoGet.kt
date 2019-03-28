@@ -1,12 +1,9 @@
 package smarthome.raspberry.server.httphandlers
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-
 import fi.iki.elonen.NanoHTTPD
-import smarthome.raspberry.model.SmartHomeRepository
-
 import fi.iki.elonen.NanoHTTPD.MIME_PLAINTEXT
+import smarthome.raspberry.model.SmartHomeRepository
 
 class InfoGet : BaseRequestHandler() {
     private val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()

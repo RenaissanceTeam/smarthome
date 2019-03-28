@@ -1,14 +1,12 @@
 package smarthome.raspberry.server.httphandlers
 
-import java.util.ArrayList
-
 import fi.iki.elonen.NanoHTTPD
-import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerType
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 import smarthome.raspberry.arduinodevices.controllers.ArduinoControllersFactory
 import smarthome.raspberry.model.SmartHomeRepository
+import java.util.*
 
 class InitPost : BaseRequestHandler() {
     override fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {

@@ -1,6 +1,5 @@
 package smarthome.raspberry.auth;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,18 +23,14 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import smarthome.raspberry.MainActivity;
 import smarthome.raspberry.R;
-import smarthome.raspberry.model.SmartHomeRepository;
-import smarthome.raspberry.utils.HomeController;
 
 import static smarthome.raspberry.BuildConfig.DEBUG;
 
