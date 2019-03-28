@@ -1,10 +1,8 @@
 package smarthome.raspberry.server;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.IOException;
-
 
 import fi.iki.elonen.NanoHTTPD;
 public class WebServer extends NanoHTTPD implements StoppableServer {

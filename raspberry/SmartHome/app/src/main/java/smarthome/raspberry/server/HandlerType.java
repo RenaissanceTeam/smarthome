@@ -1,6 +1,5 @@
 package smarthome.raspberry.server;
 
-import android.net.Uri;
 import android.util.Log;
 
 import fi.iki.elonen.NanoHTTPD;
