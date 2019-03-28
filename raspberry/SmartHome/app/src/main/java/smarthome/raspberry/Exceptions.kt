@@ -2,7 +2,6 @@ package smarthome.raspberry
 
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
-import java.lang.RuntimeException
 
 class UnableToCreateHomeStorage(homeId: String) : RuntimeException("can't create home storage for id=$homeId")
 class UnsupportedRead(controller: BaseController) : RuntimeException("Can't read controller $controller")
