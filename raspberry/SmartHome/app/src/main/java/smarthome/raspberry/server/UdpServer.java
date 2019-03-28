@@ -12,7 +12,6 @@ import java.net.InetAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import smarthome.raspberry.BuildConfig;
 import smarthome.raspberry.utils.ip.Helpers;
 
 import static smarthome.raspberry.BuildConfig.DEBUG;

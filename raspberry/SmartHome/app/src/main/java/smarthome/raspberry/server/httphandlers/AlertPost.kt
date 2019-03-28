@@ -1,10 +1,7 @@
 package smarthome.raspberry.server.httphandlers
 
 import android.util.Log
-
 import fi.iki.elonen.NanoHTTPD
-import smarthome.library.common.BaseController
-import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.model.SmartHomeRepository
 
 val TAG = AlertPost::class.java.simpleName

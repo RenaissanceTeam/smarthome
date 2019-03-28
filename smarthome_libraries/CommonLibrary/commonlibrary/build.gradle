@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
@@ -24,6 +26,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
     implementation 'com.google.firebase:firebase-firestore:18.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }
 repositories {
