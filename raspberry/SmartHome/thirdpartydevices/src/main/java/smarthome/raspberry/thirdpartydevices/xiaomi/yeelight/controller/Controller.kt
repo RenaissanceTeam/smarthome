@@ -1,5 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
+import com.google.firebase.firestore.Exclude
 import smarthome.library.common.BaseController
 import smarthome.library.common.GUID
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
@@ -9,12 +10,18 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfac
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 
-open class Controller(val device: YeelightDevice,
+open class Controller(device: YeelightDevice,
                       type: String,
-                      val writeCommandListener: WriteCommandListener = defWriteCommandListener)
+                      writeCommandListener: WriteCommandListener = defWriteCommandListener)
     : BaseController() {
 
+    @Exclude val device: YeelightDevice
+        @Exclude get
+    private val writeCommandListener: WriteCommandListener
+
     init {
+        this.device = device
+        this.writeCommandListener = writeCommandListener
         this.type = type
         this.guid = GUID.getInstance().generateGuidForController(device, this)
     }

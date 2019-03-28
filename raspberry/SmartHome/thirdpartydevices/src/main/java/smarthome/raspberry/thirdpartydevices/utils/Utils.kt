@@ -25,5 +25,9 @@ class Utils {
         fun <T> mapJson(json: String, c: Class<T>): T {
             return DEF_GSON.fromJson(json, c)
         }
+
+        fun toJson(o: Any): String {
+            return GSON.toJson(o)
+        }
     }
 }

@@ -24,6 +24,7 @@ class DoorWindowSensor(sid: String, gatewaySid: String) : GatewayDevice(sid, DOO
 
             setVoltage(o)
 
+            super.parseData(json)
         } catch (e: JSONException) {
             reportDataParseError(e)
         }

@@ -1,5 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device
 
+import com.google.gson.annotations.Expose
 import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.SMOKE_SENSOR_TYPE
@@ -17,6 +18,7 @@ class SmokeSensor(sid: String,
                   smokeAlarmListener: SmokeAlarmListener? = null)
     : GatewayDevice(sid, SMOKE_SENSOR_TYPE, gatewaySid, smokeAlarmListener = smokeAlarmListener) {
 
+    @Expose
     private var alarm: Boolean = false
 
     init {
@@ -46,6 +48,7 @@ class SmokeSensor(sid: String,
 
             setVoltage(o)
 
+            super.parseData(json)
         } catch (e: JSONException) {
             reportDataParseError(e)
         }

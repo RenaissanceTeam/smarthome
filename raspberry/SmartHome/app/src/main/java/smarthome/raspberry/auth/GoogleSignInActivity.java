@@ -34,6 +34,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import smarthome.raspberry.MainActivity;
 import smarthome.raspberry.R;
+import smarthome.raspberry.model.SmartHomeRepository;
 import smarthome.raspberry.utils.HomeController;
 
 import static smarthome.raspberry.BuildConfig.DEBUG;
@@ -125,27 +126,26 @@ public class GoogleSignInActivity extends FragmentActivity implements
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            if (DEBUG) Log.d(TAG, "signInWithCredential:success");
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        if (DEBUG) Log.d(TAG, "signInWithCredential:success");
 
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(getApplicationContext(), "Authorization succeeded.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Authorization succeeded.", Toast.LENGTH_SHORT).show();
 
-                            finish();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            if (DEBUG) Log.d(TAG, "signInWithCredential:failure", task.getException());
+                        //startActivity(new Intent(GoogleSignInActivity.this, MainActivity.class));
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        if (DEBUG) Log.d(TAG, "signInWithCredential:failure", task.getException());
 
-                            Toast.makeText(getApplicationContext(), "Authorization failed.", Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-
-                        hideProgressDialog();
+                        Toast.makeText(getApplicationContext(), "Authorization failed.", Toast.LENGTH_SHORT).show();
+                        updateUI(null);
                     }
+
+                    hideProgressDialog();
                 });
     }
 

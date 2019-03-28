@@ -2,12 +2,12 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.NAME_CONTROLLER_TYPE
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Readable
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Writable
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 
-class NameController(device: YeelightDevice) : Controller(device, NAME_CONTROLLER_TYPE), Readable, Writable {
+class NameController(device: YeelightDevice) : Controller(device, NAME_CONTROLLER_TYPE), YeelightReadable, YeelightWritable {
     override fun read(): String {
         return super.controllerRead(Property.NAME)
     }
@@ -15,8 +15,7 @@ class NameController(device: YeelightDevice) : Controller(device, NAME_CONTROLLE
     /**
      * @param params {name} (String)
      */
-    override fun write(vararg params: Any): Result {
-        val name: String = params[0] as String // TODO: should iotDevice be renamed too?
-        return super.controllerWrite(NAME_CONTROLLER_TYPE, name)
+    override fun write(params: String): Result {
+        return super.controllerWrite(NAME_CONTROLLER_TYPE, params) // TODO: should iotDevice be renamed too?
     }
 }

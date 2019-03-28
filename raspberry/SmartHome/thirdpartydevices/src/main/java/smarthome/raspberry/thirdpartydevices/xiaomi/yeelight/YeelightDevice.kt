@@ -1,9 +1,13 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight
 
+import com.google.firebase.firestore.Exclude
+import com.google.gson.annotations.Expose
 import smarthome.library.common.GUID
 import smarthome.library.common.IotDevice
 import smarthome.library.common.constants.DeviceTypes.YEELIGHT_DEVICE_TYPE
 import smarthome.raspberry.thirdpartydevices.network.SocketHolder
+import smarthome.raspberry.thirdpartydevices.utils.Utils
+import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.toJson
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.command.Command
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.GET_PROPERTY_METHOD_HEADER
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.ControllersFactory
@@ -12,15 +16,26 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.model.DeviceMetaData
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.model.DiscoverResponse
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
-import smarthome.raspberry.thirdpartydevices.utils.Utils
 
-class YeelightDevice(private val id: String,
-                     val metaData: DeviceMetaData,
-                     val ip: String,
-                     val port: Int = 55443,
-                     var effect: Effect = Effect.SUDDEN,
-                     var duration: Int = 0)
+class YeelightDevice(id: String,
+                     metaData: DeviceMetaData,
+                     ip: String,
+                     port: Int = 55443,
+                     effect: Effect = Effect.SMOOTH,
+                     duration: Int = 500)
     : IotDevice() {
+
+    @Expose private val id: String = id
+    @Exclude @Expose val metaData: DeviceMetaData = metaData
+        @Exclude get
+    @Exclude @Expose val ip: String = ip
+        @Exclude get
+    @Exclude @Expose val port: Int = port
+        @Exclude get
+    @Exclude @Expose var effect: Effect = effect
+        @Exclude get
+    @Exclude @Expose var duration: Int = duration
+        @Exclude get
 
     init {
         name = id
@@ -73,8 +88,8 @@ class YeelightDevice(private val id: String,
     }
 
     override fun equals(other: Any?): Boolean {
-        val second = other as YeelightDevice
-        return second.id == this.id
+        val second = other as IotDevice
+        return second.guid == this.guid
     }
 
     override fun hashCode(): Int {
@@ -90,6 +105,10 @@ class YeelightDevice(private val id: String,
                 "ip: $ip \n" +
                 "port: $port \n" +
                 metaData.toString()
+    }
+
+    override fun gsonned(): String {
+        return toJson(this)
     }
 
 }

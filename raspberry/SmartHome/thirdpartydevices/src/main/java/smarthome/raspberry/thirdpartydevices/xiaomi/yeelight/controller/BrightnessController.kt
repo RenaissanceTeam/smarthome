@@ -2,13 +2,13 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.BRIGHTNESS_CONTROLLER_TYPE
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Readable
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Writable
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.adjust
 
-class BrightnessController(device: YeelightDevice) : Controller(device, BRIGHTNESS_CONTROLLER_TYPE), Readable, Writable {
+class BrightnessController(device: YeelightDevice) : Controller(device, BRIGHTNESS_CONTROLLER_TYPE), YeelightReadable, YeelightWritable {
 
     override fun read(): String {
         return super.controllerRead(Property.BRIGHTNESS)
@@ -17,8 +17,8 @@ class BrightnessController(device: YeelightDevice) : Controller(device, BRIGHTNE
     /**
      * @param params {brightness} (int from 1 to 100)
      */
-    override fun write(vararg params: Any): Result {
-        val brightness: Int = adjust(params[0] as Int, 1, 100)
+    override fun write(params: String): Result {
+        val brightness: Int = adjust(params.toInt(), 1, 100)
         setNewState(brightness.toString())
         return super.controllerWrite(BRIGHTNESS_CONTROLLER_TYPE, brightness, device.effect.effect, device.duration)
     }

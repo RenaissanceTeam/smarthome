@@ -8,18 +8,15 @@ import smarthome.raspberry.model.SmartHomeRepository
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayService
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.discover.DeviceDetector
 
-// TODO: rename class
-class Service {
+class DeviceObserver {
     // parentGatewaySid, GatewayService
     val gatewayServices: HashMap<String, GatewayService> = HashMap()
     val yeelightDeviceDetector: DeviceDetector = DeviceDetector()
 
     private val scope = CoroutineScope(Dispatchers.Default)
 
-    init {
-        start()
-    }
 
+    // entry for non setup needed devices
     fun start() {
         scope.launch {
             val devices = yeelightDeviceDetector.discover()

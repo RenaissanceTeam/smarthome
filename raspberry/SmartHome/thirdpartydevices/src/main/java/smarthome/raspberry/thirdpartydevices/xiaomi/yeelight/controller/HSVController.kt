@@ -2,27 +2,27 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.HSV_CONTROLLER_TYPE
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Readable
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.Writable
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.adjust
 
-class HSVController(device: YeelightDevice) : Controller(device, HSV_CONTROLLER_TYPE), Readable, Writable {
+class HSVController(device: YeelightDevice) : Controller(device, HSV_CONTROLLER_TYPE), YeelightReadable, YeelightWritable {
 
     override fun read(): String {
         val res = super.controllerRead(Property.HUE, Property.SAT)
-        setNewState("hue: " + res[0] + " saturation: " + res[1])
+        setNewState(res[0] + " " + res[1])
         return res.joinToString(" ")
     }
 
     /**
      * @param params {hue} (int from 0 to 359), {saturation} (int from 0 to 100)
      */
-    override fun write(vararg params: Any): Result {
-        val hue: Int = adjust(params[0] as Int, 0, 359)
-        val saturation: Int = adjust(params[1] as Int, 0, 100)
-        setNewState("$hue $saturation")
+    override fun write(params: String): Result {
+        val options = params.split(" ")
+        val hue: Int = adjust(options[0].toInt(), 0, 359)
+        val saturation: Int = adjust(options[1].toInt(), 0, 100)
         return super.controllerWrite(HSV_CONTROLLER_TYPE, hue, saturation, device.effect.effect, device.duration)
     }
 }

@@ -7,18 +7,14 @@ import android.util.Log
 import android.widget.Toast
 
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 import smarthome.raspberry.auth.GoogleSignInActivity
 import smarthome.raspberry.model.SmartHomeRepository
-import smarthome.raspberry.server.StoppableServer
 import smarthome.raspberry.server.UdpServer
 import smarthome.raspberry.server.WebServer
-import smarthome.raspberry.utils.HomeController
+import smarthome.raspberry.service.DeviceObserver
 
 private val TAG = MainActivity::class.java.simpleName
 private val DEBUG = BuildConfig.DEBUG
@@ -27,7 +23,8 @@ private val AUTH_ACTIVITY_REQUEST_CODE = 12312
 class MainActivity : Activity() {
     private var httpServer: WebServer? = null
     private var udpServer: UdpServer? = null
-    private val mAuth: FirebaseAuth? = null
+
+    val deviceObserver: DeviceObserver = DeviceObserver()
 
     private val isAuthenticated = FirebaseAuth.getInstance().currentUser != null
     private val job = Job()
@@ -44,8 +41,8 @@ class MainActivity : Activity() {
 
     override fun onStart() {
         super.onStart()
-        httpServer?.startServer()
-        udpServer?.startServer()
+        //httpServer?.startServer()
+        //udpServer?.startServer()
     }
 
     override fun onResume() {
@@ -56,8 +53,12 @@ class MainActivity : Activity() {
         } else {
             uiScope.launch {
                 try {
-                    SmartHomeRepository.listenForCloudChanges()
+                    SmartHomeRepository.init(applicationContext)
+                    delay(2000)
+                    SmartHomeRepository.listenForCloudChanges() // TODO: normal fix
+                    deviceObserver.start()
                 } catch (e: Throwable) {
+                    Log.d(TAG, "Initialization or cloud change listener set up failed", e)
                     Toast.makeText(baseContext, e.message, Toast.LENGTH_SHORT).show()
                 }
             }
