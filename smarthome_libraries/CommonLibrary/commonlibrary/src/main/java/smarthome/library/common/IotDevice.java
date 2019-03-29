@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static smarthome.library.common.constants.DeviceTypes.DEFAULT_TYPE;
+import static smarthome.library.common.constants.MessageConstantsKt.PENDING;
 
 public class IotDevice {
     @Expose public String name;
@@ -16,6 +17,7 @@ public class IotDevice {
     @Expose public long guid;
     @Expose public List<BaseController> controllers = new ArrayList<>();
     @Expose private String type = DEFAULT_TYPE;
+    @Expose public String status = PENDING;
 
     public IotDevice() {} // needed for deserialization
 
@@ -62,7 +64,8 @@ public class IotDevice {
     public boolean isIdentical(IotDevice device) {
         return equals(device)
                 && Objects.equals(name, device.name)
-                && Objects.equals(description, device.description);
+                && Objects.equals(description, device.description)
+                && Objects.equals(status, device.status);
     }
 
     @Override

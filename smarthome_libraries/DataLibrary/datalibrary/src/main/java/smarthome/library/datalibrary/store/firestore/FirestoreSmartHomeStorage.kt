@@ -22,7 +22,8 @@ class FirestoreSmartHomeStorage(
     private val devicesRef: CollectionReference = homeRef.collection(HOME_DEVICES_NODE)
     private val pendingDevicesRef: CollectionReference = homeRef.collection(PENDING_DEVICES_NODE)
 
-    private var registration: ListenerRegistration? = null
+    private var devicesRegistration: ListenerRegistration? = null
+    private var pendingDevicesRegistration: ListenerRegistration? = null
 
     override fun createSmartHome(successListener: OnSuccessListener<Void>, failureListener: OnFailureListener) {
         db.collection(HOMES_NODE).document(homeId).set(mapOf(Pair("exists", "true")))
@@ -99,7 +100,7 @@ class FirestoreSmartHomeStorage(
 
 
     override fun observeDevicesUpdates(observer: DevicesObserver) {
-        registration = devicesRef.addSnapshotListener(EventListener { snapshot, e ->
+        val eventListener: EventListener<QuerySnapshot> = EventListener { snapshot, e ->
             if (e != null) {
                 Log.w(TAG, "Devices updates listen failed", e)
                 return@EventListener
@@ -113,11 +114,15 @@ class FirestoreSmartHomeStorage(
                 devices.add(doc.toObject(IotDevice::class.java))
 
             observer.onDevicesChanged(devices, snapshot.metadata.hasPendingWrites())
-        })
+        }
+
+        devicesRegistration = devicesRef.addSnapshotListener(eventListener)
+        pendingDevicesRegistration = pendingDevicesRef.addSnapshotListener(eventListener)
     }
 
     override fun detachDevicesUpdatesObserver() {
-        registration?.remove()
+        devicesRegistration?.remove()
+        pendingDevicesRegistration?.remove()
     }
 
     override fun addPendingDevice(

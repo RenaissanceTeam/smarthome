@@ -21,6 +21,7 @@ class DeviceChangesHandler(private val localDevice: IotDevice,
         if (!localDevice.isIdentical(cloudDevice) || shouldUpdateDb) {
             localDevice.name = cloudDevice.name
             localDevice.description = cloudDevice.description
+            localDevice.status = cloudDevice.status
 
             SmartHomeRepository.addDevice(localDevice) // todo test, it should update the device in db
         }

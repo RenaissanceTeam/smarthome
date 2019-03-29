@@ -112,6 +112,18 @@ public class JsonDataSource extends SQLiteOpenHelper implements DeviceDataSource
             return (query != null && query.moveToFirst());
         }
     }
+
+    @Override
+    public IotDevice get(Long guid) {
+        String rawQuery = "SELECT * FROM " + tableName + " WHERE " + GUID_COLUMN + " = " + guid;
+        try (Cursor query = getReadableDatabase().rawQuery(rawQuery, null)) {
+            if (query.moveToFirst()) {
+                String json = query.getString(JSON_INDEX);
+                return gson.fromJson(json, deviceType);
+            } else return null;
+        }
+    }
+
     @Override
     public void update(IotDevice device) {
         getWritableDatabase().update(tableName, getContentValues(device), GUID_COLUMN + "=" + device.guid, null);
