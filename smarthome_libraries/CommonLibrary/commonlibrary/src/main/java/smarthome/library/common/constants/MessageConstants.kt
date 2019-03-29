@@ -8,3 +8,4 @@ const val DISCOVER_DEVICE      = "discover_device_request"
 // statuses
 const val ACCEPTED = "accepted"
 const val DENIED   = "denied"
+const val PENDING = "pending"

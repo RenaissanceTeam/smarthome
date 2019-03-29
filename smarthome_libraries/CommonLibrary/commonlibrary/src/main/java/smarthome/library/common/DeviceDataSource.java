@@ -13,6 +13,8 @@ public interface DeviceDataSource<T extends IotDevice>{
 
     boolean contains(T device);
 
+    IotDevice get(Long guid);
+
     void update(T device);
 
     void delete(T device);

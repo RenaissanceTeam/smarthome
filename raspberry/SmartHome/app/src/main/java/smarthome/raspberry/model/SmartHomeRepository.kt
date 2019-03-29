@@ -12,6 +12,9 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.GUID
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
+import smarthome.library.common.constants.ACCEPTED
+import smarthome.library.common.constants.DENIED
+import smarthome.library.common.constants.PENDING
 import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.listeners.DevicesObserver
 import smarthome.raspberry.BuildConfig.DEBUG
@@ -20,6 +23,7 @@ import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 import smarthome.raspberry.utils.HomeController
 import java.util.*
+import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
 
 
@@ -71,9 +75,9 @@ object SmartHomeRepository : SmartHome() {
             ioScope.launch {
                 if (DEBUG) Log.d(TAG, "new devices update: $cloudDevices isInner=$isInner")
 
-                if (cloudDevices.size < devices.size) {
+                /*if (cloudDevices.size < devices.size) {
                     deleteLocalDevices(cloudDevices)
-                }
+                }*/
 
                 try {
                     handleChanges(cloudDevices, storage)
@@ -104,7 +108,7 @@ object SmartHomeRepository : SmartHome() {
             if (cloudDevices.contains(localDevice)) continue
             removed.add(localDevice)
         }
-//        removed.forEach { repository.delete(it) } // todo add delete() to repository
+        removed.forEach { delete(it) } // todo add delete() to repository
     }
 
 
@@ -113,12 +117,12 @@ object SmartHomeRepository : SmartHome() {
      * Iot device should be added to databases
      */
     fun addDevice(device: IotDevice): Boolean {
-        if (DEBUG) Log.d(TAG, "addDevice: $device")
-
         if (!ready) {
             pendingDevices.add(device)
             return false
         }
+
+        if (DEBUG) Log.d(TAG, "addDevice: $device")
 
         for (dataSource in DataSources.values()) {
             if (dataSource.deviceType != device.javaClass) {
@@ -127,9 +131,25 @@ object SmartHomeRepository : SmartHome() {
 
             dataSource.init(context)
 
-            if (dataSource.source.contains(device)) {
-                dataSource.source.update(device)
-                devices[devices.indexOf(device)] = device
+            val src = dataSource.source
+            if (src.contains(device)) {
+                if (src.get(device.guid).status != device.status) {
+                    ioScope.launch {
+                        suspendCoroutine<Unit> { continuation ->
+                            if (device.status == ACCEPTED) {
+                                movePendingDeviceToAccepted(device, continuation)
+                                src.update(device)
+                                devices[devices.indexOf(device)] = device
+                            }
+
+                            else if (device.status == DENIED) {
+                                removePendingDevice(device, continuation)
+                                delete(device)
+                            }
+                        }
+                    }
+                }
+
                 return true
             }
 
@@ -140,22 +160,100 @@ object SmartHomeRepository : SmartHome() {
                 devices.add(device)
                 ioScope.launch {
                     suspendCoroutine<Unit> { continuation ->
-                        storage.addDevice(device,
-                                OnSuccessListener {
-                                    if (DEBUG) Log.d(TAG, "success adding device to firestore")
-                                    continuation.resumeWith(Result.success(Unit))
-                                },
-                                OnFailureListener { if (DEBUG) Log.d(TAG, "failed $it")
-                                    continuation.resumeWith(Result.failure(it))
-                                }
-                        )
+                        if (device.status == PENDING)
+                            pushPendingDeviceToCloud(device, continuation)
+                        else if (device.status == ACCEPTED)
+                            pushAcceptedDeviceToCloud(device, continuation)
                     }
                 }
+
                 return true
             }
 
         }
+
         return false
+    }
+
+    fun delete(device: IotDevice) {
+        for (dataSource in DataSources.values()) {
+            if (dataSource.deviceType != device.javaClass)
+                continue
+
+            devices.remove(device)
+            ioScope.launch {
+                suspendCoroutine<Unit> { continuation ->
+                    dataSource.source.delete(device)
+                    storage.removeDevice(device,
+                            OnSuccessListener {
+                                if (DEBUG) Log.d(TAG, "device successfully removed")
+                                continuation.resumeWith(Result.success(Unit))
+                            },
+                            OnFailureListener {
+                                if (DEBUG) Log.d(TAG, "failed $it")
+                                continuation.resumeWith(Result.failure(it))
+                            })
+                }
+            }
+        }
+    }
+
+    private fun pushAcceptedDeviceToCloud(device: IotDevice, continuation: Continuation<Unit>) {
+        storage.addDevice(device,
+                OnSuccessListener {
+                    if (DEBUG) Log.d(TAG, "success adding device to firestore")
+                    continuation.resumeWith(Result.success(Unit))
+                },
+                OnFailureListener {
+                    if (DEBUG) Log.d(TAG, "failed $it")
+                    continuation.resumeWith(Result.failure(it))
+                }
+        )
+    }
+
+    private fun pushPendingDeviceToCloud(device: IotDevice, continuation: Continuation<Unit>) {
+        storage.addPendingDevice(device,
+                OnSuccessListener {
+                    if (DEBUG) Log.d(TAG, "success adding pending device to firestore")
+                    continuation.resumeWith(Result.success(Unit))
+                },
+                OnFailureListener {
+                    if (DEBUG) Log.d(TAG, "failed $it")
+                    continuation.resumeWith(Result.failure(it))
+                }
+        )
+    }
+
+    private fun movePendingDeviceToAccepted(device: IotDevice, continuation: Continuation<Unit>) {
+        storage.addDevice(device,
+                OnSuccessListener {
+                    storage.removePendingDevice(device,
+                            OnSuccessListener {
+                                if (DEBUG) Log.d(TAG, "device successfully noved from pending to root devices node")
+                                continuation.resumeWith(Result.success(Unit))
+                            },
+                            OnFailureListener {
+                                if (DEBUG) Log.d(TAG, "failed $it")
+                                continuation.resumeWith(Result.failure(it))
+                            })
+                },
+                OnFailureListener {
+                    if (DEBUG) Log.d(TAG, "failed $it")
+                    continuation.resumeWith(Result.failure(it))
+                })
+    }
+
+    private fun removePendingDevice(device: IotDevice, continuation: Continuation<Unit>) {
+        storage.removePendingDevice(device,
+                OnSuccessListener {
+                    if (DEBUG) Log.d(TAG, "pending device successfully removed")
+                    continuation.resumeWith(Result.success(Unit))
+                },
+                OnFailureListener {
+                    if (DEBUG) Log.d(TAG, "failed $it")
+                    continuation.resumeWith(Result.failure(it))
+                }
+        )
     }
 
     fun getController(guid: Long): BaseController {

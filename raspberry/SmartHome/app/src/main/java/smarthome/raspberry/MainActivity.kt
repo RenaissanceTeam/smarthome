@@ -54,7 +54,7 @@ class MainActivity : Activity() {
             uiScope.launch {
                 try {
                     SmartHomeRepository.init(applicationContext)
-                    delay(2000)
+                    delay(5000)
                     SmartHomeRepository.listenForCloudChanges() // TODO: normal fix
                     deviceObserver.start()
                 } catch (e: Throwable) {
