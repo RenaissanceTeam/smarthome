@@ -1,18 +1,13 @@
 package smarthome.library.datalibrary.store.firestore
 
 import android.util.Log
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
-import smarthome.library.datalibrary.constants.FIREBASE_READ_VALUE_ERROR
-import smarthome.library.datalibrary.constants.HOMES_NODE
-import smarthome.library.datalibrary.constants.HOME_DEVICES_NODE
-import smarthome.library.datalibrary.constants.TAG
+import smarthome.library.datalibrary.constants.*
 import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.listeners.DeviceListener
 import smarthome.library.datalibrary.store.listeners.DevicesObserver
@@ -23,7 +18,9 @@ class FirestoreSmartHomeStorage(
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 ) : SmartHomeStorage {
 
-    private val ref: CollectionReference = db.collection(HOMES_NODE).document(homeId).collection(HOME_DEVICES_NODE)
+    private val homeRef: DocumentReference = db.collection(HOMES_NODE).document(homeId)
+    private val devicesRef: CollectionReference = homeRef.collection(HOME_DEVICES_NODE)
+    private val pendingDevicesRef: CollectionReference = homeRef.collection(PENDING_DEVICES_NODE)
 
     private var registration: ListenerRegistration? = null
 
@@ -44,7 +41,7 @@ class FirestoreSmartHomeStorage(
     override fun getSmartHome(listener: SmartHomeListener, failureListener: OnFailureListener) {
         val smartHome = SmartHome()
 
-        ref.get()
+        devicesRef.get()
             .addOnSuccessListener { documents ->
                 for (document in documents)
                     smartHome.devices.add(document.toObject(IotDevice::class.java))
@@ -102,7 +99,7 @@ class FirestoreSmartHomeStorage(
 
 
     override fun observeDevicesUpdates(observer: DevicesObserver) {
-        registration = ref.addSnapshotListener(EventListener { snapshot, e ->
+        registration = devicesRef.addSnapshotListener(EventListener { snapshot, e ->
             if (e != null) {
                 Log.w(TAG, "Devices updates listen failed", e)
                 return@EventListener
@@ -123,13 +120,38 @@ class FirestoreSmartHomeStorage(
         registration?.remove()
     }
 
+    override fun addPendingDevice(
+        iotDevice: IotDevice,
+        successListener: OnSuccessListener<Void>,
+        failureListener: OnFailureListener
+    ) {
+        getPendingDeviceRef(iotDevice)
+            .set(iotDevice)
+            .addOnSuccessListener(successListener)
+            .addOnFailureListener(failureListener)
+    }
+
+    override fun removePendingDevice(
+        iotDevice: IotDevice,
+        successListener: OnSuccessListener<Void>,
+        failureListener: OnFailureListener
+    ) {
+        getPendingDeviceRef(iotDevice)
+            .delete()
+            .addOnSuccessListener(successListener)
+            .addOnFailureListener(failureListener)
+    }
 
     private fun getDeviceRef(iotDevice: IotDevice): DocumentReference {
-        return ref.document(iotDevice.guid.toString())
+        return devicesRef.document(iotDevice.guid.toString())
     }
 
     private fun getDeviceRef(guid: Long): DocumentReference {
-        return ref.document(guid.toString())
+        return devicesRef.document(guid.toString())
+    }
+
+    private fun getPendingDeviceRef(iotDevice: IotDevice): DocumentReference {
+        return pendingDevicesRef.document(iotDevice.guid.toString())
     }
 
     companion object {
