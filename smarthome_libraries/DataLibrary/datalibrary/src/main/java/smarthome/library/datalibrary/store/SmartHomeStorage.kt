@@ -55,4 +55,17 @@ interface SmartHomeStorage {
     )
 
     fun detachDevicesUpdatesObserver()
+
+    fun addPendingDevice(
+        iotDevice: IotDevice,
+        successListener: OnSuccessListener<Void> = defSuccessListener,
+        failureListener: OnFailureListener = defFailureListener
+    )
+
+    fun removePendingDevice(
+        iotDevice: IotDevice,
+        successListener: OnSuccessListener<Void> = defSuccessListener,
+        failureListener: OnFailureListener = defFailureListener
+    )
+
 }

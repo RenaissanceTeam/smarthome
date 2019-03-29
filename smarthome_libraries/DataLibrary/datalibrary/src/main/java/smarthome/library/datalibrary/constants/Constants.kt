@@ -14,6 +14,8 @@ const val HOMES_NODE = "homes"
 
 const val ACCOUNT_HOMES_ARRAY_REF = "homes"
 const val HOME_DEVICES_NODE = "devices"
+const val MESSAGES_NODE = "message_queue"
+const val PENDING_DEVICES_NODE = "pending_devices"
 
 const val FIREBASE_READ_VALUE_ERROR = "Failed to read value"
 
