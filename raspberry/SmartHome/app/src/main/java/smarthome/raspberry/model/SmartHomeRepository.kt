@@ -39,6 +39,9 @@ object SmartHomeRepository : SmartHome() {
     private var tokens: List<InstanceToken> = listOf()
     private lateinit var fcmSender: FcmSender // todo don't like violation of SRP in repo
 
+    private var ready: Boolean = false
+    private val pendingDevices: Queue<IotDevice> = LinkedList()
+
     fun init(appContext: Context) {
         context = appContext
 
@@ -65,6 +68,9 @@ object SmartHomeRepository : SmartHome() {
                 // todo add code here to fix some links after deserializing from db
             }
         }
+
+        ready = true
+        processPendingDevices()
     }
 
     fun listenForCloudChanges() {
@@ -81,8 +87,15 @@ object SmartHomeRepository : SmartHome() {
     fun addDevice(device: IotDevice): Boolean {
         if (DEBUG) Log.d(TAG, "addDevice: $device")
 
+        if (!ready) {
+            pendingDevices.add(device)
+            return false
+        }
+
         for (dataSource in DataSources.values()) {
             if (!device.belongsTo(dataSource)) continue
+
+            dataSource.init(context)
 
             if (dataSource.source.contains(device)) {
                 dataSource.source.update(device)
@@ -146,6 +159,11 @@ object SmartHomeRepository : SmartHome() {
         }
 
         devices.clear()
+    }
+
+    private fun processPendingDevices() {
+        while (pendingDevices.size > 0)
+            addDevice(pendingDevices.poll())
     }
 
     fun handleAlert(device: IotDevice, controller: BaseController) {

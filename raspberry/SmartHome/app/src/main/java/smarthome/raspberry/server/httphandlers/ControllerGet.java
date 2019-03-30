@@ -25,7 +25,7 @@ public class ControllerGet extends BaseRequestHandler{
                 return getArduinoHttpError();
             }
         } else {
-            throw new IllegalStateException("get request to non readable service");
+            throw new IllegalStateException("get request to non readable deviceObserver");
         }
     }
 }

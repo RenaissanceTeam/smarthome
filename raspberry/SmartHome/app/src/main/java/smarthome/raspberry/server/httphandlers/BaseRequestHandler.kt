@@ -1,10 +1,9 @@
 package smarthome.raspberry.server.httphandlers
 
 import fi.iki.elonen.NanoHTTPD
+import fi.iki.elonen.NanoHTTPD.MIME_PLAINTEXT
 import smarthome.library.common.BaseController
 import smarthome.raspberry.model.SmartHomeRepository
-
-import fi.iki.elonen.NanoHTTPD.MIME_PLAINTEXT
 
 abstract class BaseRequestHandler : RequestHandler {
 
