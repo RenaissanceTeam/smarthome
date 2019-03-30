@@ -5,6 +5,10 @@ import smarthome.raspberry.UnsupportedRead
 import smarthome.raspberry.UnsupportedWrite
 import smarthome.raspberry.arduinodevices.controllers.ArduinoReadable
 import smarthome.raspberry.arduinodevices.controllers.ArduinoWritable
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayReadable
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayWritable
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 
 class ControllerChangesHandler(private val localController: BaseController,
                                private val cloudController: BaseController) {
@@ -27,25 +31,49 @@ class ControllerChangesHandler(private val localController: BaseController,
     }
 
     private suspend fun handleRead() {
-        when (localController) {
+        changesMade = when (localController) {
             is ArduinoReadable -> {
                 val response = localController.read().response // blocking
                 localController.state = response
                 localController.setUpToDate()
-                changesMade = true
+                true
             }
-            // todo add others
+            is YeelightReadable -> {
+                localController.setNewState(localController.read()) // blocking
+                localController.setUpToDate()
+                true
+            }
+            is GatewayReadable -> {
+                localController.setNewState(localController.read()) // non-blocking
+                localController.setUpToDate()
+                true
+            }
             else -> throw UnsupportedRead(localController)
         }
     }
 
     private suspend fun handleWrite() {
-        val newState = cloudController.state
-        when (localController) {
+        var newState = cloudController.state
+        changesMade = when (localController) {
             is ArduinoWritable -> {
                 localController.write(newState) // blocking
                 localController.setUpToDate()
-                changesMade = true
+                true
+            }
+            is YeelightWritable -> {
+                if(newState == null)
+                    newState = ""
+                val res = localController.write(newState) // blocking
+                if(res.isOkResult())
+                    localController.setNewState(newState)
+                localController.setUpToDate()
+                true
+            }
+            is GatewayWritable -> {
+                if (newState == null)
+                    newState = ""
+                localController.write(newState) // async
+                true
             }
             else -> throw UnsupportedWrite(localController, newState)
         }

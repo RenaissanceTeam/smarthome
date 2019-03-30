@@ -12,12 +12,12 @@ import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import smarthome.raspberry.arduinodevices.ArduinoControllerResponse;
-import smarthome.raspberry.arduinodevices.ArduinoDevice;
-import smarthome.raspberry.arduinodevices.ArduinoDeviceAPI;
 import smarthome.library.common.BaseController;
 import smarthome.library.common.ControllerType;
 import smarthome.library.common.GUID;
+import smarthome.raspberry.arduinodevices.ArduinoControllerResponse;
+import smarthome.raspberry.arduinodevices.ArduinoDevice;
+import smarthome.raspberry.arduinodevices.ArduinoDeviceAPI;
 
 public class ArduinoController extends BaseController {
     @Exclude public ArduinoDevice device;
