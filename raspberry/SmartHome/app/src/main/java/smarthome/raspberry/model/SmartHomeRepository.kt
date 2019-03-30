@@ -5,8 +5,6 @@ import android.content.Context
 import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,6 +21,9 @@ import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 import smarthome.raspberry.model.cloudchanges.DeviceChangesListener
 import smarthome.raspberry.utils.HomeController
+import smarthome.raspberry.utils.fcm.FcmSender
+import smarthome.raspberry.utils.fcm.MessageType
+import smarthome.raspberry.utils.fcm.Priority
 import java.util.*
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -36,6 +37,7 @@ object SmartHomeRepository : SmartHome() {
     private lateinit var tokenStorage: InstanceTokenStorage
     private val ioScope = CoroutineScope(Dispatchers.IO)
     private var tokens: List<InstanceToken> = listOf()
+    private lateinit var fcmSender: FcmSender // todo don't like violation of SRP in repo
 
     fun init(appContext: Context) {
         context = appContext
@@ -46,6 +48,7 @@ object SmartHomeRepository : SmartHome() {
             devicesStorage = homeController.getSmartHomeStorage(homeId)
             tokenStorage = homeController.getTokenStorage(homeId)
             devices = ArrayList()
+            fcmSender = FcmSender(context)
 
             loadSavedDevices()
         }
@@ -150,23 +153,12 @@ object SmartHomeRepository : SmartHome() {
         ioScope.launch {
             try {
                 updateDeviceInRemoteStorage(device)
-                sendFcm(controller)
+                fcmSender.send(controller, device, MessageType.NOTIFICATION, Priority.HIGH,
+                        tokens.map { it.token }.toTypedArray())
             } catch (e: Throwable) {
                 if (DEBUG) Log.d(TAG, "can't handle alert: ", e)
             }
         }
-    }
-
-    private fun sendFcm(controller: BaseController) {
-        val msg = RemoteMessage.Builder(tokens[0].token + "@gcm.googleapis.com")
-                .setMessageId("${controller.guid}${controller.state}")
-                .addData("controller_guid", controller.guid.toString())
-                .addData("alert_state", controller.state)
-                .build()
-
-
-        if (DEBUG) Log.d(TAG, "send fcm msg=$msg")
-        FirebaseMessaging.getInstance().send(msg)
     }
 
     private suspend fun updateDeviceInRemoteStorage(device: IotDevice) {
