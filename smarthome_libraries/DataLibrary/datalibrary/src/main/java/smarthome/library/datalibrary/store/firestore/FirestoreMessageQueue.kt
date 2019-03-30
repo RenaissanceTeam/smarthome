@@ -9,12 +9,21 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import smarthome.library.common.constants.CHANGE_DEVICE_STATUS
+import smarthome.library.common.constants.DISCOVER_ALL
+import smarthome.library.common.constants.DISCOVER_DEVICE
+import smarthome.library.common.message.ChangeDeviceStatusRequest
+import smarthome.library.common.message.DiscoverAllDevicesRequest
+import smarthome.library.common.message.DiscoverDeviceRequest
 import smarthome.library.common.message.Message
+import smarthome.library.datalibrary.BuildConfig.DEBUG
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.constants.MESSAGES_NODE
 import smarthome.library.datalibrary.constants.TAG
+import smarthome.library.datalibrary.constants.WrongMessageType
 import smarthome.library.datalibrary.store.MessageQueue
 import smarthome.library.datalibrary.store.listeners.MessageListener
+import java.lang.IllegalArgumentException
 
 class FirestoreMessageQueue(
     private val homeId: String,
@@ -57,9 +66,17 @@ class FirestoreMessageQueue(
             if (snapshot == null)
                 return@EventListener
 
-            val devices = ArrayList<Message>()
-            for (doc in snapshot)
-                devices.add(doc.toObject(Message::class.java))
+            val devices = ArrayList<Any>()
+            for (doc in snapshot) {
+                val messageType: String = doc.get("messageType") as String
+                val message = when (messageType) {
+                    CHANGE_DEVICE_STATUS -> doc.toObject(ChangeDeviceStatusRequest::class.java)
+                    DISCOVER_ALL -> doc.toObject(DiscoverAllDevicesRequest::class.java)
+                    DISCOVER_DEVICE -> doc.toObject(DiscoverDeviceRequest::class.java)
+                    else -> throw WrongMessageType(messageType)
+                }
+                devices.add(message)
+            }
 
             listener.onMessagesReceived(devices, snapshot.metadata.hasPendingWrites())
         } )

@@ -15,10 +15,15 @@ import smarthome.library.common.SmartHome
 import smarthome.library.common.constants.ACCEPTED
 import smarthome.library.common.constants.DENIED
 import smarthome.library.common.constants.PENDING
+import smarthome.library.datalibrary.store.MessageQueue
 import smarthome.library.datalibrary.store.SmartHomeStorage
+import smarthome.library.datalibrary.store.firestore.FirestoreMessageQueue
 import smarthome.library.datalibrary.store.listeners.DevicesObserver
+import smarthome.library.datalibrary.store.listeners.MessageListener
 import smarthome.raspberry.BuildConfig.DEBUG
 import smarthome.raspberry.OddDeviceInCloud
+import smarthome.raspberry.UnableToCreateHomeStorage
+import smarthome.raspberry.UnableToCreateMessageQueue
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 import smarthome.raspberry.utils.HomeController
@@ -32,6 +37,7 @@ object SmartHomeRepository : SmartHome() {
     const val TAG = "SmartHomeRepository"
     lateinit var context: Context
     lateinit var storage: SmartHomeStorage
+    lateinit var messageQueue: MessageQueue
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
     private var ready: Boolean = false
@@ -44,6 +50,7 @@ object SmartHomeRepository : SmartHome() {
             val homeController = HomeController(context)
             val homeId = homeController.getHomeId()
             storage = homeController.getSmartHomeStorage(homeId)
+            messageQueue = FirestoreMessageQueue.getInstance(homeId) ?: throw UnableToCreateMessageQueue(homeId)
 
             devices = ArrayList()
 
@@ -75,10 +82,6 @@ object SmartHomeRepository : SmartHome() {
             ioScope.launch {
                 if (DEBUG) Log.d(TAG, "new devices update: $cloudDevices isInner=$isInner")
 
-                /*if (cloudDevices.size < devices.size) {
-                    deleteLocalDevices(cloudDevices)
-                }*/
-
                 try {
                     handleChanges(cloudDevices, storage)
                 } catch (e: Throwable) {
@@ -86,6 +89,11 @@ object SmartHomeRepository : SmartHome() {
                 }
             }
         })
+    }
+
+    suspend fun subscribeToMessageQueue() {
+        messageQueue.subscribe(MessageHandler.getInstance())
+        if (DEBUG) Log.d(TAG, "Successfully subscribed to message queue")
     }
 
     private suspend fun handleChanges(cloudDevices: List<IotDevice>, storage: SmartHomeStorage) {
@@ -150,6 +158,9 @@ object SmartHomeRepository : SmartHome() {
                     }
                 }
 
+                src.update(device)
+                devices[devices.indexOf(device)] = device
+
                 return true
             }
 
@@ -198,6 +209,16 @@ object SmartHomeRepository : SmartHome() {
         }
     }
 
+    fun changeDeviceStatus(deviceId: Long, status: String) {
+        val device = devices.find { it.guid == deviceId }
+
+        if (device != null) {
+            device.status = status
+            addDevice(device)
+        }
+
+    }
+
     private fun pushAcceptedDeviceToCloud(device: IotDevice, continuation: Continuation<Unit>) {
         storage.addDevice(device,
                 OnSuccessListener {
@@ -229,7 +250,7 @@ object SmartHomeRepository : SmartHome() {
                 OnSuccessListener {
                     storage.removePendingDevice(device,
                             OnSuccessListener {
-                                if (DEBUG) Log.d(TAG, "device successfully noved from pending to root devices node")
+                                if (DEBUG) Log.d(TAG, "device successfully moved from pending to root devices node")
                                 continuation.resumeWith(Result.success(Unit))
                             },
                             OnFailureListener {
