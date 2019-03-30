@@ -8,9 +8,9 @@ import smarthome.raspberry.model.SmartHomeRepository
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayService
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.discover.DeviceDetector
 
-class DeviceObserver {
+class DeviceObserver private constructor() {
     // parentGatewaySid, GatewayService
-    val gatewayServices: HashMap<String, GatewayService> = HashMap()
+    val gatewayServices: HashMap<String, GatewayService> = HashMap() // TODO: save state and recreate gatewayServices on app start
     val yeelightDeviceDetector: DeviceDetector = DeviceDetector()
 
     private val scope = CoroutineScope(Dispatchers.Default)
@@ -32,9 +32,18 @@ class DeviceObserver {
                     .build()
             delay(20000)
             if (service.gateway != null) {
+                gatewayServices[service.gateway.sid] = service
                 for (device in service.devices)
                     SmartHomeRepository.addDevice(device)
             }
+        }
+    }
+
+    companion object {
+        private val instance = DeviceObserver()
+
+        fun getInstance() : DeviceObserver {
+            return instance
         }
     }
 }

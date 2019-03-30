@@ -24,7 +24,7 @@ class MainActivity : Activity() {
     private var httpServer: WebServer? = null
     private var udpServer: UdpServer? = null
 
-    val deviceObserver: DeviceObserver = DeviceObserver()
+    val deviceObserver: DeviceObserver = DeviceObserver.getInstance()
 
     private val isAuthenticated = FirebaseAuth.getInstance().currentUser != null
     private val job = Job()
@@ -56,6 +56,7 @@ class MainActivity : Activity() {
                     SmartHomeRepository.init(applicationContext)
                     delay(5000)
                     SmartHomeRepository.listenForCloudChanges() // TODO: normal fix
+                    SmartHomeRepository.subscribeToMessageQueue()
                     deviceObserver.start()
                 } catch (e: Throwable) {
                     Log.d(TAG, "Initialization or cloud change listener set up failed", e)
