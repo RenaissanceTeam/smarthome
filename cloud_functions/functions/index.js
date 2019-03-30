@@ -2,13 +2,16 @@ var app = require('express')();
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 var bodyParser = require('body-parser');
-var serviceAccount = require('../serviceAccountKey.json');
-
-admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 app.use(bodyParser.json());
 
+admin.initializeApp({ credential: admin.credential.applicationDefault() });
+
+// for local:
+// var serviceAccount = require('../serviceAccountKey.json');
+// admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 
 exports.sendFcm = functions.https.onRequest((request, response) => {
+	console.log(request.body)
  	let title = request.body['title'];
  	let body = request.body['body'];
  	let priority = request.body['priority'];
@@ -31,6 +34,7 @@ exports.sendFcm = functions.https.onRequest((request, response) => {
 	    .then((fcmResponse) => {
 	    	console.log('Successfully sent message:', fcmResponse);
 	    	response.send("Success")
+	    	return
 	    })
 	    .catch((error) => {
 	    	console.log("error", error);
@@ -39,7 +43,7 @@ exports.sendFcm = functions.https.onRequest((request, response) => {
 });
 
 function isNull(what, name) {
-	if (what == null || what == undefined || what.length == 0) {
+	if (what === null || what === undefined || what.length === 0) {
 		console.log("no value provided for", name);
 		return true;
 	}
@@ -52,7 +56,7 @@ function getInvalidError(what, name, response) {
 }
 
 function createPayload(type, title, body) {
-	if (type == "notification") {
+	if (type === "notification") {
 	 	return {
 	 		notification: {
 	 			title: title,
