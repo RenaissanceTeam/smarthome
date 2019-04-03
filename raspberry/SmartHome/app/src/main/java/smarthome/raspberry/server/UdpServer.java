@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -47,7 +48,6 @@ public class UdpServer implements StoppableServer {
                         Log.d(TAG, "run: block to receive udp packet");
                         DatagramPacket receivePacket = listen(serverSocket); // blocking call
                         Log.d(TAG, "run: cancel blocking, received packet");
-                        serverSocket.close();
 
                         onReceiveFromUpd(receivePacket); // blocking call
                     } catch (IOException e) {
@@ -80,20 +80,15 @@ public class UdpServer implements StoppableServer {
                 .header(REMOTE_ADDR_HEADER, Helpers.getLocalIpAddress())
                 .build();
 
-        new OkHttpClient().newCall(request).execute().body().close(); // blocking call
+
+        Response response = new OkHttpClient()
+                .newCall(request)
+                .execute();
+        Log.d(TAG, "onReceiveFromUpd: request=" + request + ", response=" + response);
+        response.body().close(); // blocking call
     }
 
     private String getArduinoInitUrl(InetAddress address) {
         return String.format(ARDUINO_INIT_URL, address.getHostAddress());
-    }
-
-    public void send(String data) throws Exception {
-        DatagramSocket clientSocket = new DatagramSocket();
-        InetAddress ip = InetAddress.getByName("localhost");
-
-        byte[] sendData = data.getBytes();
-        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, PORT);
-        clientSocket.send(sendPacket);
-        clientSocket.close();
     }
 }

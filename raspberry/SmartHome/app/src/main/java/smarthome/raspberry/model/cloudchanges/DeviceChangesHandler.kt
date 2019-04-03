@@ -1,8 +1,9 @@
-package smarthome.raspberry.model
+package smarthome.raspberry.model.cloudchanges
 
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.OddControllerInCloud
+import smarthome.raspberry.model.SmartHomeRepository
 
 class DeviceChangesHandler(private val localDevice: IotDevice,
                            private val cloudDevice: IotDevice) {

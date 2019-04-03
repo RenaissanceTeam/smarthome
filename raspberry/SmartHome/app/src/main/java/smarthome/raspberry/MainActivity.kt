@@ -41,8 +41,8 @@ class MainActivity : Activity() {
 
     override fun onStart() {
         super.onStart()
-        //httpServer?.startServer()
-        //udpServer?.startServer()
+        httpServer?.startServer()
+        udpServer?.startServer()
     }
 
     override fun onResume() {

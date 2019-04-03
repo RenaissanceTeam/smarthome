@@ -1,4 +1,4 @@
-package smarthome.raspberry.model
+package smarthome.raspberry.model.cloudchanges
 
 import smarthome.library.common.BaseController
 import smarthome.raspberry.UnsupportedRead

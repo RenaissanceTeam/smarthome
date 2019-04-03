@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
+import smarthome.client.BuildConfig.DEBUG
 import smarthome.client.auth.AuthUIWrapper
 import smarthome.client.auth.Authenticator
 import smarthome.client.viewpager.Pages
@@ -22,7 +23,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val page: LiveData<Int>
         get() = _page
 
-    val authenticator = Authenticator(FirebaseAuth.getInstance())
+    private val authenticator = Authenticator(FirebaseAuth.getInstance())
     val authUiWrapper = AuthUIWrapper
 
     fun authCheck() {
@@ -35,11 +36,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onAuthSuccessful() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "auth successful, user id=${authenticator.getUserId()}")
+        if (DEBUG) Log.d(TAG, "auth successful, user id=${authenticator.getUserId()}")
     }
 
     fun onAuthFailed() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "auth failed, user id=${authenticator.getUserId()}")
+        if (DEBUG) Log.d(TAG, "auth failed, user id=${authenticator.getUserId()}")
     }
 
     fun onBottomNavigationClick(menuItem: MenuItem) : Boolean{
