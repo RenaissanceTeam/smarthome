@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import smarthome.client.BuildConfig
+import smarthome.client.BuildConfig.DEBUG
 import smarthome.client.HomeModelException
 import smarthome.client.Model
 import smarthome.client.NoDeviceException
@@ -25,31 +26,33 @@ class DashboardViewModel : ViewModel() {
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private var disposable: Disposable? = null
 
-    init {
-        requestSmartHomeState()
-        uiScope.launch {
-            disposable = Model.getDevicesObservable().subscribe {
-                _devices.value = it
-            }
-        }
-    }
-
-
     val devices: LiveData<MutableList<IotDevice>>
         get() = _devices
 
     val allHomeUpdateState: LiveData<Boolean>
         get() = _allHomeUpdateState
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun requestSmartHomeState() {
         if (BuildConfig.DEBUG) Log.d(TAG, "request smart home state")
+
         uiScope.launch {
             _allHomeUpdateState.value = true
+            if (disposable == null) tryListenForUpdates()
             try {
                 _devices.value = Model.getDevices()
             } catch (e: HomeModelException) {
+                if (DEBUG) Log.d(TAG, "request home state failed", e)
                 // todo find a way to notify user about error
             }
+        }
+    }
+
+    private suspend fun tryListenForUpdates() {
+        try {
+            disposable = Model.getDevicesObservable().subscribe { _devices.value = it }
+        } catch (e: Throwable) {
+            if (DEBUG) Log.d(TAG, "can't subscribe for devices updates", e)
         }
     }
 

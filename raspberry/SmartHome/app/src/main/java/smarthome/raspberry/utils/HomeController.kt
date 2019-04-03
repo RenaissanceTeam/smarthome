@@ -5,7 +5,10 @@ import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import smarthome.library.datalibrary.store.HomesReferencesStorage
+import smarthome.library.datalibrary.store.InstanceTokenStorage
+import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreHomesReferencesStorage
+import smarthome.library.datalibrary.store.firestore.FirestoreInstanceTokenStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
 import smarthome.library.datalibrary.store.listeners.HomeExistenceListener
 import smarthome.raspberry.BuildConfig.DEBUG
@@ -13,6 +16,7 @@ import smarthome.raspberry.UnableToCreateHomeStorage
 import smarthome.raspberry.model.SmartHomeRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import kotlin.random.Random
 
@@ -22,6 +26,7 @@ private const val TAG = "HomeController"
 class HomeController(context: Context) {
     val sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
     val storage: HomesReferencesStorage = FirestoreHomesReferencesStorage.getInstance()!!
+    private val tokenStorage: InstanceTokenStorage? = null
 
     suspend fun getHomeId(): String {
         if (!sharedPreferencesHelper.isHomeIdExists()) {
@@ -47,7 +52,7 @@ class HomeController(context: Context) {
         suspendCoroutine<Unit> { continuation ->
             getSmartHomeStorage(homeId).postSmartHome(SmartHomeRepository,
                     OnSuccessListener { continuation.resumeWith(Result.success(Unit)) },
-                    OnFailureListener { continuation.resumeWith(Result.failure(it)) })
+                    OnFailureListener { continuation.resumeWithException(it) })
         }
     }
 
@@ -90,5 +95,9 @@ class HomeController(context: Context) {
         val randomPart = Random.nextInt(0, 9999).toString()
 
         return "$HOME_ID_PREFIX$currentTime$randomPart"
+    }
+
+    fun getTokenStorage(homeId: String): InstanceTokenStorage {
+        return tokenStorage ?: FirestoreInstanceTokenStorage(homeId)
     }
 }
