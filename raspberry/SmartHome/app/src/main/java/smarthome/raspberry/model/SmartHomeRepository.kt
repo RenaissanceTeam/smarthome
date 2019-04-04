@@ -61,7 +61,9 @@ object SmartHomeRepository : SmartHome() {
             val homeController = HomeController(context)
             val homeId = homeController.getHomeId()
             devicesStorage = homeController.getSmartHomeStorage(homeId)
-            messageQueue = FirestoreMessageQueue.getInstance(homeId) ?: throw UnableToCreateMessageQueue(homeId)
+            tokenStorage = homeController.getTokenStorage(homeId)
+            messageQueue = FirestoreMessageQueue.getInstance(homeId)
+                    ?: throw UnableToCreateMessageQueue(homeId)
             devices = ArrayList()
             fcmSender = FcmSender(context)
 
@@ -94,19 +96,6 @@ object SmartHomeRepository : SmartHome() {
     suspend fun subscribeToMessageQueue() {
         messageQueue.subscribe(MessageHandler.getInstance())
         if (DEBUG) Log.d(TAG, "Successfully subscribed to message queue")
-    }
-
-    private suspend fun handleChanges(cloudDevices: List<IotDevice>, storage: SmartHomeStorage) {
-        for (device in cloudDevices) {
-            val localDevice = devices.find { it == device } ?: throw OddDeviceInCloud(device)
-
-            val changesHandler = DeviceChangesHandler(localDevice, device)
-            changesHandler.handleChanges()
-
-            if (changesHandler.changesMade) {
-                storage.updateDevice(localDevice)
-            }
-        }
     }
 
     private fun deleteLocalDevices(cloudDevices: MutableList<IotDevice>) {
@@ -146,9 +135,7 @@ object SmartHomeRepository : SmartHome() {
                                 movePendingDeviceToAccepted(device, continuation)
                                 src.update(device)
                                 devices[devices.indexOf(device)] = device
-                            }
-
-                            else if (device.status == DENIED) {
+                            } else if (device.status == DENIED) {
                                 removePendingDevice(device, continuation)
                                 delete(device)
                             }
@@ -164,18 +151,16 @@ object SmartHomeRepository : SmartHome() {
 
             if (!dataSource.source.add(device)) continue
 
-                devices.add(device)
-                ioScope.launch {
-                    suspendCoroutine<Unit> { continuation ->
-                        if (device.status == PENDING)
-                            pushPendingDeviceToCloud(device, continuation)
-                        else if (device.status == ACCEPTED)
-                            pushAcceptedDeviceToCloud(device, continuation)
-                    }
+            devices.add(device)
+            ioScope.launch {
+                suspendCoroutine<Unit> { continuation ->
+                    if (device.status == PENDING)
+                        pushPendingDeviceToCloud(device, continuation)
+                    else if (device.status == ACCEPTED)
+                        pushAcceptedDeviceToCloud(device, continuation)
                 }
-
-                return true
             }
+
             return true
         }
 
@@ -191,7 +176,7 @@ object SmartHomeRepository : SmartHome() {
             ioScope.launch {
                 suspendCoroutine<Unit> { continuation ->
                     dataSource.source.delete(device)
-                    storage.removeDevice(device,
+                    devicesStorage.removeDevice(device,
                             OnSuccessListener {
                                 if (DEBUG) Log.d(TAG, "device successfully removed")
                                 continuation.resumeWith(Result.success(Unit))
@@ -216,7 +201,7 @@ object SmartHomeRepository : SmartHome() {
     }
 
     private fun pushAcceptedDeviceToCloud(device: IotDevice, continuation: Continuation<Unit>) {
-        storage.addDevice(device,
+        devicesStorage.addDevice(device,
                 OnSuccessListener {
                     if (DEBUG) Log.d(TAG, "success adding device to firestore")
                     continuation.resumeWith(Result.success(Unit))
@@ -229,7 +214,7 @@ object SmartHomeRepository : SmartHome() {
     }
 
     private fun pushPendingDeviceToCloud(device: IotDevice, continuation: Continuation<Unit>) {
-        storage.addPendingDevice(device,
+        devicesStorage.addPendingDevice(device,
                 OnSuccessListener {
                     if (DEBUG) Log.d(TAG, "success adding pending device to firestore")
                     continuation.resumeWith(Result.success(Unit))
@@ -242,9 +227,9 @@ object SmartHomeRepository : SmartHome() {
     }
 
     private fun movePendingDeviceToAccepted(device: IotDevice, continuation: Continuation<Unit>) {
-        storage.addDevice(device,
+        devicesStorage.addDevice(device,
                 OnSuccessListener {
-                    storage.removePendingDevice(device,
+                    devicesStorage.removePendingDevice(device,
                             OnSuccessListener {
                                 if (DEBUG) Log.d(TAG, "device successfully moved from pending to root devices node")
                                 continuation.resumeWith(Result.success(Unit))
@@ -261,7 +246,7 @@ object SmartHomeRepository : SmartHome() {
     }
 
     private fun removePendingDevice(device: IotDevice, continuation: Continuation<Unit>) {
-        storage.removePendingDevice(device,
+        devicesStorage.removePendingDevice(device,
                 OnSuccessListener {
                     if (DEBUG) Log.d(TAG, "pending device successfully removed")
                     continuation.resumeWith(Result.success(Unit))
@@ -335,7 +320,7 @@ object SmartHomeRepository : SmartHome() {
     private suspend fun updateDeviceInRemoteStorage(device: IotDevice) {
         suspendCoroutine<Unit> { c ->
             devicesStorage.updateDevice(device,
-                    OnSuccessListener { c.resumeWith(Result.success(Unit))},
+                    OnSuccessListener { c.resumeWith(Result.success(Unit)) },
                     OnFailureListener { c.resumeWithException(FirestoreUnreachable()) })
         }
     }
