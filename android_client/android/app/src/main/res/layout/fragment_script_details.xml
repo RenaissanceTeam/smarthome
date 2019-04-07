@@ -25,6 +25,7 @@
         <EditText
             android:id="@+id/name"
             android:layout_width="wrap_content"
+            android:editable="false"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             app:layout_constraintBaseline_toBaselineOf="@id/name_label"
@@ -42,13 +43,16 @@
 
         <TextView
             android:id="@+id/condition"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintBaseline_toBaselineOf="@id/condition_label"
             app:layout_constraintStart_toEndOf="@id/condition_label"
-            tools:text="This is a condition" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="40dp"
+            tools:text="This is a condition This is a condition This is a condition
+                        This is a condition This is a condition This is a condition" />
 
         <ImageView
             android:id="@+id/change_condition_button"
@@ -56,7 +60,7 @@
             android:layout_height="20dp"
             android:layout_marginStart="8dp"
             android:src="@android:drawable/ic_menu_edit"
-            app:layout_constraintBottom_toBottomOf="@id/condition"
+            app:layout_constraintTop_toTopOf="@id/condition"
             app:layout_constraintStart_toEndOf="@id/condition" />
 
 
@@ -67,17 +71,19 @@
             android:layout_marginTop="16dp"
             android:text="@string/action"
             app:layout_constraintStart_toStartOf="@+id/condition_label"
-            app:layout_constraintTop_toBottomOf="@+id/condition_label" />
+            app:layout_constraintTop_toBottomOf="@+id/condition" />
 
         <TextView
             android:id="@+id/action"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintBaseline_toBaselineOf="@id/action_label"
             app:layout_constraintStart_toEndOf="@id/action_label"
-            tools:text="This is an action" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="40dp"
+            tools:text="This is an action This is an action This is an action This is an action " />
 
         <ImageView
             android:id="@+id/change_action_button"
@@ -85,7 +91,7 @@
             android:layout_height="20dp"
             android:layout_marginStart="8dp"
             android:src="@android:drawable/ic_menu_edit"
-            app:layout_constraintBottom_toBottomOf="@id/action"
+            app:layout_constraintTop_toTopOf="@id/action"
             app:layout_constraintStart_toEndOf="@id/action" />
 
 
