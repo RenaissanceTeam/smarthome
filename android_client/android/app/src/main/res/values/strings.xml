@@ -12,4 +12,7 @@
     <string name="edit_text_title">Set new value to %s</string>
     <string name="empty_description">Empty description</string>
     <string name="empty_name">Empty name</string>
+    <string name="script_name">Script name</string>
+    <string name="condition">Condition</string>
+    <string name="action">Action</string>
 </resources>

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import smarthome.client.fragments.controllerdetail.ControllerDetails
 import smarthome.client.fragments.devicedetail.DeviceDetails
+import smarthome.client.fragments.scriptdetail.ScriptDetails
 
 class DetailsActivity : FragmentActivity() {
 
@@ -30,6 +31,9 @@ class DetailsActivity : FragmentActivity() {
         } else if (arguments.containsKey(CONTROLLER_GUID)) {
             fragment = ControllerDetails()
             fragmentTag = ControllerDetails.FRAGMENT_TAG
+        } else if (arguments.containsKey(SCRIPT_GUID)) {
+            fragment = ScriptDetails()
+            fragmentTag = ScriptDetails.FRAGMENT_TAG
         }
 
         if (fragment == null) {
@@ -38,7 +42,7 @@ class DetailsActivity : FragmentActivity() {
         }
 
         fragment.arguments = arguments
-        supportFragmentManager?.apply {
+        supportFragmentManager.apply {
             val transaction = beginTransaction().replace(R.id.root_view, fragment, fragmentTag)
             if (addToBackstack) transaction.addToBackStack(null)
             transaction.commit()
