@@ -2,18 +2,37 @@ package smarthome.client.fragments.controllerdetail.statechanger
 
 import android.view.ViewGroup
 import android.widget.Button
+import com.dd.processbutton.ProcessButton
+import com.dd.processbutton.iml.ActionProcessButton
+import com.dd.processbutton.iml.GenerateProcessButton
 import smarthome.client.R
 
-class ReadStateChanger(container: ViewGroup, listener: () -> Unit):
-        ControllerStateChanger(container)  {
+class ReadStateChanger(container: ViewGroup, listener: () -> Unit) :
+        ControllerStateChanger(container) {
+
+    private val normalProgress = 0
+    private val loadingProgress = 50
+    private val completeProgress = 100
+    private val errorProgress = -1
 
     override val layout: Int
         get() = R.layout.state_changer_read
 
-    override fun invalidateNewState(state: String) {}
+    private val button: ActionProcessButton = rootView.findViewById(R.id.read)
+
+    override fun invalidateNewState(state: String?, serveState: String?) {
+        if (serveState == "up to date" || serveState == null) button.progress = normalProgress
+        else button.progress = loadingProgress
+    }
 
     init {
-        rootView.findViewById<Button>(R.id.read).setOnClickListener { listener() }
+        button.setMode(ActionProcessButton.Mode.ENDLESS)
+
+        button.setOnClickListener {
+            listener()
+            button.progress = loadingProgress
+        }
+
     }
 
 }
