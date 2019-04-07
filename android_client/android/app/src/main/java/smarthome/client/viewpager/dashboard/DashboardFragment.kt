@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -34,11 +35,15 @@ class DashboardFragment : Fragment() {
         viewModel.devices.observe(this, Observer {
             if (BuildConfig.DEBUG) Log.d(TAG, "devicesView've changed, now its ${viewModel.devices.value}")
             adapterForDevices?.notifyDataSetChanged()
-            viewModel.receivedNewSmartHomeState()
         })
         viewModel.allHomeUpdateState.observe(this, Observer {
             if (BuildConfig.DEBUG) Log.d(TAG, "allHomeUpdateState's changed")
             refreshLayout?.isRefreshing = it
+        })
+        viewModel.toastMessage.observe(this, Observer {
+            it ?: return@Observer
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.toastShowed()
         })
     }
 
