@@ -8,6 +8,7 @@ abstract class Condition {
 
 class MockCondition: Condition() {
     override fun evaluate(): Boolean = true
+    override fun toString() = "mock condition"
 }
 
 abstract class Action {
@@ -16,4 +17,5 @@ abstract class Action {
 
 class MockAction: Action() {
     override fun action() {}
+    override fun toString() = "mock action"
 }

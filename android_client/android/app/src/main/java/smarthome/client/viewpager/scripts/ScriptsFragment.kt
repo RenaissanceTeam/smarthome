@@ -1,5 +1,6 @@
 package smarthome.client.viewpager.scripts
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import smarthome.client.DEVICE_GUID
+import smarthome.client.DetailsActivity
+import smarthome.client.SCRIPT_GUID
 
 
 class ScriptsFragment : Fragment() {
@@ -44,6 +48,10 @@ class ScriptsFragment : Fragment() {
         setupRecyclerView()
         refreshLayout?.setOnRefreshListener {
             if (refreshLayout?.isRefreshing == true) viewModel.onRefresh()
+        }
+        actionButton?.setOnClickListener {
+            activity?.startActivity(Intent(context, DetailsActivity::class.java)
+                    .putExtra(SCRIPT_GUID, 123L))
         }
     }
 
