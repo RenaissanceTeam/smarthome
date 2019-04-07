@@ -10,7 +10,6 @@ import smarthome.library.common.BaseController
 class ControllerView(root: ViewGroup) {
     private val inflater = LayoutInflater.from(root.context)
     val itemView = inflater.inflate(R.layout.controller_item, root, false)
-    private val guid: TextView = itemView.findViewById(R.id.controller_guid)
     private val name: TextView = itemView.findViewById(R.id.name)
     private val state: TextView = itemView.findViewById(R.id.state)
     private val UNKNOWN_STATE = "-"
@@ -19,7 +18,6 @@ class ControllerView(root: ViewGroup) {
 
 
     fun bind(controller: BaseController) {
-        guid.text = "${controller.guid}"
         if (controller.name.isNullOrEmpty()) {
             name.text = "${controller.type ?: UNKNOWN_STATE}"
         } else {
