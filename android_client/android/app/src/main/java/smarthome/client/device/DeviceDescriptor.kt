@@ -10,7 +10,7 @@ import smarthome.library.common.constants.DeviceTypes.*
 object DeviceDescriptor {
 
     fun getDevicePicture(res: Resources, device: IotDevice): Bitmap {
-        return DeviceDescriptor.getDevicePicture(res, device.deviceType)
+        return DeviceDescriptor.getDevicePicture(res, device.type)
     }
     
     fun getDevicePicture(res: Resources, deviceType: String): Bitmap {

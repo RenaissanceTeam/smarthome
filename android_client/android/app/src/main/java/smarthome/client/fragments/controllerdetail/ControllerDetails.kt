@@ -46,7 +46,10 @@ class ControllerDetails : Fragment() {
         viewModel.refresh.observe(this, Observer { progressBar?.visibility = if (it) View.VISIBLE else View.GONE })
         viewModel.controller.observe(this, Observer {
             bindController(it)
-            it.state?.let { state -> stateChanger?.invalidateNewState(state) }
+            val state = it.state ?: return@Observer
+            val serveState = it.serveState ?: return@Observer
+
+            stateChanger?.invalidateNewState(state, serveState)
         })
         viewModel.device.observe(this, Observer { bindDevice(it) })
         viewModel.stateChangerType.observe(this, Observer { invalidateStateChanger(it) })
@@ -64,7 +67,7 @@ class ControllerDetails : Fragment() {
             name?.setTextColor(resources.getColor(android.R.color.darker_gray))
             name?.text = getString(R.string.empty_name)
         } else {
-            name?.setTextColor(resources.getColor(android.R.color.black))
+            name?.setTextColor(resources.getColor(R.color.primary_text_default_material_light))
             name?.text = controller.name
         }
     }
@@ -81,7 +84,9 @@ class ControllerDetails : Fragment() {
             StateChangerType.ONLY_READ -> ReadStateChanger(container) { viewModel.newStateRequest(null, STATE_PENDING_READ) }
         }
         stateChanger = changer
-        viewModel.controller.value?.state?.let { changer.invalidateNewState(it) }
+        viewModel.controller.value?.let {
+            changer.invalidateNewState(it.state, it.serveState)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -96,7 +101,6 @@ class ControllerDetails : Fragment() {
         type = view.findViewById(R.id.type)
         serveState = view.findViewById(R.id.serve_state)
         state = view.findViewById(R.id.state)
-        progressBar = view.findViewById(R.id.progress_bar)
         stateChangerContainer = view.findViewById(R.id.state_changer)
 
         name?.setOnClickListener {
