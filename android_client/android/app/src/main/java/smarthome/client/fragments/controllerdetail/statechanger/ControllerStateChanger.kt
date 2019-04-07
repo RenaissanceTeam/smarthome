@@ -11,5 +11,5 @@ abstract class ControllerStateChanger(container: ViewGroup) {
         rootView = View.inflate(container.context, layout, container)
     }
 
-    abstract fun invalidateNewState(state: String)
+    abstract fun invalidateNewState(state: String?, serveState: String?)
 }
