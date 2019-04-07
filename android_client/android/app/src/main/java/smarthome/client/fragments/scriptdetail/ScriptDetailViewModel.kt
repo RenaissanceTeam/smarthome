@@ -14,6 +14,6 @@ class ScriptDetailViewModel: ViewModel() {
 
 
     fun setScriptGuid(guid: Long) {
-        _script.value = Script("mock script", MockCondition(), MockAction())
+        _script.value = Script("Garage Light", MockCondition(), MockAction())
     }
 }

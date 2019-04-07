@@ -8,7 +8,7 @@ abstract class Condition {
 
 class MockCondition: Condition() {
     override fun evaluate(): Boolean = true
-    override fun toString() = "mock condition"
+    override fun toString() = "'GarageMovementSensor' is triggered"
 }
 
 abstract class Action {
@@ -17,5 +17,5 @@ abstract class Action {
 
 class MockAction: Action() {
     override fun action() {}
-    override fun toString() = "mock action"
+    override fun toString() = "Turn on 'GarageLight'"
 }
