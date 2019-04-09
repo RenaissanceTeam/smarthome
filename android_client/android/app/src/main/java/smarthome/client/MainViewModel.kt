@@ -29,7 +29,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val authDisposable: Disposable
 
     init {
-        authDisposable = Authenticator.isAuthenticated.subscribe { _isAuthenticated.value = it }
+        authDisposable = Authenticator.isAuthenticated.subscribe { _isAuthenticated.value = it}
     }
 
     fun onAuthSuccessful() {
