@@ -16,4 +16,11 @@ class ScriptDetailViewModel: ViewModel() {
     fun setScriptGuid(guid: Long) {
         _script.value = Script("Garage Light", MockCondition(), MockAction())
     }
+
+    fun scriptNameChange(name: String) {
+        val oldScript = _script.value ?: return
+        _script.value = Script(name, oldScript.condition, oldScript.action)
+
+        // todo save to firestore
+    }
 }
