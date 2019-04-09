@@ -12,6 +12,8 @@ import androidx.lifecycle.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import smarthome.client.*
 import smarthome.client.R
+import smarthome.client.ui.DialogParameters
+import smarthome.client.ui.EditTextDialog
 import smarthome.client.viewpager.scripts.Script
 
 class ScriptDetails: Fragment() {
@@ -44,6 +46,11 @@ class ScriptDetails: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupViews(view)
+        name?.setOnClickListener { EditTextDialog.create(view.context,
+                DialogParameters("script name", viewModel.script.value?.name ?: "") {
+                    viewModel.scriptNameChange(it)
+                }
+        ).show() }
         passGuidToViewModel()
     }
 
