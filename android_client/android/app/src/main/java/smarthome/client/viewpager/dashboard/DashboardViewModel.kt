@@ -11,9 +11,7 @@ import smarthome.client.BuildConfig
 import smarthome.client.BuildConfig.DEBUG
 import smarthome.client.HomeModelException
 import smarthome.client.Model
-import smarthome.client.NoDeviceException
-import smarthome.library.common.BaseController
-import smarthome.library.common.ControllerType
+import smarthome.client.auth.Authenticator
 import smarthome.library.common.IotDevice
 
 class DashboardViewModel : ViewModel() {
@@ -21,10 +19,12 @@ class DashboardViewModel : ViewModel() {
 
     private val _devices = MutableLiveData<MutableList<IotDevice>>()
     private val _allHomeUpdateState = MutableLiveData<Boolean>()
+    private val _toastMessage = MutableLiveData<String?>()
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
-    private var disposable: Disposable? = null
+    private var devicesSubscription: Disposable? = null
+    private val authSubscription: Disposable
 
     val devices: LiveData<MutableList<IotDevice>>
         get() = _devices
@@ -32,38 +32,45 @@ class DashboardViewModel : ViewModel() {
     val allHomeUpdateState: LiveData<Boolean>
         get() = _allHomeUpdateState
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    val toastMessage: LiveData<String?>
+        get() = _toastMessage
+
+    init {
+        authSubscription = Authenticator.isAuthenticated.subscribe { if (it) requestSmartHomeState(); }
+    }
+
     fun requestSmartHomeState() {
         if (BuildConfig.DEBUG) Log.d(TAG, "request smart home state")
 
         uiScope.launch {
             _allHomeUpdateState.value = true
-            if (disposable == null) tryListenForUpdates()
+            if (devicesSubscription == null) tryListenForUpdates()
             try {
                 _devices.value = Model.getDevices()
             } catch (e: HomeModelException) {
                 if (DEBUG) Log.d(TAG, "request home state failed", e)
-                // todo find a way to notify user about error
             }
+            _allHomeUpdateState.value = false
         }
     }
 
     private suspend fun tryListenForUpdates() {
         try {
-            disposable = Model.getDevicesObservable().subscribe { _devices.value = it }
+            devicesSubscription = Model.getDevicesObservable().subscribe {
+                _devices.value = it
+                _allHomeUpdateState.value = false
+            }
         } catch (e: Throwable) {
-            if (DEBUG) Log.d(TAG, "can't subscribe for devices updates", e)
+            _toastMessage.value = "Can't listen for devices update"
+            if (DEBUG) Log.d(TAG, "", e)
         }
     }
+
+    fun toastShowed() = { _toastMessage.value = null }
 
     override fun onCleared() {
         super.onCleared()
         job.cancel()
-        disposable?.dispose()
-    }
-
-    fun receivedNewSmartHomeState() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "set refreshing state to false")
-        _allHomeUpdateState.value = false
+        devicesSubscription?.dispose()
     }
 }

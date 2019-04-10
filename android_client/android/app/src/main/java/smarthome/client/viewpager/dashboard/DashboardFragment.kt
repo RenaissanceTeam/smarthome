@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +16,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import smarthome.client.*
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
+
 
 class DashboardFragment : Fragment() {
 
@@ -34,11 +38,15 @@ class DashboardFragment : Fragment() {
         viewModel.devices.observe(this, Observer {
             if (BuildConfig.DEBUG) Log.d(TAG, "devicesView've changed, now its ${viewModel.devices.value}")
             adapterForDevices?.notifyDataSetChanged()
-            viewModel.receivedNewSmartHomeState()
         })
         viewModel.allHomeUpdateState.observe(this, Observer {
             if (BuildConfig.DEBUG) Log.d(TAG, "allHomeUpdateState's changed")
             refreshLayout?.isRefreshing = it
+        })
+        viewModel.toastMessage.observe(this, Observer {
+            it ?: return@Observer
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.toastShowed()
         })
     }
 
@@ -59,6 +67,7 @@ class DashboardFragment : Fragment() {
         adapterForDevices = DevicesAdapter(layoutInflater, viewModel,
                 ::onDeviceClick, ::onControllerClick)
         devicesView?.adapter = adapterForDevices
+        devicesView?.addItemDecoration(DividerItemDecoration(context, VERTICAL))
     }
 
     override fun onDestroyView() {
