@@ -1,23 +1,28 @@
 package smarthome.raspberry.service
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import smarthome.raspberry.BuildConfig.DEBUG
 import smarthome.raspberry.model.SmartHomeRepository
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayService
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.discover.DeviceDetector
 
 class DeviceObserver private constructor() {
+    private val TAG = javaClass.name
+
     // parentGatewaySid, GatewayService
-    val gatewayServices: HashMap<String, GatewayService> = HashMap() // TODO: save state and recreate gatewayServices on app start
-    val yeelightDeviceDetector: DeviceDetector = DeviceDetector()
+    private val gatewayServices: HashMap<String, GatewayService> = HashMap() // TODO: save state and recreate gatewayServices on app start
+    private val yeelightDeviceDetector: DeviceDetector = DeviceDetector()
 
     private val scope = CoroutineScope(Dispatchers.Default)
 
 
     // entry for non setup needed devices
     fun start() {
+        if (DEBUG) Log.d(TAG, "searching for new devices")
         scope.launch {
             val devices = yeelightDeviceDetector.discover()
             for (device in devices)
@@ -26,6 +31,7 @@ class DeviceObserver private constructor() {
     }
 
     fun exploreGateway(password: String) {
+        if (DEBUG) Log.d(TAG, "setting up new xiaomi gateway")
         scope.launch {
             val service = GatewayService.builder()
                     .setGatewayPassword(password)

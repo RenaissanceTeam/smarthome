@@ -30,6 +30,7 @@ import smarthome.raspberry.FirestoreUnreachable
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 import smarthome.raspberry.model.cloudchanges.DeviceChangesListener
+import smarthome.raspberry.model.listeners.RepoInitListener
 import smarthome.raspberry.utils.HomeController
 import smarthome.raspberry.utils.fcm.FcmSender
 import smarthome.raspberry.utils.fcm.MessageType
@@ -43,6 +44,7 @@ import kotlin.coroutines.suspendCoroutine
 @SuppressLint("StaticFieldLeak")
 object SmartHomeRepository : SmartHome() {
     const val TAG = "SmartHomeRepository"
+    private var listener: RepoInitListener? = null
     lateinit var devicesStorage: SmartHomeStorage
     private lateinit var context: Context
     private lateinit var tokenStorage: InstanceTokenStorage
@@ -54,7 +56,12 @@ object SmartHomeRepository : SmartHome() {
     private var ready: Boolean = false
     private val pendingDevices: Queue<IotDevice> = LinkedList()
 
-    fun init(appContext: Context) {
+    suspend fun init(appContext: Context, listener: RepoInitListener) {
+        setInitListener(listener)
+        SmartHomeRepository.init(appContext)
+    }
+
+    suspend fun init(appContext: Context) {
         context = appContext
 
         ioScope.launch {
@@ -68,7 +75,13 @@ object SmartHomeRepository : SmartHome() {
             fcmSender = FcmSender(context)
 
             loadSavedDevices()
+
+            listener?.onInitializationComplete()
         }
+    }
+
+    fun setInitListener(listener: RepoInitListener) {
+        this.listener = listener
     }
 
     private fun loadSavedDevices() {
@@ -93,7 +106,7 @@ object SmartHomeRepository : SmartHome() {
         tokenStorage.observeTokenChanges { tokens = it }
     }
 
-    suspend fun subscribeToMessageQueue() {
+    fun subscribeToMessageQueue() {
         messageQueue.subscribe(MessageHandler.getInstance())
         if (DEBUG) Log.d(TAG, "Successfully subscribed to message queue")
     }

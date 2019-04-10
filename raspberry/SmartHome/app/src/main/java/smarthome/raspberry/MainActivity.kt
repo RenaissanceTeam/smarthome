@@ -12,6 +12,7 @@ import kotlinx.coroutines.*
 
 import smarthome.raspberry.auth.GoogleSignInActivity
 import smarthome.raspberry.model.SmartHomeRepository
+import smarthome.raspberry.model.listeners.RepoInitListener
 import smarthome.raspberry.server.UdpServer
 import smarthome.raspberry.server.WebServer
 import smarthome.raspberry.service.DeviceObserver
@@ -20,7 +21,7 @@ private val TAG = MainActivity::class.java.simpleName
 private val DEBUG = BuildConfig.DEBUG
 private val AUTH_ACTIVITY_REQUEST_CODE = 12312
 
-class MainActivity : Activity() {
+class MainActivity : Activity(), RepoInitListener {
     private var httpServer: WebServer? = null
     private var udpServer: UdpServer? = null
 
@@ -53,11 +54,7 @@ class MainActivity : Activity() {
         } else {
             uiScope.launch {
                 try {
-                    SmartHomeRepository.init(applicationContext)
-                    delay(5000)
-                    SmartHomeRepository.listenForCloudChanges() // TODO: normal fix
-                    SmartHomeRepository.subscribeToMessageQueue()
-                    deviceObserver.start()
+                    SmartHomeRepository.init(applicationContext, this@MainActivity)
                 } catch (e: Throwable) {
                     Log.d(TAG, "Initialization or cloud change listener set up failed", e)
                     Toast.makeText(baseContext, e.message, Toast.LENGTH_SHORT).show()
@@ -75,5 +72,11 @@ class MainActivity : Activity() {
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+    }
+
+    override fun onInitializationComplete() {
+        SmartHomeRepository.listenForCloudChanges()
+        SmartHomeRepository.subscribeToMessageQueue()
+        deviceObserver.start()
     }
 }
