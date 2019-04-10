@@ -31,13 +31,6 @@ public class GUID {
 
     public long generateGuidForController(IotDevice device, BaseController controller) {
         long guid = device.guid + controller.type.hashCode();
-
-        long shift = 1;
-        while (mGuids.contains(guid)) {
-            guid += shift;
-        }
-
-        // so we've created a unique guid for the controller
         mGuids.add(guid);
         return guid;
     }

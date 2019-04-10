@@ -1,26 +1,58 @@
 package smarthome.client.fragments.controllerdetail.statechanger
 
 import android.view.ViewGroup
-import androidx.appcompat.widget.SwitchCompat
+import com.dd.processbutton.iml.ActionProcessButton
 import smarthome.client.R
 
 class OnOffStateChanger(container: ViewGroup, listener: (String) -> Unit):
         ControllerStateChanger(container) {
 
+    private val normalProgress = 0
+    private val loadingProgress = 50
+    private val completeProgress = 100
+    private val errorProgress = -1
+    private val unknownState = "Unknown"
+
     override val layout: Int
         get() = R.layout.state_changer_onoff
 
-    val switchCompat = rootView.findViewById<SwitchCompat>(R.id.controller_switch)
+    private var currentState = "0"
+    private val button = rootView.findViewById<ActionProcessButton>(R.id.change_button)
 
     init {
-        switchCompat.setOnClickListener {
-            listener(clickToState())
+        button.setOnClickListener {
+            changeStateToOpposite()
+            changeLoadingText()
+            listener(currentState)
         }
     }
 
-    private fun clickToState(): String = if (switchCompat.isChecked) "1" else "0"
+    private fun changeStateToOpposite() {
+        currentState = if (currentState == "0" || currentState == unknownState) "1" else "0"
+    }
 
-    override fun invalidateNewState(state: String) {
-        switchCompat.isChecked = "1" == state
+    private fun changeLoadingText() {
+        if (currentState == "0") {
+            button.loadingText = "Switching off"
+        } else {
+            button.loadingText = "Switching on"
+        }
+    }
+
+
+    override fun invalidateNewState(state: String?, serveState: String?) {
+        currentState = state ?: unknownState
+        changeNormalText()
+        if (serveState == "up to date" || serveState == null) button.progress = normalProgress
+        else button.progress = loadingProgress
+
+    }
+
+    private fun changeNormalText() {
+        if (currentState == "0" || currentState == unknownState) {
+            button.normalText = "Switch on"
+        } else {
+            button.normalText = "Switch off"
+        }
     }
 }
