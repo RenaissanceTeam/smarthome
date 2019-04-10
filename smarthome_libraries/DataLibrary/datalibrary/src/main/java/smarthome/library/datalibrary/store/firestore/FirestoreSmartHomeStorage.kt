@@ -36,7 +36,9 @@ class FirestoreSmartHomeStorage(
         failureListener: OnFailureListener
     ) {
         for (device in smartHome.devices)
-            addDevice(device)
+            addDevice(device, failureListener = failureListener)
+
+        successListener.onSuccess(null)
     }
 
     override fun getSmartHome(listener: SmartHomeListener, failureListener: OnFailureListener) {
@@ -49,7 +51,7 @@ class FirestoreSmartHomeStorage(
 
                 listener.onSmartHomeReceived(smartHome)
             }
-            .addOnFailureListener { failureListener }
+            .addOnFailureListener(failureListener)
     }
 
     override fun addDevice(

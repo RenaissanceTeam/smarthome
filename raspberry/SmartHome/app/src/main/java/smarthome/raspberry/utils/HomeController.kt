@@ -14,6 +14,7 @@ import smarthome.library.datalibrary.store.listeners.HomeExistenceListener
 import smarthome.raspberry.BuildConfig.DEBUG
 import smarthome.raspberry.UnableToCreateHomeStorage
 import smarthome.raspberry.model.SmartHomeRepository
+import smarthome.raspberry.service.DeviceObserver
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.coroutines.resumeWithException
@@ -45,15 +46,7 @@ class HomeController(context: Context) {
         sharedPreferencesHelper.setHomeId(homeId)
 
         createHomeReference(homeId)
-        postSmartHomeToReference(homeId)
-    }
-
-    private suspend fun postSmartHomeToReference(homeId: String) {
-        suspendCoroutine<Unit> { continuation ->
-            getSmartHomeStorage(homeId).postSmartHome(SmartHomeRepository,
-                    OnSuccessListener { continuation.resumeWith(Result.success(Unit)) },
-                    OnFailureListener { continuation.resumeWithException(it) })
-        }
+        createEmptyHomeNode(homeId)
     }
 
     private suspend fun createHomeReference(homeId: String) {
@@ -66,6 +59,21 @@ class HomeController(context: Context) {
                     },
                     OnFailureListener {
                         if (DEBUG) Log.d(TAG, "adding home reference failed", it)
+                        continuation.resumeWith(Result.failure(it))
+                    }
+            )
+        }
+    }
+
+    private suspend fun createEmptyHomeNode(homeId: String) {
+        suspendCoroutine<Unit> { continuation ->
+            getSmartHomeStorage(homeId).createSmartHome(
+                    OnSuccessListener {
+                        if (DEBUG) Log.d(TAG, "empty home node successfully created")
+                        continuation.resumeWith(Result.success(Unit))
+                    },
+                    OnFailureListener {
+                        if (DEBUG) Log.d(TAG, "failed to create empty home node", it)
                         continuation.resumeWith(Result.failure(it))
                     }
             )
