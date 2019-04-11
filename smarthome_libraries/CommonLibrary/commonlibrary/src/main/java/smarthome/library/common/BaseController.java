@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 
 import java.util.Objects;
 
+import static smarthome.library.common.constants.Constants.STATE_DISABLED;
 import static smarthome.library.common.constants.Constants.STATE_PENDING_READ;
 import static smarthome.library.common.constants.Constants.STATE_PENDING_WRITE;
 import static smarthome.library.common.constants.Constants.STATE_UP_TO_DATE;
@@ -40,6 +41,10 @@ public class BaseController {
 
     public void setUpToDate() {
         serveState = STATE_UP_TO_DATE;
+    }
+
+    public void disableController() {
+        serveState = STATE_DISABLED;
     }
 
     @Exclude

@@ -86,6 +86,19 @@ class ControllerDetailViewModel : ViewModel() {
             Model.changeDevice(device)
         }
     }
+
+    fun disableController() {
+        if (BuildConfig.DEBUG) Log.d(TAG, "disabling controller...")
+        val device = _device.value ?: return
+        val controller = _controller.value ?: return
+
+        uiScope.launch {
+            controller.disableController()
+
+            updateDevice(device)
+        }
+    }
+
     fun controllerNameChanged(name: String) {
         val controller = _controller.value ?: return
         val device = _device.value ?: return

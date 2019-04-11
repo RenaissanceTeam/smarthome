@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -40,6 +41,7 @@ class ControllerDetails : Fragment() {
     private var progressBar: ProgressBar? = null
     private var stateChangerContainer: FrameLayout? = null
     private var stateChanger: ControllerStateChanger? = null
+    private var disableControllerCard: CardView? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -102,6 +104,11 @@ class ControllerDetails : Fragment() {
         serveState = view.findViewById(R.id.serve_state)
         state = view.findViewById(R.id.state)
         stateChangerContainer = view.findViewById(R.id.state_changer)
+        disableControllerCard = view.findViewById(R.id.controller_details_disable_controller_card)
+
+        disableControllerCard?.setOnClickListener {
+            viewModel.disableController()
+        }
 
         name?.setOnClickListener {
             EditTextDialog.create(view.context,
