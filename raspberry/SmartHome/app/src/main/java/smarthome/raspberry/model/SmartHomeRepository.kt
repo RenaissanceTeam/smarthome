@@ -12,21 +12,15 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.GUID
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
-import smarthome.library.common.constants.ACCEPTED
-import smarthome.library.common.constants.DENIED
-import smarthome.library.common.constants.PENDING
-import smarthome.library.datalibrary.store.MessageQueue
+import smarthome.library.common.message.Message
 import smarthome.library.datalibrary.model.InstanceToken
 import smarthome.library.datalibrary.store.InstanceTokenStorage
+import smarthome.library.datalibrary.store.MessageQueue
 import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreMessageQueue
-import smarthome.library.datalibrary.store.listeners.DevicesObserver
-import smarthome.library.datalibrary.store.listeners.MessageListener
 import smarthome.raspberry.BuildConfig.DEBUG
-import smarthome.raspberry.OddDeviceInCloud
-import smarthome.raspberry.UnableToCreateHomeStorage
-import smarthome.raspberry.UnableToCreateMessageQueue
 import smarthome.raspberry.FirestoreUnreachable
+import smarthome.raspberry.UnableToCreateMessageQueue
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 import smarthome.raspberry.model.cloudchanges.DeviceChangesListener
@@ -36,8 +30,8 @@ import smarthome.raspberry.utils.fcm.FcmSender
 import smarthome.raspberry.utils.fcm.MessageType
 import smarthome.raspberry.utils.fcm.Priority
 import java.util.*
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.Continuation
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
@@ -103,12 +97,18 @@ object SmartHomeRepository : SmartHome() {
     fun listenForCloudChanges() {
         if (DEBUG) Log.d(TAG, "listenForCloudChanges")
         devicesStorage.observeDevicesUpdates(DeviceChangesListener)
+        devicesStorage.observePendingDevicesUpdates(DeviceChangesListener)
         tokenStorage.observeTokenChanges { tokens = it }
     }
 
     fun subscribeToMessageQueue() {
         messageQueue.subscribe(MessageHandler.getInstance())
         if (DEBUG) Log.d(TAG, "Successfully subscribed to message queue")
+    }
+
+    fun deleteMessage(message: Message) {
+        messageQueue.removeMessage(message)
+        messageQueue.removeMessage(message)
     }
 
     private fun deleteLocalDevices(cloudDevices: MutableList<IotDevice>) {
@@ -144,11 +144,11 @@ object SmartHomeRepository : SmartHome() {
                 if (src.get(device.guid).status != device.status) {
                     ioScope.launch {
                         suspendCoroutine<Unit> { continuation ->
-                            if (device.status == ACCEPTED) {
+                            if (device.isAccepted) {
                                 movePendingDeviceToAccepted(device, continuation)
                                 src.update(device)
                                 devices[devices.indexOf(device)] = device
-                            } else if (device.status == DENIED) {
+                            } else if (device.isRejected) {
                                 removePendingDevice(device, continuation)
                                 delete(device)
                             }
@@ -167,9 +167,9 @@ object SmartHomeRepository : SmartHome() {
             devices.add(device)
             ioScope.launch {
                 suspendCoroutine<Unit> { continuation ->
-                    if (device.status == PENDING)
+                    if (device.isPending)
                         pushPendingDeviceToCloud(device, continuation)
-                    else if (device.status == ACCEPTED)
+                    else if (device.isAccepted)
                         pushAcceptedDeviceToCloud(device, continuation)
                 }
             }

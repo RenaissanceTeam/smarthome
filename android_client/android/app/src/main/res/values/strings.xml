@@ -12,4 +12,6 @@
     <string name="edit_text_title">Set new value to %s</string>
     <string name="empty_description">Empty description</string>
     <string name="empty_name">Empty name</string>
+    <string name="delete">delete</string>
+    <string name="add">add</string>
 </resources>

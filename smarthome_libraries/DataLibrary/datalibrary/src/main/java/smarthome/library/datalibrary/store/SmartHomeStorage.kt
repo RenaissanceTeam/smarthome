@@ -9,6 +9,7 @@ import smarthome.library.datalibrary.constants.defFailureListener
 import smarthome.library.datalibrary.constants.defSuccessListener
 import smarthome.library.datalibrary.store.listeners.DeviceListener
 import smarthome.library.datalibrary.store.listeners.DevicesObserver
+import smarthome.library.datalibrary.store.listeners.PendingDevicesFetchListener
 import smarthome.library.datalibrary.store.listeners.SmartHomeListener
 
 interface SmartHomeStorage {
@@ -62,10 +63,27 @@ interface SmartHomeStorage {
         failureListener: OnFailureListener = defFailureListener
     )
 
+    fun updatePendingDevice(
+        device: IotDevice,
+        successListener: OnSuccessListener<Void>,
+        failureListener: OnFailureListener
+    )
+
     fun removePendingDevice(
         iotDevice: IotDevice,
         successListener: OnSuccessListener<Void> = defSuccessListener,
         failureListener: OnFailureListener = defFailureListener
     )
+
+    fun fetchPendingDevices(
+        listener: PendingDevicesFetchListener,
+        failureListener: OnFailureListener
+    )
+
+    fun observePendingDevicesUpdates(
+        observer: DevicesObserver
+    )
+
+    fun detachPendingDevicesUpdatesObserver()
 
 }
