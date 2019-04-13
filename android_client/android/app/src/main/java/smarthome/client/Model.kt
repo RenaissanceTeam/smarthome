@@ -20,7 +20,9 @@ import kotlin.coroutines.suspendCoroutine
 object Model {
     private val TAG = Model::class.java.simpleName
     private var smartHome: SmartHome? = null
+    private var pendingDevices: MutableList<IotDevice>? = null
     private var _devices: Observable<MutableList<IotDevice>>? = null
+    private var pendingDevicesObservable: Observable<MutableList<IotDevice>>? = null
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
     suspend fun getDevicesObservable(): Observable<MutableList<IotDevice>> = _devices
@@ -38,6 +40,22 @@ object Model {
             )
         }
         _devices = observable
+        return observable
+    }
+
+    suspend fun getPendingDevicesObservable(): Observable<MutableList<IotDevice>> = pendingDevicesObservable
+            ?: createPendingDevicesObservable()
+
+    private suspend fun createPendingDevicesObservable(): Observable<MutableList<IotDevice>> {
+        val storage = CloudStorages.getSmartHomeStorage()
+        val observable = Observable.create<MutableList<IotDevice>> { emitter ->
+            storage.observePendingDevicesUpdates(DevicesObserver { devices, isInner ->
+                pendingDevices = devices
+                emitter.onNext(devices)
+            }
+            )
+        }
+        pendingDevicesObservable = observable
         return observable
     }
 
@@ -77,11 +95,26 @@ object Model {
         return home.devices
     }
 
+    suspend fun getPendingDevicesCopy(): MutableList<IotDevice> {
+        return getPendingDevices().toMutableList()
+    }
+
+
 
     suspend fun changeDevice(device: IotDevice) {
         val storage = CloudStorages.getSmartHomeStorage()
         suspendCoroutine<Unit> { continuation ->
             storage.updateDevice(device,
+                    OnSuccessListener { continuation.resumeWith(Result.success(Unit)) },
+                    OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }
+            )
+        }
+    }
+
+    suspend fun changePendingDevice(device: IotDevice) {
+        val storage = CloudStorages.getSmartHomeStorage()
+        suspendCoroutine<Unit> { continuation ->
+            storage.updatePendingDevice(device,
                     OnSuccessListener { continuation.resumeWith(Result.success(Unit)) },
                     OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }
             )
@@ -94,6 +127,14 @@ object Model {
         val smartHome = CloudStorages.loadHome()
         this.smartHome = smartHome
         return smartHome
+    }
+
+    private suspend fun getPendingDevices() = pendingDevices ?: loadPendingDevices()
+
+    private suspend fun loadPendingDevices(): MutableList<IotDevice> {
+        val devices = CloudStorages.loadPendingDevices()
+        this.pendingDevices = devices
+        return devices
     }
 
     fun saveInstanceToken(token: String, fcmTokenStorage: FcmTokenStorage) {

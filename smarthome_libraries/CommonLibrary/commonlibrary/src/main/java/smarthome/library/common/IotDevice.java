@@ -1,5 +1,6 @@
 package smarthome.library.common;
 
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 
@@ -9,7 +10,9 @@ import java.util.List;
 import java.util.Objects;
 
 import static smarthome.library.common.constants.DeviceTypes.DEFAULT_TYPE;
+import static smarthome.library.common.constants.MessageConstantsKt.ACCEPTED;
 import static smarthome.library.common.constants.MessageConstantsKt.PENDING;
+import static smarthome.library.common.constants.MessageConstantsKt.REJECTED;
 
 public class IotDevice {
     @Expose public String name;
@@ -17,7 +20,7 @@ public class IotDevice {
     @Expose public long guid;
     @Expose public List<BaseController> controllers = new ArrayList<>();
     @Expose private String type = DEFAULT_TYPE;
-    @Expose public String status = PENDING;
+    @Expose private String status = PENDING;
 
     public IotDevice() {} // needed for deserialization
 
@@ -47,6 +50,37 @@ public class IotDevice {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setAccepted() {
+        status = ACCEPTED;
+    }
+
+    public void setRejected() {
+        status = REJECTED;
+    }
+
+    @Exclude
+    public boolean isAccepted() {
+        return ACCEPTED.equals(status);
+    }
+
+    @Exclude
+    public boolean isRejected() {
+        return REJECTED.equals(status);
+    }
+
+    @Exclude
+    public boolean isPending() {
+        return PENDING.equals(status);
     }
 
     /**

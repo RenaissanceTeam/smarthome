@@ -5,6 +5,7 @@ import smarthome.library.common.constants.DeviceTypes.GATEWAY_TYPE
 import smarthome.library.common.message.ChangeDeviceStatusRequest
 import smarthome.library.common.message.DiscoverAllDevicesRequest
 import smarthome.library.common.message.DiscoverDeviceRequest
+import smarthome.library.common.message.Message
 import smarthome.library.datalibrary.store.listeners.MessageListener
 import smarthome.raspberry.BuildConfig.DEBUG
 import smarthome.raspberry.service.DeviceObserver
@@ -26,6 +27,7 @@ class MessageHandler : MessageListener {
                 is DiscoverDeviceRequest -> processDiscoverDeviceMessage(message)
                 else -> if (DEBUG) Log.d(TAG, "Message is not supported")
             }
+            SmartHomeRepository.deleteMessage(message as Message)
         }
     }
 
