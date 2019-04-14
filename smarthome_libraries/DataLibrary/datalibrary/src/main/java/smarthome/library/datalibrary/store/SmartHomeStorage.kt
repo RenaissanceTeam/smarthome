@@ -65,8 +65,8 @@ interface SmartHomeStorage {
 
     fun updatePendingDevice(
         device: IotDevice,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
+        successListener: OnSuccessListener<Void> = defSuccessListener,
+        failureListener: OnFailureListener = defFailureListener
     )
 
     fun removePendingDevice(
