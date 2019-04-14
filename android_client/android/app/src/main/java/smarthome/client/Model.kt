@@ -59,6 +59,10 @@ object Model {
         return observable
     }
 
+    suspend fun getPendingController(guid: Long): BaseController {
+        return getController(getPendingDevices(), guid)
+    }
+
     suspend fun getController(guid: Long): BaseController {
         return getController(getDevices(), guid)
     }
@@ -75,6 +79,10 @@ object Model {
 
     suspend fun getDevice(guid: Long): IotDevice {
         return getDevice(getDevices(), guid)
+    }
+
+    suspend fun getPendingDevice(guid: Long): IotDevice {
+        return getDevice(getPendingDevices(), guid)
     }
 
     suspend fun getDevice(controller: BaseController): IotDevice {

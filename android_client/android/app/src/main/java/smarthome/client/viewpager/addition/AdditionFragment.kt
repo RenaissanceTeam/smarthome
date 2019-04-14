@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -20,6 +19,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import smarthome.client.*
 import smarthome.client.util.CloudStorages
+import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.library.common.message.DiscoverAllDevicesRequest
 
@@ -69,9 +69,9 @@ class AdditionFragment : Fragment() {
         devicesRecycler?.layoutManager = LinearLayoutManager(view.context)
 
         refreshLayout?.setOnRefreshListener { viewModel.requestSmartHomeState() }
-        adapterForDevices = DeviceAdapter(viewModel, ::onDeviceAccept, ::onDeviceReject)
+        adapterForDevices = DeviceAdapter(viewModel, ::onDeviceDetailsClick, ::onControllerDetailsClick, ::onDeviceAccept, ::onDeviceReject)
         devicesRecycler?.adapter = adapterForDevices
-        devicesRecycler?.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        devicesRecycler?.setHasFixedSize(true)
     }
 
     private fun onDeviceAccept(device: IotDevice?) {
@@ -88,6 +88,23 @@ class AdditionFragment : Fragment() {
 
         device.setRejected()
         updateDevice(device)
+    }
+
+    private fun onDeviceDetailsClick(device: IotDevice?) {
+        Log.d(TAG, "clicked on $device")
+        device ?: return
+
+        activity?.startActivity(Intent(context, DetailsActivity::class.java)
+                .putExtra(DEVICE_GUID, device.guid)
+                .putExtra(USE_PENDING, true))
+    }
+
+    private fun onControllerDetailsClick(controller: BaseController?) {
+        controller ?: return
+
+        activity?.startActivity(Intent(context, DetailsActivity::class.java)
+                .putExtra(CONTROLLER_GUID, controller.guid)
+                .putExtra(USE_PENDING, true))
     }
 
     private fun updateDevice(device: IotDevice) {
