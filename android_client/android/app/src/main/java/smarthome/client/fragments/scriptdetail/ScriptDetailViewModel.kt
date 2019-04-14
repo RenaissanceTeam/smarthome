@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import smarthome.client.MockAction
-import smarthome.client.MockCondition
-import smarthome.client.Script
+import smarthome.client.*
 
 class ScriptDetailViewModel: ViewModel() {
     private val _script = MutableLiveData<Script>()
@@ -18,7 +16,9 @@ class ScriptDetailViewModel: ViewModel() {
 
 
     fun setScriptGuid(guid: Long) {
-        _script.value = Script("Garage Light", mutableListOf(MockCondition()), mutableListOf(MockAction()))
+        _script.value = Script("Garage Light",
+                mutableListOf(ControllerCondition(), ExactTimeCondition()),
+                mutableListOf(MockAction()))
     }
 
     fun scriptNameChange(name: String) {
@@ -38,5 +38,15 @@ class ScriptDetailViewModel: ViewModel() {
 
     fun onSaveClicked() {
 
+    }
+
+    fun changeConditionType(position: Int, title: String) {
+        val script = script.value
+        script ?: return
+
+        val conditions = script.conditions
+        conditions[position] = Condition.withTitle(title)
+
+        _script.value = script
     }
 }

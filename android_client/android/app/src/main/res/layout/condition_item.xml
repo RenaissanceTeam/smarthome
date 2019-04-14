@@ -27,6 +27,7 @@
             android:id="@+id/type_controller"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:tag="Controller"
             android:text="Controller" />
 
 
@@ -34,7 +35,8 @@
             android:id="@+id/type_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time" />
+            android:tag="Exact Time"
+            android:text="Exact Time" />
     </RadioGroup>
 
     <LinearLayout

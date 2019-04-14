@@ -10,11 +10,27 @@ class Script(val name: String,
              val actions: MutableList<Action>)
 
 abstract class Condition {
+    companion object {
+        fun withTitle(title: String): Condition {
+            return when (title) {
+                "Controller" -> ControllerCondition()
+                "Exact Time" -> ExactTimeCondition()
+                else -> throw RuntimeException("No condition with title $title")
+            }
+        }
+    }
+
+    abstract fun getTag(): String
     abstract fun evaluate(): Boolean
     abstract fun getFields(): List<ConditionField>
 }
 
-class MockCondition: Condition() {
+
+
+
+class ControllerCondition: Condition() {
+    override fun getTag() = "Controller"
+
     override fun getFields(): List<ConditionField> {
         return listOf(
                 TextConditionField("mock before", "mock after"),
@@ -24,6 +40,20 @@ class MockCondition: Condition() {
 
     override fun evaluate(): Boolean = true
     override fun toString() = "'GarageMovementSensor' is triggered"
+}
+
+class ExactTimeCondition: Condition() {
+    override fun getTag() = "Exact Time"
+
+    override fun getFields(): List<ConditionField> {
+        return listOf(
+                TextConditionField("time before", "mock after"),
+                TextConditionField("time2 before", "mock2 after")
+        )
+    }
+
+    override fun evaluate(): Boolean = true
+    override fun toString() = "'ExactTime' is triggered"
 }
 
 abstract class ConditionField {
