@@ -67,9 +67,7 @@ class DeviceDetails : Fragment() {
     }
 
     private fun openControllerDetails(guid: Long) {
-        val bundle = Bundle()
-        bundle.putLong(CONTROLLER_GUID, guid)
-        (activity as? DetailsActivity)?.replaceFragment(bundle)
+        (activity as? DetailsActivity)?.openControllerDetails(guid)
         viewModel.controllerDetailsShowed()
     }
 

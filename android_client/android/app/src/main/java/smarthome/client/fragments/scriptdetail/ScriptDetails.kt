@@ -1,11 +1,11 @@
 package smarthome.client.fragments.scriptdetail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
@@ -14,10 +14,10 @@ import smarthome.client.*
 import smarthome.client.R
 import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
-import smarthome.client.viewpager.scripts.Script
+import smarthome.client.Script
 
 class ScriptDetails: Fragment() {
-    private val viewModel by lazy { ViewModelProviders.of(this).get(ScriptDetailViewModel::class.java) }
+    private lateinit var viewModel: ScriptDetailViewModel
 
     companion object {
         val FRAGMENT_TAG = "ScriptDetailsFragment"
@@ -27,21 +27,30 @@ class ScriptDetails: Fragment() {
     private var condition: TextView? = null
     private var action: TextView? = null
     private var save: FloatingActionButton? = null
+    private var changeCondition: ImageView? = null
+    private var changeAction: ImageView? = null
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_script_details, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = activity?.run {
+            ViewModelProviders.of(this).get(ScriptDetailViewModel::class.java)
+        } ?: throw NullPointerException("Activity is null in script details")
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         viewModel.script.observe(this, Observer { bindViews(it) } )
     }
 
     private fun bindViews(script: Script) {
         name?.setText(script.name)
-        condition?.text = script.condition.toString()
-        action?.text = script.action.toString()
+        condition?.text = script.conditions.toString()
+        action?.text = script.actions.toString()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,7 +60,17 @@ class ScriptDetails: Fragment() {
                     viewModel.scriptNameChange(it)
                 }
         ).show() }
+
+        changeCondition?.setOnClickListener {
+            viewModel.onEditConditionClicked()
+            openConditionDetails()
+        }
+        changeAction?.setOnClickListener { viewModel.onEditActionClicked() }
         passGuidToViewModel()
+    }
+
+    private fun openConditionDetails() {
+        (activity as? DetailsActivity)?.run { openConditionFragment() }
     }
 
     private fun setupViews(view: View) {
@@ -59,6 +78,8 @@ class ScriptDetails: Fragment() {
         condition = view.findViewById(R.id.condition)
         action = view.findViewById(R.id.action)
         save = view.findViewById(R.id.save)
+        changeAction = view.findViewById(R.id.change_action_button)
+        changeCondition = view.findViewById(R.id.change_condition_button)
 
         save?.setOnClickListener { activity?.onBackPressed() }
     }
