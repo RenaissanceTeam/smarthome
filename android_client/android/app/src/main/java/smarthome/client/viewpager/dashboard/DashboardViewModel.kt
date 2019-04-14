@@ -11,9 +11,7 @@ import smarthome.client.BuildConfig
 import smarthome.client.BuildConfig.DEBUG
 import smarthome.client.HomeModelException
 import smarthome.client.Model
-import smarthome.client.NoDeviceException
-import smarthome.library.common.BaseController
-import smarthome.library.common.ControllerType
+import smarthome.client.auth.Authenticator
 import smarthome.library.common.IotDevice
 
 class DashboardViewModel : ViewModel() {
@@ -25,7 +23,8 @@ class DashboardViewModel : ViewModel() {
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
-    private var disposable: Disposable? = null
+    private var devicesSubscription: Disposable? = null
+    private val authSubscription: Disposable
 
     val devices: LiveData<MutableList<IotDevice>>
         get() = _devices
@@ -37,7 +36,7 @@ class DashboardViewModel : ViewModel() {
         get() = _toastMessage
 
     init {
-        requestSmartHomeState()
+        authSubscription = Authenticator.isAuthenticated.subscribe { if (it) requestSmartHomeState(); }
     }
 
     fun requestSmartHomeState() {
@@ -45,7 +44,7 @@ class DashboardViewModel : ViewModel() {
 
         uiScope.launch {
             _allHomeUpdateState.value = true
-            if (disposable == null) tryListenForUpdates()
+            if (devicesSubscription == null) tryListenForUpdates()
             try {
                 _devices.value = Model.getDevices()
             } catch (e: HomeModelException) {
@@ -57,7 +56,7 @@ class DashboardViewModel : ViewModel() {
 
     private suspend fun tryListenForUpdates() {
         try {
-            disposable = Model.getDevicesObservable().subscribe {
+            devicesSubscription = Model.getDevicesObservable().subscribe {
                 _devices.value = it
                 _allHomeUpdateState.value = false
             }
@@ -72,6 +71,6 @@ class DashboardViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         job.cancel()
-        disposable?.dispose()
+        devicesSubscription?.dispose()
     }
 }
