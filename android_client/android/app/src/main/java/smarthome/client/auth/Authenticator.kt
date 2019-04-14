@@ -1,8 +1,10 @@
 package smarthome.client.auth
 
+import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.Auth
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.subjects.ReplaySubject
+import smarthome.client.App
 
 object Authenticator {
     private val firebaseAuth = FirebaseAuth.getInstance()
@@ -22,10 +24,8 @@ object Authenticator {
         return firebaseAuth.currentUser?.uid
     }
 
-    fun signOut() {
-        firebaseAuth.signOut()
-        AuthUIWrapper.clearCredentials()
-
+    suspend fun signOut() {
+        AuthUIWrapper.signOut()
         onNewAuth()
     }
 }
