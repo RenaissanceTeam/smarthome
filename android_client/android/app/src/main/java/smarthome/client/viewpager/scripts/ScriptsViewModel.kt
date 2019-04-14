@@ -3,6 +3,9 @@ package smarthome.client.viewpager.scripts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import smarthome.client.MockAction
+import smarthome.client.MockCondition
+import smarthome.client.Script
 
 class ScriptsViewModel : ViewModel() {
     private val _scripts = MutableLiveData<MutableList<Script>>()
@@ -21,7 +24,7 @@ class ScriptsViewModel : ViewModel() {
                 "Garage Light", "Main Light", "Alert check sensors", "Everyday check", "Light Sensor",
                 "Alarm Curtains", "Rain sensor")
         for (title in titles)
-            scripts.add(Script(title, MockCondition(), MockAction()))
+            scripts.add(Script(title, mutableListOf(MockCondition()), mutableListOf(MockAction())))
         _scripts.value = scripts
     }
 
