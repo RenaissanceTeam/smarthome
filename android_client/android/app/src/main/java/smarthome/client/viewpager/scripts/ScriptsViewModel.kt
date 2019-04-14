@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import smarthome.client.MockAction
-import smarthome.client.MockCondition
+import smarthome.client.ControllerCondition
 import smarthome.client.Script
 
 class ScriptsViewModel : ViewModel() {
@@ -24,7 +24,7 @@ class ScriptsViewModel : ViewModel() {
                 "Garage Light", "Main Light", "Alert check sensors", "Everyday check", "Light Sensor",
                 "Alarm Curtains", "Rain sensor")
         for (title in titles)
-            scripts.add(Script(title, mutableListOf(MockCondition()), mutableListOf(MockAction())))
+            scripts.add(Script(title, mutableListOf(ControllerCondition()), mutableListOf(MockAction())))
         _scripts.value = scripts
     }
 

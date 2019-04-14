@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -28,6 +30,7 @@ class ConditionFragment : Fragment() {
             ViewModelProviders.of(this).get(ScriptDetailViewModel::class.java)
         } ?: throw NullPointerException("Activity is null in condition fragment")
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -62,7 +65,7 @@ class ConditionsAdapter(private val viewModel: ScriptDetailViewModel) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConditionViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.condition_item, parent, false)
-        return ConditionViewHolder(view)
+        return ConditionViewHolder(view) { position, title ->  viewModel.changeConditionType(position, title) }
     }
 
     override fun getItemCount() = viewModel.conditions.value?.count() ?: 0
@@ -70,14 +73,47 @@ class ConditionsAdapter(private val viewModel: ScriptDetailViewModel) :
     override fun onBindViewHolder(holder: ConditionViewHolder, position: Int) {
         val condition = viewModel.conditions.value?.get(position)
         condition ?: return
-        holder.bind(condition)
+        holder.bind(condition, position)
     }
 }
 
-class ConditionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class ConditionViewHolder(view: View,
+                          onTypeChange: (Int, String) -> Unit) : RecyclerView.ViewHolder(view) {
     private val fields = view.findViewById<LinearLayout>(R.id.fields)
-    fun bind(condition: Condition) {
+    private val type = view.findViewById<RadioGroup>(R.id.type_radio_group)
+    private var boundPosition: Int = -1
+    private var isBinding = false
+
+    init {
+        type.setOnCheckedChangeListener { group, checkedId ->
+            if (isBinding) return@setOnCheckedChangeListener
+
+            val button = group.findViewById<RadioButton>(checkedId)
+            button ?: return@setOnCheckedChangeListener
+
+            onTypeChange(boundPosition, button.tag.toString())
+        }
+    }
+
+    fun bind(condition: Condition, position: Int) {
+        isBinding = true
+        boundPosition = position
+
+        selectRadioButton(condition)
+        inflateFields(condition)
+
+        isBinding = false
+    }
+
+    private fun inflateFields(condition: Condition) {
         fields.removeAllViews()
         condition.getFields().forEach { fields.addView(it.getView(fields)) }
+    }
+
+    private fun selectRadioButton(condition: Condition) {
+        val shouldBeChecked = type.findViewWithTag<RadioButton>(condition.getTag())
+        if (shouldBeChecked.id != type.checkedRadioButtonId) {
+            type.check(shouldBeChecked.id)
+        }
     }
 }
