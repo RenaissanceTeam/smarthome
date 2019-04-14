@@ -1,8 +1,11 @@
 package smarthome.client
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 
 class Script(val name: String,
@@ -31,29 +34,27 @@ abstract class Condition {
 class ControllerCondition: Condition() {
     override fun getTag() = "Controller"
 
-    override fun getFields(): List<ConditionField> {
-        return listOf(
-                TextConditionField("mock before", "mock after"),
-                TextConditionField("mock2 before", "mock2 after")
-                )
-    }
+    private val controllerField = TextConditionField("Controller")
+    private val fields = listOf(controllerField)
+
+    override fun getFields() = fields
 
     override fun evaluate(): Boolean = true
-    override fun toString() = "'GarageMovementSensor' is triggered"
+
+    override fun toString() = fields.joinToString(separator = " and ")
 }
 
 class ExactTimeCondition: Condition() {
     override fun getTag() = "Exact Time"
 
-    override fun getFields(): List<ConditionField> {
-        return listOf(
-                TextConditionField("time before", "mock after"),
-                TextConditionField("time2 before", "mock2 after")
-        )
-    }
+    private val atTimeField = TextConditionField("At time")
+    private val fields = listOf(atTimeField)
+
+    override fun getFields() = fields
 
     override fun evaluate(): Boolean = true
-    override fun toString() = "'ExactTime' is triggered"
+
+    override fun toString() = fields.joinToString(separator = " and ")
 }
 
 abstract class ConditionField {
@@ -62,14 +63,26 @@ abstract class ConditionField {
 }
 
 class TextConditionField(private val before: String,
-                         private val after: String): ConditionField() {
+                         private val after: String = ""): ConditionField() {
     override fun getView(root: ViewGroup): View {
         val inflater = LayoutInflater.from(root.context)
         val view = inflater.inflate(R.layout.field_text_input, root, false)
         view.findViewById<TextView>(R.id.field_before).text = before
         view.findViewById<TextView>(R.id.field_after).text = after
+        val input = view.findViewById<EditText>(R.id.field_input)
+        input.setText(state)
+
+        input.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                state = s?.toString() ?: ""
+            }
+            override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+        })
         return view
     }
+
+    override fun toString() = "$before = $state $after"
 }
 
 abstract class Action {

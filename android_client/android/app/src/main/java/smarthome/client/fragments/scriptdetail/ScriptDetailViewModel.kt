@@ -1,5 +1,6 @@
 package smarthome.client.fragments.scriptdetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -36,16 +37,18 @@ class ScriptDetailViewModel: ViewModel() {
 
     }
 
-    fun onSaveClicked() {
-
+    fun onSaveConditionsClicked() {
+        Log.d("ScriptDetailVM", "onSaveClicked: ${script.value?.conditions?.joinToString() }")
     }
 
-    fun changeConditionType(position: Int, title: String) {
+    fun changeConditionType(position: Int, tag: String) {
         val script = script.value
         script ?: return
 
         val conditions = script.conditions
-        conditions[position] = Condition.withTitle(title)
+
+        if (conditions[position].getTag() == tag) return
+        conditions[position] = Condition.withTitle(tag)
 
         _script.value = script
     }
