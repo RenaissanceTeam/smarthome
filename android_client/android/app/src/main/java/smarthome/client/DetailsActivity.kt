@@ -3,7 +3,7 @@ package smarthome.client
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import smarthome.client.fragments.condition.ConditionFragment
+import smarthome.client.fragments.scriptdetail.ConditionFragment
 import smarthome.client.fragments.controllerdetail.ControllerDetails
 import smarthome.client.fragments.devicedetail.DeviceDetails
 import smarthome.client.fragments.scriptdetail.ScriptDetails

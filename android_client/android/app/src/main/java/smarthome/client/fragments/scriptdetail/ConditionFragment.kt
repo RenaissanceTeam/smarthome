@@ -1,10 +1,9 @@
-package smarthome.client.fragments.condition
+package smarthome.client.fragments.scriptdetail
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -13,14 +12,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import smarthome.client.R
-import smarthome.client.fragments.scriptdetail.ScriptDetailViewModel
 import smarthome.client.Condition
 
 class ConditionFragment : Fragment() {
 
     private var conditions: RecyclerView? = null
     private var adapter: ConditionsAdapter? = null
+    private var saveButton: FloatingActionButton? = null
+
     private lateinit var viewModel: ScriptDetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,16 +46,27 @@ class ConditionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupViews(view)
         setupRecyclerView()
+
+        saveButton?.setOnClickListener { viewModel.onSaveConditionsClicked() }
     }
 
     private fun setupViews(view: View) {
         conditions = view.findViewById(R.id.conditions)
+        saveButton = view.findViewById(R.id.save)
     }
 
     private fun setupRecyclerView() {
         adapter = ConditionsAdapter(viewModel)
         conditions?.layoutManager = LinearLayoutManager(context)
         conditions?.adapter = adapter
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        conditions = null
+        adapter = null
+        saveButton = null
     }
 }
 
@@ -65,7 +77,7 @@ class ConditionsAdapter(private val viewModel: ScriptDetailViewModel) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConditionViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.condition_item, parent, false)
-        return ConditionViewHolder(view) { position, title ->  viewModel.changeConditionType(position, title) }
+        return ConditionViewHolder(view) { position, title -> viewModel.changeConditionType(position, title) }
     }
 
     override fun getItemCount() = viewModel.conditions.value?.count() ?: 0
