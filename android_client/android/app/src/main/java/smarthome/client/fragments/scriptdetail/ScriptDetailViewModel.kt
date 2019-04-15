@@ -60,4 +60,12 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
         val devices = Model.getDevices()
         return devices.flatMap { it.controllers }
     }
+
+    fun onAddButtonClicked() {
+        val script = script.value
+        script ?: return
+
+        script.conditions.add(Condition.withTag(CONDITION_CONTROLLER, this))
+        _script.value = script
+    }
 }
