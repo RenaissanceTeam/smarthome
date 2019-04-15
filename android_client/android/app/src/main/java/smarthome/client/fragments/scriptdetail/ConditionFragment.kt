@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import smarthome.client.R
-import smarthome.client.scripts.conditions.Condition
 import smarthome.client.ui.SwipeToDeleteCallback
 
 class ConditionFragment : Fragment() {
@@ -85,70 +84,5 @@ class ConditionFragment : Fragment() {
         addButton = null
         saveButton = null
         toolbar = null
-    }
-}
-
-
-class ConditionsAdapter(private val viewModel: ScriptDetailViewModel) :
-        RecyclerView.Adapter<ConditionViewHolder>() {
-
-    fun removeAt(position: Int) {
-        viewModel.removeConditionAt(position)
-        notifyItemRemoved(position)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConditionViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.condition_item, parent, false)
-        return ConditionViewHolder(view) { position, title -> viewModel.changeConditionType(position, title) }
-    }
-
-    override fun getItemCount() = viewModel.conditions.value?.count() ?: 0
-
-    override fun onBindViewHolder(holder: ConditionViewHolder, position: Int) {
-        val condition = viewModel.conditions.value?.get(position)
-        condition ?: return
-        holder.bind(condition, position)
-    }
-}
-
-class ConditionViewHolder(view: View,
-                          onTypeChange: (Int, String) -> Unit) : RecyclerView.ViewHolder(view) {
-    private val fieldLayout = view.findViewById<FrameLayout>(R.id.field)
-    private val type = view.findViewById<RadioGroup>(R.id.type_radio_group)
-    private var boundPosition: Int = -1
-    private var isBinding = false
-
-    init {
-        type.setOnCheckedChangeListener { group, checkedId ->
-            if (isBinding) return@setOnCheckedChangeListener
-
-            val button = group.findViewById<RadioButton>(checkedId)
-            button ?: return@setOnCheckedChangeListener
-
-            onTypeChange(boundPosition, button.tag.toString())
-        }
-    }
-
-    fun bind(condition: Condition, position: Int) {
-        isBinding = true
-        boundPosition = position
-
-        selectRadioButton(condition)
-        inflateFields(condition)
-
-        isBinding = false
-    }
-
-    private fun inflateFields(condition: Condition) {
-        fieldLayout.removeAllViews()
-        fieldLayout.addView(condition.getView(fieldLayout))
-    }
-
-    private fun selectRadioButton(condition: Condition) {
-        val shouldBeChecked = type.findViewWithTag<RadioButton>(condition.getTag())
-        if (shouldBeChecked.id != type.checkedRadioButtonId) {
-            type.check(shouldBeChecked.id)
-        }
     }
 }

@@ -50,6 +50,13 @@
                 android:layout_height="wrap_content"
                 android:tag="Exact Time"
                 android:text="Exact Time" />
+
+            <RadioButton
+                android:id="@+id/type_interval_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="Interval Time"
+                android:text="Interval Time" />
         </RadioGroup>
 
         <View

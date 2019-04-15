@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import smarthome.client.CONDITION_CONTROLLER
 import smarthome.client.CONDITION_EXACT_TIME
+import smarthome.client.CONDITION_INTERVAL_TIME
 
 abstract class Condition {
     companion object {
@@ -12,6 +13,7 @@ abstract class Condition {
             return when (tag) {
                 CONDITION_CONTROLLER -> ControllerCondition(provider)
                 CONDITION_EXACT_TIME -> ExactTimeCondition()
+                CONDITION_INTERVAL_TIME -> IntervalTimeCondition()
                 else -> throw RuntimeException("No condition with tag $tag")
             }
         }
