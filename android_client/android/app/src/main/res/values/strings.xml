@@ -15,4 +15,7 @@
     <string name="script_name">Script name</string>
     <string name="condition">Condition</string>
     <string name="action">Action</string>
+    <string name="less_than"><![CDATA[<]]></string>
+    <string name="equal_to">=</string>
+    <string name="more_than"><![CDATA[>]]></string>
 </resources>

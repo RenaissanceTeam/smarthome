@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -91,7 +92,7 @@ class ConditionsAdapter(private val viewModel: ScriptDetailViewModel) :
 
 class ConditionViewHolder(view: View,
                           onTypeChange: (Int, String) -> Unit) : RecyclerView.ViewHolder(view) {
-    private val fields = view.findViewById<LinearLayout>(R.id.fields)
+    private val fieldLayout = view.findViewById<FrameLayout>(R.id.field)
     private val type = view.findViewById<RadioGroup>(R.id.type_radio_group)
     private var boundPosition: Int = -1
     private var isBinding = false
@@ -118,8 +119,8 @@ class ConditionViewHolder(view: View,
     }
 
     private fun inflateFields(condition: Condition) {
-        fields.removeAllViews()
-        condition.getFields().forEach { fields.addView(it.getView(fields)) }
+        fieldLayout.removeAllViews()
+        fieldLayout.addView(condition.getView(fieldLayout))
     }
 
     private fun selectRadioButton(condition: Condition) {
