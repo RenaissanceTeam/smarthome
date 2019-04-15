@@ -39,6 +39,14 @@ class ControllerCondition(provider: ControllerConditionProvider) : Condition() {
         return view
     }
 
+    override fun isFilled(): Boolean {
+        val isFilled = (chosenController != null && compare != null && value != null)
+        if (!isFilled) {
+            // todo highlight not filled with red
+        }
+        return isFilled
+    }
+
     private fun bindView() {
         val radioGroup = view.findViewById<RadioGroup>(R.id.compare_radio_group)
         val dropDownList = view.findViewById<AppCompatSpinner>(R.id.controller_drop_down_list)

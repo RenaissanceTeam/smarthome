@@ -32,6 +32,14 @@ class ExactTimeCondition : Condition() {
         return view
     }
 
+    override fun isFilled(): Boolean {
+        val isFilled = !state.isEmpty()
+        if (!isFilled) {
+            // todo highlight
+        }
+        return isFilled
+    }
+
     override fun toString() = "At time $state"
 
     override fun evaluate(): Boolean = true // todo

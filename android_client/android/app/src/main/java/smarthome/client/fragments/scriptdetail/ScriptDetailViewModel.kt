@@ -46,6 +46,8 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
 
     fun onSaveConditionsClicked() {
         Log.d("ScriptDetailVM", "onSaveClicked: ${script.value?.conditions?.joinToString() }")
+        val allFilled = script.value?.conditions?.all { it.isFilled() }
+        Log.d("ScriptDetailVM", "allFilled?: $allFilled")
     }
 
     fun changeConditionType(position: Int, tag: String) {
