@@ -25,6 +25,8 @@ abstract class Condition {
 
     abstract fun evaluate(): Boolean
 
+    abstract fun isFilled(): Boolean
+
     internal fun inflateLayout(root: ViewGroup, layout: Int): View {
         val inflater = LayoutInflater.from(root.context)
         return inflater.inflate(layout, root, false)

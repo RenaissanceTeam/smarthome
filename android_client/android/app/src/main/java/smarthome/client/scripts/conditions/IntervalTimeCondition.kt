@@ -13,6 +13,8 @@ class IntervalTimeCondition : Condition() {
     var intervalView: TextView? = null
     var intervalSeek: SeekBar? = null
 
+    private val min = 5
+
     override fun getTag() = CONDITION_INTERVAL_TIME
 
     override fun getView(root: ViewGroup): View {
@@ -24,6 +26,7 @@ class IntervalTimeCondition : Condition() {
 
         intervalSeek?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, newInterval: Int, fromUser: Boolean) {
+                if (!fromUser) return
                 interval = newInterval
                 invalidateIntervalView()
             }
@@ -35,7 +38,13 @@ class IntervalTimeCondition : Condition() {
         return view
     }
 
+    override fun isFilled() = true
+
     private fun invalidateIntervalView() {
+        if (interval < min) {
+            interval = min
+            intervalSeek?.progress = interval
+        }
         intervalView?.text = formatInterval()
     }
 
