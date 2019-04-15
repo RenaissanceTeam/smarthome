@@ -16,7 +16,7 @@
         android:text="Controller"/>
 
 
-    <Spinner
+    <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/controller_drop_down_list"
         app:layout_constraintStart_toEndOf="@id/controller_name_label"
         app:layout_constraintTop_toTopOf="@id/controller_name_label"

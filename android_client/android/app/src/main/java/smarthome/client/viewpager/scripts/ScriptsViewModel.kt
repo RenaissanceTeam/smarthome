@@ -23,8 +23,8 @@ class ScriptsViewModel : ViewModel() {
         val titles = listOf("Control light", "Curtains", "Check temperature", "Door opening",
                 "Garage Light", "Main Light", "Alert check sensors", "Everyday check", "Light Sensor",
                 "Alarm Curtains", "Rain sensor")
-        for (title in titles)
-            scripts.add(Script(title, mutableListOf(ControllerCondition()), mutableListOf(MockAction())))
+//        for (title in titles)
+//            scripts.add(Script(title, mutableListOf(ControllerCondition()), mutableListOf(MockAction())))
         _scripts.value = scripts
     }
 
