@@ -68,4 +68,12 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
         script.conditions.add(Condition.withTag(CONDITION_CONTROLLER, this))
         _script.value = script
     }
+
+    fun removeConditionAt(position: Int) {
+        val script = script.value
+        script ?: return
+
+        script.conditions.removeAt(position)
+        _script.value = script
+    }
 }

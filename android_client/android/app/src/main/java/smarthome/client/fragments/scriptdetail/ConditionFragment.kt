@@ -11,11 +11,13 @@ import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import smarthome.client.R
 import smarthome.client.Condition
+import smarthome.client.ui.SwipeToDeleteCallback
 
 class ConditionFragment : Fragment() {
 
@@ -60,7 +62,14 @@ class ConditionFragment : Fragment() {
         adapter = ConditionsAdapter(viewModel)
         conditions?.layoutManager = LinearLayoutManager(context)
         conditions?.adapter = adapter
+
+        val context = context ?: return
+        val swipeHandler = SwipeToDeleteCallback(context) { viewHolder, _ ->
+            adapter?.removeAt(viewHolder.adapterPosition)
+        }
+        ItemTouchHelper(swipeHandler).attachToRecyclerView(conditions)
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -74,6 +83,11 @@ class ConditionFragment : Fragment() {
 
 class ConditionsAdapter(private val viewModel: ScriptDetailViewModel) :
         RecyclerView.Adapter<ConditionViewHolder>() {
+
+    fun removeAt(position: Int) {
+        viewModel.removeConditionAt(position)
+        notifyItemRemoved(position)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConditionViewHolder {
         val inflater = LayoutInflater.from(parent.context)
