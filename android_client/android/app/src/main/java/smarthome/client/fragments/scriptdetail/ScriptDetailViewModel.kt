@@ -6,6 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import smarthome.client.*
+import smarthome.client.scripts.conditions.AllConditionsProvider
+import smarthome.client.scripts.conditions.Condition
+import smarthome.client.scripts.actions.MockAction
+import smarthome.client.scripts.Script
 import smarthome.library.common.BaseController
 
 class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {

@@ -14,7 +14,7 @@ import smarthome.client.*
 import smarthome.client.R
 import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
-import smarthome.client.Script
+import smarthome.client.scripts.Script
 
 class ScriptDetails: Fragment() {
     private lateinit var viewModel: ScriptDetailViewModel
