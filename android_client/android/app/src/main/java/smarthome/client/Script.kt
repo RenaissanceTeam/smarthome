@@ -81,6 +81,23 @@ class ControllerCondition(provider: ControllerConditionProvider) : Condition() {
             return
         }
 
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            compare = when (checkedId) {
+                R.id.less_than -> COMPARE_LESS_THAN
+                R.id.more_than -> COMPARE_MORE_THAN
+                R.id.equal_to -> COMPARE_EQUAL_TO
+                else -> throw RuntimeException("Can't parse compare option")
+            }
+        }
+
+        valueInput.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                value = s.toString()
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
         dropDownList.adapter = ArrayAdapter<String>(view.context,
                 android.R.layout.simple_spinner_dropdown_item, dataset)
 
@@ -92,7 +109,6 @@ class ControllerCondition(provider: ControllerConditionProvider) : Condition() {
                 choosenController = controllersWithName?.get(position)
             }
         }
-
 
         hasPendingBinding = false
     }

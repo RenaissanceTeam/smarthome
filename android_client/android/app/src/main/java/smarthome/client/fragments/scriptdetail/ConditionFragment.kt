@@ -4,10 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -24,6 +23,9 @@ class ConditionFragment : Fragment() {
     private var conditions: RecyclerView? = null
     private var adapter: ConditionsAdapter? = null
     private var addButton: FloatingActionButton? = null
+    private var saveButton: ImageView? = null
+    private var toolbar: Toolbar? = null
+
 
     private lateinit var viewModel: ScriptDetailViewModel
 
@@ -48,14 +50,18 @@ class ConditionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews(view)
+        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setupRecyclerView()
 
         addButton?.setOnClickListener { viewModel.onAddButtonClicked() }
+        saveButton?.setOnClickListener { viewModel.onSaveConditionsClicked() }
     }
 
     private fun setupViews(view: View) {
         conditions = view.findViewById(R.id.conditions)
         addButton = view.findViewById(R.id.add_button)
+        saveButton = view.findViewById(R.id.save)
+        toolbar = view.findViewById(R.id.toolbar)
     }
 
     private fun setupRecyclerView() {
@@ -77,6 +83,8 @@ class ConditionFragment : Fragment() {
         conditions = null
         adapter = null
         addButton = null
+        saveButton = null
+        toolbar = null
     }
 }
 
