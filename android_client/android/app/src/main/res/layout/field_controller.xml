@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/controller_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="24dp"
+        android:text="Controller"/>
+
+
+    <Spinner
+        android:id="@+id/controller_drop_down_list"
+        app:layout_constraintStart_toEndOf="@id/controller_name_label"
+        app:layout_constraintTop_toTopOf="@id/controller_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/controller_compare"
+        app:layout_constraintTop_toBottomOf="@id/controller_name_label"
+        app:layout_constraintStart_toStartOf="@id/controller_name_label"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:text="Is"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:id="@+id/compare_radio_group"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/controller_compare"
+        app:layout_constraintTop_toBottomOf="@id/controller_drop_down_list"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/less"
+            android:text="<"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:id="@+id/equal"
+            android:text="="
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:id="@+id/more"
+            android:text=">"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/value_label"
+        app:layout_constraintTop_toBottomOf="@id/controller_compare"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@id/controller_compare"
+        android:text="Value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/value_input"
+        app:layout_constraintStart_toEndOf="@id/value_label"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/value_label"
+        android:minWidth="150dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</androidx.constraintlayout.widget.ConstraintLayout>
