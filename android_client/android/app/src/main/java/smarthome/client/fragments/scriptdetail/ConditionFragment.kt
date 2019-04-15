@@ -21,7 +21,7 @@ class ConditionFragment : Fragment() {
 
     private var conditions: RecyclerView? = null
     private var adapter: ConditionsAdapter? = null
-    private var saveButton: FloatingActionButton? = null
+    private var addButton: FloatingActionButton? = null
 
     private lateinit var viewModel: ScriptDetailViewModel
 
@@ -48,12 +48,12 @@ class ConditionFragment : Fragment() {
         setupViews(view)
         setupRecyclerView()
 
-        saveButton?.setOnClickListener { viewModel.onSaveConditionsClicked() }
+        addButton?.setOnClickListener { viewModel.onAddButtonClicked() }
     }
 
     private fun setupViews(view: View) {
         conditions = view.findViewById(R.id.conditions)
-        saveButton = view.findViewById(R.id.save)
+        addButton = view.findViewById(R.id.add_button)
     }
 
     private fun setupRecyclerView() {
@@ -67,7 +67,7 @@ class ConditionFragment : Fragment() {
 
         conditions = null
         adapter = null
-        saveButton = null
+        addButton = null
     }
 }
 
