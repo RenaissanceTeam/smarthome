@@ -64,9 +64,11 @@ abstract class ConditionField {
 
 class TextConditionField(private val before: String,
                          private val after: String = ""): ConditionField() {
+
     override fun getView(root: ViewGroup): View {
         val inflater = LayoutInflater.from(root.context)
         val view = inflater.inflate(R.layout.field_text_input, root, false)
+
         view.findViewById<TextView>(R.id.field_before).text = before
         view.findViewById<TextView>(R.id.field_after).text = after
         val input = view.findViewById<EditText>(R.id.field_input)
@@ -84,6 +86,23 @@ class TextConditionField(private val before: String,
 
     override fun toString() = "$before = $state $after"
 }
+
+class ControllerConditionField(): ConditionField() {
+    override fun getView(root: ViewGroup): View {
+
+    }
+
+    override fun toString(): String {
+
+    }
+}
+
+
+
+
+
+
+
 
 abstract class Action {
     abstract fun action()
