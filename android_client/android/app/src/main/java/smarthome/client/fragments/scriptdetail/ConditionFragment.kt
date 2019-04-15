@@ -40,6 +40,7 @@ class ConditionFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.conditions.observe(this, Observer { adapter?.notifyDataSetChanged() })
+        viewModel.isConditionOpen.observe(this, Observer { if (!it) activity?.onBackPressed() })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

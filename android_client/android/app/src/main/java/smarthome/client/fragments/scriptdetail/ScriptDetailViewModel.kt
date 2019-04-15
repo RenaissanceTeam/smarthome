@@ -17,10 +17,14 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
     val script: LiveData<Script>
         get() = _script
 
-    val conditions = Transformations.map(script) { it.conditions }
+    val isConditionOpen = MutableLiveData<Boolean>()
+    val conditions:LiveData<MutableList<Condition>> = Transformations.map(script) { it.conditions }
     val actions = Transformations.map(script) { it.actions }
 
+    private var copyBeforeEditCondition: Script? = null
+
     fun setScriptGuid(guid: Long) {
+        Log.d("ScriptDetailVM", "setScriptGuid: ")
         _script.value = Script("Garage Light",
                 mutableListOf(
                         Condition.withTag(CONDITION_EXACT_TIME, this),
@@ -37,7 +41,8 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
     }
 
     fun onEditConditionClicked() {
-
+        copyBeforeEditCondition = _script.value?.copy()
+        isConditionOpen.value = true
     }
 
     fun onEditActionClicked() {
@@ -45,9 +50,18 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
     }
 
     fun onSaveConditionsClicked() {
-        Log.d("ScriptDetailVM", "onSaveClicked: ${script.value?.conditions?.joinToString() }")
-        val allFilled = script.value?.conditions?.all { it.isFilled() }
-        Log.d("ScriptDetailVM", "allFilled?: $allFilled")
+        val conditions = script.value?.conditions ?: return
+
+        Log.d("ScriptDetailVM", "onSaveClicked: ${conditions.joinToString() }")
+        val allFilled = conditions.isNotEmpty() && conditions.all { it.isFilled() }
+
+        if (allFilled) {
+            isConditionOpen.value = false
+        }
+    }
+
+    fun onDiscardConditionsChanges() {
+        _script.value = copyBeforeEditCondition
     }
 
     fun changeConditionType(position: Int, tag: String) {

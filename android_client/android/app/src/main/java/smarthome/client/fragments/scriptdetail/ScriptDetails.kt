@@ -1,6 +1,7 @@
 package smarthome.client.fragments.scriptdetail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,8 +49,9 @@ class ScriptDetails: Fragment() {
     }
 
     private fun bindViews(script: Script) {
+        Log.d("ScriptDetails", "bind views")
         name?.setText(script.name)
-        condition?.text = script.conditions.toString()
+        condition?.text = script.conditions.joinToString(" AND ")
         action?.text = script.actions.toString()
     }
 
@@ -66,7 +68,7 @@ class ScriptDetails: Fragment() {
             openConditionDetails()
         }
         changeAction?.setOnClickListener { viewModel.onEditActionClicked() }
-        passGuidToViewModel()
+        if (viewModel.script.value == null) passGuidToViewModel()
     }
 
     private fun openConditionDetails() {
