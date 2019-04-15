@@ -27,16 +27,17 @@ abstract class Condition {
             }
         }
     }
-    var state: String = ""
+
     abstract fun getView(root: ViewGroup): View
+
+    abstract fun getTag(): String
+
+    abstract fun evaluate(): Boolean
 
     internal fun inflateLayout(root: ViewGroup, layout: Int): View {
         val inflater = LayoutInflater.from(root.context)
         return inflater.inflate(layout, root, false)
     }
-
-    abstract fun getTag(): String
-    abstract fun evaluate(): Boolean
 }
 
 interface AllConditionsProvider: ControllerConditionProvider
@@ -81,6 +82,17 @@ class ControllerCondition(provider: ControllerConditionProvider) : Condition() {
             return
         }
 
+        dropDownList.adapter = ArrayAdapter<String>(view.context,
+                android.R.layout.simple_spinner_dropdown_item, dataset)
+
+        setEventListeners(radioGroup, valueInput, dropDownList)
+
+        hasPendingBinding = false
+    }
+
+    private fun setEventListeners(radioGroup: RadioGroup,
+                                  valueInput: EditText,
+                                  dropDownList: AppCompatSpinner) {
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             compare = when (checkedId) {
                 R.id.less_than -> COMPARE_LESS_THAN
@@ -94,31 +106,40 @@ class ControllerCondition(provider: ControllerConditionProvider) : Condition() {
             override fun afterTextChanged(s: Editable?) {
                 value = s.toString()
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
-
-        dropDownList.adapter = ArrayAdapter<String>(view.context,
-                android.R.layout.simple_spinner_dropdown_item, dataset)
 
         dropDownList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 choosenController = null
             }
+
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 choosenController = controllersWithName?.get(position)
             }
         }
-
-        hasPendingBinding = false
     }
 
-    override fun evaluate(): Boolean = true // todo
+    override fun evaluate(): Boolean {
+        val controller = choosenController ?: return false
+        val value = value ?: return false
 
-    override fun toString() = "Controller ${choosenController?.name} "
+        return when (compare) {
+            COMPARE_LESS_THAN -> controller.state.toDouble() < value.toDouble()
+            COMPARE_MORE_THAN -> controller.state.toDouble() > value.toDouble()
+            COMPARE_EQUAL_TO -> controller.state.toDouble() == value.toDouble()
+            else -> throw RuntimeException("Unsupported compare: $compare")
+        }
+    }
+
+    override fun toString() = "Controller ${choosenController?.name} $compare $value"
 }
 
 class ExactTimeCondition : Condition() {
+    var state = ""
+
     override fun getTag() = CONDITION_EXACT_TIME
 
     override fun getView(root: ViewGroup): View {
