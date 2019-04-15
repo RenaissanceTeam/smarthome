@@ -1,50 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    style="@style/Widget.MaterialComponents.CardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/mtrl_card_spacing"
+    android:layout_marginTop="@dimen/mtrl_card_spacing"
+    android:layout_marginRight="@dimen/mtrl_card_spacing">
 
-    <TextView
-        android:id="@+id/type_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:text="Type"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <RadioGroup
-        android:id="@+id/type_radio_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toEndOf="@id/type_label"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <RadioButton
-            android:id="@+id/type_controller"
+        <TextView
+            android:id="@+id/type_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:tag="Controller"
-            android:text="Controller" />
+            android:layout_marginStart="8dp"
+            android:text="Type"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/type_radio_group"
+            app:layout_constraintBottom_toBottomOf="@id/type_radio_group"/>
 
-
-        <RadioButton
-            android:id="@+id/type_time"
+        <RadioGroup
+            android:id="@+id/type_radio_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:tag="Exact Time"
-            android:text="Exact Time" />
-    </RadioGroup>
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toEndOf="@id/type_label"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:id="@+id/fields"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="@id/type_label"
-        app:layout_constraintTop_toBottomOf="@id/type_radio_group" />
+            <RadioButton
+                android:id="@+id/type_controller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="Controller"
+                android:text="Controller" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+            <RadioButton
+                android:id="@+id/type_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="Exact Time"
+                android:text="Exact Time" />
+        </RadioGroup>
+
+        <View
+            android:id="@+id/line"
+            app:layout_constraintTop_toBottomOf="@id/type_radio_group"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_width="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimary"
+            />
+        <FrameLayout
+            android:id="@+id/field"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="20dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/type_radio_group" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

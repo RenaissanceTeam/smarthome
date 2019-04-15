@@ -6,8 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import smarthome.client.*
+import smarthome.library.common.BaseController
 
-class ScriptDetailViewModel: ViewModel() {
+class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
     private val _script = MutableLiveData<Script>()
     val script: LiveData<Script>
         get() = _script
@@ -15,10 +16,12 @@ class ScriptDetailViewModel: ViewModel() {
     val conditions = Transformations.map(script) { it.conditions }
     val actions = Transformations.map(script) { it.actions }
 
-
     fun setScriptGuid(guid: Long) {
         _script.value = Script("Garage Light",
-                mutableListOf(ControllerCondition(), ExactTimeCondition()),
+                mutableListOf(
+                        Condition.withTag(CONDITION_EXACT_TIME, this),
+                        Condition.withTag(CONDITION_CONTROLLER, this)
+                ),
                 mutableListOf(MockAction()))
     }
 
@@ -48,8 +51,13 @@ class ScriptDetailViewModel: ViewModel() {
         val conditions = script.conditions
 
         if (conditions[position].getTag() == tag) return
-        conditions[position] = Condition.withTitle(tag)
+        conditions[position] = Condition.withTag(tag, this)
 
         _script.value = script
+    }
+
+    override suspend fun getControllers(): List<BaseController> {
+        val devices = Model.getDevices()
+        return devices.flatMap { it.controllers }
     }
 }
