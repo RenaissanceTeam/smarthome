@@ -1,53 +1,22 @@
-package smarthome.client
+package smarthome.client.scripts.conditions
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.RadioGroup
 import androidx.appcompat.widget.AppCompatSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import smarthome.client.fragments.scriptdetail.ScriptDetailViewModel
+import smarthome.client.*
 import smarthome.library.common.BaseController
 
-class Script(val name: String,
-             val conditions: MutableList<Condition>,
-             val actions: MutableList<Action>)
-
-abstract class Condition {
-    companion object {
-        fun withTag(tag: String, provider: AllConditionsProvider): Condition {
-            return when (tag) {
-                CONDITION_CONTROLLER -> ControllerCondition(provider)
-                CONDITION_EXACT_TIME -> ExactTimeCondition()
-                else -> throw RuntimeException("No condition with tag $tag")
-            }
-        }
-    }
-
-    abstract fun getView(root: ViewGroup): View
-
-    abstract fun getTag(): String
-
-    abstract fun evaluate(): Boolean
-
-    internal fun inflateLayout(root: ViewGroup, layout: Int): View {
-        val inflater = LayoutInflater.from(root.context)
-        return inflater.inflate(layout, root, false)
-    }
-}
-
-interface AllConditionsProvider: ControllerConditionProvider
-
-interface ControllerConditionProvider {
-    suspend fun getControllers(): List<BaseController>
-}
-
 class ControllerCondition(provider: ControllerConditionProvider) : Condition() {
-    var choosenController: BaseController? = null
+    var chosenController: BaseController? = null
     var compare: String? = null
     var value: String? = null
     private var controllersWithName: List<BaseController>? = null
@@ -113,17 +82,17 @@ class ControllerCondition(provider: ControllerConditionProvider) : Condition() {
 
         dropDownList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                choosenController = null
+                chosenController = null
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                choosenController = controllersWithName?.get(position)
+                chosenController = controllersWithName?.get(position)
             }
         }
     }
 
     override fun evaluate(): Boolean {
-        val controller = choosenController ?: return false
+        val controller = chosenController ?: return false
         val value = value ?: return false
 
         return when (compare) {
@@ -134,44 +103,5 @@ class ControllerCondition(provider: ControllerConditionProvider) : Condition() {
         }
     }
 
-    override fun toString() = "Controller ${choosenController?.name} $compare $value"
+    override fun toString() = "Controller ${chosenController?.name} $compare $value"
 }
-
-class ExactTimeCondition : Condition() {
-    var state = ""
-
-    override fun getTag() = CONDITION_EXACT_TIME
-
-    override fun getView(root: ViewGroup): View {
-        val view = inflateLayout(root, R.layout.field_text_input)
-
-        view.findViewById<TextView>(R.id.field_before).text = "At time"
-        val input = view.findViewById<EditText>(R.id.field_input)
-        input.setText(state)
-
-        input.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                state = s?.toString() ?: ""
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
-            override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
-        })
-        return view
-    }
-
-    override fun toString() = "At time $state"
-
-    override fun evaluate(): Boolean = true // todo
-}
-
-
-abstract class Action {
-    abstract fun action()
-}
-
-class MockAction : Action() {
-    override fun action() {}
-    override fun toString() = "Turn on 'GarageLight'"
-}
-

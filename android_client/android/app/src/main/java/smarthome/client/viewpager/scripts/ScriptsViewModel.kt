@@ -3,9 +3,7 @@ package smarthome.client.viewpager.scripts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import smarthome.client.MockAction
-import smarthome.client.ControllerCondition
-import smarthome.client.Script
+import smarthome.client.scripts.Script
 
 class ScriptsViewModel : ViewModel() {
     private val _scripts = MutableLiveData<MutableList<Script>>()

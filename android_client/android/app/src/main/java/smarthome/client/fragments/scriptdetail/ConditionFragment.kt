@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import smarthome.client.R
-import smarthome.client.Condition
+import smarthome.client.scripts.conditions.Condition
 import smarthome.client.ui.SwipeToDeleteCallback
 
 class ConditionFragment : Fragment() {
