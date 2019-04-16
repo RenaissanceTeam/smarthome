@@ -13,12 +13,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import smarthome.client.R
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import smarthome.client.DEVICE_GUID
-import smarthome.client.DetailsActivity
-import smarthome.client.SCRIPT_GUID
+import smarthome.client.*
 
 
 class ScriptsFragment : Fragment() {
@@ -51,7 +48,7 @@ class ScriptsFragment : Fragment() {
         }
         actionButton?.setOnClickListener {
             activity?.startActivity(Intent(context, DetailsActivity::class.java)
-                    .putExtra(SCRIPT_GUID, 123L))
+                    .putExtra(SCRIPT_GUID, INVALID_GUID))
         }
     }
 
