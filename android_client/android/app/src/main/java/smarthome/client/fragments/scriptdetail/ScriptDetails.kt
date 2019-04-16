@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -41,16 +42,21 @@ class ScriptDetails: Fragment() {
             ViewModelProviders.of(this).get(ScriptDetailViewModel::class.java)
         } ?: throw NullPointerException("Activity is null in script details")
         viewModel.onCreateScriptDetails()
-        viewModel.isScriptOpen.observe(this, Observer { if (!it) activity?.onBackPressed()} )
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.script.observe(this, Observer { bindViews(it) } )
+        viewModel.isScriptOpen.observe(this, Observer { if (!it) activity?.onBackPressed()} )
     }
 
-    private fun bindViews(script: Script) {
-        Log.d("ScriptDetails", "bind views")
+    private fun bindViews(script: Script?) {
+        Log.d("ScriptDetails", "bind views for $script")
+        if (script == null) {
+            Log.d("ScriptDetails", "invalid script=$script, quit")
+            activity?.onBackPressed()
+            return
+        }
         name?.setText(script.name)
         condition?.text = script.conditions.joinToString(" AND ")
         action?.text = script.actions.toString()

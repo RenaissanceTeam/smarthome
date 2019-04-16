@@ -25,13 +25,13 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
     private var copyBeforeEditCondition: Script? = null
 
     fun setScriptGuid(guid: Long) {
-        Log.d("ScriptDetailVM", "setScriptGuid: ")
-        _script.value = Script("Garage Light",
-                mutableListOf(
-                        Condition.withTag(CONDITION_EXACT_TIME, this),
-                        Condition.withTag(CONDITION_CONTROLLER, this)
-                ),
-                mutableListOf(MockAction()))
+        if (guid == INVALID_GUID) {
+            _script.value = Script("",
+                    mutableListOf(),
+                    mutableListOf(MockAction()))
+        } else {
+            _script.value = Model.getScript(guid)
+        }
     }
 
     fun scriptNameChange(name: String) {

@@ -126,4 +126,8 @@ object Model {
         }
         _scriptsObservable?.onNext(scripts)
     }
+
+    fun getScript(guid: Long): Script? {
+        return scripts.find { it.guid == guid }
+    }
 }

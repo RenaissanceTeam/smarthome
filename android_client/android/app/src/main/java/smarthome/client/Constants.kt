@@ -14,3 +14,4 @@ const val CONDITION_INTERVAL_TIME = "Interval Time"
 const val COMPARE_LESS_THAN = "<"
 const val COMPARE_MORE_THAN = ">"
 const val COMPARE_EQUAL_TO = "="
+const val INVALID_GUID = -1L

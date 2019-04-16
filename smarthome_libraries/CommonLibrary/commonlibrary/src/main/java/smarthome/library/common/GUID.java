@@ -1,8 +1,9 @@
 package smarthome.library.common;
 
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
+
+import kotlin.random.Random;
 
 /**
  * IoT device can be identified by its guid. As well as its controllers
@@ -38,4 +39,7 @@ public class GUID {
         return name.hashCode();
     }
 
+    public long random() {
+        return Random.Default.nextLong();
+    }
 }
