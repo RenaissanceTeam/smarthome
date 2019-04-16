@@ -24,7 +24,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
-        android:src="@android:drawable/ic_menu_edit"
+        android:src="@drawable/add"
+        android:tint="@android:color/white"
         app:layout_anchorGravity="bottom|right|end"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
