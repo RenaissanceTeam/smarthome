@@ -17,6 +17,7 @@ class ScriptsViewModel : ViewModel() {
     private val scriptsDisposable: Disposable? = null
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
+    val openScriptDetails = MutableLiveData<Script?>()
 
     val scripts: LiveData<MutableList<Script>>
         get() = _scripts
@@ -31,6 +32,10 @@ class ScriptsViewModel : ViewModel() {
 
     fun onRefresh() {
         _refresh.value = false
+    }
+
+    fun onScriptClick(script: Script?) {
+        openScriptDetails.value = script
     }
 
     override fun onCleared() {

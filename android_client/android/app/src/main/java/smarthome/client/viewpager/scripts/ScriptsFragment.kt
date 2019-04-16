@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import smarthome.client.*
+import smarthome.client.scripts.Script
 
 
 class ScriptsFragment : Fragment() {
@@ -33,6 +34,10 @@ class ScriptsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel.scripts.observe(this, Observer { adapter?.notifyDataSetChanged() })
         viewModel.refresh.observe(this, Observer { refreshLayout?.isRefreshing = it })
+        viewModel.openScriptDetails.observe(this, Observer {
+            it ?: return@Observer
+            openScriptDetails(it)
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -46,10 +51,12 @@ class ScriptsFragment : Fragment() {
         refreshLayout?.setOnRefreshListener {
             if (refreshLayout?.isRefreshing == true) viewModel.onRefresh()
         }
-        actionButton?.setOnClickListener {
-            activity?.startActivity(Intent(context, DetailsActivity::class.java)
-                    .putExtra(SCRIPT_GUID, INVALID_GUID))
-        }
+        actionButton?.setOnClickListener { openScriptDetails(null) }
+    }
+
+    private fun openScriptDetails(script: Script?) {
+        activity?.startActivity(Intent(context, DetailsActivity::class.java)
+                .putExtra(SCRIPT_GUID, script?.guid ?: INVALID_GUID))
     }
 
     private fun setupRecyclerView() {
