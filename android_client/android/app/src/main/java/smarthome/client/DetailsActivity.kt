@@ -3,10 +3,11 @@ package smarthome.client
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import smarthome.client.fragments.scriptdetail.ConditionFragment
 import smarthome.client.fragments.controllerdetail.ControllerDetails
 import smarthome.client.fragments.devicedetail.DeviceDetails
 import smarthome.client.fragments.scriptdetail.ScriptDetails
+import smarthome.client.fragments.scriptdetail.action.ActionFragment
+import smarthome.client.fragments.scriptdetail.condition.ConditionFragment
 
 class DetailsActivity : FragmentActivity() {
 
@@ -19,6 +20,10 @@ class DetailsActivity : FragmentActivity() {
 
     fun openConditionFragment() {
         replaceFragment(ConditionFragment())
+    }
+
+    fun openActionFragment() {
+        replaceFragment(ActionFragment())
     }
 
     fun openControllerDetails(guid: Long) {

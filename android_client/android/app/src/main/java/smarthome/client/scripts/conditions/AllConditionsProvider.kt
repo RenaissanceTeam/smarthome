@@ -1,3 +1,5 @@
 package smarthome.client.scripts.conditions
 
-interface AllConditionsProvider: ControllerConditionProvider
+import smarthome.client.scripts.ControllersProvider
+
+interface AllConditionsProvider: ControllersProvider

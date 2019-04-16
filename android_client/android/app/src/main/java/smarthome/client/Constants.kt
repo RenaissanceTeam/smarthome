@@ -8,9 +8,14 @@ const val CONTROLLER_GUID = "controller_guid"
 const val SCRIPT_GUID = "script_guid"
 const val OPEN_CONDITION_SCRIPT= "open_condition"
 const val OPEN_ACTION_SCRIPT= "open_action"
+
 const val CONDITION_CONTROLLER = "Controller"
 const val CONDITION_EXACT_TIME = "Exact Time"
 const val CONDITION_INTERVAL_TIME = "Interval Time"
+
+const val ACTION_READ_CONTROLLER = "Read Controller"
+const val ACTION_WRITE_CONTROLLER = "Write Controller"
+
 const val COMPARE_LESS_THAN = "<"
 const val COMPARE_MORE_THAN = ">"
 const val COMPARE_EQUAL_TO = "="

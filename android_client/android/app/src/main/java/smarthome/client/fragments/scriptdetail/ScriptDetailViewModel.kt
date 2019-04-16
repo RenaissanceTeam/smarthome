@@ -8,27 +8,28 @@ import androidx.lifecycle.ViewModel
 import smarthome.client.*
 import smarthome.client.scripts.conditions.AllConditionsProvider
 import smarthome.client.scripts.conditions.Condition
-import smarthome.client.scripts.actions.MockAction
 import smarthome.client.scripts.Script
+import smarthome.client.scripts.actions.Action
+import smarthome.client.scripts.actions.AllActionsProvider
+import smarthome.client.scripts.actions.ReadAction
 import smarthome.library.common.BaseController
 
-class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
+class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvider {
     private val _script = MutableLiveData<Script>()
     val script: LiveData<Script>
         get() = _script
 
     val isConditionOpen = MutableLiveData<Boolean>()
+    val isActionOpen = MutableLiveData<Boolean>()
     val isScriptOpen = MutableLiveData<Boolean>()
-    val conditions:LiveData<MutableList<Condition>> = Transformations.map(script) { it.conditions }
-    val actions = Transformations.map(script) { it.actions }
+    val conditions: LiveData<MutableList<Condition>> = Transformations.map(script) { it.conditions }
+    val actions: LiveData<MutableList<Action>> = Transformations.map(script) { it.actions }
 
     private var copyBeforeEditCondition: Script? = null
 
     fun setScriptGuid(guid: Long) {
         if (guid == INVALID_GUID) {
-            _script.value = Script("",
-                    mutableListOf(),
-                    mutableListOf(MockAction()))
+            _script.value = Script()
         } else {
             _script.value = Model.getScript(guid)
         }
@@ -42,12 +43,11 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
     }
 
     fun onEditConditionClicked() {
-        copyBeforeEditCondition = _script.value?.copy()
         isConditionOpen.value = true
     }
 
     fun onEditActionClicked() {
-
+        isActionOpen.value = true
     }
 
     fun onSaveConditionsClicked() {
@@ -61,8 +61,24 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
         }
     }
 
-    fun onDiscardConditionsChanges() {
-        _script.value = copyBeforeEditCondition
+
+    fun onAddActionButtonClicked() {
+        val script = script.value
+        script ?: return
+
+        script.actions.add(ReadAction(this))
+        _script.value = script
+    }
+
+    fun onSaveActionsClicked() {
+        val actions = script.value?.actions ?: return
+
+        Log.d("ScriptDetailVM", "onSaveClicked: ${actions.joinToString() }")
+        val allFilled = actions.isNotEmpty() && actions.all { it.isFilled() }
+
+        if (allFilled) {
+            isActionOpen.value = false
+        }
     }
 
     fun changeConditionType(position: Int, tag: String) {
@@ -77,12 +93,24 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
         _script.value = script
     }
 
+    fun changeActionType(position: Int, tag: String) {
+        val script = script.value
+        script ?: return
+
+        val actions = script.actions
+
+        if (actions[position].getTag() == tag) return
+        actions[position] = Action.withTag(tag, this)
+
+        _script.value = script
+    }
+
     override suspend fun getControllers(): List<BaseController> {
         val devices = Model.getDevices()
         return devices.flatMap { it.controllers }
     }
 
-    fun onAddButtonClicked() {
+    fun onAddConditionButtonClicked() {
         val script = script.value
         script ?: return
 
@@ -111,5 +139,13 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
 
     fun onCreateScriptDetails() {
         isScriptOpen.value = true
+    }
+
+    fun removeActionAt(position: Int) {
+        val script = script.value
+        script ?: return
+
+        script.actions.removeAt(position)
+        _script.value = script
     }
 }

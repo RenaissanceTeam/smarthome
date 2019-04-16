@@ -1,9 +1,10 @@
-package smarthome.client.fragments.scriptdetail
+package smarthome.client.fragments.scriptdetail.condition
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
+import smarthome.client.fragments.scriptdetail.ScriptDetailViewModel
 
 class ConditionsAdapter(private val viewModel: ScriptDetailViewModel) :
         RecyclerView.Adapter<ConditionViewHolder>() {
