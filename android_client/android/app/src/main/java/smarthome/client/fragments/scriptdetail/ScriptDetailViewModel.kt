@@ -18,6 +18,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
         get() = _script
 
     val isConditionOpen = MutableLiveData<Boolean>()
+    val isScriptOpen = MutableLiveData<Boolean>()
     val conditions:LiveData<MutableList<Condition>> = Transformations.map(script) { it.conditions }
     val actions = Transformations.map(script) { it.actions }
 
@@ -95,5 +96,16 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
 
         script.conditions.removeAt(position)
         _script.value = script
+    }
+
+    fun onSaveScriptClicked() {
+        isScriptOpen.value = false
+        val script = script.value ?: return
+
+        Model.saveScript(script)
+    }
+
+    fun onCreateScriptDetails() {
+        isScriptOpen.value = true
     }
 }

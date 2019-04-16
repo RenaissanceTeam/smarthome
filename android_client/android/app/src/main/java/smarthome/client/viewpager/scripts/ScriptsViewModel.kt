@@ -3,32 +3,41 @@ package smarthome.client.viewpager.scripts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import smarthome.client.Model
 import smarthome.client.scripts.Script
 
 class ScriptsViewModel : ViewModel() {
     private val _scripts = MutableLiveData<MutableList<Script>>()
     private val _refresh = MutableLiveData<Boolean>()
+    private val scriptsDisposable: Disposable? = null
+    private val job = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     val scripts: LiveData<MutableList<Script>>
         get() = _scripts
 
+
     val refresh: LiveData<Boolean>
         get() = _refresh
 
-
     init {
-        val scripts = mutableListOf<Script>()
-        val titles = listOf("Control light", "Curtains", "Check temperature", "Door opening",
-                "Garage Light", "Main Light", "Alert check sensors", "Everyday check", "Light Sensor",
-                "Alarm Curtains", "Rain sensor")
-//        for (title in titles)
-//            scripts.add(Script(title, mutableListOf(ControllerCondition()), mutableListOf(MockAction())))
-        _scripts.value = scripts
+        uiScope.launch { Model.getScriptsObservable().subscribe { _scripts.value = it } }
     }
 
     fun onRefresh() {
         _refresh.value = false
     }
 
+    override fun onCleared() {
+        super.onCleared()
+
+        job.cancel()
+        scriptsDisposable?.dispose()
+    }
 
 }

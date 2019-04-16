@@ -18,21 +18,20 @@ import smarthome.client.ui.EditTextDialog
 import smarthome.client.scripts.Script
 
 class ScriptDetails: Fragment() {
-    private lateinit var viewModel: ScriptDetailViewModel
-
     companion object {
         val FRAGMENT_TAG = "ScriptDetailsFragment"
     }
 
+    private lateinit var viewModel: ScriptDetailViewModel
     private var name: EditText? = null
     private var condition: TextView? = null
     private var action: TextView? = null
-    private var save: FloatingActionButton? = null
+    private var save: ImageView? = null
     private var changeCondition: ImageView? = null
     private var changeAction: ImageView? = null
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_script_details, container, false)
     }
 
@@ -41,6 +40,8 @@ class ScriptDetails: Fragment() {
         viewModel = activity?.run {
             ViewModelProviders.of(this).get(ScriptDetailViewModel::class.java)
         } ?: throw NullPointerException("Activity is null in script details")
+        viewModel.onCreateScriptDetails()
+        viewModel.isScriptOpen.observe(this, Observer { if (!it) activity?.onBackPressed()} )
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -83,7 +84,7 @@ class ScriptDetails: Fragment() {
         changeAction = view.findViewById(R.id.change_action_button)
         changeCondition = view.findViewById(R.id.change_condition_button)
 
-        save?.setOnClickListener { activity?.onBackPressed() }
+        save?.setOnClickListener { viewModel.onSaveScriptClicked() }
     }
 
     private fun passGuidToViewModel() {
