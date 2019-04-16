@@ -99,10 +99,14 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider {
     }
 
     fun onSaveScriptClicked() {
-        isScriptOpen.value = false
         val script = script.value ?: return
+        if (script.name.isNotEmpty() && script.conditions.isNotEmpty() && script.actions.isNotEmpty()) {
+            isScriptOpen.value = false
+            Model.saveScript(script)
+        } else {
+            // todo show not filled fields
+        }
 
-        Model.saveScript(script)
     }
 
     fun onCreateScriptDetails() {
