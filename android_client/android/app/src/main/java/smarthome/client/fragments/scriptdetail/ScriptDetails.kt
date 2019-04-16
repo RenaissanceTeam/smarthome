@@ -59,7 +59,7 @@ class ScriptDetails: Fragment() {
         }
         name?.setText(script.name)
         condition?.text = script.conditions.joinToString(" AND ")
-        action?.text = script.actions.toString()
+        action?.text = script.actions.joinToString(" AND ")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,12 +74,19 @@ class ScriptDetails: Fragment() {
             viewModel.onEditConditionClicked()
             openConditionDetails()
         }
-        changeAction?.setOnClickListener { viewModel.onEditActionClicked() }
+        changeAction?.setOnClickListener {
+            viewModel.onEditActionClicked()
+            openActionDetails()
+        }
         if (viewModel.script.value == null) passGuidToViewModel()
     }
 
     private fun openConditionDetails() {
         (activity as? DetailsActivity)?.run { openConditionFragment() }
+    }
+
+    private fun openActionDetails() {
+        (activity as? DetailsActivity)?.run { openActionFragment() }
     }
 
     private fun setupViews(view: View) {

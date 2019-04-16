@@ -1,4 +1,4 @@
-package smarthome.client.fragments.scriptdetail
+package smarthome.client.fragments.scriptdetail.condition
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import smarthome.client.R
+import smarthome.client.fragments.scriptdetail.ScriptDetailViewModel
 import smarthome.client.ui.SwipeToDeleteCallback
 
 class ConditionFragment : Fragment() {
@@ -53,7 +54,7 @@ class ConditionFragment : Fragment() {
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setupRecyclerView()
 
-        addButton?.setOnClickListener { viewModel.onAddButtonClicked() }
+        addButton?.setOnClickListener { viewModel.onAddConditionButtonClicked() }
         saveButton?.setOnClickListener { viewModel.onSaveConditionsClicked() }
     }
 

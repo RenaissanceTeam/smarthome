@@ -1,7 +1,7 @@
-package smarthome.client.scripts.conditions
+package smarthome.client.scripts
 
 import smarthome.library.common.BaseController
 
-interface ControllerConditionProvider {
+interface ControllersProvider {
     suspend fun getControllers(): List<BaseController>
 }

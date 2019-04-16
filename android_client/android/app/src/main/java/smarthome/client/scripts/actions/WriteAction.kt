@@ -1,4 +1,4 @@
-package smarthome.client.scripts.conditions
+package smarthome.client.scripts.actions
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,10 +16,10 @@ import smarthome.client.*
 import smarthome.client.scripts.ControllersProvider
 import smarthome.library.common.BaseController
 
-class ControllerCondition(provider: ControllersProvider) : Condition() {
+class WriteAction(provider: ControllersProvider) : Action() {
     var chosenController: BaseController? = null
-    var compare: String? = null
     var value: String? = null
+    var compare: String? = null
     private var controllersWithName: List<BaseController>? = null
     private var hasPendingBinding = false
     private lateinit var view: View
@@ -32,24 +32,21 @@ class ControllerCondition(provider: ControllersProvider) : Condition() {
         }
     }
 
-    override fun getTag() = CONDITION_CONTROLLER
+    override fun isFilled(): Boolean {
+        return chosenController != null && !value.isNullOrEmpty()
+    }
 
     override fun getView(root: ViewGroup): View {
-        view = inflateLayout(root, R.layout.field_controller)
+        view = inflateLayout(root, R.layout.action_write_controller)
         bindView()
         return view
     }
 
-    override fun isFilled(): Boolean {
-        val isFilled = (chosenController != null && compare != null && value != null)
-        if (!isFilled) {
-            // todo highlight not filled with red
-        }
-        return isFilled
-    }
+    override fun getTag() = ACTION_WRITE_CONTROLLER
+
+    override fun toString() = "Write $value to ${chosenController?.name}"
 
     private fun bindView() {
-        val radioGroup = view.findViewById<RadioGroup>(R.id.compare_radio_group)
         val dropDownList = view.findViewById<AppCompatSpinner>(R.id.controller_drop_down_list)
         val valueInput = view.findViewById<EditText>(R.id.value_input)
 
@@ -63,22 +60,13 @@ class ControllerCondition(provider: ControllersProvider) : Condition() {
         dropDownList.adapter = ArrayAdapter<String>(view.context,
                 android.R.layout.simple_spinner_dropdown_item, dataset)
 
-        setEventListeners(radioGroup, valueInput, dropDownList)
+        setEventListeners(valueInput, dropDownList)
 
         hasPendingBinding = false
     }
 
-    private fun setEventListeners(radioGroup: RadioGroup,
-                                  valueInput: EditText,
+    private fun setEventListeners(valueInput: EditText,
                                   dropDownList: AppCompatSpinner) {
-        radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            compare = when (checkedId) {
-                R.id.less_than -> COMPARE_LESS_THAN
-                R.id.more_than -> COMPARE_MORE_THAN
-                R.id.equal_to -> COMPARE_EQUAL_TO
-                else -> throw RuntimeException("Can't parse compare option")
-            }
-        }
 
         valueInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -100,17 +88,4 @@ class ControllerCondition(provider: ControllersProvider) : Condition() {
         }
     }
 
-    override fun evaluate(): Boolean {
-        val controller = chosenController ?: return false
-        val value = value ?: return false
-
-        return when (compare) {
-            COMPARE_LESS_THAN -> controller.state.toDouble() < value.toDouble()
-            COMPARE_MORE_THAN -> controller.state.toDouble() > value.toDouble()
-            COMPARE_EQUAL_TO -> controller.state.toDouble() == value.toDouble()
-            else -> throw RuntimeException("Unsupported compare: $compare")
-        }
-    }
-
-    override fun toString() = "Controller ${chosenController?.name} $compare $value"
 }
