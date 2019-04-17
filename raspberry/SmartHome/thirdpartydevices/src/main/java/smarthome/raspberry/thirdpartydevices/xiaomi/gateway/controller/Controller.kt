@@ -1,5 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller
 
+import com.google.firebase.firestore.Exclude
 import smarthome.library.common.BaseController
 import smarthome.library.common.GUID
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.Command
@@ -8,11 +9,15 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-open class Controller(val device: GatewayDevice,
+open class Controller(device: GatewayDevice,
                       type: String,
                       private val transport: UdpTransport? = null,
                       private val stateChangedListener: StateChangeListener = defStateChangeListener)
     : BaseController() {
+
+    @Exclude
+    val device: GatewayDevice = device
+        @Exclude get
 
     init {
         this.type = type

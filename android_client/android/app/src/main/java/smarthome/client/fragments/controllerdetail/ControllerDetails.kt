@@ -106,7 +106,7 @@ class ControllerDetails : Fragment() {
 
         name?.setOnClickListener {
             EditTextDialog.create(view.context,
-                    DialogParameters("controller name", viewModel.controller.value?.name
+                    DialogParameters("controller name", currentValue = viewModel.controller.value?.name
                             ?: "") {
                         viewModel.controllerNameChanged(it)
                     }

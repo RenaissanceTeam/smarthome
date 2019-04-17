@@ -6,6 +6,24 @@ import smarthome.library.common.constants.*
 
 object ControllerProcessor {
 
+    fun write (controller: BaseController?,
+               controllerUpdateHandler: (controller: BaseController?) -> Unit) {
+        controller ?: return
+
+        val type = controller.type
+        if (type == TOGGLE_CONTROLLER_TYPE ||
+                type == POWER_CONTROLLER_TYPE ||
+                type == DELETE_CRON_CONTROLLER_TYPE ||
+                type == DEFAULT_CONTROLLER_TYPE ||
+                type == GATEWAY_LEFT_BUTTON_CONTROLLER ||
+                type == GATEWAY_RIGHT_BUTTON_CONTROLLER ||
+                type == GATEWAY_SINGLE_BUTTON_CONTROLLER ||
+                type == GATEWAY_LIGHT_ON_OFF_CONTROLLER ||
+                type == GATEWAY_SMART_PLUG_ON_OFF_CONTROLLER) {
+            write(controller, "", controllerUpdateHandler)
+        }
+    }
+
     fun write(controller: BaseController?,
               args: String,
               controllerUpdateHandler: (controller: BaseController?) -> Unit) {
