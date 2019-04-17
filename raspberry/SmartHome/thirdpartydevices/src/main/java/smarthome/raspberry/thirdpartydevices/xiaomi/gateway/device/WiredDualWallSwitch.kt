@@ -7,9 +7,9 @@ import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.WIRED_DUAL_WALL_SWITCH_TYPE
 import smarthome.library.common.constants.GATEWAY_LEFT_BUTTON_CONTROLLER
 import smarthome.library.common.constants.GATEWAY_RIGHT_BUTTON_CONTROLLER
+import smarthome.library.common.constants.STATUS_CHANNEL_0
+import smarthome.library.common.constants.STATUS_CHANNEL_1
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IDLE_STATUS
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_CHANNEL_0
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_CHANNEL_1
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.ButtonController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 

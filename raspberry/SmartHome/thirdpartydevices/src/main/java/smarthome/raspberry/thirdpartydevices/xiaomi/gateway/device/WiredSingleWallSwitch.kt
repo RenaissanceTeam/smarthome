@@ -4,7 +4,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.WIRED_SINGLE_WALL_SWITCH_TYPE
 import smarthome.library.common.constants.GATEWAY_SINGLE_BUTTON_CONTROLLER
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_KEY
+import smarthome.library.common.constants.STATUS_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.ButtonController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 

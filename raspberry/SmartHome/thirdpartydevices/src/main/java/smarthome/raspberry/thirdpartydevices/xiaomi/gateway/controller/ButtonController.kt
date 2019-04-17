@@ -1,8 +1,8 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller
 
+import smarthome.library.common.constants.STATUS_CHANNEL_0
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.WiredDualWallSwitchCmd
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.WiredSingleWallSwitchCmd
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_CHANNEL_0
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice

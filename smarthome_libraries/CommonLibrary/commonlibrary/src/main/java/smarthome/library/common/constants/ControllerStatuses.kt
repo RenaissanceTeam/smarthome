@@ -1,0 +1,20 @@
+package smarthome.library.common.constants
+
+const val STATUS_KEY = "status"
+const val STATUS_OPEN = "open"
+const val STATUS_CLOSE = "close"
+const val STATUS_MOTION = "motion"
+const val STATUS_NO_MOTION = "no_motion"
+const val STATUS_CLICK = "click"
+const val STATUS_DOUBLE_CLICK = "double_click"
+const val STATUS_LONG_PRESS = "long_click_press"
+const val STATUS_TEMPERATURE = "temperature"
+const val STATUS_HUMIDITY = "humidity"
+const val STATUS_WATER_LEAK = "leak"
+const val STATUS_NO_WATER_LEAK = "no_leak"
+const val STATUS_PRESSURE = "pressure"
+const val STATUS_CHANNEL_0 = "channel_0"
+const val STATUS_CHANNEL_1 = "channel_1"
+
+const val STATUS_ON = "on"
+const val STATUS_OFF = "off"

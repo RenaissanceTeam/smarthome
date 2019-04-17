@@ -5,8 +5,8 @@ import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.WATER_LEAK_SENSOR_TYPE
 import smarthome.library.common.constants.GATEWAY_WATER_LEAK_CONTROLLER
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_KEY
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_WATER_LEAK
+import smarthome.library.common.constants.STATUS_KEY
+import smarthome.library.common.constants.STATUS_WATER_LEAK
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.VoltageController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.WaterLeakController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.WaterLeakListener

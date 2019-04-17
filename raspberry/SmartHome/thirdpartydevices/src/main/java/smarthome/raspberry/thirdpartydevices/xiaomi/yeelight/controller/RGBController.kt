@@ -1,7 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
+import smarthome.library.common.constants.RGB_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.RGB_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
@@ -17,6 +17,6 @@ class RGBController(device: YeelightDevice) : Controller(device, RGB_CONTROLLER_
      * @param params rgb (int)
      */
     override fun write(params: String): Result {
-        return super.controllerWrite(RGB_CONTROLLER_TYPE, params.toInt(), device.effect.effect, device.duration)
+        return super.controllerWrite(type, params.toInt(), device.effect.effect, device.duration)
     }
 }

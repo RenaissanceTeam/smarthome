@@ -69,7 +69,12 @@ class AdditionFragment : Fragment() {
         devicesRecycler?.layoutManager = LinearLayoutManager(view.context)
 
         refreshLayout?.setOnRefreshListener { viewModel.requestSmartHomeState() }
-        adapterForDevices = DeviceAdapter(viewModel, ::onDeviceDetailsClick, ::onControllerDetailsClick, ::onDeviceAccept, ::onDeviceReject)
+        adapterForDevices = DeviceAdapter(viewModel,
+                ::onDeviceDetailsClick,
+                ::onControllerDetailsClick,
+                ::onDeviceAccept,
+                ::onDeviceReject,
+                ::onControllerChanged)
         devicesRecycler?.adapter = adapterForDevices
         devicesRecycler?.setHasFixedSize(true)
     }
@@ -105,6 +110,12 @@ class AdditionFragment : Fragment() {
         activity?.startActivity(Intent(context, DetailsActivity::class.java)
                 .putExtra(CONTROLLER_GUID, controller.guid)
                 .putExtra(USE_PENDING, true))
+    }
+
+    private fun onControllerChanged(controller: BaseController?) {
+        uiScope.launch {
+            controller?.let { viewModel.onControllerChanged(it) }
+        }
     }
 
     private fun updateDevice(device: IotDevice) {

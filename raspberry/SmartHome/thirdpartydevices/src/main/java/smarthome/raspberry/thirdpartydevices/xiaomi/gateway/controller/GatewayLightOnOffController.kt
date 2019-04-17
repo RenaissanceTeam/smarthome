@@ -1,8 +1,8 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller
 
 import smarthome.library.common.constants.GATEWAY_LIGHT_ON_OFF_CONTROLLER
+import smarthome.library.common.constants.STATUS_ON
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.GatewayLightCmd
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_ON
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice

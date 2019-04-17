@@ -4,10 +4,8 @@ import com.google.firebase.firestore.Exclude
 import com.google.gson.annotations.Expose
 import org.json.JSONException
 import org.json.JSONObject
+import smarthome.library.common.constants.*
 import smarthome.library.common.constants.DeviceTypes.GATEWAY_TYPE
-import smarthome.library.common.constants.GATEWAY_ILLUMINATION_CONTROLLER
-import smarthome.library.common.constants.GATEWAY_LIGHT_ON_OFF_CONTROLLER
-import smarthome.library.common.constants.GATEWAY_RGB_CONTROLLER
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.*
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.GatewayLightOnOffController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.IlluminationController

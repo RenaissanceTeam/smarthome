@@ -1,7 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller
 
 import smarthome.library.common.constants.GATEWAY_ILLUMINATION_CONTROLLER
-import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.adjust
+import smarthome.raspberry.thirdpartydevices.utils.Utils.adjust
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.GatewayLightCmd
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayWritable
