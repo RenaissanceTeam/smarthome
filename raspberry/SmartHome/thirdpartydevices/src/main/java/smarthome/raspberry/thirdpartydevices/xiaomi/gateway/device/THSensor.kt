@@ -5,8 +5,8 @@ import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.TEMPERATURE_HUMIDITY_SENSOR_TYPE
 import smarthome.library.common.constants.GATEWAY_HUMIDITY_CONTROLLER
 import smarthome.library.common.constants.GATEWAY_TEMPERATURE_CONTROLLER
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_HUMIDITY
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_TEMPERATURE
+import smarthome.library.common.constants.STATUS_HUMIDITY
+import smarthome.library.common.constants.STATUS_TEMPERATURE
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.HumidityController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.TemperatureController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.VoltageController

@@ -6,17 +6,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
+import smarthome.client.util.ControllerProcessor
 import smarthome.library.common.BaseController
 
 class ControllersAdapter(val controllers: MutableList<BaseController>,
-                         val controllerDetailsClickListener: (controller: BaseController?) -> Unit)
+                         val controllerDetailsClickListener: (controller: BaseController?) -> Unit,
+                         val controllerUpdateHandler: (controller: BaseController?) -> Unit)
     : RecyclerView.Adapter<ControllersAdapter.ViewHolder>() {
 
     private val TAG = javaClass.name
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.controller_card, parent, false)
-        return ViewHolder(itemView, controllerDetailsClickListener)
+        return ViewHolder(itemView, controllerDetailsClickListener, controllerUpdateHandler)
     }
 
     override fun getItemCount(): Int {
@@ -28,7 +30,8 @@ class ControllersAdapter(val controllers: MutableList<BaseController>,
     }
 
     class ViewHolder(itemView: View,
-                     controllerDetailsClickListener: (controller: BaseController?) -> Unit)
+                     controllerDetailsClickListener: (controller: BaseController?) -> Unit,
+                     controllerUpdateHandler: (controller: BaseController?) -> Unit)
         : RecyclerView.ViewHolder(itemView) {
 
         private val UNKNOWN_STATE = "-"
@@ -39,6 +42,9 @@ class ControllersAdapter(val controllers: MutableList<BaseController>,
         var controllerState: TextView = itemView.findViewById(R.id.controller_card_state)
 
         init {
+            itemView.setOnClickListener {
+                ControllerProcessor.write(controller, "", controllerUpdateHandler)
+            }
             itemView.setOnLongClickListener {
                 controllerDetailsClickListener(controller)
                 true

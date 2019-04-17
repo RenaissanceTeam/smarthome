@@ -89,6 +89,10 @@ object Model {
         return getDevice(getDevices(), controller)
     }
 
+    suspend fun getPendingDevice(controller: BaseController): IotDevice {
+        return getDevice(getPendingDevices(), controller)
+    }
+
     fun getDevice(devices: List<IotDevice>, controller: BaseController): IotDevice {
         return devices.find { it.controllers.contains(controller) }
                 ?: throw NoDeviceWithControllerException(controller)

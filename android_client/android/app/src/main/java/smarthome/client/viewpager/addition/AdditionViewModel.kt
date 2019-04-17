@@ -13,6 +13,7 @@ import smarthome.client.BuildConfig
 import smarthome.client.HomeModelException
 import smarthome.client.Model
 import smarthome.client.auth.Authenticator
+import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
 class AdditionViewModel : ViewModel() {
@@ -66,6 +67,19 @@ class AdditionViewModel : ViewModel() {
         } catch (e: Throwable) {
             _toastMessage.value = "Can't listen for devices update"
             if (BuildConfig.DEBUG) Log.d(TAG, "", e)
+        }
+    }
+
+    suspend fun onControllerChanged(controller: BaseController) {
+        val device = Model.getPendingDevice(controller)
+        device.controllers[device.controllers.indexOf(controller)] = controller
+        Model.changePendingDevice(device)
+    }
+
+    private fun updateDevice(device: IotDevice) {
+        uiScope.launch {
+            //_refresh.value = true
+            Model.changePendingDevice(device)
         }
     }
 

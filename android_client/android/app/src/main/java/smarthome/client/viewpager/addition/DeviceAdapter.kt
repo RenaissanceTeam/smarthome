@@ -22,7 +22,8 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
                     val deviceDetailsClickListener: (device: IotDevice?) -> Unit,
                     val controllerDetailsClickListener: (controller: BaseController?) -> Unit,
                     val deviceAcceptClickListener: (device: IotDevice?) -> Unit,
-                    val deviceRejectClickListener: (device: IotDevice?) -> Unit) : RecyclerView.Adapter<DeviceAdapter.ViewHolder>() {
+                    val deviceRejectClickListener: (device: IotDevice?) -> Unit,
+                    val controllerUpdateHandler: (controller: BaseController?) -> Unit) : RecyclerView.Adapter<DeviceAdapter.ViewHolder>() {
 
     private val TAG = javaClass.name
 
@@ -33,7 +34,8 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
                 controllerDetailsClickListener,
                 deviceAcceptClickListener,
                 deviceRejectClickListener,
-                ::notifyItemViewChanged)
+                ::notifyItemViewChanged,
+                controllerUpdateHandler)
     }
 
     override fun getItemCount(): Int {
@@ -76,7 +78,8 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
                      private val controllerDetailsClickListener: (controller: BaseController?) -> Unit,
                      deviceAcceptClickListener: (device: IotDevice?) -> Unit,
                      deviceRejectClickListener: (device: IotDevice?) -> Unit,
-                     onItemChanged: (device: IotDevice?, isExpanded: Boolean) -> Unit) : RecyclerView.ViewHolder(itemView) {
+                     onItemChanged: (device: IotDevice?, isExpanded: Boolean) -> Unit,
+                     val controllerUpdateHandler: (controller: BaseController?) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
         private var device: IotDevice? = null
         val deviceId: TextView = itemView.findViewById(R.id.device_card_name_label)
@@ -116,7 +119,9 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
         fun bind(device: IotDevice?) {
             this.device = device ?: return
 
-            deviceId.text = device.guid.toString()
+            if (device.name.isNullOrEmpty())
+                deviceId.text = device.guid.toString()
+            else deviceId.text = device.name
             deviceType.text = device.type
         }
 
@@ -131,7 +136,7 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
 
         private fun fillControllersRecycler() {
             controllersRecycler.layoutManager = GridLayoutManager(itemView.context, 2)
-            val adapter = device?.getControllers()?.let { ControllersAdapter(it, controllerDetailsClickListener) }
+            val adapter = device?.getControllers()?.let { ControllersAdapter(it, controllerDetailsClickListener, controllerUpdateHandler) }
             controllersRecycler.adapter = adapter
             controllersRecycler.visibility = VISIBLE
         }

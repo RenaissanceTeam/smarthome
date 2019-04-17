@@ -2,15 +2,11 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device
 
 import org.json.JSONException
 import org.json.JSONObject
+import smarthome.library.common.constants.*
 import smarthome.library.common.constants.DeviceTypes.SMART_PLUG_TYPE
-import smarthome.library.common.constants.GATEWAY_LOAD_POWER_CONTROLLER
-import smarthome.library.common.constants.GATEWAY_POWER_CONSUMED_CONTROLLER
-import smarthome.library.common.constants.GATEWAY_SMART_PLUG_ON_OFF_CONTROLLER
-import smarthome.library.common.constants.GATEWAY_TIME_IN_USE_CONTROLLER
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IN_USE_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.LOAD_POWER_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.POWER_CONSUMED_KEY
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.*
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 

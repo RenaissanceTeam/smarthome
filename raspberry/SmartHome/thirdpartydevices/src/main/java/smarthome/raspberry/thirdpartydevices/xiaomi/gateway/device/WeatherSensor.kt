@@ -6,7 +6,7 @@ import smarthome.library.common.constants.DeviceTypes.WEATHER_SENSOR_TYPE
 import smarthome.library.common.constants.GATEWAY_HUMIDITY_CONTROLLER
 import smarthome.library.common.constants.GATEWAY_PRESSURE_CONTROLLER
 import smarthome.library.common.constants.GATEWAY_TEMPERATURE_CONTROLLER
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_PRESSURE
+import smarthome.library.common.constants.STATUS_PRESSURE
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.PressureController
 
 class WeatherSensor(sid: String, gatewaySid: String)

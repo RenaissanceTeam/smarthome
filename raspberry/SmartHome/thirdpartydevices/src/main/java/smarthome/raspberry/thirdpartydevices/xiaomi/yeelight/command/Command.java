@@ -33,7 +33,7 @@ public class Command {
     }
 
     public String toJson() {
-        return Utils.Companion.getGSON().toJson(this)
+        return Utils.INSTANCE.getGSON().toJson(this)
                 .replace("[[", "[")
                 .replace("]]", "]");
     }
