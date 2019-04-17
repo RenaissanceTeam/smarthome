@@ -12,7 +12,11 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.Illuminat
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.RGBController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-class Gateway(sid: String, val transport: UdpTransport) : GatewayDevice(sid, GATEWAY_TYPE) {
+class Gateway(sid: String, transport: UdpTransport) : GatewayDevice(sid, GATEWAY_TYPE) {
+
+    @Exclude
+    val transport: UdpTransport = transport
+        @Exclude get
 
     @Exclude @Expose var ip: String = ""
         @Exclude get

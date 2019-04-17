@@ -51,6 +51,7 @@ dependencies {
     def lifecycle_version = "2.0.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     // jetpack
@@ -65,14 +66,14 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
 
-    implementation(name:'datalibrary-debug', ext:'aar') {
-        transitive=false
-        changing=true
+    implementation(name: 'datalibrary-debug', ext: 'aar') {
+        transitive = false
+        changing = true
     }
 
-    implementation(name:'commonlibrary-debug', ext:'aar') {
-        transitive=false
-        changing=true
+    implementation(name: 'commonlibrary-debug', ext: 'aar') {
+        transitive = false
+        changing = true
     }
 
     implementation 'com.android.support:multidex:1.0.3'
@@ -80,3 +81,4 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android-extensions'

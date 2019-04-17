@@ -21,8 +21,8 @@ class ButtonController(device: GatewayDevice, type: String, transport: UdpTransp
             is WiredDualWallSwitch -> {
                 val args = params.split(" ")
                 if(args[1] == STATUS_CHANNEL_0)
-                    sendCommand(args[0], device.statusRight)
-                else sendCommand(device.statusLeft, args[0])
+                    sendCommand(args[0], (device as WiredDualWallSwitch).statusRight)
+                else sendCommand((device as WiredDualWallSwitch).statusLeft, args[0])
             }
             is WiredSingleWallSwitch -> controllerWrite(WiredSingleWallSwitchCmd(params))
         }

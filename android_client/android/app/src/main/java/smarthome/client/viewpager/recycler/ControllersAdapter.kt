@@ -18,7 +18,7 @@ class ControllersAdapter(val controllers: MutableList<BaseController>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.controller_card, parent, false)
-        return ViewHolder(itemView, controllerDetailsClickListener, controllerUpdateHandler)
+        return ViewHolder(itemView, ::notifyControllerChanged, controllerDetailsClickListener, controllerUpdateHandler)
     }
 
     override fun getItemCount(): Int {
@@ -29,7 +29,12 @@ class ControllersAdapter(val controllers: MutableList<BaseController>,
         holder.bind(controllers[position])
     }
 
+    fun notifyControllerChanged(controller: BaseController) {
+        notifyItemChanged(controllers.indexOf(controller))
+    }
+
     class ViewHolder(itemView: View,
+                     notifyRecycler: (controller: BaseController) -> Unit,
                      controllerDetailsClickListener: (controller: BaseController?) -> Unit,
                      controllerUpdateHandler: (controller: BaseController?) -> Unit)
         : RecyclerView.ViewHolder(itemView) {
@@ -43,7 +48,8 @@ class ControllersAdapter(val controllers: MutableList<BaseController>,
 
         init {
             itemView.setOnClickListener {
-                ControllerProcessor.write(controller, "", controllerUpdateHandler)
+                ControllerProcessor.write(controller, controllerUpdateHandler)
+                notifyRecycler(controller!!)
             }
             itemView.setOnLongClickListener {
                 controllerDetailsClickListener(controller)

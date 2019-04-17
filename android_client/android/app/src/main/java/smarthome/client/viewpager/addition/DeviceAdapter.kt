@@ -90,6 +90,9 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
         val acceptButton: CardView = itemView.findViewById(R.id.device_card_accept_button)
 
         init {
+            rejectButton.visibility = VISIBLE
+            acceptButton.visibility = VISIBLE
+
             itemView.setOnLongClickListener {
                 deviceDetailsClickListener(device)
                 true

@@ -78,7 +78,7 @@ class DeviceDetails : Fragment() {
 
         deviceName?.setOnClickListener {
             EditTextDialog.create(view.context,
-                    DialogParameters("device name", viewModel.device.value?.name ?: "") {
+                    DialogParameters("device name", currentValue = viewModel.device.value?.name ?: "") {
                         viewModel.deviceNameChanged(it)
                     }
             ).show()
@@ -86,7 +86,7 @@ class DeviceDetails : Fragment() {
 
         deviceDescription?.setOnClickListener {
             EditTextDialog.create(view.context,
-                    DialogParameters("device description", viewModel.device.value?.description ?: "") {
+                    DialogParameters("device description", currentValue = viewModel.device.value?.description ?: "") {
                         viewModel.deviceDescriptionChanged(it)
                     }
             ).show()

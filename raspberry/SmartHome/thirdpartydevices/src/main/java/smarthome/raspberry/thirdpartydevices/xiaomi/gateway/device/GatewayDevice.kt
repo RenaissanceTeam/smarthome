@@ -10,6 +10,7 @@ import smarthome.library.common.GUID
 import smarthome.library.common.IotDevice
 import smarthome.library.common.constants.GATEWAY_VOLTAGE_CONTROLLER
 import smarthome.raspberry.thirdpartydevices.BuildConfig
+import smarthome.raspberry.thirdpartydevices.utils.Utils.toJson
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IDLE_STATUS
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.VOLTAGE_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.SmokeAlarmListener
@@ -68,5 +69,9 @@ abstract class GatewayDevice(sid: String,
 
     override fun toString(): String {
         return "\n--- Xiaomi gateway device --- \ntype: $type, sid: $sid, name: $name"
+    }
+
+    override fun gsonned(): String {
+        return toJson(this)
     }
 }

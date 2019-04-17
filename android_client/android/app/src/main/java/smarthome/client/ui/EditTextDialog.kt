@@ -1,7 +1,6 @@
 package smarthome.client.ui
 
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,8 +10,9 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import smarthome.client.R
 
-class DialogParameters(val changeSubject: String,
-                       val currentValue: String,
+class DialogParameters(val title: String,
+                       val usePredicate: Boolean = true,
+                       val currentValue: String = "",
                        val changedListener: (String) -> Unit)
 
 class EditTextDialog private constructor(
@@ -32,7 +32,9 @@ class EditTextDialog private constructor(
 
         editText?.setText(params.currentValue)
         editText?.addTextChangedListener(this)
-        setTitle(context.getString(R.string.edit_text_title).format(params.changeSubject))
+        if (params.usePredicate)
+            setTitle(context.getString(R.string.edit_text_title).format(params.title))
+        else setTitle(params.title)
         setButton(BUTTON_POSITIVE, context.getString(android.R.string.ok)) { _, _ ->
             params.changedListener(editText?.text.toString()); cancel()
         }

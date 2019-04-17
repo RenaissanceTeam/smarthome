@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import smarthome.client.*
+import smarthome.client.fragments.deviceaddition.DISCOVER_REQUEST_CODE
 import smarthome.client.util.CloudStorages
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
@@ -63,20 +64,24 @@ class AdditionFragment : Fragment() {
         if (BuildConfig.DEBUG) Log.d(TAG, "onViewCreated")
         refreshLayout = view.findViewById(R.id.add_device_refresh_layout)
         fab = view.findViewById(R.id.add_device_fab)
-        fab?.setOnClickListener { onAddDeviceClicked() }
+        fab?.setOnClickListener {
+            startActivityForResult(Intent(context, AddDeviceActivity::class.java), DISCOVER_REQUEST_CODE)
+        }
 
         devicesRecycler = view.findViewById(R.id.add_device_recycler)
         devicesRecycler?.layoutManager = LinearLayoutManager(view.context)
 
         refreshLayout?.setOnRefreshListener { viewModel.requestSmartHomeState() }
-        adapterForDevices = DeviceAdapter(viewModel,
-                ::onDeviceDetailsClick,
-                ::onControllerDetailsClick,
-                ::onDeviceAccept,
-                ::onDeviceReject,
-                ::onControllerChanged)
+        adapterForDevices = createDeviceAdapter()
         devicesRecycler?.adapter = adapterForDevices
         devicesRecycler?.setHasFixedSize(true)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == DISCOVER_REQUEST_CODE) {
+            adapterForDevices = createDeviceAdapter()
+            devicesRecycler?.adapter = adapterForDevices
+        }
     }
 
     private fun onDeviceAccept(device: IotDevice?) {
@@ -129,5 +134,14 @@ class AdditionFragment : Fragment() {
             CloudStorages.getMessageQueue()
                     .postMessage(DiscoverAllDevicesRequest("1")) //TODO implement clientID generation
         }
+    }
+
+    private fun createDeviceAdapter(): DeviceAdapter {
+        return DeviceAdapter(viewModel,
+                ::onDeviceDetailsClick,
+                ::onControllerDetailsClick,
+                ::onDeviceAccept,
+                ::onDeviceReject,
+                ::onControllerChanged)
     }
 }
