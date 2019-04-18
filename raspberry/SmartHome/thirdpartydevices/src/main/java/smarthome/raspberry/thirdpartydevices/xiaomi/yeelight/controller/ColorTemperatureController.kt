@@ -1,8 +1,8 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
-import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.adjust
+import smarthome.library.common.constants.COLOR_TEMPERATURE_CONTROLLER_TYPE
+import smarthome.raspberry.thirdpartydevices.utils.Utils.adjust
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.COLOR_TEMPERATURE_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
@@ -15,7 +15,7 @@ class ColorTemperatureController(device: YeelightDevice) : Controller(device, CO
      */
     override fun write(params: String): Result {
         val colorTemp: Int = adjust(params.toInt(), 1700, 6500)
-        return super.controllerWrite(COLOR_TEMPERATURE_CONTROLLER_TYPE, colorTemp, device.effect.effect, device.duration)
+        return super.controllerWrite(type, colorTemp, device.effect.effect, device.duration)
     }
 
     override fun read(): String {

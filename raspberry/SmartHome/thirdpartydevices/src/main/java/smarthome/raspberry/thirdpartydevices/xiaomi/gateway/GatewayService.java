@@ -34,6 +34,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WeatherSensor
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WiredDualWallSwitch;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WiredSingleWallSwitch;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WirelessSwitch;
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.interfaces.TransportSettable;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport;
 
 import static smarthome.library.common.constants.DeviceTypes.DOOR_WINDOW_SENSOR_TYPE;
@@ -51,6 +52,7 @@ import static smarthome.library.common.constants.DeviceTypes.WIRELESS_SWITCH_TYP
 public class GatewayService {
 
     private Gateway gateway;
+    private String gatewayPassword;
     private Map<String, GatewayDevice> devices = Collections.synchronizedMap(new HashMap<>());
     private UdpTransport transport;
 
@@ -65,9 +67,29 @@ public class GatewayService {
 
     private final String TAG = getClass().getName();
 
+    private GatewayService(Gateway gateway, List<GatewayDevice> devices) {
+        this(gateway.getSid(), gateway.getPassword());
+        this.gateway = gateway;
+        gateway.setUpTransport(transport);
+        gateway.recoverControllers();
+        
+        if (devices != null) {
+            for(GatewayDevice device : devices) {
+                if (TransportSettable.class.isAssignableFrom(device.getClass()))
+                    ((TransportSettable) device).setUpTransport(transport);
+
+                device.recoverControllers();
+
+                save(device);
+            }
+        }
+    }
+
     private GatewayService(String sid, String password) {
         initConsumersMap();
         initDeviceDictionary();
+
+        gatewayPassword = password;
 
         transport = new UdpTransport(password);
 
@@ -142,7 +164,7 @@ public class GatewayService {
         transport.setCurrentToken(response.token);
 
         if(gateway == null) {
-            gateway = new Gateway(response.sid, transport);
+            gateway = new Gateway(gatewayPassword, response.sid, transport);
             save(gateway);
         }
 
@@ -244,6 +266,8 @@ public class GatewayService {
 
     public static class Builder {
 
+        private Gateway gateway;
+        List<GatewayDevice> devices;
         private String psw;
         private String sid;
 
@@ -262,10 +286,32 @@ public class GatewayService {
             return this;
         }
 
+        public GatewayService.Builder setGateway(Gateway gateway) {
+            this.gateway = gateway;
+
+            return this;
+        }
+
+        public GatewayService.Builder setDevices(List<GatewayDevice> devices) {
+            this.devices = devices;
+
+            return this;
+        }
+
         public GatewayService build() {
+            if(gateway != null)
+                return new GatewayService(gateway, devices);
+
             return new GatewayService(sid, psw);
         }
 
+    }
+
+    public void kill() {
+        cs.cancel();
+        executor.shutdown();
+        transport.kill();
+        transport = null;
     }
 
     @Override

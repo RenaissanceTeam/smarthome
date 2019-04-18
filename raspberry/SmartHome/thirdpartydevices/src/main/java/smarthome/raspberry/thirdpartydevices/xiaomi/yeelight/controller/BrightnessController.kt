@@ -1,8 +1,8 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
-import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.adjust
+import smarthome.library.common.constants.BRIGHTNESS_CONTROLLER_TYPE
+import smarthome.raspberry.thirdpartydevices.utils.Utils.adjust
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.BRIGHTNESS_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
@@ -20,6 +20,6 @@ class BrightnessController(device: YeelightDevice) : Controller(device, BRIGHTNE
     override fun write(params: String): Result {
         val brightness: Int = adjust(params.toInt(), 1, 100)
         setNewState(brightness.toString())
-        return super.controllerWrite(BRIGHTNESS_CONTROLLER_TYPE, brightness, device.effect.effect, device.duration)
+        return super.controllerWrite(type, brightness, device.effect.effect, device.duration)
     }
 }

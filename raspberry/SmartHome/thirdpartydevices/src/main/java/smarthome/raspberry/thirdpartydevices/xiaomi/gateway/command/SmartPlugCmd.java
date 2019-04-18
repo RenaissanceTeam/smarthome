@@ -1,6 +1,6 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command;
 
-import static smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.ConstantsKt.STATUS_KEY;
+import static smarthome.library.common.constants.ControllerStatusesKt.STATUS_KEY;
 
 public class SmartPlugCmd extends Command {
 

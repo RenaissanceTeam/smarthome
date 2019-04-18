@@ -5,9 +5,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.MOTION_SENSOR_TYPE
 import smarthome.library.common.constants.GATEWAY_MOTION_CONTROLLER
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_KEY
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_MOTION
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_NO_MOTION
+import smarthome.library.common.constants.STATUS_KEY
+import smarthome.library.common.constants.STATUS_MOTION
+import smarthome.library.common.constants.STATUS_NO_MOTION
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.MotionController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.VoltageController
 import java.time.LocalDateTime

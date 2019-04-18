@@ -9,6 +9,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interface
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
+import java.lang.Exception
 
 class ControllerChangesHandler(private val localController: BaseController,
                                private val cloudController: BaseController) {
@@ -63,9 +64,11 @@ class ControllerChangesHandler(private val localController: BaseController,
             is YeelightWritable -> {
                 if(newState == null)
                     newState = ""
-                val res = localController.write(newState) // blocking
-                if(res.isOkResult())
-                    localController.setNewState(newState)
+                try {
+                    val res = localController.write(newState) // blocking
+                    if (res.isOkResult())
+                        localController.setNewState(newState)
+                } catch (e: Exception) { }
                 localController.setUpToDate()
                 true
             }
