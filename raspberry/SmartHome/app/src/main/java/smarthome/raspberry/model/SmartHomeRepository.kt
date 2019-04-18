@@ -25,15 +25,15 @@ import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 import smarthome.raspberry.model.cloudchanges.DeviceChangesListener
 import smarthome.raspberry.model.listeners.RepoInitListener
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayService
+import smarthome.raspberry.service.GatewayServiceController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IDLE_STATUS
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.*
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Gateway
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
 import smarthome.raspberry.utils.HomeController
 import smarthome.raspberry.utils.fcm.FcmSender
 import smarthome.raspberry.utils.fcm.MessageType
 import smarthome.raspberry.utils.fcm.Priority
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -119,12 +119,7 @@ object SmartHomeRepository : SmartHome() {
         for (device in sidToDeviceMap[IDLE_STATUS]!!) {
             val gateway = device as Gateway
             if (DEBUG) Log.d(TAG, "creating gateway service for gateway: $gateway")
-            ioScope.launch {
-                GatewayService.builder()
-                        .setGateway(gateway)
-                        .setDevices(sidToDeviceMap[gateway.sid])
-                        .build()
-            }
+            GatewayServiceController.getInstance().bindGatewayService(gateway, sidToDeviceMap[gateway.sid])
         }
     }
 
@@ -183,7 +178,7 @@ object SmartHomeRepository : SmartHome() {
                                 src.update(device)
                                 devices[devices.indexOf(device)] = device
                             } else if (device.isRejected) {
-                                removePendingDevice(device, continuation)
+                                checkAndProcessGateway(device)
                                 delete(device)
                             }
                         }
@@ -223,18 +218,22 @@ object SmartHomeRepository : SmartHome() {
             ioScope.launch {
                 suspendCoroutine<Unit> { continuation ->
                     dataSource.source.delete(device)
-                    devicesStorage.removeDevice(device,
-                            OnSuccessListener {
-                                if (DEBUG) Log.d(TAG, "device successfully removed")
-                                continuation.resumeWith(Result.success(Unit))
-                            },
-                            OnFailureListener {
-                                if (DEBUG) Log.d(TAG, "failed $it")
-                                continuation.resumeWith(Result.failure(it))
-                            })
+                    removeDevice(device, continuation)
+                }
+            }
+            ioScope.launch {
+                suspendCoroutine<Unit> {
+                    removePendingDevice(device, it)
                 }
             }
         }
+    }
+
+    private fun checkAndProcessGateway(device: IotDevice) {
+        if (device is Gateway)
+            ioScope.launch {
+                GatewayServiceController.getInstance().removeGatewayService(device)
+            }
     }
 
     fun changeDeviceStatus(deviceId: Long, status: String) {
@@ -285,6 +284,18 @@ object SmartHomeRepository : SmartHome() {
                                 if (DEBUG) Log.d(TAG, "failed $it")
                                 continuation.resumeWith(Result.failure(it))
                             })
+                },
+                OnFailureListener {
+                    if (DEBUG) Log.d(TAG, "failed $it")
+                    continuation.resumeWith(Result.failure(it))
+                })
+    }
+
+    private fun removeDevice(device: IotDevice, continuation: Continuation<Unit>) {
+        devicesStorage.removeDevice(device,
+                OnSuccessListener {
+                    if (DEBUG) Log.d(TAG, "device successfully removed")
+                    continuation.resumeWith(Result.success(Unit))
                 },
                 OnFailureListener {
                     if (DEBUG) Log.d(TAG, "failed $it")
