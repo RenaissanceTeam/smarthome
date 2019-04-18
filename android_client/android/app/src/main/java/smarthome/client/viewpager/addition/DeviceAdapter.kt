@@ -23,9 +23,16 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
                     val controllerDetailsClickListener: (controller: BaseController?) -> Unit,
                     val deviceAcceptClickListener: (device: IotDevice?) -> Unit,
                     val deviceRejectClickListener: (device: IotDevice?) -> Unit,
-                    val controllerUpdateHandler: (controller: BaseController?) -> Unit) : RecyclerView.Adapter<DeviceAdapter.ViewHolder>() {
+                    val controllerUpdateHandler: (controller: BaseController?) -> Unit)
+    : RecyclerView.Adapter<DeviceAdapter.ViewHolder>(), ViewNotifier {
 
     private val TAG = javaClass.name
+
+    var viewNotifier: ViewNotifier? = null
+
+    init {
+        viewModel.viewNotifier = this
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.device_card, parent, false)
@@ -71,6 +78,10 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
         }
     }
 
+    override fun onItemRemoved(pos: Int) {
+        notifyItemRemoved(pos)
+        viewNotifier?.onItemRemoved(pos) // TODO: normal fix
+    }
 
     class ViewHolder(itemView: View,
                      private var isExpanded: Boolean = false,
