@@ -7,7 +7,7 @@ import smarthome.library.common.IotDevice
 import smarthome.library.common.constants.DeviceTypes.YEELIGHT_DEVICE_TYPE
 import smarthome.raspberry.thirdpartydevices.network.SocketHolder
 import smarthome.raspberry.thirdpartydevices.utils.Utils
-import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.toJson
+import smarthome.raspberry.thirdpartydevices.utils.Utils.toJson
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.command.Command
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.GET_PROPERTY_METHOD_HEADER
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.ControllersFactory

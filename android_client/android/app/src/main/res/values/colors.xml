@@ -5,11 +5,13 @@
     <color name="colorPrimaryLight">#718792</color>
     <color name="colorPrimaryDark">#1c313a</color>
     <color name="colorTextPrimary">#000000</color>
-    <color name="colorAccent">#455a64</color>
-    <color name="colorAccentLight">#ffffff</color>
-    <color name="colorAccentDark">#babdbe</color>
+    <color name="colorAccent">#00ACC1</color>
+    <color name="colorAccentLight">#26C6DA</color>
+    <color name="colorAccentDark">#00838F</color>
 
+    <color name="white">#ffffff</color>
 
-
+    <color name="reject">#D32F2F</color>
+    <color name="accept">#388E3C</color>
 
 </resources>

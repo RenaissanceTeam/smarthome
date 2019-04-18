@@ -1,7 +1,8 @@
 package smarthome.library.common;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -32,6 +33,11 @@ public class GUID {
         long guid = device.guid + controller.type.hashCode();
         mGuids.add(guid);
         return guid;
+    }
+
+    public String getGuidForMessage() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy_HH:mm:ss");
+        return sdf.format(new Date());
     }
 
     private long getGuidForName(String name) {

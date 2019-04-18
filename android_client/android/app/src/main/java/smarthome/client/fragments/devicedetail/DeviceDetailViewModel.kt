@@ -33,13 +33,15 @@ class DeviceDetailViewModel : ViewModel() {
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private var disposable: Disposable? = null
 
+    var usePending: Boolean = false
+
     fun setDeviceGuid(deviceGuid: Long?) {
         deviceGuid ?: return
 
         uiScope.launch {
             try {
                 _refresh.value = true
-                _device.value = Model.getDevice(deviceGuid)
+                _device.value = if (!usePending) Model.getDevice(deviceGuid) else Model.getPendingDevice(deviceGuid)
                 _refresh.value = false
 
                 listenForModelChanges(deviceGuid)
@@ -50,7 +52,8 @@ class DeviceDetailViewModel : ViewModel() {
     }
 
     private suspend fun listenForModelChanges(deviceGuid: Long) {
-        disposable = Model.getDevicesObservable().subscribe {
+        val observable = if (!usePending) Model.getDevicesObservable() else Model.getPendingDevicesObservable()
+        disposable = observable.subscribe {
             val changedDevice = Model.getDevice(it, deviceGuid)
             _device.value = changedDevice
             _refresh.value = false
@@ -83,10 +86,16 @@ class DeviceDetailViewModel : ViewModel() {
         updateDevice(device)
     }
 
+    fun usePending() {
+        usePending = true
+    }
+
     private fun updateDevice(device: IotDevice) {
         uiScope.launch {
             _refresh.value = true
-            Model.changeDevice(device)
+            if (!usePending)
+                Model.changeDevice(device)
+            else Model.changePendingDevice(device)
         }
     }
 }

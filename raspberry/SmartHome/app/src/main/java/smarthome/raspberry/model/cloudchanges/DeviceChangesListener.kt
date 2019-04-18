@@ -38,7 +38,9 @@ object DeviceChangesListener : DevicesObserver {
             changesHandler.handleChanges()
 
             if (changesHandler.changesMade) {
-                storage.updateDevice(localDevice)
+                if (localDevice.isPending)
+                    storage.updatePendingDevice(localDevice)
+                else storage.updateDevice(localDevice)
             }
         }
     }

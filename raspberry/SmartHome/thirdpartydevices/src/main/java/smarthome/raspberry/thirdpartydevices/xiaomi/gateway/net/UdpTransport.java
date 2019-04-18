@@ -66,7 +66,6 @@ public class UdpTransport {
     }
 
     public void setGatewayIp(String gatewayIp) {
-        Log.i(TAG, "--- Gateway ip updated ---");
         this.gatewayIp = gatewayIp;
     }
 
@@ -180,6 +179,12 @@ public class UdpTransport {
             sb.append(String.format("%02X", b));
         }
         return sb.toString();
+    }
+
+    public void kill() {
+        executor.shutdown();
+        socket.close();
+        incomingMulticastChannel = null;
     }
 
     @Override
