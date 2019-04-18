@@ -1,6 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller
 
 import smarthome.library.common.constants.STATUS_CHANNEL_0
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.interfaces.TransportSettable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.WiredDualWallSwitchCmd
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.WiredSingleWallSwitchCmd
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.interfaces.GatewayReadable
@@ -11,7 +12,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.WiredSingleWa
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
 class ButtonController(device: GatewayDevice, type: String, transport: UdpTransport)
-    : Controller(device, type, transport), GatewayReadable, GatewayWritable {
+    : Controller(device, type, transport), GatewayReadable, GatewayWritable, TransportSettable {
     /**
      * for WiredDualWallSwitch: "on" or "off" (String), status_channel (String)
      * for WiredSingleWallSwitch: "on" or "off" (String)
@@ -34,5 +35,9 @@ class ButtonController(device: GatewayDevice, type: String, transport: UdpTransp
 
     private fun sendCommand(statusLeft: String, statusRight: String) {
         super.controllerWrite(WiredDualWallSwitchCmd(statusLeft, statusRight))
+    }
+
+    override fun setUpTransport(transport: UdpTransport) {
+        this.transport = transport
     }
 }

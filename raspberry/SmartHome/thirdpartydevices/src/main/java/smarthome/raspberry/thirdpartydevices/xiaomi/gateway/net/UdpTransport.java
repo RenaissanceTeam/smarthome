@@ -66,7 +66,6 @@ public class UdpTransport {
     }
 
     public void setGatewayIp(String gatewayIp) {
-        Log.i(TAG, "--- Gateway ip updated ---");
         this.gatewayIp = gatewayIp;
     }
 

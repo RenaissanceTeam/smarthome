@@ -9,12 +9,13 @@ import smarthome.library.common.constants.GATEWAY_LEFT_BUTTON_CONTROLLER
 import smarthome.library.common.constants.GATEWAY_RIGHT_BUTTON_CONTROLLER
 import smarthome.library.common.constants.STATUS_CHANNEL_0
 import smarthome.library.common.constants.STATUS_CHANNEL_1
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.interfaces.TransportSettable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IDLE_STATUS
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.ButtonController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-class WiredDualWallSwitch (sid: String, transport: UdpTransport, gatewaySid: String)
-    : GatewayDevice(sid, WIRED_DUAL_WALL_SWITCH_TYPE, gatewaySid) {
+class WiredDualWallSwitch (sid: String, @Exclude private var transport: UdpTransport, gatewaySid: String)
+    : GatewayDevice(sid, WIRED_DUAL_WALL_SWITCH_TYPE, gatewaySid), TransportSettable {
 
     @Exclude @Expose var statusLeft: String = IDLE_STATUS
         @Exclude get
@@ -24,6 +25,13 @@ class WiredDualWallSwitch (sid: String, transport: UdpTransport, gatewaySid: Str
     init {
         addControllers(ButtonController(this, GATEWAY_LEFT_BUTTON_CONTROLLER, transport),
                 ButtonController(this, GATEWAY_RIGHT_BUTTON_CONTROLLER, transport))
+    }
+
+    override fun setUpTransport(transport: UdpTransport) {
+        this.transport = transport
+
+        for (controller in controllers)
+            (controller as TransportSettable).setUpTransport(transport)
     }
 
     override fun parseData(json: String) {

@@ -11,12 +11,18 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
 open class Controller(device: GatewayDevice,
                       type: String,
-                      private val transport: UdpTransport? = null,
+                      transport: UdpTransport? = null,
                       private val stateChangedListener: StateChangeListener = defStateChangeListener)
     : BaseController() {
 
+
     @Exclude
-    val device: GatewayDevice = device
+    @Transient
+    var transport: UdpTransport? = transport
+        @Exclude get
+
+    @Exclude
+    var device: GatewayDevice = device
         @Exclude get
 
     init {

@@ -6,18 +6,19 @@ import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.*
 import smarthome.library.common.constants.DeviceTypes.GATEWAY_TYPE
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.interfaces.TransportSettable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.*
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.GatewayLightOnOffController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.IlluminationController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.RGBController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-class Gateway(sid: String, transport: UdpTransport) : GatewayDevice(sid, GATEWAY_TYPE) {
+class Gateway(password: String, sid: String,
+              @Exclude private var transport: UdpTransport)
+    : GatewayDevice(sid, GATEWAY_TYPE), TransportSettable {
 
-    @Exclude
-    val transport: UdpTransport = transport
+    @Exclude @Expose val password: String = password
         @Exclude get
-
     @Exclude @Expose var ip: String = ""
         @Exclude get
     @Exclude @Expose var rgb: Long = 0
@@ -30,6 +31,13 @@ class Gateway(sid: String, transport: UdpTransport) : GatewayDevice(sid, GATEWAY
         addControllers(RGBController(this, transport),
                 IlluminationController(this, transport),
                 GatewayLightOnOffController(this, transport))
+    }
+
+    override fun setUpTransport(transport: UdpTransport) {
+        this.transport = transport
+
+        for (controller in controllers)
+            (controller as TransportSettable).setUpTransport(transport)
     }
 
     private fun configureIp(ip: String) {
@@ -78,7 +86,7 @@ class Gateway(sid: String, transport: UdpTransport) : GatewayDevice(sid, GATEWAY
     }
 
     override fun toString(): String {
-        return super.toString() + "\nip: $ip, rgb: $rgb, illumination: $illumination, protoVersion: $protoVersion"
+        return super.toString() + "\nip: $ip, rgb: $rgb, illumination: $illumination, protoVersion: $protoVersion \npassword: $password"
     }
 
 }
