@@ -20,6 +20,8 @@ class AdditionViewModel : ViewModel() {
 
     val TAG = javaClass.name
 
+    var viewNotifier: ViewNotifier? = null
+
     private val _devices = MutableLiveData<MutableList<IotDevice>>()
     private val _allHomeUpdateState = MutableLiveData<Boolean>()
     private val _toastMessage = MutableLiveData<String?>()
@@ -61,6 +63,24 @@ class AdditionViewModel : ViewModel() {
     private suspend fun tryListenForUpdates() {
         try {
             devicesSubscription = Model.getPendingDevicesObservable().subscribe {
+                _devices.value?.let {old ->
+                    if (old.size > it.size) {
+                        if (it.size == 0) {
+                            viewNotifier?.onItemRemoved(0)
+                            return@let
+                        }
+
+                        for (i in 0..it.size) {
+                            if (old[i] != it[i]) {
+                                viewNotifier?.onItemRemoved(i)
+                                return@let
+                            }
+                        }
+
+                        viewNotifier?.onItemRemoved(old.size - 1)
+                    }
+                }
+
                 _devices.value = it
                 _allHomeUpdateState.value = false
             }

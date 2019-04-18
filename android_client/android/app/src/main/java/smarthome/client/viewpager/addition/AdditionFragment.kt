@@ -24,7 +24,7 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.library.common.message.DiscoverAllDevicesRequest
 
-class AdditionFragment : Fragment() {
+class AdditionFragment : Fragment(), ViewNotifier {
 
     private val TAG = javaClass.name
 
@@ -72,15 +72,13 @@ class AdditionFragment : Fragment() {
         devicesRecycler?.layoutManager = LinearLayoutManager(view.context)
 
         refreshLayout?.setOnRefreshListener { viewModel.requestSmartHomeState() }
-        adapterForDevices = createDeviceAdapter()
-        devicesRecycler?.adapter = adapterForDevices
+        resetAdapter()
         devicesRecycler?.setHasFixedSize(true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == DISCOVER_REQUEST_CODE) {
-            adapterForDevices = createDeviceAdapter()
-            devicesRecycler?.adapter = adapterForDevices
+            resetAdapter()
         }
     }
 
@@ -134,6 +132,16 @@ class AdditionFragment : Fragment() {
             CloudStorages.getMessageQueue()
                     .postMessage(DiscoverAllDevicesRequest("1")) //TODO implement clientID generation
         }
+    }
+
+    override fun onItemRemoved(pos: Int) {
+        resetAdapter()
+    }
+
+    private fun resetAdapter() {
+        adapterForDevices = createDeviceAdapter()
+        devicesRecycler?.adapter = adapterForDevices
+        adapterForDevices?.viewNotifier = this
     }
 
     private fun createDeviceAdapter(): DeviceAdapter {
