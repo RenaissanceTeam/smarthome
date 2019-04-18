@@ -1,6 +1,7 @@
 package smarthome.client.fragments.controllerdetail.statechanger
 
 import smarthome.library.common.ControllerType
+import smarthome.library.common.constants.*
 
 
 object ControllerTypeAdapter {
@@ -9,6 +10,24 @@ object ControllerTypeAdapter {
         return when (type) {
 
             ControllerType.ARDUINO_ON_OFF.toString() -> StateChangerType.ONOFF
+
+            POWER_CONTROLLER_TYPE -> StateChangerType.LEXEME_ONOFF
+            GATEWAY_LEFT_BUTTON_CONTROLLER -> StateChangerType.LEXEME_ONOFF
+            GATEWAY_RIGHT_BUTTON_CONTROLLER -> StateChangerType.LEXEME_ONOFF
+            GATEWAY_SINGLE_BUTTON_CONTROLLER -> StateChangerType.LEXEME_ONOFF
+            GATEWAY_LIGHT_ON_OFF_CONTROLLER -> StateChangerType.LEXEME_ONOFF
+            GATEWAY_SMART_PLUG_ON_OFF_CONTROLLER -> StateChangerType.LEXEME_ONOFF
+
+            TOGGLE_CONTROLLER_TYPE -> StateChangerType.SIMPLE_WRITE
+            DELETE_CRON_CONTROLLER_TYPE -> StateChangerType.SIMPLE_WRITE
+            DEFAULT_CONTROLLER_TYPE -> StateChangerType.SIMPLE_WRITE
+
+            BRIGHTNESS_CONTROLLER_TYPE -> StateChangerType.DIMMER
+            GATEWAY_ILLUMINATION_CONTROLLER -> StateChangerType.GATEWAY_DIMMER
+            GATEWAY_RGB_CONTROLLER -> StateChangerType.GATEWAY_RGB
+
+            NAME_CONTROLLER_TYPE -> StateChangerType.TEXT_READ_WRITE
+
             else -> StateChangerType.ONLY_READ
         }
     }

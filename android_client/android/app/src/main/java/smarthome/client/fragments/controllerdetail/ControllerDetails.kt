@@ -13,10 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import smarthome.client.CONTROLLER_GUID
 import smarthome.client.R
 import smarthome.client.USE_PENDING
-import smarthome.client.fragments.controllerdetail.statechanger.ControllerStateChanger
-import smarthome.client.fragments.controllerdetail.statechanger.OnOffStateChanger
-import smarthome.client.fragments.controllerdetail.statechanger.ReadStateChanger
-import smarthome.client.fragments.controllerdetail.statechanger.StateChangerType
+import smarthome.client.fragments.controllerdetail.statechanger.*
 import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.BaseController
@@ -82,6 +79,12 @@ class ControllerDetails : Fragment() {
 
         val changer = when (changerType) {
             StateChangerType.ONOFF -> OnOffStateChanger(container) { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }
+            StateChangerType.LEXEME_ONOFF -> LexemeOnOffStateChanger(container) { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }
+            StateChangerType.SIMPLE_WRITE -> SimpleWriteStateChanger(container) { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }
+            StateChangerType.DIMMER -> DimmerStateChanger(container, state, { state?.text = it }, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) } )
+            StateChangerType.GATEWAY_DIMMER -> DimmerStateChanger(container, state, { state?.text = it }, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) }, 1300 )
+            StateChangerType.GATEWAY_RGB -> RGBStateChanger(container, { state?.text = it }, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) } )
+            StateChangerType.TEXT_READ_WRITE -> TextReadWriteStateChanger(container, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) } )
             StateChangerType.ONLY_READ -> ReadStateChanger(container) { viewModel.newStateRequest(null, STATE_PENDING_READ) }
         }
         stateChanger = changer
