@@ -1,17 +1,19 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device
 
+import com.google.firebase.firestore.Exclude
 import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.*
 import smarthome.library.common.constants.DeviceTypes.SMART_PLUG_TYPE
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.interfaces.TransportSettable
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IN_USE_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.LOAD_POWER_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.POWER_CONSUMED_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.*
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
-class SmartPlug(sid: String, transport: UdpTransport, gatewaySid: String)
-    : GatewayDevice(sid, SMART_PLUG_TYPE, gatewaySid) {
+class SmartPlug(sid: String, @Exclude private var transport: UdpTransport, gatewaySid: String)
+    : GatewayDevice(sid, SMART_PLUG_TYPE, gatewaySid), TransportSettable {
 
     init {
         addControllers(SmartPlugOnOffController(this, transport),
@@ -19,6 +21,16 @@ class SmartPlug(sid: String, transport: UdpTransport, gatewaySid: String)
                 PowerConsumedController(this),
                 LoadPowerController(this),
                 VoltageController(this))
+    }
+
+    override fun setUpTransport(transport: UdpTransport) {
+        this.transport = transport
+
+        for (controller in controllers)
+            if (controller is SmartPlugOnOffController) {
+                controller.setUpTransport(transport)
+                return
+            }
     }
 
     override fun parseData(json: String) {

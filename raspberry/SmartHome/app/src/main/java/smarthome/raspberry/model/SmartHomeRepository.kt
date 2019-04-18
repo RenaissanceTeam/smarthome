@@ -25,11 +25,15 @@ import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 import smarthome.raspberry.model.cloudchanges.DeviceChangesListener
 import smarthome.raspberry.model.listeners.RepoInitListener
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayService
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IDLE_STATUS
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.*
 import smarthome.raspberry.utils.HomeController
 import smarthome.raspberry.utils.fcm.FcmSender
 import smarthome.raspberry.utils.fcm.MessageType
 import smarthome.raspberry.utils.fcm.Priority
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -79,6 +83,7 @@ object SmartHomeRepository : SmartHome() {
     }
 
     private fun loadSavedDevices() {
+        val gatewayDevices: MutableSet<GatewayDevice> = mutableSetOf()
         for (dataSource in DataSources.values()) {
             dataSource.init(context)
             devices.addAll(dataSource.source.all)
@@ -87,11 +92,40 @@ object SmartHomeRepository : SmartHome() {
                     (it as? ArduinoController)?.device = device
                 }
                 // todo add code here to fix some links after deserializing from db
+                if (GatewayDevice::class.java.isAssignableFrom(device.javaClass))
+                    gatewayDevices.add(device as GatewayDevice)
             }
         }
 
+        if (gatewayDevices.isNotEmpty())
+            processGatewayDevices(gatewayDevices)
+
         ready = true
         processPendingDevices()
+    }
+
+    private fun processGatewayDevices(gatewayDevices: MutableSet<GatewayDevice>) {
+        if (DEBUG) Log.d(TAG, "processing saved gateway devices")
+        val sidToDeviceMap: HashMap<String, MutableList<GatewayDevice>> = hashMapOf()
+        val devices = gatewayDevices.toMutableList()
+        devices.forEach {
+            val sid = it.parentGatewaySid
+            if (sidToDeviceMap[sid] == null)
+                sidToDeviceMap[sid] = mutableListOf()
+
+            sidToDeviceMap[sid]!!.add(it)
+        }
+
+        for (device in sidToDeviceMap[IDLE_STATUS]!!) {
+            val gateway = device as Gateway
+            if (DEBUG) Log.d(TAG, "creating gateway service for gateway: $gateway")
+            ioScope.launch {
+                GatewayService.builder()
+                        .setGateway(gateway)
+                        .setDevices(sidToDeviceMap[gateway.sid])
+                        .build()
+            }
+        }
     }
 
     fun listenForCloudChanges() {

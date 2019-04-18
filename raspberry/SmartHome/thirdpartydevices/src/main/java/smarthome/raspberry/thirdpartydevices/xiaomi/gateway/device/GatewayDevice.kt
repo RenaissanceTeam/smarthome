@@ -13,6 +13,7 @@ import smarthome.raspberry.thirdpartydevices.BuildConfig
 import smarthome.raspberry.thirdpartydevices.utils.Utils.toJson
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IDLE_STATUS
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.VOLTAGE_KEY
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.Controller
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.SmokeAlarmListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.StateChangeListener
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.WaterLeakListener
@@ -38,6 +39,11 @@ abstract class GatewayDevice(sid: String,
         this.name = sid
         this.type = type
         this.guid = GUID.getInstance().getGuidForIotDevice(this)
+    }
+
+    fun recoverControllers() {
+        for (controller in controllers)
+            (controller as Controller).device = this
     }
 
     open fun parseData(json: String) {
