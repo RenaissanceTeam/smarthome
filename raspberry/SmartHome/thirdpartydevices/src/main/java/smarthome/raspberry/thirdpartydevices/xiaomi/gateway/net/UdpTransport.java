@@ -181,6 +181,12 @@ public class UdpTransport {
         return sb.toString();
     }
 
+    public void kill() {
+        executor.shutdown();
+        socket.close();
+        incomingMulticastChannel = null;
+    }
+
     @Override
     protected void finalize() throws Throwable {
         socket.close();

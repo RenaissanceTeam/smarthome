@@ -3,11 +3,9 @@ package smarthome.raspberry.service
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import smarthome.raspberry.BuildConfig.DEBUG
 import smarthome.raspberry.model.SmartHomeRepository
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayService
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.discover.DeviceDetector
 
 class DeviceObserver private constructor() {
@@ -31,16 +29,7 @@ class DeviceObserver private constructor() {
 
     fun exploreGateway(password: String) {
         if (DEBUG) Log.d(TAG, "setting up new xiaomi gateway")
-        scope.launch {
-            val service = GatewayService.builder()
-                    .setGatewayPassword(password)
-                    .build()
-            delay(20000)
-            if (service.gateway != null) {
-                for (device in service.devices)
-                    SmartHomeRepository.addDevice(device)
-            }
-        }
+        GatewayServiceController.getInstance().bindGatewayService(password)
     }
 
     companion object {

@@ -307,6 +307,13 @@ public class GatewayService {
 
     }
 
+    public void kill() {
+        cs.cancel();
+        executor.shutdown();
+        transport.kill();
+        transport = null;
+    }
+
     @Override
     protected void finalize() throws Throwable {
         cs.cancel();
