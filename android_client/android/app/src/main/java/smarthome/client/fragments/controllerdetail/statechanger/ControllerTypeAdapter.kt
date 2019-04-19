@@ -23,9 +23,9 @@ object ControllerTypeAdapter {
             DEFAULT_CONTROLLER_TYPE -> StateChangerType.SIMPLE_WRITE
 
             BRIGHTNESS_CONTROLLER_TYPE -> StateChangerType.DIMMER
-            GATEWAY_ILLUMINATION_CONTROLLER -> StateChangerType.GATEWAY_DIMMER
             GATEWAY_RGB_CONTROLLER -> StateChangerType.GATEWAY_RGB
 
+            CRON_ADD_CONTROLLER_TYPE -> StateChangerType.DIGITS_DECIMAL_READ_WRITE
             NAME_CONTROLLER_TYPE -> StateChangerType.TEXT_READ_WRITE
 
             else -> StateChangerType.ONLY_READ

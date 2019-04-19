@@ -26,7 +26,7 @@ class RGBStateChanger(container: ViewGroup,
     private val readButton = rootView.findViewById<ActionProcessButton>(R.id.read_button)
     private var pressedButton = writeButton
 
-    private val step: Float = 2.5f
+    private val step: Float = 2.55f
 
     private var rgb: Array<Int> = arrayOf(0, 0, 0)
     private var rgbS: String = ""
