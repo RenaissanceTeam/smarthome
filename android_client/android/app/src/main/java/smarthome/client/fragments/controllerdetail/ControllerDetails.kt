@@ -82,7 +82,7 @@ class ControllerDetails : Fragment() {
             StateChangerType.LEXEME_ONOFF -> LexemeOnOffStateChanger(container) { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }
             StateChangerType.SIMPLE_WRITE -> SimpleWriteStateChanger(container) { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }
             StateChangerType.DIMMER -> DimmerStateChanger(container, state, { state?.text = it }, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) } )
-            StateChangerType.GATEWAY_RGB -> RGBStateChanger(container, { state?.text = it }, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) } )
+            StateChangerType.RGB -> RGBStateChanger(container, { state?.text = it }, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) } )
             StateChangerType.TEXT_READ_WRITE -> TextReadWriteStateChanger(container, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) } )
             StateChangerType.DIGITS_DECIMAL_READ_WRITE -> TextReadWriteStateChanger(container, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) }, DIGITS_ONLY_TEXT_TYPE )
             StateChangerType.ONLY_READ -> ReadStateChanger(container) { viewModel.newStateRequest(null, STATE_PENDING_READ) }
