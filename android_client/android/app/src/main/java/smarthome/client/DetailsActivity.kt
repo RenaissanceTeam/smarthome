@@ -36,7 +36,7 @@ class DetailsActivity : FragmentActivity() {
 
         try {
             val fragment = chooseFragment()
-            replaceFragment(fragment, arguments = intent.extras, addToBackstack = addToBackstack)
+            replaceFragment(fragment, arguments = intent.extras, addToBackstack = addToBackstack, withAnimation = false)
         } catch (e: Throwable) {
             finish()
         }
@@ -73,10 +73,17 @@ class DetailsActivity : FragmentActivity() {
     }
 
     private fun replaceFragment(fragment: Fragment, arguments: Bundle? = null,
-                                addToBackstack: Boolean = true) {
+                                addToBackstack: Boolean = true,
+                                withAnimation: Boolean = true) {
         fragment.arguments = arguments
         supportFragmentManager.apply {
-            val transaction = beginTransaction().replace(R.id.root_view, fragment)
+            val transaction = beginTransaction()
+            if (withAnimation) {
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                        R.anim.enter_from_left, R.anim.exit_to_right)
+            }
+
+            transaction.replace(R.id.root_view, fragment)
             if (addToBackstack) transaction.addToBackStack(null)
             transaction.commit()
         }
