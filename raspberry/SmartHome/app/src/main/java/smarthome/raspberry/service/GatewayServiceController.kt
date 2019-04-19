@@ -5,13 +5,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import smarthome.library.common.BaseController
+import smarthome.library.common.IotDevice
 import smarthome.raspberry.BuildConfig.DEBUG
 import smarthome.raspberry.model.SmartHomeRepository
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.GatewayService
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Gateway
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.interfaces.AlarmHandler
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.interfaces.DeviceAddedListener
 
-class GatewayServiceController {
+class GatewayServiceController : AlarmHandler, DeviceAddedListener {
 
     private val TAG = javaClass.name
 
@@ -23,16 +27,18 @@ class GatewayServiceController {
         ioScope.launch {
             val service = GatewayService.builder()
                     .setGatewayPassword(password)
+                    .setAddDeviceListener(this@GatewayServiceController)
+                    .setAlarmHandler(this@GatewayServiceController)
                     .build()
 
-            delay(20000)
+            delay(5000)
 
             gatewayServices[service.gateway.sid] = service
 
-            if (service.gateway != null) {
+            /*if (service.gateway != null) {
                 for (device in service.devices)
                     SmartHomeRepository.addDevice(device)
-            }
+            }*/
             log(service)
         }
     }
@@ -42,9 +48,9 @@ class GatewayServiceController {
             val service = GatewayService.builder()
                     .setGateway(gateway)
                     .setDevices(gatewayDevices)
+                    .setAddDeviceListener(this@GatewayServiceController)
+                    .setAlarmHandler(this@GatewayServiceController)
                     .build()
-
-            delay(5000)
 
             gatewayServices[gateway.sid] = service
             log(service)
@@ -53,6 +59,9 @@ class GatewayServiceController {
 
     suspend fun removeGatewayService(gateway: Gateway) {
         val service = gatewayServices[gateway.sid]
+
+        service?.removeDeviceAddedListener()
+        service?.removeAlarmHandler(this)
 
         for (device in service!!.devices!!) {
             if (device == gateway)
@@ -63,6 +72,14 @@ class GatewayServiceController {
 
         service.kill()
 
+    }
+
+    override fun onDeviceAdded(device: IotDevice) {
+        SmartHomeRepository.addDevice(device)
+    }
+
+    override fun onAlarm(device: IotDevice, controller: BaseController) {
+        SmartHomeRepository.handleAlert(device, controller)
     }
 
     private fun log(service: GatewayService) {

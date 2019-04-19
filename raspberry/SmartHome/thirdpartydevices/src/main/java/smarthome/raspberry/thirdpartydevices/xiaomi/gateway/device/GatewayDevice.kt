@@ -21,7 +21,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners
 abstract class GatewayDevice(sid: String,
                              type: String,
                              parentGatewaySid: String = IDLE_STATUS,
-                             @Expose private val stateChangeListener: StateChangeListener? = null,
+                             private val stateChangeListener: StateChangeListener? = null,
                              smokeAlarmListener: SmokeAlarmListener? = null,
                              waterLeakListener: WaterLeakListener? = null)
     : IotDevice () {
@@ -65,8 +65,8 @@ abstract class GatewayDevice(sid: String,
         throw IllegalArgumentException("This device does not have controller with type: $type")
     }
 
-    fun invokeStateListener(state: String) {
-        stateChangeListener?.onStateChanged(state)
+    fun invokeStateListener(state: String, device: GatewayDevice, controller: BaseController) {
+        stateChangeListener?.onStateChanged(state, device, controller)
     }
 
     fun reportDataParseError(e: JSONException) {

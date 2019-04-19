@@ -1,8 +1,10 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants
 
 import android.util.Log
+import smarthome.library.common.BaseController
 import smarthome.raspberry.thirdpartydevices.BuildConfig
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.StateChangeListener
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
 
 
 const val IDLE_STATUS = "idle"
@@ -19,8 +21,8 @@ const val LOAD_POWER_KEY = "load_power"
 const val ALARM_KEY = "alarm"
 const val DENSITY_KEY = "density"
 
-val defStateChangeListener: StateChangeListener = StateChangeListener {
+val defStateChangeListener: StateChangeListener = StateChangeListener { s: String, gatewayDevice: GatewayDevice, baseController: BaseController ->
     if (BuildConfig.DEBUG) {
-        Log.d("StateChangeListener", "new state: $it")
+        Log.d("StateChangeListener", "device: $gatewayDevice, controller: $baseController, state changed, new state: $s")
     }
 }
