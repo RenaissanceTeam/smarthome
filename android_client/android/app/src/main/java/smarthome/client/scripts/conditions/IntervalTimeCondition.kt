@@ -9,11 +9,12 @@ import smarthome.client.CONDITION_INTERVAL_TIME
 import smarthome.client.R
 
 class IntervalTimeCondition : Condition() {
-    var interval = 0
+    private val min = 5
+
+    var interval = min
     var intervalView: TextView? = null
     var intervalSeek: SeekBar? = null
 
-    private val min = 5
 
     override fun getTag() = CONDITION_INTERVAL_TIME
 
@@ -34,7 +35,10 @@ class IntervalTimeCondition : Condition() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
+
         invalidateIntervalView()
+        intervalSeek?.progress = interval
+
         return view
     }
 
