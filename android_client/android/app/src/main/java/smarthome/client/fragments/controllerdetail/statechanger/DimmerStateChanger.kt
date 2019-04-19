@@ -41,7 +41,8 @@ class DimmerStateChanger(container: ViewGroup,
             pressedButton = writeButton
             writeListener(currentState)
         }
-        seekBar.progress = stateTitle?.text.toString().toInt()
+        val state = stateTitle?.text.toString()
+        seekBar.progress = if (state == "") 0 else state.toInt()
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val res = (progress * step).toString()
@@ -55,7 +56,8 @@ class DimmerStateChanger(container: ViewGroup,
         })
         stateTitle?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                seekBar.progress = s.toString().toInt() / step
+                val state = s.toString()
+                seekBar.progress = if (state == "") 0 else state.toInt() / step
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }

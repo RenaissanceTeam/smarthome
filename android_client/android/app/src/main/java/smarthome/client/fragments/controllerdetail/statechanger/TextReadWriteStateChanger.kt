@@ -1,15 +1,20 @@
 package smarthome.client.fragments.controllerdetail.statechanger
 
 import android.text.Editable
+import android.text.InputType.TYPE_CLASS_NUMBER
 import android.text.TextWatcher
 import android.view.ViewGroup
 import android.widget.EditText
 import com.dd.processbutton.iml.ActionProcessButton
 import smarthome.client.R
 
+const val DEFAULT_TEXT_TYPE = "default"
+const val DIGITS_ONLY_TEXT_TYPE = "digits"
+
 class TextReadWriteStateChanger(container: ViewGroup,
                                 writeListener: (String) -> Unit,
-                                readListener: () -> Unit):
+                                readListener: () -> Unit,
+                                textType: String = DEFAULT_TEXT_TYPE):
         ControllerStateChanger(container) {
 
     private val normalProgress = 0
@@ -34,6 +39,10 @@ class TextReadWriteStateChanger(container: ViewGroup,
             pressedButton = writeButton
             writeListener(currentState)
         }
+
+        if (textType == DIGITS_ONLY_TEXT_TYPE)
+            editText.inputType = TYPE_CLASS_NUMBER
+
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 currentState = s.toString()

@@ -54,7 +54,7 @@ abstract class GatewayDevice(sid: String,
     fun setVoltage(o: JSONObject) {
         if (!o.isNull(VOLTAGE_KEY))
             getControllerByType(GATEWAY_VOLTAGE_CONTROLLER).state =
-                    (o.getString(VOLTAGE_KEY).toFloat() / 1000).toString()
+                    (o.getString(VOLTAGE_KEY).toFloat() / 1000).toString() + "v"
     }
 
     fun getControllerByType(type: String): BaseController {
