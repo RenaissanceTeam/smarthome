@@ -1,5 +1,6 @@
 package smarthome.client.fragments.scriptdetail
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -58,8 +59,18 @@ class ScriptDetails: Fragment() {
             return
         }
         name?.setText(script.name)
-        condition?.text = script.conditions.joinToString(" AND ")
-        action?.text = script.actions.joinToString(" AND ")
+        condition?.let { setDecoratedText(it, script.conditions.joinToString(" AND ")) }
+        action?.let { setDecoratedText(it, script.actions.joinToString(" AND ")) }
+    }
+
+    private fun setDecoratedText(textView: TextView, text: String) {
+        if (text.isEmpty()) {
+            textView.text = "Empty"
+            textView.setTextColor(Color.parseColor("#888888"))
+        } else {
+            textView.text = text
+            textView.setTextColor(Color.parseColor("#000000"))
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

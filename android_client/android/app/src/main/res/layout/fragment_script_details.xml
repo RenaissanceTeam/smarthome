@@ -50,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:minWidth="150dp"
             android:editable="false"
             app:layout_constraintBaseline_toBaselineOf="@id/name_label"
             app:layout_constraintStart_toEndOf="@id/name_label"
