@@ -24,6 +24,11 @@ class ControllerCondition(provider: ControllersProvider) : Condition() {
     private var hasPendingBinding = false
     private lateinit var view: View
 
+    private val compareStateToViewId = mapOf(
+            COMPARE_LESS_THAN to R.id.less_than,
+            COMPARE_MORE_THAN to R.id.more_than,
+            COMPARE_EQUAL_TO to R.id.equal_to)
+
     init {
         CoroutineScope(Dispatchers.Main).launch {
             val controllers = provider.getControllers()
@@ -53,8 +58,10 @@ class ControllerCondition(provider: ControllersProvider) : Condition() {
         val dropDownList = view.findViewById<AppCompatSpinner>(R.id.controller_drop_down_list)
         val valueInput = view.findViewById<EditText>(R.id.value_input)
 
-        val dataset = controllersWithName?.map { it.name }?.toTypedArray()
+        checkSelectedRadioGroup(radioGroup)
+        valueInput.setText(value)
 
+        val dataset = controllersWithName?.map { it.name }?.toTypedArray()
         if (dataset == null) {
             hasPendingBinding = true
             return
@@ -63,21 +70,28 @@ class ControllerCondition(provider: ControllersProvider) : Condition() {
         dropDownList.adapter = ArrayAdapter<String>(view.context,
                 android.R.layout.simple_spinner_dropdown_item, dataset)
 
+        val selectedControllerPosition = controllersWithName?.indexOf(chosenController)
+        selectedControllerPosition?.let {
+            dropDownList.setSelection(it)
+        }
+
         setEventListeners(radioGroup, valueInput, dropDownList)
 
         hasPendingBinding = false
+    }
+
+    private fun checkSelectedRadioGroup(radioGroup: RadioGroup) {
+        val id = compareStateToViewId[compare] ?: return
+        radioGroup.check(id)
     }
 
     private fun setEventListeners(radioGroup: RadioGroup,
                                   valueInput: EditText,
                                   dropDownList: AppCompatSpinner) {
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            compare = when (checkedId) {
-                R.id.less_than -> COMPARE_LESS_THAN
-                R.id.more_than -> COMPARE_MORE_THAN
-                R.id.equal_to -> COMPARE_EQUAL_TO
-                else -> throw RuntimeException("Can't parse compare option")
-            }
+            compare = compareStateToViewId.asIterable()
+                    .filter { it.value == checkedId }
+                    .map { it.key }[0]
         }
 
         valueInput.addTextChangedListener(object : TextWatcher {
