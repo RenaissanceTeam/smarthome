@@ -5,7 +5,7 @@ enum class StateChangerType {
     LEXEME_ONOFF,
     SIMPLE_WRITE,
     DIMMER,
-    GATEWAY_RGB,
+    RGB,
     TEXT_READ_WRITE,
     DIGITS_DECIMAL_READ_WRITE,
     ONLY_READ // default, assume that each controller can be read

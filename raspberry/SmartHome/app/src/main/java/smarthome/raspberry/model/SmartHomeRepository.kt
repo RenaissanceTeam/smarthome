@@ -58,7 +58,7 @@ object SmartHomeRepository : SmartHome() {
 
     suspend fun init(appContext: Context, listener: RepoInitListener) {
         setInitListener(listener)
-        SmartHomeRepository.init(appContext)
+        init(appContext)
     }
 
     suspend fun init(appContext: Context) {
@@ -102,6 +102,10 @@ object SmartHomeRepository : SmartHome() {
 
                 if (GatewayDevice::class.java.isAssignableFrom(device.javaClass))
                     gatewayDevices.add(device as GatewayDevice)
+
+                device.controllers.forEach {
+                    it.classType = it.javaClass.simpleName
+                }
             }
         }
 
