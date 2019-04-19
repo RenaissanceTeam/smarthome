@@ -15,7 +15,8 @@ open class Controller(device: YeelightDevice,
                       writeCommandListener: WriteCommandListener = defWriteCommandListener)
     : BaseController() {
 
-    @Exclude val device: YeelightDevice
+    @Exclude
+    var device: YeelightDevice
         @Exclude get
     private val writeCommandListener: WriteCommandListener
 

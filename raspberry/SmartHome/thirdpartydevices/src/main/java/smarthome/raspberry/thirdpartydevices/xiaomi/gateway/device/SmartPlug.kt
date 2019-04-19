@@ -38,9 +38,10 @@ class SmartPlug(sid: String, @Exclude private var transport: UdpTransport, gatew
             val o = JSONObject(json)
 
             if (!o.isNull(STATUS_KEY)) {
-                getControllerByType(GATEWAY_SMART_PLUG_ON_OFF_CONTROLLER).state = o.getString(STATUS_KEY)
+                val onOffController = getControllerByType(GATEWAY_SMART_PLUG_ON_OFF_CONTROLLER)
+                onOffController.state = o.getString(STATUS_KEY)
 
-                invokeStateListener(getControllerByType(GATEWAY_SMART_PLUG_ON_OFF_CONTROLLER).state)
+                invokeStateListener(onOffController.state, this, onOffController)
             }
 
             if (!o.isNull(IN_USE_KEY))
