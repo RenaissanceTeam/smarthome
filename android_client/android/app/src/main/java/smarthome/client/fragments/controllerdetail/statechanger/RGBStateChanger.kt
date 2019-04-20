@@ -4,11 +4,12 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import com.dd.processbutton.iml.ActionProcessButton
 import smarthome.client.R
+import java.lang.NumberFormatException
 
 class RGBStateChanger(container: ViewGroup,
+                      currState: String,
                       stateListener: (String) -> Unit,
-                      writeListener: (String) -> Unit,
-                      readListener: () -> Unit):
+                      writeListener: (String) -> Unit):
         ControllerStateChanger(container) {
 
     private val normalProgress = 0
@@ -18,13 +19,11 @@ class RGBStateChanger(container: ViewGroup,
     override val layout: Int
         get() = R.layout.state_changer_rgb
 
-    private var currentState = ""
+    private var currentState = currState
     private val r = rootView.findViewById<SeekBar>(R.id.state_changer_rgb_r_seek_bar)
     private val g = rootView.findViewById<SeekBar>(R.id.state_changer_rgb_g_seek_bar)
     private val b = rootView.findViewById<SeekBar>(R.id.state_changer_rgb_b_seek_bar)
     private val writeButton = rootView.findViewById<ActionProcessButton>(R.id.write_button)
-    private val readButton = rootView.findViewById<ActionProcessButton>(R.id.read_button)
-    private var pressedButton = writeButton
 
     private val step: Float = 2.55f
 
@@ -33,13 +32,9 @@ class RGBStateChanger(container: ViewGroup,
         get() = "${rgb[0]} ${rgb[1]} ${rgb[2]}"
 
     init {
-        readButton.setOnClickListener {
-            pressedButton = readButton
-            readListener()
-        }
+        parseCurrentState()
         writeButton.normalText = WRITE_DEFAULT_TITLE
         writeButton.setOnClickListener {
-            pressedButton = writeButton
             writeListener(currentState)
         }
         r.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -77,11 +72,35 @@ class RGBStateChanger(container: ViewGroup,
         })
     }
 
+    private fun parseCurrentState() {
+        if (currentState.trim() == "")
+            return
+
+        val args = currentState.split(" ")
+
+        var rValue = 0
+        var gValue = 0
+        var bValue = 0
+
+        try {
+            rValue = args[0].toInt()
+            gValue = args[1].toInt()
+            bValue = args[2].toInt()
+        } catch (e: NumberFormatException) { }
+
+        rgb[0] = rValue
+        rgb[1] = gValue
+        rgb[2] = bValue
+
+        r.progress = (rValue / step).toInt()
+        g.progress = (gValue / step).toInt()
+        b.progress = (bValue / step).toInt()
+    }
 
     override fun invalidateNewState(state: String?, serveState: String?) {
         currentState = state ?: unknownState
-        if (serveState == "up to date" || serveState == null) pressedButton.progress = normalProgress
-        else pressedButton.progress = loadingProgress
+        if (serveState == "up to date" || serveState == null) writeButton.progress = normalProgress
+        else writeButton.progress = loadingProgress
 
     }
 

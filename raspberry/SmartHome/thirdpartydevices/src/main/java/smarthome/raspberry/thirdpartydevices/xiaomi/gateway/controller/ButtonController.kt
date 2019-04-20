@@ -18,6 +18,7 @@ class ButtonController(device: GatewayDevice, type: String, transport: UdpTransp
      * for WiredSingleWallSwitch: "on" or "off" (String)
      */
     override fun write(params: String) {
+        super.updateState(params)
         when (device) {
             is WiredDualWallSwitch -> {
                 val args = params.split(" ")
