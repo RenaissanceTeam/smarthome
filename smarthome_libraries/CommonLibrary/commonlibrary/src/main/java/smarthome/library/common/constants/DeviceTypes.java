@@ -7,7 +7,7 @@ public class DeviceTypes {
     // -- Xiaomi devices
     public static final String GATEWAY_TYPE = "gateway";
     public static final String DOOR_WINDOW_SENSOR_TYPE = "magnet";
-    public static final String MOTION_SENSOR_TYPE = "motion";
+    public static final String MOTION_SENSOR_TYPE = "sensor_motion.aq2";
     public static final String WIRELESS_SWITCH_TYPE = "switch";
     public static final String TEMPERATURE_HUMIDITY_SENSOR_TYPE = "sensor_ht";
     public static final String WATER_LEAK_SENSOR_TYPE = "sensor_wleak.aq1";
