@@ -29,6 +29,10 @@ open class Controller(device: GatewayDevice,
         this.guid = GUID.getInstance().generateGuidForController(device, this)
     }
 
+    fun updateState(state: String) {
+        this.state = state
+    }
+
     fun controllerWrite(command: Command) {
         transport?.sendWriteCommand(device.sid, device.type, command)
     }
