@@ -5,6 +5,7 @@ import smarthome.library.common.IotDevice
 import kotlin.RuntimeException
 
 class UnableToCreateHomeStorage(homeId: String) : RuntimeException("can't create home devicesStorage for id=$homeId")
+class UnableToCreateMessageQueue(homeId: String) : RuntimeException("can't create message queue for home: $homeId")
 class UnsupportedRead(controller: BaseController) : RuntimeException("Can't read controller $controller")
 class UnsupportedWrite(controller: BaseController, value: String) : RuntimeException("Can't write val=$value to controller $controller ")
 class OddDeviceInCloud(device: IotDevice)

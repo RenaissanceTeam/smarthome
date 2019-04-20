@@ -6,19 +6,25 @@ import com.google.firebase.auth.FirebaseAuth
 import smarthome.client.AuthenticationFailed
 import smarthome.client.NoHomeid
 import smarthome.client.RemoteFailure
+import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
 import smarthome.library.datalibrary.store.InstanceTokenStorage
+import smarthome.library.datalibrary.store.MessageQueue
 import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreHomesReferencesStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreInstanceTokenStorage
+import smarthome.library.datalibrary.store.firestore.FirestoreMessageQueue
 import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
 import smarthome.library.datalibrary.store.listeners.HomesReferencesListener
+import smarthome.library.datalibrary.store.listeners.PendingDevicesFetchListener
 import smarthome.library.datalibrary.store.listeners.SmartHomeListener
+import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.suspendCoroutine
 
 object CloudStorages {
     private var homeStorage: SmartHomeStorage? = null
     private var instanceTokenStorage: InstanceTokenStorage? = null
+    private var messageQueue: MessageQueue? = null
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     suspend fun getSmartHomeStorage(): SmartHomeStorage {
@@ -33,6 +39,13 @@ object CloudStorages {
             setupFirestore()
         }
         return instanceTokenStorage!!
+    }
+
+    suspend fun getMessageQueue(): MessageQueue {
+        if (messageQueue == null) {
+            setupFirestore()
+        }
+        return messageQueue!!
     }
 
     private suspend fun setupFirestore() {
@@ -50,6 +63,7 @@ object CloudStorages {
 
         homeStorage = FirestoreSmartHomeStorage(homeId)
         instanceTokenStorage = FirestoreInstanceTokenStorage(homeId)
+        messageQueue = FirestoreMessageQueue(homeId)
 
         FcmTokenRequester().initFcmToken()
     }
@@ -60,6 +74,19 @@ object CloudStorages {
         return suspendCoroutine { continuation ->
             storage.getSmartHome(
                     SmartHomeListener {
+                        continuation.resumeWith(Result.success(it))
+                    },
+                    OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }
+            )
+        }
+    }
+
+    suspend fun loadPendingDevices(): MutableList<IotDevice> {
+        val storage = getSmartHomeStorage()
+
+        return suspendCoroutine { continuation ->
+            storage.fetchPendingDevices(
+                    PendingDevicesFetchListener {
                         continuation.resumeWith(Result.success(it))
                     },
                     OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }

@@ -18,4 +18,9 @@
     <string name="less_than"><![CDATA[<]]></string>
     <string name="equal_to">=</string>
     <string name="more_than"><![CDATA[>]]></string>
+    <string name="delete">delete</string>
+    <string name="add">add</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

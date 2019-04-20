@@ -51,7 +51,7 @@ public class UdpServer implements StoppableServer {
 
                         onReceiveFromUpd(receivePacket); // blocking call
                     } catch (IOException e) {
-                        Log.e(TAG, "", e);
+                        //Log.e(TAG, "", e);
                     }
                 }
             }

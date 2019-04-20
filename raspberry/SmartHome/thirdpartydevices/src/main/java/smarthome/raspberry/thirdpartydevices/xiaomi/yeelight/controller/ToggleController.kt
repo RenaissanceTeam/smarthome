@@ -1,7 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
+import smarthome.library.common.constants.TOGGLE_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.TOGGLE_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
@@ -14,6 +14,6 @@ class ToggleController(device: YeelightDevice) : Controller(device, TOGGLE_CONTR
     }
 
     override fun write(params: String): Result {
-        return super.controllerWrite(TOGGLE_CONTROLLER_TYPE)
+        return super.controllerWrite(type)
     }
 }

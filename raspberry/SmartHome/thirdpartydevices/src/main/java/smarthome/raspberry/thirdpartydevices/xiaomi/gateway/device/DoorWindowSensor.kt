@@ -4,7 +4,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import smarthome.library.common.constants.DeviceTypes.DOOR_WINDOW_SENSOR_TYPE
 import smarthome.library.common.constants.GATEWAY_DOOR_WINDOW_CONTROLLER
-import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.STATUS_KEY
+import smarthome.library.common.constants.STATUS_KEY
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.DoorWindowController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.VoltageController
 

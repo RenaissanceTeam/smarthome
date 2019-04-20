@@ -15,10 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import smarthome.client.CONTROLLER_GUID
-import smarthome.client.DEVICE_GUID
-import smarthome.client.DetailsActivity
-import smarthome.client.R
+import smarthome.client.*
 import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.IotDevice
@@ -67,7 +64,11 @@ class DeviceDetails : Fragment() {
     }
 
     private fun openControllerDetails(guid: Long) {
-        (activity as? DetailsActivity)?.openControllerDetails(guid)
+        val bundle = Bundle()
+        bundle.putLong(CONTROLLER_GUID, guid)
+        if (viewModel.usePending)
+            bundle.putBoolean(USE_PENDING, true)
+        (activity as? DetailsActivity)?.replaceFragment(bundle)
         viewModel.controllerDetailsShowed()
     }
 
@@ -77,7 +78,7 @@ class DeviceDetails : Fragment() {
 
         deviceName?.setOnClickListener {
             EditTextDialog.create(view.context,
-                    DialogParameters("device name", viewModel.device.value?.name ?: "") {
+                    DialogParameters("device name", currentValue = viewModel.device.value?.name ?: "") {
                         viewModel.deviceNameChanged(it)
                     }
             ).show()
@@ -85,7 +86,7 @@ class DeviceDetails : Fragment() {
 
         deviceDescription?.setOnClickListener {
             EditTextDialog.create(view.context,
-                    DialogParameters("device description", viewModel.device.value?.description ?: "") {
+                    DialogParameters("device description", currentValue = viewModel.device.value?.description ?: "") {
                         viewModel.deviceDescriptionChanged(it)
                     }
             ).show()
@@ -105,6 +106,9 @@ class DeviceDetails : Fragment() {
 
     private fun passGuidToViewModel() {
         var deviceGuid: Long? = arguments?.getLong(DEVICE_GUID)
+        if (arguments?.containsKey(USE_PENDING) == true) {
+            viewModel.usePending()
+        }
         if (arguments?.containsKey(DEVICE_GUID) != true) {
             deviceGuid = null
         }

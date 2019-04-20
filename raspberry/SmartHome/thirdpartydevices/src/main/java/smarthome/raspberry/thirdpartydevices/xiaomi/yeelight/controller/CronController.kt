@@ -1,7 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
+import smarthome.library.common.constants.CRON_ADD_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.CRON_ADD_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
@@ -18,6 +18,6 @@ class CronController(device: YeelightDevice) : Controller(device, CRON_ADD_CONTR
      * @param params {delay} (int)
      */
     override fun write(params: String): Result {
-        return super.controllerWrite(CRON_ADD_CONTROLLER_TYPE, 0, params.toInt())
+        return super.controllerWrite(type, 0, params.toInt())
     }
 }

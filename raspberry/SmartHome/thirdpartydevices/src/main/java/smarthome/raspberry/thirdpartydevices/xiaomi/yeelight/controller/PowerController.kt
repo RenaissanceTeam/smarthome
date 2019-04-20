@@ -1,7 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
+import smarthome.library.common.constants.POWER_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.POWER_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
@@ -17,6 +17,6 @@ class PowerController(device: YeelightDevice) : Controller(device, POWER_CONTROL
      * @param params should be "on" or "off" (String)
      */
     override fun write(params: String): Result {
-        return super.controllerWrite(POWER_CONTROLLER_TYPE, params, device.effect.effect, device.duration)
+        return super.controllerWrite(type, params, device.effect.effect, device.duration)
     }
 }
