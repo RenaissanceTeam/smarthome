@@ -50,6 +50,8 @@ class WriteActionViewWrapper(provider: ControllersProvider, private val action:W
         val dropDownList = view.findViewById<AppCompatSpinner>(R.id.controller_drop_down_list)
         val valueInput = view.findViewById<EditText>(R.id.value_input)
 
+        valueInput.setText(action.value)
+
         val dataset = controllersWithName?.map { it.name }?.toTypedArray()
 
         if (dataset == null) {
