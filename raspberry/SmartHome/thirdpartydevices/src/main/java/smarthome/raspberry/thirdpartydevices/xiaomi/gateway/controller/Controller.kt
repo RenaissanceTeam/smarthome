@@ -34,7 +34,7 @@ open class Controller(device: GatewayDevice,
     }
 
     fun controllerRead(): String {
-        return state
+        return state ?: ""
     }
 
 }

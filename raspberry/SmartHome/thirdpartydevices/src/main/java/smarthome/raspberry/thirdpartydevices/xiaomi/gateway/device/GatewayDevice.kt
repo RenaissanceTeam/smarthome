@@ -30,9 +30,9 @@ abstract class GatewayDevice(sid: String,
         @Exclude get
     @Exclude @Expose val parentGatewaySid: String = parentGatewaySid
         @Exclude get
-    @Exclude @Expose var smokeAlarmListener: SmokeAlarmListener? = smokeAlarmListener
+    @Exclude val smokeAlarmListener: SmokeAlarmListener? = smokeAlarmListener
         @Exclude get
-    @Exclude @Expose var waterLeakListener: WaterLeakListener? = waterLeakListener
+    @Exclude val waterLeakListener: WaterLeakListener? = waterLeakListener
         @Exclude get
 
     init {
