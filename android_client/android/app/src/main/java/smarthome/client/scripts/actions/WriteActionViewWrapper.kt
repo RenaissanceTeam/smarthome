@@ -7,19 +7,18 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.RadioGroup
 import androidx.appcompat.widget.AppCompatSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import smarthome.client.*
+import smarthome.client.ACTION_WRITE_CONTROLLER
+import smarthome.client.R
 import smarthome.client.scripts.ControllersProvider
+import smarthome.client.scripts.commonlib.scripts.actions.WriteAction
 import smarthome.library.common.BaseController
 
-class WriteAction(provider: ControllersProvider) : Action(), ActionViewBuilder {
-    var chosenController: BaseController? = null
-    var value: String? = null
-    var compare: String? = null
+class WriteActionViewWrapper(provider: ControllersProvider, private val action:WriteAction): ActionViewWrapper {
+
     private var controllersWithName: List<BaseController>? = null
     private var hasPendingBinding = false
     private lateinit var view: View
@@ -33,7 +32,7 @@ class WriteAction(provider: ControllersProvider) : Action(), ActionViewBuilder {
     }
 
     override fun isFilled(): Boolean {
-        return chosenController != null && !value.isNullOrEmpty()
+        return action.chosenController != null && !action.value.isNullOrEmpty()
     }
 
     override fun getView(root: ViewGroup): View {
@@ -44,7 +43,8 @@ class WriteAction(provider: ControllersProvider) : Action(), ActionViewBuilder {
 
     override fun getTag() = ACTION_WRITE_CONTROLLER
 
-    override fun toString() = "Write $value to ${chosenController?.name}"
+    override fun toString() = action.toString()
+
 
     private fun bindView() {
         val dropDownList = view.findViewById<AppCompatSpinner>(R.id.controller_drop_down_list)
@@ -70,7 +70,7 @@ class WriteAction(provider: ControllersProvider) : Action(), ActionViewBuilder {
 
         valueInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                value = s.toString()
+                action.value = s.toString()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -79,11 +79,11 @@ class WriteAction(provider: ControllersProvider) : Action(), ActionViewBuilder {
 
         dropDownList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                chosenController = null
+                action.chosenController = null
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                chosenController = controllersWithName?.get(position)
+                action.chosenController = controllersWithName?.get(position)
             }
         }
     }

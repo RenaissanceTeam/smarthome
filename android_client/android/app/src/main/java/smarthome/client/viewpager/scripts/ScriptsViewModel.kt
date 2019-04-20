@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import smarthome.client.Model
-import smarthome.client.scripts.Script
+import smarthome.client.scripts.commonlib.scripts.Script
 
 class ScriptsViewModel : ViewModel() {
     private val _scripts = MutableLiveData<MutableList<Script>>()

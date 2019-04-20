@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import smarthome.client.BuildConfig.DEBUG
-import smarthome.client.scripts.Script
+import smarthome.client.scripts.commonlib.scripts.Script
 import smarthome.client.util.CloudStorages
 import smarthome.client.util.FcmTokenStorage
 import smarthome.library.common.BaseController

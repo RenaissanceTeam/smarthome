@@ -7,13 +7,10 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import smarthome.client.*
 import smarthome.client.scripts.conditions.AllConditionsProvider
-import smarthome.client.scripts.conditions.Condition
-import smarthome.client.scripts.Script
-import smarthome.client.scripts.actions.Action
-import smarthome.client.scripts.actions.ActionViewBuilder
+import smarthome.client.scripts.commonlib.scripts.Script
+import smarthome.client.scripts.actions.ActionViewWrapper
 import smarthome.client.scripts.actions.AllActionsProvider
-import smarthome.client.scripts.actions.ReadAction
-import smarthome.client.scripts.conditions.ConditionViewBuilder
+import smarthome.client.scripts.conditions.ConditionViewWrapper
 import smarthome.library.common.BaseController
 
 class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvider {
@@ -24,8 +21,13 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     val isConditionOpen = MutableLiveData<Boolean>()
     val isActionOpen = MutableLiveData<Boolean>()
     val isScriptOpen = MutableLiveData<Boolean>()
-    val conditions: LiveData<MutableList<Condition>> = Transformations.map(script) { it.conditions }
-    val actions: LiveData<MutableList<Action>> = Transformations.map(script) { it.actions }
+    val conditions: LiveData<MutableList<ConditionViewWrapper>> = Transformations.map(script) {
+        it.conditions.map { condition -> ConditionViewWrapper.wrap(condition, this) }.toMutableList()
+    }
+
+    val actions: LiveData<MutableList<ActionViewWrapper>> = Transformations.map(script) {
+        it.actions.map { action -> ActionViewWrapper.wrap(action, this) }.toMutableList()
+    }
 
     private var copyBeforeEditCondition: Script? = null
 
@@ -53,10 +55,10 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     }
 
     fun onSaveConditionsClicked() {
-        val conditions = script.value?.conditions ?: return
+        val conditions = conditions.value ?: return
 
         Log.d("ScriptDetailVM", "onSaveClicked: ${conditions.joinToString() }")
-        val allFilled = conditions.isNotEmpty() && conditions.all { (it as? ConditionViewBuilder)?.isFilled() ?: false }
+        val allFilled = conditions.isNotEmpty() && conditions.all { it.isFilled() }
 
         if (allFilled) {
             isConditionOpen.value = false
@@ -68,15 +70,15 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
         val script = script.value
         script ?: return
 
-        script.actions.add(ReadAction(this))
+        script.actions.add(ActionViewWrapper.withTag(ACTION_READ_CONTROLLER))
         _script.value = script
     }
 
     fun onSaveActionsClicked() {
-        val actions = script.value?.actions ?: return
+        val actions = actions.value ?: return
 
         Log.d("ScriptDetailVM", "onSaveClicked: ${actions.joinToString() }")
-        val allFilled = actions.isNotEmpty() && actions.all { (it as? ActionViewBuilder)?.isFilled() ?: false}
+        val allFilled = actions.isNotEmpty() && actions.all { it.isFilled() }
 
         if (allFilled) {
             isActionOpen.value = false
@@ -84,26 +86,20 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     }
 
     fun changeConditionType(position: Int, tag: String) {
-        val script = script.value
-        script ?: return
+        val script = script.value ?: return
+        val conditionViewWrappers = conditions.value ?: return
+        if ((conditionViewWrappers[position]).getTag() == tag) return
 
-        val conditions = script.conditions
-
-        if ((conditions[position] as? ConditionViewBuilder)?.getTag() == tag) return
-        conditions[position] = Condition.withTag(tag, this)
-
+        script.conditions[position] = ConditionViewWrapper.withTag(tag)
         _script.value = script
     }
 
     fun changeActionType(position: Int, tag: String) {
-        val script = script.value
-        script ?: return
+        val script = script.value ?: return
+        val actionViewWrappers = actions.value ?: return
+        if (actionViewWrappers[position].getTag() == tag) return
 
-        val actions = script.actions
-
-        if (actions[position].getTag() == tag) return
-        actions[position] = Action.withTag(tag, this)
-
+        script.actions[position] = ActionViewWrapper.withTag(tag)
         _script.value = script
     }
 
@@ -116,7 +112,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
         val script = script.value
         script ?: return
 
-        script.conditions.add(Condition.withTag(CONDITION_CONTROLLER, this))
+        script.conditions.add(ConditionViewWrapper.withTag(CONDITION_CONTROLLER))
         _script.value = script
     }
 

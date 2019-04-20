@@ -2,7 +2,6 @@ package smarthome.client.viewpager.scripts
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import smarthome.client.*
-import smarthome.client.scripts.Script
+import smarthome.client.scripts.commonlib.scripts.Script
 
 
 class ScriptsFragment : Fragment() {

@@ -4,17 +4,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
-import smarthome.client.CONDITION_EXACT_TIME
 import smarthome.client.CONDITION_INTERVAL_TIME
 import smarthome.client.R
+import smarthome.client.scripts.commonlib.scripts.conditions.IntervalTimeCondition
 
-class IntervalTimeCondition : Condition(), ConditionViewBuilder {
-    private val min = 5
+class IntervalTimeConditionViewWrapper(private val condition: IntervalTimeCondition) : ConditionViewWrapper {
 
-    var interval = min
     var intervalView: TextView? = null
     var intervalSeek: SeekBar? = null
-
 
     override fun getTag() = CONDITION_INTERVAL_TIME
 
@@ -28,7 +25,7 @@ class IntervalTimeCondition : Condition(), ConditionViewBuilder {
         intervalSeek?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, newInterval: Int, fromUser: Boolean) {
                 if (!fromUser) return
-                interval = newInterval
+                condition.interval = newInterval
                 invalidateIntervalView()
             }
 
@@ -37,7 +34,7 @@ class IntervalTimeCondition : Condition(), ConditionViewBuilder {
         })
 
         invalidateIntervalView()
-        intervalSeek?.progress = interval
+        intervalSeek?.progress = condition.interval
 
         return view
     }
@@ -45,24 +42,12 @@ class IntervalTimeCondition : Condition(), ConditionViewBuilder {
     override fun isFilled() = true
 
     private fun invalidateIntervalView() {
-        if (interval < min) {
-            interval = min
-            intervalSeek?.progress = interval
+        if (condition.interval < condition.min) {
+            condition.interval = condition.min
+            intervalSeek?.progress = condition.interval
         }
-        intervalView?.text = formatInterval()
+        intervalView?.text = condition.formatInterval()
     }
 
-    private fun formatInterval(): String {
-        val hours = interval / 60
-        val minutes = interval % 60
-
-        if (hours == 0) return "$minutes min"
-        if (minutes == 0) return "$hours h"
-
-        return "$hours h. $minutes min"
-    }
-
-    override fun toString() = "At interval ${formatInterval()}"
-
-    override fun evaluate(): Boolean = true // todo
+    override fun toString() = condition.toString()
 }

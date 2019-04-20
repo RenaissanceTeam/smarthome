@@ -9,15 +9,13 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import smarthome.client.*
 import smarthome.client.R
 import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
-import smarthome.client.scripts.Script
+import smarthome.client.scripts.commonlib.scripts.Script
 
 class ScriptDetails: Fragment() {
     companion object {
