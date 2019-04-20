@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import smarthome.client.fragments.controllerdetail.ControllerDetails
 import smarthome.client.fragments.devicedetail.DeviceDetails
+import smarthome.client.fragments.scriptdetail.ScriptDetails
+import smarthome.client.fragments.scriptdetail.action.ActionFragment
+import smarthome.client.fragments.scriptdetail.condition.ConditionFragment
 
 class DetailsActivity : FragmentActivity() {
 
@@ -12,34 +15,75 @@ class DetailsActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-        replaceFragment(intent.extras, addToBackstack = false)
+        replaceFragmentFromIntent(addToBackstack = false)
     }
 
-    fun replaceFragment(arguments: Bundle?, addToBackstack: Boolean = true) {
-        if (arguments == null) {
+    fun openConditionFragment() {
+        replaceFragment(ConditionFragment())
+    }
+
+    fun openActionFragment() {
+        replaceFragment(ActionFragment())
+    }
+
+    fun openControllerDetails(guid: Long) {
+        val bundle = Bundle()
+        bundle.putLong(CONTROLLER_GUID, guid)
+        replaceFragment(ControllerDetails(), bundle)
+    }
+
+    private fun replaceFragmentFromIntent(addToBackstack: Boolean = true) {
+
+        try {
+            val fragment = chooseFragment()
+            replaceFragment(fragment, arguments = intent.extras, addToBackstack = addToBackstack, withAnimation = false)
+        } catch (e: Throwable) {
             finish()
-            return
         }
+    }
 
-        var fragment: Fragment? = null
-        var fragmentTag = ""
+    private fun chooseFragment(): Fragment {
+        val fromExtras = intent.extras?.let { chooseFragment(it) }
+        if (fromExtras != null) return fromExtras
 
+        val fromAction = intent.action?.let { chooseFragment(it) }
+        if (fromAction != null) return fromAction
+
+        throw RuntimeException("No fragment found")
+    }
+
+    private fun chooseFragment(arguments: Bundle): Fragment? {
         if (arguments.containsKey(DEVICE_GUID)) {
-            fragment = DeviceDetails()
-            fragmentTag = DeviceDetails.FRAGMENT_TAG
-        } else if (arguments.containsKey(CONTROLLER_GUID)) {
-            fragment = ControllerDetails()
-            fragmentTag = ControllerDetails.FRAGMENT_TAG
+            return DeviceDetails()
         }
-
-        if (fragment == null) {
-            finish()
-            return
+        if (arguments.containsKey(CONTROLLER_GUID)) {
+            return ControllerDetails()
         }
+        if (arguments.containsKey(SCRIPT_GUID)) {
+            return ScriptDetails()
+        }
+        return null
+    }
 
+    private fun chooseFragment(action: String): Fragment? {
+        return when (action) {
+            OPEN_CONDITION_SCRIPT -> ConditionFragment()
+            else -> null
+        }
+    }
+
+    private fun replaceFragment(fragment: Fragment, arguments: Bundle? = null,
+                                addToBackstack: Boolean = true,
+                                withAnimation: Boolean = true) {
         fragment.arguments = arguments
-        supportFragmentManager?.apply {
-            val transaction = beginTransaction().replace(R.id.root_view, fragment, fragmentTag)
+        supportFragmentManager.apply {
+            val transaction = beginTransaction()
+            if (withAnimation) {
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                        R.anim.enter_from_left, R.anim.exit_to_right)
+            }
+
+            transaction.replace(R.id.root_view, fragment)
             if (addToBackstack) transaction.addToBackStack(null)
             transaction.commit()
         }
