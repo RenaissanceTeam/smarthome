@@ -1,8 +1,8 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
-import smarthome.raspberry.thirdpartydevices.utils.Utils.Companion.adjust
+import smarthome.library.common.constants.HSV_CONTROLLER_TYPE
+import smarthome.raspberry.thirdpartydevices.utils.Utils.adjust
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.HSV_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
@@ -23,6 +23,6 @@ class HSVController(device: YeelightDevice) : Controller(device, HSV_CONTROLLER_
         val options = params.split(" ")
         val hue: Int = adjust(options[0].toInt(), 0, 359)
         val saturation: Int = adjust(options[1].toInt(), 0, 100)
-        return super.controllerWrite(HSV_CONTROLLER_TYPE, hue, saturation, device.effect.effect, device.duration)
+        return super.controllerWrite(type, hue, saturation, device.effect.effect, device.duration)
     }
 }

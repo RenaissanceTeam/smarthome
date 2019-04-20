@@ -15,7 +15,6 @@ import smarthome.client.Model
 import smarthome.client.fragments.controllerdetail.statechanger.ControllerTypeAdapter
 import smarthome.client.fragments.controllerdetail.statechanger.StateChangerType
 import smarthome.library.common.BaseController
-import smarthome.library.common.ControllerType
 import smarthome.library.common.IotDevice
 
 class ControllerDetailViewModel : ViewModel() {
@@ -41,12 +40,14 @@ class ControllerDetailViewModel : ViewModel() {
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private var disposable: Disposable? = null
 
+    private var usePending = false
+
     fun setControllerGuid(controllerGuid: Long?) {
         controllerGuid ?: return
         uiScope.launch {
             _refresh.value = true
             try {
-                val foundController = Model.getController(controllerGuid)
+                val foundController = if (!usePending) Model.getController(controllerGuid) else Model.getPendingController(controllerGuid)
                 _controller.value = foundController
                 if (foundController.isUpToDate) _refresh.value = false
                 _stateChangerType.value = ControllerTypeAdapter.toStateChangerType(foundController.type)
@@ -58,8 +59,13 @@ class ControllerDetailViewModel : ViewModel() {
         }
     }
 
+    fun usePending() {
+        usePending = true
+    }
+
     private suspend fun listenForModelChanges(controllerGuid: Long) {
-        disposable = Model.getDevicesObservable().subscribe {
+        val observable = if (!usePending) Model.getDevicesObservable() else Model.getPendingDevicesObservable()
+        disposable = observable.subscribe {
             val changedController = Model.getController(it, controllerGuid)
             _controller.value = changedController
             _device.value = Model.getDevice(it, changedController)
@@ -83,7 +89,7 @@ class ControllerDetailViewModel : ViewModel() {
             state?.let { controller.state = it }
             controller.serveState = serveState
 
-            Model.changeDevice(device)
+            _updateDevice(device)
         }
     }
     fun controllerNameChanged(name: String) {
@@ -97,8 +103,14 @@ class ControllerDetailViewModel : ViewModel() {
     private fun updateDevice(device: IotDevice) {
         uiScope.launch {
             _refresh.value = true
-            Model.changeDevice(device)
+            _updateDevice(device)
         }
+    }
+
+    private suspend fun _updateDevice(device: IotDevice) {
+        if (!usePending)
+            Model.changeDevice(device)
+        else Model.changePendingDevice(device)
     }
 
 }

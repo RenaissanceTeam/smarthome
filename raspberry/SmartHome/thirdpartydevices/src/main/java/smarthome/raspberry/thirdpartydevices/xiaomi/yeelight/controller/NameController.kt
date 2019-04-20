@@ -1,7 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
+import smarthome.library.common.constants.NAME_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
-import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.constants.NAME_CONTROLLER_TYPE
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightReadable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.interfaces.YeelightWritable
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.enums.Property
@@ -16,6 +16,6 @@ class NameController(device: YeelightDevice) : Controller(device, NAME_CONTROLLE
      * @param params {name} (String)
      */
     override fun write(params: String): Result {
-        return super.controllerWrite(NAME_CONTROLLER_TYPE, params) // TODO: should iotDevice be renamed too?
+        return super.controllerWrite(type, params) // TODO: should iotDevice be renamed too?
     }
 }

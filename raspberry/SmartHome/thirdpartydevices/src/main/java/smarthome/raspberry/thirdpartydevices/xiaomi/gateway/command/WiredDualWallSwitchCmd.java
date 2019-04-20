@@ -1,7 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command;
 
-import static smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.ConstantsKt.STATUS_CHANNEL_0;
-import static smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.ConstantsKt.STATUS_CHANNEL_1;
+import static smarthome.library.common.constants.ControllerStatusesKt.STATUS_CHANNEL_0;
+import static smarthome.library.common.constants.ControllerStatusesKt.STATUS_CHANNEL_1;
 
 public class WiredDualWallSwitchCmd extends Command {
 

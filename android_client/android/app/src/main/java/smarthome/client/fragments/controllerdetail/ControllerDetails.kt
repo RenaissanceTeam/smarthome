@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import smarthome.client.CONTROLLER_GUID
 import smarthome.client.R
+import smarthome.client.USE_PENDING
 import smarthome.client.fragments.controllerdetail.statechanger.ControllerStateChanger
 import smarthome.client.fragments.controllerdetail.statechanger.OnOffStateChanger
 import smarthome.client.fragments.controllerdetail.statechanger.ReadStateChanger
@@ -105,7 +106,7 @@ class ControllerDetails : Fragment() {
 
         name?.setOnClickListener {
             EditTextDialog.create(view.context,
-                    DialogParameters("controller name", viewModel.controller.value?.name
+                    DialogParameters("controller name", currentValue = viewModel.controller.value?.name
                             ?: "") {
                         viewModel.controllerNameChanged(it)
                     }
@@ -113,6 +114,8 @@ class ControllerDetails : Fragment() {
         }
 
         var controllerGuid: Long? = arguments?.getLong(CONTROLLER_GUID)
+        if (arguments?.containsKey(USE_PENDING) == true)
+            viewModel.usePending()
         if (arguments?.containsKey(CONTROLLER_GUID) != true) {
             controllerGuid = null
         }

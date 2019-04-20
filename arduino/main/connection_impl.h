@@ -357,9 +357,8 @@ void init(WebServer &server, WebServer::ConnectionType type, char * params, bool
   if (client != 0) delete client;
   client = new HttpClient(wifiClient, ip, RASPBERRY_PORT);
   client->post("/init?" home_info, "text", "");
-  delay(100);
   client->flush();
-  delay(100);
+  delay(500);
   client->stop();
 }
 
@@ -390,10 +389,8 @@ void sendAlertToServer(int serviceIndex, int value) {
 	  return;
 	}
 	client->post("/alert?ind=" + String(serviceIndex) + "&value=" + value, "text", "");
-  delay(200);
   client->flush();
-  delay(200);
+  delay(500);
   client->stop();
-  delay(100);
 }
 #endif
