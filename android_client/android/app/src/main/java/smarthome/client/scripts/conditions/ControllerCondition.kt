@@ -16,7 +16,7 @@ import smarthome.client.*
 import smarthome.client.scripts.ControllersProvider
 import smarthome.library.common.BaseController
 
-class ControllerCondition(provider: ControllersProvider) : Condition() {
+class ControllerCondition(provider: ControllersProvider) : Condition(), ConditionViewBuilder {
     var chosenController: BaseController? = null
     var compare: String? = null
     var value: String? = null

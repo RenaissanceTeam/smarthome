@@ -8,7 +8,7 @@ import smarthome.client.CONDITION_EXACT_TIME
 import smarthome.client.CONDITION_INTERVAL_TIME
 import smarthome.client.R
 
-class IntervalTimeCondition : Condition() {
+class IntervalTimeCondition : Condition(), ConditionViewBuilder {
     private val min = 5
 
     var interval = min

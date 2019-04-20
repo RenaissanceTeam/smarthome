@@ -10,8 +10,10 @@ import smarthome.client.scripts.conditions.AllConditionsProvider
 import smarthome.client.scripts.conditions.Condition
 import smarthome.client.scripts.Script
 import smarthome.client.scripts.actions.Action
+import smarthome.client.scripts.actions.ActionViewBuilder
 import smarthome.client.scripts.actions.AllActionsProvider
 import smarthome.client.scripts.actions.ReadAction
+import smarthome.client.scripts.conditions.ConditionViewBuilder
 import smarthome.library.common.BaseController
 
 class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvider {
@@ -54,7 +56,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
         val conditions = script.value?.conditions ?: return
 
         Log.d("ScriptDetailVM", "onSaveClicked: ${conditions.joinToString() }")
-        val allFilled = conditions.isNotEmpty() && conditions.all { it.isFilled() }
+        val allFilled = conditions.isNotEmpty() && conditions.all { (it as? ConditionViewBuilder)?.isFilled() ?: false }
 
         if (allFilled) {
             isConditionOpen.value = false
@@ -74,7 +76,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
         val actions = script.value?.actions ?: return
 
         Log.d("ScriptDetailVM", "onSaveClicked: ${actions.joinToString() }")
-        val allFilled = actions.isNotEmpty() && actions.all { it.isFilled() }
+        val allFilled = actions.isNotEmpty() && actions.all { (it as? ActionViewBuilder)?.isFilled() ?: false}
 
         if (allFilled) {
             isActionOpen.value = false
@@ -87,7 +89,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
 
         val conditions = script.conditions
 
-        if (conditions[position].getTag() == tag) return
+        if ((conditions[position] as? ConditionViewBuilder)?.getTag() == tag) return
         conditions[position] = Condition.withTag(tag, this)
 
         _script.value = script

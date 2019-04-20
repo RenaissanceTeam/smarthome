@@ -9,7 +9,7 @@ import android.widget.TextView
 import smarthome.client.CONDITION_EXACT_TIME
 import smarthome.client.R
 
-class ExactTimeCondition : Condition() {
+class ExactTimeCondition : Condition(), ConditionViewBuilder {
     var state = ""
 
     override fun getTag() = CONDITION_EXACT_TIME

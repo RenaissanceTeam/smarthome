@@ -16,7 +16,7 @@ import smarthome.client.*
 import smarthome.client.scripts.ControllersProvider
 import smarthome.library.common.BaseController
 
-class ReadAction(private val provider: ControllersProvider): Action() {
+class ReadAction(private val provider: ControllersProvider): Action(), ActionViewBuilder {
     var chosenController: BaseController? = null
 
     private var controllersWithName: List<BaseController>? = null

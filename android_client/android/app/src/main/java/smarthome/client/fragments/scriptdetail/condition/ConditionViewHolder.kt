@@ -7,6 +7,7 @@ import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
 import smarthome.client.scripts.conditions.Condition
+import smarthome.client.scripts.conditions.ConditionViewBuilder
 
 class ConditionViewHolder(view: View,
                           onTypeChange: (Int, String) -> Unit) : RecyclerView.ViewHolder(view) {
@@ -30,18 +31,18 @@ class ConditionViewHolder(view: View,
         isBinding = true
         boundPosition = position
 
-        selectRadioButton(condition)
-        inflateFields(condition)
+        if (condition is ConditionViewBuilder) selectRadioButton(condition)
+        if (condition is ConditionViewBuilder) inflateFields(condition)
 
         isBinding = false
     }
 
-    private fun inflateFields(condition: Condition) {
+    private fun inflateFields(condition: ConditionViewBuilder) {
         fieldLayout.removeAllViews()
         fieldLayout.addView(condition.getView(fieldLayout))
     }
 
-    private fun selectRadioButton(condition: Condition) {
+    private fun selectRadioButton(condition: ConditionViewBuilder) {
         val shouldBeChecked = type.findViewWithTag<RadioButton>(condition.getTag())
         if (shouldBeChecked.id != type.checkedRadioButtonId) {
             type.check(shouldBeChecked.id)

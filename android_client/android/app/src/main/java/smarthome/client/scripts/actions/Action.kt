@@ -6,6 +6,11 @@ import android.view.ViewGroup
 import smarthome.client.ACTION_READ_CONTROLLER
 import smarthome.client.ACTION_WRITE_CONTROLLER
 
+interface ActionViewBuilder {
+    fun getView(root: ViewGroup): View
+
+    fun isFilled(): Boolean
+}
 abstract class Action {
     companion object {
         fun withTag(tag: String, provider: AllActionsProvider): Action {
@@ -16,10 +21,6 @@ abstract class Action {
             }
         }
     }
-
-    abstract fun getView(root: ViewGroup): View
-
-    abstract fun isFilled(): Boolean
 
     abstract fun getTag(): String
 
