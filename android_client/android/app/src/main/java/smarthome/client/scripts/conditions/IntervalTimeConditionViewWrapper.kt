@@ -6,7 +6,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import smarthome.client.CONDITION_INTERVAL_TIME
 import smarthome.client.R
-import smarthome.client.scripts.commonlib.scripts.conditions.IntervalTimeCondition
+import smarthome.library.common.scripts.conditions.IntervalTimeCondition
 
 class IntervalTimeConditionViewWrapper(private val condition: IntervalTimeCondition) : ConditionViewWrapper {
 

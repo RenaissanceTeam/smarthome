@@ -5,9 +5,7 @@ import com.google.gson.annotations.Expose;
 
 import java.util.Objects;
 
-import static smarthome.library.common.constants.Constants.STATE_PENDING_READ;
-import static smarthome.library.common.constants.Constants.STATE_PENDING_WRITE;
-import static smarthome.library.common.constants.Constants.STATE_UP_TO_DATE;
+import static smarthome.library.common.constants.ConstantsKt.*;
 
 /**
  * Basic controller interface

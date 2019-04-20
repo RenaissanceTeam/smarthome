@@ -7,7 +7,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import smarthome.client.*
 import smarthome.client.scripts.conditions.AllConditionsProvider
-import smarthome.client.scripts.commonlib.scripts.Script
+import smarthome.library.common.scripts.Script
 import smarthome.client.scripts.actions.ActionViewWrapper
 import smarthome.client.scripts.actions.AllActionsProvider
 import smarthome.client.scripts.conditions.ConditionViewWrapper

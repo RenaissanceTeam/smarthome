@@ -8,7 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import smarthome.client.CONDITION_EXACT_TIME
 import smarthome.client.R
-import smarthome.client.scripts.commonlib.scripts.conditions.ExactTimeCondition
+import smarthome.library.common.scripts.conditions.ExactTimeCondition
 
 class ExactTimeConditionViewWrapper(private val condition: ExactTimeCondition): ConditionViewWrapper {
 

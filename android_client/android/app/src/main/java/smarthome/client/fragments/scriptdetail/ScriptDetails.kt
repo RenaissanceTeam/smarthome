@@ -15,7 +15,7 @@ import smarthome.client.*
 import smarthome.client.R
 import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
-import smarthome.client.scripts.commonlib.scripts.Script
+import smarthome.library.common.scripts.Script
 
 class ScriptDetails: Fragment() {
     companion object {

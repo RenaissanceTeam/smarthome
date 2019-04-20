@@ -10,8 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import smarthome.client.ACTION_READ_CONTROLLER
 import smarthome.client.R
+import smarthome.library.common.constants.*
 import smarthome.client.scripts.ControllersProvider
-import smarthome.client.scripts.commonlib.scripts.actions.ReadAction
+import smarthome.library.common.scripts.actions.ReadAction
 import smarthome.library.common.BaseController
 
 class ReadActionViewWrapper(private val provider: ControllersProvider,

@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
-import smarthome.client.scripts.commonlib.scripts.Script
+import smarthome.library.common.scripts.Script
 
 class ScriptViewHolder(view: View, onClick: (Script?) -> Unit) : RecyclerView.ViewHolder(view) {
     private val name = view.findViewById<TextView>(R.id.script_name)

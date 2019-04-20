@@ -6,7 +6,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
-import smarthome.client.scripts.commonlib.scripts.conditions.Condition
+import smarthome.library.common.scripts.conditions.Condition
 import smarthome.client.scripts.conditions.ConditionViewWrapper
 
 class ConditionViewHolder(view: View,

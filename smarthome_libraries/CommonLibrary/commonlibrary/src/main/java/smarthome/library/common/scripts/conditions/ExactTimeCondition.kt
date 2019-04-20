@@ -1,6 +1,6 @@
-package smarthome.client.scripts.commonlib.scripts.conditions
+package smarthome.library.common.scripts.conditions
 
-import smarthome.client.scripts.commonlib.scripts.conditions.Condition
+import smarthome.library.common.scripts.conditions.Condition
 
 open class ExactTimeCondition : Condition() {
     var state = ""

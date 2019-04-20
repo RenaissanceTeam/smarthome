@@ -1,6 +1,6 @@
-package smarthome.client.scripts.commonlib.scripts.actions
+package smarthome.library.common.scripts.actions
 
-import smarthome.client.scripts.commonlib.scripts.actions.Action
+import smarthome.library.common.scripts.actions.Action
 import smarthome.library.common.BaseController
 
 open class WriteAction : Action() {

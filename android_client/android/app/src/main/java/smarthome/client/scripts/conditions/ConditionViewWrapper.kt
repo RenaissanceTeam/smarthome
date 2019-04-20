@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import smarthome.client.CONDITION_CONTROLLER
 import smarthome.client.CONDITION_EXACT_TIME
 import smarthome.client.CONDITION_INTERVAL_TIME
-import smarthome.client.scripts.commonlib.scripts.conditions.Condition
-import smarthome.client.scripts.commonlib.scripts.conditions.ControllerCondition
-import smarthome.client.scripts.commonlib.scripts.conditions.ExactTimeCondition
-import smarthome.client.scripts.commonlib.scripts.conditions.IntervalTimeCondition
+import smarthome.library.common.constants.*
+import smarthome.library.common.scripts.conditions.Condition
+import smarthome.library.common.scripts.conditions.ControllerCondition
+import smarthome.library.common.scripts.conditions.ExactTimeCondition
+import smarthome.library.common.scripts.conditions.IntervalTimeCondition
 
 interface ConditionViewWrapper {
     companion object {
