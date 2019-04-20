@@ -28,12 +28,13 @@ class WaterLeakSensor(sid: String,
             val o = JSONObject(json)
 
             if (!o.isNull(STATUS_KEY)) {
-                getControllerByType(GATEWAY_WATER_LEAK_CONTROLLER).state = o.getString(STATUS_KEY)
+                val waterLeakController = getControllerByType(GATEWAY_WATER_LEAK_CONTROLLER)
+                waterLeakController.state = o.getString(STATUS_KEY)
 
-                val leakStatus = getControllerByType(GATEWAY_WATER_LEAK_CONTROLLER).state == STATUS_WATER_LEAK
+                val leakStatus = waterLeakController.state == STATUS_WATER_LEAK
 
                 if(leak != leakStatus) {
-                    waterLeakListener?.onWaterLeakStatusChanged(leakStatus)
+                    waterLeakListener?.onWaterLeakStatusChanged(leakStatus, this, waterLeakController)
                     leak = leakStatus
                 }
             }

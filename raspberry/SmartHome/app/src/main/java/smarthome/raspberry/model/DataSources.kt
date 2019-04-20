@@ -29,7 +29,7 @@ enum class DataSources (val deviceType: Class<out IotDevice>,
             MotionController::class.java, VoltageController::class.java),
 
     GATEWAY_SMART_PLUG(SmartPlug::class.java,
-            SmartPlugOnOffController::class.java, TimeInUseController::class.java,
+            SmartPlugOnOffController::class.java, TimeInUseController::class.java, PowerConsumedController::class.java,
             PowerController::class.java, LoadPowerController::class.java, VoltageController::class.java),
 
     GATEWAY_SMOKE_SENSOR(SmokeSensor::class.java,

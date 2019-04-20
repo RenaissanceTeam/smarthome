@@ -21,7 +21,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners
 abstract class GatewayDevice(sid: String,
                              type: String,
                              parentGatewaySid: String = IDLE_STATUS,
-                             @Expose private val stateChangeListener: StateChangeListener? = null,
+                             private val stateChangeListener: StateChangeListener? = null,
                              smokeAlarmListener: SmokeAlarmListener? = null,
                              waterLeakListener: WaterLeakListener? = null)
     : IotDevice () {
@@ -30,9 +30,9 @@ abstract class GatewayDevice(sid: String,
         @Exclude get
     @Exclude @Expose val parentGatewaySid: String = parentGatewaySid
         @Exclude get
-    @Exclude @Expose var smokeAlarmListener: SmokeAlarmListener? = smokeAlarmListener
+    @Exclude val smokeAlarmListener: SmokeAlarmListener? = smokeAlarmListener
         @Exclude get
-    @Exclude @Expose var waterLeakListener: WaterLeakListener? = waterLeakListener
+    @Exclude val waterLeakListener: WaterLeakListener? = waterLeakListener
         @Exclude get
 
     init {
@@ -54,7 +54,7 @@ abstract class GatewayDevice(sid: String,
     fun setVoltage(o: JSONObject) {
         if (!o.isNull(VOLTAGE_KEY))
             getControllerByType(GATEWAY_VOLTAGE_CONTROLLER).state =
-                    (o.getString(VOLTAGE_KEY).toFloat() / 1000).toString()
+                    (o.getString(VOLTAGE_KEY).toFloat() / 1000).toString() + "v"
     }
 
     fun getControllerByType(type: String): BaseController {
@@ -65,8 +65,8 @@ abstract class GatewayDevice(sid: String,
         throw IllegalArgumentException("This device does not have controller with type: $type")
     }
 
-    fun invokeStateListener(state: String) {
-        stateChangeListener?.onStateChanged(state)
+    fun invokeStateListener(state: String, device: GatewayDevice, controller: BaseController) {
+        stateChangeListener?.onStateChanged(state, device, controller)
     }
 
     fun reportDataParseError(e: JSONException) {

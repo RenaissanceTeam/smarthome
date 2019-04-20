@@ -49,34 +49,21 @@ class Gateway(password: String, sid: String,
         try {
             val o = JSONObject(json)
 
-            var light = false
-
             if (!o.isNull(IP_KEY))
                 configureIp(o.getString(IP_KEY))
 
             if (!o.isNull(RGB_KEY)) {
                 rgb = o.getLong(RGB_KEY)
-                getControllerByType(GATEWAY_RGB_CONTROLLER).state = rgb.toString()
-
-                if(rgb > 0)
-                    light = true
+                //getControllerByType(GATEWAY_RGB_CONTROLLER).state = rgb.toString()
             }
 
             if (!o.isNull(ILLUMINATION_KEY)) {
                 illumination = o.getInt(ILLUMINATION_KEY)
-                getControllerByType(GATEWAY_ILLUMINATION_CONTROLLER).state = illumination.toString()
-
-                if(illumination > 0)
-                    light = true
+                getControllerByType(GATEWAY_ILLUMINATION_CONTROLLER).state = illumination.toString() + "lx"
             }
 
             if (!o.isNull(PROTO_VERSION_KEY))
                 protoVersion = o.getString(PROTO_VERSION_KEY)
-
-            var lightStatus = STATUS_OFF
-            if (light) lightStatus = STATUS_ON
-
-            getControllerByType(GATEWAY_LIGHT_ON_OFF_CONTROLLER).state = lightStatus
 
             super.parseData(json)
         } catch (e: JSONException) {

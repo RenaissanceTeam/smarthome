@@ -29,6 +29,8 @@ import smarthome.raspberry.service.GatewayServiceController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IDLE_STATUS
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Gateway
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
+import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.Controller
 import smarthome.raspberry.utils.HomeController
 import smarthome.raspberry.utils.fcm.FcmSender
 import smarthome.raspberry.utils.fcm.MessageType
@@ -56,7 +58,7 @@ object SmartHomeRepository : SmartHome() {
 
     suspend fun init(appContext: Context, listener: RepoInitListener) {
         setInitListener(listener)
-        SmartHomeRepository.init(appContext)
+        init(appContext)
     }
 
     suspend fun init(appContext: Context) {
@@ -91,9 +93,19 @@ object SmartHomeRepository : SmartHome() {
                 (device as? ArduinoDevice)?.controllers?.forEach {
                     (it as? ArduinoController)?.device = device
                 }
-                // todo add code here to fix some links after deserializing from db
+
+                if (device is YeelightDevice) {
+                    device.controllers.forEach {
+                        (it as Controller).device = device
+                    }
+                }
+
                 if (GatewayDevice::class.java.isAssignableFrom(device.javaClass))
                     gatewayDevices.add(device as GatewayDevice)
+
+                device.controllers.forEach {
+                    it.classType = it.javaClass.simpleName
+                }
             }
         }
 
@@ -366,7 +378,7 @@ object SmartHomeRepository : SmartHome() {
         // todo save to firestore (notify android client, send FCM)
         ioScope.launch {
             try {
-                updateDeviceInRemoteStorage(device)
+                updateDeviceInRemoteStorage(device, device.isPending)
                 fcmSender.send(controller, device, MessageType.NOTIFICATION, Priority.HIGH,
                         tokens.map { it.token }.toTypedArray())
             } catch (e: Throwable) {
@@ -375,11 +387,18 @@ object SmartHomeRepository : SmartHome() {
         }
     }
 
-    private suspend fun updateDeviceInRemoteStorage(device: IotDevice) {
+    private suspend fun updateDeviceInRemoteStorage(device: IotDevice, isPending: Boolean) {
         suspendCoroutine<Unit> { c ->
-            devicesStorage.updateDevice(device,
-                    OnSuccessListener { c.resumeWith(Result.success(Unit)) },
-                    OnFailureListener { c.resumeWithException(FirestoreUnreachable()) })
+            if (isPending) {
+                devicesStorage.updatePendingDevice(device,
+                        OnSuccessListener { c.resumeWith(Result.success(Unit)) },
+                        OnFailureListener { c.resumeWithException(FirestoreUnreachable()) })
+            }
+            else {
+                devicesStorage.updateDevice(device,
+                        OnSuccessListener { c.resumeWith(Result.success(Unit)) },
+                        OnFailureListener { c.resumeWithException(FirestoreUnreachable()) })
+            }
         }
     }
 }

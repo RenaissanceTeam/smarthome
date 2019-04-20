@@ -17,6 +17,7 @@ class GatewayLightOnOffController(device: GatewayDevice, transport: UdpTransport
      * "on", "off" (String)
      */
     override fun write(params: String) {
+        super.updateState(params)
         val tmblr = params == STATUS_ON
         if (tmblr)
             super.controllerWrite(GatewayLightCmd(calculateRGB(255.toByte(), 255.toByte(), 255.toByte()), 1300))

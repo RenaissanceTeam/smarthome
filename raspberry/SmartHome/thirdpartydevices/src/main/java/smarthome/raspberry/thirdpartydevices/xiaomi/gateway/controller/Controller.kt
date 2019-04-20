@@ -11,8 +11,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 
 open class Controller(device: GatewayDevice,
                       type: String,
-                      transport: UdpTransport? = null,
-                      private val stateChangedListener: StateChangeListener = defStateChangeListener)
+                      transport: UdpTransport? = null)
     : BaseController() {
 
 
@@ -30,12 +29,16 @@ open class Controller(device: GatewayDevice,
         this.guid = GUID.getInstance().generateGuidForController(device, this)
     }
 
+    fun updateState(state: String) {
+        this.state = state
+    }
+
     fun controllerWrite(command: Command) {
         transport?.sendWriteCommand(device.sid, device.type, command)
     }
 
     fun controllerRead(): String {
-        return state
+        return state ?: ""
     }
 
 }

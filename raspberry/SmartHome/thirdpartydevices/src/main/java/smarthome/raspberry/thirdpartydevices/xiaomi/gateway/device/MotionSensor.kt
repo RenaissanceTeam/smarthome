@@ -10,9 +10,11 @@ import smarthome.library.common.constants.STATUS_MOTION
 import smarthome.library.common.constants.STATUS_NO_MOTION
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.MotionController
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.VoltageController
+import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners.StateChangeListener
 import java.time.LocalDateTime
 
-class MotionSensor(sid: String, gatewaySid: String) : GatewayDevice(sid, MOTION_SENSOR_TYPE, gatewaySid) {
+class MotionSensor(sid: String, gatewaySid: String, stateChangeListener: StateChangeListener)
+    : GatewayDevice(sid, MOTION_SENSOR_TYPE, gatewaySid, stateChangeListener) {
 
     @Expose private var lastMotion: LocalDateTime = LocalDateTime.now()
 
@@ -33,7 +35,7 @@ class MotionSensor(sid: String, gatewaySid: String) : GatewayDevice(sid, MOTION_
                 if (motionController.state == STATUS_MOTION) {
                     lastMotion = LocalDateTime.now()
                     motionController.state += " $lastMotion"
-                    invokeStateListener(motionController.state)
+                    invokeStateListener(motionController.state, this, motionController)
                 }
             }
 
