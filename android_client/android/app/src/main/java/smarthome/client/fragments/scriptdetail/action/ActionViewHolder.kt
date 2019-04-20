@@ -7,6 +7,7 @@ import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
 import smarthome.client.scripts.actions.Action
+import smarthome.client.scripts.actions.ActionViewBuilder
 import smarthome.client.scripts.conditions.Condition
 
 class ActionViewHolder(view: View,
@@ -32,12 +33,12 @@ class ActionViewHolder(view: View,
         boundPosition = position
 
         selectRadioButton(action)
-        inflateFields(action)
+        if (action is ActionViewBuilder) inflateFields(action)
 
         isBinding = false
     }
 
-    private fun inflateFields(action: Action) {
+    private fun inflateFields(action: ActionViewBuilder) {
         fieldLayout.removeAllViews()
         fieldLayout.addView(action.getView(fieldLayout))
     }

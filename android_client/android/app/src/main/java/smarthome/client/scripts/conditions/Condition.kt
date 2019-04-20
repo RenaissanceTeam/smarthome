@@ -7,6 +7,14 @@ import smarthome.client.CONDITION_CONTROLLER
 import smarthome.client.CONDITION_EXACT_TIME
 import smarthome.client.CONDITION_INTERVAL_TIME
 
+interface ConditionViewBuilder {
+    fun getTag(): String
+
+    fun getView(root: ViewGroup): View
+
+    fun isFilled(): Boolean
+}
+
 abstract class Condition {
     companion object {
         fun withTag(tag: String, provider: AllConditionsProvider): Condition {
@@ -19,16 +27,10 @@ abstract class Condition {
         }
     }
 
-    abstract fun getView(root: ViewGroup): View
-
-    abstract fun getTag(): String
-
     abstract fun evaluate(): Boolean
+}
 
-    abstract fun isFilled(): Boolean
-
-    internal fun inflateLayout(root: ViewGroup, layout: Int): View {
-        val inflater = LayoutInflater.from(root.context)
-        return inflater.inflate(layout, root, false)
-    }
+fun inflateLayout(root: ViewGroup, layout: Int): View {
+    val inflater = LayoutInflater.from(root.context)
+    return inflater.inflate(layout, root, false)
 }

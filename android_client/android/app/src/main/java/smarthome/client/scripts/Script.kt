@@ -8,5 +8,3 @@ data class Script(val name: String = "",
              val conditions: MutableList<Condition> = mutableListOf(),
              val actions: MutableList<Action> = mutableListOf(),
                   val guid: Long = GUID.getInstance().random())
-
-

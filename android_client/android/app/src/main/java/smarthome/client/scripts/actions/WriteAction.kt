@@ -16,7 +16,7 @@ import smarthome.client.*
 import smarthome.client.scripts.ControllersProvider
 import smarthome.library.common.BaseController
 
-class WriteAction(provider: ControllersProvider) : Action() {
+class WriteAction(provider: ControllersProvider) : Action(), ActionViewBuilder {
     var chosenController: BaseController? = null
     var value: String? = null
     var compare: String? = null
