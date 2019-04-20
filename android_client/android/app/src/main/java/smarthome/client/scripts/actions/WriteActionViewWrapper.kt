@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import smarthome.client.ACTION_WRITE_CONTROLLER
 import smarthome.client.R
 import smarthome.client.scripts.ControllersProvider
-import smarthome.client.scripts.commonlib.scripts.actions.WriteAction
+import smarthome.library.common.scripts.actions.WriteAction
 import smarthome.library.common.BaseController
 
 class WriteActionViewWrapper(provider: ControllersProvider, private val action:WriteAction): ActionViewWrapper {

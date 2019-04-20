@@ -1,7 +1,7 @@
-package smarthome.client.scripts.commonlib.scripts.conditions
+package smarthome.library.common.scripts.conditions
 
-import smarthome.client.*
 import smarthome.library.common.BaseController
+import smarthome.library.common.constants.*
 
 open class ControllerCondition : Condition() {
     var chosenController: BaseController? = null

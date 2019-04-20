@@ -13,13 +13,13 @@ import androidx.appcompat.widget.AppCompatSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import smarthome.client.*
+import smarthome.client.CONDITION_CONTROLLER
+import smarthome.library.common.constants.*
 import smarthome.client.scripts.ControllersProvider
-import smarthome.client.scripts.commonlib.scripts.conditions.Condition
-import smarthome.client.scripts.commonlib.scripts.conditions.ControllerCondition
+import smarthome.library.common.scripts.conditions.ControllerCondition
 import smarthome.library.common.BaseController
 
-class ControllerConditionViewWrapper(provider: ControllersProvider, private val condition: ControllerCondition): ConditionViewWrapper {
+class ControllerConditionViewWrapper(provider: ControllersProvider, private val condition: ControllerCondition) : ConditionViewWrapper {
     private var controllersWithName: List<BaseController>? = null
     private var hasPendingBinding = false
     private lateinit var view: View

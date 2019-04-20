@@ -5,10 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import smarthome.client.ACTION_READ_CONTROLLER
 import smarthome.client.ACTION_WRITE_CONTROLLER
-import smarthome.client.scripts.commonlib.scripts.actions.Action
-import smarthome.client.scripts.commonlib.scripts.actions.ReadAction
-import smarthome.client.scripts.commonlib.scripts.actions.WriteAction
-import smarthome.client.scripts.commonlib.scripts.conditions.Condition
+import smarthome.library.common.constants.*
+import smarthome.library.common.scripts.actions.Action
+import smarthome.library.common.scripts.actions.ReadAction
+import smarthome.library.common.scripts.actions.WriteAction
+import smarthome.library.common.scripts.conditions.Condition
 
 interface ActionViewWrapper {
     companion object {

@@ -1,4 +1,4 @@
-package smarthome.client.scripts.commonlib.scripts.conditions
+package smarthome.library.common.scripts.conditions
 
 abstract class Condition {
     abstract fun evaluate(): Boolean

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import smarthome.client.*
-import smarthome.client.scripts.commonlib.scripts.Script
+import smarthome.library.common.scripts.Script
 
 
 class ScriptsFragment : Fragment() {

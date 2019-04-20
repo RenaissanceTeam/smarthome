@@ -1,16 +1,14 @@
-package smarthome.client.scripts.commonlib.scripts.conditions
+package smarthome.library.common.scripts.conditions
 
-import smarthome.client.scripts.commonlib.scripts.conditions.Condition
+import smarthome.library.common.scripts.conditions.Condition
 
 open class IntervalTimeCondition : Condition() {
-    internal val min = 5
-
+    val min = 5
     var interval = min
-
 
     override fun toString() = "At interval ${formatInterval()}"
 
-    internal fun formatInterval(): String {
+    fun formatInterval(): String {
         val hours = interval / 60
         val minutes = interval % 60
 
