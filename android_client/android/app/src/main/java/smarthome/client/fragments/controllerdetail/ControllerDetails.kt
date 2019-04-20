@@ -21,8 +21,8 @@ import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
-import smarthome.library.common.constants.Constants.STATE_PENDING_READ
-import smarthome.library.common.constants.Constants.STATE_PENDING_WRITE
+import smarthome.library.common.constants.STATE_PENDING_READ
+import smarthome.library.common.constants.STATE_PENDING_WRITE
 
 class ControllerDetails : Fragment() {
 
