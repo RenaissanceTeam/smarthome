@@ -76,7 +76,7 @@ class ScriptDetails: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupViews(view)
         name?.setOnClickListener { EditTextDialog.create(view.context,
-                DialogParameters("script name", viewModel.script.value?.name ?: "") {
+                DialogParameters("script name", currentValue = viewModel.script.value?.name ?: "") {
                     viewModel.scriptNameChange(it)
                 }
         ).show() }
