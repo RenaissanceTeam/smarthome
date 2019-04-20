@@ -8,9 +8,9 @@ import android.widget.EditText
 import android.widget.TextView
 import smarthome.client.CONDITION_EXACT_TIME
 import smarthome.client.R
+import smarthome.client.scripts.commonlib.scripts.conditions.ExactTimeCondition
 
-class ExactTimeCondition : Condition(), ConditionViewBuilder {
-    var state = ""
+class ExactTimeConditionViewWrapper(private val condition: ExactTimeCondition): ConditionViewWrapper {
 
     override fun getTag() = CONDITION_EXACT_TIME
 
@@ -19,11 +19,11 @@ class ExactTimeCondition : Condition(), ConditionViewBuilder {
 
         view.findViewById<TextView>(R.id.field_before).text = "At time"
         val input = view.findViewById<EditText>(R.id.field_input)
-        input.setText(state)
+        input.setText(condition.state)
 
         input.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                state = s?.toString() ?: ""
+                condition.state = s?.toString() ?: ""
             }
 
             override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
@@ -33,14 +33,13 @@ class ExactTimeCondition : Condition(), ConditionViewBuilder {
     }
 
     override fun isFilled(): Boolean {
-        val isFilled = !state.isEmpty()
+        val isFilled = !condition.state.isEmpty()
         if (!isFilled) {
             // todo highlight
         }
         return isFilled
     }
 
-    override fun toString() = "At time $state"
+    override fun toString() = condition.toString()
 
-    override fun evaluate(): Boolean = true // todo
 }
