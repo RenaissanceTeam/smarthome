@@ -10,7 +10,6 @@ import java.util.*
 
 class InitPost : BaseRequestHandler() {
     override fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
-        // todo add check if it's really arduino if other devices will be added the same way
         return if (initNewArduinoDevice(session)) {
             NanoHTTPD.Response("Added successfully")
         } else NanoHTTPD.Response("ArduinoDevice was not added")
@@ -21,21 +20,33 @@ class InitPost : BaseRequestHandler() {
         val name = params["name"]
         val description = params["description"]
         val ip = session.headers["http-client-ip"]
-        val rawServices = params["services"]!!.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val rawServices = params["services"]?.split(';')
+        val servicesNames = params["names"]?.split(';')
+
 
         val device = ArduinoDevice(name, description, ip)
-        device.controllers = parseControllers(device, rawServices)
+        device.controllers = parseControllers(device, rawServices, servicesNames)
 
         return SmartHomeRepository.addDevice(device)
     }
 
-    private fun parseControllers(device: ArduinoDevice, rawServices: Array<String>): List<ArduinoController> {
+    private fun parseControllers(device: ArduinoDevice,
+                                 rawServices: List<String>?,
+                                 serviceNames: List<String>?): List<ArduinoController> {
         val controllers = ArrayList<ArduinoController>()
+        rawServices ?: return listOf()
+        serviceNames ?: throw RuntimeException("No service names for services: $rawServices")
+        if (rawServices.count() != serviceNames.count()) {
+            throw RuntimeException("Count of services=${rawServices.count()} " +
+                    "and service names=${serviceNames.count()} is not the same")
+        }
 
         for (i in rawServices.indices) {
             val id = Integer.parseInt(rawServices[i].trim { it <= ' ' })
             val type = ControllerType.getById(id)
-            controllers.add(ArduinoControllersFactory.createArduinoController(type, device, i))
+            val name = serviceNames[i]
+
+            controllers.add(ArduinoControllersFactory.createArduinoController(type, name, device, i))
         }
 
         return controllers

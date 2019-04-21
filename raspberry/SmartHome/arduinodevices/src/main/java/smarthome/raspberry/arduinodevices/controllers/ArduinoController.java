@@ -23,8 +23,9 @@ public class ArduinoController extends BaseController {
     @Exclude public ArduinoDevice device;
     @Exclude @Expose public final int indexInArduinoServicesArray;
 
-    public ArduinoController(ArduinoDevice device, ControllerType type, int indexInArduinoServicesArray) {
+    public ArduinoController(ArduinoDevice device, String name, ControllerType type, int indexInArduinoServicesArray) {
         this.device = device;
+        this.name = name;
         this.type = type.toString();
         this.indexInArduinoServicesArray = indexInArduinoServicesArray;
         this.guid = GUID.getInstance().generateGuidForController(device, this);
@@ -73,6 +74,7 @@ public class ArduinoController extends BaseController {
     public String toString() {
         return "ArduinoController{" +
                 "device guid=" + device.guid +
+                ", name=" + name +
                 ", guid=" + guid +
                 ", indexInArduinoServicesArray=" + indexInArduinoServicesArray +
                 ", type=" + type +
