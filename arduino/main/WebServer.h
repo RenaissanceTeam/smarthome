@@ -53,7 +53,7 @@
 #endif
 
 #ifndef WEBDUINO_COMMANDS_COUNT
-#define WEBDUINO_COMMANDS_COUNT 8
+#define WEBDUINO_COMMANDS_COUNT 3
 #endif
 
 #ifndef WEBDUINO_URL_PATH_COMMAND_LENGTH
@@ -61,19 +61,11 @@
 #endif
 
 #ifndef WEBDUINO_FAIL_MESSAGE
-#define WEBDUINO_FAIL_MESSAGE "<h1>EPIC FAIL</h1>"
+#define WEBDUINO_FAIL_MESSAGE ""
 #endif
 
-#ifndef WEBDUINO_AUTH_REALM
-#define WEBDUINO_AUTH_REALM "Webduino"
-#endif // #ifndef WEBDUINO_AUTH_REALM
-
-#ifndef WEBDUINO_AUTH_MESSAGE
-#define WEBDUINO_AUTH_MESSAGE "<h1>401 Unauthorized</h1>"
-#endif // #ifndef WEBDUINO_AUTH_MESSAGE
-
 #ifndef WEBDUINO_SERVER_ERROR_MESSAGE
-#define WEBDUINO_SERVER_ERROR_MESSAGE "<h1>500 Internal Server Error</h1>"
+#define WEBDUINO_SERVER_ERROR_MESSAGE ""
 #endif // WEBDUINO_SERVER_ERROR_MESSAGE
 
 #ifndef WEBDUINO_OUTPUT_BUFFER_SIZE
@@ -235,23 +227,9 @@ public:
   URLPARAM_RESULT nextURLparam(char **tail, char *name, int nameLen,
                                char *value, int valueLen);
 
-  // compare string against credentials in current request
-  //
-  // authCredentials must be Base64 encoded outside of Webduino
-  // (I wanted to be easy on the resources)
-  //
-  // returns true if strings match, false otherwise
-  bool checkCredentials(const char authCredentials[45]);
 
   // output headers and a message indicating a server error
   void httpFail();
-
-  // output headers and a message indicating "401 Unauthorized"
-  void httpUnauthorized();
-
-  // output headers and a message indicating "500 Internal Server Error"
-  void httpServerError();
-
   // output headers indicating "204 No Content" and no further message
   void httpNoContent();
 
@@ -289,7 +267,6 @@ private:
   unsigned char m_pushbackDepth;
 
   int m_contentLength;
-  char m_authCredentials[51];
   char m_remoteIp[15];
   bool m_readingContent;
 
@@ -607,13 +584,6 @@ void WebServer::processConnection(char *buff, int *bufflen)
   }
 }
 
-// bool WebServer::checkCredentials(const char authCredentials[45])
-// {
-//   char basic[7] = "Basic ";
-//   if((0 == strncmp(m_authCredentials,basic,6)) &&
-//      (0 == strcmp(authCredentials, m_authCredentials + 6))) return true;
-//   return false;
-// }
 
 void WebServer::httpFail()
 {
@@ -640,23 +610,6 @@ void WebServer::defaultFailCmd(WebServer &server,
   server.httpFail();
 }
 
-
-void WebServer::httpServerError()
-{
-  P(servErrMsg1) = "HTTP/1.0 500 Internal Server Error" CRLF;
-  printP(servErrMsg1);
-
-#ifndef WEBDUINO_SUPRESS_SERVER_HEADER
-  printP(webServerHeader);
-#endif
-
-  P(servErrMsg2) = 
-    "Content-Type: text/html" CRLF
-    CRLF
-    WEBDUINO_SERVER_ERROR_MESSAGE;
-
-  printP(servErrMsg2);
-}
 
 
 void WebServer::httpSuccess(const char *contentType,
@@ -909,13 +862,6 @@ void WebServer::getRequest(WebServer::ConnectionType &type,
 }
 void WebServer::processHeaders()
 {
-  // look for three things: the Content-Length header, the Authorization
-  // header, and the double-CRLF that ends the headers.
-
-  // empty the m_authCredentials before every run of this function.
-  // otherwise users who don't send an Authorization header would be treated
-  // like the last user who tried to authenticate (possibly successful)
-  m_authCredentials[0]=0;
 
   while (1)
   {
@@ -925,17 +871,6 @@ void WebServer::processHeaders()
 #if WEBDUINO_SERIAL_DEBUGGING > 1
       Serial.print("\n*** got Content-Length of ");
       Serial.print(m_contentLength);
-      Serial.print(" ***");
-#endif
-      continue;
-    }
-
-    if (expect("Authorization:"))
-    {
-      readHeader(m_authCredentials,51);
-#if WEBDUINO_SERIAL_DEBUGGING > 1
-      Serial.print("\n*** got Authorization: of ");
-      Serial.print(m_authCredentials);
       Serial.print(" ***");
 #endif
       continue;

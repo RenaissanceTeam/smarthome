@@ -80,12 +80,12 @@ public class UdpServer implements StoppableServer {
                 .header(REMOTE_ADDR_HEADER, Helpers.getLocalIpAddress())
                 .build();
 
-
         Response response = new OkHttpClient()
                 .newCall(request)
                 .execute();
-        Log.d(TAG, "onReceiveFromUpd: request=" + request + ", response=" + response);
-        response.body().close(); // blocking call
+
+        Log.d(TAG, "onReceiveFromUpd: request=" + request + "headers: " + request.headers() + ", response=" + response);
+        response.body().close();
     }
 
     private String getArduinoInitUrl(InetAddress address) {
