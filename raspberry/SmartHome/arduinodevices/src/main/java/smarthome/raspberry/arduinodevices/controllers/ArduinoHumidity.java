@@ -8,8 +8,8 @@ import smarthome.raspberry.arduinodevices.ArduinoDevice;
 
 public class ArduinoHumidity extends ArduinoController implements ArduinoReadable {
 
-    public ArduinoHumidity(ArduinoDevice device, ControllerType type, int indexInArduinoServicesArray) {
-        super(device, type, indexInArduinoServicesArray);
+    public ArduinoHumidity(ArduinoDevice device, String name, ControllerType type, int indexInArduinoServicesArray) {
+        super(device, name, type, indexInArduinoServicesArray);
     }
 
     @Override

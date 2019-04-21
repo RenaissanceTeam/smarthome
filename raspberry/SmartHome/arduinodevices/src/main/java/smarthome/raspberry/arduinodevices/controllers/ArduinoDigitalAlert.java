@@ -7,8 +7,8 @@ import smarthome.raspberry.arduinodevices.ArduinoControllerResponse;
 import smarthome.raspberry.arduinodevices.ArduinoDevice;
 
 public class ArduinoDigitalAlert extends ArduinoController implements ArduinoReadable {
-    public ArduinoDigitalAlert(ArduinoDevice device, ControllerType type, int indexInArduinoServicesArray) {
-        super(device, type, indexInArduinoServicesArray);
+    public ArduinoDigitalAlert(ArduinoDevice device, String name, ControllerType type, int indexInArduinoServicesArray) {
+        super(device, name, type, indexInArduinoServicesArray);
     }
 
     @Override

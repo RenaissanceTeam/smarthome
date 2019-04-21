@@ -10,9 +10,9 @@ public class ArduinoOnOff extends ArduinoController implements ArduinoWritable, 
 
     public static final String TAG = ArduinoOnOff.class.getSimpleName();
 
-    public ArduinoOnOff(ArduinoDevice device, ControllerType type,
+    public ArduinoOnOff(ArduinoDevice device, String name, ControllerType type,
                         int indexInArduinoServicesArray) {
-        super(device, type, indexInArduinoServicesArray);
+        super(device, name, type, indexInArduinoServicesArray);
     }
 
     @Override
