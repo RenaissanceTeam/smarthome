@@ -24,6 +24,7 @@ void baseResponse(WebServer& server, int val) {
   server.print(val);
   server.print("\"}");
   server.print(CRLF);
+  server.flushBuf();
 }
 
 void baseResponse(WebServer& server, double val) {
@@ -33,6 +34,7 @@ void baseResponse(WebServer& server, double val) {
   server.print(val);
   server.print("\"}");
   server.print(CRLF);
+  server.flushBuf();
 }
 
 // ==========================================================================
@@ -343,6 +345,7 @@ void homePage(WebServer &server, WebServer::ConnectionType type,
 {
   server.httpSuccess();
   server.print(home_info);
+  server.flushBuf();
 }
 
 
