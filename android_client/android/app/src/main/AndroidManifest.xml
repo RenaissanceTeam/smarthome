@@ -10,6 +10,15 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/alert_notification_channel" />
+
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+
+            android:resource="@drawable/round_warning" />
+
         <activity android:name=".AddDeviceActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>

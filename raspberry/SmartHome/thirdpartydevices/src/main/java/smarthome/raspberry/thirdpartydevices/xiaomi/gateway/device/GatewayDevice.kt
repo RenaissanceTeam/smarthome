@@ -21,7 +21,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller.listeners
 abstract class GatewayDevice(sid: String,
                              type: String,
                              parentGatewaySid: String = IDLE_STATUS,
-                             private val stateChangeListener: StateChangeListener? = null,
+                             stateChangeListener: StateChangeListener? = null,
                              smokeAlarmListener: SmokeAlarmListener? = null,
                              waterLeakListener: WaterLeakListener? = null)
     : IotDevice () {
@@ -30,9 +30,11 @@ abstract class GatewayDevice(sid: String,
         @Exclude get
     @Exclude @Expose val parentGatewaySid: String = parentGatewaySid
         @Exclude get
-    @Exclude val smokeAlarmListener: SmokeAlarmListener? = smokeAlarmListener
+    @Exclude var stateChangeListener: StateChangeListener? = stateChangeListener
         @Exclude get
-    @Exclude val waterLeakListener: WaterLeakListener? = waterLeakListener
+    @Exclude var smokeAlarmListener: SmokeAlarmListener? = smokeAlarmListener
+        @Exclude get
+    @Exclude var waterLeakListener: WaterLeakListener? = waterLeakListener
         @Exclude get
 
     init {
