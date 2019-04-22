@@ -10,9 +10,9 @@ import smarthome.raspberry.arduinodevices.ArduinoDeviceAPI;
 
 public class ArduinoReadFloat extends ArduinoController implements ArduinoReadable {
 
-    public ArduinoReadFloat(ArduinoDevice device, ControllerType type,
+    public ArduinoReadFloat(ArduinoDevice device, String name, ControllerType type,
                             int indexInArduinoServicesArray) {
-        super(device, type, indexInArduinoServicesArray);
+        super(device, name, type, indexInArduinoServicesArray);
     }
 
     @Override
