@@ -100,6 +100,15 @@ public class GatewayService implements SmokeAlarmListener, StateChangeListener, 
                 if (TransportSettable.class.isAssignableFrom(device.getClass()))
                     ((TransportSettable) device).setUpTransport(transport);
 
+                if (device.getClass() == MotionSensor.class || device.getClass() == DoorWindowSensor.class)
+                    device.setStateChangeListener(this);
+
+                if (device.getClass() == SmokeSensor.class)
+                    device.setSmokeAlarmListener(this);
+
+                if (device.getClass() == WaterLeakSensor.class)
+                    device.setWaterLeakListener(this);
+
                 device.recoverControllers();
 
                 save(device);
