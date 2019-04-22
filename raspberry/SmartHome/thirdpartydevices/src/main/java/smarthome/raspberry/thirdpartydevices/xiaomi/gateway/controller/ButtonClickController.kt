@@ -13,6 +13,7 @@ class ButtonClickController(device: GatewayDevice, transport: UdpTransport)
      * STATUS_CLICK, STATUS_DOUBLE_CLICK, STATUS_LONG_PRESS
      */
     override fun write(params: String) {
+        super.updateState(params)
         super.controllerWrite(WirelessSwitchCmd(params))
     }
 

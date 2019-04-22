@@ -14,6 +14,7 @@ class SmartPlugOnOffController(device: GatewayDevice, transport: UdpTransport)
      * "on" or "off" (String)
      */
     override fun write(params: String) {
+        super.updateState(params)
         super.controllerWrite(SmartPlugCmd(params))
     }
 
