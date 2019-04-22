@@ -35,10 +35,6 @@ class GatewayServiceController : AlarmHandler, DeviceAddedListener {
 
             gatewayServices[service.gateway.sid] = service
 
-            /*if (service.gateway != null) {
-                for (device in service.devices)
-                    SmartHomeRepository.addDevice(device)
-            }*/
             log(service)
         }
     }

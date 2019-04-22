@@ -18,6 +18,7 @@ class RGBController(device: GatewayDevice, transport: UdpTransport)
      * r, g, b (int) or calculated on client rgb (long)
      */
     override fun write(params: String) {
+        super.updateState(params)
         val args = params.split(" ")
         if(args.size > 1) {
             val r = adjust(args[0].toInt(), 0, 255)
