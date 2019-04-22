@@ -8,9 +8,9 @@ import smarthome.raspberry.arduinodevices.ArduinoDevice;
 
 public class ArduinoTemperature extends ArduinoController implements ArduinoReadable {
 
-    public ArduinoTemperature(ArduinoDevice device, ControllerType type,
+    public ArduinoTemperature(ArduinoDevice device, String name, ControllerType type,
                               int indexInArduinoServicesArray) {
-        super(device, type, indexInArduinoServicesArray);
+        super(device, name, type, indexInArduinoServicesArray);
     }
 
     @Override

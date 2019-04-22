@@ -1,5 +1,6 @@
 package smarthome.raspberry.model.cloudchanges
 
+import android.util.Log
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.OddControllerInCloud
@@ -15,8 +16,12 @@ class DeviceChangesHandler(private val localDevice: IotDevice,
         var shouldUpdateDb = false
 
         for (cloudController in cloudDevice.controllers) {
-            val changesHandler = handleControllerChanges(getLocalController(cloudController), cloudController)
-            shouldUpdateDb = shouldUpdateDb || changesHandler.shouldUpdateDb
+            try {
+                val changesHandler = handleControllerChanges(getLocalController(cloudController), cloudController)
+                shouldUpdateDb = shouldUpdateDb || changesHandler.shouldUpdateDb
+            } catch (e: Throwable) {
+                Log.d("DeviceChangesHandler", "", e)
+            }
         }
 
         if (!localDevice.isIdentical(cloudDevice) || shouldUpdateDb) {
