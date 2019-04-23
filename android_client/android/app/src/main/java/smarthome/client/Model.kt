@@ -4,10 +4,12 @@ import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import io.reactivex.Observable
+import io.reactivex.subjects.ReplaySubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import smarthome.client.BuildConfig.DEBUG
+import smarthome.library.common.scripts.Script
 import smarthome.client.util.CloudStorages
 import smarthome.client.util.FcmTokenStorage
 import smarthome.library.common.BaseController
@@ -24,6 +26,16 @@ object Model {
     private var _devices: Observable<MutableList<IotDevice>>? = null
     private var pendingDevicesObservable: Observable<MutableList<IotDevice>>? = null
     private val ioScope = CoroutineScope(Dispatchers.IO)
+    private var scripts = mutableListOf<Script>()
+    private var _scriptsObservable: ReplaySubject<MutableList<Script>>? = null
+
+    suspend fun getScriptsObservable(): Observable<MutableList<Script>> = _scriptsObservable ?: createScriptsObservable()
+
+    private suspend fun createScriptsObservable(): Observable<MutableList<Script>> {
+        val observable: ReplaySubject<MutableList<Script>> = ReplaySubject.createWithSize(1)
+        _scriptsObservable = observable
+        return observable
+    }
 
     suspend fun getDevicesObservable(): Observable<MutableList<IotDevice>> = _devices
             ?: createDevicesObservable()
@@ -160,4 +172,16 @@ object Model {
         }
     }
 
+    fun saveScript(script: Script) {
+        if (scripts.contains(script)) {
+            scripts[scripts.indexOf(script)] = script
+        } else {
+            scripts.add(script)
+        }
+        _scriptsObservable?.onNext(scripts)
+    }
+
+    fun getScript(guid: Long): Script? {
+        return scripts.find { it.guid == guid }
+    }
 }

@@ -15,8 +15,10 @@ class IlluminationController (device: GatewayDevice, transport: UdpTransport)
 
     /**
      * illumination (int from 0 to 1300)
+     * not sure, that it is writable
      */
     override fun write(params: String) {
+        super.updateState(params)
         val illumination = adjust(params.toInt(), 0, 1300)
         super.controllerWrite(GatewayLightCmd((device as Gateway).rgb, illumination))
     }

@@ -13,16 +13,13 @@ import androidx.lifecycle.ViewModelProviders
 import smarthome.client.CONTROLLER_GUID
 import smarthome.client.R
 import smarthome.client.USE_PENDING
-import smarthome.client.fragments.controllerdetail.statechanger.ControllerStateChanger
-import smarthome.client.fragments.controllerdetail.statechanger.OnOffStateChanger
-import smarthome.client.fragments.controllerdetail.statechanger.ReadStateChanger
-import smarthome.client.fragments.controllerdetail.statechanger.StateChangerType
+import smarthome.client.fragments.controllerdetail.statechanger.*
 import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
-import smarthome.library.common.constants.Constants.STATE_PENDING_READ
-import smarthome.library.common.constants.Constants.STATE_PENDING_WRITE
+import smarthome.library.common.constants.STATE_PENDING_READ
+import smarthome.library.common.constants.STATE_PENDING_WRITE
 
 class ControllerDetails : Fragment() {
 
@@ -82,6 +79,12 @@ class ControllerDetails : Fragment() {
 
         val changer = when (changerType) {
             StateChangerType.ONOFF -> OnOffStateChanger(container) { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }
+            StateChangerType.LEXEME_ONOFF -> LexemeOnOffStateChanger(container) { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }
+            StateChangerType.SIMPLE_WRITE -> SimpleWriteStateChanger(container) { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }
+            StateChangerType.DIMMER -> DimmerStateChanger(container, state, { state?.text = it }, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) } )
+            StateChangerType.RGB -> RGBStateChanger(container, state?.text.toString(), { state?.text = it }, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) } )
+            StateChangerType.TEXT_READ_WRITE -> TextReadWriteStateChanger(container, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) } )
+            StateChangerType.DIGITS_DECIMAL_READ_WRITE -> TextReadWriteStateChanger(container, { viewModel.newStateRequest(it, STATE_PENDING_WRITE) }, {  viewModel.newStateRequest(null, STATE_PENDING_READ) }, DIGITS_ONLY_TEXT_TYPE )
             StateChangerType.ONLY_READ -> ReadStateChanger(container) { viewModel.newStateRequest(null, STATE_PENDING_READ) }
         }
         stateChanger = changer

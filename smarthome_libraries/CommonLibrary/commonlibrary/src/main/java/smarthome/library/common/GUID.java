@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import kotlin.random.Random;
+
 /**
  * IoT device can be identified by its guid. As well as its controllers
  */
@@ -30,7 +32,14 @@ public class GUID {
     }
 
     public long generateGuidForController(IotDevice device, BaseController controller) {
-        long guid = device.guid + controller.type.hashCode();
+        long guid;
+
+        if (controller.name != null) {
+            guid = getGuidForName(controller.name);
+        } else {
+            guid = device.guid + controller.type.hashCode();
+        }
+
         mGuids.add(guid);
         return guid;
     }
@@ -44,4 +53,7 @@ public class GUID {
         return name.hashCode();
     }
 
+    public long random() {
+        return Random.Default.nextLong();
+    }
 }

@@ -32,14 +32,15 @@ class SmokeSensor(sid: String,
             val o = JSONObject(json)
 
             if (!o.isNull(ALARM_KEY)) {
-                val alarmStatus = o.getBoolean(ALARM_KEY)
+                val smokeAlarmController = getControllerByType(GATEWAY_SMOKE_ALARM_CONTROLLER)
+                val alarmStatus = o.getString(ALARM_KEY) == "1"
 
                 if (alarm != alarmStatus)
-                    smokeAlarmListener?.onSmokeAlarmStatusChanged(alarmStatus)
+                    smokeAlarmListener?.onSmokeAlarmStatusChanged(alarmStatus, this, smokeAlarmController)
 
                 alarm = alarmStatus
 
-                getControllerByType(GATEWAY_SMOKE_ALARM_CONTROLLER).state = alarm.toString()
+                smokeAlarmController.state = alarm.toString()
             }
 
             if (!o.isNull(DENSITY_KEY))

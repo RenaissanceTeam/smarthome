@@ -68,7 +68,8 @@ class DeviceDetails : Fragment() {
         bundle.putLong(CONTROLLER_GUID, guid)
         if (viewModel.usePending)
             bundle.putBoolean(USE_PENDING, true)
-        (activity as? DetailsActivity)?.replaceFragment(bundle)
+
+        (activity as? DetailsActivity)?.openControllerDetails(guid)
         viewModel.controllerDetailsShowed()
     }
 

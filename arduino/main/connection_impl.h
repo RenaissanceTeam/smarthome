@@ -9,7 +9,7 @@
 
 #define DEBUG 0
 
-#define home_info "name=" DEVICE_NAME "&services=" SERVICES_STR
+#define home_info "name=" DEVICE_NAME "&services=" SERVICES_STR "&names=" SERVICE_NAMES_STR
 
 WiFiEspClient wifiClient;
 HttpClient* client;
@@ -24,6 +24,7 @@ void baseResponse(WebServer& server, int val) {
   server.print(val);
   server.print("\"}");
   server.print(CRLF);
+  server.flushBuf();
 }
 
 void baseResponse(WebServer& server, double val) {
@@ -33,6 +34,7 @@ void baseResponse(WebServer& server, double val) {
   server.print(val);
   server.print("\"}");
   server.print(CRLF);
+  server.flushBuf();
 }
 
 // ==========================================================================
@@ -343,6 +345,7 @@ void homePage(WebServer &server, WebServer::ConnectionType type,
 {
   server.httpSuccess();
   server.print(home_info);
+  server.flushBuf();
 }
 
 
@@ -358,7 +361,6 @@ void init(WebServer &server, WebServer::ConnectionType type, char * params, bool
   client = new HttpClient(wifiClient, ip, RASPBERRY_PORT);
   client->post("/init?" home_info, "text", "");
   client->flush();
-  delay(500);
   client->stop();
 }
 
@@ -390,7 +392,6 @@ void sendAlertToServer(int serviceIndex, int value) {
 	}
 	client->post("/alert?ind=" + String(serviceIndex) + "&value=" + value, "text", "");
   client->flush();
-  delay(500);
   client->stop();
 }
 #endif
