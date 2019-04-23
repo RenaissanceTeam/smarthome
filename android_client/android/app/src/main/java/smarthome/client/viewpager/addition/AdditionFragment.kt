@@ -127,13 +127,6 @@ class AdditionFragment : Fragment(), ViewNotifier {
         }
     }
 
-    private fun onAddDeviceClicked() {
-        uiScope.launch {
-            CloudStorages.getMessageQueue()
-                    .postMessage(DiscoverAllDevicesRequest("1")) //TODO implement clientID generation
-        }
-    }
-
     override fun onItemRemoved(pos: Int) {
         resetAdapter()
     }

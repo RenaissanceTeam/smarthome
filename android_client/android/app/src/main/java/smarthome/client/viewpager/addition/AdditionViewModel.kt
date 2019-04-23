@@ -70,7 +70,7 @@ class AdditionViewModel : ViewModel() {
                             return@let
                         }
 
-                        for (i in 0..it.size) {
+                        for (i in 0 until it.size) {
                             if (old[i] != it[i]) {
                                 viewNotifier?.onItemRemoved(i)
                                 return@let
