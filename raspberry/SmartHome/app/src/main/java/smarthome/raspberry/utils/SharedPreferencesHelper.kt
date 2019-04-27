@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 
 class SharedPreferencesHelper(context: Context) {
 
-    val sharedPreferences: SharedPreferences = context.getSharedPreferences("", MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("", MODE_PRIVATE)
 
     fun isHomeIdExists(): Boolean {
          return sharedPreferences.getString(HOME_ID_KEY, DEFAULT_HOME_ID) != DEFAULT_HOME_ID
@@ -20,12 +20,12 @@ class SharedPreferencesHelper(context: Context) {
         sharedPreferences.edit().putString(HOME_ID_KEY, homeId).apply()
     }
 
-    fun getDoNotDisturb(): Boolean {
-        return sharedPreferences.getBoolean(DO_NOT_DISTURB_KEY, false)
+    fun getDoNotDisturb(userId: String): Boolean {
+        return sharedPreferences.getBoolean(getUserDoNotDisturbKey(userId), false)
     }
 
-    fun setDoNotDisturb(mode: Boolean) {
-        sharedPreferences.edit().putBoolean(DO_NOT_DISTURB_KEY, mode).apply()
+    fun setDoNotDisturb(userId: String, mode: Boolean) {
+        sharedPreferences.edit().putBoolean(getUserDoNotDisturbKey(userId), mode).apply()
     }
 
     companion object {
@@ -35,6 +35,10 @@ class SharedPreferencesHelper(context: Context) {
         const val DO_NOT_DISTURB_KEY: String = "do_not_disturb_key"
 
         private var instance: SharedPreferencesHelper? = null
+
+        private fun getUserDoNotDisturbKey(userId: String): String {
+            return "$userId $DO_NOT_DISTURB_KEY"
+        }
 
         fun getInstance(context: Context): SharedPreferencesHelper {
             if (instance == null)

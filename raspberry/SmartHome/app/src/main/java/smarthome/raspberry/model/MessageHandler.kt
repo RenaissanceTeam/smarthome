@@ -47,7 +47,7 @@ class MessageHandler : MessageListener {
 
     private fun processDoNotDisturbChangeRequest(message: ChangeDoNotDisturbOption) {
         SharedPreferencesHelper.getInstance(App.instance.applicationContext)
-                .setDoNotDisturb(message.mode)
+                .setDoNotDisturb(message.clientId, message.mode)
     }
 
     companion object {

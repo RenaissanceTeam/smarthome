@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -382,7 +383,8 @@ object SmartHomeRepository : SmartHome() {
                 updateDeviceInRemoteStorage(device, device.isPending)
 
                 var messageType = MessageType.NOTIFICATION
-                if (SharedPreferencesHelper.getInstance(context).getDoNotDisturb())
+                if (SharedPreferencesHelper.getInstance(context).getDoNotDisturb(
+                                FirebaseAuth.getInstance().currentUser!!.uid)) //TODO: for all users in home
                     messageType = MessageType.DATA
 
                 fcmSender.send(controller, device, messageType, Priority.HIGH,
