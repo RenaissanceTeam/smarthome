@@ -2,13 +2,12 @@ package smarthome.raspberry.model
 
 import android.util.Log
 import smarthome.library.common.constants.DeviceTypes.GATEWAY_TYPE
-import smarthome.library.common.message.ChangeDeviceStatusRequest
-import smarthome.library.common.message.DiscoverAllDevicesRequest
-import smarthome.library.common.message.DiscoverDeviceRequest
-import smarthome.library.common.message.Message
+import smarthome.library.common.message.*
 import smarthome.library.datalibrary.store.listeners.MessageListener
+import smarthome.raspberry.App
 import smarthome.raspberry.BuildConfig.DEBUG
 import smarthome.raspberry.service.DeviceObserver
+import smarthome.raspberry.utils.SharedPreferencesHelper
 
 class MessageHandler : MessageListener {
 
@@ -25,6 +24,7 @@ class MessageHandler : MessageListener {
                 is ChangeDeviceStatusRequest -> processChangeDeviceStatusMessage(message)
                 is DiscoverAllDevicesRequest -> processDiscoverAllDevicesMessage()
                 is DiscoverDeviceRequest -> processDiscoverDeviceMessage(message)
+                is ChangeDoNotDisturbOption -> processDoNotDisturbChangeRequest(message)
                 else -> if (DEBUG) Log.d(TAG, "Message is not supported")
             }
             SmartHomeRepository.deleteMessage(message as Message)
@@ -43,6 +43,11 @@ class MessageHandler : MessageListener {
         if (message.deviceType == GATEWAY_TYPE) {
             DeviceObserver.getInstance().exploreGateway(message.params)
         }
+    }
+
+    private fun processDoNotDisturbChangeRequest(message: ChangeDoNotDisturbOption) {
+        SharedPreferencesHelper.getInstance(App.instance.applicationContext)
+                .setDoNotDisturb(message.mode)
     }
 
     companion object {

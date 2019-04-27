@@ -32,6 +32,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.Controller
 import smarthome.raspberry.utils.HomeController
+import smarthome.raspberry.utils.SharedPreferencesHelper
 import smarthome.raspberry.utils.fcm.FcmSender
 import smarthome.raspberry.utils.fcm.MessageType
 import smarthome.raspberry.utils.fcm.Priority
@@ -379,7 +380,12 @@ object SmartHomeRepository : SmartHome() {
         ioScope.launch {
             try {
                 updateDeviceInRemoteStorage(device, device.isPending)
-                fcmSender.send(controller, device, MessageType.NOTIFICATION, Priority.HIGH,
+
+                var messageType = MessageType.NOTIFICATION
+                if (SharedPreferencesHelper.getInstance(context).getDoNotDisturb())
+                    messageType = MessageType.DATA
+
+                fcmSender.send(controller, device, messageType, Priority.HIGH,
                         tokens.map { it.token }.toTypedArray())
             } catch (e: Throwable) {
                 if (DEBUG) Log.d(TAG, "can't handle alert: ", e)
