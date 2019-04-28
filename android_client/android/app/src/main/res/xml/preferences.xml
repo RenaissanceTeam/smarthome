@@ -3,21 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:title="Account">
         <Preference
+            android:icon="@drawable/ic_account_circle_accent"
             android:enabled="false"
             android:key="current_account"
             android:title="Current account" />
 
         <Preference
+            android:icon="@drawable/ic_exit_to_app_accent"
             android:key="sign_out"
             android:title="Sign out" />
 
     </PreferenceCategory>
 
     <SwitchPreference
+        android:icon="@drawable/ic_remove_circle_outline_accent"
         app:key="do_not_disturb"
         app:title="Do not disturb" />
 
     <Preference
+        android:icon="@drawable/ic_feedback_accent"
         app:key="feedback"
         app:summary="Report technical issues or suggest new features"
         app:title="Send feedback" />
