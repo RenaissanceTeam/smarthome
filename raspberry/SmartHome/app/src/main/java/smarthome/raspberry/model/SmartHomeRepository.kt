@@ -14,7 +14,7 @@ import smarthome.library.common.GUID
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
 import smarthome.library.common.message.Message
-import smarthome.library.datalibrary.model.InstanceToken
+import smarthome.library.datalibrary.model.InstanceTokenWrapper
 import smarthome.library.datalibrary.store.InstanceTokenStorage
 import smarthome.library.datalibrary.store.MessageQueue
 import smarthome.library.datalibrary.store.SmartHomeStorage
@@ -52,7 +52,7 @@ object SmartHomeRepository : SmartHome() {
     private lateinit var tokenStorage: InstanceTokenStorage
     lateinit var messageQueue: MessageQueue
     private val ioScope = CoroutineScope(Dispatchers.IO)
-    private var tokens: List<InstanceToken> = listOf()
+    private var tokens: List< Pair<String, InstanceTokenWrapper> > = listOf()
     private lateinit var fcmSender: FcmSender // todo don't like violation of SRP in repo
 
     private var ready: Boolean = false
@@ -229,9 +229,9 @@ object SmartHomeRepository : SmartHome() {
                 continue
 
             devices.remove(device)
+            dataSource.source.delete(device)
             ioScope.launch {
                 suspendCoroutine<Unit> { continuation ->
-                    dataSource.source.delete(device)
                     removeDevice(device, continuation)
                 }
             }
@@ -330,22 +330,6 @@ object SmartHomeRepository : SmartHome() {
         )
     }
 
-
-    private suspend fun addDeviceToStorage(device: IotDevice) {
-        suspendCoroutine<Unit> { continuation ->
-            devicesStorage.addDevice(device,
-                    OnSuccessListener {
-                        if (DEBUG) Log.d(TAG, "success adding device to firestore")
-                        continuation.resumeWith(Result.success(Unit))
-                    },
-                    OnFailureListener {
-                        if (DEBUG) Log.d(TAG, "failed $it")
-                        continuation.resumeWithException(it)
-                    }
-            )
-        }
-    }
-
     fun getController(guid: Long): BaseController {
         var controller: BaseController? = null
         devices.find {
@@ -377,18 +361,21 @@ object SmartHomeRepository : SmartHome() {
     }
 
     fun handleAlert(device: IotDevice, controller: BaseController) {
-        // todo save to firestore (notify android client, send FCM)
+
         ioScope.launch {
             try {
                 updateDeviceInRemoteStorage(device, device.isPending)
 
-                var messageType = MessageType.NOTIFICATION
-                if (SharedPreferencesHelper.getInstance(context).getDoNotDisturb(
-                                FirebaseAuth.getInstance().currentUser!!.uid)) //TODO: for all users in home
-                    messageType = MessageType.DATA
+                for (userToTokens in tokens) {
+                    var messageType = MessageType.NOTIFICATION
+                    if (SharedPreferencesHelper.getInstance(context)
+                                    .getDoNotDisturb(userToTokens.first))
+                        messageType = MessageType.DATA
 
-                fcmSender.send(controller, device, messageType, Priority.HIGH,
-                        tokens.map { it.token }.toTypedArray())
+                    fcmSender.send(controller, device, messageType, Priority.HIGH,
+                            userToTokens.second.tokens.toTypedArray())
+                }
+
             } catch (e: Throwable) {
                 if (DEBUG) Log.d(TAG, "can't handle alert: ", e)
             }

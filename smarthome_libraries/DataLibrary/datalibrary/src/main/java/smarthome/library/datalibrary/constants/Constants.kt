@@ -17,6 +17,7 @@ const val HOME_DEVICES_NODE = "devices"
 const val HOME_USERS_NODE = "users"
 const val MESSAGES_NODE = "message_queue"
 const val PENDING_DEVICES_NODE = "pending_devices"
+const val HOME_USERS_USER_TOKENS_REF = "tokens"
 
 const val FIREBASE_READ_VALUE_ERROR = "Failed to read value"
 
