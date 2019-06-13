@@ -17,6 +17,10 @@
             android:name="deviceGuid"
             app:argType="long"
             android:defaultValue="-1L" />
+        <argument
+            android:name="usePending"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/actionFragment"
@@ -31,7 +35,14 @@
         android:id="@+id/additionFragment"
         android:name="smarthome.client.screens.addition.AdditionFragment"
         android:label="AdditionFragment"
-        tools:layout="@layout/fragment_device_addition" />
+        tools:layout="@layout/fragment_device_addition" >
+        <action
+            android:id="@+id/action_additionFragment_to_deviceDetails"
+            app:destination="@id/deviceDetails" />
+        <action
+            android:id="@+id/action_additionFragment_to_controllerDetails"
+            app:destination="@id/controllerDetails" />
+    </fragment>
     <fragment
         android:id="@+id/conditionFragment"
         android:name="smarthome.client.fragments.scriptdetail.condition.ConditionFragment"
@@ -50,6 +61,10 @@
             android:name="controllerGuid"
             app:argType="long"
             android:defaultValue="-1L" />
+        <argument
+            android:name="usePending"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/dashboardFragment"
@@ -102,9 +117,4 @@
         android:name="smarthome.client.AddDeviceActivity"
         android:label="AddDeviceActivity"
         tools:layout="@layout/activity_add_device" />
-    <activity
-        android:id="@+id/detailsActivity"
-        android:name="smarthome.client.DetailsActivity"
-        android:label="DetailsActivity"
-        tools:layout="@layout/activity_details"/>
 </navigation>

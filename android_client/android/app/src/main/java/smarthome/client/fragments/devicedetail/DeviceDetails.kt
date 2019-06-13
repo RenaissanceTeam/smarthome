@@ -76,10 +76,7 @@ class DeviceDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupViews(view)
 
-        if (arguments?.containsKey(USE_PENDING) == true) {
-            viewModel.usePending()
-        }
-
+        if (args.usePending) viewModel.usePending()
         viewModel.setDeviceGuid(args.deviceGuid)
 
         deviceName?.setOnClickListener {
