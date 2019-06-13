@@ -17,3 +17,6 @@ const val CONDITION_INTERVAL_TIME = "Interval Time"
 
 const val ACTION_READ_CONTROLLER = "Read Controller"
 const val ACTION_WRITE_CONTROLLER = "Write Controller"
+
+const val SHOW_BOTTOM_BAR = "show_bottom_bar"
+const val SHOW_TOOL_BAR = "show_tool_bar"
