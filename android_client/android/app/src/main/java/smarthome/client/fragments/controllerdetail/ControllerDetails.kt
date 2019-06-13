@@ -10,10 +10,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 import smarthome.client.CONTROLLER_GUID
 import smarthome.client.R
 import smarthome.client.USE_PENDING
 import smarthome.client.fragments.controllerdetail.statechanger.*
+import smarthome.client.fragments.devicedetail.DeviceDetailsArgs
 import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.BaseController
@@ -22,6 +24,7 @@ import smarthome.library.common.constants.STATE_PENDING_READ
 import smarthome.library.common.constants.STATE_PENDING_WRITE
 
 class ControllerDetails : Fragment() {
+    private val args: ControllerDetailsArgs by navArgs()
 
     companion object {
         val FRAGMENT_TAG = "ControllerDetailsFragment"
@@ -116,13 +119,10 @@ class ControllerDetails : Fragment() {
             ).show()
         }
 
-        var controllerGuid: Long? = arguments?.getLong(CONTROLLER_GUID)
         if (arguments?.containsKey(USE_PENDING) == true)
             viewModel.usePending()
-        if (arguments?.containsKey(CONTROLLER_GUID) != true) {
-            controllerGuid = null
-        }
-        viewModel.setControllerGuid(controllerGuid)
+
+        viewModel.setControllerGuid(args.controllerGuid)
     }
 
     override fun onDestroyView() {

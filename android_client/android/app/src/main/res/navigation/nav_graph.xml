@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_deviceDetails_to_controllerDetails"
             app:destination="@id/controllerDetails" />
+        <argument
+            android:name="deviceGuid"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
     <fragment
         android:id="@+id/actionFragment"
@@ -41,7 +45,12 @@
         android:id="@+id/controllerDetails"
         android:name="smarthome.client.fragments.controllerdetail.ControllerDetails"
         android:label="ControllerDetails"
-        tools:layout="@layout/fragment_controller_details"/>
+        tools:layout="@layout/fragment_controller_details">
+        <argument
+            android:name="controllerGuid"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="smarthome.client.screens.dashboard.DashboardFragment"
