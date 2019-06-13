@@ -66,7 +66,7 @@ class DashboardViewModel : ViewModel() {
         }
     }
 
-    fun toastShowed() = { _toastMessage.value = null }
+    fun toastShowed() { _toastMessage.value = null }
 
     override fun onCleared() {
         super.onCleared()
