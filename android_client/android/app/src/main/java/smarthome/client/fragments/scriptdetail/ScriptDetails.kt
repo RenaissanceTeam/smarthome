@@ -13,6 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import kotlinx.android.synthetic.main.fragment_script_details.*
+import kotlinx.android.synthetic.main.toolbar_with_save.*
 import smarthome.client.*
 import smarthome.client.R
 import smarthome.client.ui.DialogParameters
@@ -25,12 +29,6 @@ class ScriptDetails: Fragment() {
     }
 
     private lateinit var viewModel: ScriptDetailViewModel
-    private var name: EditText? = null
-    private var condition: TextView? = null
-    private var action: TextView? = null
-    private var save: ImageView? = null
-    private var changeCondition: ImageView? = null
-    private var changeAction: ImageView? = null
     private val args: ScriptDetailsArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -59,9 +57,9 @@ class ScriptDetails: Fragment() {
             activity?.onBackPressed()
             return
         }
-        name?.setText(script.name)
-        condition?.let { setDecoratedText(it, script.conditions.joinToString(" AND ")) }
-        action?.let { setDecoratedText(it, script.actions.joinToString(" AND ")) }
+        name.setText(script.name)
+        setDecoratedText(condition, script.conditions.joinToString(" AND "))
+        setDecoratedText(action, script.actions.joinToString(" AND "))
     }
 
     private fun setDecoratedText(textView: TextView, text: String) {
@@ -75,18 +73,22 @@ class ScriptDetails: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setupViews(view)
-        name?.setOnClickListener { EditTextDialog.create(view.context,
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+        toolbar.setupWithNavController(findNavController(), appBarConfiguration)
+
+        save.setOnClickListener { viewModel.onSaveScriptClicked() }
+
+        name.setOnClickListener { EditTextDialog.create(view.context,
                 DialogParameters("script name", currentValue = viewModel.script.value?.name ?: "") {
                     viewModel.scriptNameChange(it)
                 }
         ).show() }
 
-        changeCondition?.setOnClickListener {
+        change_condition_button.setOnClickListener {
             viewModel.onEditConditionClicked()
             openConditionDetails()
         }
-        changeAction?.setOnClickListener {
+        change_action_button.setOnClickListener {
             viewModel.onEditActionClicked()
             openActionDetails()
         }
@@ -101,24 +103,5 @@ class ScriptDetails: Fragment() {
     private fun openActionDetails() {
         val action = ScriptDetailsDirections.actionScriptDetailsToActionFragment()
         findNavController().navigate(action)
-    }
-
-    private fun setupViews(view: View) {
-        name = view.findViewById(R.id.name)
-        condition = view.findViewById(R.id.condition)
-        action = view.findViewById(R.id.action)
-        save = view.findViewById(R.id.save)
-        changeAction = view.findViewById(R.id.change_action_button)
-        changeCondition = view.findViewById(R.id.change_condition_button)
-
-        save?.setOnClickListener { viewModel.onSaveScriptClicked() }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        name = null
-        condition = null
-        action = null
-        save = null
     }
 }
