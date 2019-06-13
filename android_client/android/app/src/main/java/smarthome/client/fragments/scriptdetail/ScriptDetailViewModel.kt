@@ -32,7 +32,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     private var copyBeforeEditCondition: Script? = null
 
     fun setScriptGuid(guid: Long) {
-        if (guid == INVALID_GUID) {
+        if (guid == NEW_SCRIPT_GUID) {
             _script.value = Script()
         } else {
             _script.value = Model.getScript(guid)

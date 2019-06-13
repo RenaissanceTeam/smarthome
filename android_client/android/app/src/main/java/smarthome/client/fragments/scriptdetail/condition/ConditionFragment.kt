@@ -77,7 +77,6 @@ class ConditionFragment : Fragment() {
         ItemTouchHelper(swipeHandler).attachToRecyclerView(conditions)
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
 
