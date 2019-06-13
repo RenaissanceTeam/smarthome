@@ -42,6 +42,10 @@
         <action
             android:id="@+id/action_additionFragment_to_controllerDetails"
             app:destination="@id/controllerDetails" />
+        <argument
+            android:name="show_bottom_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/conditionFragment"
@@ -77,6 +81,10 @@
         <action
             android:id="@+id/action_dashboardFragment_to_controllerDetails"
             app:destination="@id/controllerDetails" />
+        <argument
+            android:name="show_bottom_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/scriptDetails"
@@ -98,6 +106,10 @@
         android:name="smarthome.client.screens.scripts.ScriptsFragment"
         android:label="ScriptsFragment"
         tools:layout="@layout/fragment_scripts">
+        <argument
+            android:name="show_bottom_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
         <action
             android:id="@+id/action_scriptsFragment_to_scriptDetails"
             app:destination="@id/scriptDetails" />
@@ -106,12 +118,19 @@
         android:id="@+id/settingsFragment"
         android:name="smarthome.client.screens.settings.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+        <argument
+            android:name="show_bottom_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+
+    </fragment>
     <fragment
         android:id="@+id/deviceSelectorFragment"
         android:name="smarthome.client.fragments.deviceaddition.DeviceSelectorFragment"
         android:label="fragment_device_selector"
-        tools:layout="@layout/fragment_device_selector" />
+        tools:layout="@layout/fragment_device_selector" >
+    </fragment>
     <activity
         android:id="@+id/addDeviceActivity"
         android:name="smarthome.client.AddDeviceActivity"
