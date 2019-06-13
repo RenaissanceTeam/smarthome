@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_device_details" >
         <action
             android:id="@+id/action_deviceDetails_to_controllerDetails"
-            app:destination="@id/controllerDetails" />
+            app:destination="@id/controllerDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
         <argument
             android:name="deviceGuid"
             app:argType="long"
@@ -33,7 +37,11 @@
         tools:layout="@layout/fragment_action" >
         <action
             android:id="@+id/action_actionFragment_to_deviceSelectorFragment"
-            app:destination="@id/deviceSelectorFragment" />
+            app:destination="@id/deviceSelectorFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
     </fragment>
     <fragment
         android:id="@+id/additionFragment"
@@ -42,10 +50,18 @@
         tools:layout="@layout/fragment_device_addition" >
         <action
             android:id="@+id/action_additionFragment_to_deviceDetails"
-            app:destination="@id/deviceDetails" />
+            app:destination="@id/deviceDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
         <action
             android:id="@+id/action_additionFragment_to_controllerDetails"
-            app:destination="@id/controllerDetails" />
+            app:destination="@id/controllerDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
         <argument
             android:name="show_bottom_bar"
             app:argType="boolean"
@@ -58,7 +74,11 @@
         tools:layout="@layout/fragment_condition">
         <action
             android:id="@+id/action_conditionFragment_to_deviceSelectorFragment"
-            app:destination="@id/deviceSelectorFragment" />
+            app:destination="@id/deviceSelectorFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
     </fragment>
     <fragment
         android:id="@+id/controllerDetails"
@@ -85,10 +105,18 @@
         tools:layout="@layout/fragment_dashboard" >
         <action
             android:id="@+id/action_dashboardFragment_to_deviceDetails"
-            app:destination="@id/deviceDetails" />
+            app:destination="@id/deviceDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
         <action
             android:id="@+id/action_dashboardFragment_to_controllerDetails"
-            app:destination="@id/controllerDetails" />
+            app:destination="@id/controllerDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
         <argument
             android:name="show_bottom_bar"
             app:argType="boolean"
@@ -101,10 +129,18 @@
         tools:layout="@layout/fragment_script_details" >
         <action
             android:id="@+id/action_scriptDetails_to_conditionFragment"
-            app:destination="@id/conditionFragment" />
+            app:destination="@id/conditionFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
         <action
             android:id="@+id/action_scriptDetails_to_actionFragment"
-            app:destination="@id/actionFragment" />
+            app:destination="@id/actionFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
         <argument android:name="scriptGuid"
             app:argType="long"
             android:defaultValue="-1L" />
@@ -120,7 +156,11 @@
             android:defaultValue="true" />
         <action
             android:id="@+id/action_scriptsFragment_to_scriptDetails"
-            app:destination="@id/scriptDetails" />
+            app:destination="@id/scriptDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
