@@ -10,22 +10,22 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.fragment_condition.*
+import kotlinx.android.synthetic.main.toolbar_with_save.*
 import smarthome.client.R
 import smarthome.client.fragments.scriptdetail.ScriptDetailViewModel
 import smarthome.client.ui.SwipeToDeleteCallback
 
 class ConditionFragment : Fragment() {
 
-    private var conditions: RecyclerView? = null
     private var adapter: ConditionsAdapter? = null
-    private var addButton: FloatingActionButton? = null
-    private var saveButton: ImageView? = null
-    private var toolbar: Toolbar? = null
-
 
     private lateinit var viewModel: ScriptDetailViewModel
 
@@ -50,25 +50,21 @@ class ConditionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupViews(view)
+
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+        toolbar.setupWithNavController(findNavController(), appBarConfiguration)
+
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setupRecyclerView()
 
-        addButton?.setOnClickListener { viewModel.onAddConditionButtonClicked() }
-        saveButton?.setOnClickListener { viewModel.onSaveConditionsClicked() }
-    }
-
-    private fun setupViews(view: View) {
-        conditions = view.findViewById(R.id.conditions)
-        addButton = view.findViewById(R.id.add_button)
-        saveButton = view.findViewById(R.id.save)
-        toolbar = view.findViewById(R.id.toolbar)
+        add_button.setOnClickListener { viewModel.onAddConditionButtonClicked() }
+        save.setOnClickListener { viewModel.onSaveConditionsClicked() }
     }
 
     private fun setupRecyclerView() {
         adapter = ConditionsAdapter(viewModel)
-        conditions?.layoutManager = LinearLayoutManager(context)
-        conditions?.adapter = adapter
+        conditions.layoutManager = LinearLayoutManager(context)
+        conditions.adapter = adapter
 
         val context = context ?: return
         val swipeHandler = SwipeToDeleteCallback(context) { viewHolder, _ ->
@@ -77,13 +73,4 @@ class ConditionFragment : Fragment() {
         ItemTouchHelper(swipeHandler).attachToRecyclerView(conditions)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        conditions = null
-        adapter = null
-        addButton = null
-        saveButton = null
-        toolbar = null
-    }
 }

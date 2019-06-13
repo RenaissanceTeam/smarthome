@@ -7,15 +7,15 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : FragmentActivity() {
 
     private val viewModel
             by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
-
-    private val bottomNavigation by lazy { findViewById<BottomNavigationView>(R.id.bottom_navigation) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,10 +23,13 @@ class MainActivity : FragmentActivity() {
 
         viewModel.isAuthenticated.observe(this, Observer { if (!it) launchAuthActivity() })
         val navController = findNavController(R.id.nav_host_fragment)
-        bottomNavigation.setupWithNavController(navController)
+        bottom_navigation.setupWithNavController(navController)
+
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { a, destination, c ->
-            handleVisibility(bottomNavigation, destination.arguments.containsKey(SHOW_BOTTOM_BAR))
-//            handleVisibility(arguments)
+            handleVisibility(bottom_navigation, destination.arguments.containsKey(SHOW_BOTTOM_BAR))
+            handleVisibility(toolbar, destination.arguments.containsKey(SHOW_TOOL_BAR))
         }
     }
 
@@ -37,7 +40,6 @@ class MainActivity : FragmentActivity() {
             view.visibility = View.GONE
         }
     }
-
 
     private fun launchAuthActivity() {
         startActivityForResult(viewModel.authUiWrapper.getAuthIntent(), RC_SIGN_IN)

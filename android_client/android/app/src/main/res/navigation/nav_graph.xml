@@ -21,6 +21,10 @@
             android:name="usePending"
             app:argType="boolean"
             android:defaultValue="false" />
+        <argument
+            android:name="show_tool_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/actionFragment"
@@ -69,6 +73,10 @@
             android:name="usePending"
             app:argType="boolean"
             android:defaultValue="false" />
+        <argument
+            android:name="show_tool_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/dashboardFragment"
@@ -130,6 +138,10 @@
         android:name="smarthome.client.fragments.deviceaddition.DeviceSelectorFragment"
         android:label="fragment_device_selector"
         tools:layout="@layout/fragment_device_selector" >
+        <argument
+            android:name="show_tool_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <activity
         android:id="@+id/addDeviceActivity"
