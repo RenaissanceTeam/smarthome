@@ -1,4 +1,4 @@
-package smarthome.client.viewpager.dashboard
+package smarthome.client.screens.dashboard
 
 import android.util.Log
 import androidx.lifecycle.*

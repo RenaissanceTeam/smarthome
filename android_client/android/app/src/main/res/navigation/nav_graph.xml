@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/additionFragment"
-        android:name="smarthome.client.viewpager.addition.AdditionFragment"
+        android:name="smarthome.client.screens.addition.AdditionFragment"
         android:label="AdditionFragment"
         tools:layout="@layout/fragment_device_addition" />
     <fragment
@@ -44,7 +44,7 @@
         tools:layout="@layout/fragment_controller_details"/>
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="smarthome.client.viewpager.dashboard.DashboardFragment"
+        android:name="smarthome.client.screens.dashboard.DashboardFragment"
         android:label="DashboardFragment"
         tools:layout="@layout/fragment_dashboard" >
         <action
@@ -68,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/scriptsFragment"
-        android:name="smarthome.client.viewpager.scripts.ScriptsFragment"
+        android:name="smarthome.client.screens.scripts.ScriptsFragment"
         android:label="ScriptsFragment"
         tools:layout="@layout/fragment_scripts">
         <action
@@ -77,7 +77,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="smarthome.client.viewpager.settings.SettingsFragment"
+        android:name="smarthome.client.screens.settings.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings" />
     <fragment

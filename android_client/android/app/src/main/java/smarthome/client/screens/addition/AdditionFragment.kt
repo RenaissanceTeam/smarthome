@@ -1,4 +1,4 @@
-package smarthome.client.viewpager.addition
+package smarthome.client.screens.addition
 
 import android.content.Intent
 import android.os.Bundle

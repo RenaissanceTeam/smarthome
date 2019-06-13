@@ -1,6 +1,5 @@
-package smarthome.client.viewpager.dashboard
+package smarthome.client.screens.dashboard
 
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView

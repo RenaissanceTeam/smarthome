@@ -1,4 +1,4 @@
-package smarthome.client.viewpager.recycler
+package smarthome.client.screens.recycler
 
 import android.view.LayoutInflater
 import android.view.View
