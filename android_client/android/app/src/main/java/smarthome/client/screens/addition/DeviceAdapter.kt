@@ -1,4 +1,4 @@
-package smarthome.client.viewpager.addition
+package smarthome.client.screens.addition
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.BuildConfig.DEBUG
 import smarthome.client.R
-import smarthome.client.viewpager.recycler.ControllersAdapter
+import smarthome.client.screens.recycler.ControllersAdapter
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
