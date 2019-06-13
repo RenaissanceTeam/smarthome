@@ -119,9 +119,7 @@ class ControllerDetails : Fragment() {
             ).show()
         }
 
-        if (arguments?.containsKey(USE_PENDING) == true)
-            viewModel.usePending()
-
+        if (args.usePending) viewModel.usePending()
         viewModel.setControllerGuid(args.controllerGuid)
     }
 

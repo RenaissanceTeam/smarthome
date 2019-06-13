@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -102,17 +103,17 @@ class AdditionFragment : Fragment(), ViewNotifier {
         Log.d(TAG, "clicked on $device")
         device ?: return
 
-        activity?.startActivity(Intent(context, DetailsActivity::class.java)
-                .putExtra(DEVICE_GUID, device.guid)
-                .putExtra(USE_PENDING, true))
+        val action = AdditionFragmentDirections
+                .actionAdditionFragmentToDeviceDetails(device.guid,  true)
+        findNavController().navigate(action)
     }
 
     private fun onControllerDetailsClick(controller: BaseController?) {
         controller ?: return
 
-        activity?.startActivity(Intent(context, DetailsActivity::class.java)
-                .putExtra(CONTROLLER_GUID, controller.guid)
-                .putExtra(USE_PENDING, true))
+        val action = AdditionFragmentDirections
+                .actionAdditionFragmentToControllerDetails(controller.guid,  true)
+        findNavController().navigate(action)
     }
 
     private fun onControllerChanged(controller: BaseController?) {
