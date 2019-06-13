@@ -11,6 +11,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import smarthome.client.*
 import smarthome.client.R
 import smarthome.client.ui.DialogParameters
@@ -29,6 +31,7 @@ class ScriptDetails: Fragment() {
     private var save: ImageView? = null
     private var changeCondition: ImageView? = null
     private var changeAction: ImageView? = null
+    private val args: ScriptDetailsArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -87,15 +90,17 @@ class ScriptDetails: Fragment() {
             viewModel.onEditActionClicked()
             openActionDetails()
         }
-        if (viewModel.script.value == null) passGuidToViewModel()
+        if (viewModel.script.value == null) viewModel.setScriptGuid(args.scriptGuid)
     }
 
     private fun openConditionDetails() {
-        (activity as? DetailsActivity)?.run { openConditionFragment() }
+        val action = ScriptDetailsDirections.actionScriptDetailsToConditionFragment()
+        findNavController().navigate(action)
     }
 
     private fun openActionDetails() {
-        (activity as? DetailsActivity)?.run { openActionFragment() }
+        val action = ScriptDetailsDirections.actionScriptDetailsToActionFragment()
+        findNavController().navigate(action)
     }
 
     private fun setupViews(view: View) {
@@ -107,15 +112,6 @@ class ScriptDetails: Fragment() {
         changeCondition = view.findViewById(R.id.change_condition_button)
 
         save?.setOnClickListener { viewModel.onSaveScriptClicked() }
-    }
-
-    private fun passGuidToViewModel() {
-        val guid = arguments?.getLong(SCRIPT_GUID)
-        if (guid == null) {
-            activity?.onBackPressed()
-            return
-        }
-        viewModel.setScriptGuid(guid)
     }
 
     override fun onDestroyView() {

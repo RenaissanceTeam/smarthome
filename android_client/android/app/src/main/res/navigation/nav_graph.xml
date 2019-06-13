@@ -74,6 +74,9 @@
         <action
             android:id="@+id/action_scriptDetails_to_actionFragment"
             app:destination="@id/actionFragment" />
+        <argument android:name="scriptGuid"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
     <fragment
         android:id="@+id/scriptsFragment"

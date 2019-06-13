@@ -10,6 +10,7 @@ const val SCRIPT_GUID = "script_guid"
 const val OPEN_CONDITION_SCRIPT= "open_condition"
 const val OPEN_ACTION_SCRIPT= "open_action"
 const val INVALID_GUID = -1L
+const val NEW_SCRIPT_GUID = 0L
 const val CONDITION_CONTROLLER = "Controller"
 const val CONDITION_EXACT_TIME = "Exact Time"
 const val CONDITION_INTERVAL_TIME = "Interval Time"
