@@ -12,7 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import smarthome.client.BuildConfig
 import smarthome.client.HomeModelException
-import smarthome.client.Model
+import smarthome.client.model.Model
 import smarthome.client.auth.Authenticator
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice

@@ -1,12 +1,12 @@
 package smarthome.client.auth
 
 import com.google.firebase.auth.FirebaseAuth
-import io.reactivex.subjects.ReplaySubject
+import io.reactivex.subjects.BehaviorSubject
 
 object Authenticator {
     private val firebaseAuth = FirebaseAuth.getInstance()
-    val isAuthenticated: ReplaySubject<Boolean> = ReplaySubject.createWithSize(1)
-    val userEmail: ReplaySubject<String> = ReplaySubject.createWithSize(1)
+    val isAuthenticated: BehaviorSubject<Boolean> = BehaviorSubject.create()
+    val userEmail: BehaviorSubject<String> = BehaviorSubject.create()
 
     init {
         onNewAuth()

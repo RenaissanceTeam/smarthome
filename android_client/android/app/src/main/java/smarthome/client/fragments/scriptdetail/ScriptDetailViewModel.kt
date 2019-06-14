@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import smarthome.client.*
+import smarthome.client.model.Model
 import smarthome.client.scripts.conditions.AllConditionsProvider
 import smarthome.library.common.scripts.Script
 import smarthome.client.scripts.actions.ActionViewWrapper
