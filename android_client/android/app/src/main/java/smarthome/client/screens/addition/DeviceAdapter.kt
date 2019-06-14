@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.BuildConfig.DEBUG
 import smarthome.client.R
-import smarthome.client.screens.recycler.ControllersAdapter
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
