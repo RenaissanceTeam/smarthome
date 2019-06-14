@@ -7,14 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 import smarthome.client.BuildConfig
 import smarthome.client.R
 import smarthome.library.common.BaseController
@@ -24,11 +27,8 @@ import smarthome.library.common.IotDevice
 class DashboardFragment : Fragment() {
 
     private val TAG = DashboardFragment::class.java.simpleName
-    private val viewModel
-            by lazy { ViewModelProviders.of(this).get(DashboardViewModel::class.java) }
+    private val viewModel: DashboardViewModel by viewModels()
 
-    private var refreshLayout: SwipeRefreshLayout? = null
-    private var devicesView: RecyclerView? = null
     private var adapterForDevices: DevicesAdapter? = null
 
 
@@ -36,19 +36,19 @@ class DashboardFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         if (BuildConfig.DEBUG) Log.d(TAG, "onActivity created, create viewModel")
-        viewModel.devices.observe(this, Observer {
+        viewModel.devices.observe(this) {
             if (BuildConfig.DEBUG) Log.d(TAG, "devicesView've changed, now its ${viewModel.devices.value}")
             adapterForDevices?.notifyDataSetChanged()
-        })
-        viewModel.allHomeUpdateState.observe(this, Observer {
+        }
+        viewModel.allHomeUpdateState.observe(this) {
             if (BuildConfig.DEBUG) Log.d(TAG, "allHomeUpdateState's changed")
-            refreshLayout?.isRefreshing = it
-        })
-        viewModel.toastMessage.observe(this, Observer {
-            it ?: return@Observer
+            refresh_layout.isRefreshing = it
+        }
+        viewModel.toastMessage.observe(this) {
+            it ?: return@observe
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             viewModel.toastShowed()
-        })
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -60,22 +60,18 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (BuildConfig.DEBUG) Log.d(TAG, "onViewCreated")
-        refreshLayout = view.findViewById(R.id.refresh_layout)
-        devicesView = view.findViewById(R.id.devices)
-        devicesView?.layoutManager = LinearLayoutManager(view.context)
 
-        refreshLayout?.setOnRefreshListener { viewModel.requestSmartHomeState() }
+        devices.layoutManager = LinearLayoutManager(view.context)
+
+        refresh_layout.setOnRefreshListener { viewModel.requestSmartHomeState() }
         adapterForDevices = DevicesAdapter(layoutInflater, viewModel,
                 ::onDeviceClick, ::onControllerClick)
-        devicesView?.adapter = adapterForDevices
-        devicesView?.addItemDecoration(DividerItemDecoration(context, VERTICAL))
+        devices?.adapter = adapterForDevices
+        devices?.addItemDecoration(DividerItemDecoration(context, VERTICAL))
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-        refreshLayout = null
-        devicesView = null
         adapterForDevices = null
     }
 

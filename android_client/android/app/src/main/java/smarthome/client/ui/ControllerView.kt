@@ -19,7 +19,7 @@ class ControllerView(root: ViewGroup) {
 
     fun bind(controller: BaseController) {
         if (controller.name.isNullOrEmpty()) {
-            name.text = "${controller.type ?: UNKNOWN_STATE}"
+            name.text = controller.type ?: UNKNOWN_STATE
         } else {
             name.text = controller.name
         }

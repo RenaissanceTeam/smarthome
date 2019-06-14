@@ -7,18 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import smarthome.client.*
+import kotlinx.android.synthetic.main.fragment_device_addition.*
+import smarthome.client.AddDeviceActivity
+import smarthome.client.BuildConfig
+import smarthome.client.Model
+import smarthome.client.R
 import smarthome.client.fragments.deviceaddition.DISCOVER_REQUEST_CODE
 import smarthome.client.util.CloudStorages
 import smarthome.library.common.BaseController
@@ -29,17 +26,8 @@ class AdditionFragment : Fragment(), ViewNotifier {
 
     private val TAG = javaClass.name
 
-    private var refreshLayout: SwipeRefreshLayout? = null
-    private var fab: FloatingActionButton? = null
-    private var devicesRecycler: RecyclerView? = null
     private var adapterForDevices: DeviceAdapter? = null
-
-    private val job = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + job)
-
-    private val viewModel
-            by lazy { ViewModelProviders.of(this).get(AdditionViewModel::class.java) }
-
+    private val viewModel: AdditionViewModel by viewModels()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -51,7 +39,7 @@ class AdditionFragment : Fragment(), ViewNotifier {
         })
         viewModel.allHomeUpdateState.observe(this, Observer {
             if (BuildConfig.DEBUG) Log.d(TAG, "allHomeUpdateState's changed")
-            refreshLayout?.isRefreshing = it
+            add_device_refresh_layout.isRefreshing = it
         })
     }
 
@@ -63,40 +51,23 @@ class AdditionFragment : Fragment(), ViewNotifier {
         super.onViewCreated(view, savedInstanceState)
 
         if (BuildConfig.DEBUG) Log.d(TAG, "onViewCreated")
-        refreshLayout = view.findViewById(R.id.add_device_refresh_layout)
-        fab = view.findViewById(R.id.add_device_fab)
-        fab?.setOnClickListener {
+
+        add_device_fab.setOnClickListener {
             startActivityForResult(Intent(context, AddDeviceActivity::class.java), DISCOVER_REQUEST_CODE)
         }
 
-        devicesRecycler = view.findViewById(R.id.add_device_recycler)
-        devicesRecycler?.layoutManager = LinearLayoutManager(view.context)
+        add_device_recycler.layoutManager = LinearLayoutManager(view.context)
 
-        refreshLayout?.setOnRefreshListener { viewModel.requestSmartHomeState() }
+        add_device_refresh_layout.setOnRefreshListener { viewModel.requestSmartHomeState() }
         resetAdapter()
-        devicesRecycler?.setHasFixedSize(true)
+
+        add_device_recycler.setHasFixedSize(true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == DISCOVER_REQUEST_CODE) {
             resetAdapter()
         }
-    }
-
-    private fun onDeviceAccept(device: IotDevice?) {
-        Log.d(TAG, "clicked on $device")
-        device ?: return
-
-        device.setAccepted()
-        updateDevice(device)
-    }
-
-    private fun onDeviceReject(device: IotDevice?) {
-        Log.d(TAG, "clicked on $device")
-        device ?: return
-
-        device.setRejected()
-        updateDevice(device)
     }
 
     private fun onDeviceDetailsClick(device: IotDevice?) {
@@ -116,41 +87,19 @@ class AdditionFragment : Fragment(), ViewNotifier {
         findNavController().navigate(action)
     }
 
-    private fun onControllerChanged(controller: BaseController?) {
-        uiScope.launch {
-            controller?.let { viewModel.onControllerChanged(it) }
-        }
-    }
-
-    private fun updateDevice(device: IotDevice) {
-        uiScope.launch {
-            Model.changePendingDevice(device)
-        }
-    }
-
-    private fun onAddDeviceClicked() {
-        uiScope.launch {
-            CloudStorages.getMessageQueue()
-                    .postMessage(DiscoverAllDevicesRequest("1")) //TODO implement clientID generation
-        }
-    }
-
     override fun onItemRemoved(pos: Int) {
         resetAdapter()
     }
 
     private fun resetAdapter() {
         adapterForDevices = createDeviceAdapter()
-        devicesRecycler?.adapter = adapterForDevices
+        add_device_recycler?.adapter = adapterForDevices
         adapterForDevices?.viewNotifier = this
     }
 
     private fun createDeviceAdapter(): DeviceAdapter {
         return DeviceAdapter(viewModel,
                 ::onDeviceDetailsClick,
-                ::onControllerDetailsClick,
-                ::onDeviceAccept,
-                ::onDeviceReject,
-                ::onControllerChanged)
+                ::onControllerDetailsClick)
     }
 }

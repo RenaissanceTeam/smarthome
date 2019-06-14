@@ -2,6 +2,7 @@ package smarthome.client.screens.settings
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,9 +13,6 @@ import smarthome.client.auth.Authenticator
 class SettingsViewModel : ViewModel() {
     val currentAccount = MutableLiveData<String>()
     val emailDisposable: Disposable
-    val job = Job()
-    val uiScope = CoroutineScope(Dispatchers.Main + job)
-
 
     init {
         emailDisposable = Authenticator.userEmail.subscribe { currentAccount.value = it }
@@ -24,8 +22,7 @@ class SettingsViewModel : ViewModel() {
         super.onCleared()
 
         emailDisposable.dispose()
-        job.cancel()
     }
 
-    fun signOut() = uiScope.launch { Authenticator.signOut() }
+    fun signOut() = viewModelScope.launch { Authenticator.signOut() }
 }

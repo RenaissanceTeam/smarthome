@@ -20,10 +20,7 @@ import smarthome.library.common.IotDevice
 
 class DeviceAdapter(private val viewModel: AdditionViewModel,
                     val deviceDetailsClickListener: (device: IotDevice?) -> Unit,
-                    val controllerDetailsClickListener: (controller: BaseController?) -> Unit,
-                    val deviceAcceptClickListener: (device: IotDevice?) -> Unit,
-                    val deviceRejectClickListener: (device: IotDevice?) -> Unit,
-                    val controllerUpdateHandler: (controller: BaseController?) -> Unit)
+                    val controllerDetailsClickListener: (controller: BaseController?) -> Unit)
     : RecyclerView.Adapter<DeviceAdapter.ViewHolder>(), ViewNotifier {
 
     private val TAG = javaClass.name
@@ -39,10 +36,10 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
         return ViewHolder(itemView, false,
                 deviceDetailsClickListener,
                 controllerDetailsClickListener,
-                deviceAcceptClickListener,
-                deviceRejectClickListener,
+                { viewModel.acceptDevice(it)  },
+                { viewModel.rejectDevice(it) },
                 ::notifyItemViewChanged,
-                controllerUpdateHandler)
+                { viewModel.onControllerChanged(it) })
     }
 
     override fun getItemCount(): Int {
