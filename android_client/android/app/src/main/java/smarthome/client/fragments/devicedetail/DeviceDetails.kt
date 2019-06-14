@@ -6,21 +6,15 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.device_card.*
 import kotlinx.android.synthetic.main.fragment_device_details.*
-import smarthome.client.*
+import smarthome.client.R
 import smarthome.client.ui.DialogParameters
 import smarthome.client.ui.EditTextDialog
 import smarthome.library.common.IotDevice
@@ -48,7 +42,7 @@ class DeviceDetails : Fragment() {
     private fun bindDevice(device: IotDevice) {
         device_name.text = device.name
         setDescription(device)
-        device_controllers_recycler.adapter?.notifyDataSetChanged()
+        devices.adapter?.notifyDataSetChanged()
     }
 
     private fun setDescription(device: IotDevice) {
@@ -70,9 +64,9 @@ class DeviceDetails : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        device_controllers_recycler.layoutManager = LinearLayoutManager(view.context)
-        device_controllers_recycler.adapter = ControllersAdapter(viewModel)
-        device_controllers_recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        devices.layoutManager = LinearLayoutManager(view.context)
+        devices.adapter = ControllersAdapter(viewModel)
+        devices.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         if (args.usePending) viewModel.usePending()
         viewModel.setDeviceGuid(args.deviceGuid)
