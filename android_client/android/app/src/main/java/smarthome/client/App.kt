@@ -18,8 +18,4 @@ class App : MultiDexApplication() {
         super.onCreate()
         appContext = this
     }
-
-    fun App.getAppContext(): Context {
-        return appContext
-    }
 }

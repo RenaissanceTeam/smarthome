@@ -1,7 +1,5 @@
 package smarthome.client
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
