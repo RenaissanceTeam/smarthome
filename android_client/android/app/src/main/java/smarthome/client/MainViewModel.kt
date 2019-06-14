@@ -19,6 +19,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val isAuthenticated: LiveData<Boolean>
         get() = _isAuthenticated
 
+
     val authUiWrapper = AuthUIWrapper
     private val authDisposable: Disposable
 
