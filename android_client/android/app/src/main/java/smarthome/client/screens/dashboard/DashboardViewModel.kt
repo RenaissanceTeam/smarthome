@@ -21,8 +21,6 @@ class DashboardViewModel : ViewModel() {
     private val _allHomeUpdateState = MutableLiveData<Boolean>()
     private val _toastMessage = MutableLiveData<String?>()
 
-    private val job = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private var devicesSubscription: Disposable? = null
     private val authSubscription: Disposable
 
@@ -42,7 +40,7 @@ class DashboardViewModel : ViewModel() {
     fun requestSmartHomeState() {
         if (BuildConfig.DEBUG) Log.d(TAG, "request smart home state")
 
-        uiScope.launch {
+        viewModelScope.launch {
             _allHomeUpdateState.value = true
             if (devicesSubscription == null) tryListenForUpdates()
             try {
@@ -70,7 +68,6 @@ class DashboardViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        job.cancel()
         devicesSubscription?.dispose()
     }
 }

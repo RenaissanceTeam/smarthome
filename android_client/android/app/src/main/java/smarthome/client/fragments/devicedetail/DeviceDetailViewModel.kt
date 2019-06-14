@@ -1,6 +1,5 @@
 package smarthome.client.fragments.devicedetail
 
-import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import smarthome.client.HomeModelException
 import smarthome.client.Model
-import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
 class DeviceDetailViewModel : ViewModel() {

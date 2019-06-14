@@ -52,9 +52,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // ViewModel and LiveData
-    def lifecycle_version = "2.0.0"
+    def lifecycle_version = "2.2.0-alpha01"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
@@ -83,6 +84,10 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
     implementation 'in.srain.cube:ultra-ptr:1.0.11'
+
+    // ktx
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'androidx.fragment:fragment-ktx:1.1.0-beta01'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
 }

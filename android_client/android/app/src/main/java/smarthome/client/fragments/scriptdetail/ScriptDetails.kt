@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -28,7 +29,7 @@ class ScriptDetails: Fragment() {
         val FRAGMENT_TAG = "ScriptDetailsFragment"
     }
 
-    private lateinit var viewModel: ScriptDetailViewModel
+    private val viewModel: ScriptDetailViewModel by viewModels()
     private val args: ScriptDetailsArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -38,16 +39,15 @@ class ScriptDetails: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = activity?.run {
-            ViewModelProviders.of(this).get(ScriptDetailViewModel::class.java)
-        } ?: throw NullPointerException("Activity is null in script details")
         viewModel.onCreateScriptDetails()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.script.observe(this, Observer { bindViews(it) } )
-        viewModel.isScriptOpen.observe(this, Observer { if (!it) activity?.onBackPressed()} )
+        viewModel.script.observe(this, ::bindViews)
+        viewModel.isScriptOpen.observe(this) {
+            if (!it) activity?.onBackPressed()
+        }
     }
 
     private fun bindViews(script: Script?) {

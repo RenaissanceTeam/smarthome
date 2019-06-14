@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,15 +37,13 @@ class ControllerDetailViewModel : ViewModel() {
     val stateChangerType: LiveData<StateChangerType>
         get() = _stateChangerType
 
-    private val job = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private var disposable: Disposable? = null
 
     private var usePending = false
 
     fun setControllerGuid(controllerGuid: Long?) {
         controllerGuid ?: return
-        uiScope.launch {
+        viewModelScope.launch {
             _refresh.value = true
             try {
                 val foundController = if (!usePending) Model.getController(controllerGuid) else Model.getPendingController(controllerGuid)
@@ -75,7 +74,6 @@ class ControllerDetailViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        job.cancel()
         disposable?.dispose()
     }
 
@@ -84,7 +82,7 @@ class ControllerDetailViewModel : ViewModel() {
         val device = _device.value ?: return
         val controller = _controller.value ?: return
 
-        uiScope.launch {
+        viewModelScope.launch {
             _refresh.value = true
             state?.let { controller.state = it }
             controller.serveState = serveState
@@ -101,7 +99,7 @@ class ControllerDetailViewModel : ViewModel() {
     }
 
     private fun updateDevice(device: IotDevice) {
-        uiScope.launch {
+        viewModelScope.launch {
             _refresh.value = true
             _updateDevice(device)
         }

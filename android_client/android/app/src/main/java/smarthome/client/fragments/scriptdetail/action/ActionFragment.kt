@@ -8,6 +8,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -26,16 +28,7 @@ import smarthome.client.ui.SwipeToDeleteCallback
 class ActionFragment : Fragment() {
 
     private var adapter: ActionsAdapter? = null
-
-    private lateinit var viewModel: ScriptDetailViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel = activity?.run {
-            ViewModelProviders.of(this).get(ScriptDetailViewModel::class.java)
-        } ?: throw NullPointerException("Activity is null in action fragment")
-    }
+    private val viewModel: ScriptDetailViewModel by viewModels()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

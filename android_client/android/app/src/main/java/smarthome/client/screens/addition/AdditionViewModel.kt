@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -90,10 +91,13 @@ class AdditionViewModel : ViewModel() {
         }
     }
 
-    suspend fun onControllerChanged(controller: BaseController) {
-        val device = Model.getPendingDevice(controller)
-        device.controllers[device.controllers.indexOf(controller)] = controller
-        Model.changePendingDevice(device)
+    fun onControllerChanged(controller: BaseController?) {
+        controller ?: return
+        viewModelScope.launch {
+            val device = Model.getPendingDevice(controller)
+            device.controllers[device.controllers.indexOf(controller)] = controller
+            Model.changePendingDevice(device)
+        }
     }
 
     private fun updateDevice(device: IotDevice) {
@@ -109,4 +113,17 @@ class AdditionViewModel : ViewModel() {
         devicesSubscription?.dispose()
     }
 
+    fun acceptDevice(device: IotDevice?) {
+        device ?: return
+
+        device.setAccepted()
+        viewModelScope.launch { Model.changePendingDevice(device) }
+    }
+
+    fun rejectDevice(device: IotDevice?) {
+        device ?: return
+
+        device.setRejected()
+        viewModelScope.launch { Model.changePendingDevice(device) }
+    }
 }
