@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.auth.Authenticator
+import smarthome.client.domain.usecases.AuthenticationUseCase
 import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.library.common.IotDevice
 
@@ -20,6 +20,7 @@ class DashboardViewModel : ViewModel(), KoinComponent {
     private val _toastMessage = MutableLiveData<String?>()
 
     private val devicesUseCase: DevicesUseCase by inject()
+    private val authenticationUseCase: AuthenticationUseCase by inject()
 
     private var devicesSubscription: Disposable? = null
     private val authSubscription: Disposable
@@ -34,7 +35,7 @@ class DashboardViewModel : ViewModel(), KoinComponent {
         get() = _toastMessage
 
     init {
-        authSubscription = Authenticator.isAuthenticated.subscribe {
+        authSubscription = authenticationUseCase.getAuthenticationStatus().subscribe {
             if (it) {
                 requestSmartHomeState()
             } else {

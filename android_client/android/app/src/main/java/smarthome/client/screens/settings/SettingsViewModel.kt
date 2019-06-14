@@ -4,18 +4,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import smarthome.client.auth.Authenticator
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import smarthome.client.domain.usecases.AuthenticationUseCase
 
-class SettingsViewModel : ViewModel() {
+class SettingsViewModel : ViewModel(), KoinComponent {
     val currentAccount = MutableLiveData<String>()
     val emailDisposable: Disposable
 
+    private val authenticationUseCase: AuthenticationUseCase by inject()
+
     init {
-        emailDisposable = Authenticator.userEmail.subscribe { currentAccount.value = it }
+        emailDisposable = authenticationUseCase.getEmail().subscribe { currentAccount.value = it }
     }
 
     override fun onCleared() {
@@ -24,5 +25,5 @@ class SettingsViewModel : ViewModel() {
         emailDisposable.dispose()
     }
 
-    fun signOut() = viewModelScope.launch { Authenticator.signOut() }
+    fun signOut() = viewModelScope.launch { authenticationUseCase.signOut() }
 }

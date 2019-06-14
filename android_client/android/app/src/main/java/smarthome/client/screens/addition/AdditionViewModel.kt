@@ -10,21 +10,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import smarthome.client.BuildConfig
-import smarthome.client.HomeModelException
-import smarthome.client.model.Model
-import smarthome.client.auth.Authenticator
+import smarthome.client.domain.usecases.AuthenticationUseCase
+import smarthome.client.domain.usecases.PendingDevicesUseCase
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
-class AdditionViewModel : ViewModel() {
+class AdditionViewModel : ViewModel(), KoinComponent {
 
     val TAG = javaClass.name
 
     var viewNotifier: ViewNotifier? = null
 
     private val _devices = MutableLiveData<MutableList<IotDevice>>()
-    private val _allHomeUpdateState = MutableLiveData<Boolean>()
+    private val _globalUpdateState = MutableLiveData<Boolean>()
     private val _toastMessage = MutableLiveData<String?>()
 
     private val job = Job()
@@ -32,78 +33,66 @@ class AdditionViewModel : ViewModel() {
     private var devicesSubscription: Disposable? = null
     private val authSubscription: Disposable
 
+    private val authenticationUseCase: AuthenticationUseCase by inject()
+    private val pendingDevicesUseCase: PendingDevicesUseCase by inject()
+
+
     val devices: LiveData<MutableList<IotDevice>>
         get() = _devices
 
     val allHomeUpdateState: LiveData<Boolean>
-        get() = _allHomeUpdateState
+        get() = _globalUpdateState
 
     val toastMessage: LiveData<String?>
         get() = _toastMessage
 
 
     init {
-        authSubscription = Authenticator.isAuthenticated.subscribe { if (it) requestSmartHomeState(); }
+        authSubscription = authenticationUseCase.getAuthenticationStatus().subscribe { if (it) requestSmartHomeState(); }
     }
 
     fun requestSmartHomeState() {
         if (BuildConfig.DEBUG) Log.d(TAG, "request smart home state")
 
         uiScope.launch {
-            _allHomeUpdateState.value = true
-            if (devicesSubscription == null) tryListenForUpdates()
+            _globalUpdateState.value = true
             try {
-                _devices.value = Model.getPendingDevicesCopy()
-            } catch (e: HomeModelException) {
-                if (BuildConfig.DEBUG) Log.d(TAG, "request home state failed", e)
-            }
-            _allHomeUpdateState.value = false
-        }
-    }
-
-    private suspend fun tryListenForUpdates() {
-        try {
-            devicesSubscription = Model.getPendingDevicesObservable().subscribe {
-                _devices.value?.let {old ->
-                    if (old.size > it.size) {
-                        if (it.size == 0) {
-                            viewNotifier?.onItemRemoved(0)
-                            return@let
-                        }
-
-                        for (i in 0..it.size) {
-                            if (old[i] != it[i]) {
-                                viewNotifier?.onItemRemoved(i)
+                devicesSubscription = pendingDevicesUseCase.getPendingDevices().subscribe {
+                    _devices.value?.let {old -> // todo change to list adapter
+                        if (old.size > it.size) {
+                            if (it.size == 0) {
+                                viewNotifier?.onItemRemoved(0)
                                 return@let
                             }
+
+                            for (i in 0..it.size) {
+                                if (old[i] != it[i]) {
+                                    viewNotifier?.onItemRemoved(i)
+                                    return@let
+                                }
+                            }
+
+                            viewNotifier?.onItemRemoved(old.size - 1)
                         }
-
-                        viewNotifier?.onItemRemoved(old.size - 1)
                     }
-                }
 
-                _devices.value = it
-                _allHomeUpdateState.value = false
+                    _devices.value = it
+                    _globalUpdateState.value = false
+                }
+            } catch (e: Throwable) {
+                _toastMessage.value = "Can't listen for devices update"
+                if (BuildConfig.DEBUG) Log.d(TAG, "", e)
             }
-        } catch (e: Throwable) {
-            _toastMessage.value = "Can't listen for devices update"
-            if (BuildConfig.DEBUG) Log.d(TAG, "", e)
         }
     }
+
 
     fun onControllerChanged(controller: BaseController?) {
         controller ?: return
         viewModelScope.launch {
-            val device = Model.getPendingDevice(controller)
+            val device = pendingDevicesUseCase.getPendingDevice(controller)
             device.controllers[device.controllers.indexOf(controller)] = controller
-            Model.changePendingDevice(device)
-        }
-    }
-
-    private fun updateDevice(device: IotDevice) {
-        uiScope.launch {
-            //_refresh.value = true
-            Model.changePendingDevice(device)
+            pendingDevicesUseCase.changePendingDevice(device)
         }
     }
 
@@ -117,13 +106,13 @@ class AdditionViewModel : ViewModel() {
         device ?: return
 
         device.setAccepted()
-        viewModelScope.launch { Model.changePendingDevice(device) }
+        viewModelScope.launch { pendingDevicesUseCase.changePendingDevice(device) }
     }
 
     fun rejectDevice(device: IotDevice?) {
         device ?: return
 
         device.setRejected()
-        viewModelScope.launch { Model.changePendingDevice(device) }
+        viewModelScope.launch { pendingDevicesUseCase.changePendingDevice(device) }
     }
 }
