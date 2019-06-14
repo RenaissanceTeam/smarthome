@@ -1,17 +1,16 @@
 package smarthome.client
 
 import android.app.Application
-import android.util.Log
-import android.view.MenuItem
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.disposables.Disposable
-import smarthome.client.BuildConfig.DEBUG
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import smarthome.client.auth.AuthUIWrapper
-import smarthome.client.auth.Authenticator
+import smarthome.client.domain.usecases.AuthenticationUseCase
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(application: Application) : AndroidViewModel(application), KoinComponent {
 
     private val TAG = MainViewModel::class.java.simpleName
 
@@ -19,22 +18,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val isAuthenticated: LiveData<Boolean>
         get() = _isAuthenticated
 
+    private val authenticationUseCase: AuthenticationUseCase by inject()
 
     val authUiWrapper = AuthUIWrapper
     private val authDisposable: Disposable
 
     init {
-        authDisposable = Authenticator.isAuthenticated.subscribe { _isAuthenticated.value = it}
+        authDisposable = authenticationUseCase.getAuthenticationStatus().subscribe { _isAuthenticated.value = it}
     }
 
     fun onAuthSuccessful() {
-        Authenticator.onNewAuth()
-        if (DEBUG) Log.d(TAG, "auth successful, user id=${Authenticator.getUserId()}")
+        authenticationUseCase.onAuthSuccess()
     }
 
     fun onAuthFailed() {
-        Authenticator.onNewAuth()
-        if (DEBUG) Log.d(TAG, "auth failed, user id=${Authenticator.getUserId()}")
+        authenticationUseCase.onAuthFail()
     }
 
     override fun onCleared() {

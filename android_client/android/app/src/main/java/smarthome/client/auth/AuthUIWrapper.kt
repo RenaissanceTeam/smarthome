@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import smarthome.client.App
 
 object AuthUIWrapper {
-    val providers = listOf(AuthUI.IdpConfig.GoogleBuilder().build())
+    private val providers = listOf(AuthUI.IdpConfig.GoogleBuilder().build())
 
     fun getAuthIntent(): Intent {
         return AuthUI.getInstance()
