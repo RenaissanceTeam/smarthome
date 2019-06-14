@@ -14,13 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_device_addition.*
 import smarthome.client.AddDeviceActivity
 import smarthome.client.BuildConfig
-import smarthome.client.Model
 import smarthome.client.R
 import smarthome.client.fragments.deviceaddition.DISCOVER_REQUEST_CODE
-import smarthome.client.util.CloudStorages
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
-import smarthome.library.common.message.DiscoverAllDevicesRequest
 
 class AdditionFragment : Fragment(), ViewNotifier {
 

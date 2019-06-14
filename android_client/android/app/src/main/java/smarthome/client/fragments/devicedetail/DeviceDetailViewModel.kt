@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import smarthome.client.HomeModelException
-import smarthome.client.Model
+import smarthome.client.model.Model
 import smarthome.library.common.IotDevice
 
 class DeviceDetailViewModel : ViewModel() {

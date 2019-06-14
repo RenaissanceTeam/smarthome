@@ -1,25 +1,25 @@
 package smarthome.client.screens.dashboard
 
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import smarthome.client.BuildConfig
-import smarthome.client.BuildConfig.DEBUG
-import smarthome.client.HomeModelException
-import smarthome.client.Model
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import smarthome.client.auth.Authenticator
+import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.library.common.IotDevice
 
-class DashboardViewModel : ViewModel() {
+class DashboardViewModel : ViewModel(), KoinComponent {
     val TAG = DashboardViewModel::class.java.simpleName
 
     private val _devices = MutableLiveData<MutableList<IotDevice>>()
     private val _allHomeUpdateState = MutableLiveData<Boolean>()
     private val _toastMessage = MutableLiveData<String?>()
+
+    private val devicesUseCase: DevicesUseCase by inject()
 
     private var devicesSubscription: Disposable? = null
     private val authSubscription: Disposable
@@ -34,33 +34,27 @@ class DashboardViewModel : ViewModel() {
         get() = _toastMessage
 
     init {
-        authSubscription = Authenticator.isAuthenticated.subscribe { if (it) requestSmartHomeState(); }
-    }
-
-    fun requestSmartHomeState() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "request smart home state")
-
-        viewModelScope.launch {
-            _allHomeUpdateState.value = true
-            if (devicesSubscription == null) tryListenForUpdates()
-            try {
-                _devices.value = Model.getDevices()
-            } catch (e: HomeModelException) {
-                if (DEBUG) Log.d(TAG, "request home state failed", e)
+        authSubscription = Authenticator.isAuthenticated.subscribe {
+            if (it) {
+                requestSmartHomeState()
+            } else {
+                devicesSubscription?.dispose()
+                devicesSubscription = null
+                // todo show user not logged in placeholder
             }
-            _allHomeUpdateState.value = false
         }
     }
 
-    private suspend fun tryListenForUpdates() {
-        try {
-            devicesSubscription = Model.getDevicesObservable().subscribe {
+    fun requestSmartHomeState() {
+        viewModelScope.launch {
+            _allHomeUpdateState.value = true
+
+            devicesSubscription = devicesUseCase.getDevices().doOnError {
+                _toastMessage.value = "Error $it"
+            }.subscribe {
                 _devices.value = it
                 _allHomeUpdateState.value = false
             }
-        } catch (e: Throwable) {
-            _toastMessage.value = "Can't listen for devices update"
-            if (DEBUG) Log.d(TAG, "", e)
         }
     }
 

@@ -3,7 +3,7 @@ package smarthome.client.util
 import android.content.Context
 import android.util.Log
 import smarthome.client.BuildConfig.DEBUG
-import smarthome.client.Model
+import smarthome.client.model.Model
 
 class FcmTokenStorage(context: Context) {
     val INVALID_TOKEN = ""
