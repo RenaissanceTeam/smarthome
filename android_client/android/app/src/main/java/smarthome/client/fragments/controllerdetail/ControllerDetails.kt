@@ -11,9 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
-import smarthome.client.CONTROLLER_GUID
 import smarthome.client.R
-import smarthome.client.USE_PENDING
 import smarthome.client.fragments.controllerdetail.statechanger.*
 import smarthome.client.fragments.devicedetail.DeviceDetailsArgs
 import smarthome.client.ui.DialogParameters
