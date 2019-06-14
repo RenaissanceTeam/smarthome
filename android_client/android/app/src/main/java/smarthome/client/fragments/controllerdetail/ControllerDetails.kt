@@ -11,7 +11,6 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.controller_item.*
 import kotlinx.android.synthetic.main.fragment_controller_details.*
 import kotlinx.android.synthetic.main.fragment_controller_details.state
-import kotlinx.android.synthetic.main.fragment_device_details.*
 import smarthome.client.R
 import smarthome.client.fragments.controllerdetail.statechanger.*
 import smarthome.client.ui.DialogParameters
@@ -61,11 +60,11 @@ class ControllerDetails : Fragment() {
 
     private fun setControllerName(controller: BaseController) {
         if (controller.name.isNullOrEmpty()) {
-            name.setTextColor(resources.getColor(android.R.color.darker_gray))
-            name.text = getString(R.string.empty_name)
+            controller_name.setTextColor(resources.getColor(android.R.color.darker_gray))
+            controller_name.text = getString(R.string.empty_name)
         } else {
-            name.setTextColor(resources.getColor(R.color.primary_text_default_material_light))
-            name.text = controller.name
+            controller_name.setTextColor(resources.getColor(R.color.primary_text_default_material_light))
+            controller_name.text = controller.name
         }
     }
 
