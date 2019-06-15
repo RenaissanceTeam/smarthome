@@ -6,7 +6,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
-import smarthome.client.scripts.actions.ActionViewWrapper
+import smarthome.client.presentation.screens.scripts.actions.ActionViewWrapper
 
 class ActionViewHolder(view: View,
                        onTypeChange: (Int, String) -> Unit) : RecyclerView.ViewHolder(view) {

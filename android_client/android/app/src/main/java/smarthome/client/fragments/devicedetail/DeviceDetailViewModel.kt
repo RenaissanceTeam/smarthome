@@ -8,11 +8,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import smarthome.client.HomeModelException
+import smarthome.client.domain.usecases.DevicesUseCase
+import smarthome.client.domain.usecases.PendingDevicesUseCase
 import smarthome.client.model.Model
 import smarthome.library.common.IotDevice
 
-class DeviceDetailViewModel : ViewModel() {
+class DeviceDetailViewModel : ViewModel(), KoinComponent {
     private val _device = MutableLiveData<IotDevice>()
     val device: LiveData<IotDevice>
         get() = _device
@@ -26,10 +30,11 @@ class DeviceDetailViewModel : ViewModel() {
     val controllerDetails: LiveData<Long?>
         get() = _controllerDetails
 
-
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private var disposable: Disposable? = null
+    private val devicesUseCase: DevicesUseCase by inject()
+    private val pendingDevicesUseCase: PendingDevicesUseCase by inject()
 
     var usePending: Boolean = false
 
@@ -39,7 +44,7 @@ class DeviceDetailViewModel : ViewModel() {
         uiScope.launch {
             try {
                 _refresh.value = true
-                _device.value = if (!usePending) Model.getDevice(deviceGuid) else Model.getPendingDevice(deviceGuid)
+                _device.value = if (!usePending) devicesUseCase.getDevice(deviceGuid) else pendingDevicesUseCase.getPendingDevice(deviceGuid)
                 _refresh.value = false
 
                 listenForModelChanges(deviceGuid)
@@ -50,9 +55,9 @@ class DeviceDetailViewModel : ViewModel() {
     }
 
     private suspend fun listenForModelChanges(deviceGuid: Long) {
-        val observable = if (!usePending) Model.getDevicesObservable() else Model.getPendingDevicesObservable()
-        disposable = observable.subscribe {
-            val changedDevice = Model.getDevice(it, deviceGuid)
+        val observable = if (!usePending) devicesUseCase.getDevices() else pendingDevicesUseCase.getPendingDevices()
+        disposable = observable.subscribe { devices ->
+            val changedDevice = devices.find { it.guid == deviceGuid }
             _device.value = changedDevice
             _refresh.value = false
         }
@@ -92,8 +97,8 @@ class DeviceDetailViewModel : ViewModel() {
         uiScope.launch {
             _refresh.value = true
             if (!usePending)
-                Model.changeDevice(device)
-            else Model.changePendingDevice(device)
+                devicesUseCase.changeDevice(device)
+            else pendingDevicesUseCase.changePendingDevice(device)
         }
     }
 }

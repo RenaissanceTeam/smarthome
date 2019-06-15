@@ -1,26 +1,20 @@
 package smarthome.client.domain.usecases
 
-import io.reactivex.Observable
-import smarthome.client.domain.HomeRepository
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
-class DevicesUseCase(private val repository: HomeRepository) {
-
-    suspend fun getDevices(): Observable<MutableList<IotDevice>>{
-        return repository.getDevices()
-    }
-
-    fun changeDevice(device: IotDevice) {
+class ControllersUseCase {
+    fun getController(controllerGuid: Long): BaseController {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun findDevice(devices: MutableList<IotDevice>?, changedController: BaseController): IotDevice? {
+    fun findController(devices: MutableList<IotDevice>?, controllerGuid: Long): BaseController {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun getDevice(deviceGuid: Long): IotDevice? {
+    fun getControllers(): List<BaseController> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+
 }
-

@@ -9,16 +9,21 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import smarthome.client.BuildConfig.DEBUG
 import smarthome.client.R
-import smarthome.client.util.FcmTokenStorage
+import smarthome.client.domain.usecases.CloudMessageUseCase
+
+//import smarthome.client.util.FcmTokenStorage
 
 
-class FCMService : FirebaseMessagingService() {
+class FCMService : FirebaseMessagingService(), KoinComponent {
 
     private val TAG = "FCMService"
 
     private var notificationManager: NotificationManager? = null
+    private val messageUseCase: CloudMessageUseCase by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -32,7 +37,7 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(newToken: String?) {
-        FcmTokenStorage(baseContext).savedToken = newToken ?: return
+        messageUseCase.onNewToken(newToken)
     }
 
     override fun onMessageReceived(message: RemoteMessage?) {

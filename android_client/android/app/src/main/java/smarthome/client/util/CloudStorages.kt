@@ -65,7 +65,6 @@ object CloudStorages {
         instanceTokenStorage = FirestoreInstanceTokenStorage(homeId)
         messageQueue = FirestoreMessageQueue(homeId)
 
-        FcmTokenRequester().initFcmToken()
     }
 
     suspend fun loadHome(): SmartHome {

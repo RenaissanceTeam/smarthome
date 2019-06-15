@@ -15,7 +15,7 @@ import smarthome.client.NoDeviceWithControllerException
 import smarthome.client.RemoteFailure
 import smarthome.library.common.scripts.Script
 import smarthome.client.util.CloudStorages
-import smarthome.client.util.FcmTokenStorage
+//import smarthome.client.util.FcmTokenStorage
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome

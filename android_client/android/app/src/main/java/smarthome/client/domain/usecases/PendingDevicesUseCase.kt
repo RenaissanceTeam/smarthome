@@ -10,11 +10,15 @@ class PendingDevicesUseCase(private val repository: HomeRepository) {
         TODO()
     }
 
-    fun getPendingDevice(controller: BaseController): IotDevice {
+    fun findPendingDevice(controller: BaseController): IotDevice {
         TODO()
     }
 
     fun changePendingDevice(device: IotDevice) {
         TODO()
+    }
+
+    fun getPendingDevice(deviceGuid: Long): IotDevice? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
