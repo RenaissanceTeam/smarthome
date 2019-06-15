@@ -17,7 +17,7 @@ import smarthome.client.R
 import smarthome.client.util.CloudStorages
 import smarthome.library.common.message.Message
 
-val DISCOVER_REQUEST_CODE = 2356
+const val DISCOVER_REQUEST_CODE = 2356
 
 const val SEARCH_ALL_METHOD = "Search all"
 const val SEARCH_GATEWAY_METHOD = "Xiaomi Gateway"
@@ -52,7 +52,7 @@ class DeviceSelectorFragment : Fragment() {
         recycler?.adapter = adapter
     }
 
-    fun processSearchMethod(method: String, args: String?) {
+    private fun processSearchMethod(method: String, args: String?) {
         sendDiscoverRequest(MessageFactory.createMessage(method, args))
         activity?.setResult(DISCOVER_REQUEST_CODE)
         activity?.finish()

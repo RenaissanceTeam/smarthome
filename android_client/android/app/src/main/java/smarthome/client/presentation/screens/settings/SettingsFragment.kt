@@ -9,7 +9,7 @@ import smarthome.client.R
 
 class SettingsFragment : PreferenceFragmentCompat() {
     private val viewModel: SettingsViewModel by viewModels()
-    private val currentAccount by lazy { findPreference<Preference>("current_account") }
+    private val currentAccount by lazy { findPreference<Preference>("current_account") } // todo to constants
     private val signOut by lazy { findPreference<Preference>("sign_out") }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

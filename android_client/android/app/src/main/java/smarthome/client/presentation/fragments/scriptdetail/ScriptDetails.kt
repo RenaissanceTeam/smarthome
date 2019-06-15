@@ -23,7 +23,7 @@ import smarthome.library.common.scripts.Script
 
 class ScriptDetails: Fragment() {
     companion object {
-        val FRAGMENT_TAG = "ScriptDetailsFragment"
+        const val FRAGMENT_TAG = "ScriptDetailsFragment"
     }
 
     private val viewModel: ScriptDetailViewModel by viewModels()

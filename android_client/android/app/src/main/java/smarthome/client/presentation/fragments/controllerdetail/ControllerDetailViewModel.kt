@@ -21,8 +21,6 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
 class ControllerDetailViewModel : ViewModel(), KoinComponent {
-    val TAG = "ControllerDetail_VModel"
-
     private val _refresh = MutableLiveData<Boolean>()
     val refresh: LiveData<Boolean>
         get() = _refresh
@@ -59,7 +57,6 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
                 listenForModelChanges(controllerGuid)
             } catch (e: HomeModelException) {
                 // todo handle
-                if (BuildConfig.DEBUG) Log.w(TAG, "exception when setting controller guid=$controllerGuid", e)
             }
         }
     }
@@ -84,7 +81,6 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
     }
 
     fun newStateRequest(state: String?, serveState: String) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "new state request $state")
         val device = _device.value ?: return
         val controller = _controller.value ?: return
 
@@ -93,7 +89,7 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
             state?.let { controller.state = it }
             controller.serveState = serveState
 
-            _updateDevice(device)
+            changeDevice(device)
         }
     }
     fun controllerNameChanged(name: String) {
@@ -107,13 +103,12 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
     private fun updateDevice(device: IotDevice) {
         viewModelScope.launch {
             _refresh.value = true
-            _updateDevice(device)
+            changeDevice(device)
         }
     }
 
-    private suspend fun _updateDevice(device: IotDevice) {
-        if (!usePending)
-            devicesUseCase.changeDevice(device)
+    private fun changeDevice(device: IotDevice) {
+        if (!usePending) devicesUseCase.changeDevice(device)
         else pendingDevicesUseCase.changePendingDevice(device)
     }
 

@@ -1,6 +1,5 @@
 package smarthome.client.presentation.screens.scripts.conditions
 
-import android.R
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -13,11 +12,14 @@ import androidx.appcompat.widget.AppCompatSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import smarthome.client.util.CONDITION_CONTROLLER
-import smarthome.library.common.constants.*
+import smarthome.client.R
 import smarthome.client.presentation.screens.scripts.ControllersProvider
-import smarthome.library.common.scripts.conditions.ControllerCondition
+import smarthome.client.util.CONDITION_CONTROLLER
 import smarthome.library.common.BaseController
+import smarthome.library.common.constants.COMPARE_EQUAL_TO
+import smarthome.library.common.constants.COMPARE_LESS_THAN
+import smarthome.library.common.constants.COMPARE_MORE_THAN
+import smarthome.library.common.scripts.conditions.ControllerCondition
 
 class ControllerConditionViewWrapper(provider: ControllersProvider, private val condition: ControllerCondition) : ConditionViewWrapper {
     private var controllersWithName: List<BaseController>? = null
@@ -55,9 +57,9 @@ class ControllerConditionViewWrapper(provider: ControllersProvider, private val 
 
 
     private fun bindView() {
-        val radioGroup = view.findViewById<RadioGroup>(smarthome.client.R.id.compare_radio_group)
-        val dropDownList = view.findViewById<AppCompatSpinner>(smarthome.client.R.id.controller_drop_down_list)
-        val valueInput = view.findViewById<EditText>(smarthome.client.R.id.value_input)
+        val radioGroup = view.findViewById<RadioGroup>(R.id.compare_radio_group)
+        val dropDownList = view.findViewById<AppCompatSpinner>(R.id.controller_drop_down_list)
+        val valueInput = view.findViewById<EditText>(R.id.value_input)
 
         checkSelectedRadioGroup(radioGroup)
         valueInput.setText(condition.value)
@@ -69,7 +71,7 @@ class ControllerConditionViewWrapper(provider: ControllersProvider, private val 
         }
 
         dropDownList.adapter = ArrayAdapter<String>(view.context,
-                R.layout.simple_spinner_dropdown_item, dataset)
+                android.R.layout.simple_spinner_dropdown_item, dataset)
 
         val selectedControllerPosition = controllersWithName?.indexOf(condition.chosenController)
         selectedControllerPosition?.let {

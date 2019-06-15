@@ -24,7 +24,7 @@ class DeviceDetails : Fragment() {
     private val args: DeviceDetailsArgs by navArgs()
 
     companion object {
-        val FRAGMENT_TAG = "DeviceDetailsFragment"
+        const val FRAGMENT_TAG = "DeviceDetailsFragment"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

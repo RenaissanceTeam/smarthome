@@ -10,8 +10,8 @@ import smarthome.library.common.scripts.conditions.IntervalTimeCondition
 
 class IntervalTimeConditionViewWrapper(private val condition: IntervalTimeCondition) : ConditionViewWrapper {
 
-    var intervalView: TextView? = null
-    var intervalSeek: SeekBar? = null
+    private var intervalView: TextView? = null
+    private var intervalSeek: SeekBar? = null
 
     override fun getTag() = CONDITION_INTERVAL_TIME
 

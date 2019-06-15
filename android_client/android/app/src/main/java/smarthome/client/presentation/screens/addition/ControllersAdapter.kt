@@ -9,12 +9,10 @@ import smarthome.client.R
 import smarthome.client.util.ControllerProcessor
 import smarthome.library.common.BaseController
 
-class ControllersAdapter(val controllers: MutableList<BaseController>,
-                         val controllerDetailsClickListener: (controller: BaseController?) -> Unit,
-                         val controllerUpdateHandler: (controller: BaseController?) -> Unit)
+class ControllersAdapter(private val controllers: MutableList<BaseController>,
+                         private val controllerDetailsClickListener: (controller: BaseController?) -> Unit,
+                         private val controllerUpdateHandler: (controller: BaseController?) -> Unit)
     : RecyclerView.Adapter<ControllersAdapter.ViewHolder>() {
-
-    private val TAG = javaClass.name
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.controller_card, parent, false)
@@ -29,7 +27,7 @@ class ControllersAdapter(val controllers: MutableList<BaseController>,
         holder.bind(controllers[position])
     }
 
-    fun notifyControllerChanged(controller: BaseController) {
+    private fun notifyControllerChanged(controller: BaseController) {
         notifyItemChanged(controllers.indexOf(controller))
     }
 
@@ -39,12 +37,10 @@ class ControllersAdapter(val controllers: MutableList<BaseController>,
                      controllerUpdateHandler: (controller: BaseController?) -> Unit)
         : RecyclerView.ViewHolder(itemView) {
 
-        private val UNKNOWN_STATE = "-"
 
         var controller: BaseController? = null
-
-        var controllerName: TextView = itemView.findViewById(R.id.controller_card_name)
-        var controllerState: TextView = itemView.findViewById(R.id.controller_card_state)
+        private var controllerName: TextView = itemView.findViewById(R.id.controller_card_name)
+        private var controllerState: TextView = itemView.findViewById(R.id.controller_card_state)
 
         init {
             itemView.setOnClickListener {
@@ -61,7 +57,7 @@ class ControllersAdapter(val controllers: MutableList<BaseController>,
             this.controller = controller ?: return
 
             if (controller.name.isNullOrEmpty())
-                controllerName.text = controller.type ?: UNKNOWN_STATE
+                controllerName.text = controller.type
             else controllerName.text = controller.name
 
             controllerState.text = controller.state

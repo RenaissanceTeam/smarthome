@@ -12,16 +12,15 @@ import smarthome.library.common.IotDevice
 class DeviceViewHolder(itemView: View,
                        clickOnDevice: (device: IotDevice?) -> Unit,
                        val clickOnController: (controller: BaseController) -> Unit): RecyclerView.ViewHolder(itemView) {
-    val TAG = DeviceViewHolder::class.java.simpleName
-
-    init {
-        itemView.setOnClickListener { clickOnDevice(device) }
-    }
 
     private var device: IotDevice? = null
     private val controllers: LinearLayout = itemView.findViewById(R.id.devices)
     private val deviceName: TextView = itemView.findViewById(R.id.device_name)
     private val deviceDescription: TextView = itemView.findViewById(R.id.device_description)
+
+    init {
+        itemView.setOnClickListener { clickOnDevice(device) }
+    }
 
     fun bind(device: IotDevice?) {
         controllers.removeAllViews()
@@ -39,6 +38,5 @@ class DeviceViewHolder(itemView: View,
         controllerView.itemView.setOnClickListener { clickOnController(controller) }
         return controllerView.itemView
     }
-
 }
 

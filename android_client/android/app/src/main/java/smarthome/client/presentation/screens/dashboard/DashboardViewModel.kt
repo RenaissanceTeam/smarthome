@@ -13,8 +13,6 @@ import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.library.common.IotDevice
 
 class DashboardViewModel : ViewModel(), KoinComponent {
-    val TAG = DashboardViewModel::class.java.simpleName
-
     private val _devices = MutableLiveData<MutableList<IotDevice>>()
     private val _allHomeUpdateState = MutableLiveData<Boolean>()
     private val _toastMessage = MutableLiveData<String?>()

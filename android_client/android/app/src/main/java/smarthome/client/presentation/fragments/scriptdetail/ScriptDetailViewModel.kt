@@ -10,7 +10,6 @@ import org.koin.core.inject
 import smarthome.client.domain.usecases.ControllersUseCase
 import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.client.domain.usecases.ScriptUseCase
-import smarthome.client.model.Model
 import smarthome.client.presentation.screens.scripts.conditions.AllConditionsProvider
 import smarthome.library.common.scripts.Script
 import smarthome.client.presentation.screens.scripts.actions.ActionViewWrapper

@@ -28,7 +28,7 @@ class RGBStateChanger(container: ViewGroup,
     private val step: Float = 2.55f
 
     private var rgb: Array<Int> = arrayOf(0, 0, 0)
-    private var rgbS: String = ""
+    private val rgbS: String
         get() = "${rgb[0]} ${rgb[1]} ${rgb[2]}"
 
     init {

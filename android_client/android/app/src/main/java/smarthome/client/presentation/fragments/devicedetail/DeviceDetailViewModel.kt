@@ -13,7 +13,6 @@ import org.koin.core.inject
 import smarthome.client.util.HomeModelException
 import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.client.domain.usecases.PendingDevicesUseCase
-import smarthome.client.model.Model
 import smarthome.library.common.IotDevice
 
 class DeviceDetailViewModel : ViewModel(), KoinComponent {

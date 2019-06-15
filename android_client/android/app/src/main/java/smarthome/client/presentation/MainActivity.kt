@@ -49,7 +49,7 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun launchAuthActivity() {
-        startActivityForResult(viewModel.authUiWrapper.getAuthIntent(), RC_SIGN_IN)
+        startActivityForResult(viewModel.getAuthIntent(), RC_SIGN_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

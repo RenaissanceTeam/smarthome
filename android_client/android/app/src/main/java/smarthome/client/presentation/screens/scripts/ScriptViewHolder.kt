@@ -13,6 +13,7 @@ class ScriptViewHolder(view: View, onClick: (Script?) -> Unit) : RecyclerView.Vi
     init {
         view.setOnClickListener { onClick(boundScript) }
     }
+
     fun bind(script: Script) {
         name.text = script.name
         boundScript = script
