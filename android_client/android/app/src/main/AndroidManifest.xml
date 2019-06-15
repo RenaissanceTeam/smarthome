@@ -19,8 +19,8 @@
 
             android:resource="@drawable/round_warning" />
 
-        <activity android:name=".AddDeviceActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".presentation.AddDeviceActivity"></activity>
+        <activity android:name=".presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.FCMService">
+        <service android:name="smarthome.client.presentation.services.FCMService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

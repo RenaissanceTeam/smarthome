@@ -3,9 +3,6 @@ package smarthome.client.util
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
-import smarthome.client.AuthenticationFailed
-import smarthome.client.NoHomeid
-import smarthome.client.RemoteFailure
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
 import smarthome.library.datalibrary.store.InstanceTokenStorage
@@ -18,7 +15,6 @@ import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
 import smarthome.library.datalibrary.store.listeners.HomesReferencesListener
 import smarthome.library.datalibrary.store.listeners.PendingDevicesFetchListener
 import smarthome.library.datalibrary.store.listeners.SmartHomeListener
-import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.suspendCoroutine
 
 object CloudStorages {

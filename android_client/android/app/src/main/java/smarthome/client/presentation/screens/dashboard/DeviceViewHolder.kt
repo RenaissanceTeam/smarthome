@@ -5,7 +5,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
-import smarthome.client.ui.ControllerView
+import smarthome.client.presentation.ui.ControllerView
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 

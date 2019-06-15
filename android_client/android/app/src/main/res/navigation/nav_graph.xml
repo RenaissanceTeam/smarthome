@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/deviceDetails"
-        android:name="smarthome.client.fragments.devicedetail.DeviceDetails"
+        android:name="smarthome.client.presentation.fragments.devicedetail.DeviceDetails"
         android:label="DeviceDetails"
         tools:layout="@layout/fragment_device_details" >
         <action
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/actionFragment"
-        android:name="smarthome.client.fragments.scriptdetail.action.ActionFragment"
+        android:name="smarthome.client.presentation.fragments.scriptdetail.action.ActionFragment"
         android:label="ActionFragment"
         tools:layout="@layout/fragment_action" >
         <action
@@ -69,7 +69,7 @@
     </fragment>
     <fragment
         android:id="@+id/conditionFragment"
-        android:name="smarthome.client.fragments.scriptdetail.condition.ConditionFragment"
+        android:name="smarthome.client.presentation.fragments.scriptdetail.condition.ConditionFragment"
         android:label="ConditionFragment"
         tools:layout="@layout/fragment_condition">
         <action
@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/controllerDetails"
-        android:name="smarthome.client.fragments.controllerdetail.ControllerDetails"
+        android:name="smarthome.client.presentation.fragments.controllerdetail.ControllerDetails"
         android:label="ControllerDetails"
         tools:layout="@layout/fragment_controller_details">
         <argument
@@ -124,7 +124,7 @@
     </fragment>
     <fragment
         android:id="@+id/scriptDetails"
-        android:name="smarthome.client.fragments.scriptdetail.ScriptDetails"
+        android:name="smarthome.client.presentation.fragments.scriptdetail.ScriptDetails"
         android:label="ScriptDetails"
         tools:layout="@layout/fragment_script_details" >
         <action
@@ -175,7 +175,7 @@
     </fragment>
     <fragment
         android:id="@+id/deviceSelectorFragment"
-        android:name="smarthome.client.fragments.deviceaddition.DeviceSelectorFragment"
+        android:name="smarthome.client.presentation.fragments.deviceaddition.DeviceSelectorFragment"
         android:label="fragment_device_selector"
         tools:layout="@layout/fragment_device_selector" >
         <argument
@@ -185,7 +185,7 @@
     </fragment>
     <activity
         android:id="@+id/addDeviceActivity"
-        android:name="smarthome.client.AddDeviceActivity"
+        android:name="smarthome.client.presentation.AddDeviceActivity"
         android:label="AddDeviceActivity"
         tools:layout="@layout/activity_add_device" />
 </navigation>

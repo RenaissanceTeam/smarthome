@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import smarthome.client.ACTION_WRITE_CONTROLLER
+import smarthome.client.util.ACTION_WRITE_CONTROLLER
 import smarthome.client.R
 import smarthome.client.presentation.screens.scripts.ControllersProvider
 import smarthome.library.common.scripts.actions.WriteAction
