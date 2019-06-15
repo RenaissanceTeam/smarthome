@@ -3,9 +3,9 @@ package smarthome.client.presentation.screens.scripts.conditions
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import smarthome.client.CONDITION_CONTROLLER
-import smarthome.client.CONDITION_EXACT_TIME
-import smarthome.client.CONDITION_INTERVAL_TIME
+import smarthome.client.util.CONDITION_CONTROLLER
+import smarthome.client.util.CONDITION_EXACT_TIME
+import smarthome.client.util.CONDITION_INTERVAL_TIME
 import smarthome.library.common.scripts.conditions.Condition
 import smarthome.library.common.scripts.conditions.ControllerCondition
 import smarthome.library.common.scripts.conditions.ExactTimeCondition

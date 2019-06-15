@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
-import smarthome.client.CONDITION_INTERVAL_TIME
+import smarthome.client.util.CONDITION_INTERVAL_TIME
 import smarthome.client.R
 import smarthome.library.common.scripts.conditions.IntervalTimeCondition
 

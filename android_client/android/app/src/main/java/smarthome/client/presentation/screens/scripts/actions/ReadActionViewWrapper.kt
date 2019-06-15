@@ -8,7 +8,7 @@ import androidx.appcompat.widget.AppCompatSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import smarthome.client.ACTION_READ_CONTROLLER
+import smarthome.client.util.ACTION_READ_CONTROLLER
 import smarthome.client.R
 import smarthome.client.presentation.screens.scripts.ControllersProvider
 import smarthome.library.common.scripts.actions.ReadAction

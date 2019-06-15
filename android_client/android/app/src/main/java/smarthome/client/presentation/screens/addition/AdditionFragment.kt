@@ -12,10 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_device_addition.*
-import smarthome.client.AddDeviceActivity
+import smarthome.client.presentation.AddDeviceActivity
 import smarthome.client.BuildConfig
 import smarthome.client.R
-import smarthome.client.fragments.deviceaddition.DISCOVER_REQUEST_CODE
+import smarthome.client.presentation.fragments.deviceaddition.DISCOVER_REQUEST_CODE
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 

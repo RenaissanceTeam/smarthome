@@ -3,8 +3,8 @@ package smarthome.client.presentation.screens.scripts.actions
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import smarthome.client.ACTION_READ_CONTROLLER
-import smarthome.client.ACTION_WRITE_CONTROLLER
+import smarthome.client.util.ACTION_READ_CONTROLLER
+import smarthome.client.util.ACTION_WRITE_CONTROLLER
 import smarthome.library.common.scripts.actions.Action
 import smarthome.library.common.scripts.actions.ReadAction
 import smarthome.library.common.scripts.actions.WriteAction

@@ -13,7 +13,7 @@ import androidx.appcompat.widget.AppCompatSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import smarthome.client.CONDITION_CONTROLLER
+import smarthome.client.util.CONDITION_CONTROLLER
 import smarthome.library.common.constants.*
 import smarthome.client.presentation.screens.scripts.ControllersProvider
 import smarthome.library.common.scripts.conditions.ControllerCondition

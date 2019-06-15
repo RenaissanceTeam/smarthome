@@ -3,7 +3,6 @@ package smarthome.client.data
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import smarthome.client.auth.AuthUIWrapper
 import smarthome.client.domain.AuthenticationRepository
 
 class AuthenticationRepositoryImpl(private val firebaseAuth: FirebaseAuth): AuthenticationRepository {
