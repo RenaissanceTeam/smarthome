@@ -2,7 +2,6 @@ package smarthome.client.presentation.screens.addition
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,29 +12,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_device_addition.*
 import smarthome.client.presentation.AddDeviceActivity
-import smarthome.client.BuildConfig
 import smarthome.client.R
 import smarthome.client.presentation.fragments.deviceaddition.DISCOVER_REQUEST_CODE
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
 class AdditionFragment : Fragment(), ViewNotifier {
-
-    private val TAG = javaClass.name
-
     private var adapterForDevices: DeviceAdapter? = null
     private val viewModel: AdditionViewModel by viewModels()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "onActivity created, create viewModel")
         viewModel.devices.observe(this, Observer {
-            if (BuildConfig.DEBUG) Log.d(TAG, "devicesRecycler've changed, now its ${viewModel.devices.value}")
             adapterForDevices?.notifyDataSetChanged()
         })
-        viewModel.allHomeUpdateState.observe(this, Observer {
-            if (BuildConfig.DEBUG) Log.d(TAG, "allHomeUpdateState's changed")
+        viewModel.globalUpdateState.observe(this, Observer {
             add_device_refresh_layout.isRefreshing = it
         })
     }
@@ -46,8 +38,6 @@ class AdditionFragment : Fragment(), ViewNotifier {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (BuildConfig.DEBUG) Log.d(TAG, "onViewCreated")
 
         add_device_fab.setOnClickListener {
             startActivityForResult(Intent(context, AddDeviceActivity::class.java), DISCOVER_REQUEST_CODE)
@@ -68,7 +58,6 @@ class AdditionFragment : Fragment(), ViewNotifier {
     }
 
     private fun onDeviceDetailsClick(device: IotDevice?) {
-        Log.d(TAG, "clicked on $device")
         device ?: return
 
         val action = AdditionFragmentDirections

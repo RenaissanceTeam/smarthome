@@ -13,7 +13,7 @@ object DeviceDescriptor {
         return getDevicePicture(res, device.type)
     }
     
-    fun getDevicePicture(res: Resources, deviceType: String): Bitmap {
+    private fun getDevicePicture(res: Resources, deviceType: String): Bitmap {
         val deviceResource = typesMap[deviceType] ?: throw IllegalArgumentException("no resource for provided device type found")
 
         return BitmapFactory.decodeResource(res, deviceResource)

@@ -10,8 +10,8 @@ import smarthome.client.R
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
 
-class DeviceSelectorAdapter(val dataSource: List<Pair<String, Int>>,
-                            val onDeviceClick: (deviceSearchMethod: String, args: String?) -> Unit) : RecyclerView.Adapter<DeviceSelectorAdapter.ViewHolder>() {
+class DeviceSelectorAdapter(private val dataSource: List<Pair<String, Int>>,
+                            private val onDeviceClick: (deviceSearchMethod: String, args: String?) -> Unit) : RecyclerView.Adapter<DeviceSelectorAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.device_selector_item_card, parent, false)
@@ -30,9 +30,9 @@ class DeviceSelectorAdapter(val dataSource: List<Pair<String, Int>>,
     class ViewHolder(itemView: View,
                      onDeviceClick: (deviceSearchMethod: String, args: String?) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
-        var method: String? = null
-        val image: ImageView = itemView.findViewById(R.id.device_selector_item_image)
-        val title: TextView = itemView.findViewById(R.id.device_selector_item_title)
+        private var method: String? = null
+        private val image: ImageView = itemView.findViewById(R.id.device_selector_item_image)
+        private val title: TextView = itemView.findViewById(R.id.device_selector_item_title)
 
         init {
             itemView.setOnClickListener {

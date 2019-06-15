@@ -15,15 +15,10 @@ class ScriptsViewModel : ViewModel(), KoinComponent {
     private val _scripts = MutableLiveData<MutableList<Script>>()
     private val _refresh = MutableLiveData<Boolean>()
     private val scriptsDisposable: Disposable? = null
-
     private val scriptUseCase: ScriptUseCase by inject()
-
     val openScriptDetails = MutableLiveData<Script?>()
-
     val scripts: LiveData<MutableList<Script>>
         get() = _scripts
-
-
     val refresh: LiveData<Boolean>
         get() = _refresh
 
@@ -43,5 +38,4 @@ class ScriptsViewModel : ViewModel(), KoinComponent {
         super.onCleared()
         scriptsDisposable?.dispose()
     }
-
 }

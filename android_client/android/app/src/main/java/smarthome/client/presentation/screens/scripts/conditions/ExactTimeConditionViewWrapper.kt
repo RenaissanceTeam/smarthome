@@ -33,7 +33,7 @@ class ExactTimeConditionViewWrapper(private val condition: ExactTimeCondition): 
     }
 
     override fun isFilled(): Boolean {
-        val isFilled = !condition.state.isEmpty()
+        val isFilled = condition.state.isNotEmpty()
         if (!isFilled) {
             // todo highlight
         }

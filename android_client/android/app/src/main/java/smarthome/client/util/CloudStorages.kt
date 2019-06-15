@@ -23,14 +23,14 @@ object CloudStorages {
     private var messageQueue: MessageQueue? = null
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-    suspend fun getSmartHomeStorage(): SmartHomeStorage {
+    private suspend fun getSmartHomeStorage(): SmartHomeStorage {
         if (homeStorage == null) {
             setupFirestore()
         }
         return homeStorage!!
     }
 
-    suspend fun getInstanceTokenStorage(): InstanceTokenStorage {
+    private suspend fun getInstanceTokenStorage(): InstanceTokenStorage {
         if (instanceTokenStorage == null) {
             setupFirestore()
         }

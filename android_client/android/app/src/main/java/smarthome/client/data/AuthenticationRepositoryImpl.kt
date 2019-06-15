@@ -13,7 +13,7 @@ class AuthenticationRepositoryImpl(private val firebaseAuth: FirebaseAuth): Auth
         onNewAuth()
     }
 
-    fun onNewAuth() {
+    private fun onNewAuth() {
         isAuthenticated.onNext(firebaseAuth.currentUser != null)
         userEmail.onNext(firebaseAuth.currentUser?.email ?: "Not authenticated")
     }

@@ -1,8 +1,5 @@
 package smarthome.client.data
 
-import smarthome.client.model.Model
-import smarthome.library.common.scripts.Script
-
 class LocalStorageImpl : LocalStorage {
 
 //    override fun saveScript(script: Script) {

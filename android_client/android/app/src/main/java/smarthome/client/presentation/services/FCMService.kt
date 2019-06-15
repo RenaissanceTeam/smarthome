@@ -15,13 +15,7 @@ import smarthome.client.BuildConfig.DEBUG
 import smarthome.client.R
 import smarthome.client.domain.usecases.CloudMessageUseCase
 
-//import smarthome.client.util.FcmTokenStorage
-
-
 class FCMService : FirebaseMessagingService(), KoinComponent {
-
-    private val TAG = "FCMService"
-
     private var notificationManager: NotificationManager? = null
     private val messageUseCase: CloudMessageUseCase by inject()
 
@@ -41,8 +35,6 @@ class FCMService : FirebaseMessagingService(), KoinComponent {
     }
 
     override fun onMessageReceived(message: RemoteMessage?) {
-        if (DEBUG) Log.d(TAG, "received message=$message")
-
         message ?: return
 
         val notification = message.notification ?: return

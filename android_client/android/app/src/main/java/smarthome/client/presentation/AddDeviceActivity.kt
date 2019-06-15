@@ -11,7 +11,7 @@ class AddDeviceActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_device)
 
-        supportFragmentManager?.apply {
+        supportFragmentManager.apply {
             val transaction = beginTransaction().replace(R.id.add_device_activity_container, DeviceSelectorFragment())
             transaction.commit()
         }

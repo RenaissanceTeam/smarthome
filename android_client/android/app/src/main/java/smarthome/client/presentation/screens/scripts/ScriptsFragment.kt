@@ -58,6 +58,7 @@ class ScriptsFragment : Fragment() {
         adapter = ScriptsAdapter(viewModel)
         scripts.adapter = adapter
         scripts.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+
         hideFabWhenScrolling(scripts)
     }
 

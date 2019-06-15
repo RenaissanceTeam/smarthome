@@ -1,5 +1,6 @@
 package smarthome.client.presentation.fragments.controllerdetail
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +25,7 @@ class ControllerDetails : Fragment() {
     private val args: ControllerDetailsArgs by navArgs()
 
     companion object {
-        val FRAGMENT_TAG = "ControllerDetailsFragment"
+        const val FRAGMENT_TAG = "ControllerDetailsFragment"
     }
 
     private val viewModel: ControllerDetailViewModel by viewModels()
@@ -60,10 +61,10 @@ class ControllerDetails : Fragment() {
 
     private fun setControllerName(controller: BaseController) {
         if (controller.name.isNullOrEmpty()) {
-            controller_name.setTextColor(resources.getColor(android.R.color.darker_gray))
+            controller_name.setTextColor(Color.parseColor("#aaa")) // todo add to style
             controller_name.text = getString(R.string.empty_name)
         } else {
-            controller_name.setTextColor(resources.getColor(R.color.primary_text_default_material_light))
+            controller_name.setTextColor(Color.parseColor("#de000000")) // todo add to style
             controller_name.text = controller.name
         }
     }
