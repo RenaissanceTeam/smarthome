@@ -5,16 +5,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import smarthome.client.*
+import smarthome.client.domain.usecases.ControllersUseCase
+import smarthome.client.domain.usecases.DevicesUseCase
+import smarthome.client.domain.usecases.ScriptUseCase
 import smarthome.client.model.Model
-import smarthome.client.scripts.conditions.AllConditionsProvider
+import smarthome.client.presentation.screens.scripts.conditions.AllConditionsProvider
 import smarthome.library.common.scripts.Script
-import smarthome.client.scripts.actions.ActionViewWrapper
-import smarthome.client.scripts.actions.AllActionsProvider
-import smarthome.client.scripts.conditions.ConditionViewWrapper
+import smarthome.client.presentation.screens.scripts.actions.ActionViewWrapper
+import smarthome.client.presentation.screens.scripts.actions.AllActionsProvider
+import smarthome.client.presentation.screens.scripts.conditions.ConditionViewWrapper
 import smarthome.library.common.BaseController
 
-class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvider {
+class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvider, KoinComponent {
     private val _script = MutableLiveData<Script>()
     val script: LiveData<Script>
         get() = _script
@@ -31,12 +36,16 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     }
 
     private var copyBeforeEditCondition: Script? = null
+    private val scriptUseCase: ScriptUseCase by inject()
+    private val devicesUseCase: DevicesUseCase by inject()
+    private val controllersUseCase: ControllersUseCase by inject()
+
 
     fun setScriptGuid(guid: Long) {
         if (guid == NEW_SCRIPT_GUID) {
             _script.value = Script()
         } else {
-            _script.value = Model.getScript(guid)
+            _script.value = scriptUseCase.getScript(guid)
         }
     }
 
@@ -105,8 +114,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     }
 
     override suspend fun getControllers(): List<BaseController> {
-        val devices = Model.getDevices()
-        return devices.flatMap { it.controllers }
+        return controllersUseCase.getControllers()
     }
 
     fun onAddConditionButtonClicked() {
@@ -129,7 +137,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
         val script = script.value ?: return
         if (script.name.isNotEmpty() && script.conditions.isNotEmpty() && script.actions.isNotEmpty()) {
             isScriptOpen.value = false
-            Model.saveScript(script)
+            scriptUseCase.saveScript(script)
         } else {
             // todo show not filled fields
         }

@@ -6,8 +6,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
-import smarthome.library.common.scripts.conditions.Condition
-import smarthome.client.scripts.conditions.ConditionViewWrapper
+import smarthome.client.presentation.screens.scripts.conditions.ConditionViewWrapper
 
 class ConditionViewHolder(view: View,
                           onTypeChange: (Int, String) -> Unit) : RecyclerView.ViewHolder(view) {

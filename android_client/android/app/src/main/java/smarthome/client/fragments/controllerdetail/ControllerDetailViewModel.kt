@@ -7,15 +7,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import smarthome.client.BuildConfig
 import smarthome.client.HomeModelException
-import smarthome.client.model.Model
+import smarthome.client.domain.usecases.ControllersUseCase
+import smarthome.client.domain.usecases.DevicesUseCase
+import smarthome.client.domain.usecases.PendingControllersUseCase
+import smarthome.client.domain.usecases.PendingDevicesUseCase
 import smarthome.client.fragments.controllerdetail.statechanger.ControllerTypeAdapter
 import smarthome.client.fragments.controllerdetail.statechanger.StateChangerType
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
-class ControllerDetailViewModel : ViewModel() {
+class ControllerDetailViewModel : ViewModel(), KoinComponent {
     val TAG = "ControllerDetail_VModel"
 
     private val _refresh = MutableLiveData<Boolean>()
@@ -37,13 +42,17 @@ class ControllerDetailViewModel : ViewModel() {
     private var disposable: Disposable? = null
 
     private var usePending = false
+    private val controllersUseCase: ControllersUseCase by inject()
+    private val devicesUseCase: DevicesUseCase by inject()
+    private val pendingControllersUseCase: PendingControllersUseCase by inject()
+    private val pendingDevicesUseCase: PendingDevicesUseCase by inject()
 
     fun setControllerGuid(controllerGuid: Long?) {
         controllerGuid ?: return
         viewModelScope.launch {
             _refresh.value = true
             try {
-                val foundController = if (!usePending) Model.getController(controllerGuid) else Model.getPendingController(controllerGuid)
+                val foundController = if (!usePending) controllersUseCase.getController(controllerGuid) else pendingControllersUseCase.getPendingController(controllerGuid)
                 _controller.value = foundController
                 if (foundController.isUpToDate) _refresh.value = false
                 _stateChangerType.value = ControllerTypeAdapter.toStateChangerType(foundController.type)
@@ -60,11 +69,11 @@ class ControllerDetailViewModel : ViewModel() {
     }
 
     private suspend fun listenForModelChanges(controllerGuid: Long) {
-        val observable = if (!usePending) Model.getDevicesObservable() else Model.getPendingDevicesObservable()
+        val observable = if (!usePending) devicesUseCase.getDevices() else pendingDevicesUseCase.getPendingDevices()
         disposable = observable.subscribe {
-            val changedController = Model.getController(it, controllerGuid)
+            val changedController = controllersUseCase.findController(it, controllerGuid)
             _controller.value = changedController
-            _device.value = Model.getDevice(it, changedController)
+            _device.value = devicesUseCase.findDevice(it, changedController)
             if (changedController.isUpToDate) _refresh.value = false
         }
     }
@@ -104,8 +113,8 @@ class ControllerDetailViewModel : ViewModel() {
 
     private suspend fun _updateDevice(device: IotDevice) {
         if (!usePending)
-            Model.changeDevice(device)
-        else Model.changePendingDevice(device)
+            devicesUseCase.changeDevice(device)
+        else pendingDevicesUseCase.changePendingDevice(device)
     }
 
 }
