@@ -21,4 +21,20 @@ class AuthenticationRepositoryImpl(private val firebaseAuth: FirebaseAuth): Auth
     override fun getAuthenticationStatus(): Observable<Boolean> {
         return isAuthenticated
     }
+
+    override fun getEmail(): Observable<String> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setAuthenticationStatus(isAuthenticated: Boolean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun resetEmail() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun updateEmail() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

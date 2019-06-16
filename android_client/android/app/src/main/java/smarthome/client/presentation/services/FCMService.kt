@@ -4,20 +4,24 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.BuildConfig.DEBUG
 import smarthome.client.R
 import smarthome.client.domain.usecases.CloudMessageUseCase
 
 class FCMService : FirebaseMessagingService(), KoinComponent {
     private var notificationManager: NotificationManager? = null
     private val messageUseCase: CloudMessageUseCase by inject()
+    private val job = Job()
+    private val ioScope = CoroutineScope(Dispatchers.IO + job)
 
     override fun onCreate() {
         super.onCreate()
@@ -30,8 +34,14 @@ class FCMService : FirebaseMessagingService(), KoinComponent {
         createNotificationChannel(channel, channel, channel)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        job.cancel()
+    }
+
     override fun onNewToken(newToken: String?) {
-        messageUseCase.onNewToken(newToken)
+        ioScope.launch { messageUseCase.onNewToken(newToken) }
     }
 
     override fun onMessageReceived(message: RemoteMessage?) {

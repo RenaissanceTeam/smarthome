@@ -1,20 +1,27 @@
 package smarthome.client.domain.usecases
 
+import smarthome.client.domain.HomeRepository
+import smarthome.client.util.NoControllerException
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
-class ControllersUseCase {
-    fun getController(controllerGuid: Long): BaseController {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+class ControllersUseCase(private val repository: HomeRepository) {
+    suspend fun getController(controllerGuid: Long): BaseController {
+        val controllers = repository.getControllers()
+
+        return controllers.find { it.guid == controllerGuid } ?: throw NoControllerException(controllerGuid)
     }
 
-    fun findController(devices: MutableList<IotDevice>?, controllerGuid: Long): BaseController {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun findController(devices: MutableList<IotDevice>, controllerGuid: Long): BaseController {
+        for (device in devices) {
+            val controllers = device.controllers
+            return controllers.find { it.guid == controllerGuid } ?: continue
+        }
+
+        throw NoControllerException(controllerGuid)
     }
 
-    fun getControllers(): List<BaseController> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    suspend fun getControllers(): List<BaseController> {
+        return repository.getControllers()
     }
-
-
 }
