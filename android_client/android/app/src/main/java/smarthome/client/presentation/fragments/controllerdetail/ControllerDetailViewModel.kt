@@ -1,6 +1,5 @@
 package smarthome.client.presentation.fragments.controllerdetail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,14 +8,15 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.BuildConfig
-import smarthome.client.util.HomeModelException
 import smarthome.client.domain.usecases.ControllersUseCase
 import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.client.domain.usecases.PendingControllersUseCase
 import smarthome.client.domain.usecases.PendingDevicesUseCase
 import smarthome.client.presentation.fragments.controllerdetail.statechanger.ControllerTypeAdapter
 import smarthome.client.presentation.fragments.controllerdetail.statechanger.StateChangerType
+import smarthome.client.util.HomeModelException
+import smarthome.client.util.NoControllerException
+import smarthome.client.util.NoDeviceWithControllerException
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
@@ -68,11 +68,29 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
     private suspend fun listenForModelChanges(controllerGuid: Long) {
         val observable = if (!usePending) devicesUseCase.getDevices() else pendingDevicesUseCase.getPendingDevices()
         disposable = observable.subscribe {
-            val changedController = controllersUseCase.findController(it, controllerGuid)
+            val changedController = findController(it, controllerGuid)
             _controller.value = changedController
-            _device.value = devicesUseCase.findDevice(it, changedController)
+            _device.value = findDevice(it, changedController)
             if (changedController.isUpToDate) _refresh.value = false
         }
+    }
+
+    private fun findController(devices: MutableList<IotDevice>, controllerGuid: Long): BaseController {
+        for (device in devices) {
+            val controllers = device.controllers
+            return controllers.find { it.guid == controllerGuid } ?: continue
+        }
+
+        throw NoControllerException(controllerGuid)
+    }
+
+    private fun findDevice(devices: MutableList<IotDevice>, controller: BaseController): IotDevice {
+        for (device in devices) {
+            val controllers = device.controllers
+            return if (controllers.contains(controller)) device else continue
+        }
+
+        throw NoDeviceWithControllerException(controller)
     }
 
     override fun onCleared() {
@@ -108,8 +126,9 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
     }
 
     private fun changeDevice(device: IotDevice) {
-        if (!usePending) devicesUseCase.changeDevice(device)
-        else pendingDevicesUseCase.changePendingDevice(device)
+        viewModelScope.launch {
+            if (!usePending) devicesUseCase.changeDevice(device)
+            else pendingDevicesUseCase.changePendingDevice(device)
+        }
     }
-
 }

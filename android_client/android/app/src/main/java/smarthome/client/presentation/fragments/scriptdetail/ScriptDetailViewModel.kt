@@ -1,24 +1,22 @@
 package smarthome.client.presentation.fragments.scriptdetail
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.domain.usecases.ControllersUseCase
 import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.client.domain.usecases.ScriptUseCase
-import smarthome.client.presentation.screens.scripts.conditions.AllConditionsProvider
-import smarthome.library.common.scripts.Script
 import smarthome.client.presentation.screens.scripts.actions.ActionViewWrapper
 import smarthome.client.presentation.screens.scripts.actions.AllActionsProvider
+import smarthome.client.presentation.screens.scripts.conditions.AllConditionsProvider
 import smarthome.client.presentation.screens.scripts.conditions.ConditionViewWrapper
 import smarthome.client.util.ACTION_READ_CONTROLLER
 import smarthome.client.util.CONDITION_CONTROLLER
 import smarthome.client.util.NEW_SCRIPT_GUID
 import smarthome.library.common.BaseController
+import smarthome.library.common.scripts.Script
 
 class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvider, KoinComponent {
     private val _script = MutableLiveData<Script>()
@@ -136,11 +134,15 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
 
     fun onSaveScriptClicked() {
         val script = script.value ?: return
-        if (script.name.isNotEmpty() && script.conditions.isNotEmpty() && script.actions.isNotEmpty()) {
+
+
+        viewModelScope.launch {
+            if (script.name.isNotEmpty() && script.conditions.isNotEmpty() && script.actions.isNotEmpty()) { // todo move to use case
             isScriptOpen.value = false
             scriptUseCase.saveScript(script)
         } else {
             // todo show not filled fields
+            }
         }
 
     }

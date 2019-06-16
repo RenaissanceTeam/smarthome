@@ -8,19 +8,22 @@ class AuthenticationUseCase(private val repository: AuthenticationRepository) {
         return repository.getAuthenticationStatus()
     }
 
-    fun onAuthFail() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     fun getEmail(): Observable<String> {
-        TODO()
+        return repository.getEmail()
     }
 
-    fun signOut() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun onAuthFail() {
+        repository.setAuthenticationStatus(false)
+        repository.resetEmail()
     }
 
     fun onAuthSuccess() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        repository.setAuthenticationStatus(true)
+        repository.updateEmail()
+    }
+
+    fun signOut() {
+        repository.setAuthenticationStatus(false)
+        repository.resetEmail()
     }
 }

@@ -1,13 +1,17 @@
 package smarthome.client.domain.usecases
 
-class CloudMessageUseCase {
-    fun onNewToken(newToken: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+import smarthome.client.domain.HomeRepository
+
+class CloudMessageUseCase(private val homeRepository: HomeRepository) {
+    suspend fun onNewToken(newToken: String?) {
+        newToken ?: return
+
+        homeRepository.saveAppToken(newToken)
     }
 
-    fun noSavedToken(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    suspend fun noSavedToken(): Boolean {
+        val token = homeRepository.getAppToken()
+
+        return token == null
     }
-
-
 }
