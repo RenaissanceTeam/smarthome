@@ -1,6 +1,8 @@
 package smarthome.client.data
 
 import io.reactivex.Observable
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import smarthome.client.domain.usecases.AuthenticationUseCase
 import smarthome.client.domain.usecases.HomeUseCases
 import smarthome.client.util.NoHomeid
@@ -15,12 +17,13 @@ import smarthome.library.datalibrary.store.firestore.FirestoreMessageQueue
 import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
 import smarthome.library.datalibrary.store.listeners.DeviceUpdate
 
-class RemoteStorageImpl(private val authenticationUseCase: AuthenticationUseCase,
-                        private val homeUseCases: HomeUseCases) : RemoteStorage {
+class RemoteStorageImpl : RemoteStorage, KoinComponent {
 
     private var homeStorage: SmartHomeStorage? = null
     private var instanceTokenStorage: InstanceTokenStorage? = null
     private var messageQueue: MessageQueue? = null
+    private val authenticationUseCase: AuthenticationUseCase by inject()
+    private val homeUseCases: HomeUseCases by inject()
 
     private suspend fun getSmartHomeStorage(): SmartHomeStorage {
         if (homeStorage == null) {
@@ -44,7 +47,7 @@ class RemoteStorageImpl(private val authenticationUseCase: AuthenticationUseCase
 //    }
 
     private suspend fun setupFirestore() {
-        val userId = authenticationUseCase.getUserId()
+        val userId = authenticationUseCase.getUserId() ?: throw RuntimeException("no user id to setup remote storage")
         val references = FirestoreHomesReferencesStorage(userId)
 
         val homeIds = references.getHomesReferences().homes
@@ -64,7 +67,7 @@ class RemoteStorageImpl(private val authenticationUseCase: AuthenticationUseCase
     }
 
     override suspend fun saveAppToken(newToken: String) {
-        val userId = authenticationUseCase.getUserId()
+        val userId = authenticationUseCase.getUserId() ?: throw RuntimeException("no user id to setup remote storage")
         getInstanceTokenStorage().saveToken(userId, newToken)
     }
 

@@ -3,23 +3,21 @@ package smarthome.client.presentation
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
-import smarthome.client.*
+import smarthome.client.R
 import smarthome.client.util.RC_SIGN_IN
 import smarthome.client.util.SHOW_BOTTOM_BAR
 import smarthome.client.util.SHOW_TOOL_BAR
 
 
 class MainActivity : FragmentActivity() {
-
-    private val viewModel
-            by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

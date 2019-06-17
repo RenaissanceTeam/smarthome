@@ -8,5 +8,5 @@ interface AuthenticationRepository {
     suspend fun setAuthenticationStatus(isAuthenticated: Boolean)
     suspend fun resetEmail()
     suspend fun updateEmail()
-    suspend fun getUserId(): String
+    suspend fun getUserId(): String?
 }

@@ -27,7 +27,7 @@ class AuthenticationUseCase(private val repository: AuthenticationRepository) {
         repository.resetEmail()
     }
 
-    suspend fun getUserId(): String {
+    suspend fun getUserId(): String? {
         return repository.getUserId()
     }
 }
