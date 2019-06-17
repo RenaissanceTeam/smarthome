@@ -11,3 +11,6 @@ const val ACTION_WRITE_CONTROLLER = "Write Controller"
 
 const val SHOW_BOTTOM_BAR = "show_bottom_bar"
 const val SHOW_TOOL_BAR = "show_tool_bar"
+
+const val TOKEN_PREFS = "token_prefs"
+const val TOKEN_KEY = "token_key"

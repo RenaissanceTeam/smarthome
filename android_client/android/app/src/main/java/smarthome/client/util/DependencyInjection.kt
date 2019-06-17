@@ -13,6 +13,6 @@ val repositoryModule = module {
 }
 
 val dataSourceModule = module {
-    single { LocalStorageImpl() as LocalStorage }
+    single { LocalStorageImpl(get()) as LocalStorage }
     single { RemoteStorageImpl() as RemoteStorage }
 }

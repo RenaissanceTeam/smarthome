@@ -6,7 +6,7 @@ import smarthome.library.common.scripts.Script
 
 
 interface LocalStorage {
-    suspend fun saveDevices(devices: List<IotDevice>)
+    suspend fun saveDevices(devices: MutableList<IotDevice>)
     suspend fun getDevices(): BehaviorSubject<MutableList<IotDevice>>
     suspend fun saveAppToken(newToken: String)
     suspend fun getAppToken(): String?
