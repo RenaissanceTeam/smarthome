@@ -1,6 +1,7 @@
 package smarthome.client.data
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import smarthome.client.domain.AuthenticationRepository
@@ -23,22 +24,26 @@ class AuthenticationRepositoryImpl(private val firebaseAuth: FirebaseAuth): Auth
     }
 
     override fun getEmail(): Observable<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return userEmail
     }
 
     override suspend fun setAuthenticationStatus(isAuthenticated: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        this.isAuthenticated.onNext(isAuthenticated)
     }
 
     override suspend fun resetEmail() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        userEmail.onNext("")
     }
 
     override suspend fun updateEmail() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        userEmail.onNext(getCurrentUser().email ?: "")
     }
 
-    override suspend fun getUserId(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun getCurrentUser(): FirebaseUser {
+        return firebaseAuth.currentUser ?: throw RuntimeException("current user is null")
+    }
+
+    override suspend fun getUserId(): String? {
+        return firebaseAuth.currentUser?.uid
     }
 }
