@@ -1,21 +1,20 @@
 package smarthome.library.datalibrary.store.firestore
 
-import android.util.Log
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.EventListener
+import io.reactivex.Observable
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.constants.HOME_DEVICES_NODE
 import smarthome.library.datalibrary.constants.PENDING_DEVICES_NODE
-import smarthome.library.datalibrary.constants.TAG
 import smarthome.library.datalibrary.store.SmartHomeStorage
-import smarthome.library.datalibrary.store.listeners.DeviceListener
-import smarthome.library.datalibrary.store.listeners.DevicesObserver
-import smarthome.library.datalibrary.store.listeners.PendingDevicesFetchListener
-import smarthome.library.datalibrary.store.listeners.SmartHomeListener
+import smarthome.library.datalibrary.store.listeners.DeviceUpdate
+import smarthome.library.datalibrary.util.ObserverMode
+import smarthome.library.datalibrary.util.withContinuation
+import smarthome.library.datalibrary.util.withObjectContinuation
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class FirestoreSmartHomeStorage(
     private val homeId: String,
@@ -25,168 +24,131 @@ class FirestoreSmartHomeStorage(
     private val homeRef: DocumentReference = db.collection(HOMES_NODE).document(homeId)
     private val devicesRef: CollectionReference = homeRef.collection(HOME_DEVICES_NODE)
     private val pendingDevicesRef: CollectionReference = homeRef.collection(PENDING_DEVICES_NODE)
-
     private var devicesRegistration: ListenerRegistration? = null
     private var pendingDevicesRegistration: ListenerRegistration? = null
 
-    override fun createSmartHome(successListener: OnSuccessListener<Void>, failureListener: OnFailureListener) {
-        db.collection(HOMES_NODE).document(homeId).set(mapOf(Pair("exists", "true")))
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+    override suspend fun createSmartHome() {
+        suspendCoroutine<Unit> {
+            db.collection(HOMES_NODE).document(homeId).set(mapOf(Pair("exists", "true"))).withContinuation(it)
+        }
     }
 
-    override fun postSmartHome(
-        smartHome: SmartHome, successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        for (device in smartHome.devices)
-            addDevice(device, failureListener = failureListener)
-
-        successListener.onSuccess(null)
+    override suspend fun postSmartHome(smartHome: SmartHome) {
+        for (device in smartHome.devices) addDevice(device)
     }
 
-    override fun getSmartHome(listener: SmartHomeListener, failureListener: OnFailureListener) {
-        val smartHome = SmartHome()
+    override suspend fun getSmartHome(): SmartHome {
+        return suspendCoroutine { continuation ->
+            devicesRef.get()
+                .addOnSuccessListener { documents ->
+                    try {
+                        val smartHome = SmartHome()
+                        documents.forEach { smartHome.devices.add(it.toObject(IotDevice::class.java)) }
 
-        devicesRef.get()
-            .addOnSuccessListener { documents ->
-                for (document in documents)
-                    smartHome.devices.add(document.toObject(IotDevice::class.java))
-
-                listener(smartHome)
-            }
-            .addOnFailureListener(failureListener)
+                        continuation.resumeWith(Result.success(smartHome))
+                    } catch (e: Throwable) {
+                        continuation.resumeWithException(e)
+                    }
+                }
+                .addOnFailureListener { continuation.resumeWithException(it) }
+        }
     }
 
-    override fun addDevice(
-        iotDevice: IotDevice,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        getDeviceRef(iotDevice)
-            .set(iotDevice)
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+
+    override suspend fun addDevice(iotDevice: IotDevice) {
+        suspendCoroutine<Unit> {
+            getDeviceRef(iotDevice).set(iotDevice).withContinuation(it)
+        }
     }
 
-    override fun updateDevice(
-        device: IotDevice,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        getDeviceRef(device)
-            .set(device, SetOptions.merge())
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+
+    override suspend fun updateDevice(device: IotDevice) {
+        suspendCoroutine<Unit> {
+            getDeviceRef(device).set(device, SetOptions.merge()).withContinuation(it)
+        }
     }
 
-    override fun getDevice(
-        guid: Long,
-        listener: DeviceListener,
-        failureListener: OnFailureListener
-    ) {
-        getDeviceRef(guid)
-            .get()
-            .addOnSuccessListener { document ->
-                listener(document.toObject(IotDevice::class.java)!!)
-            }
-            .addOnFailureListener(failureListener)
+    override suspend fun getDevice(guid: Long): IotDevice {
+        return suspendCoroutine { getDeviceRef(guid).get().withObjectContinuation(it) }
     }
 
-    override fun removeDevice(
-        iotDevice: IotDevice,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        getDeviceRef(iotDevice)
-            .delete()
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+    override suspend fun removeDevice(iotDevice: IotDevice) {
+        suspendCoroutine<Unit> {
+            getDeviceRef(iotDevice).delete().withContinuation(it)
+        }
     }
 
-    override fun observeDevicesUpdates(observer: DevicesObserver) {
-        observeUpdates(observer, 0)
+    override suspend fun observeDevicesUpdates(): Observable<DeviceUpdate> {
+        return observeDeviceUpdates(ObserverMode.DEVICES)
     }
 
-    override fun detachDevicesUpdatesObserver() {
-        devicesRegistration?.remove()
+    override suspend fun observePendingDevicesUpdates(): Observable<DeviceUpdate> {
+        return observeDeviceUpdates(ObserverMode.PENDING_DEVICES)
     }
 
-    override fun addPendingDevice(
-        iotDevice: IotDevice,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        getPendingDeviceRef(iotDevice)
-            .set(iotDevice)
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+    override suspend fun addPendingDevice(iotDevice: IotDevice) {
+        suspendCoroutine<Unit> {
+            getPendingDeviceRef(iotDevice).set(iotDevice).withContinuation(it)
+        }
     }
 
-    override fun updatePendingDevice(
-        device: IotDevice,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        getPendingDeviceRef(device)
-            .set(device, SetOptions.merge())
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+    override suspend fun updatePendingDevice(device: IotDevice) {
+        suspendCoroutine<Unit> {
+            getPendingDeviceRef(device).set(device, SetOptions.merge()).withContinuation(it)
+        }
     }
 
-    override fun removePendingDevice(
-        iotDevice: IotDevice,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        getPendingDeviceRef(iotDevice)
-            .delete()
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+    override suspend fun removePendingDevice(iotDevice: IotDevice) {
+        suspendCoroutine<Unit> {
+            getPendingDeviceRef(iotDevice).delete().withContinuation(it)
+        }
     }
 
-    override fun fetchPendingDevices(listener: PendingDevicesFetchListener, failureListener: OnFailureListener) {
-        val pendingDevices: MutableList<IotDevice> = ArrayList()
+    override suspend fun fetchPendingDevices(): MutableList<IotDevice> {
+        return suspendCoroutine { continuation ->
+            pendingDevicesRef.get()
+                .addOnSuccessListener { documents ->
+                    try {
+                        val pendingDevices = mutableListOf<IotDevice>()
+                        for (document in documents)
+                            pendingDevices.add(document.toObject(IotDevice::class.java))
 
-        pendingDevicesRef.get()
-            .addOnSuccessListener { documents ->
-                for (document in documents)
-                    pendingDevices.add(document.toObject(IotDevice::class.java))
-
-                listener(pendingDevices)
-            }
-            .addOnFailureListener(failureListener)
+                        continuation.resumeWith(Result.success(pendingDevices))
+                    } catch (e: Throwable) {
+                        continuation.resumeWithException(e)
+                    }
+                }
+                .addOnFailureListener { continuation.resumeWithException(it) }
+        }
     }
 
-    override fun observePendingDevicesUpdates(observer: DevicesObserver) {
-        observeUpdates(observer, 1)
-    }
+    private fun observeDeviceUpdates(mode: ObserverMode): Observable<DeviceUpdate> {
+        return Observable.create<DeviceUpdate> {
+            val eventListener: EventListener<QuerySnapshot> = EventListener { snapshot, e ->
+                if (e != null) {
+                    it.onError(e)
+                    return@EventListener
+                }
 
-    override fun detachPendingDevicesUpdatesObserver() {
-        pendingDevicesRegistration?.remove()
-    }
+                if (snapshot == null) {
+                    it.onError(NullPointerException("null snapshot"))
+                    return@EventListener
+                }
 
-    private fun observeUpdates(observer: DevicesObserver, mode: Int) {
-        val eventListener: EventListener<QuerySnapshot> = EventListener { snapshot, e ->
-            if (e != null) {
-                Log.w(TAG, "Devices updates listen failed", e)
-                return@EventListener
+                val devices = ArrayList<IotDevice>()
+                for (doc in snapshot)
+                    devices.add(doc.toObject(IotDevice::class.java))
+
+                it.onNext(DeviceUpdate(devices, snapshot.metadata.hasPendingWrites()))
             }
 
-            if (snapshot == null)
-                return@EventListener
-
-            val devices = ArrayList<IotDevice>()
-            for (doc in snapshot)
-                devices.add(doc.toObject(IotDevice::class.java))
-
-            observer(devices, snapshot.metadata.hasPendingWrites())
+            when (mode) {
+                ObserverMode.DEVICES -> devicesRegistration = devicesRef.addSnapshotListener(eventListener)
+                ObserverMode.PENDING_DEVICES -> pendingDevicesRegistration =
+                    pendingDevicesRef.addSnapshotListener(eventListener)
+            }
         }
 
-        when (mode) {
-            0 -> devicesRegistration = devicesRef.addSnapshotListener(eventListener)
-            1 -> pendingDevicesRegistration = pendingDevicesRef.addSnapshotListener(eventListener)
-        }
     }
 
 
@@ -200,24 +162,5 @@ class FirestoreSmartHomeStorage(
 
     private fun getPendingDeviceRef(iotDevice: IotDevice): DocumentReference {
         return pendingDevicesRef.document(iotDevice.guid.toString())
-    }
-
-    companion object {
-
-        private var instance: FirestoreSmartHomeStorage? = null
-
-        fun getInstance(homeId: String): FirestoreSmartHomeStorage? {
-            if (instance == null)
-                instance =
-                    instantiate(homeId)
-
-            return instance
-        }
-
-        private fun instantiate(homeId: String): FirestoreSmartHomeStorage? {
-            val auth = FirebaseAuth.getInstance()
-
-            auth.currentUser?.let { return FirestoreSmartHomeStorage(homeId) } ?: return null
-        }
     }
 }
