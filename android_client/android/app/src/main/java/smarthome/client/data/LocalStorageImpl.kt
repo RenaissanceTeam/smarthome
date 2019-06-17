@@ -1,11 +1,20 @@
 package smarthome.client.data
 
+import android.annotation.SuppressLint
+import android.content.Context
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import smarthome.client.util.TOKEN_KEY
+import smarthome.client.util.TOKEN_PREFS
 import smarthome.library.common.IotDevice
 import smarthome.library.common.scripts.Script
 
-class LocalStorageImpl : LocalStorage {
-//    private val devices = BehaviorSubject.create<MutableList<IotDevice>>()
+class LocalStorageImpl(private val appContext: Context) : LocalStorage {
+    private val devices = BehaviorSubject.create<MutableList<IotDevice>>()
+    private val scripts = BehaviorSubject.create<MutableList<Script>>()
+    private val pendingDevices = BehaviorSubject.create<MutableList<IotDevice>>()
+    private val appTokenPrefs = appContext.getSharedPreferences(TOKEN_PREFS, Context.MODE_PRIVATE)
 
 //    override fun saveScript(script: Script) {
 //        if (Model.scripts.contains(script)) {
@@ -20,39 +29,53 @@ class LocalStorageImpl : LocalStorage {
 //        return Model.scripts.find { it.guid == guid }
 //    }
 
-    override suspend fun saveDevices(devices: List<IotDevice>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun saveDevices(devices: MutableList<IotDevice>) {
+        this.devices.onNext(devices)
     }
 
     override suspend fun getDevices(): BehaviorSubject<MutableList<IotDevice>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return devices
     }
 
+    @SuppressLint("ApplySharedPref")
     override suspend fun saveAppToken(newToken: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        withContext(Dispatchers.IO) {
+            appTokenPrefs.edit().putString(TOKEN_KEY, newToken).commit()
+        }
     }
 
     override suspend fun getAppToken(): String? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return withContext(Dispatchers.IO) {
+            appTokenPrefs.getString(TOKEN_KEY, null)
+        }
     }
 
     override suspend fun updateDevice(device: IotDevice) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        updateObjectInSource(device, devices)
+    }
+
+    private fun <T>updateObjectInSource(obj: T, source: BehaviorSubject<MutableList<T>> ) {
+        val objects = source.value ?: return
+
+        val objIndex = objects.indexOf(obj)
+        objects[objIndex] = obj
+
+        source.onNext(objects)
     }
 
     override suspend fun getPendingDevices(): BehaviorSubject<MutableList<IotDevice>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return pendingDevices
     }
 
     override suspend fun updatePendingDevice(device: IotDevice) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        updateObjectInSource(device, pendingDevices)
     }
 
     override suspend fun getScripts(): BehaviorSubject<MutableList<Script>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return scripts
     }
 
     override suspend fun saveScript(script: Script) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        updateObjectInSource(script, scripts)
     }
 }

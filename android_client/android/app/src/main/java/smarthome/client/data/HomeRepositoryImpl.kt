@@ -23,7 +23,7 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
         remoteStorage.observeDevices { devices, isInner ->
             if (isInner) return@observeDevices
 
-            ioScope.launch { localStorage.saveDevices(devices) }
+            ioScope.launch { localStorage.saveDevices(devices.toMutableList()) }
         }
     }
 
