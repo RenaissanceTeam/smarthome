@@ -1,15 +1,18 @@
 package smarthome.library.datalibrary.store.firestore
 
 import android.util.Log
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import io.reactivex.Observable
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.constants.HOME_USERS_NODE
 import smarthome.library.datalibrary.constants.TAG
 import smarthome.library.datalibrary.model.InstanceToken
 import smarthome.library.datalibrary.store.InstanceTokenStorage
+import smarthome.library.datalibrary.util.withContinuation
+import smarthome.library.datalibrary.util.withObjectContinuation
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class FirestoreInstanceTokenStorage(
     homeId: String,
@@ -18,47 +21,42 @@ class FirestoreInstanceTokenStorage(
 
     private val usersRef = db.collection(HOMES_NODE).document(homeId).collection(HOME_USERS_NODE)
 
-    override fun saveToken(
-        userId: String,
-        token: String,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        val instance = InstanceToken()
-        instance.token = token
-        usersRef.document(userId).set(instance)
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+    override suspend fun saveToken(userId: String, token: String) {
+        suspendCoroutine<Unit> {
+            usersRef.document(userId).set(InstanceToken(token)).withContinuation(it)
+        }
     }
 
-    override fun getToken(
-        userId: String,
-        successListener: OnSuccessListener<String>,
-        failureListener: OnFailureListener
-    ) {
-        usersRef.document(userId).get()
-            .addOnSuccessListener { successListener.onSuccess(it.toObject(InstanceToken::class.java)?.token) }
-            .addOnFailureListener(failureListener)
+    override suspend fun getToken(userId: String): String {
+        return suspendCoroutine {
+            usersRef.document(userId).get().withObjectContinuation(it)
+        }
     }
 
-    override fun removeToken(
-        userId: String,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        usersRef.document(userId).delete()
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+    override suspend fun removeToken(userId: String) {
+        suspendCoroutine<Unit> {
+            usersRef.document(userId).delete().withContinuation(it)
+        }
     }
 
-    override fun observeTokenChanges(observer: (List<InstanceToken>) -> Unit) {
-        usersRef.addSnapshotListener(EventListener { snapshot, e ->
-            if (e != null || snapshot == null) {
-                Log.w(TAG, "Tokens updates listen failed", e)
-                return@EventListener
-            }
-
-            observer(snapshot.map { it.toObject(InstanceToken::class.java) })
-        })
+    override fun observeTokenChanges(): Observable<String> {
+        TODO("strange method, it listens to all added users, not their tokens")
+//        return Observable.create {
+//            usersRef.addSnapshotListener(EventListener { snapshot, e ->
+//                if (e != null) {
+//                    it.onError(e)
+//                    return@EventListener
+//                }
+//
+//                if (snapshot == null) {
+//                    it.onError(NullPointerException("Null token snapshot"))
+//                    return@EventListener
+//                }
+//
+//
+//                it.onNext(snapshot.map { it.toObject(InstanceToken::class.java) })
+//            })
+//        }
     }
+
 }

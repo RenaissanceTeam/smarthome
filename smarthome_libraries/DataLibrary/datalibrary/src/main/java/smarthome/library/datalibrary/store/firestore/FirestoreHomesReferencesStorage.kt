@@ -1,9 +1,8 @@
 package smarthome.library.datalibrary.store.firestore
 
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import smarthome.library.datalibrary.constants.ACCOUNTS_NODE
@@ -11,8 +10,10 @@ import smarthome.library.datalibrary.constants.ACCOUNT_HOMES_ARRAY_REF
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.model.HomesReferences
 import smarthome.library.datalibrary.store.HomesReferencesStorage
-import smarthome.library.datalibrary.store.listeners.HomesReferencesListener
-import smarthome.library.datalibrary.store.listeners.OnHomeExists
+import smarthome.library.datalibrary.util.withContinuation
+import smarthome.library.datalibrary.util.withObjectContinuation
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class FirestoreHomesReferencesStorage(
     uid: String,
@@ -21,90 +22,61 @@ class FirestoreHomesReferencesStorage(
 
     private val ref: DocumentReference = db.collection(ACCOUNTS_NODE).document(uid)
 
-    override fun postHomesReferences(
-        homesReferences: HomesReferences,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        ref.set(homesReferences)
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+
+    override suspend fun replaceHomesReferences(homesReferences: HomesReferences) {
+        suspendCoroutine<Unit> {
+            ref.set(homesReferences).withContinuation(it)
+        }
     }
 
-    override fun addHomeReference(
-        homeReference: String,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        ref.get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    ref.update(ACCOUNT_HOMES_ARRAY_REF, FieldValue.arrayUnion(homeReference))
-                        .addOnSuccessListener(successListener)
-                        .addOnFailureListener(failureListener)
+    override suspend fun mergeHomesReferences(updatedHomesReferences: HomesReferences) {
+        suspendCoroutine<Unit> {
+            ref.update(ACCOUNT_HOMES_ARRAY_REF, FieldValue.arrayUnion(updatedHomesReferences)).withContinuation(it)
+        }
+    }
 
-                } else {
-                    val data = HomesReferences()
-                    data.homes.add(homeReference)
-                    ref.set(data)
-                        .addOnSuccessListener(successListener)
-                        .addOnFailureListener(failureListener)
+    override suspend fun addHomeReference(homeReference: String) {
+        val homeSnapshot = suspendCoroutine<DocumentSnapshot> { continuation ->
+            ref.get()
+                .addOnSuccessListener { continuation.resumeWith(Result.success(it)) }
+                .addOnFailureListener { continuation.resumeWithException(it) }
+        }
+
+
+        suspendCoroutine<Unit> { continuation ->
+            val task = if (homeSnapshot.exists()) {
+                taskUpdateHomeReference(homeReference)
+            } else {
+                taskNewHomeReference(homeReference)
+            }
+
+            task.withContinuation(continuation)
+        }
+    }
+
+    private fun taskUpdateHomeReference(homeReference: String) =
+        ref.update(ACCOUNT_HOMES_ARRAY_REF, FieldValue.arrayUnion(homeReference))
+
+    private fun taskNewHomeReference(homeReference: String): Task<Void> {
+        return ref.set(HomesReferences(mutableListOf(homeReference)))
+    }
+
+
+    override suspend fun getHomesReferences(): HomesReferences {
+        return suspendCoroutine {
+            ref.get().withObjectContinuation(it)
+        }
+    }
+
+    override suspend fun checkIfHomeExists(homeId: String): Boolean {
+        return suspendCoroutine { continuation ->
+            db.collection(HOMES_NODE).document(homeId)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    continuation.resumeWith(Result.success(documentSnapshot.exists()))
                 }
-            }
-            .addOnFailureListener(failureListener)
-
-    }
-
-    override fun updateHomesReferences(
-        updatedHomesReferences: HomesReferences,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        ref.update(ACCOUNT_HOMES_ARRAY_REF, FieldValue.arrayUnion(updatedHomesReferences))
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
-    }
-
-    override fun getHomesReferences(
-        listener: HomesReferencesListener,
-        failureListener: OnFailureListener) {
-        ref.get()
-            .addOnSuccessListener { res ->
-                res.toObject(HomesReferences::class.java)?.let { listener(it) }
-            }
-            .addOnFailureListener(failureListener)
-    }
-
-    override fun checkIfHomeExists(
-        homeId: String,
-        listener: OnHomeExists,
-        failureListener: OnFailureListener
-    ) {
-        db.collection(HOMES_NODE).document(homeId)
-            .get()
-            .addOnSuccessListener { documentSnapshot ->
-                listener(documentSnapshot.exists())
-            }
-            .addOnFailureListener(failureListener)
-    }
-
-    companion object {
-        private var instance: FirestoreHomesReferencesStorage? = null
-
-        fun getInstance(): FirestoreHomesReferencesStorage? {
-            if (instance == null) {
-                instance =
-                    tryInstantiate()
-            }
-            return instance
+                .addOnFailureListener { continuation.resumeWithException(it) }
         }
 
-        private fun tryInstantiate(): FirestoreHomesReferencesStorage? {
-            return FirebaseAuth.getInstance().currentUser?.let {
-                FirestoreHomesReferencesStorage(
-                    it.uid
-                )
-            }
-        }
     }
 }
