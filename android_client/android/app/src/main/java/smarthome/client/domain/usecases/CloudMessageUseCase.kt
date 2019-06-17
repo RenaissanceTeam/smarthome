@@ -10,7 +10,7 @@ class CloudMessageUseCase(private val homeRepository: HomeRepository) {
     }
 
     suspend fun noSavedToken(): Boolean {
-        val token = homeRepository.getAppToken()
+        val token = homeRepository.getSavedAppToken()
 
         return token == null
     }

@@ -44,7 +44,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
         if (guid == NEW_SCRIPT_GUID) {
             _script.value = Script()
         } else {
-            _script.value = scriptUseCase.getScript(guid)
+            viewModelScope.launch { _script.value = scriptUseCase.getScript(guid) }
         }
     }
 

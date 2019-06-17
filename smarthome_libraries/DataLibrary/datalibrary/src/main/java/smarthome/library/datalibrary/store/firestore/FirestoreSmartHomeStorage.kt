@@ -53,7 +53,7 @@ class FirestoreSmartHomeStorage(
                 for (document in documents)
                     smartHome.devices.add(document.toObject(IotDevice::class.java))
 
-                listener.onSmartHomeReceived(smartHome)
+                listener(smartHome)
             }
             .addOnFailureListener(failureListener)
     }
@@ -88,7 +88,7 @@ class FirestoreSmartHomeStorage(
         getDeviceRef(guid)
             .get()
             .addOnSuccessListener { document ->
-                listener.onDeviceReceived(document.toObject(IotDevice::class.java)!!)
+                listener(document.toObject(IotDevice::class.java)!!)
             }
             .addOnFailureListener(failureListener)
     }
@@ -153,7 +153,7 @@ class FirestoreSmartHomeStorage(
                 for (document in documents)
                     pendingDevices.add(document.toObject(IotDevice::class.java))
 
-                listener.onPendingDevicesFetched(pendingDevices)
+                listener(pendingDevices)
             }
             .addOnFailureListener(failureListener)
     }
@@ -180,7 +180,7 @@ class FirestoreSmartHomeStorage(
             for (doc in snapshot)
                 devices.add(doc.toObject(IotDevice::class.java))
 
-            observer.onDevicesChanged(devices, snapshot.metadata.hasPendingWrites())
+            observer(devices, snapshot.metadata.hasPendingWrites())
         }
 
         when (mode) {

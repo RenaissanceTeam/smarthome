@@ -8,17 +8,17 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
 class PendingDevicesUseCase(private val repository: HomeRepository) {
-    fun getPendingDevices(): Observable<MutableList<IotDevice>> {
+    suspend fun getPendingDevices(): Observable<MutableList<IotDevice>> {
         return repository.getPendingDevices()
     }
 
-    fun findPendingDevice(controller: BaseController): IotDevice {
+    suspend fun findPendingDevice(controller: BaseController): IotDevice {
         val pendingDevices = getPendingDevicesFromRepo()
 
         return pendingDevices.find { it.controllers.contains(controller) } ?: throw NoDeviceWithControllerException(controller)
     }
 
-    private fun getPendingDevicesFromRepo(): MutableList<IotDevice> {
+    private suspend fun getPendingDevicesFromRepo(): MutableList<IotDevice> {
         return repository.getPendingDevices().value
                 ?: TODO("no pending devices in behavior subject")
     }
@@ -27,7 +27,7 @@ class PendingDevicesUseCase(private val repository: HomeRepository) {
         repository.updatePendingDevice(device)
     }
 
-    fun getPendingDevice(deviceGuid: Long): IotDevice {
+    suspend fun getPendingDevice(deviceGuid: Long): IotDevice {
         val pendingDevices = getPendingDevicesFromRepo()
 
         return pendingDevices.find { it.guid == deviceGuid } ?: throw NoDeviceException(deviceGuid)

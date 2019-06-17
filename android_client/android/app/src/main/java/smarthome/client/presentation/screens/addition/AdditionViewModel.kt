@@ -32,29 +32,31 @@ class AdditionViewModel : ViewModel(), KoinComponent {
     }
 
     fun requestSmartHomeState() {
-        _globalUpdateState.value = true
+        viewModelScope.launch {
+            _globalUpdateState.value = true
 
-        devicesSubscription = pendingDevicesUseCase.getPendingDevices().subscribe {
-            _devices.value?.let {old -> // todo change to list adapter
-                if (old.size > it.size) {
-                    if (it.size == 0) {
-                        viewNotifier?.onItemRemoved(0)
-                        return@let
-                    }
-
-                    for (i in 0..it.size) {
-                        if (old[i] != it[i]) {
-                            viewNotifier?.onItemRemoved(i)
+            devicesSubscription = pendingDevicesUseCase.getPendingDevices().subscribe {
+                _devices.value?.let { old -> // todo change to list adapter
+                    if (old.size > it.size) {
+                        if (it.size == 0) {
+                            viewNotifier?.onItemRemoved(0)
                             return@let
                         }
+
+                        for (i in 0..it.size) {
+                            if (old[i] != it[i]) {
+                                viewNotifier?.onItemRemoved(i)
+                                return@let
+                            }
+                        }
+
+                        viewNotifier?.onItemRemoved(old.size - 1)
                     }
-
-                    viewNotifier?.onItemRemoved(old.size - 1)
                 }
-            }
 
-            _devices.value = it
-            _globalUpdateState.value = false
+                _devices.value = it
+                _globalUpdateState.value = false
+            }
         }
     }
 

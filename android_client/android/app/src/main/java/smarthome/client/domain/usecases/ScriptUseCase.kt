@@ -6,11 +6,11 @@ import smarthome.client.util.NoScriptException
 import smarthome.library.common.scripts.Script
 
 class ScriptUseCase(private val repository: HomeRepository) {
-    fun getScripts(): Observable<MutableList<Script>> {
+    suspend fun getScripts(): Observable<MutableList<Script>> {
         return repository.getScripts()
     }
 
-    fun getScript(guid: Long): Script {
+    suspend fun getScript(guid: Long): Script {
         val scripts = repository.getScripts().value
                 ?: TODO("no value in scripts behavior subject")
 

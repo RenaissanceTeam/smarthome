@@ -78,7 +78,7 @@ class FirestoreMessageQueue(
                 devices.add(message)
             }
 
-            listener.onMessagesReceived(devices, snapshot.metadata.hasPendingWrites())
+            listener(devices, snapshot.metadata.hasPendingWrites())
         } )
     }
 
