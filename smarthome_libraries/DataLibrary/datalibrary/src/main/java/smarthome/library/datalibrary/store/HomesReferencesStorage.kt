@@ -5,8 +5,8 @@ import com.google.android.gms.tasks.OnSuccessListener
 import smarthome.library.datalibrary.constants.defFailureListener
 import smarthome.library.datalibrary.constants.defSuccessListener
 import smarthome.library.datalibrary.model.HomesReferences
-import smarthome.library.datalibrary.store.listeners.HomeExistenceListener
 import smarthome.library.datalibrary.store.listeners.HomesReferencesListener
+import smarthome.library.datalibrary.store.listeners.OnHomeExists
 
 interface HomesReferencesStorage {
 
@@ -41,7 +41,7 @@ interface HomesReferencesStorage {
 
     fun checkIfHomeExists(
         homeId: String,
-        listener: HomeExistenceListener,
+        listener: OnHomeExists,
         failureListener: OnFailureListener = defFailureListener
     )
 }

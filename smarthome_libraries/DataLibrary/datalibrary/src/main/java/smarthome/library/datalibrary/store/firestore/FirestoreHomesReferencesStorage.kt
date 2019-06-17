@@ -11,8 +11,8 @@ import smarthome.library.datalibrary.constants.ACCOUNT_HOMES_ARRAY_REF
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.model.HomesReferences
 import smarthome.library.datalibrary.store.HomesReferencesStorage
-import smarthome.library.datalibrary.store.listeners.HomeExistenceListener
 import smarthome.library.datalibrary.store.listeners.HomesReferencesListener
+import smarthome.library.datalibrary.store.listeners.OnHomeExists
 
 class FirestoreHomesReferencesStorage(
     uid: String,
@@ -70,22 +70,20 @@ class FirestoreHomesReferencesStorage(
         failureListener: OnFailureListener) {
         ref.get()
             .addOnSuccessListener { res ->
-                res.toObject(HomesReferences::class.java)?.let { listener.onHomesReferencesReceived(it) }
+                res.toObject(HomesReferences::class.java)?.let { listener(it) }
             }
             .addOnFailureListener(failureListener)
     }
 
     override fun checkIfHomeExists(
         homeId: String,
-        listener: HomeExistenceListener,
+        listener: OnHomeExists,
         failureListener: OnFailureListener
     ) {
         db.collection(HOMES_NODE).document(homeId)
             .get()
             .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists())
-                    listener.onHomeAlreadyExists()
-                else listener.onHomeDoesNotExist()
+                listener(documentSnapshot.exists())
             }
             .addOnFailureListener(failureListener)
     }

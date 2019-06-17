@@ -2,62 +2,85 @@ package smarthome.client.data
 
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import smarthome.client.domain.HomeRepository
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.library.common.scripts.Script
-import smarthome.library.datalibrary.store.listeners.DevicesObserver
 
 class HomeRepositoryImpl(private val localStorage: LocalStorage,
                          private val remoteStorage: RemoteStorage) : HomeRepository {
+    private val ioScope = CoroutineScope(Dispatchers.IO)
 
     override suspend fun getDevices(): Observable<MutableList<IotDevice>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return localStorage.getDevices()
         // todo don't forget to listen for remote changes when have at least 1 subscriber
     }
 
-    override fun observeDevicesUpdates(devicesObserver: DevicesObserver) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override suspend fun observeDevicesUpdates() {
+        remoteStorage.observeDevices { devices, isInner ->
+            if (isInner) return@observeDevices
 
+            ioScope.launch { localStorage.saveDevices(devices) }
+        }
+    }
 
     override suspend fun saveAppToken(newToken: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        localStorage.saveAppToken(newToken)
+        remoteStorage.saveAppToken(newToken)
     }
 
-    override suspend fun getAppToken(): String? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun getSavedAppToken(): String? {
+         return localStorage.getAppToken()
     }
 
     override suspend fun getControllers(): MutableList<BaseController> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val devices = localStorage.getDevices().value
+        if (devices.isNullOrEmpty()) return mutableListOf()
+
+        return devices.flatMap { it.controllers }.toMutableList()
     }
 
     override suspend fun updateDevice(device: IotDevice) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        remoteStorage.updateDevice(device)
+        localStorage.updateDevice(device)
     }
 
     override suspend fun getDevice(deviceGuid: Long): IotDevice? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val devices = localStorage.getDevices().value
+        if (devices.isNullOrEmpty()) return null
+
+        return devices.find { it.guid == deviceGuid }
     }
 
     override suspend fun getPendingController(controllerGuid: Long): BaseController? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val devices = localStorage.getPendingDevices().value
+        if (devices.isNullOrEmpty()) return null
+
+        for (device in devices) {
+            return device.controllers.find { it.guid == controllerGuid } ?: continue
+        }
+
+        return null
     }
 
-    override fun getPendingDevices(): BehaviorSubject<MutableList<IotDevice>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun getPendingDevices(): BehaviorSubject<MutableList<IotDevice>> {
+        return localStorage.getPendingDevices()
     }
 
     override suspend fun updatePendingDevice(device: IotDevice) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        remoteStorage.updatePendingDevice(device)
+        localStorage.updatePendingDevice(device)
     }
 
-    override fun getScripts(): BehaviorSubject<MutableList<Script>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun getScripts(): BehaviorSubject<MutableList<Script>> {
+        return localStorage.getScripts()
     }
 
     override suspend fun saveScript(script: Script) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        remoteStorage.saveScript(script)
+        localStorage.saveScript(script)
     }
 }
