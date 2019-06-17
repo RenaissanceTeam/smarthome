@@ -1,6 +1,7 @@
 package smarthome.client.data
 
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +14,7 @@ import smarthome.library.common.scripts.Script
 class HomeRepositoryImpl(private val localStorage: LocalStorage,
                          private val remoteStorage: RemoteStorage) : HomeRepository {
     private val ioScope = CoroutineScope(Dispatchers.IO)
+    private var deviceSubscription: Disposable? = null
 
     override suspend fun getDevices(): Observable<MutableList<IotDevice>> {
         return localStorage.getDevices()
@@ -20,10 +22,10 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
     }
 
     override suspend fun observeDevicesUpdates() {
-        remoteStorage.observeDevices { devices, isInner ->
-            if (isInner) return@observeDevices
+        deviceSubscription = remoteStorage.observeDevices().subscribe {
+            if (it.isInnerCall) return@subscribe
 
-            ioScope.launch { localStorage.saveDevices(devices.toMutableList()) }
+            ioScope.launch { localStorage.saveDevices(it.devices.toMutableList()) }
         }
     }
 

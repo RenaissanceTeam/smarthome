@@ -1,113 +1,82 @@
 package smarthome.client.data
 
+import io.reactivex.Observable
+import smarthome.client.domain.usecases.AuthenticationUseCase
+import smarthome.client.domain.usecases.HomeUseCases
+import smarthome.client.util.NoHomeid
 import smarthome.library.common.IotDevice
 import smarthome.library.common.scripts.Script
-import smarthome.library.datalibrary.store.listeners.DevicesObserver
+import smarthome.library.datalibrary.store.InstanceTokenStorage
+import smarthome.library.datalibrary.store.MessageQueue
+import smarthome.library.datalibrary.store.SmartHomeStorage
+import smarthome.library.datalibrary.store.firestore.FirestoreHomesReferencesStorage
+import smarthome.library.datalibrary.store.firestore.FirestoreInstanceTokenStorage
+import smarthome.library.datalibrary.store.firestore.FirestoreMessageQueue
+import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
+import smarthome.library.datalibrary.store.listeners.DeviceUpdate
 
-class RemoteStorageImpl : RemoteStorage {
+class RemoteStorageImpl(private val authenticationUseCase: AuthenticationUseCase,
+                        private val homeUseCases: HomeUseCases) : RemoteStorage {
 
-//    private var homeStorage: SmartHomeStorage? = null
-//    private var instanceTokenStorage: InstanceTokenStorage? = null
-//    private var messageQueue: MessageQueue? = null
-//    private val userId = FirebaseAuth.getInstance().currentUser?.uid
-//
-//    private suspend fun getSmartHomeStorage(): SmartHomeStorage {
-//        if (homeStorage == null) {
-//            setupFirestore()
-//        }
-//        return homeStorage!!
-//    }
-//
-//    private suspend fun getInstanceTokenStorage(): InstanceTokenStorage {
-//        if (instanceTokenStorage == null) {
-//            setupFirestore()
-//        }
-//        return instanceTokenStorage!!
-//    }
-//
+    private var homeStorage: SmartHomeStorage? = null
+    private var instanceTokenStorage: InstanceTokenStorage? = null
+    private var messageQueue: MessageQueue? = null
+
+    private suspend fun getSmartHomeStorage(): SmartHomeStorage {
+        if (homeStorage == null) {
+            setupFirestore()
+        }
+        return homeStorage!!
+    }
+
+    private suspend fun getInstanceTokenStorage(): InstanceTokenStorage {
+        if (instanceTokenStorage == null) {
+            setupFirestore()
+        }
+        return instanceTokenStorage!!
+    }
+
 //    suspend fun getMessageQueue(): MessageQueue {
 //        if (messageQueue == null) {
 //            setupFirestore()
 //        }
 //        return messageQueue!!
 //    }
-//
-//    private suspend fun setupFirestore() {
-//        val userId = this.userId ?: throw AuthenticationFailed()
-//
-//        val references = FirestoreHomesReferencesStorage(userId)
-//        val homeIds = suspendCoroutine<List<String>> { continuation ->
-//            references.getHomesReferences(
-//                    HomesReferencesListener { continuation.resumeWith(Result.success(it.homes)) },
-//                    OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }
-//            )
-//        }
-//        if (homeIds.isNullOrEmpty()) throw NoHomeid()
-//        val homeId = homeIds[0] // todo let user choose
-//
-//        homeStorage = FirestoreSmartHomeStorage(homeId)
-//        instanceTokenStorage = FirestoreInstanceTokenStorage(homeId)
-//        messageQueue = FirestoreMessageQueue(homeId)
-//    }
-//
-//    suspend fun loadHome(): SmartHome {
-//        val storage = getSmartHomeStorage()
-//
-//        return suspendCoroutine { continuation ->
-//            storage.getSmartHome(
-//                    SmartHomeListener {
-//                        continuation.resumeWith(Result.success(it))
-//                    },
-//                    OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }
-//            )
-//        }
-//    }
-//
-//    suspend fun loadPendingDevices(): MutableList<IotDevice> {
-//        val storage = getSmartHomeStorage()
-//
-//        return suspendCoroutine { continuation ->
-//            storage.fetchPendingDevices(
-//                    PendingDevicesFetchListener {
-//                        continuation.resumeWith(Result.success(it))
-//                    },
-//                    OnFailureListener { continuation.resumeWith(Result.failure(RemoteFailure(it))) }
-//            )
-//        }
-//    }
-//
-//    suspend fun saveInstanceToken(token: String) {
-//        val userId = this.userId ?: throw AuthenticationFailed()
-//        val storage = getInstanceTokenStorage()
-//        suspendCoroutine<Unit> { continuation ->
-//            storage.saveToken(userId, token,
-//                    OnSuccessListener { continuation.resumeWith(Result.success(Unit)) },
-//                    OnFailureListener { continuation.resumeWith(Result.failure(it)) })
-//        }
-//    }
+
+    private suspend fun setupFirestore() {
+        val userId = authenticationUseCase.getUserId()
+        val references = FirestoreHomesReferencesStorage(userId)
+
+        val homeIds = references.getHomesReferences().homes
+        if (homeIds.isNullOrEmpty()) throw NoHomeid()
+
+        val homeId = homeUseCases.getChosenHomeId()
+
+        homeStorage = FirestoreSmartHomeStorage(homeId)
+        instanceTokenStorage = FirestoreInstanceTokenStorage(homeId)
+        messageQueue = FirestoreMessageQueue(homeId)
+    }
 
 
-    override suspend fun observeDevices(devicesObserver: DevicesObserver) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    override suspend fun observeDevices(): Observable<DeviceUpdate> {
+        return getSmartHomeStorage().observeDevicesUpdates()
     }
 
     override suspend fun saveAppToken(newToken: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override suspend fun getAppToken(): String? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val userId = authenticationUseCase.getUserId()
+        getInstanceTokenStorage().saveToken(userId, newToken)
     }
 
     override suspend fun updateDevice(device: IotDevice) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        getSmartHomeStorage().updateDevice(device)
     }
 
     override suspend fun updatePendingDevice(device: IotDevice) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        getSmartHomeStorage().updatePendingDevice(device)
     }
 
     override suspend fun saveScript(script: Script) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//        getSmartHomeStorage().saves
     }
 }
