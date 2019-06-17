@@ -1,21 +1,18 @@
 package smarthome.client.presentation
 
-import android.app.Application
 import android.content.Intent
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.App
 import smarthome.client.domain.usecases.AuthenticationUseCase
 
-class MainViewModel(application: Application) : AndroidViewModel(application), KoinComponent {
+class MainViewModel: ViewModel(), KoinComponent {
     private val _isAuthenticated = MutableLiveData<Boolean>()
     val isAuthenticated: LiveData<Boolean>
         get() = _isAuthenticated
@@ -34,12 +31,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application), K
                 .setAvailableProviders(providers)
                 .setIsSmartLockEnabled(false)
                 .build()
-    }
-
-    fun signOut() {
-        FirebaseAuth.getInstance().signOut()
-        AuthUI.getInstance().delete(App.appContext)
-        AuthUI.getInstance().signOut(App.appContext)
     }
 
     fun onAuthSuccessful() {
