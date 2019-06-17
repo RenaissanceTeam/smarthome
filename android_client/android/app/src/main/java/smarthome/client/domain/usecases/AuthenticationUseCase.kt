@@ -12,18 +12,22 @@ class AuthenticationUseCase(private val repository: AuthenticationRepository) {
         return repository.getEmail()
     }
 
-    fun onAuthFail() {
+    suspend fun onAuthFail() {
         repository.setAuthenticationStatus(false)
         repository.resetEmail()
     }
 
-    fun onAuthSuccess() {
+    suspend fun onAuthSuccess() {
         repository.setAuthenticationStatus(true)
         repository.updateEmail()
     }
 
-    fun signOut() {
+    suspend fun signOut() {
         repository.setAuthenticationStatus(false)
         repository.resetEmail()
+    }
+
+    suspend fun getUserId(): String {
+        return repository.getUserId()
     }
 }

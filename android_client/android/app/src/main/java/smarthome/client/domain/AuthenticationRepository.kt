@@ -5,7 +5,8 @@ import io.reactivex.Observable
 interface AuthenticationRepository {
     fun getAuthenticationStatus(): Observable<Boolean>
     fun getEmail(): Observable<String>
-    fun setAuthenticationStatus(isAuthenticated: Boolean)
-    fun resetEmail()
-    fun updateEmail()
+    suspend fun setAuthenticationStatus(isAuthenticated: Boolean)
+    suspend fun resetEmail()
+    suspend fun updateEmail()
+    suspend fun getUserId(): String
 }

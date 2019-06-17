@@ -26,15 +26,19 @@ class AuthenticationRepositoryImpl(private val firebaseAuth: FirebaseAuth): Auth
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun setAuthenticationStatus(isAuthenticated: Boolean) {
+    override suspend fun setAuthenticationStatus(isAuthenticated: Boolean) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun resetEmail() {
+    override suspend fun resetEmail() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun updateEmail() {
+    override suspend fun updateEmail() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun getUserId(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

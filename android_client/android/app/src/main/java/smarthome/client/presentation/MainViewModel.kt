@@ -5,9 +5,11 @@ import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.App
@@ -41,11 +43,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application), K
     }
 
     fun onAuthSuccessful() {
-        authenticationUseCase.onAuthSuccess()
+        viewModelScope.launch { authenticationUseCase.onAuthSuccess() }
     }
 
     fun onAuthFailed() {
-        authenticationUseCase.onAuthFail()
+        viewModelScope.launch { authenticationUseCase.onAuthFail() }
     }
 
     override fun onCleared() {
