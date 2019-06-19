@@ -18,7 +18,9 @@ val usecasesModule = module {
     single { ScriptUseCase(get()) }
 }
 val repositoryModule = module {
-    single { HomeRepositoryImpl(get(), get()) as HomeRepository}
+    val homeRepo =  HomeRepositoryImpl()
+    single { homeRepo as HomeRepository}
+    single { homeRepo as RemoteStorageInput }
     single { AuthenticationRepositoryImpl(get()) as AuthenticationRepository}
     single { FirebaseAuth.getInstance() }
 }
