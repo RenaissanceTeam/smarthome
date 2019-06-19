@@ -61,10 +61,10 @@ class ControllerDetails : Fragment() {
 
     private fun setControllerName(controller: BaseController) {
         if (controller.name.isNullOrEmpty()) {
-            controller_name.setTextColor(Color.parseColor("#aaa")) // todo add to style
+            controller_name.setTextColor(Color.BLACK) // todo add to style
             controller_name.text = getString(R.string.empty_name)
         } else {
-            controller_name.setTextColor(Color.parseColor("#de000000")) // todo add to style
+            controller_name.setTextColor(Color.GRAY) // todo add to style
             controller_name.text = controller.name
         }
     }
