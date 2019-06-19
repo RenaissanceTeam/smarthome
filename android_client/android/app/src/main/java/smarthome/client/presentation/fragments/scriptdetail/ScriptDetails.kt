@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.*
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -62,10 +62,10 @@ class ScriptDetails: Fragment() {
     private fun setDecoratedText(textView: TextView, text: String) {
         if (text.isEmpty()) {
             textView.text = "Empty"
-            textView.setTextColor(Color.parseColor("#888888"))
+            textView.setTextColor(Color.GRAY)
         } else {
             textView.text = text
-            textView.setTextColor(Color.parseColor("#000000"))
+            textView.setTextColor(Color.BLACK)
         }
     }
 

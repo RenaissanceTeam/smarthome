@@ -22,7 +22,6 @@ class SwipeToDeleteCallback(context: Context,
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = onSwipe(viewHolder, direction)
 
-
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         /**
          * To disable "swipe" for specific item return 0 here.
