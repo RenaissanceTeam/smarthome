@@ -11,6 +11,7 @@ interface RemoteStorage  {
     suspend fun updateDevice(device: IotDevice)
     suspend fun updatePendingDevice(device: IotDevice)
     suspend fun saveScript(script: Script)
+    suspend fun getAllHomeIds(): MutableList<String>
 
 }
 

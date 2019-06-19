@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
@@ -39,6 +40,7 @@ class DashboardViewModel : ViewModel(), KoinComponent {
             } else {
                 devicesSubscription?.dispose()
                 devicesSubscription = null
+                _toastMessage.value = "Not logged in"
                 // todo show user not logged in placeholder
             }
         }
@@ -48,12 +50,13 @@ class DashboardViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             _allHomeUpdateState.value = true
 
-            devicesSubscription = devicesUseCase.getDevices().doOnError {
-                _toastMessage.value = "Error $it"
-            }.subscribe {
-                _devices.value = it
-                _allHomeUpdateState.value = false
-            }
+            devicesSubscription = devicesUseCase.getDevices()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError { _toastMessage.value = "Error $it" }
+                    .subscribe {
+                        _devices.value = it
+                        _allHomeUpdateState.value = false
+                    }
         }
     }
 

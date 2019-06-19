@@ -6,19 +6,42 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import smarthome.client.domain.HomeRepository
+import smarthome.client.domain.usecases.AuthenticationUseCase
+import smarthome.client.domain.usecases.HomeUseCases
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.library.common.scripts.Script
 
-class HomeRepositoryImpl(private val localStorage: LocalStorage,
-                         private val remoteStorage: RemoteStorage) : HomeRepository {
+class HomeRepositoryImpl :
+        HomeRepository, RemoteStorageInput, KoinComponent {
+
     private val ioScope = CoroutineScope(Dispatchers.IO)
     private var deviceSubscription: Disposable? = null
+    private val authenticationUseCase: AuthenticationUseCase by inject()
+    private val homeUseCases: HomeUseCases by inject()
+    private val localStorage: LocalStorage by inject()
+    private val remoteStorage: RemoteStorage by inject()
 
     override suspend fun getDevices(): Observable<MutableList<IotDevice>> {
-        return localStorage.getDevices()
+        if (deviceSubscription == null) observeDevicesUpdates()
         // todo don't forget to listen for remote changes when have at least 1 subscriber
+
+        return localStorage.getDevices()
+    }
+
+    override suspend fun getUserId(): String {
+        return authenticationUseCase.getUserId() ?: TODO()
+    }
+
+    override suspend fun chooseHomeId(homeIds: MutableList<String>): String {
+        return homeUseCases.chooseHomeId(homeIds)
+    }
+
+    override suspend fun getSavedHomeId(): String? {
+        return localStorage.getSavedHomeId()
     }
 
     override suspend fun observeDevicesUpdates() {

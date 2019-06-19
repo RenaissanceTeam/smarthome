@@ -20,4 +20,5 @@ interface HomeRepository {
     suspend fun updatePendingDevice(device: IotDevice)
     suspend fun getScripts(): BehaviorSubject<MutableList<Script>>
     suspend fun saveScript(script: Script)
+    suspend fun getSavedHomeId(): String?
 }

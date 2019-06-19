@@ -5,6 +5,8 @@ import android.content.Context
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import smarthome.client.util.HOME_ID_KEY
+import smarthome.client.util.HOME_ID_PREFS
 import smarthome.client.util.TOKEN_KEY
 import smarthome.client.util.TOKEN_PREFS
 import smarthome.library.common.IotDevice
@@ -15,6 +17,7 @@ class LocalStorageImpl(private val appContext: Context) : LocalStorage {
     private val scripts = BehaviorSubject.create<MutableList<Script>>()
     private val pendingDevices = BehaviorSubject.create<MutableList<IotDevice>>()
     private val appTokenPrefs = appContext.getSharedPreferences(TOKEN_PREFS, Context.MODE_PRIVATE)
+    private val homeIdPrefs = appContext.getSharedPreferences(HOME_ID_PREFS, Context.MODE_PRIVATE)
 
 //    override fun saveScript(script: Script) {
 //        if (Model.scripts.contains(script)) {
@@ -61,6 +64,10 @@ class LocalStorageImpl(private val appContext: Context) : LocalStorage {
         objects[objIndex] = obj
 
         source.onNext(objects)
+    }
+
+    override suspend fun getSavedHomeId(): String? {
+        return homeIdPrefs.getString(HOME_ID_KEY,  null)
     }
 
     override suspend fun getPendingDevices(): BehaviorSubject<MutableList<IotDevice>> {
