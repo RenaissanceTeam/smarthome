@@ -28,18 +28,11 @@ public class GUID {
     }
 
     public long getGuidForIotDevice(IotDevice device) {
-        return getGuidForName(device.name);
+        return getGuidForName(device.getName());
     }
 
     public long generateGuidForController(IotDevice device, BaseController controller) {
-        long guid;
-
-        if (controller.name != null) {
-            guid = getGuidForName(controller.name);
-        } else {
-            guid = device.guid + controller.type.hashCode();
-        }
-
+        long guid = getGuidForName(controller.getName());
         mGuids.add(guid);
         return guid;
     }
