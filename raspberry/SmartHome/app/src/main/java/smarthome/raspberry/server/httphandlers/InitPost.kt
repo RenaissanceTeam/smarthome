@@ -9,13 +9,13 @@ import smarthome.raspberry.model.SmartHomeRepository
 import java.util.*
 
 class InitPost : BaseRequestHandler() {
-    override fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
+    override suspend fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         return if (initNewArduinoDevice(session)) {
             NanoHTTPD.Response("Added successfully")
         } else NanoHTTPD.Response("ArduinoDevice was not added")
     }
 
-    private fun initNewArduinoDevice(session: NanoHTTPD.IHTTPSession): Boolean {
+    private suspend fun initNewArduinoDevice(session: NanoHTTPD.IHTTPSession): Boolean {
         val params = session.parms
         val name = params["name"]
         val description = params["description"]

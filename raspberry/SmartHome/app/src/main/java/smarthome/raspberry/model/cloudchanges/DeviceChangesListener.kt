@@ -6,16 +6,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import smarthome.library.common.IotDevice
 import smarthome.library.datalibrary.store.SmartHomeStorage
-import smarthome.library.datalibrary.store.listeners.DevicesObserver
 import smarthome.raspberry.BuildConfig
 import smarthome.raspberry.OddDeviceInCloud
 import smarthome.raspberry.model.SmartHomeRepository
 
-object DeviceChangesListener : DevicesObserver {
+object DeviceChangesListener {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
-    override fun onDevicesChanged(cloudDevices: MutableList<IotDevice>?, isInner: Boolean) {
+    fun onDevicesChanged(cloudDevices: MutableList<IotDevice>?, isInner: Boolean) {
         if (BuildConfig.DEBUG) Log.d(SmartHomeRepository.TAG, "new devices update isInner=$isInner, $cloudDevices ")
         if (isInner || cloudDevices == null) return
         ioScope.launch { tryHandleChanges(cloudDevices) }

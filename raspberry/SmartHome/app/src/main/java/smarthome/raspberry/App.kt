@@ -25,11 +25,11 @@ class App : Application() {
     override fun onTerminate() {
         super.onTerminate()
         wakeLock?.release()
-        val storage = FirestoreSmartHomeStorage.getInstance(
-                SharedPreferencesHelper.getInstance(this).getHomeId()
-        )
-        storage?.detachDevicesUpdatesObserver()
-        storage?.detachPendingDevicesUpdatesObserver()
+//        val storage = FirestoreSmartHomeStorage.getInstance(
+//                SharedPreferencesHelper.getInstance(this).getHomeId()
+//        )
+//        storage?.detachDevicesUpdatesObserver()
+//        storage?.detachPendingDevicesUpdatesObserver()
     }
 
     companion object {

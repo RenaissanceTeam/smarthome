@@ -17,7 +17,7 @@ class AlertPost : BaseRequestHandler() {
     private lateinit var device: ArduinoDevice
     private lateinit var controller: BaseController
 
-    override fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
+    override suspend fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         return try {
             parseRequest(session)
             controller.state = value

@@ -62,6 +62,10 @@ dependencies {
     implementation 'com.firebase:firebase-client-android:2.5.2'
     implementation 'com.google.firebase:firebase-messaging:17.4.0'
 
+    // rx
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
+
     //coroutines
     def coroutinesVersion = "1.1.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"

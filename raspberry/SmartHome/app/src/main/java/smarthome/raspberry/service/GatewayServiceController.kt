@@ -70,7 +70,7 @@ class GatewayServiceController : AlarmHandler, DeviceAddedListener {
 
     }
 
-    override fun onDeviceAdded(device: IotDevice) {
+    override suspend fun onDeviceAdded(device: IotDevice) {
         SmartHomeRepository.addDevice(device)
     }
 
