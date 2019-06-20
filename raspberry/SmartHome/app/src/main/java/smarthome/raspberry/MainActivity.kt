@@ -74,7 +74,7 @@ class MainActivity : Activity(), RepoInitListener {
         job.cancel()
     }
 
-    override fun onInitializationComplete() {
+    override suspend fun onInitializationComplete() {
         SmartHomeRepository.listenForCloudChanges()
         SmartHomeRepository.subscribeToMessageQueue()
         deviceObserver.start()

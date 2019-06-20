@@ -3,8 +3,6 @@ package smarthome.raspberry.model
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +17,6 @@ import smarthome.library.datalibrary.store.MessageQueue
 import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreMessageQueue
 import smarthome.raspberry.BuildConfig.DEBUG
-import smarthome.raspberry.FirestoreUnreachable
 import smarthome.raspberry.UnableToCreateMessageQueue
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
@@ -36,9 +33,7 @@ import smarthome.raspberry.utils.fcm.FcmSender
 import smarthome.raspberry.utils.fcm.MessageType
 import smarthome.raspberry.utils.fcm.Priority
 import java.util.*
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import kotlin.collections.ArrayList
 
 
 @SuppressLint("StaticFieldLeak")
@@ -69,7 +64,7 @@ object SmartHomeRepository : SmartHome() {
             val homeId = homeController.getHomeId()
             devicesStorage = homeController.getSmartHomeStorage(homeId)
             tokenStorage = homeController.getTokenStorage(homeId)
-            messageQueue = FirestoreMessageQueue.getInstance(homeId)
+            messageQueue = FirestoreMessageQueue(homeId) // todo inject
                     ?: throw UnableToCreateMessageQueue(homeId)
             devices = ArrayList()
             fcmSender = FcmSender(context)
@@ -84,7 +79,7 @@ object SmartHomeRepository : SmartHome() {
         this.listener = listener
     }
 
-    private fun loadSavedDevices() {
+    private suspend fun loadSavedDevices() {
         val gatewayDevices: MutableSet<GatewayDevice> = mutableSetOf()
         for (dataSource in DataSources.values()) {
             dataSource.init(context)
@@ -135,11 +130,15 @@ object SmartHomeRepository : SmartHome() {
         }
     }
 
-    fun listenForCloudChanges() {
+    suspend fun listenForCloudChanges() {
         if (DEBUG) Log.d(TAG, "listenForCloudChanges")
-        devicesStorage.observeDevicesUpdates(DeviceChangesListener)
-        devicesStorage.observePendingDevicesUpdates(DeviceChangesListener)
-        tokenStorage.observeTokenChanges { tokens = it }
+        devicesStorage.observeDevicesUpdates().subscribe {
+            DeviceChangesListener.onDevicesChanged(it.devices, it.isInnerCall)
+        }
+        devicesStorage.observePendingDevicesUpdates().subscribe {
+            DeviceChangesListener.onDevicesChanged(it.devices, it.isInnerCall)
+        }
+        tokenStorage.observeTokenChanges().subscribe { TODO() }
     }
 
     fun subscribeToMessageQueue() {
@@ -147,27 +146,28 @@ object SmartHomeRepository : SmartHome() {
         if (DEBUG) Log.d(TAG, "Successfully subscribed to message queue")
     }
 
-    fun deleteMessage(message: Message) {
+    suspend fun deleteMessage(message: Message) {
         messageQueue.removeMessage(message)
         messageQueue.removeMessage(message)
     }
 
-    private fun deleteLocalDevices(cloudDevices: MutableList<IotDevice>) {
-        // some devices were deleted
-        val removed = mutableListOf<IotDevice>()
-        for (localDevice in devices) {
-            if (cloudDevices.contains(localDevice)) continue
-            removed.add(localDevice)
-        }
-        removed.forEach { delete(it) } // todo add delete() to repository
-    }
+//  todo lost reference to this
+//    private fun deleteLocalDevices(cloudDevices: MutableList<IotDevice>) {
+//        // some devices were deleted
+//        val removed = mutableListOf<IotDevice>()
+//        for (localDevice in devices) {
+//            if (cloudDevices.contains(localDevice)) continue
+//            removed.add(localDevice)
+//        }
+//        removed.forEach { delete(it) } // todo add delete() to repository
+//    }
 
 
     /**
      * Main entry point for adding devices, call this method, when new
      * Iot device should be added to databases
      */
-    fun addDevice(device: IotDevice): Boolean {
+    suspend fun addDevice(device: IotDevice): Boolean {
         if (!ready) {
             pendingDevices.add(device)
             return false
@@ -183,18 +183,19 @@ object SmartHomeRepository : SmartHome() {
             val src = dataSource.source
             if (src.contains(device)) {
                 if (src.get(device.guid).status != device.status) {
-                    ioScope.launch {
-                        suspendCoroutine<Unit> { continuation ->
-                            if (device.isAccepted) {
-                                movePendingDeviceToAccepted(device, continuation)
-                                src.update(device)
-                                devices[devices.indexOf(device)] = device
-                            } else if (device.isRejected) {
-                                checkAndProcessGateway(device)
-                                delete(device)
-                            }
-                        }
+                    if (device.isAccepted) {
+
+                        devicesStorage.addDevice(device)
+                        devicesStorage.removePendingDevice(device)
+
+                        src.update(device)
+                        devices[devices.indexOf(device)] = device
+                    } else if (device.isRejected) {
+                        checkAndProcessGateway(device)
+                        delete(device)
                     }
+
+
                 }
 
                 src.update(device)
@@ -206,14 +207,10 @@ object SmartHomeRepository : SmartHome() {
             if (!dataSource.source.add(device)) continue
 
             devices.add(device)
-            ioScope.launch {
-                suspendCoroutine<Unit> { continuation ->
-                    if (device.isPending)
-                        pushPendingDeviceToCloud(device, continuation)
-                    else if (device.isAccepted)
-                        pushAcceptedDeviceToCloud(device, continuation)
-                }
-            }
+            if (device.isPending)
+                devicesStorage.addPendingDevice(device)
+            else if (device.isAccepted)
+                devicesStorage.addDevice(device)
 
             return true
         }
@@ -221,34 +218,23 @@ object SmartHomeRepository : SmartHome() {
         return false
     }
 
-    fun delete(device: IotDevice) {
+    suspend fun delete(device: IotDevice) {
         for (dataSource in DataSources.values()) {
             if (dataSource.deviceType != device.javaClass)
                 continue
 
             devices.remove(device)
-            ioScope.launch {
-                suspendCoroutine<Unit> { continuation ->
-                    dataSource.source.delete(device)
-                    removeDevice(device, continuation)
-                }
-            }
-            ioScope.launch {
-                suspendCoroutine<Unit> {
-                    removePendingDevice(device, it)
-                }
-            }
+            dataSource.source.delete(device)
+            devicesStorage.removeDevice(device)
+            devicesStorage.removePendingDevice(device)
         }
     }
 
-    private fun checkAndProcessGateway(device: IotDevice) {
-        if (device is Gateway)
-            ioScope.launch {
-                GatewayServiceController.getInstance().removeGatewayService(device)
-            }
+    private suspend fun checkAndProcessGateway(device: IotDevice) {
+        if (device is Gateway) GatewayServiceController.getInstance().removeGatewayService(device)
     }
 
-    fun changeDeviceStatus(deviceId: Long, status: String) {
+    suspend fun changeDeviceStatus(deviceId: Long, status: String) {
         val device = devices.find { it.guid == deviceId }
 
         if (device != null) {
@@ -256,92 +242,6 @@ object SmartHomeRepository : SmartHome() {
             addDevice(device)
         }
 
-    }
-
-    private fun pushAcceptedDeviceToCloud(device: IotDevice, continuation: Continuation<Unit>) {
-        devicesStorage.addDevice(device,
-                OnSuccessListener {
-                    if (DEBUG) Log.d(TAG, "success adding device to firestore")
-                    continuation.resumeWith(Result.success(Unit))
-                },
-                OnFailureListener {
-                    if (DEBUG) Log.d(TAG, "failed $it")
-                    continuation.resumeWith(Result.failure(it))
-                }
-        )
-    }
-
-    private fun pushPendingDeviceToCloud(device: IotDevice, continuation: Continuation<Unit>) {
-        devicesStorage.addPendingDevice(device,
-                OnSuccessListener {
-                    if (DEBUG) Log.d(TAG, "success adding pending device to firestore")
-                    continuation.resumeWith(Result.success(Unit))
-                },
-                OnFailureListener {
-                    if (DEBUG) Log.d(TAG, "failed $it")
-                    continuation.resumeWith(Result.failure(it))
-                }
-        )
-    }
-
-    private fun movePendingDeviceToAccepted(device: IotDevice, continuation: Continuation<Unit>) {
-        devicesStorage.addDevice(device,
-                OnSuccessListener {
-                    devicesStorage.removePendingDevice(device,
-                            OnSuccessListener {
-                                if (DEBUG) Log.d(TAG, "device successfully moved from pending to root devices node")
-                                continuation.resumeWith(Result.success(Unit))
-                            },
-                            OnFailureListener {
-                                if (DEBUG) Log.d(TAG, "failed $it")
-                                continuation.resumeWith(Result.failure(it))
-                            })
-                },
-                OnFailureListener {
-                    if (DEBUG) Log.d(TAG, "failed $it")
-                    continuation.resumeWith(Result.failure(it))
-                })
-    }
-
-    private fun removeDevice(device: IotDevice, continuation: Continuation<Unit>) {
-        devicesStorage.removeDevice(device,
-                OnSuccessListener {
-                    if (DEBUG) Log.d(TAG, "device successfully removed")
-                    continuation.resumeWith(Result.success(Unit))
-                },
-                OnFailureListener {
-                    if (DEBUG) Log.d(TAG, "failed $it")
-                    continuation.resumeWith(Result.failure(it))
-                })
-    }
-
-    private fun removePendingDevice(device: IotDevice, continuation: Continuation<Unit>) {
-        devicesStorage.removePendingDevice(device,
-                OnSuccessListener {
-                    if (DEBUG) Log.d(TAG, "pending device successfully removed")
-                    continuation.resumeWith(Result.success(Unit))
-                },
-                OnFailureListener {
-                    if (DEBUG) Log.d(TAG, "failed $it")
-                    continuation.resumeWith(Result.failure(it))
-                }
-        )
-    }
-
-
-    private suspend fun addDeviceToStorage(device: IotDevice) {
-        suspendCoroutine<Unit> { continuation ->
-            devicesStorage.addDevice(device,
-                    OnSuccessListener {
-                        if (DEBUG) Log.d(TAG, "success adding device to firestore")
-                        continuation.resumeWith(Result.success(Unit))
-                    },
-                    OnFailureListener {
-                        if (DEBUG) Log.d(TAG, "failed $it")
-                        continuation.resumeWithException(it)
-                    }
-            )
-        }
     }
 
     fun getController(guid: Long): BaseController {
@@ -369,7 +269,7 @@ object SmartHomeRepository : SmartHome() {
         devices.clear()
     }
 
-    private fun processPendingDevices() {
+    private suspend fun processPendingDevices() {
         while (pendingDevices.size > 0)
             addDevice(pendingDevices.poll())
     }
@@ -388,17 +288,10 @@ object SmartHomeRepository : SmartHome() {
     }
 
     private suspend fun updateDeviceInRemoteStorage(device: IotDevice, isPending: Boolean) {
-        suspendCoroutine<Unit> { c ->
-            if (isPending) {
-                devicesStorage.updatePendingDevice(device,
-                        OnSuccessListener { c.resumeWith(Result.success(Unit)) },
-                        OnFailureListener { c.resumeWithException(FirestoreUnreachable()) })
-            }
-            else {
-                devicesStorage.updateDevice(device,
-                        OnSuccessListener { c.resumeWith(Result.success(Unit)) },
-                        OnFailureListener { c.resumeWithException(FirestoreUnreachable()) })
-            }
+        if (isPending) {
+            devicesStorage.updatePendingDevice(device)
+        } else {
+            devicesStorage.updateDevice(device)
         }
     }
 }

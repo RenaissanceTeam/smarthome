@@ -1,6 +1,9 @@
 package smarthome.raspberry.model
 
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import smarthome.library.common.constants.DeviceTypes.GATEWAY_TYPE
 import smarthome.library.common.message.ChangeDeviceStatusRequest
 import smarthome.library.common.message.DiscoverAllDevicesRequest
@@ -11,27 +14,24 @@ import smarthome.raspberry.BuildConfig.DEBUG
 import smarthome.raspberry.service.DeviceObserver
 
 class MessageHandler : MessageListener {
+    override fun invoke(messages: List<Any>, isInnerCall: Boolean) {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (isInnerCall || messages.isEmpty())
+                return@launch
 
-
-    override fun onMessagesReceived(messages: MutableList<Any>, isInner: Boolean) {
-        if (isInner)
-            return
-
-        if (messages.size == 0)
-            return
-
-        for (message in messages) {
-            when (message) {
-                is ChangeDeviceStatusRequest -> processChangeDeviceStatusMessage(message)
-                is DiscoverAllDevicesRequest -> processDiscoverAllDevicesMessage()
-                is DiscoverDeviceRequest -> processDiscoverDeviceMessage(message)
-                else -> if (DEBUG) Log.d(TAG, "Message is not supported")
+            for (message in messages) {
+                when (message) {
+                    is ChangeDeviceStatusRequest -> processChangeDeviceStatusMessage(message)
+                    is DiscoverAllDevicesRequest -> processDiscoverAllDevicesMessage()
+                    is DiscoverDeviceRequest -> processDiscoverDeviceMessage(message)
+                    else -> if (DEBUG) Log.d(TAG, "Message is not supported")
+                }
+                SmartHomeRepository.deleteMessage(message as Message)
             }
-            SmartHomeRepository.deleteMessage(message as Message)
         }
     }
 
-    private fun processChangeDeviceStatusMessage(message: ChangeDeviceStatusRequest) {
+    private suspend fun processChangeDeviceStatusMessage(message: ChangeDeviceStatusRequest) {
         SmartHomeRepository.changeDeviceStatus(message.deviceId, message.status)
     }
 
