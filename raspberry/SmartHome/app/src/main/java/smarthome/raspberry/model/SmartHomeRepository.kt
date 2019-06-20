@@ -132,10 +132,8 @@ object SmartHomeRepository : SmartHome() {
 
     suspend fun listenForCloudChanges() {
         if (DEBUG) Log.d(TAG, "listenForCloudChanges")
-        devicesStorage.observeDevicesUpdates().subscribe {
-            DeviceChangesListener.onDevicesChanged(it.devices, it.isInnerCall)
-        }
-        devicesStorage.observePendingDevicesUpdates().subscribe {
+        devicesStorage.observeDevicesUpdates()
+                .mergeWith(devicesStorage.observePendingDevicesUpdates()).subscribe {
             DeviceChangesListener.onDevicesChanged(it.devices, it.isInnerCall)
         }
         tokenStorage.observeTokenChanges().subscribe { TODO() }
