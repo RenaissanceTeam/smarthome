@@ -1,14 +1,9 @@
 package smarthome.raspberry.server
 
 import android.util.Log
-
-import java.io.IOException
-
 import fi.iki.elonen.NanoHTTPD
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import java.io.IOException
 
 const val TAG = "WebServer"
 const val PORT = 8080

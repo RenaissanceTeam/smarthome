@@ -11,6 +11,9 @@ import kotlinx.coroutines.*
 
 
 import smarthome.raspberry.auth.GoogleSignInActivity
+import smarthome.raspberry.domain.usecases.AuthUseCase
+import smarthome.raspberry.domain.usecases.DevicesUseCase
+import smarthome.raspberry.domain.usecases.HomeUseCase
 import smarthome.raspberry.model.SmartHomeRepository
 import smarthome.raspberry.model.listeners.RepoInitListener
 import smarthome.raspberry.server.UdpServer
@@ -24,10 +27,14 @@ private val AUTH_ACTIVITY_REQUEST_CODE = 12312
 class MainActivity : Activity(), RepoInitListener {
     private var httpServer: WebServer? = null
     private var udpServer: UdpServer? = null
+    private val authUseCase: AuthUseCase = TODO()
+    private val devicesUseCase: DevicesUseCase = TODO()
+    private val homeUseCase: HomeUseCase = TODO()
+
 
     val deviceObserver: DeviceObserver = DeviceObserver.getInstance()
 
-    private val isAuthenticated = FirebaseAuth.getInstance().currentUser != null
+
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
@@ -49,17 +56,10 @@ class MainActivity : Activity(), RepoInitListener {
     override fun onResume() {
         super.onResume()
 
-        if (!isAuthenticated) {
+        if (!authUseCase.isAuthenticated()) {
             startActivity(Intent(this, GoogleSignInActivity::class.java))
         } else {
-            uiScope.launch {
-                try {
-                    SmartHomeRepository.init(applicationContext, this@MainActivity)
-                } catch (e: Throwable) {
-                    Log.d(TAG, "Initialization or cloud change listener set up failed", e)
-                    Toast.makeText(baseContext, e.message, Toast.LENGTH_SHORT).show()
-                }
-            }
+            uiScope.launch { homeUseCase.start() }
         }
     }
 
