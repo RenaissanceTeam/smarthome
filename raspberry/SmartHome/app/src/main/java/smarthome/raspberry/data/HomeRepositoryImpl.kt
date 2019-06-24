@@ -1,8 +1,13 @@
 package smarthome.raspberry.data
 
+import android.annotation.SuppressLint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import smarthome.library.common.*
 import smarthome.raspberry.data.local.LocalStorageInput
 import smarthome.raspberry.data.local.LocalStorageOutput
+import smarthome.raspberry.data.remote.DeviceChangesListener
 import smarthome.raspberry.data.remote.RemoteStorageInput
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.usecases.ControllersUseCase
@@ -18,13 +23,33 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
     private val devicesUseCase: DevicesUseCase = TODO()
     private val homeUseCase: HomeUseCase = TODO()
     private val controllersUseCase: ControllersUseCase = TODO()
+    private val ioScope = CoroutineScope(Dispatchers.IO)
+
 
     override suspend fun setupUserInteraction() {
         remoteStorage.init()
     }
 
+    @SuppressLint("CheckResult")
     override suspend fun setupDevicesInteraction() {
 //        deviceChannels.forEach { it.init() }
+
+        remoteStorage.getDevices().subscribe {
+            if (it.isInnerCall) return@subscribe
+
+            ioScope.launch {
+                devicesUseCase.onDevicesChanged(it.devices)
+            }
+        }
+    }
+
+    override suspend fun proceedControllerChange(it: BaseController): BaseController {
+
+
+    }
+
+    override fun getCurrentDevices(): MutableList<IotDevice> {
+        return localStorage.getDevices()
     }
 
     override suspend fun generateHomeId(): String {

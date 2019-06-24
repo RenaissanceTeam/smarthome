@@ -1,9 +1,7 @@
 package smarthome.raspberry.data.remote
 
-import smarthome.library.common.BaseController
-import smarthome.library.common.HomesReferencesStorage
-import smarthome.library.common.InstanceTokenStorage
-import smarthome.library.common.MessageQueue
+import io.reactivex.Observable
+import smarthome.library.common.*
 import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.raspberry.data.RemoteStorage
 
@@ -32,6 +30,10 @@ class RemoteStorageImpl : RemoteStorage {
         val exists = homesReferencesStorage.checkIfHomeExists(homeId)
 
         return !exists
+    }
+
+    override suspend fun getDevices(): Observable<DeviceUpdate> {
+        return homeStorage.observeDevicesUpdates()
     }
 
     //    suspend fun getMessageQueue(): MessageQueue {

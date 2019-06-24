@@ -16,6 +16,10 @@ class ControllersUseCase(private val repository: HomeRepository) {
         return repository.fetchControllerState(controller)
     }
 
+    /**
+     * Controller is changed without users request. It may be caused by environment changes,
+     * scheduled script, etc.
+     */
     suspend fun notifyControllerChanged(controller: BaseController) {
         repository.onControllerChanged(controller)
     }
