@@ -10,4 +10,5 @@ interface HomeRepository {
     suspend fun setControllerState(controller: BaseController, state: ControllerState)
     suspend fun fetchControllerState(controller: BaseController): ControllerState
     suspend fun onControllerChanged(controller: BaseController)
+    suspend fun isHomeIdUnique(homeId: String): Boolean
 }

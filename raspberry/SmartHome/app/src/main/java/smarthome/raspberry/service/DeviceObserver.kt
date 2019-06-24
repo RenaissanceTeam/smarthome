@@ -11,7 +11,6 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.discover.DeviceDete
 class DeviceObserver private constructor() {
     private val TAG = javaClass.name
 
-
     private val yeelightDeviceDetector: DeviceDetector = DeviceDetector()
 
     private val scope = CoroutineScope(Dispatchers.Default)
