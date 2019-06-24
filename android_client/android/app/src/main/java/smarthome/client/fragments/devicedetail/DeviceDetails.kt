@@ -12,6 +12,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +31,7 @@ class DeviceDetails : Fragment() {
     private var deviceImage: ImageView? = null
     private var progressBar: ProgressBar? = null
     private var controllers: RecyclerView? = null
+    private val args: DeviceDetailsArgs by navArgs()
 
     companion object {
         val FRAGMENT_TAG = "DeviceDetailsFragment"
@@ -64,18 +67,17 @@ class DeviceDetails : Fragment() {
     }
 
     private fun openControllerDetails(guid: Long) {
-        val bundle = Bundle()
-        bundle.putLong(CONTROLLER_GUID, guid)
-        if (viewModel.usePending)
-            bundle.putBoolean(USE_PENDING, true)
+        val action = DeviceDetailsDirections.actionDeviceDetailsToControllerDetails(guid)
+        findNavController().navigate(action)
 
-        (activity as? DetailsActivity)?.openControllerDetails(guid)
         viewModel.controllerDetailsShowed()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupViews(view)
-        passGuidToViewModel()
+
+        if (args.usePending) viewModel.usePending()
+        viewModel.setDeviceGuid(args.deviceGuid)
 
         deviceName?.setOnClickListener {
             EditTextDialog.create(view.context,
@@ -103,17 +105,6 @@ class DeviceDetails : Fragment() {
         controllers?.layoutManager = LinearLayoutManager(view.context)
         controllers?.adapter = ControllersAdapter(viewModel)
         controllers?.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-    }
-
-    private fun passGuidToViewModel() {
-        var deviceGuid: Long? = arguments?.getLong(DEVICE_GUID)
-        if (arguments?.containsKey(USE_PENDING) == true) {
-            viewModel.usePending()
-        }
-        if (arguments?.containsKey(DEVICE_GUID) != true) {
-            deviceGuid = null
-        }
-        viewModel.setDeviceGuid(deviceGuid)
     }
 
     override fun onDestroyView() {

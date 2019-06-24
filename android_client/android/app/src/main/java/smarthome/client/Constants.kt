@@ -10,9 +10,15 @@ const val SCRIPT_GUID = "script_guid"
 const val OPEN_CONDITION_SCRIPT= "open_condition"
 const val OPEN_ACTION_SCRIPT= "open_action"
 const val INVALID_GUID = -1L
+const val NEW_SCRIPT_GUID = 0L
 const val CONDITION_CONTROLLER = "Controller"
 const val CONDITION_EXACT_TIME = "Exact Time"
 const val CONDITION_INTERVAL_TIME = "Interval Time"
 
 const val ACTION_READ_CONTROLLER = "Read Controller"
 const val ACTION_WRITE_CONTROLLER = "Write Controller"
+
+const val SHOW_BOTTOM_BAR = "show_bottom_bar"
+const val SHOW_TOOL_BAR = "show_tool_bar"
+
+const val HIDE_ANIMATION_DURATION = 300L

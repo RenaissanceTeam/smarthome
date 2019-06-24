@@ -1,4 +1,4 @@
-package smarthome.client.viewpager.scripts
+package smarthome.client.screens.scripts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

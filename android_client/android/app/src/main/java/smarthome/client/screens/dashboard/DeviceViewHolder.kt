@@ -1,9 +1,9 @@
-package smarthome.client.viewpager.dashboard
+package smarthome.client.screens.dashboard
 
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
 import smarthome.client.ui.ControllerView

@@ -1,40 +1,47 @@
 package smarthome.client
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.viewpager.widget.ViewPager
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import smarthome.client.viewpager.Pages
-import smarthome.client.viewpager.ViewpagerAdapter
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : FragmentActivity() {
 
     private val viewModel
             by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
 
-    private val bottomNavigation by lazy { findViewById<BottomNavigationView>(R.id.bottom_navigation) }
-    private val viewpager by lazy { findViewById<ViewPager>(R.id.viewpager) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         viewModel.isAuthenticated.observe(this, Observer { if (!it) launchAuthActivity() })
-        viewModel.page.observe(this, Observer { viewpager.currentItem = it })
 
-        viewpager.adapter = ViewpagerAdapter(supportFragmentManager)
-        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(a: Int) = Unit
-            override fun onPageScrolled(a: Int, b: Float, c: Int) = Unit
-            override fun onPageSelected(position: Int) {
-                bottomNavigation.selectedItemId = Pages.values()[position].menuItemId
-            }
-        })
+        val navController = findNavController(R.id.nav_host_fragment)
+        bottom_navigation.setupWithNavController(navController)
 
-        bottomNavigation.setOnNavigationItemSelectedListener { viewModel.onBottomNavigationClick(it) }
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
+        navController.addOnDestinationChangedListener { a, destination, c ->
+            handleVisibility(bottom_navigation, destination.arguments.containsKey(SHOW_BOTTOM_BAR))
+            handleVisibility(toolbar, destination.arguments.containsKey(SHOW_TOOL_BAR))
+        }
+    }
+
+    private fun handleVisibility(view: View, show: Boolean) {
+        if (show) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
     }
 
     private fun launchAuthActivity() {

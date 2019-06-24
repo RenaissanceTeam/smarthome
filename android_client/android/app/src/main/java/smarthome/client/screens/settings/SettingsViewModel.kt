@@ -1,4 +1,4 @@
-package smarthome.client.viewpager.settings
+package smarthome.client.screens.settings
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

@@ -1,6 +1,5 @@
-package smarthome.client.viewpager.dashboard
+package smarthome.client.screens.dashboard
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,14 +9,16 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import smarthome.client.*
+import smarthome.client.BuildConfig
+import smarthome.client.R
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 
 
 class DashboardFragment : Fragment() {
@@ -82,14 +83,15 @@ class DashboardFragment : Fragment() {
         Log.d(TAG, "clicked on $device")
         device ?: return
 
-        activity?.startActivity(Intent(context, DetailsActivity::class.java)
-                .putExtra(DEVICE_GUID, device.guid))
+        val action = DashboardFragmentDirections.actionDashboardFragmentToDeviceDetails(device.guid)
+        findNavController().navigate(action)
     }
 
     private fun onControllerClick(controller: BaseController) {
         Log.d(TAG, "clicked on $controller")
 
-        activity?.startActivity(Intent(context, DetailsActivity::class.java)
-                .putExtra(CONTROLLER_GUID, controller.guid))
+        val action = DashboardFragmentDirections
+                .actionDashboardFragmentToControllerDetails(controller.guid)
+        findNavController().navigate(action)
     }
 }

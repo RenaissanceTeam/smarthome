@@ -1,4 +1,4 @@
-package smarthome.client.viewpager.dashboard
+package smarthome.client.screens.dashboard
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,8 +11,9 @@ import smarthome.library.common.IotDevice
 
 class DevicesAdapter(private val inflater: LayoutInflater,
                      private val viewModel: DashboardViewModel,
-                     val clickOnDevice: (device: IotDevice?) -> Unit,
-                     val clickOnController: (controller: BaseController) -> Unit) : RecyclerView.Adapter<DeviceViewHolder>() {
+                     private val clickOnDevice: (device: IotDevice?) -> Unit,
+                     private val clickOnController: (controller: BaseController) -> Unit)
+    : RecyclerView.Adapter<DeviceViewHolder>() {
 
     private val TAG = DevicesAdapter::class.java.simpleName
 
@@ -24,7 +25,7 @@ class DevicesAdapter(private val inflater: LayoutInflater,
     override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
         if (BuildConfig.DEBUG) Log.v(TAG, "bind viewHolder $position")
         viewModel.devices.value?.let { devices ->
-            val device = devices.get(position)
+            val device = devices[position]
 
             if (BuildConfig.DEBUG) Log.v(TAG, "device= $device")
             holder.bind(device)
