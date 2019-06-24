@@ -1,4 +1,4 @@
-package smarthome.client.viewpager.scripts
+package smarthome.client.screens.scripts
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

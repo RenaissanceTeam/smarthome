@@ -1,4 +1,4 @@
-package smarthome.client.viewpager.addition
+package smarthome.client.screens.addition
 
 interface ViewNotifier {
     fun onItemRemoved(pos: Int)

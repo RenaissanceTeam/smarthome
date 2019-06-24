@@ -1,4 +1,4 @@
-package smarthome.client.viewpager.scripts
+package smarthome.client.screens.scripts
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -54,8 +55,9 @@ class ScriptsFragment : Fragment() {
     }
 
     private fun openScriptDetails(script: Script?) {
-        activity?.startActivity(Intent(context, DetailsActivity::class.java)
-                .putExtra(SCRIPT_GUID, script?.guid ?: INVALID_GUID))
+        val action = ScriptsFragmentDirections
+                .actionScriptsFragmentToScriptDetails(script?.guid ?: NEW_SCRIPT_GUID)
+        findNavController().navigate(action)
     }
 
     private fun setupRecyclerView() {
