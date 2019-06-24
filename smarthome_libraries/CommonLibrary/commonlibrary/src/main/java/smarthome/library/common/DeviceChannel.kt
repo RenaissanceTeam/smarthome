@@ -17,7 +17,6 @@ interface DeviceChannel {
  *  add/delete device
  */
 interface DeviceChannelOutput {
-    fun onNewDevice(device: IotDevice)
-
-    fun onNewState(controller: BaseController)
+    suspend fun onNewDevice(device: IotDevice)
+    suspend fun onNewState(controller: BaseController)
 }
