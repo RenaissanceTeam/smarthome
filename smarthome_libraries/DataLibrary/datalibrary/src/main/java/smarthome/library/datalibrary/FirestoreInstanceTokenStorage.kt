@@ -1,17 +1,13 @@
-package smarthome.library.datalibrary.store.firestore
+package smarthome.library.datalibrary
 
-import android.util.Log
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Observable
+import smarthome.library.common.InstanceToken
+import smarthome.library.common.InstanceTokenStorage
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.constants.HOME_USERS_NODE
-import smarthome.library.datalibrary.constants.TAG
-import smarthome.library.datalibrary.model.InstanceToken
-import smarthome.library.datalibrary.store.InstanceTokenStorage
 import smarthome.library.datalibrary.util.withContinuation
 import smarthome.library.datalibrary.util.withObjectContinuation
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class FirestoreInstanceTokenStorage(

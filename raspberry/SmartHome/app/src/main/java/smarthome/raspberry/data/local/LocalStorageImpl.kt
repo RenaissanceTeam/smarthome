@@ -1,4 +1,4 @@
-package smarthome.raspberry.utils
+package smarthome.raspberry.data.local
 
 import android.content.Context
 import android.util.Log
@@ -6,20 +6,21 @@ import smarthome.library.datalibrary.store.HomesReferencesStorage
 import smarthome.library.datalibrary.store.InstanceTokenStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreInstanceTokenStorage
 import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
-import smarthome.raspberry.BuildConfig.DEBUG
+import smarthome.raspberry.BuildConfig
+import smarthome.raspberry.data.LocalStorage
+import smarthome.raspberry.utils.SharedPreferencesHelper
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
-private const val HOME_ID_PREFIX = "home_id"
-private const val TAG = "HomeController"
+class LocalStorageImpl(private val context: Context): LocalStorage {
+    private val HOME_ID_PREFIX = "home_id"
+    private val TAG = "HomeController"
+    private val sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
+    private val input: LocalStorageInput = TODO()
+    private val output: LocalStorageOutput = TODO()
 
-class HomeController(context: Context) {
-    val sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
-    val storage: HomesReferencesStorage = TODO("inject")
-    private val tokenStorage: InstanceTokenStorage? = null
-
-    suspend fun getHomeId(): String {
+    override suspend fun getHomeId(): String {
         if (!sharedPreferencesHelper.isHomeIdExists()) {
             saveNewHomeId()
         }
@@ -34,26 +35,18 @@ class HomeController(context: Context) {
         val homeId = generateFirestoreUniqueHomeId()
         sharedPreferencesHelper.setHomeId(homeId)
 
-        createHomeReference(homeId)
-        createEmptyHomeNode(homeId)
+        output.createHome(homeId)
     }
 
-    private suspend fun createHomeReference(homeId: String) {
-        storage.addHomeReference(homeId)
-    }
-
-    private suspend fun createEmptyHomeNode(homeId: String) {
-        getSmartHomeStorage(homeId).createSmartHome()
-    }
 
     private suspend fun generateFirestoreUniqueHomeId(): String {
-        if (DEBUG) Log.d(TAG, "generateFirestoreUniqueHomeId")
+        if (BuildConfig.DEBUG) Log.d(TAG, "generateFirestoreUniqueHomeId")
         var homeId: String
         do {
             homeId = generateHomeId()
             val isUnique = storage.checkIfHomeExists(homeId)
         } while (!isUnique)
-        if (DEBUG) Log.d(TAG, "generated homeid=$homeId, that is unique")
+        if (BuildConfig.DEBUG) Log.d(TAG, "generated homeid=$homeId, that is unique")
         return homeId
     }
 
@@ -64,9 +57,5 @@ class HomeController(context: Context) {
         val randomPart = Random.nextInt(0, 9999).toString()
 
         return "$HOME_ID_PREFIX$currentTime$randomPart"
-    }
-
-    fun getTokenStorage(homeId: String): InstanceTokenStorage {
-        return tokenStorage ?: FirestoreInstanceTokenStorage(homeId)
     }
 }
