@@ -1,18 +1,22 @@
 package smarthome.raspberry.data
 
 import smarthome.library.common.*
+import smarthome.raspberry.data.local.LocalStorageInput
 import smarthome.raspberry.data.local.LocalStorageOutput
 import smarthome.raspberry.data.remote.RemoteStorageInput
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.usecases.ControllersUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
+import smarthome.raspberry.domain.usecases.HomeUseCase
 
-class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInput, LocalStorageOutput {
+class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInput,
+        LocalStorageInput, LocalStorageOutput {
 
     private val localStorage: LocalStorage = TODO()
     private val remoteStorage: RemoteStorage = TODO()
     private val deviceChannels: List<DeviceChannel> = TODO()
     private val devicesUseCase: DevicesUseCase = TODO()
+    private val homeUseCase: HomeUseCase = TODO()
     private val controllersUseCase: ControllersUseCase = TODO()
 
     override suspend fun setupUserInteraction() {
@@ -21,6 +25,14 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
 
     override suspend fun setupDevicesInteraction() {
 //        deviceChannels.forEach { it.init() }
+    }
+
+    override suspend fun generateHomeId(): String {
+        return homeUseCase.generateUniqueHomeId()
+    }
+
+    override suspend fun isHomeIdUnique(homeId: String): Boolean {
+        return remoteStorage.isHomeIdUnique(homeId)
     }
 
     override suspend fun setControllerState(controller: BaseController, state: ControllerState) {
@@ -58,11 +70,11 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
     }
 
     override suspend fun getUserId(): String {
-
+        TODO()
     }
 
     override suspend fun getHomeId(): String {
-        localStorage.getHomeId()
+        return localStorage.getHomeId()
     }
 
     override suspend fun createHome(homeId: String) {
