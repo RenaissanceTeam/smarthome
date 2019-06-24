@@ -9,7 +9,7 @@ open class IotDevice(var name: String,
         return guid.toInt()
     }
 
-    override fun equals(obj: Any?): Boolean {
-        return (obj as? IotDevice)?.guid == guid
+    override fun equals(other: Any?): Boolean {
+        return (other as? IotDevice)?.guid == guid
     }
 }
