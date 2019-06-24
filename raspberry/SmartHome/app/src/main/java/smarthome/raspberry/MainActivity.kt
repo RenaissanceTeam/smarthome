@@ -4,9 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 
 
@@ -16,8 +14,8 @@ import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
 import smarthome.raspberry.model.SmartHomeRepository
 import smarthome.raspberry.model.listeners.RepoInitListener
-import smarthome.raspberry.server.UdpServer
-import smarthome.raspberry.server.WebServer
+import smarthome.raspberry.arduinodevices.server.UdpServer
+import smarthome.raspberry.arduinodevices.server.WebServer
 import smarthome.raspberry.service.DeviceObserver
 
 private val TAG = MainActivity::class.java.simpleName

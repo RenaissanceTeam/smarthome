@@ -1,4 +1,4 @@
-package smarthome.raspberry.utils.fcm
+package smarthome.raspberry.data.remote.fcm
 
 enum class MessageType {
     NOTIFICATION, DATA;

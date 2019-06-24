@@ -20,7 +20,7 @@
 //import smarthome.raspberry.UnableToCreateMessageQueue
 //import smarthome.raspberry.arduinodevices.ArduinoDevice
 //import smarthome.raspberry.arduinodevices.controllers.ArduinoController
-//import smarthome.raspberry.model.cloudchanges.DeviceChangesListener
+//import smarthome.raspberry.data.remote.DeviceChangesListener
 //import smarthome.raspberry.model.listeners.RepoInitListener
 //import smarthome.raspberry.service.GatewayServiceController
 //import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IDLE_STATUS
@@ -29,9 +29,9 @@
 //import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 //import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller.Controller
 //import smarthome.raspberry.utils.HomeController
-//import smarthome.raspberry.utils.fcm.FcmSender
-//import smarthome.raspberry.utils.fcm.MessageType
-//import smarthome.raspberry.utils.fcm.Priority
+//import smarthome.raspberry.data.remote.fcm.FcmSender
+//import smarthome.raspberry.data.remote.fcm.MessageType
+//import smarthome.raspberry.data.remote.fcm.Priority
 //import java.util.*
 //import kotlin.collections.ArrayList
 //

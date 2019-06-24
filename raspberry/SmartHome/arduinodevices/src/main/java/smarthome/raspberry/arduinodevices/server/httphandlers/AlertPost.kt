@@ -1,4 +1,4 @@
-package smarthome.raspberry.server.httphandlers
+package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import android.util.Log
 

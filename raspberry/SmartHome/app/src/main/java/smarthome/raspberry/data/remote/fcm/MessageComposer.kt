@@ -1,4 +1,4 @@
-package smarthome.raspberry.utils.fcm
+package smarthome.raspberry.data.remote.fcm
 
 import android.content.Context
 import smarthome.library.common.BaseController
