@@ -1,11 +1,13 @@
 package smarthome.raspberry.data
 
 import smarthome.library.common.*
+import smarthome.raspberry.data.local.LocalStorageOutput
+import smarthome.raspberry.data.remote.RemoteStorageInput
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.usecases.ControllersUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 
-class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput {
+class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInput, LocalStorageOutput {
 
     private val localStorage: LocalStorage = TODO()
     private val remoteStorage: RemoteStorage = TODO()
@@ -53,5 +55,17 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput {
 
     override suspend fun onNewState(controller: BaseController) {
         controllersUseCase.notifyControllerChanged(controller)
+    }
+
+    override suspend fun getUserId(): String {
+
+    }
+
+    override suspend fun getHomeId(): String {
+        localStorage.getHomeId()
+    }
+
+    override suspend fun createHome(homeId: String) {
+        remoteStorage.createHome(homeId)
     }
 }

@@ -1,4 +1,4 @@
-package smarthome.library.datalibrary.store
+package smarthome.library.common
 
 import io.reactivex.Observable
 

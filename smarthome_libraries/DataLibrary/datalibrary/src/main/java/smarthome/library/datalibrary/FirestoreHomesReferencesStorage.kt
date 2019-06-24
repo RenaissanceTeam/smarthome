@@ -1,15 +1,15 @@
-package smarthome.library.datalibrary.store.firestore
+package smarthome.library.datalibrary
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import smarthome.library.common.HomesReferences
+import smarthome.library.common.HomesReferencesStorage
 import smarthome.library.datalibrary.constants.ACCOUNTS_NODE
 import smarthome.library.datalibrary.constants.ACCOUNT_HOMES_ARRAY_REF
 import smarthome.library.datalibrary.constants.HOMES_NODE
-import smarthome.library.datalibrary.model.HomesReferences
-import smarthome.library.datalibrary.store.HomesReferencesStorage
 import smarthome.library.datalibrary.util.withContinuation
 import smarthome.library.datalibrary.util.withObjectContinuation
 import kotlin.coroutines.resumeWithException
@@ -36,10 +36,8 @@ class FirestoreHomesReferencesStorage(
     }
 
     override suspend fun addHomeReference(homeReference: String) {
-        val homeSnapshot = suspendCoroutine<DocumentSnapshot> { continuation ->
-            ref.get()
-                .addOnSuccessListener { continuation.resumeWith(Result.success(it)) }
-                .addOnFailureListener { continuation.resumeWithException(it) }
+        val homeSnapshot = suspendCoroutine<DocumentSnapshot> {
+            ref.get().withObjectContinuation(it)
         }
 
 

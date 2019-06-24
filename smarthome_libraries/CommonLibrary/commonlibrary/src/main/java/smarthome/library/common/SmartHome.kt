@@ -1,3 +1,3 @@
 package smarthome.library.common
 
-open class SmartHome(val devices: List<IotDevice>)
+open class SmartHome(val devices: MutableList<IotDevice> = mutableListOf())

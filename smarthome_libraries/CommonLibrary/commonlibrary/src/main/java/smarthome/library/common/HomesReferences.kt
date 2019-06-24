@@ -1,4 +1,4 @@
-package smarthome.library.datalibrary.model
+package smarthome.library.common
 
 import java.util.ArrayList
 

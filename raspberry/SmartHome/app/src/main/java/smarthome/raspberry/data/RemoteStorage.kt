@@ -4,5 +4,6 @@ import smarthome.library.common.BaseController
 
 interface RemoteStorage {
     suspend fun init()
-    fun onControllerChanged(controller: BaseController)
+    suspend fun onControllerChanged(controller: BaseController)
+    suspend fun createHome(homeId: String)
 }

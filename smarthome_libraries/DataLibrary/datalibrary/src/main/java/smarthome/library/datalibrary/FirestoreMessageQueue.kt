@@ -1,14 +1,9 @@
-package smarthome.library.datalibrary.store.firestore
+package smarthome.library.datalibrary
 
 import android.util.Log
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.*
+import smarthome.library.common.MessageListener
+import smarthome.library.common.MessageQueue
 import smarthome.library.common.constants.CHANGE_DEVICE_STATUS
 import smarthome.library.common.constants.DISCOVER_ALL
 import smarthome.library.common.constants.DISCOVER_DEVICE
@@ -16,16 +11,11 @@ import smarthome.library.common.message.ChangeDeviceStatusRequest
 import smarthome.library.common.message.DiscoverAllDevicesRequest
 import smarthome.library.common.message.DiscoverDeviceRequest
 import smarthome.library.common.message.Message
-import smarthome.library.datalibrary.BuildConfig.DEBUG
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.constants.MESSAGES_NODE
 import smarthome.library.datalibrary.constants.TAG
 import smarthome.library.datalibrary.constants.WrongMessageType
-import smarthome.library.datalibrary.store.MessageQueue
-import smarthome.library.datalibrary.store.listeners.MessageListener
 import smarthome.library.datalibrary.util.withContinuation
-import java.lang.IllegalArgumentException
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class FirestoreMessageQueue(
