@@ -14,14 +14,12 @@ open class BaseController(var name: String,
         return guid.toInt()
     }
 
-    override fun equals(obj: Any?): Boolean {
-        return (obj as? BaseController)?.guid == guid
+    override fun equals(other: Any?): Boolean {
+        return (other as? BaseController)?.guid == guid
     }
 }
 
-open class ControllerState {
-
-}
+open class ControllerState
 
 enum class ServeState {
     PENDING, UPDATING, IDLE
