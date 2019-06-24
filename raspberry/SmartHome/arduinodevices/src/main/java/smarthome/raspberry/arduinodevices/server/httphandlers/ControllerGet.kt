@@ -1,11 +1,10 @@
-package smarthome.raspberry.server.httphandlers
+package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import com.google.gson.Gson
 
 import java.io.IOException
 
 import fi.iki.elonen.NanoHTTPD
-import smarthome.library.common.BaseController
 import smarthome.raspberry.arduinodevices.ArduinoControllerResponse
 import smarthome.raspberry.arduinodevices.controllers.ArduinoReadable
 

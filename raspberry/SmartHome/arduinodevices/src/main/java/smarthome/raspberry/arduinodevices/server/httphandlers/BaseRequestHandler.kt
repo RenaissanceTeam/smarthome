@@ -1,4 +1,4 @@
-package smarthome.raspberry.server.httphandlers
+package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import fi.iki.elonen.NanoHTTPD
 import fi.iki.elonen.NanoHTTPD.MIME_PLAINTEXT

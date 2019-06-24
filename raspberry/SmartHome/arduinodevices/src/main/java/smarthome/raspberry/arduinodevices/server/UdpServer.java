@@ -1,4 +1,4 @@
-package smarthome.raspberry.server;
+package smarthome.raspberry.arduinodevices.server;
 
 import android.util.Log;
 

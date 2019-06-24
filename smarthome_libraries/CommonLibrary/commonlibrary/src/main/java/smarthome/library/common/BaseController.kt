@@ -5,7 +5,7 @@ package smarthome.library.common
  * <br></br>All controllers must implement this interface
  */
 open class BaseController(var name: String,
-                          var state: ControllerState,
+                          var state: ControllerState? = null,
                           var serveState: ServeState = ServeState.IDLE,
                           val guid: Long = GUID.getGuidForName(name)) {
 

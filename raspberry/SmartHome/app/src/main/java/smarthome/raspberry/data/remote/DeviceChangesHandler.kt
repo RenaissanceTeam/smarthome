@@ -1,4 +1,4 @@
-package smarthome.raspberry.model.cloudchanges
+package smarthome.raspberry.data.remote
 
 import android.util.Log
 import smarthome.library.common.BaseController

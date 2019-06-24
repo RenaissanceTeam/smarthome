@@ -1,16 +1,16 @@
-package smarthome.raspberry.server
+package smarthome.raspberry.arduinodevices.server
 
 import android.util.Log
 
 import fi.iki.elonen.NanoHTTPD
-import smarthome.raspberry.server.httphandlers.AlertPost
-import smarthome.raspberry.server.httphandlers.ControllerGet
-import smarthome.raspberry.server.httphandlers.ControllerPost
-import smarthome.raspberry.server.httphandlers.ErrorHandler
-import smarthome.raspberry.server.httphandlers.InfoGet
-import smarthome.raspberry.server.httphandlers.InitPost
-import smarthome.raspberry.server.httphandlers.RequestHandler
-import smarthome.raspberry.server.httphandlers.ResetPost
+import smarthome.raspberry.arduinodevices.server.httphandlers.AlertPost
+import smarthome.raspberry.arduinodevices.server.httphandlers.ControllerGet
+import smarthome.raspberry.arduinodevices.server.httphandlers.ControllerPost
+import smarthome.raspberry.arduinodevices.server.httphandlers.ErrorHandler
+import smarthome.raspberry.arduinodevices.server.httphandlers.InfoGet
+import smarthome.raspberry.arduinodevices.server.httphandlers.InitPost
+import smarthome.raspberry.arduinodevices.server.httphandlers.RequestHandler
+import smarthome.raspberry.arduinodevices.server.httphandlers.ResetPost
 
 import fi.iki.elonen.NanoHTTPD.Method.GET
 import fi.iki.elonen.NanoHTTPD.Method.POST

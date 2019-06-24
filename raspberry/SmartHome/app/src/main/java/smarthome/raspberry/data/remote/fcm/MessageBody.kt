@@ -1,9 +1,7 @@
-package smarthome.raspberry.utils.fcm
+package smarthome.raspberry.data.remote.fcm
 
 import com.google.gson.Gson
 import okhttp3.RequestBody
-import org.json.JSONObject
-
 
 
 class MessageBody(
