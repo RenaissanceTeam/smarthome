@@ -1,15 +1,17 @@
 package smarthome.raspberry.data
 
-import smarthome.library.common.BaseController
-import smarthome.library.common.ControllerState
-import smarthome.library.common.DeviceChannel
+import smarthome.library.common.*
 import smarthome.raspberry.domain.HomeRepository
+import smarthome.raspberry.domain.usecases.ControllersUseCase
+import smarthome.raspberry.domain.usecases.DevicesUseCase
 
-class HomeRepositoryImpl : HomeRepository {
+class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput {
 
     private val localStorage: LocalStorage = TODO()
     private val remoteStorage: RemoteStorage = TODO()
     private val deviceChannels: List<DeviceChannel> = TODO()
+    private val devicesUseCase: DevicesUseCase = TODO()
+    private val controllersUseCase: ControllersUseCase = TODO()
 
     override suspend fun setupUserInteraction() {
         remoteStorage.init()
@@ -43,5 +45,13 @@ class HomeRepositoryImpl : HomeRepository {
 
     override suspend fun onControllerChanged(controller: BaseController) {
         remoteStorage.onControllerChanged(controller)
+    }
+
+    override suspend fun onNewDevice(device: IotDevice) {
+        devicesUseCase.addNewDevice(device)
+    }
+
+    override suspend fun onNewState(controller: BaseController) {
+        controllersUseCase.notifyControllerChanged(controller)
     }
 }

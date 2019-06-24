@@ -2,6 +2,7 @@ package smarthome.raspberry.domain
 
 import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerState
+import smarthome.library.common.DeviceChannelOutput
 
 interface HomeRepository {
     suspend fun setupUserInteraction()

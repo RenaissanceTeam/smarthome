@@ -9,7 +9,7 @@ const val TAG = "WebServer"
 const val PORT = 8080
 
 class WebServer : NanoHTTPD(PORT), StoppableServer {
-    override fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
+    override fun serve(session: IHTTPSession): Response {
         return try {
             val response = runBlocking { HandlerType.handle(session) }
             response

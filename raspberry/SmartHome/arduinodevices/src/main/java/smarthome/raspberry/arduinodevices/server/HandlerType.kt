@@ -15,7 +15,9 @@ import smarthome.raspberry.arduinodevices.server.httphandlers.ResetPost
 import fi.iki.elonen.NanoHTTPD.Method.GET
 import fi.iki.elonen.NanoHTTPD.Method.POST
 
-enum class HandlerType private constructor(private val method: NanoHTTPD.Method, private val requestPath: String, private val handler: RequestHandler) {
+enum class HandlerType(private val method: NanoHTTPD.Method,
+                       private val requestPath: String,
+                       private val handler: RequestHandler) {
     READ_CONTROLLER(GET, "/controller", ControllerGet()),
     CHANGE_CONTROLLER(POST, "/controller", ControllerPost()),
     INFO(GET, "/info", InfoGet()),
@@ -33,18 +35,17 @@ enum class HandlerType private constructor(private val method: NanoHTTPD.Method,
             val uri = session.uri
             Log.d(TAG, "handle: " + method + ":" + uri + " " + session.queryParameterString)
 
-            val handlerType = findSuitableHandler(method, uri)
-            return handlerType.handler.serve(session)
+            return findSuitableHandler(method, uri).serve(session)
         }
 
         fun errorHandle(message: String): NanoHTTPD.Response {
             return errorHandler.getError(message)
         }
 
-        private fun findSuitableHandler(method: NanoHTTPD.Method, uri: String): HandlerType {
+        private fun findSuitableHandler(method: NanoHTTPD.Method, uri: String): RequestHandler {
             for (handlerType in values()) {
                 if (handlerType.method == method && uri.startsWith(handlerType.requestPath)) {
-                    return handlerType
+                    return handlerType.handler
                 }
             }
 
