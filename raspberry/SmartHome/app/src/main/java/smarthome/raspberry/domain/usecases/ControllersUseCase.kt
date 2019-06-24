@@ -1,9 +1,22 @@
 package smarthome.raspberry.domain.usecases
 
 import smarthome.library.common.BaseController
+import smarthome.library.common.ControllerState
+import smarthome.raspberry.domain.HomeRepository
 
-class ControllersUseCase {
-    fun updateController(controller: BaseController ) {}
+class ControllersUseCase(private val repository: HomeRepository) {
 
-    fun notifyControllerChanged(controller: BaseController) {}
+    suspend fun setNewState(controller: BaseController, state: ControllerState) {
+        repository.setControllerState(controller, state)
+        // todo check if someone is listening for updates of this controller
+    }
+
+    suspend fun fetchState(controller: BaseController ): ControllerState {
+        // todo check if someone is listening for updates of this controller
+        return repository.fetchControllerState(controller)
+    }
+
+    suspend fun notifyControllerChanged(controller: BaseController) {
+        repository.onControllerChanged(controller)
+    }
 }

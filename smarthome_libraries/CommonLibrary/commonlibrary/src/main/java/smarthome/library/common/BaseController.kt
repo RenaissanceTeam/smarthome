@@ -4,10 +4,10 @@ package smarthome.library.common
  * Basic controller interface
  * <br></br>All controllers must implement this interface
  */
-class BaseController(val name: String,
-                     val state: ControllerState,
-                     val serveState: ServeState,
-                     val guid: Long) {
+open class BaseController(var name: String,
+                          var state: ControllerState,
+                          var serveState: ServeState = ServeState.IDLE,
+                          val guid: Long = GUID.getGuidForName(name)) {
 
 
     override fun hashCode(): Int {
@@ -19,7 +19,7 @@ class BaseController(val name: String,
     }
 }
 
-class ControllerState {
+open class ControllerState {
 
 }
 
