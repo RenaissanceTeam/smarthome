@@ -18,7 +18,7 @@ public class ArduinoReadFloat extends ArduinoController implements ArduinoReadab
     @Override
     public ArduinoControllerResponse read() throws IOException {
         ArduinoDeviceAPI arduinoApi = getArduinoDeviceAPI();
-        Call<ArduinoControllerResponse> call = arduinoApi.controllerReadRequest(indexInArduinoServicesArray);
+        Call<ArduinoControllerResponse> call = arduinoApi.controllerReadRequest(getIndexInArduinoServicesArray());
 
         ArduinoControllerResponse controllerResponse = call.execute().body();
         if (controllerResponse != null) {
