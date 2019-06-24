@@ -129,14 +129,7 @@
 //        }
 //    }
 //
-//    suspend fun listenForCloudChanges() {
-//        if (DEBUG) Log.d(TAG, "listenForCloudChanges")
-//        devicesStorage.observeDevicesUpdates()
-//                .mergeWith(devicesStorage.observePendingDevicesUpdates()).subscribe {
-//            DeviceChangesListener.onDevicesChanged(it.devices, it.isInnerCall)
-//        }
-//        tokenStorage.observeTokenChanges().subscribe { TODO() }
-//    }
+//
 //
 //    fun subscribeToMessageQueue() {
 //        messageQueue.subscribe(MessageHandler.getInstance())

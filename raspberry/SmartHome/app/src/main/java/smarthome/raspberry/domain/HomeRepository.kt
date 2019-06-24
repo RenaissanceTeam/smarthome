@@ -3,6 +3,7 @@ package smarthome.raspberry.domain
 import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerState
 import smarthome.library.common.DeviceChannelOutput
+import smarthome.library.common.IotDevice
 
 interface HomeRepository {
     suspend fun setupUserInteraction()
@@ -11,4 +12,6 @@ interface HomeRepository {
     suspend fun fetchControllerState(controller: BaseController): ControllerState
     suspend fun onControllerChanged(controller: BaseController)
     suspend fun isHomeIdUnique(homeId: String): Boolean
+    fun getCurrentDevices(): MutableList<IotDevice>
+    suspend fun proceedControllerChange(it: BaseController): BaseController
 }
