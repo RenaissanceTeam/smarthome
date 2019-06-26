@@ -47,12 +47,20 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
         remoteStorage.saveDevice(device)
     }
 
-    override suspend fun proceedReadController(it: BaseController): BaseController {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun proceedReadController(controller: BaseController): BaseController {
+        val channel = findSuitableChannel(controller)
+        val newState = channel.read(controller)
+
+        controller.state = newState
+        return controller
     }
 
-    override suspend fun proceedWriteController(it: BaseController): BaseController {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun proceedWriteController(controller: BaseController, state: ControllerState): BaseController {
+        val channel = findSuitableChannel(controller)
+        val newState = channel.writeState(controller, state)
+
+        controller.state = newState
+        return controller
     }
 
     override fun getCurrentDevices(): MutableList<IotDevice> {
@@ -67,30 +75,8 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
         return remoteStorage.isHomeIdUnique(homeId)
     }
 
-    override suspend fun setControllerState(controller: BaseController, state: ControllerState) {
-        val channel = findSuitableChannel(controller)
-        val newState = channel.writeState(controller, state)
-
-        controller.state = newState
-
-        val device = localStorage.findDevice(controller)
-        remoteStorage.saveDevice(device)
-    }
-
     private fun findSuitableChannel(controller: BaseController): DeviceChannel {
         TODO()
-    }
-
-    override suspend fun fetchControllerState(controller: BaseController): ControllerState {
-        val channel = findSuitableChannel(controller)
-        val newState = channel.read(controller)
-
-        controller.state = newState
-
-        val device = localStorage.findDevice(controller)
-        remoteStorage.saveDevice(device)
-
-        return newState
     }
 
     override suspend fun onControllerChanged(controller: BaseController) {

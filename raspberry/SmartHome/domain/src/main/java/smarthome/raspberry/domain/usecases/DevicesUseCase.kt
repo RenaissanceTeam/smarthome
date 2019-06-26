@@ -49,7 +49,10 @@ class DevicesUseCase(private val repository: HomeRepository) {
                             it.serveState = ServeState.IDLE
                         }
                         ServeState.PENDING_WRITE -> {
-                            repository.proceedWriteController(it)
+                            it.state?.let { writeState ->
+                                repository.proceedWriteController(it, writeState)
+                            }
+
                             it.serveState = ServeState.IDLE
                         }
                         else -> return@map
