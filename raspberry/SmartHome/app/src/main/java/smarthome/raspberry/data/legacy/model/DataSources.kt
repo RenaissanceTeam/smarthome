@@ -1,4 +1,4 @@
-//package smarthome.raspberry.model
+//package smarthome.raspberry.data.legacy.model
 //
 //import android.content.Context
 //import smarthome.library.common.BaseController

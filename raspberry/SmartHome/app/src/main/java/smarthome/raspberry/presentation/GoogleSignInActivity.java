@@ -1,4 +1,4 @@
-package smarthome.raspberry.auth;
+package smarthome.raspberry.presentation;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -29,7 +29,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import smarthome.raspberry.MainActivity;
 import smarthome.raspberry.R;
 
 import static smarthome.raspberry.BuildConfig.DEBUG;
