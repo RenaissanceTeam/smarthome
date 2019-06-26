@@ -15,5 +15,5 @@ interface HomeRepository {
     fun getCurrentDevices(): MutableList<IotDevice>
     suspend fun proceedReadController(it: BaseController): BaseController
     suspend fun proceedWriteController(it: BaseController): BaseController
-    suspend fun applyDeviceChanges(changedDevice: IotDevice)
+    suspend fun saveDevice(device: IotDevice)
 }

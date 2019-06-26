@@ -22,5 +22,5 @@ open class BaseController(var name: String,
 open class ControllerState
 
 enum class ServeState {
-    PENDING_READ, PENDING_WRITE, UPDATING, IDLE
+    PENDING_READ, PENDING_WRITE, IDLE
 }

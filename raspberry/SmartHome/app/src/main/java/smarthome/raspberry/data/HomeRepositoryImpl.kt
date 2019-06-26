@@ -37,13 +37,14 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
             if (it.isInnerCall) return@subscribe
 
             ioScope.launch {
-                devicesUseCase.onDevicesChanged(it.devices)
+                devicesUseCase.onUserRequest(it.devices)
             }
         }
     }
 
-    override suspend fun applyDeviceChanges(changedDevice: IotDevice) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun saveDevice(device: IotDevice) {
+        localStorage.saveDevice(device)
+        remoteStorage.saveDevice(device)
     }
 
     override suspend fun proceedReadController(it: BaseController): BaseController {
@@ -71,7 +72,9 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
         val newState = channel.writeState(controller, state)
 
         controller.state = newState
-        remoteStorage.saveController(controller)
+
+        val device = localStorage.findDevice(controller)
+        remoteStorage.saveDevice(device)
     }
 
     private fun findSuitableChannel(controller: BaseController): DeviceChannel {
@@ -83,13 +86,16 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
         val newState = channel.read(controller)
 
         controller.state = newState
-        remoteStorage.saveController(controller)
+
+        val device = localStorage.findDevice(controller)
+        remoteStorage.saveDevice(device)
 
         return newState
     }
 
     override suspend fun onControllerChanged(controller: BaseController) {
-        remoteStorage.saveController(controller)
+        val device = localStorage.findDevice(controller)
+        remoteStorage.saveDevice(device)
     }
 
     override suspend fun onNewDevice(device: IotDevice) {

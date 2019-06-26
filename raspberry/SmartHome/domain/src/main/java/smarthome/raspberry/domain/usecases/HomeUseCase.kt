@@ -22,7 +22,6 @@ class HomeUseCase(private val repository: HomeRepository) {
         repository.setupDevicesInteraction()
     }
 
-
     suspend fun generateUniqueHomeId(): String {
         var homeId: String
         do {
