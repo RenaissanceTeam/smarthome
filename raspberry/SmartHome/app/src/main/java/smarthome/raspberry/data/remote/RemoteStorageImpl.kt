@@ -16,8 +16,8 @@ class RemoteStorageImpl : RemoteStorage {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override suspend fun saveController(controller: BaseController) {
-        TODO()
+    override suspend fun saveDevice(device: IotDevice) {
+        homeStorage.updateDevice(device)
     }
 
     override suspend fun createHome(homeId: String) {

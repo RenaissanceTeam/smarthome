@@ -14,7 +14,7 @@ class DevicesUseCase(private val repository: HomeRepository) {
 
     }
 
-    suspend fun onDevicesChanged(changedDevices: MutableList<IotDevice>) {
+    suspend fun onUserRequest(changedDevices: MutableList<IotDevice>) {
         try {
             handleChanges(changedDevices, repository.getCurrentDevices())
         } catch (e: Throwable) {
@@ -27,9 +27,8 @@ class DevicesUseCase(private val repository: HomeRepository) {
             val notChangedDevice = notChangedDevices.find { it == changedDevice } ?: continue
 
             val hasChanges = handleDeviceChanges(changedDevice, notChangedDevice)
-
             if (hasChanges) {
-                repository.applyDeviceChanges(changedDevice)
+                repository.saveDevice(changedDevice)
             }
         }
     }
@@ -45,8 +44,14 @@ class DevicesUseCase(private val repository: HomeRepository) {
                 }
                 .map {
                     when (it.serveState) {
-                        ServeState.PENDING_READ -> repository.proceedReadController(it)
-                        ServeState.PENDING_WRITE -> repository.proceedWriteController(it)
+                        ServeState.PENDING_READ -> {
+                            repository.proceedReadController(it)
+                            it.serveState = ServeState.IDLE
+                        }
+                        ServeState.PENDING_WRITE -> {
+                            repository.proceedWriteController(it)
+                            it.serveState = ServeState.IDLE
+                        }
                         else -> return@map
                     }
                 }
