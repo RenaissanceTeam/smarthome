@@ -2,6 +2,7 @@ package smarthome.raspberry.domain.usecases
 
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
+import smarthome.library.common.ServeState
 import smarthome.raspberry.domain.HomeRepository
 
 class DevicesUseCase(private val repository: HomeRepository) {
@@ -15,6 +16,7 @@ class DevicesUseCase(private val repository: HomeRepository) {
         try {
             handleChanges(changedDevices, repository.getCurrentDevices())
         } catch (e: Throwable) {
+            TODO()
         }
     }
 
@@ -25,32 +27,33 @@ class DevicesUseCase(private val repository: HomeRepository) {
             val hasChanges = handleDeviceChanges(changedDevice, notChangedDevice)
 
             if (hasChanges) {
-                TODO()
+                repository.applyDeviceChanges(changedDevice)
             }
         }
     }
 
     private suspend fun handleDeviceChanges(changedDevice: IotDevice,
                                             notChangedDevice: IotDevice): Boolean {
-
         return changedDevice.controllers
                 .filter { changedController ->
                     val notChangedController = notChangedDevice.controllers
                             .find { it == changedController } ?: return@filter false
 
-                    hasControllerChanges(notChangedController, changedController)
+                    return@filter hasControllerChanges(notChangedController, changedController)
                 }
-                // todo parse pending read or pending write and call repo
-                .map { repository.proceedControllerChange(it) }
+                .map {
+                    when (it.serveState) {
+                        ServeState.PENDING_READ -> repository.proceedReadController(it)
+                        ServeState.PENDING_WRITE -> repository.proceedWriteController(it)
+                        else -> return@map
+                    }
+                }
                 .isNotEmpty()
     }
-
 
     private fun hasControllerChanges(notChangedController: BaseController,
                              changedController: BaseController): Boolean {
         return notChangedController.state != changedController.state
     }
-
-
 }
 

@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 import smarthome.library.common.*
 import smarthome.raspberry.data.local.LocalStorageInput
 import smarthome.raspberry.data.local.LocalStorageOutput
-import smarthome.raspberry.data.remote.DeviceChangesListener
 import smarthome.raspberry.data.remote.RemoteStorageInput
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.usecases.ControllersUseCase
@@ -43,9 +42,16 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
         }
     }
 
-    override suspend fun proceedControllerChange(it: BaseController): BaseController {
+    override suspend fun applyDeviceChanges(changedDevice: IotDevice) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
+    override suspend fun proceedReadController(it: BaseController): BaseController {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
+    override suspend fun proceedWriteController(it: BaseController): BaseController {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getCurrentDevices(): MutableList<IotDevice> {
