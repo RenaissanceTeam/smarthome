@@ -82,7 +82,8 @@ dependencies {
     }
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api project(path: ':thirdpartydevices')
+    implementation project(path: ':thirdpartydevices')
+    implementation project(path: ':domain')
 }
 
 

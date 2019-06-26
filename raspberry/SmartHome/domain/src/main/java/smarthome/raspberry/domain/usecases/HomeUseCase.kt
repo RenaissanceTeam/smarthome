@@ -1,7 +1,5 @@
 package smarthome.raspberry.domain.usecases
 
-import android.util.Log
-import smarthome.raspberry.BuildConfig
 import smarthome.raspberry.domain.HomeRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -9,8 +7,6 @@ import kotlin.random.Random
 
 class HomeUseCase(private val repository: HomeRepository) {
     private val HOME_ID_PREFIX = "home_id"
-
-
 
     /**
      * First use case, after that home should be ready to other use cases
