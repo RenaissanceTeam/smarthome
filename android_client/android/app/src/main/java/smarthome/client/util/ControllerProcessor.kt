@@ -24,9 +24,9 @@ object ControllerProcessor {
         }
     }
 
-    fun write(controller: BaseController?,
-              args: String,
-              controllerUpdateHandler: (controller: BaseController?) -> Unit) {
+    private fun write(controller: BaseController?,
+                      args: String,
+                      controllerUpdateHandler: (controller: BaseController?) -> Unit) {
         if (controller == null)
             return
 

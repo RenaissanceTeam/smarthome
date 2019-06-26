@@ -1,25 +1,20 @@
 package smarthome.client
 
-import android.content.Context
 import androidx.multidex.MultiDexApplication
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import smarthome.client.util.FcmTokenRequester
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import smarthome.client.util.dataSourceModule
+import smarthome.client.util.repositoryModule
+import smarthome.client.util.usecasesModule
 
 class App : MultiDexApplication() {
-    private val TAG = "App"
-
-    companion object {
-        lateinit var appContext: Context
-    }
-
     override fun onCreate() {
         super.onCreate()
-        appContext = this
-    }
-
-    fun App.getAppContext(): Context {
-        return appContext
+        startKoin{
+            androidLogger()
+            androidContext(this@App)
+            modules(listOf(usecasesModule, repositoryModule, dataSourceModule))
+        }
     }
 }

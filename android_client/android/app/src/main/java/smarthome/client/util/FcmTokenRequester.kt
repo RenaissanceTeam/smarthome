@@ -1,32 +1,22 @@
 package smarthome.client.util
 
-import android.content.Context
-import android.util.Log
 import com.google.firebase.iid.FirebaseInstanceId
-import smarthome.client.App
-import smarthome.client.BuildConfig
-import java.lang.RuntimeException
-import kotlin.Result.Companion.failure
+import smarthome.client.domain.usecases.CloudMessageUseCase
 import kotlin.Result.Companion.success
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class FcmTokenRequester {
-
-    private val TAG = "FcmTokenRequester"
-    private val storage = FcmTokenStorage(App.appContext)
+class FcmTokenRequester(private val messageUseCase: CloudMessageUseCase) {
 
     suspend fun initFcmToken() {
-        if (!storage.isSaved) saveToken()
+        if (messageUseCase.noSavedToken()) saveToken()
     }
 
     private suspend fun saveToken() {
         try {
             val token = requestToken()
-            if (BuildConfig.DEBUG) Log.d(TAG, "received token after explicit request=$token")
-            storage.savedToken = token
+            messageUseCase.onNewToken(token)
         } catch (e: Throwable) {
-            if (BuildConfig.DEBUG) Log.w(TAG, "can't request token: ", e)
         }
     }
 
