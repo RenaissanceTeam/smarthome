@@ -32,7 +32,11 @@ class LocalStorageImpl : LocalStorage {
         return devices.find { it.controllers.contains(controller) } ?: TODO()
     }
 
-    override fun saveDevice(device: IotDevice) {
+    override fun updateDevice(device: IotDevice) {
         devices[devices.indexOf(device)] = device
+    }
+
+    override suspend fun addDevice(device: IotDevice) {
+        devices.add(device)
     }
 }

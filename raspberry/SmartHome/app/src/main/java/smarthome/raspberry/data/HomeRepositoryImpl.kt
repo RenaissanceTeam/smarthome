@@ -43,8 +43,8 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
     }
 
     override suspend fun saveDevice(device: IotDevice) {
-        localStorage.saveDevice(device)
-        remoteStorage.saveDevice(device)
+        localStorage.updateDevice(device)
+        remoteStorage.updateDevice(device)
     }
 
     override suspend fun proceedReadController(controller: BaseController): BaseController {
@@ -81,7 +81,7 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
 
     override suspend fun onControllerChanged(controller: BaseController) {
         val device = localStorage.findDevice(controller)
-        remoteStorage.saveDevice(device)
+        remoteStorage.updateDevice(device)
     }
 
     override suspend fun onNewDevice(device: IotDevice) {
