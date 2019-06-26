@@ -2,7 +2,6 @@ package smarthome.raspberry.data.remote
 
 import io.reactivex.Observable
 import smarthome.library.common.*
-import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.raspberry.data.RemoteStorage
 
 class RemoteStorageImpl : RemoteStorage {
