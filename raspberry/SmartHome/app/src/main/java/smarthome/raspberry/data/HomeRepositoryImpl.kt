@@ -71,7 +71,7 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
         val newState = channel.writeState(controller, state)
 
         controller.state = newState
-        remoteStorage.onControllerChanged(controller)
+        remoteStorage.saveController(controller)
     }
 
     private fun findSuitableChannel(controller: BaseController): DeviceChannel {
@@ -83,13 +83,13 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
         val newState = channel.read(controller)
 
         controller.state = newState
-        remoteStorage.onControllerChanged(controller)
+        remoteStorage.saveController(controller)
 
         return newState
     }
 
     override suspend fun onControllerChanged(controller: BaseController) {
-        remoteStorage.onControllerChanged(controller)
+        remoteStorage.saveController(controller)
     }
 
     override suspend fun onNewDevice(device: IotDevice) {

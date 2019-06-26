@@ -6,7 +6,9 @@ import smarthome.library.common.ServeState
 import smarthome.raspberry.domain.HomeRepository
 
 class DevicesUseCase(private val repository: HomeRepository) {
-    suspend fun addNewDevice(device: IotDevice) {}
+    suspend fun addNewDevice(device: IotDevice) {
+
+    }
 
     suspend fun removeDevice(device: IotDevice) {
 

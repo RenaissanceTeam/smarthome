@@ -16,7 +16,7 @@ class RemoteStorageImpl : RemoteStorage {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override suspend fun onControllerChanged(controller: BaseController) {
+    override suspend fun saveController(controller: BaseController) {
         TODO()
     }
 

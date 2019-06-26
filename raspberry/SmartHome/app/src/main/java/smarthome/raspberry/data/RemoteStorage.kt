@@ -6,7 +6,7 @@ import smarthome.library.common.DeviceUpdate
 
 interface RemoteStorage {
     suspend fun init()
-    suspend fun onControllerChanged(controller: BaseController)
+    suspend fun saveController(controller: BaseController)
     suspend fun createHome(homeId: String)
     suspend fun isHomeIdUnique(homeId: String): Boolean
     suspend fun getDevices(): Observable<DeviceUpdate>
