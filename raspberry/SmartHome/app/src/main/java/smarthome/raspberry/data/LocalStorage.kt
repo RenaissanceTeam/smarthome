@@ -7,5 +7,6 @@ interface LocalStorage {
     suspend fun getHomeId(): String
     fun getDevices(): MutableList<IotDevice>
     fun findDevice(controller: BaseController): IotDevice
-    fun saveDevice(device: IotDevice)
+    suspend fun addDevice(device: IotDevice)
+    fun updateDevice(device: IotDevice)
 }

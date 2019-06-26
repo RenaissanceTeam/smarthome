@@ -6,7 +6,7 @@ package smarthome.library.common
  */
 open class BaseController(var name: String,
                           var state: ControllerState? = null,
-                          var serveState: ServeState = ServeState.IDLE,
+                          var serveState: ControllerServeState = ControllerServeState.IDLE,
                           val guid: Long = GUID.getGuidForName(name)) {
 
 
@@ -21,6 +21,6 @@ open class BaseController(var name: String,
 
 open class ControllerState
 
-enum class ServeState {
+enum class ControllerServeState {
     PENDING_READ, PENDING_WRITE, IDLE
 }

@@ -6,7 +6,7 @@ import smarthome.library.common.IotDevice
 
 interface RemoteStorage {
     suspend fun init()
-    suspend fun saveDevice(device: IotDevice)
+    suspend fun updateDevice(device: IotDevice)
     suspend fun createHome(homeId: String)
     suspend fun isHomeIdUnique(homeId: String): Boolean
     suspend fun getDevices(): Observable<DeviceUpdate>
