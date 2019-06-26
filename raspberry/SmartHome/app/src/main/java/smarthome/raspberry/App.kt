@@ -3,7 +3,6 @@ package smarthome.raspberry
 import android.app.Application
 import android.content.Context
 import android.os.PowerManager
-import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
 
 class App : Application() {
 

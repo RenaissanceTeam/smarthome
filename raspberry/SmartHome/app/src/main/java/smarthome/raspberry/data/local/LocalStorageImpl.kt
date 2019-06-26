@@ -1,10 +1,9 @@
 package smarthome.raspberry.data.local
 
-import android.content.Context
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.data.LocalStorage
 
-class LocalStorageImpl(private val context: Context): LocalStorage {
+class LocalStorageImpl : LocalStorage {
     private val preferences: SharedPreferencesHelper = TODO()
     private val input: LocalStorageInput = TODO()
     private val output: LocalStorageOutput = TODO()
