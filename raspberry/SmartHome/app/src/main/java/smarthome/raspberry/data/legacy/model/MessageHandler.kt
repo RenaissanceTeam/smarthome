@@ -1,4 +1,4 @@
-//package smarthome.raspberry.model
+//package smarthome.raspberry.data.legacy.model
 //
 //import android.util.Log
 //import kotlinx.coroutines.CoroutineScope
@@ -11,7 +11,7 @@
 //import smarthome.library.common.message.Message
 //import smarthome.library.datalibrary.store.listeners.MessageListener
 //import smarthome.raspberry.BuildConfig.DEBUG
-//import smarthome.raspberry.service.DeviceObserver
+//import smarthome.raspberry.data.legacy.service.DeviceObserver
 //
 //class MessageHandler : MessageListener {
 //    override fun invoke(messages: List<Any>, isInnerCall: Boolean) {

@@ -3,10 +3,9 @@ package smarthome.raspberry.data.local
 import android.content.Context
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.data.LocalStorage
-import smarthome.raspberry.utils.SharedPreferencesHelper
 
 class LocalStorageImpl(private val context: Context): LocalStorage {
-    private val sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
+    private val preferences: SharedPreferencesHelper = TODO()
     private val input: LocalStorageInput = TODO()
     private val output: LocalStorageOutput = TODO()
     private val devices: MutableList<IotDevice> = mutableListOf()
@@ -16,15 +15,15 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
     }
 
     override suspend fun getHomeId(): String {
-        if (!sharedPreferencesHelper.isHomeIdExists()) {
+        if (!preferences.isHomeIdExists()) {
             saveNewHomeId()
         }
-        return sharedPreferencesHelper.getHomeId()
+        return preferences.getHomeId()
     }
 
     private suspend fun saveNewHomeId() {
         val homeId = input.generateHomeId()
-        sharedPreferencesHelper.setHomeId(homeId)
+        preferences.setHomeId(homeId)
 
         output.createHome(homeId)
     }

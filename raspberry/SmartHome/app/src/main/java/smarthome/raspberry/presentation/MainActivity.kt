@@ -1,4 +1,4 @@
-package smarthome.raspberry
+package smarthome.raspberry.presentation
 
 import android.app.Activity
 import android.content.Intent
@@ -6,17 +6,19 @@ import android.os.Bundle
 import android.util.Log
 
 import kotlinx.coroutines.*
+import smarthome.raspberry.BuildConfig
+import smarthome.raspberry.R
 
 
-import smarthome.raspberry.auth.GoogleSignInActivity
+import smarthome.raspberry.presentation.auth.GoogleSignInActivity
 import smarthome.raspberry.domain.usecases.AuthUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
-import smarthome.raspberry.model.SmartHomeRepository
-import smarthome.raspberry.model.listeners.RepoInitListener
+import smarthome.raspberry.data.legacy.model.SmartHomeRepository
+import smarthome.raspberry.data.legacy.model.listeners.RepoInitListener
 import smarthome.raspberry.arduinodevices.server.UdpServer
 import smarthome.raspberry.arduinodevices.server.WebServer
-import smarthome.raspberry.service.DeviceObserver
+import smarthome.raspberry.data.legacy.service.DeviceObserver
 
 private val TAG = MainActivity::class.java.simpleName
 private val DEBUG = BuildConfig.DEBUG

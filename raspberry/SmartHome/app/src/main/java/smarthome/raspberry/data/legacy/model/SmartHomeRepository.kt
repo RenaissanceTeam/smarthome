@@ -1,4 +1,4 @@
-//package smarthome.raspberry.model
+//package smarthome.raspberry.data.legacy.model
 //
 //import android.annotation.SuppressLint
 //import android.content.Context
@@ -21,8 +21,8 @@
 //import smarthome.raspberry.arduinodevices.ArduinoDevice
 //import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 //import smarthome.raspberry.data.remote.DeviceChangesListener
-//import smarthome.raspberry.model.listeners.RepoInitListener
-//import smarthome.raspberry.service.GatewayServiceController
+//import smarthome.raspberry.data.legacy.model.listeners.RepoInitListener
+//import smarthome.raspberry.data.legacy.service.GatewayServiceController
 //import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.IDLE_STATUS
 //import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.Gateway
 //import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.device.GatewayDevice
