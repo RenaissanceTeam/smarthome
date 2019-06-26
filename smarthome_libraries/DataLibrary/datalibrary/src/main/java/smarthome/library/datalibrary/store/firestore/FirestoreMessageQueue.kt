@@ -23,7 +23,10 @@ import smarthome.library.datalibrary.constants.TAG
 import smarthome.library.datalibrary.constants.WrongMessageType
 import smarthome.library.datalibrary.store.MessageQueue
 import smarthome.library.datalibrary.store.listeners.MessageListener
+import smarthome.library.datalibrary.util.withContinuation
 import java.lang.IllegalArgumentException
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class FirestoreMessageQueue(
     private val homeId: String,
@@ -34,26 +37,17 @@ class FirestoreMessageQueue(
 
     private var registration: ListenerRegistration? = null
 
-    override fun postMessage(
-        message: Message,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        getMessageRef(message)
-            .set(message)
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+
+    override suspend fun postMessage(message: Message) {
+        suspendCoroutine<Unit> {
+            getMessageRef(message).set(message).withContinuation(it)
+        }
     }
 
-    override fun removeMessage(
-        message: Message,
-        successListener: OnSuccessListener<Void>,
-        failureListener: OnFailureListener
-    ) {
-        getMessageRef(message)
-            .delete()
-            .addOnSuccessListener(successListener)
-            .addOnFailureListener(failureListener)
+    override suspend fun removeMessage(message: Message) {
+        suspendCoroutine<Unit> {
+            getMessageRef(message).delete().withContinuation(it)
+        }
     }
 
     override fun subscribe(listener: MessageListener) {
@@ -78,31 +72,11 @@ class FirestoreMessageQueue(
                 devices.add(message)
             }
 
-            listener.onMessagesReceived(devices, snapshot.metadata.hasPendingWrites())
+            listener(devices, snapshot.metadata.hasPendingWrites())
         } )
     }
 
     private fun getMessageRef(message: Message): DocumentReference {
         return ref.document(message.id)
-    }
-
-
-    companion object {
-
-        private var instance: FirestoreMessageQueue? = null
-
-        fun getInstance(homeId: String): FirestoreMessageQueue? {
-            if (instance == null)
-                instance =
-                    instantiate(homeId)
-
-            return instance
-        }
-
-        private fun instantiate(homeId: String): FirestoreMessageQueue? {
-            val auth = FirebaseAuth.getInstance()
-
-            auth.currentUser?.let { return FirestoreMessageQueue(homeId) } ?: return null
-        }
     }
 }

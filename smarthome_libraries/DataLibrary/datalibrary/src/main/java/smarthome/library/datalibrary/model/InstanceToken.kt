@@ -1,5 +1,3 @@
 package smarthome.library.datalibrary.model
 
-class InstanceToken {
-    var token: String = ""
-}
+class InstanceToken(val token: String)
