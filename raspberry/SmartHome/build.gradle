@@ -8,7 +8,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.android.tools.build:gradle:3.4.1'
         classpath 'com.google.gms:google-services:4.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
@@ -18,14 +18,19 @@ buildscript {
 }
 
 allprojects {
+
+    // "changing" dependencies gradle cache lifetime
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+
     repositories {
         google()
         jcenter()
         flatDir {
-            dirs '../../../smarthome_libraries/DataLibrary/datalibrary/build/outputs/aar'
-        }
-        flatDir {
-            dirs '../../../smarthome_libraries/CommonLibrary/commonlibrary/build/outputs/aar'
+            dirs '../../../smarthome_libraries/DataLibrary/datalibrary/build/outputs/aar',
+                    '../../../smarthome_libraries/CommonLibrary/common/build/libs'
+
         }
     }
 }

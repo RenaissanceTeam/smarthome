@@ -1,7 +1,5 @@
 package smarthome.library.common.scripts.conditions
 
-import smarthome.library.common.scripts.conditions.Condition
-
 open class IntervalTimeCondition : Condition() {
     val min = 5
     var interval = min
