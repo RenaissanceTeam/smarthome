@@ -1,6 +1,5 @@
 package smarthome.library.common.scripts.actions
 
-import smarthome.library.common.scripts.actions.Action
 import smarthome.library.common.BaseController
 
 open class WriteAction : Action() {
