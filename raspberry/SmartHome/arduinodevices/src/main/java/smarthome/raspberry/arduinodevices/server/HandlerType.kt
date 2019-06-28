@@ -15,7 +15,7 @@ import smarthome.raspberry.arduinodevices.server.httphandlers.ResetPost
 import fi.iki.elonen.NanoHTTPD.Method.GET
 import fi.iki.elonen.NanoHTTPD.Method.POST
 
-enum class HandlerType(private val method: NanoHTTPD.Method,
+internal enum class HandlerType(private val method: NanoHTTPD.Method,
                        private val requestPath: String,
                        private val handler: RequestHandler) {
     READ_CONTROLLER(GET, "/controller", ControllerGet()),

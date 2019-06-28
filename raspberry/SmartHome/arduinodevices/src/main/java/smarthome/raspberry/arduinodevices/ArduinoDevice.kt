@@ -6,8 +6,6 @@ import smarthome.library.common.IotDevice
 
 class ArduinoDevice(name: String,
                     description: String?,
-                    serveState: DeviceServeState,
-                    guid: Long,
                     controllers: List<BaseController>,
                     val ip: String)
-    : IotDevice(name, description, serveState, guid, controllers)
+    : IotDevice(name, description, controllers = controllers)

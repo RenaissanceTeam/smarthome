@@ -1,29 +1,19 @@
 package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import com.google.gson.Gson
-
-import java.io.IOException
-
 import fi.iki.elonen.NanoHTTPD
-import smarthome.raspberry.arduinodevices.ArduinoControllerResponse
-import smarthome.raspberry.arduinodevices.controllers.ArduinoReadable
+import smarthome.raspberry.arduinodevices.ArduinoDeviceChannel
 
-class ControllerGet : BaseRequestHandler() {
+internal class ControllerGet : BaseRequestHandler() {
+    private val channel: ArduinoDeviceChannel = TODO()
 
     override suspend fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         val params = session.parms
         val controller = getController(params)
-        return if (controller is ArduinoReadable) {
-            try {
-                val response = (controller as ArduinoReadable).read()
-                NanoHTTPD.Response(NanoHTTPD.Response.Status.OK, "text/json",
-                        Gson().toJson(response))
-            } catch (e: IOException) {
-                arduinoHttpError
-            }
+        val device = input.findDevice(controller)
 
-        } else {
-            throw IllegalStateException("get request to non readable deviceObserver")
-        }
+        val state = channel.read(device, controller)
+        return NanoHTTPD.Response(NanoHTTPD.Response.Status.OK, "text/json",
+                Gson().toJson(state))
     }
 }

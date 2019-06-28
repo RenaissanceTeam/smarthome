@@ -2,7 +2,7 @@ package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import fi.iki.elonen.NanoHTTPD
 
-class ErrorHandler : BaseRequestHandler() {
+internal class ErrorHandler : BaseRequestHandler() {
 
     fun getError(message: String): NanoHTTPD.Response {
         return getInvalidRequestResponse(message)
