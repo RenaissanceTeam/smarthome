@@ -1,21 +1,47 @@
 package smarthome.raspberry.arduinodevices
 
-import smarthome.library.common.BaseController
-import smarthome.library.common.ControllerState
-import smarthome.library.common.DeviceChannel
-import smarthome.library.common.DeviceChannelOutput
+import com.google.gson.GsonBuilder
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import smarthome.library.common.*
+import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 
 class ArduinoDeviceChannel(private val output: DeviceChannelOutput) : DeviceChannel {
+    private fun getArduinoDeviceApi(ip: String): ArduinoDeviceApi {
+        val gson = GsonBuilder()
+                .setLenient()
+                .create()
+
+        return Retrofit.Builder()
+                .baseUrl("http://$ip:8080/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
+                .create(ArduinoDeviceApi::class.java)
+    }
 
     init {
         // todo start server and push events to output
     }
 
-    override suspend fun read(controller: BaseController): ControllerState {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun read(device: IotDevice, controller: BaseController): ControllerState {
+        require(device is ArduinoDevice)
+        require(controller is ArduinoController)
+
+        val api = getArduinoDeviceApi(device.ip)
+        val response = api.controllerReadRequest(controller.indexInArduinoServicesArray)
+
+        return controller.parser.parse(response)
     }
 
-    override suspend fun writeState(controller: BaseController, state: ControllerState): ControllerState {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun writeState(device: IotDevice, controller: BaseController, state: ControllerState): ControllerState {
+        require(device is ArduinoDevice)
+        require(controller is ArduinoController)
+
+        val api = getArduinoDeviceApi(device.ip)
+
+        val writeValue = controller.parser.encode(state)
+        val response = api.controllerWriteRequest(controller.indexInArduinoServicesArray, writeValue)
+
+        return controller.parser.parse(response)
     }
 }
