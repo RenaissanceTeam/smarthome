@@ -3,10 +3,10 @@ package smarthome.raspberry.arduinodevices.controllers
 import smarthome.library.common.BaseController
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 
-open class ArduinoController(name: String,
-                             val device: ArduinoDevice,
-                             val indexInArduinoServicesArray: Int)
-    : BaseController(name) {
+internal abstract class ArduinoController(name: String,
+                                          val device: ArduinoDevice,
+                                          val indexInArduinoServicesArray: Int,
+                                          val parser: StateParser) : BaseController(name) {
 
 //    val arduinoDeviceAPI: ArduinoDeviceAPI
 //        @Exclude get() {

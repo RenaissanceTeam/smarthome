@@ -5,8 +5,8 @@ package smarthome.library.common
  * of scheduled events.
  */
 interface DeviceChannel {
-    suspend fun read(controller: BaseController): ControllerState
-    suspend fun writeState(controller: BaseController, state: ControllerState): ControllerState
+    suspend fun read(device: IotDevice, controller: BaseController): ControllerState
+    suspend fun writeState(device: IotDevice, controller: BaseController, state: ControllerState): ControllerState
 }
 
 /**
