@@ -9,6 +9,7 @@ class LocalStorageImpl : LocalStorage {
     private val input: LocalStorageInput = TODO()
     private val output: LocalStorageOutput = TODO()
     private val devices: MutableList<IotDevice> = mutableListOf()
+    private val pendingDevices: MutableList<IotDevice> = mutableListOf()
 
     override fun getDevices(): MutableList<IotDevice> {
         return devices
@@ -38,5 +39,17 @@ class LocalStorageImpl : LocalStorage {
 
     override suspend fun addDevice(device: IotDevice) {
         devices.add(device)
+    }
+
+    override suspend fun addPendingDevice(device: IotDevice) {
+        pendingDevices.add(device)
+    }
+
+    override suspend fun removePendingDevice(device: IotDevice) {
+        pendingDevices.remove(device)
+    }
+
+    override suspend fun removeDevice(device: IotDevice) {
+        devices.remove(device)
     }
 }

@@ -11,7 +11,13 @@ class DevicesUseCase(private val repository: HomeRepository) {
      * New device is considered to be pending until user explicitly accepts it.
      */
     suspend fun addNewDevice(device: IotDevice) {
+        val devices = repository.getCurrentDevices()
 
+        if (devices.contains(device)) {
+            TODO()
+        }
+
+        repository.addPendingDevice(device)
     }
 
     /**
@@ -20,7 +26,12 @@ class DevicesUseCase(private val repository: HomeRepository) {
      * scripts with the device, etc..
      */
     suspend fun acceptPendingDevice(device: IotDevice) {
+        repository.removePendingDevice(device)
+        repository.addDevice(device)
+    }
 
+    suspend fun rejectPendingDevice(device: IotDevice) {
+        repository.removePendingDevice(device)
     }
 
     /**
@@ -29,7 +40,7 @@ class DevicesUseCase(private val repository: HomeRepository) {
      * explicitly modify the scripts
      */
     suspend fun removeDevice(device: IotDevice) {
-
+        repository.removeDevice(device)
     }
 
     suspend fun readController(controller: BaseController) {
@@ -56,7 +67,6 @@ class DevicesUseCase(private val repository: HomeRepository) {
                                       notChangedDevices: MutableList<IotDevice>) {
         for (changedDevice in changedDevices) {
             val notChangedDevice = notChangedDevices.find { it == changedDevice } ?: continue
-
 
             handleDeviceChanges(changedDevice)
             handleControllerChanges(changedDevice, notChangedDevice)

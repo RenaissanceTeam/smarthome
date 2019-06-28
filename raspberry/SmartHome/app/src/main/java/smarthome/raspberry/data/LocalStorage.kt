@@ -9,4 +9,7 @@ interface LocalStorage {
     fun findDevice(controller: BaseController): IotDevice
     suspend fun addDevice(device: IotDevice)
     fun updateDevice(device: IotDevice)
+    suspend fun addPendingDevice(device: IotDevice)
+    suspend fun removePendingDevice(device: IotDevice)
+    suspend fun removeDevice(device: IotDevice)
 }
