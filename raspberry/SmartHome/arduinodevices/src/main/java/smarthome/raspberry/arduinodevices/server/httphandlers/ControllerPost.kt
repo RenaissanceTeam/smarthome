@@ -1,35 +1,33 @@
 package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import android.util.Log
-
 import com.google.gson.Gson
-
+import fi.iki.elonen.NanoHTTPD
+import smarthome.raspberry.arduinodevices.ArduinoDeviceChannel
+import smarthome.raspberry.arduinodevices.server.body
 import java.io.IOException
 
-import fi.iki.elonen.NanoHTTPD
-import smarthome.raspberry.arduinodevices.ArduinoControllerResponse
-import smarthome.raspberry.arduinodevices.controllers.ArduinoWritable
+internal class ControllerPost : BaseRequestHandler() {
+    private val TAG = ControllerPost::class.java.simpleName
+    private val channel: ArduinoDeviceChannel = TODO()
 
-class ControllerPost : BaseRequestHandler() {
-    val TAG = ControllerPost::class.java.simpleName
     override suspend fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         val params = session.parms
-        try {
-            val controller = getController(params)
+        val controller = getController(params)
+        val device = input.findDevice(controller)
 
-            if (controller is ArduinoWritable) {
-                val value = params["value"]
-                val response = (controller as ArduinoWritable).write(value)
-                return NanoHTTPD.Response(NanoHTTPD.Response.Status.OK, "text/json", Gson().toJson(response))
-            }
-
-            return getInvalidRequestResponse("post request to non writable controller $controller")
+        return try {
+            val state = channel.writeState(device, controller, session.body())
+            NanoHTTPD.Response(
+                    NanoHTTPD.Response.Status.OK,
+                    "text/json",
+                    Gson().toJson(state)
+            )
         } catch (e: IllegalArgumentException) {
-            return getInvalidRequestResponse(e.message ?: "")
+            getInvalidRequestResponse(e.message ?: "")
         } catch (e: IOException) {
             Log.d(TAG, "request to arduino web server failed: $e")
-            return arduinoHttpError
+            arduinoHttpError
         }
-
     }
 }

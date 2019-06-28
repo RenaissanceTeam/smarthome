@@ -1,14 +1,10 @@
 package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import fi.iki.elonen.NanoHTTPD
-import smarthome.library.common.ControllerType
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
-import smarthome.raspberry.arduinodevices.controllers.ArduinoControllersFactory
-import smarthome.raspberry.model.SmartHomeRepository
-import java.util.*
 
-class InitPost : BaseRequestHandler() {
+internal class InitPost : BaseRequestHandler() {
     override suspend fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         return if (initNewArduinoDevice(session)) {
             NanoHTTPD.Response("Added successfully")
@@ -17,38 +13,37 @@ class InitPost : BaseRequestHandler() {
 
     private suspend fun initNewArduinoDevice(session: NanoHTTPD.IHTTPSession): Boolean {
         val params = session.parms
-        val name = params["name"]
+        val name = params.getValue("name")
         val description = params["description"]
-        val ip = session.headers["http-client-ip"]
-        val rawServices = params["services"]?.split(';')
-        val servicesNames = params["names"]?.split(';')
+        val ip = session.headers.getValue("http-client-ip")
+        val rawServices = params.getValue("services").split(';')
+        val servicesNames = params.getValue("names").split(';')
 
 
-        val device = ArduinoDevice(name, description, ip)
-        device.controllers = parseControllers(device, rawServices, servicesNames)
+        val controllers = parseControllers(rawServices, servicesNames)
+        val device = ArduinoDevice(name, description, controllers, ip = ip)
 
-        return SmartHomeRepository.addDevice(device)
+        output.onNewDevice(device)
+        return true
     }
 
-    private fun parseControllers(device: ArduinoDevice,
-                                 rawServices: List<String>?,
-                                 serviceNames: List<String>?): List<ArduinoController> {
-        val controllers = ArrayList<ArduinoController>()
-        rawServices ?: return listOf()
-        serviceNames ?: throw RuntimeException("No service names for services: $rawServices")
-        if (rawServices.count() != serviceNames.count()) {
-            throw RuntimeException("Count of services=${rawServices.count()} " +
-                    "and service names=${serviceNames.count()} is not the same")
-        }
+    private fun parseControllers(rawServices: List<String>, serviceNames: List<String>): List<ArduinoController> {
+        val controllers = mutableListOf<ArduinoController>()
 
         for (i in rawServices.indices) {
             val id = Integer.parseInt(rawServices[i].trim { it <= ' ' })
-            val type = ControllerType.getById(id)
+//            val type = ControllerType.getById(id)
             val name = serviceNames[i]
 
-            controllers.add(ArduinoControllersFactory.createArduinoController(type, name, device, i))
+            val controller = createArduinoController()
+
+            controllers.add(controller)
         }
 
         return controllers
+    }
+
+    private fun createArduinoController(): ArduinoController {
+        TODO()
     }
 }

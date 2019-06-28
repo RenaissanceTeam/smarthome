@@ -13,7 +13,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 
 class UdpServer : StoppableServer {
-
+    private val TAG = UdpServer::class.java.simpleName
+    private val PORT = 59743
+    private val ARDUINO_INIT_URL = "http://%s:8080/init"
+    private val REMOTE_ADDR_HEADER = "Remote_Addr"
     private val isRunning = AtomicBoolean(false)
 
     override fun startServer() {
@@ -68,13 +71,5 @@ class UdpServer : StoppableServer {
 
     private fun getArduinoInitUrl(address: InetAddress): String {
         return String.format(ARDUINO_INIT_URL, address.hostAddress)
-    }
-
-    companion object {
-
-        private val TAG = UdpServer::class.java.simpleName
-        private val PORT = 59743
-        private val ARDUINO_INIT_URL = "http://%s:8080/init"
-        private val REMOTE_ADDR_HEADER = "Remote_Addr"
     }
 }

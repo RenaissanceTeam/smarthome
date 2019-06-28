@@ -48,7 +48,7 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
 
     override suspend fun proceedReadController(controller: BaseController): BaseController {
         val channel = findSuitableChannel(controller)
-        val newState = channel.read(controller)
+        val newState = channel.read(localStorage.findDevice(controller), controller)
 
         controller.state = newState
         return controller
@@ -56,7 +56,7 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
 
     override suspend fun proceedWriteController(controller: BaseController, state: ControllerState): BaseController {
         val channel = findSuitableChannel(controller)
-        val newState = channel.writeState(controller, state)
+        val newState = channel.writeState(localStorage.findDevice(controller), controller, state)
 
         controller.state = newState
         return controller
