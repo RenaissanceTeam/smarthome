@@ -24,7 +24,6 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
     private val controllersUseCase: ControllersUseCase = TODO()
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
-
     override suspend fun setupUserInteraction() {
         remoteStorage.init()
     }
@@ -79,6 +78,11 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
         TODO()
     }
 
+    override suspend fun addPendingDevice(device: IotDevice) {
+        localStorage.addPendingDevice(device)
+        remoteStorage.addPendingDevice(device)
+    }
+
     override suspend fun onControllerChanged(controller: BaseController) {
         val device = localStorage.findDevice(controller)
         remoteStorage.updateDevice(device)
@@ -102,5 +106,20 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
 
     override suspend fun createHome(homeId: String) {
         remoteStorage.createHome(homeId)
+    }
+
+    override suspend fun removePendingDevice(device: IotDevice) {
+        localStorage.removePendingDevice(device)
+        remoteStorage.removePendingDevice(device)
+    }
+
+    override suspend fun addDevice(device: IotDevice) {
+        localStorage.addDevice(device)
+        remoteStorage.addDevice(device)
+    }
+
+    override suspend fun removeDevice(device: IotDevice) {
+        localStorage.removeDevice(device)
+        remoteStorage.removeDevice(device)
     }
 }

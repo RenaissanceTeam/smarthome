@@ -42,4 +42,19 @@ class RemoteStorageImpl : RemoteStorage {
 //        return messageQueue!!
 //    }
 
+    override suspend fun addPendingDevice(device: IotDevice) {
+        homeStorage.addPendingDevice(device)
+    }
+
+    override suspend fun removePendingDevice(device: IotDevice) {
+        homeStorage.removePendingDevice(device)
+    }
+
+    override suspend fun addDevice(device: IotDevice) {
+        homeStorage.addDevice(device)
+    }
+
+    override suspend fun removeDevice(device: IotDevice) {
+        homeStorage.removeDevice(device)
+    }
 }
