@@ -9,4 +9,12 @@ dependencies {
         transitive=false
         changing=true
     }
+    testImplementation 'junit:junit:4.12'
+
+    def mockitoVersion = '3.0.0'
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-inline:$mockitoVersion"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+
 }
