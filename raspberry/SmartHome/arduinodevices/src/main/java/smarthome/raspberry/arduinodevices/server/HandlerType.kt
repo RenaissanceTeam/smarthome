@@ -7,10 +7,8 @@ import smarthome.raspberry.arduinodevices.server.httphandlers.AlertPost
 import smarthome.raspberry.arduinodevices.server.httphandlers.ControllerGet
 import smarthome.raspberry.arduinodevices.server.httphandlers.ControllerPost
 import smarthome.raspberry.arduinodevices.server.httphandlers.ErrorHandler
-import smarthome.raspberry.arduinodevices.server.httphandlers.InfoGet
 import smarthome.raspberry.arduinodevices.server.httphandlers.InitPost
 import smarthome.raspberry.arduinodevices.server.httphandlers.RequestHandler
-import smarthome.raspberry.arduinodevices.server.httphandlers.ResetPost
 
 import fi.iki.elonen.NanoHTTPD.Method.GET
 import fi.iki.elonen.NanoHTTPD.Method.POST
@@ -20,9 +18,7 @@ internal enum class HandlerType(private val method: NanoHTTPD.Method,
                        private val handler: RequestHandler) {
     READ_CONTROLLER(GET, "/controller", ControllerGet()),
     CHANGE_CONTROLLER(POST, "/controller", ControllerPost()),
-    INFO(GET, "/info", InfoGet()),
     INIT(POST, "/init", InitPost()),
-    RESET(POST, "/reset", ResetPost()),
     ALERT(POST, "/alert", AlertPost());
 
 
