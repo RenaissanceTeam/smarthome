@@ -1,15 +1,17 @@
 package smarthome.raspberry.presentation
 
+
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import smarthome.raspberry.BuildConfig
 import smarthome.raspberry.R
-
-
+import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.usecases.AuthUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
@@ -22,6 +24,8 @@ class MainActivity : Activity() {
     private val authUseCase: AuthUseCase = TODO()
     private val devicesUseCase: DevicesUseCase = TODO()
     private val homeUseCase: HomeUseCase = TODO()
+    private val repository: HomeRepository = TODO()
+
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
@@ -30,15 +34,17 @@ class MainActivity : Activity() {
         setContentView(R.layout.activity_main)
         if (DEBUG) Log.d(TAG, "onCreate")
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-
         if (!authUseCase.isAuthenticated()) {
             startActivity(Intent(this, GoogleSignInActivity::class.java))
         } else {
-            uiScope.launch { homeUseCase.start() }
+            initRepository()
+        }
+    }
+
+    private fun initRepository() {
+        uiScope.launch {
+            repository.setupUserInteraction()
+            repository.setupDevicesInteraction()
         }
     }
 

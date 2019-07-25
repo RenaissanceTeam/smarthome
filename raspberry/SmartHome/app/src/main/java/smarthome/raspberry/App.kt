@@ -3,14 +3,17 @@ package smarthome.raspberry
 import android.app.Application
 import android.content.Context
 import android.os.PowerManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import smarthome.raspberry.domain.HomeRepository
+import smarthome.raspberry.domain.usecases.HomeUseCase
 
 class App : Application() {
-
     var wakeLock: PowerManager.WakeLock? = null
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
 
         wakeLock =
                 (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
@@ -28,10 +31,5 @@ class App : Application() {
 //        )
 //        storage?.detachDevicesUpdatesObserver()
 //        storage?.detachPendingDevicesUpdatesObserver()
-    }
-
-    companion object {
-        lateinit var instance: App
-            private set
     }
 }
