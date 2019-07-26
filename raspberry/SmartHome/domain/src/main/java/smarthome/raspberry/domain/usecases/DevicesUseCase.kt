@@ -30,29 +30,9 @@ class DevicesUseCase(private val repository: HomeRepository) {
         repository.addDevice(device)
     }
 
-    suspend fun rejectPendingDevice(device: IotDevice) {
-        repository.removePendingDevice(device)
-    }
-
-    /**
-     * The process of deleting some device, doesn't matter it was pending or not. Deleting device
-     * should not delete the scripts, although they would not operate normally, user have to
-     * explicitly modify the scripts
-     */
     suspend fun removeDevice(device: IotDevice) {
         repository.removeDevice(device)
     }
-
-    suspend fun readController(controller: BaseController) {
-        repository.proceedReadController(controller)
-        controller.serveState = ControllerServeState.IDLE
-    }
-
-    suspend fun setControllerState(controller: BaseController, state: ControllerState) {
-        repository.proceedReadController(controller)
-        controller.serveState = ControllerServeState.IDLE
-    }
-
 
     suspend fun onUserRequest(changedDevices: MutableList<IotDevice>) {
         try {
@@ -85,6 +65,8 @@ class DevicesUseCase(private val repository: HomeRepository) {
         return true
     }
 
+
+
     private suspend fun handleControllerChanges(changedDevice: IotDevice,
                                                 notChangedDevice: IotDevice): Boolean {
         return changedDevice.controllers
@@ -112,9 +94,20 @@ class DevicesUseCase(private val repository: HomeRepository) {
                 .isNotEmpty()
     }
 
+
+    private suspend fun readController(controller: BaseController) {
+        repository.proceedReadController(controller)
+        controller.serveState = ControllerServeState.IDLE
+    }
+
+    private suspend fun setControllerState(controller: BaseController, state: ControllerState) {
+        repository.proceedWriteController(controller, state)
+        controller.serveState = ControllerServeState.IDLE
+    }
+
     private fun hasControllerChanges(notChangedController: BaseController,
                              changedController: BaseController): Boolean {
-        return notChangedController.state != changedController.state
+        return notChangedController.serveState != changedController.serveState
     }
 }
 
