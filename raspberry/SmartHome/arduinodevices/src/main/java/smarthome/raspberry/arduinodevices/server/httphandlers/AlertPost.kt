@@ -1,12 +1,11 @@
 package smarthome.raspberry.arduinodevices.server.httphandlers
 
-import android.util.Log
 import fi.iki.elonen.NanoHTTPD
 import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerState
 import smarthome.library.common.DeviceChannelOutput
 import smarthome.raspberry.arduinodevices.ArduinoDevice
-import smarthome.raspberry.arduinodevices.controllers.ArduinoController
+import smarthome.raspberry.arduinodevices.StringValueState
 
 
 internal class AlertPost(output: DeviceChannelOutput)
@@ -33,9 +32,12 @@ internal class AlertPost(output: DeviceChannelOutput)
 
     private suspend fun parseRequest(session: NanoHTTPD.IHTTPSession) {
         val params = session.parms
-//        controllerIndex = Integer.parseInt(params["ind"] ?: TODO())
-//        val ip = session.headers["http-client-ip"] ?: TODO()
-        value = ControllerState()
+        controllerIndex = Integer.parseInt(params["ind"]
+                ?: throw IllegalArgumentException("no controller index"))
+        val ip = session.headers["http-client-ip"]
+                ?: throw IllegalArgumentException("no ip")
+        value = StringValueState(params["value"]
+                ?: throw IllegalArgumentException("no value"))
         controller = getController(params)
 
     }
