@@ -10,16 +10,12 @@ import smarthome.raspberry.arduinodevices.ArduinoControllerResponse
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 import smarthome.raspberry.arduinodevices.server.httphandlers.AlertPost
+import smarthome.raspberry.arduinodevices.server.httphandlers.InitPost
 import smarthome.raspberry.arduinodevices.server.httphandlers.RequestHandler
 import java.io.IOException
 
 const val TAG = "WebServer"
 const val PORT = 8080
-
-internal interface WebServerOutput {
-    fun onAlert(device: ArduinoDevice, controller: ArduinoController)
-    fun onNewDevice(device: ArduinoDevice)
-}
 
 class WebHandler(private val output: DeviceChannelOutput) {
 
@@ -32,12 +28,11 @@ class WebHandler(private val output: DeviceChannelOutput) {
 
 
     private fun findSuitableHandler(method: NanoHTTPD.Method, uri: String): RequestHandler {
-//        for (handlerType in ) {
-//            if (handlerType.method == method && uri.startsWith(handlerType.requestPath)) {
-//                return handlerType.handler
-//            }
-//        }
-        return AlertPost(output)
+
+            if (NanoHTTPD.Method.POST == method && uri.startsWith("/alert")) {
+                return AlertPost(output)
+            }
+        return InitPost(output)
 
     }
 

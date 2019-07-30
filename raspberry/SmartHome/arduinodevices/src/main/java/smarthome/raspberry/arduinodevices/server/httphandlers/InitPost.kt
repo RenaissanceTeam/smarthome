@@ -1,10 +1,14 @@
 package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import fi.iki.elonen.NanoHTTPD
+import smarthome.library.common.ControllerState
 import smarthome.library.common.DeviceChannelOutput
+import smarthome.raspberry.arduinodevices.ArduinoControllerResponse
 import smarthome.raspberry.arduinodevices.ArduinoDevice
+import smarthome.raspberry.arduinodevices.StringValueState
+import smarthome.raspberry.arduinodevices.StringValueStateParser
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
-import smarthome.raspberry.arduinodevices.server.WebServerOutput
+import smarthome.raspberry.arduinodevices.controllers.StateParser
 
 internal class InitPost(output: DeviceChannelOutput)
     : BaseRequestHandler(output) {
@@ -23,30 +27,25 @@ internal class InitPost(output: DeviceChannelOutput)
         val servicesNames = params.getValue("names").split(';')
 
 
-        val controllers = parseControllers(rawServices, servicesNames)
+        val controllers = listOf<ArduinoController>()
         val device = ArduinoDevice(name, description, controllers, ip = ip)
+        parseControllers(rawServices, servicesNames, device)
 
         output.onNewDevice(device)
         return true
     }
 
-    private fun parseControllers(rawServices: List<String>, serviceNames: List<String>): List<ArduinoController> {
+    private fun parseControllers(rawServices: List<String>, serviceNames: List<String>, device: ArduinoDevice): List<ArduinoController> {
         val controllers = mutableListOf<ArduinoController>()
 
         for (i in rawServices.indices) {
             val id = Integer.parseInt(rawServices[i].trim { it <= ' ' })
-//            val type = ControllerType.getById(id)
             val name = serviceNames[i]
 
-            val controller = createArduinoController()
-
+            val controller = ArduinoController(name, device, i, StringValueStateParser())
             controllers.add(controller)
         }
 
         return controllers
-    }
-
-    private fun createArduinoController(): ArduinoController {
-        TODO()
     }
 }
