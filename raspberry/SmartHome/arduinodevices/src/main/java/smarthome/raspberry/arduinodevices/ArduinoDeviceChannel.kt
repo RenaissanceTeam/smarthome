@@ -28,14 +28,7 @@ class ArduinoDeviceChannel(private val output: DeviceChannelOutput) : DeviceChan
     init {
         // todo start server and push events to output
         initilizationServer.startServer()
-    }
-
-    private fun setupWebServer() {
-        communicationServer
-
-
         communicationServer.startServer()
-
     }
 
     override suspend fun read(device: IotDevice, controller: BaseController): ControllerState {

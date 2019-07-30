@@ -1,10 +1,13 @@
 package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import fi.iki.elonen.NanoHTTPD
+import smarthome.library.common.DeviceChannelOutput
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
+import smarthome.raspberry.arduinodevices.server.WebServerOutput
 
-internal class InitPost : BaseRequestHandler() {
+internal class InitPost(output: DeviceChannelOutput)
+    : BaseRequestHandler(output) {
     override suspend fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         return if (initNewArduinoDevice(session)) {
             NanoHTTPD.Response("Added successfully")
