@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 import smarthome.library.common.*
 import smarthome.raspberry.data.local.LocalStorageInput
 import smarthome.raspberry.data.local.LocalStorageOutput
-import smarthome.raspberry.data.remote.RemoteStorageInput
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.usecases.ControllersUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
@@ -16,7 +15,7 @@ import java.lang.reflect.Type
 
 class HomeRepositoryImpl(private val localStorage: LocalStorage,
                          private val remoteStorage: RemoteStorage,
-                         private val deviceChannels: Map<Type, DeviceChannel>) : HomeRepository, DeviceChannelOutput, RemoteStorageInput,
+                         private val deviceChannels: Map<Type, DeviceChannel>) : HomeRepository, DeviceChannelOutput,
         LocalStorageInput, LocalStorageOutput {
 
     private lateinit var devicesUseCase: DevicesUseCase
@@ -95,14 +94,6 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
 
     override suspend fun onNewState(controller: BaseController) {
         controllersUseCase.notifyControllerChanged(controller)
-    }
-
-    override suspend fun getUserId(): String {
-        TODO()
-    }
-
-    override suspend fun getHomeId(): String {
-        return localStorage.getHomeId()
     }
 
     override suspend fun createHome(homeId: String) {
