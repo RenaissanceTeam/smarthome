@@ -4,7 +4,6 @@ import fi.iki.elonen.NanoHTTPD
 import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerState
 import smarthome.library.common.DeviceChannelOutput
-import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.StringValueState
 
 
@@ -13,9 +12,7 @@ internal class AlertPost(output: DeviceChannelOutput)
 
     val TAG = AlertPost::class.java.simpleName
 
-    private var controllerIndex = -1
     private lateinit var value: ControllerState
-    private lateinit var device: ArduinoDevice
     private lateinit var controller: BaseController
 
     override suspend fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
@@ -32,13 +29,8 @@ internal class AlertPost(output: DeviceChannelOutput)
 
     private suspend fun parseRequest(session: NanoHTTPD.IHTTPSession) {
         val params = session.parms
-        controllerIndex = Integer.parseInt(params["ind"]
-                ?: throw IllegalArgumentException("no controller index"))
-        val ip = session.headers["http-client-ip"]
-                ?: throw IllegalArgumentException("no ip")
         value = StringValueState(params["value"]
                 ?: throw IllegalArgumentException("no value"))
         controller = getController(params)
-
     }
 }
