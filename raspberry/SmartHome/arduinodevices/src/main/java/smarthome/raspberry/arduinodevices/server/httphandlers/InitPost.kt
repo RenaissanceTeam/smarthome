@@ -1,14 +1,10 @@
 package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import fi.iki.elonen.NanoHTTPD
-import smarthome.library.common.ControllerState
 import smarthome.library.common.DeviceChannelOutput
-import smarthome.raspberry.arduinodevices.ArduinoControllerResponse
 import smarthome.raspberry.arduinodevices.ArduinoDevice
-import smarthome.raspberry.arduinodevices.StringValueState
 import smarthome.raspberry.arduinodevices.StringValueStateParser
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
-import smarthome.raspberry.arduinodevices.controllers.StateParser
 
 internal class InitPost(output: DeviceChannelOutput)
     : BaseRequestHandler(output) {
