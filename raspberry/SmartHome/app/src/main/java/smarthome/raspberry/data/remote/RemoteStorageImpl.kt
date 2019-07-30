@@ -9,7 +9,6 @@ class RemoteStorageImpl : RemoteStorage {
     private val homeStorage: SmartHomeStorage = TODO()
     private val instanceTokenStorage: InstanceTokenStorage = TODO()
     private val messageQueue: MessageQueue = TODO()
-    private val input: RemoteStorageInput = TODO()
     private val homesReferencesStorage: HomesReferencesStorage = TODO()
 
     override suspend fun init() {
