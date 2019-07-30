@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Test
 import smarthome.library.common.BaseController
 import smarthome.library.common.DeviceChannelOutput
+import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.StringValueState
 
 class WebServerTest {
@@ -21,6 +22,12 @@ class WebServerTest {
 
     @Before
     fun setUp() {
+        runBlocking {
+            whenever(deviceChannelOutput.findController(any())).thenReturn(controller)
+        }
+    }
+
+    private fun setupAlertSession() {
         whenever(session.method).thenReturn(NanoHTTPD.Method.POST)
         whenever(session.uri).thenReturn("/alert")
         whenever(session.parms).thenReturn(mapOf(
@@ -28,15 +35,23 @@ class WebServerTest {
                 "value" to "11.1"
 
         ))
-        runBlocking {
-            whenever(deviceChannelOutput.findController(any())).thenReturn(controller)
-        }
-
+    }
+    private fun setupInitSession() {
+        whenever(session.method).thenReturn(NanoHTTPD.Method.POST)
+        whenever(session.uri).thenReturn("/init")
+        whenever(session.headers).thenReturn(mapOf(
+                "http-client-ip" to "ip"
+        ))
+        whenever(session.parms).thenReturn(mapOf(
+                "name" to "name",
+                "services" to "1;2",
+                "names" to "1;2"
+        ))
     }
 
     @org.junit.Test
     fun handleAlertShouldTriggerOutputBoundary() {
-
+        setupAlertSession()
         runBlocking {
             handler.handle(session)
             verify(deviceChannelOutput).onNewState(controller)
@@ -45,9 +60,20 @@ class WebServerTest {
 
     @Test
     fun handleAlertProvidesValidState() {
+        setupAlertSession()
         runBlocking {
             handler.handle(session)
             assert((controller.state as StringValueState).value == "11.1")
+        }
+    }
+
+    @Test
+    fun handleInitShouldTriggerOutputBoundary() {
+        runBlocking {
+            setupInitSession()
+            handler.handle(session)
+
+            verify(deviceChannelOutput).onNewDevice(any<ArduinoDevice>())
         }
     }
 }
