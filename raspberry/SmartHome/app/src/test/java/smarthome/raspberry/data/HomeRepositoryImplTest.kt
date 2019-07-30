@@ -6,10 +6,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.Mockito.verify
-import smarthome.library.common.BaseController
-import smarthome.library.common.DeviceChannel
-import smarthome.library.common.DeviceServeState
-import smarthome.library.common.IotDevice
+import smarthome.library.common.*
 import smarthome.raspberry.domain.HomeRepository
 
 abstract class A(name: String, description: String?,
@@ -63,6 +60,22 @@ class HomeRepositoryImplTest {
             whenever(localStorage.findDevice(any())).then { device_B }
             repo.proceedReadController(controller)
             verify(deviceChannel_B).read(device_B, controller)
+        }
+    }
+
+    @Test
+    fun hasTwoChannels_proceedWrite_WriteStateToProperChannel() {
+        runBlocking {
+            repo = HomeRepositoryImpl(localStorage, remoteStorage, mapOf(
+                    device_A.javaClass to deviceChannel_A,
+                    device_B.javaClass to deviceChannel_B
+            ))
+
+            val state = ControllerState()
+
+            whenever(localStorage.findDevice(any())).then { device_A }
+            repo.proceedWriteController(controller, state)
+            verify(deviceChannel_A).writeState(device_A, controller, state)
         }
     }
 }
