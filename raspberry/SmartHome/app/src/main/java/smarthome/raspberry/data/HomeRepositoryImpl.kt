@@ -12,16 +12,16 @@ import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.usecases.ControllersUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
+import java.lang.reflect.Type
 
-class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInput,
+class HomeRepositoryImpl(private val localStorage: LocalStorage,
+                         private val remoteStorage: RemoteStorage,
+                         private val deviceChannels: Map<Type, DeviceChannel>) : HomeRepository, DeviceChannelOutput, RemoteStorageInput,
         LocalStorageInput, LocalStorageOutput {
 
-    private val localStorage: LocalStorage = TODO()
-    private val remoteStorage: RemoteStorage = TODO()
-    private val deviceChannels: List<DeviceChannel> = TODO()
-    private val devicesUseCase: DevicesUseCase = TODO()
-    private val homeUseCase: HomeUseCase = TODO()
-    private val controllersUseCase: ControllersUseCase = TODO()
+    private lateinit var devicesUseCase: DevicesUseCase
+    private lateinit var homeUseCase: HomeUseCase
+    private lateinit var controllersUseCase: ControllersUseCase
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
     override suspend fun setupUserInteraction() {
@@ -30,8 +30,6 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
 
     @SuppressLint("CheckResult")
     override suspend fun setupDevicesInteraction() {
-//        deviceChannels.forEach { it.init() }
-
         remoteStorage.getDevices().subscribe {
             if (it.isInnerCall) return@subscribe
 
@@ -47,16 +45,18 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
     }
 
     override suspend fun proceedReadController(controller: BaseController): BaseController {
-        val channel = findSuitableChannel(controller)
-        val newState = channel.read(localStorage.findDevice(controller), controller)
+        val device = localStorage.findDevice(controller)
+        val channel = findSuitableChannel(device)
+        val newState = channel.read(device, controller)
 
         controller.state = newState
         return controller
     }
 
     override suspend fun proceedWriteController(controller: BaseController, state: ControllerState): BaseController {
-        val channel = findSuitableChannel(controller)
-        val newState = channel.writeState(localStorage.findDevice(controller), controller, state)
+        val device = localStorage.findDevice(controller)
+        val channel = findSuitableChannel(device)
+        val newState = channel.writeState(device, controller, state)
 
         controller.state = newState
         return controller
@@ -74,8 +74,9 @@ class HomeRepositoryImpl : HomeRepository, DeviceChannelOutput, RemoteStorageInp
         return remoteStorage.isHomeIdUnique(homeId)
     }
 
-    private fun findSuitableChannel(controller: BaseController): DeviceChannel {
-        TODO()
+    private fun findSuitableChannel(device: IotDevice): DeviceChannel {
+        return deviceChannels[device.javaClass]
+                ?: throw IllegalArgumentException("no channel for $device")
     }
 
     override suspend fun addPendingDevice(device: IotDevice) {

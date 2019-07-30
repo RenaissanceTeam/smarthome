@@ -28,8 +28,6 @@ class ArduinoDeviceChannel(private val output: DeviceChannelOutput) : DeviceChan
     init {
         // todo start server and push events to output
         initilizationServer.startServer()
-
-
     }
 
     private fun setupWebServer() {
