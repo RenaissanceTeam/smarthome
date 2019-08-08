@@ -8,6 +8,8 @@ import smarthome.library.common.*
 import smarthome.raspberry.data.local.LocalStorageInput
 import smarthome.raspberry.data.local.LocalStorageOutput
 import smarthome.raspberry.domain.HomeRepository
+import smarthome.raspberry.domain.NoControllerException
+import smarthome.raspberry.domain.NoDeviceException
 import smarthome.raspberry.domain.usecases.ControllersUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
@@ -113,5 +115,25 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
     override suspend fun removeDevice(device: IotDevice) {
         localStorage.removeDevice(device)
         remoteStorage.removeDevice(device)
+    }
+
+
+    override suspend fun findController(guid: Long): BaseController {
+        val devices = localStorage.getDevices()
+
+        for (device in devices) {
+            return device.controllers.find { it.guid == guid } ?: continue
+        }
+        throw NoControllerException()
+    }
+
+    override suspend fun findDevice(controller: BaseController): IotDevice {
+        val devices = localStorage.getDevices()
+
+
+        for (device in devices) {
+            if (device.controllers.contains(controller)) return device
+        }
+        throw NoDeviceException()
     }
 }

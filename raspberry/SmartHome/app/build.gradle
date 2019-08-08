@@ -49,6 +49,7 @@ dependencies {
     implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
 
     def mockitoVersion = '3.0.0'
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
