@@ -4,9 +4,9 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerState
 import smarthome.library.common.IotDevice
 
+
 interface HomeRepository {
     suspend fun setupUserInteraction()
-    suspend fun setupDevicesInteraction()
     suspend fun onControllerChanged(controller: BaseController)
     suspend fun isHomeIdUnique(homeId: String): Boolean
     fun getCurrentDevices(): MutableList<IotDevice>

@@ -44,7 +44,6 @@ class MainActivity : Activity() {
     private fun initRepository() {
         uiScope.launch {
             repository.setupUserInteraction()
-            repository.setupDevicesInteraction()
         }
     }
 

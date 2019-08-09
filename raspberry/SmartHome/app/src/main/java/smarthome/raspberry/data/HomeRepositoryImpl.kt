@@ -29,17 +29,6 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
         remoteStorage.init()
     }
 
-    @SuppressLint("CheckResult")
-    override suspend fun setupDevicesInteraction() {
-        remoteStorage.getDevices().subscribe {
-            if (it.isInnerCall) return@subscribe
-
-            ioScope.launch {
-                devicesUseCase.onUserRequest(it.devices)
-            }
-        }
-    }
-
     override suspend fun saveDevice(device: IotDevice) {
         localStorage.updateDevice(device)
         remoteStorage.updateDevice(device)
