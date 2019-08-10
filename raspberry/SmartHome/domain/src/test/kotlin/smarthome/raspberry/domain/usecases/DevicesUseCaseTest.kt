@@ -1,14 +1,12 @@
 package smarthome.raspberry.domain.usecases
 
+import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.argThat
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.core.Is.`is`
-import org.hamcrest.core.IsEqual
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import smarthome.library.common.BaseController
@@ -59,14 +57,14 @@ class DevicesUseCaseTest {
 
     @Test
     fun onUserRequest_readController_ProceedReadAndUpdateServeState() {
-        `when`(repo.getCurrentDevices()).thenAnswer { mutableListOf(idleDevice) }
+        whenever(repo.getCurrentDevices()).thenReturn(mutableListOf(idleDevice))
 
         runBlocking {
             devicesUseCase.onUserRequest(mutableListOf(pendingDevice))
 
             verify(repo).proceedReadController(pendingController)
             verify(repo).saveDevice(pendingDevice)
-            assertThat(pendingController.serveState, `is`(ControllerServeState.IDLE))
+            assertThat(pendingController.serveState).isEqualTo(ControllerServeState.IDLE)
         }
     }
 
@@ -99,27 +97,27 @@ class DevicesUseCaseTest {
         pendingController.state = newState
         pendingController.serveState = ControllerServeState.PENDING_WRITE
 
-        `when`(repo.getCurrentDevices()).thenAnswer { mutableListOf(idleDevice) }
+        whenever(repo.getCurrentDevices()).thenReturn(mutableListOf(idleDevice))
 
         runBlocking {
             devicesUseCase.onUserRequest(mutableListOf(pendingDevice))
 
             verify(repo).proceedWriteController(pendingController, newState)
             verify(repo).saveDevice(pendingDevice)
-            assertThat(pendingController.serveState, IsEqual(ControllerServeState.IDLE))
+            assertThat(pendingController.serveState).isEqualTo(ControllerServeState.IDLE)
         }
     }
 
     @Test
     fun onUserRequest_readController_savesNewReadValue() {
-        `when`(repo.getCurrentDevices()).thenAnswer { mutableListOf(idleDevice) }
+        whenever(repo.getCurrentDevices()).thenReturn(mutableListOf(idleDevice))
         val stateBefore = ControllerState()
         val stateAfter = ControllerState()
 
         pendingController.state = stateBefore
 
         runBlocking {
-            `when`(repo.proceedReadController(pendingController)).thenAnswer {
+            whenever(repo.proceedReadController(pendingController)).thenAnswer {
                 pendingController.state = stateAfter
                 return@thenAnswer pendingController
             }

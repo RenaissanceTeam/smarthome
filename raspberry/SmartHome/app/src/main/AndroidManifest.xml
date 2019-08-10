@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.auth.GoogleSignInActivity">
+        <activity android:name=".presentation.GoogleSignInActivity">
             <intent-filter>
                 <action android:name="raspberry.smarthome.auth" />
 

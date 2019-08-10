@@ -3,11 +3,6 @@ package smarthome.raspberry
 import android.app.Application
 import android.content.Context
 import android.os.PowerManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import smarthome.raspberry.domain.HomeRepository
-import smarthome.raspberry.domain.usecases.HomeUseCase
 
 class App : Application() {
     var wakeLock: PowerManager.WakeLock? = null

@@ -1,5 +1,6 @@
 package smarthome.raspberry.domain.usecases
 
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -27,7 +28,7 @@ class HomeUseCaseTest {
     @Test
     fun noIdsSaved_GenerateUniqueHomeId_AddGeneratedIdToRepo() {
         runBlocking {
-            `when`(repo.isHomeIdUnique(ArgumentMatchers.anyString())).thenReturn(true)
+            whenever(repo.isHomeIdUnique(ArgumentMatchers.anyString())).thenReturn(true)
             homeUseCase.generateUniqueHomeId()
 
             verify(repo, times(1)).isHomeIdUnique(anyString())
@@ -39,7 +40,7 @@ class HomeUseCaseTest {
         runBlocking {
             val retryCount = 4
             var currentRetry = 0
-            `when`(repo.isHomeIdUnique(ArgumentMatchers.anyString())).thenAnswer {
+            whenever(repo.isHomeIdUnique(ArgumentMatchers.anyString())).thenAnswer {
                 return@thenAnswer ++currentRetry == retryCount
             }
 
