@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 const val HOME_ID_KEY: String = "home_id_key"
-const val DEFAULT_HOME_ID: String = "default_hom_id"
+const val DEFAULT_HOME_ID: String = "default_home_id"
 
 class SharedPreferencesHelper(context: Context) {
 

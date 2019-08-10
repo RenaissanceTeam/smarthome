@@ -266,19 +266,19 @@ public class GatewayService implements SmokeAlarmListener, StateChangeListener, 
     }
 
     private void save(GatewayDevice device) {
-//        if (deviceAddedListener != null)
-//            deviceAddedListener.onDeviceAdded(device);
-//        else pendingDevices.add(device);
-//
-//        synchronized (devices) {
-//            devices.put(device.getSid(), device);
-//        }
+        if (deviceAddedListener != null)
+            deviceAddedListener.onDeviceAdded(device);
+        else pendingDevices.add(device);
+
+        synchronized (devices) {
+            devices.put(device.getSid(), device);
+        }
     }
 
     private void processPendingDevices() {
-//        while (pendingDevices.size() > 0)
-//            if (deviceAddedListener != null)
-//                deviceAddedListener.onDeviceAdded(pendingDevices.poll());
+        while (pendingDevices.size() > 0)
+            if (deviceAddedListener != null)
+                deviceAddedListener.onDeviceAdded(pendingDevices.poll());
     }
 
     public void addAlarmHandler(AlarmHandler handler) {
