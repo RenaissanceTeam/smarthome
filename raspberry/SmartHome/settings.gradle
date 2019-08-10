@@ -1,1 +1,1 @@
-include ':app', ':arduinodevices', ':thirdpartydevices'
+include ':app', ':arduinodevices', ':thirdpartydevices', ':domain'
