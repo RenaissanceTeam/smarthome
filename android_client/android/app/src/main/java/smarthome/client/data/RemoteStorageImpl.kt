@@ -4,21 +4,15 @@ import io.reactivex.Observable
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.util.NoHomeid
-import smarthome.library.common.IotDevice
+import smarthome.library.common.*
 import smarthome.library.common.scripts.Script
-import smarthome.library.datalibrary.store.InstanceTokenStorage
-import smarthome.library.datalibrary.store.MessageQueue
-import smarthome.library.datalibrary.store.SmartHomeStorage
-import smarthome.library.datalibrary.store.firestore.FirestoreHomesReferencesStorage
-import smarthome.library.datalibrary.store.firestore.FirestoreInstanceTokenStorage
-import smarthome.library.datalibrary.store.firestore.FirestoreMessageQueue
-import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
-import smarthome.library.datalibrary.store.listeners.DeviceUpdate
+
 
 class RemoteStorageImpl : RemoteStorage, KoinComponent {
 
     private var homeStorage: SmartHomeStorage? = null
-    private var instanceTokenStorage: InstanceTokenStorage? = null
+    private var instanceTokenStorage: InstanceTokenStorage = TODO()
+    private var homesReferencesStorage: HomesReferencesStorage = TODO()
     private var messageQueue: MessageQueue? = null
     private val input: RemoteStorageInput by inject()
 
@@ -44,17 +38,13 @@ class RemoteStorageImpl : RemoteStorage, KoinComponent {
 //    }
 
     private suspend fun setupFirestore() {
-        val userId = input.getUserId()
-        val references = FirestoreHomesReferencesStorage(userId)
 
-        val homeIds = references.getHomesReferences().homes
+        val homeIds = homesReferencesStorage.getHomesReferences().homes
         if (homeIds.isNullOrEmpty()) throw NoHomeid()
 
         val homeId = input.chooseHomeId(homeIds)
 
-        homeStorage = FirestoreSmartHomeStorage(homeId)
-        instanceTokenStorage = FirestoreInstanceTokenStorage(homeId)
-        messageQueue = FirestoreMessageQueue(homeId)
+        // todo setup storages with userid
     }
 
     override suspend fun getAllHomeIds(): MutableList<String> {

@@ -1,0 +1,15 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "com.google.code.gson:gson:2.8.5"
+    implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
+}
+
+repositories {
+    mavenCentral()
+}

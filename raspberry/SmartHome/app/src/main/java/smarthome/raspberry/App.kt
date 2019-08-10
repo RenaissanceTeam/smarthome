@@ -3,16 +3,12 @@ package smarthome.raspberry
 import android.app.Application
 import android.content.Context
 import android.os.PowerManager
-import smarthome.library.datalibrary.store.firestore.FirestoreSmartHomeStorage
-import smarthome.raspberry.utils.SharedPreferencesHelper
 
 class App : Application() {
-
     var wakeLock: PowerManager.WakeLock? = null
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
 
         wakeLock =
                 (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
@@ -25,15 +21,10 @@ class App : Application() {
     override fun onTerminate() {
         super.onTerminate()
         wakeLock?.release()
-        val storage = FirestoreSmartHomeStorage.getInstance(
-                SharedPreferencesHelper.getInstance(this).getHomeId()
-        )
-        storage?.detachDevicesUpdatesObserver()
-        storage?.detachPendingDevicesUpdatesObserver()
-    }
-
-    companion object {
-        lateinit var instance: App
-            private set
+//        val storage = FirestoreSmartHomeStorage.getInstance(
+//                SharedPreferencesHelper.getInstance(this).getHomeId()
+//        )
+//        storage?.detachDevicesUpdatesObserver()
+//        storage?.detachPendingDevicesUpdatesObserver()
     }
 }

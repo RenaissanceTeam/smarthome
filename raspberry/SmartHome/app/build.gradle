@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -37,23 +37,21 @@ android {
     }
 }
 
-// "changing" dependencies gradle cache lifetime
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
+
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:support-annotations:28.0.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     compileOnly 'com.google.android.things:androidthings:1.0'
     implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
+
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    // http server
-    implementation 'com.nanohttpd:nanohttpd-webserver:2.1.1'
+
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.google.firebase:firebase-firestore:18.1.0'
@@ -62,8 +60,11 @@ dependencies {
     implementation 'com.firebase:firebase-client-android:2.5.2'
     implementation 'com.google.firebase:firebase-messaging:17.4.0'
 
-    //coroutines
-    def coroutinesVersion = "1.1.1"
+    // rx
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
+
+    // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
@@ -71,15 +72,17 @@ dependencies {
         transitive=false
         changing=true
     }
-    implementation(name:'commonlibrary-debug', ext:'aar') {
+    implementation(name:'common', ext:'jar') {
         transitive=false
         changing=true
     }
     implementation(project(path: ':arduinodevices')) {
         transitive=false
     }
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api project(path: ':thirdpartydevices')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+//    implementation project(path: ':thirdpartydevices')
+    implementation project(path: ':domain')
 }
 
 

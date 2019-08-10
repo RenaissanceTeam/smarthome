@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 repositories {
     mavenCentral()
@@ -8,8 +8,6 @@ repositories {
 
 android {
     compileSdkVersion 28
-
-
 
     defaultConfig {
         minSdkVersion 26
@@ -47,7 +45,7 @@ dependencies {
     implementation 'com.android.support:support-annotations:28.0.0'
     implementation 'com.google.firebase:firebase-firestore:18.2.0'
 
-    implementation(name:'commonlibrary-debug', ext:'aar') {
+    implementation(name:'common', ext:'jar') {
         transitive=false
         changing=true
     }
