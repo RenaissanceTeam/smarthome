@@ -3,6 +3,7 @@ package smarthome.raspberry.domain.usecases
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import smarthome.library.common.scripts.Action
@@ -20,24 +21,28 @@ class ScriptsUseCasesTest {
 
     @Before
     fun setUp() {
-        whenever(passingCondition.satisfy()).then { true }
+        runBlocking {
+            whenever(passingCondition.satisfy()).then { true }
+        }
     }
 
     @Test
     fun onScriptAdded_shouldSaveToRepo() {
         val newScript = Script()
 
-        scriptsUseCases.onNewScript(newScript)
-        verify(scriptsRepo).save(newScript)
-
+        runBlocking {
+            scriptsUseCases.onNewScript(newScript)
+            verify(scriptsRepo).save(newScript)
+        }
     }
 
     @Test
     fun onScriptAdded_havePassingCondition_shouldFireAction() {
         val newScript = Script(conditions = mutableListOf(passingCondition),
                 actions = mutableListOf(action))
-
-        scriptsUseCases.onNewScript(newScript)
-        verify(action)
+        runBlocking {
+            scriptsUseCases.onNewScript(newScript)
+            verify(action).run()
+        }
     }
 }
