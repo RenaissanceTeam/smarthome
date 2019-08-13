@@ -1,6 +1,7 @@
 package smarthome.raspberry.domain.usecases
 
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
@@ -42,6 +43,27 @@ class ScriptsUseCasesTest {
                 actions = mutableListOf(action))
         runBlocking {
             scriptsUseCases.onNewScript(newScript)
+            verify(action).run()
+        }
+    }
+
+    @Test
+    fun onScriptAdded_noPassingConditions_shouldScheduleEvent() {
+        val condition = mock<Condition>()
+
+        val newScript = Script(conditions = mutableListOf(condition),
+                actions = mutableListOf(action))
+
+        runBlocking {
+            whenever(condition.satisfy()).then { false }
+            scriptsUseCases.onNewScript(newScript)
+
+            verify(action, never()).run()
+
+            whenever(condition.satisfy()).then { true }
+            whenever(scriptsRepo.scripts).then { listOf(newScript) }
+            scriptsUseCases.conditionsChanged()
+
             verify(action).run()
         }
     }
