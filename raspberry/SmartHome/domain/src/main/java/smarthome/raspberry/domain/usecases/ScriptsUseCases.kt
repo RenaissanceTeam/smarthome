@@ -16,4 +16,10 @@ class ScriptsUseCases(private val repository: ScriptsRepository) {
         }
     }
 
+    suspend fun conditionsChanged() {
+        val scripts = repository.scripts
+
+        scripts.forEach { runScriptActionsIfSatisfyConditions(it) }
+    }
+
 }
