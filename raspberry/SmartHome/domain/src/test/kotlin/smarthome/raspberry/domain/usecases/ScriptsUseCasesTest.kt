@@ -48,7 +48,7 @@ class ScriptsUseCasesTest {
     }
 
     @Test
-    fun onScriptAdded_noPassingConditions_shouldScheduleEvent() {
+    fun onScriptAdded_noPassingConditions_shouldFireAfterConditionChange() {
         val condition = mock<Condition>()
 
         val newScript = Script(conditions = mutableListOf(condition),
@@ -65,6 +65,17 @@ class ScriptsUseCasesTest {
             scriptsUseCases.conditionsChanged()
 
             verify(action).run()
+        }
+    }
+
+    @Test
+    fun haveScriptAdded_deleteScript_ShouldRemoveItFromRepo() {
+        val script = Script(conditions = mutableListOf(passingCondition),
+                actions = mutableListOf(action))
+
+        runBlocking {
+            scriptsUseCases.deleteScript(script)
+            verify(scriptsRepo).delete(script)
         }
     }
 }
