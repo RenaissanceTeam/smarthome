@@ -22,4 +22,8 @@ class ScriptsUseCases(private val repository: ScriptsRepository) {
         scripts.forEach { runScriptActionsIfSatisfyConditions(it) }
     }
 
+    suspend fun deleteScript(script: Script) {
+        repository.delete(script)
+    }
+
 }
