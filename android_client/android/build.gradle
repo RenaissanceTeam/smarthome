@@ -9,7 +9,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         classpath 'com.google.gms:google-services:4.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.1.0-alpha05"
@@ -24,10 +24,8 @@ allprojects {
         google()
         jcenter()
         flatDir {
-            dirs '../../../smarthome_libraries/DataLibrary/datalibrary/build/outputs/aar'
-        }
-        flatDir {
-            dirs '../../../smarthome_libraries/CommonLibrary/commonlibrary/build/outputs/aar'
+            dirs '../../../smarthome_libraries/DataLibrary/datalibrary/build/outputs/aar',
+                    '../../../smarthome_libraries/CommonLibrary/common/build/libs'
         }
     }
 }
