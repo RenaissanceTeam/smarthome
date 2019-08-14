@@ -11,16 +11,9 @@ class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
                        private val output: LocalStorageOutput,
                        private val localDevicesStorage: LocalDevicesStorage
 ) : LocalStorage {
-    private val savedDevices: MutableList<IotDevice> by lazy { initializeSavedDevices() }
-    private val pendingDevices: MutableList<IotDevice> = mutableListOf()
-
-
-    private fun initializeSavedDevices(): MutableList<IotDevice> {
-        return localDevicesStorage.getSavedDevices().toMutableList()
-    }
 
     override fun getDevices(): MutableList<IotDevice> {
-        return savedDevices
+        return localDevicesStorage.getSavedDevices().toMutableList()
     }
 
     override suspend fun getHomeId(): String {
@@ -38,34 +31,26 @@ class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
     }
 
     override fun findDevice(controller: BaseController): IotDevice {
-        return savedDevices.find { it.controllers.contains(controller) } ?: TODO()
+        return getDevices().find { it.controllers.contains(controller) } ?: TODO()
     }
 
     override fun updateDevice(device: IotDevice) {
-        savedDevices[savedDevices.indexOf(device)] = device
-        updateSavedDevicesInStorage()
-    }
-
-    private fun updateSavedDevicesInStorage() {
-        localDevicesStorage.saveDevices(savedDevices)
+        localDevicesStorage.updateDevice(device)
     }
 
     override suspend fun addDevice(device: IotDevice) {
-        savedDevices.add(device)
-        updateSavedDevicesInStorage()
+        localDevicesStorage.add(device)
     }
 
     override suspend fun addPendingDevice(device: IotDevice) {
-        pendingDevices.add(device)
+        localDevicesStorage.addPending(device)
     }
 
     override suspend fun removePendingDevice(device: IotDevice) {
-        pendingDevices.remove(device)
+        localDevicesStorage.removePending(device)
     }
 
     override suspend fun removeDevice(device: IotDevice) {
-        savedDevices.remove(device)
-        updateSavedDevicesInStorage()
-
+        localDevicesStorage.remove(device)
     }
 }
