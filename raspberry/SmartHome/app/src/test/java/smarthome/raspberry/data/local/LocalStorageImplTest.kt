@@ -98,4 +98,20 @@ class LocalStorageImplTest {
             devices.last().shouldBeTypeOf<Device_B>()
         }
     }
+
+    @Test
+    fun noSavedDevices_addOneActiveOnePending_shouldReturnListOfOneItem() {
+        runBlocking {
+            val storage = createStorage()
+
+            val deviceA = createDeviceA()
+            val deviceB = createDeviceB()
+
+            storage.addDevice(deviceA)
+            storage.addPendingDevice(deviceB)
+
+            storage.getDevices().shouldContainExactly(deviceA)
+            storage.getPendingDevices().shouldContainExactly(deviceB)
+        }
+    }
 }
