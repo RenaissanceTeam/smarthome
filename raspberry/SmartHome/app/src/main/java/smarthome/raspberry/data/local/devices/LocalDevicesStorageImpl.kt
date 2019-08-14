@@ -4,47 +4,43 @@ import com.google.common.reflect.TypeToken
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapterFactory
 import smarthome.library.common.IotDevice
+import smarthome.raspberry.data.local.IotDeviceGroup
 import smarthome.raspberry.data.local.LocalDevicesStorage
 
 class LocalDevicesStorageImpl(typeAdapterFactory: TypeAdapterFactory) :
         LocalDevicesStorage {
     private val gson = GsonBuilder().registerTypeAdapterFactory(typeAdapterFactory).create()
     private val devicesType = object : TypeToken<ArrayList<IotDevice>>() {}.type
-    private var savedDevicesData: String? = null
-    private var savedPendingDevicesData: String? = null
-    private val devices: MutableList<IotDevice> = initializeSavedDevices()
-    private val pendingDevices: MutableList<IotDevice> = mutableListOf()
+    private var savedDevicesData: MutableMap<IotDeviceGroup, String> = mutableMapOf()
+    private val devices: MutableMap<IotDeviceGroup, MutableList<IotDevice>> = mutableMapOf()
 
-    private fun initializeSavedDevices(): MutableList<IotDevice> {
-        return gson.fromJson(savedDevicesData, devicesType) ?: mutableListOf()
+    init {
+        for (group in IotDeviceGroup.values()) {
+            devices[group] = gson.fromJson(savedDevicesData[group], devicesType) ?: mutableListOf()
+        }
     }
 
-    override fun saveDevices(devices: List<IotDevice>) {
-        savedDevicesData = gson.toJson(devices, devicesType)
+    override fun saveDevices(devices: MutableList<IotDevice>, group: IotDeviceGroup) {
+        savedDevicesData[group] = gson.toJson(devices, devicesType)
     }
 
-    override fun getSavedDevices(): List<IotDevice> {
-        return devices
+    override fun getSavedDevices(group: IotDeviceGroup): List<IotDevice> {
+        return devices[group] ?: listOf()
     }
 
-    override fun updateDevice(device: IotDevice) {
-        devices[devices.indexOf(device)] = device
+    override fun updateDevice(device: IotDevice, group: IotDeviceGroup) {
+        val list = devices[group] ?: TODO()
+
+        list[list.indexOf(device)] = device
     }
 
-    override fun add(device: IotDevice) {
-        devices.add(device)
-        saveDevices(devices)
+    override fun add(device: IotDevice, group: IotDeviceGroup) {
+        val list = devices[group] ?: mutableListOf()
+        list.add(device)
+        saveDevices(list, group)
     }
 
-    override fun addPending(device: IotDevice) {
-        pendingDevices.add(device)
-    }
-
-    override fun removePending(device: IotDevice) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun remove(device: IotDevice) {
+    override fun remove(device: IotDevice, group: IotDeviceGroup) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

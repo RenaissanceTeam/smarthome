@@ -12,4 +12,5 @@ interface LocalStorage {
     suspend fun addPendingDevice(device: IotDevice)
     suspend fun removePendingDevice(device: IotDevice)
     suspend fun removeDevice(device: IotDevice)
+    fun getPendingDevices(): MutableList<IotDevice>
 }
