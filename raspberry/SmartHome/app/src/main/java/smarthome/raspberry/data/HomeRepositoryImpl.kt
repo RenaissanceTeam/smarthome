@@ -1,12 +1,6 @@
 package smarthome.raspberry.data
 
-import android.annotation.SuppressLint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import smarthome.library.common.*
-import smarthome.raspberry.data.local.LocalStorageInput
-import smarthome.raspberry.data.local.LocalStorageOutput
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.NoControllerException
 import smarthome.raspberry.domain.NoDeviceException
@@ -23,7 +17,6 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
     private lateinit var devicesUseCase: DevicesUseCase
     private lateinit var homeUseCase: HomeUseCase
     private lateinit var controllersUseCase: ControllersUseCase
-    private val ioScope = CoroutineScope(Dispatchers.IO)
 
     override suspend fun setupUserInteraction() {
         remoteStorage.init()

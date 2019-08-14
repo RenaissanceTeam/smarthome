@@ -3,16 +3,24 @@ package smarthome.raspberry.data.local
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.data.LocalStorage
+import smarthome.raspberry.data.LocalStorageInput
+import smarthome.raspberry.data.LocalStorageOutput
 
-class LocalStorageImpl : LocalStorage {
-    private val preferences: SharedPreferencesHelper = TODO()
-    private val input: LocalStorageInput = TODO()
-    private val output: LocalStorageOutput = TODO()
-    private val devices: MutableList<IotDevice> = mutableListOf()
+class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
+                       private val input: LocalStorageInput,
+                       private val output: LocalStorageOutput,
+                       private val localDevicesStorage: LocalDevicesStorage
+) : LocalStorage {
+    private val savedDevices: MutableList<IotDevice> by lazy { initializeSavedDevices() }
     private val pendingDevices: MutableList<IotDevice> = mutableListOf()
 
+
+    private fun initializeSavedDevices(): MutableList<IotDevice> {
+        return localDevicesStorage.getSavedDevices().toMutableList()
+    }
+
     override fun getDevices(): MutableList<IotDevice> {
-        return devices
+        return savedDevices
     }
 
     override suspend fun getHomeId(): String {
@@ -30,15 +38,21 @@ class LocalStorageImpl : LocalStorage {
     }
 
     override fun findDevice(controller: BaseController): IotDevice {
-        return devices.find { it.controllers.contains(controller) } ?: TODO()
+        return savedDevices.find { it.controllers.contains(controller) } ?: TODO()
     }
 
     override fun updateDevice(device: IotDevice) {
-        devices[devices.indexOf(device)] = device
+        savedDevices[savedDevices.indexOf(device)] = device
+        updateSavedDevicesInStorage()
+    }
+
+    private fun updateSavedDevicesInStorage() {
+        localDevicesStorage.saveDevices(savedDevices)
     }
 
     override suspend fun addDevice(device: IotDevice) {
-        devices.add(device)
+        savedDevices.add(device)
+        updateSavedDevicesInStorage()
     }
 
     override suspend fun addPendingDevice(device: IotDevice) {
@@ -50,6 +64,8 @@ class LocalStorageImpl : LocalStorage {
     }
 
     override suspend fun removeDevice(device: IotDevice) {
-        devices.remove(device)
+        savedDevices.remove(device)
+        updateSavedDevicesInStorage()
+
     }
 }
