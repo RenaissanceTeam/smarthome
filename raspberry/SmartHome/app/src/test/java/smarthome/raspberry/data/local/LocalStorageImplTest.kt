@@ -1,10 +1,12 @@
 package smarthome.raspberry.data.local
 
+import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
 import com.nhaarman.mockitokotlin2.mock
 import io.kotlintest.matchers.collections.shouldBeEmpty
 import io.kotlintest.matchers.collections.shouldContain
 import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.types.shouldBeTypeOf
+import io.kotlintest.shouldBe
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import smarthome.library.common.BaseController
@@ -14,8 +16,6 @@ import smarthome.raspberry.data.LocalStorage
 import smarthome.raspberry.data.LocalStorageInput
 import smarthome.raspberry.data.LocalStorageOutput
 import smarthome.raspberry.data.local.devices.LocalDevicesStorageImpl
-import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
-
 
 
 class Device_A(name: String, description: String?, serveState: DeviceServeState, guid: Long,
@@ -110,8 +110,43 @@ class LocalStorageImplTest {
             storage.addDevice(deviceA)
             storage.addPendingDevice(deviceB)
 
-            storage.getDevices().shouldContainExactly(deviceA)
-            storage.getPendingDevices().shouldContainExactly(deviceB)
+            val anotherStorage = createStorage()
+
+            anotherStorage.getDevices().shouldContainExactly(deviceA)
+            anotherStorage.getPendingDevices().shouldContainExactly(deviceB)
+        }
+    }
+
+    @Test
+    fun haveOneSavedDevice_updateDevice_ShouldPersistNewInfo() {
+        runBlocking {
+            val storage = createStorage()
+            val nameBefore = "before"
+            val deviceA = createDeviceA(name = nameBefore)
+            storage.addDevice(deviceA)
+
+            val nameAfter = "after"
+            deviceA.name = nameAfter
+            storage.updateDevice(deviceA)
+
+            val anotherStorage = createStorage()
+
+            anotherStorage.getDevices().first().name.shouldBe(nameAfter)
+        }
+    }
+
+    @Test
+    fun haveOneSavedDevice_removeDevice_ShouldReturnEmptyList() {
+        runBlocking {
+            val storage = createStorage()
+            val deviceA = createDeviceA()
+            storage.addDevice(deviceA)
+
+            storage.removeDevice(deviceA)
+
+            val anotherStorage = createStorage()
+
+            anotherStorage.getDevices().shouldBeEmpty()
         }
     }
 }

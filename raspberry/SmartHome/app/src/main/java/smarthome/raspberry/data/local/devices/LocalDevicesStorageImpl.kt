@@ -29,7 +29,7 @@ class LocalDevicesStorageImpl(typeAdapterFactory: TypeAdapterFactory) :
     }
 
     override fun updateDevice(device: IotDevice, group: IotDeviceGroup) {
-        val list = devices[group] ?: TODO()
+        val list = devices[group] ?: return
 
         list[list.indexOf(device)] = device
     }
@@ -41,6 +41,9 @@ class LocalDevicesStorageImpl(typeAdapterFactory: TypeAdapterFactory) :
     }
 
     override fun remove(device: IotDevice, group: IotDeviceGroup) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val list = devices[group] ?: mutableListOf()
+        list.remove(device)
+
+        saveDevices(list, group)
     }
 }
