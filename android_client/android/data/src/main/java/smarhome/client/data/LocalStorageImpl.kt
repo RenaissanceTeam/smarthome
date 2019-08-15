@@ -5,10 +5,6 @@ import android.content.Context
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import smarthome.client.util.HOME_ID_KEY
-import smarthome.client.util.HOME_ID_PREFS
-import smarthome.client.util.TOKEN_KEY
-import smarthome.client.util.TOKEN_PREFS
 import smarthome.library.common.IotDevice
 import smarthome.library.common.scripts.Script
 
