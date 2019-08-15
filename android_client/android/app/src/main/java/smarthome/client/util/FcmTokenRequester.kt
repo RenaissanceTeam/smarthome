@@ -1,12 +1,12 @@
 package smarthome.client.util
 
 import com.google.firebase.iid.FirebaseInstanceId
-import smarthome.client.domain.usecases.CloudMessageUseCase
+import smarthome.client.domain.domain.usecases.CloudMessageUseCase
 import kotlin.Result.Companion.success
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class FcmTokenRequester(private val messageUseCase: CloudMessageUseCase) {
+class FcmTokenRequester(private val messageUseCase: smarthome.client.domain.domain.usecases.CloudMessageUseCase) {
 
     suspend fun initFcmToken() {
         if (messageUseCase.noSavedToken()) saveToken()
