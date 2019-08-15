@@ -3,7 +3,7 @@ package smarthome.client.presentation.screens.scripts
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import smarthome.client.R
+import smarthome.client.presentation.R
 
 class ScriptsAdapter(private val viewModel: ScriptsViewModel) : RecyclerView.Adapter<ScriptViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScriptViewHolder {

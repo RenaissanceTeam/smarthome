@@ -2,7 +2,7 @@ package smarthome.client.presentation.fragments.controllerdetail.statechanger
 
 import android.view.ViewGroup
 import com.dd.processbutton.iml.ActionProcessButton
-import smarthome.client.R
+import smarthome.client.presentation.R
 
 class ReadStateChanger(container: ViewGroup, listener: () -> Unit) :
         ControllerStateChanger(container) {

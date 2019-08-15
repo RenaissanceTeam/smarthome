@@ -11,8 +11,8 @@
 //import kotlinx.coroutines.CoroutineScope
 //import kotlinx.coroutines.Dispatchers
 //import kotlinx.coroutines.launch
-//import smarthome.client.util.ACTION_WRITE_CONTROLLER
-//import smarthome.client.R
+//import smarthome.client.presentation.ACTION_WRITE_CONTROLLER
+//import smarthome.client.presentation.R
 //import smarthome.client.presentation.screens.scripts.ControllersProvider
 //import smarthome.library.common.scripts.actions.WriteAction
 //import smarthome.library.common.BaseController

@@ -1,3 +1,28 @@
 <resources>
-    <string name="app_name">presentation</string>
+    <string name="app_name">SmartHome</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="settings">Settings</string>
+    <string name="scripts">Scripts</string>
+    <string name="new_device">New device</string>
+    <string name="controller_name">Name</string>
+    <string name="controller_type">Type</string>
+    <string name="serve_state">Serve state</string>
+    <string name="state">State</string>
+    <string name="device">Device</string>
+    <string name="edit_text_title">Set new value to %s</string>
+    <string name="empty_description">Empty description</string>
+    <string name="empty_name">Empty name</string>
+    <string name="script_name">Script name</string>
+    <string name="condition">Condition</string>
+    <string name="action">Action</string>
+    <string name="less_than"><![CDATA[<]]></string>
+    <string name="equal_to">=</string>
+    <string name="more_than"><![CDATA[>]]></string>
+    <string name="delete">delete</string>
+    <string name="add">add</string>
+
+    <string name="alert_notification_channel">alert</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

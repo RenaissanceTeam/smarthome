@@ -3,7 +3,7 @@ package smarthome.client.presentation.fragments.scriptdetail.condition
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import smarthome.client.R
+import smarthome.client.presentation.R
 import smarthome.client.presentation.fragments.scriptdetail.ScriptDetailViewModel
 
 class ConditionsAdapter(private val viewModel: ScriptDetailViewModel) :

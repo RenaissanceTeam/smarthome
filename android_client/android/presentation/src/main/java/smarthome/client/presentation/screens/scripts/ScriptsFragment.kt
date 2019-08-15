@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_scripts.*
-import smarthome.client.util.NEW_SCRIPT_GUID
-import smarthome.client.R
+import smarthome.client.presentation.NEW_SCRIPT_GUID
+import smarthome.client.presentation.R
 import smarthome.library.common.scripts.Script
 
 

@@ -31,10 +31,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     // Firebase
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.google.firebase:firebase-core:17.0.1'
     implementation 'com.google.firebase:firebase-firestore:20.2.0'
-    implementation 'com.google.firebase:firebase-messaging:19.0.1'
     implementation 'com.google.firebase:firebase-auth:18.1.0'
 
 

@@ -6,8 +6,8 @@
 //import android.view.ViewGroup
 //import android.widget.EditText
 //import android.widget.TextView
-//import smarthome.client.util.CONDITION_EXACT_TIME
-//import smarthome.client.R
+//import smarthome.client.presentation.CONDITION_EXACT_TIME
+//import smarthome.client.presentation.R
 //import smarthome.library.common.scripts.conditions.ExactTimeCondition
 //
 //class ExactTimeConditionViewWrapper(private val condition: ExactTimeCondition): ConditionViewWrapper {

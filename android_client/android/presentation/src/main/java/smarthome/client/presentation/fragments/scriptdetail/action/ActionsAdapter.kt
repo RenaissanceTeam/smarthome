@@ -3,7 +3,7 @@ package smarthome.client.presentation.fragments.scriptdetail.action
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import smarthome.client.R
+import smarthome.client.presentation.R
 import smarthome.client.presentation.fragments.scriptdetail.ScriptDetailViewModel
 
 class ActionsAdapter(private val viewModel: ScriptDetailViewModel) :

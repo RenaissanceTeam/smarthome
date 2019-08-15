@@ -12,7 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import smarthome.client.R
+import smarthome.client.presentation.R
 import smarthome.library.common.message.Message
 
 const val DISCOVER_REQUEST_CODE = 2356

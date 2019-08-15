@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import smarthome.client.R
+import smarthome.client.presentation.R
 
 class DialogParameters(val title: String,
                        val usePredicate: Boolean = true,

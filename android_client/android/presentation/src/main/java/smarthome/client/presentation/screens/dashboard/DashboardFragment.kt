@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import smarthome.client.R
+import smarthome.client.presentation.R
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 

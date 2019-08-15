@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import smarthome.client.R
+import smarthome.client.presentation.R
 import smarthome.library.common.BaseController
 
 class ControllerView(root: ViewGroup) {

@@ -5,14 +5,14 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain.domain.usecases.ControllersUseCase
-import smarthome.client.domain.domain.usecases.DevicesUseCase
-import smarthome.client.domain.domain.usecases.ScriptUseCase
+import smarthome.client.domain.usecases.ControllersUseCase
+import smarthome.client.domain.usecases.DevicesUseCase
+import smarthome.client.domain.usecases.ScriptUseCase
+import smarthome.client.presentation.ACTION_READ_CONTROLLER
+import smarthome.client.presentation.NEW_SCRIPT_GUID
 import smarthome.client.presentation.screens.scripts.actions.ActionViewWrapper
 import smarthome.client.presentation.screens.scripts.actions.AllActionsProvider
 import smarthome.client.presentation.screens.scripts.conditions.AllConditionsProvider
-import smarthome.client.util.ACTION_READ_CONTROLLER
-import smarthome.client.util.NEW_SCRIPT_GUID
 import smarthome.library.common.BaseController
 import smarthome.library.common.scripts.Script
 
@@ -33,9 +33,9 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     }
 
     private var copyBeforeEditCondition: Script? = null
-    private val scriptUseCase: smarthome.client.domain.domain.usecases.ScriptUseCase by inject()
-    private val devicesUseCase: smarthome.client.domain.domain.usecases.DevicesUseCase by inject()
-    private val controllersUseCase: smarthome.client.domain.domain.usecases.ControllersUseCase by inject()
+    private val scriptUseCase: ScriptUseCase by inject()
+    private val devicesUseCase: DevicesUseCase by inject()
+    private val controllersUseCase: ControllersUseCase by inject()
 
 
     fun setScriptGuid(guid: Long) {

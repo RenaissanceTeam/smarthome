@@ -8,14 +8,14 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain.domain.usecases.ScriptUseCase
+import smarthome.client.domain.usecases.ScriptUseCase
 import smarthome.library.common.scripts.Script
 
 class ScriptsViewModel : ViewModel(), KoinComponent {
     private val _scripts = MutableLiveData<MutableList<Script>>()
     private val _refresh = MutableLiveData<Boolean>()
     private val scriptsDisposable: Disposable? = null
-    private val scriptUseCase: smarthome.client.domain.domain.usecases.ScriptUseCase by inject()
+    private val scriptUseCase: ScriptUseCase by inject()
     val openScriptDetails = MutableLiveData<Script?>()
     val scripts: LiveData<MutableList<Script>>
         get() = _scripts

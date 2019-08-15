@@ -10,9 +10,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.util.HomeModelException
-import smarthome.client.domain.domain.usecases.DevicesUseCase
-import smarthome.client.domain.domain.usecases.PendingDevicesUseCase
+import smarthome.client.domain.HomeException
+import smarthome.client.domain.usecases.DevicesUseCase
+import smarthome.client.domain.usecases.PendingDevicesUseCase
 import smarthome.library.common.IotDevice
 
 class DeviceDetailViewModel : ViewModel(), KoinComponent {
@@ -32,8 +32,8 @@ class DeviceDetailViewModel : ViewModel(), KoinComponent {
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private var disposable: Disposable? = null
-    private val devicesUseCase: smarthome.client.domain.domain.usecases.DevicesUseCase by inject()
-    private val pendingDevicesUseCase: smarthome.client.domain.domain.usecases.PendingDevicesUseCase by inject()
+    private val devicesUseCase: DevicesUseCase by inject()
+    private val pendingDevicesUseCase: PendingDevicesUseCase by inject()
 
     var usePending: Boolean = false
 
@@ -47,8 +47,8 @@ class DeviceDetailViewModel : ViewModel(), KoinComponent {
                 _refresh.value = false
 
                 listenForModelChanges(deviceGuid)
-            } catch (e: HomeModelException) {
-
+            } catch (e: HomeException) {
+                TODO()
             }
         }
     }

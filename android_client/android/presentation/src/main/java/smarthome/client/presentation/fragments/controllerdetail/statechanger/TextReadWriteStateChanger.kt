@@ -6,7 +6,7 @@ import android.text.TextWatcher
 import android.view.ViewGroup
 import android.widget.EditText
 import com.dd.processbutton.iml.ActionProcessButton
-import smarthome.client.R
+import smarthome.client.presentation.R
 
 const val DEFAULT_TEXT_TYPE = "default"
 const val DIGITS_ONLY_TEXT_TYPE = "digits"

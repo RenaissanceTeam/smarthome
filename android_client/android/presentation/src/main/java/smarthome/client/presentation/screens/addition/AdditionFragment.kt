@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_device_addition.*
-import smarthome.client.R
+import smarthome.client.presentation.R
 import smarthome.client.presentation.fragments.deviceaddition.DISCOVER_REQUEST_CODE
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice

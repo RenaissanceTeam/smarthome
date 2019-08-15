@@ -16,7 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.fragment_script_details.*
 import kotlinx.android.synthetic.main.toolbar_with_save.*
-import smarthome.client.R
+import smarthome.client.presentation.R
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
 import smarthome.library.common.scripts.Script
