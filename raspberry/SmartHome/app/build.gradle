@@ -48,6 +48,14 @@ dependencies {
     compileOnly 'com.google.android.things:androidthings:1.0'
     implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
 
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
+
+    def mockitoVersion = '3.0.0'
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-inline:$mockitoVersion"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
+
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'

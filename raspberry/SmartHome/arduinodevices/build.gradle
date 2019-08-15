@@ -54,6 +54,14 @@ dependencies {
         changing=true
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    testImplementation 'junit:junit:4.12'
+
+    def mockitoVersion = '3.0.0'
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-inline:$mockitoVersion"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
+
 }
 repositories {
     mavenCentral()

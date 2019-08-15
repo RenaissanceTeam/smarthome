@@ -2,7 +2,7 @@ package smarthome.library.common
 
 /**
  * Describes communication from home server to device group. These may be some user requests
- * of scheduled events.
+ * or scheduled events.
  */
 interface DeviceChannel {
     suspend fun read(device: IotDevice, controller: BaseController): ControllerState
@@ -19,4 +19,6 @@ interface DeviceChannel {
 interface DeviceChannelOutput {
     suspend fun onNewDevice(device: IotDevice)
     suspend fun onNewState(controller: BaseController)
+    suspend fun findController(guid: Long): BaseController
+    suspend fun findDevice(controller: BaseController): IotDevice
 }

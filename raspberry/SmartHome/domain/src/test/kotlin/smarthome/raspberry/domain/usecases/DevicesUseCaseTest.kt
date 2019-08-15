@@ -60,7 +60,7 @@ class DevicesUseCaseTest {
         whenever(repo.getCurrentDevices()).thenReturn(mutableListOf(idleDevice))
 
         runBlocking {
-            devicesUseCase.onUserRequest(mutableListOf(pendingDevice))
+            devicesUseCase.readController(pendingDevice, pendingController)
 
             verify(repo).proceedReadController(pendingController)
             verify(repo).saveDevice(pendingDevice)
@@ -100,7 +100,7 @@ class DevicesUseCaseTest {
         whenever(repo.getCurrentDevices()).thenReturn(mutableListOf(idleDevice))
 
         runBlocking {
-            devicesUseCase.onUserRequest(mutableListOf(pendingDevice))
+            devicesUseCase.writeController(pendingDevice, pendingController, newState)
 
             verify(repo).proceedWriteController(pendingController, newState)
             verify(repo).saveDevice(pendingDevice)
@@ -122,7 +122,7 @@ class DevicesUseCaseTest {
                 return@thenAnswer pendingController
             }
 
-            devicesUseCase.onUserRequest(mutableListOf(pendingDevice))
+            devicesUseCase.readController(pendingDevice, pendingController)
             verify(repo).saveDevice(argThat {
                 controllers.first().state == stateAfter
             })
