@@ -6,7 +6,6 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
-import smarthome.client.presentation.screens.scripts.conditions.ConditionViewWrapper
 
 class ConditionViewHolder(view: View,
                           onTypeChange: (Int, String) -> Unit) : RecyclerView.ViewHolder(view) {
@@ -25,26 +24,26 @@ class ConditionViewHolder(view: View,
             onTypeChange(boundPosition, button.tag.toString())
         }
     }
-
-    fun bind(condition: ConditionViewWrapper, position: Int) {
-        isBinding = true
-        boundPosition = position
-
-        selectRadioButton(condition)
-        inflateFields(condition)
-
-        isBinding = false
-    }
-
-    private fun inflateFields(condition: ConditionViewWrapper) {
-        fieldLayout.removeAllViews()
-        fieldLayout.addView(condition.getView(fieldLayout))
-    }
-
-    private fun selectRadioButton(condition: ConditionViewWrapper) {
-        val shouldBeChecked = type.findViewWithTag<RadioButton>(condition.getTag())
-        if (shouldBeChecked.id != type.checkedRadioButtonId) {
-            type.check(shouldBeChecked.id)
-        }
-    }
+//
+//    fun bind(condition: ConditionViewWrapper, position: Int) {
+//        isBinding = true
+//        boundPosition = position
+//
+//        selectRadioButton(condition)
+//        inflateFields(condition)
+//
+//        isBinding = false
+//    }
+//
+//    private fun inflateFields(condition: ConditionViewWrapper) {
+//        fieldLayout.removeAllViews()
+//        fieldLayout.addView(condition.getView(fieldLayout))
+//    }
+//
+//    private fun selectRadioButton(condition: ConditionViewWrapper) {
+//        val shouldBeChecked = type.findViewWithTag<RadioButton>(condition.getTag())
+//        if (shouldBeChecked.id != type.checkedRadioButtonId) {
+//            type.check(shouldBeChecked.id)
+//        }
+//    }
 }

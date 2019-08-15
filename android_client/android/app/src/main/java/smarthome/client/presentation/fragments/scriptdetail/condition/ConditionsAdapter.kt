@@ -20,11 +20,11 @@ class ConditionsAdapter(private val viewModel: ScriptDetailViewModel) :
         return ConditionViewHolder(view) { position, title -> viewModel.changeConditionType(position, title) }
     }
 
-    override fun getItemCount() = viewModel.conditions.value?.count() ?: 0
+    override fun getItemCount() = 0 // viewModel.conditions.value?.count() ?: 0
 
     override fun onBindViewHolder(holder: ConditionViewHolder, position: Int) {
-        val condition = viewModel.conditions.value?.get(position)
-        condition ?: return
-        holder.bind(condition, position)
+//        val condition = viewModel.conditions.value?.get(position)
+//        condition ?: return
+//        holder.bind(condition, position)
     }
 }

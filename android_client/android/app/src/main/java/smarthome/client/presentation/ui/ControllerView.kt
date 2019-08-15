@@ -17,14 +17,8 @@ class ControllerView(root: ViewGroup) {
 
 
     fun bind(controller: BaseController) {
-        if (controller.name.isNullOrEmpty()) {
-            name.text = controller.type
-        } else {
-            name.text = controller.name
-        }
-
-        state.text = controller.state
-
+        name.text = controller.name
+        state.text = controller.state.toString()
         boundGuid = controller.guid
     }
 

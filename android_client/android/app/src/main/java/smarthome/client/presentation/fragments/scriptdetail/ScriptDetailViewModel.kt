@@ -11,9 +11,7 @@ import smarthome.client.domain.usecases.ScriptUseCase
 import smarthome.client.presentation.screens.scripts.actions.ActionViewWrapper
 import smarthome.client.presentation.screens.scripts.actions.AllActionsProvider
 import smarthome.client.presentation.screens.scripts.conditions.AllConditionsProvider
-import smarthome.client.presentation.screens.scripts.conditions.ConditionViewWrapper
 import smarthome.client.util.ACTION_READ_CONTROLLER
-import smarthome.client.util.CONDITION_CONTROLLER
 import smarthome.client.util.NEW_SCRIPT_GUID
 import smarthome.library.common.BaseController
 import smarthome.library.common.scripts.Script
@@ -26,9 +24,9 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     val isConditionOpen = MutableLiveData<Boolean>()
     val isActionOpen = MutableLiveData<Boolean>()
     val isScriptOpen = MutableLiveData<Boolean>()
-    val conditions: LiveData<MutableList<ConditionViewWrapper>> = Transformations.map(script) {
-        it.conditions.map { condition -> ConditionViewWrapper.wrap(condition, this) }.toMutableList()
-    }
+//    val conditions: LiveData<MutableList<ConditionViewWrapper>> = Transformations.map(script) {
+//        it.conditions.map { condition -> ConditionViewWrapper.wrap(condition, this) }.toMutableList()
+//    }
 
     val actions: LiveData<MutableList<ActionViewWrapper>> = Transformations.map(script) {
         it.actions.map { action -> ActionViewWrapper.wrap(action, this) }.toMutableList()
@@ -64,14 +62,14 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     }
 
     fun onSaveConditionsClicked() {
-        val conditions = conditions.value ?: return
-
-        Log.d("ScriptDetailVM", "onSaveClicked: ${conditions.joinToString() }")
-        val allFilled = conditions.isNotEmpty() && conditions.all { it.isFilled() }
-
-        if (allFilled) {
-            isConditionOpen.value = false
-        }
+//        val conditions = conditions.value ?: return
+//
+//        Log.d("ScriptDetailVM", "onSaveClicked: ${conditions.joinToString() }")
+//        val allFilled = conditions.isNotEmpty() && conditions.all { it.isFilled() }
+//
+//        if (allFilled) {
+//            isConditionOpen.value = false
+//        }
     }
 
 
@@ -95,12 +93,12 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     }
 
     fun changeConditionType(position: Int, tag: String) {
-        val script = script.value ?: return
-        val conditionViewWrappers = conditions.value ?: return
-        if ((conditionViewWrappers[position]).getTag() == tag) return
-
-        script.conditions[position] = ConditionViewWrapper.withTag(tag)
-        _script.value = script
+//        val script = script.value ?: return
+//        val conditionViewWrappers = conditions.value ?: return
+//        if ((conditionViewWrappers[position]).getTag() == tag) return
+//
+//        script.conditions[position] = ConditionViewWrapper.withTag(tag)
+//        _script.value = script
     }
 
     fun changeActionType(position: Int, tag: String) {
@@ -117,11 +115,11 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
     }
 
     fun onAddConditionButtonClicked() {
-        val script = script.value
-        script ?: return
-
-        script.conditions.add(ConditionViewWrapper.withTag(CONDITION_CONTROLLER))
-        _script.value = script
+//        val script = script.value
+//        script ?: return
+//
+//        script.conditions.add(ConditionViewWrapper.withTag(CONDITION_CONTROLLER))
+//        _script.value = script
     }
 
     fun removeConditionAt(position: Int) {
