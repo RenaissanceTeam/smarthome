@@ -6,7 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import smarthome.client.R
+import smarthome.client.presentation.R
 
 
 class SwipeToDeleteCallback(context: Context,

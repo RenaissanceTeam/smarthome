@@ -9,8 +9,8 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain.domain.usecases.AuthenticationUseCase
-import smarthome.client.domain.domain.usecases.DevicesUseCase
+import smarthome.client.domain.usecases.AuthenticationUseCase
+import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.library.common.IotDevice
 
 class DashboardViewModel : ViewModel(), KoinComponent {
@@ -18,8 +18,8 @@ class DashboardViewModel : ViewModel(), KoinComponent {
     private val _allHomeUpdateState = MutableLiveData<Boolean>()
     private val _toastMessage = MutableLiveData<String?>()
 
-    private val devicesUseCase: smarthome.client.domain.domain.usecases.DevicesUseCase by inject()
-    private val authenticationUseCase: smarthome.client.domain.domain.usecases.AuthenticationUseCase by inject()
+    private val devicesUseCase: DevicesUseCase by inject()
+    private val authenticationUseCase: AuthenticationUseCase by inject()
 
     private var devicesSubscription: Disposable? = null
     private val authSubscription: Disposable

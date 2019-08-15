@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_action.*
 import kotlinx.android.synthetic.main.toolbar_with_save.*
-import smarthome.client.R
+import smarthome.client.presentation.R
 import smarthome.client.presentation.fragments.scriptdetail.ScriptDetailViewModel
 import smarthome.client.presentation.ui.SwipeToDeleteCallback
 

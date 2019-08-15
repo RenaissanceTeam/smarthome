@@ -2,7 +2,6 @@ package smarthome.client.presentation
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import smarthome.client.R
 import smarthome.client.presentation.fragments.deviceaddition.DeviceSelectorFragment
 
 class AddDeviceActivity : FragmentActivity() {

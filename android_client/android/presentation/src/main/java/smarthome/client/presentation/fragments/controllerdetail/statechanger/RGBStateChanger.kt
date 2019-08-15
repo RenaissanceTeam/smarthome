@@ -3,7 +3,7 @@ package smarthome.client.presentation.fragments.controllerdetail.statechanger
 import android.view.ViewGroup
 import android.widget.SeekBar
 import com.dd.processbutton.iml.ActionProcessButton
-import smarthome.client.R
+import smarthome.client.presentation.R
 import java.lang.NumberFormatException
 
 class RGBStateChanger(container: ViewGroup,

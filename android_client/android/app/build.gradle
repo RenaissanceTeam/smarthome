@@ -46,21 +46,6 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    // ViewModel and LiveData
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
-
-    // jetpack
-    implementation "androidx.preference:preference:1.1.0-rc01"
-
-
-
-    // rx
-    implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android_version"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
 
     implementation(name: 'datalibrary-debug', ext: 'aar') {
         transitive = false
@@ -73,14 +58,7 @@ dependencies {
     }
 
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
-    implementation 'in.srain.cube:ultra-ptr:1.0.11'
 
-    // ktx
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.fragment:fragment-ktx:1.2.0-alpha02'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
 
 
 }

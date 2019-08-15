@@ -14,12 +14,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.R
-import smarthome.client.domain.domain.usecases.CloudMessageUseCase
+import smarthome.client.presentation.R
+import smarthome.client.domain.usecases.CloudMessageUseCase
 
 class FCMService : FirebaseMessagingService(), KoinComponent {
     private var notificationManager: NotificationManager? = null
-    private val messageUseCase: smarthome.client.domain.domain.usecases.CloudMessageUseCase by inject()
+    private val messageUseCase: CloudMessageUseCase by inject()
     private val job = Job()
     private val ioScope = CoroutineScope(Dispatchers.IO + job)
 

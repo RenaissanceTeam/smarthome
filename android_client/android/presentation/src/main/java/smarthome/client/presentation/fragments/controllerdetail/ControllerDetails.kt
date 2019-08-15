@@ -12,10 +12,12 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.controller_item.*
 import kotlinx.android.synthetic.main.fragment_controller_details.*
 import kotlinx.android.synthetic.main.fragment_controller_details.state
-import smarthome.client.R
-import smarthome.client.presentation.fragments.controllerdetail.statechanger.*
+import smarthome.client.presentation.R
+import smarthome.client.presentation.fragments.controllerdetail.statechanger.ControllerStateChanger
+import smarthome.client.presentation.fragments.controllerdetail.statechanger.StateChangerType
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
+import smarthome.client.presentationfragments.controllerdetail.ControllerDetailsArgs
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 

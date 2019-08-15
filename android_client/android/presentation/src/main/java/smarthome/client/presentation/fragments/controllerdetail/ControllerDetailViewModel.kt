@@ -8,14 +8,14 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain.domain.usecases.ControllersUseCase
-import smarthome.client.domain.domain.usecases.DevicesUseCase
-import smarthome.client.domain.domain.usecases.PendingControllersUseCase
-import smarthome.client.domain.domain.usecases.PendingDevicesUseCase
+import smarthome.client.domain.HomeException
+import smarthome.client.domain.usecases.ControllersUseCase
+import smarthome.client.domain.usecases.DevicesUseCase
+import smarthome.client.domain.usecases.PendingControllersUseCase
+import smarthome.client.domain.usecases.PendingDevicesUseCase
+import smarthome.client.presentation.NoControllerException
+import smarthome.client.presentation.NoDeviceWithControllerException
 import smarthome.client.presentation.fragments.controllerdetail.statechanger.StateChangerType
-import smarthome.client.util.HomeModelException
-import smarthome.client.util.NoControllerException
-import smarthome.client.util.NoDeviceWithControllerException
 import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerServeState
 import smarthome.library.common.IotDevice
@@ -40,10 +40,10 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
     private var disposable: Disposable? = null
 
     private var usePending = false
-    private val controllersUseCase: smarthome.client.domain.domain.usecases.ControllersUseCase by inject()
-    private val devicesUseCase: smarthome.client.domain.domain.usecases.DevicesUseCase by inject()
-    private val pendingControllersUseCase: smarthome.client.domain.domain.usecases.PendingControllersUseCase by inject()
-    private val pendingDevicesUseCase: smarthome.client.domain.domain.usecases.PendingDevicesUseCase by inject()
+    private val controllersUseCase: ControllersUseCase by inject()
+    private val devicesUseCase: DevicesUseCase by inject()
+    private val pendingControllersUseCase: PendingControllersUseCase by inject()
+    private val pendingDevicesUseCase: PendingDevicesUseCase by inject()
 
     fun setControllerGuid(controllerGuid: Long?) {
         controllerGuid ?: return
@@ -54,8 +54,8 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
                 _controller.value = foundController
                 if (foundController.serveState == ControllerServeState.IDLE) _refresh.value = false
                 listenForModelChanges(controllerGuid)
-            } catch (e: HomeModelException) {
-                // todo handle
+            } catch (e: HomeException) {
+                TODO()
             }
         }
     }

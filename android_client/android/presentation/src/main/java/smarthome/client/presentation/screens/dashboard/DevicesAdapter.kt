@@ -3,7 +3,7 @@ package smarthome.client.presentation.screens.dashboard
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import smarthome.client.R
+import smarthome.client.presentation.R
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 

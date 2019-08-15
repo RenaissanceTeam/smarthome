@@ -12,9 +12,9 @@
 //import kotlinx.coroutines.CoroutineScope
 //import kotlinx.coroutines.Dispatchers
 //import kotlinx.coroutines.launch
-//import smarthome.client.R
+//import smarthome.client.presentation.R
 //import smarthome.client.presentation.screens.scripts.ControllersProvider
-//import smarthome.client.util.CONDITION_CONTROLLER
+//import smarthome.client.presentation.CONDITION_CONTROLLER
 //import smarthome.library.common.BaseController
 //import smarthome.library.common.constants.COMPARE_EQUAL_TO
 //import smarthome.library.common.constants.COMPARE_LESS_THAN

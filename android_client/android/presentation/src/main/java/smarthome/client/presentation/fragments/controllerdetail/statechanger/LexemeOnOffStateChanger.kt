@@ -2,7 +2,7 @@ package smarthome.client.presentation.fragments.controllerdetail.statechanger
 
 import android.view.ViewGroup
 import com.dd.processbutton.iml.ActionProcessButton
-import smarthome.client.R
+import smarthome.client.presentation.R
 import smarthome.library.common.constants.STATUS_OFF
 import smarthome.library.common.constants.STATUS_ON
 

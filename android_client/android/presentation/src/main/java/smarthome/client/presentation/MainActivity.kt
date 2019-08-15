@@ -10,10 +10,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
-import smarthome.client.R
-import smarthome.client.util.RC_SIGN_IN
-import smarthome.client.util.SHOW_BOTTOM_BAR
-import smarthome.client.util.SHOW_TOOL_BAR
 
 
 class MainActivity : FragmentActivity() {

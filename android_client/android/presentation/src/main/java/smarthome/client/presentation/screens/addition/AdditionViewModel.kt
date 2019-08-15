@@ -8,8 +8,8 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain.domain.usecases.AuthenticationUseCase
-import smarthome.client.domain.domain.usecases.PendingDevicesUseCase
+import smarthome.client.domain.usecases.AuthenticationUseCase
+import smarthome.client.domain.usecases.PendingDevicesUseCase
 import smarthome.library.common.BaseController
 import smarthome.library.common.DeviceServeState
 import smarthome.library.common.IotDevice
@@ -19,8 +19,8 @@ class AdditionViewModel : ViewModel(), KoinComponent {
     private val _globalUpdateState = MutableLiveData<Boolean>()
     private var devicesSubscription: Disposable? = null
     private val authSubscription: Disposable
-    private val authenticationUseCase: smarthome.client.domain.domain.usecases.AuthenticationUseCase by inject()
-    private val pendingDevicesUseCase: smarthome.client.domain.domain.usecases.PendingDevicesUseCase by inject()
+    private val authenticationUseCase: AuthenticationUseCase by inject()
+    private val pendingDevicesUseCase: PendingDevicesUseCase by inject()
     var viewNotifier: ViewNotifier? = null
     val devices: LiveData<MutableList<IotDevice>>
         get() = _devices

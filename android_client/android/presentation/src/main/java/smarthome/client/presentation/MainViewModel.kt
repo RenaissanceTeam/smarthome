@@ -10,14 +10,14 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain.domain.usecases.AuthenticationUseCase
+import smarthome.client.domain.usecases.AuthenticationUseCase
 
 class MainViewModel: ViewModel(), KoinComponent {
     private val _isAuthenticated = MutableLiveData<Boolean>()
     val isAuthenticated: LiveData<Boolean>
         get() = _isAuthenticated
 
-    private val authenticationUseCase: smarthome.client.domain.domain.usecases.AuthenticationUseCase by inject()
+    private val authenticationUseCase: AuthenticationUseCase by inject()
     private val providers = listOf(AuthUI.IdpConfig.GoogleBuilder().build())
     private val authDisposable: Disposable
 

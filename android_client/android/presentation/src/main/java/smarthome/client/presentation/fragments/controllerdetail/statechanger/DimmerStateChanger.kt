@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import com.dd.processbutton.iml.ActionProcessButton
-import smarthome.client.R
+import smarthome.client.presentation.R
 
 class DimmerStateChanger(container: ViewGroup,
                          stateTitle: TextView?,
