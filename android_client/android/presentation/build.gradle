@@ -50,13 +50,10 @@ dependencies {
     // jetpack
     implementation "androidx.preference:preference:1.1.0-rc01"
 
-
-    // coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-
-    implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android_version"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation libs.coroutinesCore
+    implementation libs.coroutinesAndroid
+    implementation libs.rxAndroid
+    implementation libs.rxJava
 
     implementation(name:'common', ext:'jar') {
         transitive=false
@@ -65,9 +62,7 @@ dependencies {
 
     implementation project(":domain")
 
-
-    // koin - dependency injection
-    implementation "org.koin:koin-android:$koin_version"
+    implementation libs.koin
 
     implementation 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
     implementation 'in.srain.cube:ultra-ptr:1.0.11'
