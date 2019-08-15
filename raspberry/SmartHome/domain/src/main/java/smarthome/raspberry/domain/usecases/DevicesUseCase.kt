@@ -1,6 +1,9 @@
 package smarthome.raspberry.domain.usecases
 
-import smarthome.library.common.*
+import smarthome.library.common.BaseController
+import smarthome.library.common.ControllerServeState
+import smarthome.library.common.ControllerState
+import smarthome.library.common.IotDevice
 import smarthome.raspberry.domain.HomeRepository
 
 class DevicesUseCase(private val repository: HomeRepository) {
@@ -34,80 +37,19 @@ class DevicesUseCase(private val repository: HomeRepository) {
         repository.removeDevice(device)
     }
 
-    suspend fun onUserRequest(changedDevices: MutableList<IotDevice>) {
-        try {
-            handleChanges(changedDevices, repository.getCurrentDevices())
-        } catch (e: Throwable) {
-            TODO()
-        }
-    }
 
-    // todo test: when change only name should NOT trigger remote update
-    private suspend fun handleChanges(changedDevices: List<IotDevice>,
-                                      notChangedDevices: MutableList<IotDevice>) {
-        for (changedDevice in changedDevices) {
-            val notChangedDevice = notChangedDevices.find { it == changedDevice } ?: continue
-
-            handleDeviceChanges(changedDevice)
-            handleControllerChanges(changedDevice, notChangedDevice)
-
-            repository.saveDevice(changedDevice)
-        }
-    }
-
-    private suspend fun handleDeviceChanges(changedDevice: IotDevice): Boolean {
-        when (changedDevice.serveState) {
-            DeviceServeState.PENDING_TO_ADD -> addNewDevice(changedDevice)
-            DeviceServeState.ACCEPT_PENDING_TO_ADD -> acceptPendingDevice(changedDevice)
-            DeviceServeState.DELETE -> removeDevice(changedDevice)
-            else -> return false
-        }
-        return true
-    }
-
-
-
-    private suspend fun handleControllerChanges(changedDevice: IotDevice,
-                                                notChangedDevice: IotDevice): Boolean {
-        return changedDevice.controllers
-                .filter { changedController ->
-                    val notChangedController = notChangedDevice.controllers
-                            .find { it == changedController } ?: return@filter false
-
-                    return@filter hasControllerChanges(notChangedController, changedController)
-                }
-                .map {
-                    when (it.serveState) {
-                        ControllerServeState.PENDING_READ -> readController(it)
-                        ControllerServeState.PENDING_WRITE -> {
-                            if (it.state == null) {
-                                it.serveState = ControllerServeState.IDLE
-                            }
-
-                            it.state?.let { writeState ->
-                                setControllerState(it, writeState)
-                            }
-                        }
-                        else -> return@map
-                    }
-                }
-                .isNotEmpty()
-    }
-
-
-    private suspend fun readController(controller: BaseController) {
+    suspend fun readController(device: IotDevice, controller: BaseController) {
         repository.proceedReadController(controller)
         controller.serveState = ControllerServeState.IDLE
+
+        repository.saveDevice(device)
     }
 
-    private suspend fun setControllerState(controller: BaseController, state: ControllerState) {
+    suspend fun writeController(device: IotDevice, controller: BaseController, state: ControllerState) {
         repository.proceedWriteController(controller, state)
         controller.serveState = ControllerServeState.IDLE
-    }
 
-    private fun hasControllerChanges(notChangedController: BaseController,
-                             changedController: BaseController): Boolean {
-        return notChangedController.serveState != changedController.serveState
+        repository.saveDevice(device)
     }
 }
 

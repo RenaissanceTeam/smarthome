@@ -1,10 +1,13 @@
 package smarthome.raspberry.arduinodevices.server.httphandlers
 
 import fi.iki.elonen.NanoHTTPD
+import smarthome.library.common.DeviceChannelOutput
 import smarthome.raspberry.arduinodevices.ArduinoDevice
+import smarthome.raspberry.arduinodevices.StringValueStateParser
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
 
-internal class InitPost : BaseRequestHandler() {
+internal class InitPost(output: DeviceChannelOutput)
+    : BaseRequestHandler(output) {
     override suspend fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         return if (initNewArduinoDevice(session)) {
             NanoHTTPD.Response("Added successfully")
@@ -20,30 +23,25 @@ internal class InitPost : BaseRequestHandler() {
         val servicesNames = params.getValue("names").split(';')
 
 
-        val controllers = parseControllers(rawServices, servicesNames)
+        val controllers = listOf<ArduinoController>()
         val device = ArduinoDevice(name, description, controllers, ip = ip)
+        parseControllers(rawServices, servicesNames, device)
 
         output.onNewDevice(device)
         return true
     }
 
-    private fun parseControllers(rawServices: List<String>, serviceNames: List<String>): List<ArduinoController> {
+    private fun parseControllers(rawServices: List<String>, serviceNames: List<String>, device: ArduinoDevice): List<ArduinoController> {
         val controllers = mutableListOf<ArduinoController>()
 
         for (i in rawServices.indices) {
             val id = Integer.parseInt(rawServices[i].trim { it <= ' ' })
-//            val type = ControllerType.getById(id)
             val name = serviceNames[i]
 
-            val controller = createArduinoController()
-
+            val controller = ArduinoController(name, device, i, StringValueStateParser())
             controllers.add(controller)
         }
 
         return controllers
-    }
-
-    private fun createArduinoController(): ArduinoController {
-        TODO()
     }
 }
