@@ -27,11 +27,12 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.device_card, parent, false)
+        val itemView =
+                LayoutInflater.from(parent.context).inflate(R.layout.device_card, parent, false)
         return ViewHolder(itemView, false,
                 deviceDetailsClickListener,
                 controllerDetailsClickListener,
-                { viewModel.acceptDevice(it)  },
+                { viewModel.acceptDevice(it) },
                 { viewModel.rejectDevice(it) },
                 ::notifyItemViewChanged,
                 { viewModel.onControllerChanged(it) })
@@ -79,12 +80,14 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
                      deviceAcceptClickListener: (device: IotDevice?) -> Unit,
                      deviceRejectClickListener: (device: IotDevice?) -> Unit,
                      onItemChanged: (device: IotDevice?, isExpanded: Boolean) -> Unit,
-                     private val controllerUpdateHandler: (controller: BaseController?) -> Unit) : RecyclerView.ViewHolder(itemView) {
+                     private val controllerUpdateHandler: (controller: BaseController?) -> Unit) :
+            RecyclerView.ViewHolder(itemView) {
 
         private var device: IotDevice? = null
         private val deviceId: TextView = itemView.findViewById(R.id.device_card_name_label)
         private val deviceType: TextView = itemView.findViewById(R.id.device_card_description_label)
-        private val controllersRecycler: RecyclerView = itemView.findViewById(R.id.device_controllers_recycler)
+        private val controllersRecycler: RecyclerView =
+                itemView.findViewById(R.id.device_controllers_recycler)
         private val expandButton: ImageButton = itemView.findViewById(R.id.device_expand_button)
         private val rejectButton: CardView = itemView.findViewById(R.id.device_card_reject_button)
         private val acceptButton: CardView = itemView.findViewById(R.id.device_card_accept_button)
@@ -122,10 +125,9 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
         fun bind(device: IotDevice?) {
             this.device = device ?: return
 
-            if (device.name.isNullOrEmpty())
+            if (device.name.isEmpty())
                 deviceId.text = device.guid.toString()
             else deviceId.text = device.name
-            deviceType.text = device.type
         }
 
         private fun processIsExpanded() {
@@ -139,7 +141,9 @@ class DeviceAdapter(private val viewModel: AdditionViewModel,
 
         private fun fillControllersRecycler() {
             controllersRecycler.layoutManager = GridLayoutManager(itemView.context, 2)
-            val adapter = device?.getControllers()?.let { ControllersAdapter(it, controllerDetailsClickListener, controllerUpdateHandler) }
+            val adapter = device?.controllers?.let {
+                ControllersAdapter(it, controllerDetailsClickListener, controllerUpdateHandler)
+            }
             controllersRecycler.adapter = adapter
             controllersRecycler.visibility = VISIBLE
         }

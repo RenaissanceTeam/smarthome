@@ -6,10 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import smarthome.client.R
-import smarthome.client.util.ControllerProcessor
 import smarthome.library.common.BaseController
 
-class ControllersAdapter(private val controllers: MutableList<BaseController>,
+class ControllersAdapter(private val controllers: List<BaseController>,
                          private val controllerDetailsClickListener: (controller: BaseController?) -> Unit,
                          private val controllerUpdateHandler: (controller: BaseController?) -> Unit)
     : RecyclerView.Adapter<ControllersAdapter.ViewHolder>() {
@@ -44,7 +43,7 @@ class ControllersAdapter(private val controllers: MutableList<BaseController>,
 
         init {
             itemView.setOnClickListener {
-                ControllerProcessor.write(controller, controllerUpdateHandler)
+//                ControllerProcessor.write(controller, controllerUpdateHandler)
                 notifyRecycler(controller!!)
             }
             itemView.setOnLongClickListener {
@@ -56,11 +55,11 @@ class ControllersAdapter(private val controllers: MutableList<BaseController>,
         fun bind (controller: BaseController?) {
             this.controller = controller ?: return
 
-            if (controller.name.isNullOrEmpty())
-                controllerName.text = controller.type
+            if (controller.name.isEmpty())
+                controllerName.text = "Empty name"
             else controllerName.text = controller.name
 
-            controllerState.text = controller.state
+            controllerState.text = controller.state.toString()
         }
     }
 

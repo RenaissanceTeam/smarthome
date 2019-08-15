@@ -1,6 +1,5 @@
 package smarthome.client.presentation.fragments.controllerdetail.statechanger
 
-import smarthome.library.common.ControllerType
 import smarthome.library.common.constants.*
 
 
@@ -9,7 +8,7 @@ object ControllerTypeAdapter {
     fun toStateChangerType(type: String): StateChangerType {
         return when (type) {
 
-            ControllerType.ARDUINO_ON_OFF.toString() -> StateChangerType.ONOFF
+//            ControllerType.ARDUINO_ON_OFF.toString() -> StateChangerType.ONOFF
 
             POWER_CONTROLLER_TYPE -> StateChangerType.LEXEME_ONOFF
             GATEWAY_LEFT_BUTTON_CONTROLLER -> StateChangerType.LEXEME_ONOFF

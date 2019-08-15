@@ -11,6 +11,7 @@ import org.koin.core.inject
 import smarthome.client.domain.usecases.AuthenticationUseCase
 import smarthome.client.domain.usecases.PendingDevicesUseCase
 import smarthome.library.common.BaseController
+import smarthome.library.common.DeviceServeState
 import smarthome.library.common.IotDevice
 
 class AdditionViewModel : ViewModel(), KoinComponent {
@@ -28,7 +29,8 @@ class AdditionViewModel : ViewModel(), KoinComponent {
         get() = _globalUpdateState
 
     init {
-        authSubscription = authenticationUseCase.getAuthenticationStatus().subscribe { if (it) requestSmartHomeState(); }
+        authSubscription = authenticationUseCase.getAuthenticationStatus()
+                .subscribe { if (it) requestSmartHomeState(); }
     }
 
     fun requestSmartHomeState() {
@@ -36,7 +38,8 @@ class AdditionViewModel : ViewModel(), KoinComponent {
             _globalUpdateState.value = true
 
             devicesSubscription = pendingDevicesUseCase.getPendingDevices().subscribe {
-                _devices.value?.let { old -> // todo change to list adapter
+                _devices.value?.let { old ->
+                    // todo change to list adapter
                     if (old.size > it.size) {
                         if (it.size == 0) {
                             viewNotifier?.onItemRemoved(0)
@@ -65,7 +68,7 @@ class AdditionViewModel : ViewModel(), KoinComponent {
 
         viewModelScope.launch {
             val device = pendingDevicesUseCase.findPendingDevice(controller)
-            device.controllers[device.controllers.indexOf(controller)] = controller
+//            device.controllers[device.controllers.indexOf(controller)] = controller
             pendingDevicesUseCase.changePendingDevice(device)
         }
     }
@@ -78,14 +81,14 @@ class AdditionViewModel : ViewModel(), KoinComponent {
     fun acceptDevice(device: IotDevice?) {
         device ?: return
 
-        device.setAccepted()
+        device.serveState = DeviceServeState.ACCEPT_PENDING_TO_ADD
         viewModelScope.launch { pendingDevicesUseCase.changePendingDevice(device) }
     }
 
     fun rejectDevice(device: IotDevice?) {
         device ?: return
 
-        device.setRejected()
+        device.serveState = DeviceServeState.DELETE
         viewModelScope.launch { pendingDevicesUseCase.changePendingDevice(device) }
     }
 }

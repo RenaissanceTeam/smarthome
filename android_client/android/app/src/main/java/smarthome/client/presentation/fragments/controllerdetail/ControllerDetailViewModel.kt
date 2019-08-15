@@ -12,12 +12,12 @@ import smarthome.client.domain.usecases.ControllersUseCase
 import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.client.domain.usecases.PendingControllersUseCase
 import smarthome.client.domain.usecases.PendingDevicesUseCase
-import smarthome.client.presentation.fragments.controllerdetail.statechanger.ControllerTypeAdapter
 import smarthome.client.presentation.fragments.controllerdetail.statechanger.StateChangerType
 import smarthome.client.util.HomeModelException
 import smarthome.client.util.NoControllerException
 import smarthome.client.util.NoDeviceWithControllerException
 import smarthome.library.common.BaseController
+import smarthome.library.common.ControllerServeState
 import smarthome.library.common.IotDevice
 
 class ControllerDetailViewModel : ViewModel(), KoinComponent {
@@ -52,8 +52,7 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
             try {
                 val foundController = if (!usePending) controllersUseCase.getController(controllerGuid) else pendingControllersUseCase.getPendingController(controllerGuid)
                 _controller.value = foundController
-                if (foundController.isUpToDate) _refresh.value = false
-                _stateChangerType.value = ControllerTypeAdapter.toStateChangerType(foundController.type)
+                if (foundController.serveState == ControllerServeState.IDLE) _refresh.value = false
                 listenForModelChanges(controllerGuid)
             } catch (e: HomeModelException) {
                 // todo handle
@@ -71,7 +70,7 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
             val changedController = findController(it, controllerGuid)
             _controller.value = changedController
             _device.value = findDevice(it, changedController)
-            if (changedController.isUpToDate) _refresh.value = false
+            if (changedController.serveState == ControllerServeState.IDLE) _refresh.value = false
         }
     }
 
@@ -98,13 +97,13 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
         disposable?.dispose()
     }
 
-    fun newStateRequest(state: String?, serveState: String) {
+    fun newStateRequest(state: String?, serveState: ControllerServeState) {
         val device = _device.value ?: return
         val controller = _controller.value ?: return
 
         viewModelScope.launch {
             _refresh.value = true
-            state?.let { controller.state = it }
+//            state?.let { controller.state = it }
             controller.serveState = serveState
 
             changeDevice(device)
