@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : FragmentActivity() {
-    private val viewModel: smarthome.client.presentation.MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

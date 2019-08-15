@@ -4,7 +4,8 @@ apply plugin: 'kotlin'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation libs.rxJava
+
     implementation(name:'common', ext:'jar') {
         transitive=false
         changing=true
