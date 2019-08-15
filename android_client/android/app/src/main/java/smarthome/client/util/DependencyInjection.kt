@@ -6,6 +6,9 @@ import smarhome.client.data.*
 import smarthome.client.domain.AuthenticationRepository
 import smarthome.client.domain.HomeRepository
 import smarthome.client.domain.usecases.*
+import smarthome.library.datalibrary.FirestoreHomesReferencesStorage
+import smarthome.library.datalibrary.FirestoreInstanceTokenStorage
+import smarthome.library.datalibrary.FirestoreSmartHomeStorage
 
 val usecasesModule = module {
     single { AuthenticationUseCase(get()) }
@@ -27,5 +30,9 @@ val repositoryModule = module {
 
 val dataSourceModule = module {
     single { LocalStorageImpl(get()) as LocalStorage }
-    single { RemoteStorageImpl() as RemoteStorage }
+    single {
+        RemoteStorageImpl({ FirestoreInstanceTokenStorage(it)  },
+                { FirestoreHomesReferencesStorage(it) },
+                { FirestoreSmartHomeStorage(it) }) as RemoteStorage
+    }
 }

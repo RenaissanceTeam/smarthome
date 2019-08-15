@@ -37,7 +37,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation libs.appCompat
     testImplementation 'junit:junit:4.12'
 
     // ViewModel and LiveData
@@ -61,21 +61,18 @@ dependencies {
     }
 
     implementation project(":domain")
-
     implementation libs.koin
-
     implementation 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
     implementation 'in.srain.cube:ultra-ptr:1.0.11'
 
     // ktx
-    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'androidx.core:core-ktx:1.2.0-alpha03'
     implementation 'androidx.fragment:fragment-ktx:1.2.0-alpha02'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0-alpha01'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.0-alpha01'
 
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.google.firebase:firebase-messaging:19.0.1'
-
 }
 
 apply plugin: 'kotlin-android-extensions'

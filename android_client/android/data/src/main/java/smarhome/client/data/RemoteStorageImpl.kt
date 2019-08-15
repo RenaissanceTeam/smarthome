@@ -1,5 +1,6 @@
 package smarhome.client.data
 
+import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -7,27 +8,17 @@ import smarthome.library.common.*
 import smarthome.library.common.scripts.Script
 
 
-class RemoteStorageImpl : RemoteStorage, KoinComponent {
-
+class RemoteStorageImpl(
+        private val instanceTokenStorageFactory: (homeId: String) -> InstanceTokenStorage,
+        private val homesReferencesStorageFactory: (uid: String) -> HomesReferencesStorage,
+        private val homeStorageFactory: (homeId: String) -> SmartHomeStorage
+) : RemoteStorage, KoinComponent {
     private var homeStorage: SmartHomeStorage? = null
-    private var instanceTokenStorage: InstanceTokenStorage = TODO()
-    private var homesReferencesStorage: HomesReferencesStorage = TODO()
+    private var instanceTokenStorage: InstanceTokenStorage? = null
+    private var homesReferencesStorage: HomesReferencesStorage? = null
     private var messageQueue: MessageQueue? = null
     private val input: RemoteStorageInput by inject()
 
-    private suspend fun getSmartHomeStorage(): SmartHomeStorage {
-        if (homeStorage == null) {
-            setupFirestore()
-        }
-        return homeStorage!!
-    }
-
-    private suspend fun getInstanceTokenStorage(): InstanceTokenStorage {
-        if (instanceTokenStorage == null) {
-            setupFirestore()
-        }
-        return instanceTokenStorage!!
-    }
 
 //    suspend fun getMessageQueue(): MessageQueue {
 //        if (messageQueue == null) {
@@ -37,13 +28,25 @@ class RemoteStorageImpl : RemoteStorage, KoinComponent {
 //    }
 
     private suspend fun setupFirestore() {
+        homesReferencesStorage ?: initializeHomesReferencesStorage()
+        homesReferencesStorage ?: throw RuntimeException("can't initialize homesreferences storage")
+
+        homesReferencesStorage?.let { initializeInstanceTokenStorage(it) }
+    }
+    private suspend fun initializeInstanceTokenStorage(homesReferencesStorage: HomesReferencesStorage) {
+
 
         val homeIds = homesReferencesStorage.getHomesReferences().homes
         if (homeIds.isNullOrEmpty()) throw NoHomeid()
 
         val homeId = input.chooseHomeId(homeIds)
+        instanceTokenStorage = instanceTokenStorageFactory(homeId)
+        homeStorage = homeStorageFactory(homeId)
+    }
 
-        // todo setup storages with userid
+    private fun initializeHomesReferencesStorage() {
+        val uid = FirebaseAuth.getInstance().uid ?: return
+        homesReferencesStorage = homesReferencesStorageFactory(uid)
     }
 
     override suspend fun getAllHomeIds(): MutableList<String> {
@@ -68,5 +71,20 @@ class RemoteStorageImpl : RemoteStorage, KoinComponent {
 
     override suspend fun saveScript(script: Script) {
 //        getSmartHomeStorage().saves
+    }
+
+
+    private suspend fun getSmartHomeStorage(): SmartHomeStorage {
+        if (homeStorage == null) {
+            setupFirestore()
+        }
+        return homeStorage!!
+    }
+
+    private suspend fun getInstanceTokenStorage(): InstanceTokenStorage {
+        if (instanceTokenStorage == null) {
+            setupFirestore()
+        }
+        return instanceTokenStorage!!
     }
 }

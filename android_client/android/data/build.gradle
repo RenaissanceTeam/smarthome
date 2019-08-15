@@ -27,7 +27,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation libs.appCompat
     testImplementation 'junit:junit:4.12'
 
     // Firebase
@@ -35,10 +35,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:20.2.0'
     implementation 'com.google.firebase:firebase-auth:18.1.0'
 
-
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
 
     // koin - dependency injection
     implementation libs.koin
