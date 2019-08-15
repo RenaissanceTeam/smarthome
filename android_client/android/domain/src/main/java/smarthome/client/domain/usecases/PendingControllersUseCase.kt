@@ -1,7 +1,7 @@
 package smarthome.client.domain.usecases
 
 import smarthome.client.domain.HomeRepository
-import smarthome.client.util.NoControllerException
+import smarthome.client.domain.NoControllerException
 import smarthome.library.common.BaseController
 
 class PendingControllersUseCase(private val repository: HomeRepository) {

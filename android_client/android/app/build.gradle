@@ -44,8 +44,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
 
-
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // ViewModel and LiveData
@@ -63,8 +61,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     // rx
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
+    implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
 
     implementation(name: 'datalibrary-debug', ext: 'aar') {
         transitive = false
