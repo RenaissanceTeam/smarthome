@@ -11,10 +11,6 @@ class RemoteStorageImpl : RemoteStorage {
     private val messageQueue: MessageQueue = TODO()
     private val homesReferencesStorage: HomesReferencesStorage = TODO()
 
-    override suspend fun init() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override suspend fun updateDevice(device: IotDevice) {
         homeStorage.updateDevice(device)
     }
