@@ -6,7 +6,6 @@ import smarthome.library.common.IotDevice
 
 
 interface HomeRepository {
-    suspend fun setupUserInteraction()
     suspend fun onControllerChanged(controller: BaseController)
     suspend fun isHomeIdUnique(homeId: String): Boolean
     fun getCurrentDevices(): MutableList<IotDevice>

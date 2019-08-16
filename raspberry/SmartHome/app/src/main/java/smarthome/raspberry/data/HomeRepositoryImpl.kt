@@ -18,10 +18,6 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
     private lateinit var homeUseCase: HomeUseCase
     private lateinit var controllersUseCase: ControllersUseCase
 
-    override suspend fun setupUserInteraction() {
-        remoteStorage.init()
-    }
-
     override suspend fun saveDevice(device: IotDevice) {
         localStorage.updateDevice(device)
         remoteStorage.updateDevice(device)
