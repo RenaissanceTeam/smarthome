@@ -36,14 +36,6 @@ class MainActivity : Activity() {
 
         if (!authUseCase.isAuthenticated()) {
             startActivity(Intent(this, GoogleSignInActivity::class.java))
-        } else {
-            initRepository()
-        }
-    }
-
-    private fun initRepository() {
-        uiScope.launch {
-            repository.setupUserInteraction()
         }
     }
 
