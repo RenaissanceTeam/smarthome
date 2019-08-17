@@ -1,4 +1,4 @@
-package smarthome.raspberry.data.local
+package smarthome.raspberry.data
 
 interface LocalStorageInput {
     suspend fun generateHomeId(): String
