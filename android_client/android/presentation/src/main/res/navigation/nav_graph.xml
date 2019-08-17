@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/deviceDetails"
+        android:name="smarthome.client.presentation.fragments.devicedetail.DeviceDetails"
+        android:label="DeviceDetails"
+        tools:layout="@layout/fragment_device_details" >
+        <action
+            android:id="@+id/action_deviceDetails_to_controllerDetails"
+            app:destination="@id/controllerDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+        <argument
+            android:name="deviceGuid"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="usePending"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="show_tool_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/actionFragment"
+        android:name="smarthome.client.presentation.fragments.scriptdetail.action.ActionFragment"
+        android:label="ActionFragment"
+        tools:layout="@layout/fragment_action" >
+        <action
+            android:id="@+id/action_actionFragment_to_deviceSelectorFragment"
+            app:destination="@id/deviceSelectorFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/additionFragment"
+        android:name="smarthome.client.presentation.screens.addition.AdditionFragment"
+        android:label="AdditionFragment"
+        tools:layout="@layout/fragment_device_addition" >
+        <action
+            android:id="@+id/action_additionFragment_to_deviceDetails"
+            app:destination="@id/deviceDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+        <action
+            android:id="@+id/action_additionFragment_to_controllerDetails"
+            app:destination="@id/controllerDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+        <argument
+            android:name="show_bottom_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/conditionFragment"
+        android:name="smarthome.client.presentation.fragments.scriptdetail.condition.ConditionFragment"
+        android:label="ConditionFragment"
+        tools:layout="@layout/fragment_condition">
+        <action
+            android:id="@+id/action_conditionFragment_to_deviceSelectorFragment"
+            app:destination="@id/deviceSelectorFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/controllerDetails"
+        android:name="smarthome.client.presentationfragments.controllerdetail.ControllerDetails"
+        android:label="ControllerDetails"
+        tools:layout="@layout/fragment_controller_details">
+        <argument
+            android:name="controllerGuid"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="usePending"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="show_tool_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="smarthome.client.presentation.screens.dashboard.DashboardFragment"
+        android:label="DashboardFragment"
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_deviceDetails"
+            app:destination="@id/deviceDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+        <action
+            android:id="@+id/action_dashboardFragment_to_controllerDetails"
+            app:destination="@id/controllerDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+        <argument
+            android:name="show_bottom_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/scriptDetails"
+        android:name="smarthome.client.presentation.fragments.scriptdetail.ScriptDetails"
+        android:label="ScriptDetails"
+        tools:layout="@layout/fragment_script_details" >
+        <action
+            android:id="@+id/action_scriptDetails_to_conditionFragment"
+            app:destination="@id/conditionFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+        <action
+            android:id="@+id/action_scriptDetails_to_actionFragment"
+            app:destination="@id/actionFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+        <argument android:name="scriptGuid"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
+    <fragment
+        android:id="@+id/scriptsFragment"
+        android:name="smarthome.client.presentation.screens.scripts.ScriptsFragment"
+        android:label="ScriptsFragment"
+        tools:layout="@layout/fragment_scripts">
+        <argument
+            android:name="show_bottom_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+        <action
+            android:id="@+id/action_scriptsFragment_to_scriptDetails"
+            app:destination="@id/scriptDetails"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="smarthome.client.presentation.screens.settings.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings">
+        <argument
+            android:name="show_bottom_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/deviceSelectorFragment"
+        android:name="smarthome.client.presentation.fragments.deviceaddition.DeviceSelectorFragment"
+        android:label="fragment_device_selector"
+        tools:layout="@layout/fragment_device_selector" >
+        <argument
+            android:name="show_tool_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
+    <activity
+        android:id="@+id/addDeviceActivity"
+        android:name="smarthome.client.presentationAddDeviceActivity"
+        android:label="AddDeviceActivity"
+        tools:layout="@layout/activity_add_device" />
+</navigation>

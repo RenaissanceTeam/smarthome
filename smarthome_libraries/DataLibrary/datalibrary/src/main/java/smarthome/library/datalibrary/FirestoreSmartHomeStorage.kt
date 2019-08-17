@@ -6,10 +6,10 @@ import io.reactivex.Observable
 import smarthome.library.common.DeviceUpdate
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
+import smarthome.library.common.SmartHomeStorage
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.constants.HOME_DEVICES_NODE
 import smarthome.library.datalibrary.constants.PENDING_DEVICES_NODE
-import smarthome.library.datalibrary.store.SmartHomeStorage
 import smarthome.library.datalibrary.util.ObserverMode
 import smarthome.library.datalibrary.util.withContinuation
 import smarthome.library.datalibrary.util.withObjectContinuation

@@ -15,12 +15,12 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/alert_notification_channel" />
 
-        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
-
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/round_warning" />
 
-        <activity android:name=".presentation.AddDeviceActivity"></activity>
-        <activity android:name=".presentation.MainActivity">
+        <activity android:name="smarthome.client.presentation.AddDeviceActivity"></activity>
+        <activity android:name="smarthome.client.presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,5 +34,4 @@
             </intent-filter>
         </service>
     </application>
-
 </manifest>
