@@ -55,6 +55,7 @@ dependencies {
     implementation libs.rxAndroid
     implementation libs.coroutinesCore
     implementation libs.coroutinesAndroid
+    implementation libs.koin
 
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'

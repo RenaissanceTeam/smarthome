@@ -7,15 +7,18 @@ import android.os.Bundle
 import android.util.Log
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Job
+import org.koin.android.ext.android.inject
 import smarthome.raspberry.BuildConfig
 import smarthome.raspberry.R
 import smarthome.raspberry.domain.usecases.AuthUseCase
+import smarthome.raspberry.input.InputController
 
 private val TAG = MainActivity::class.java.simpleName
 private val DEBUG = BuildConfig.DEBUG
 
 class MainActivity : Activity() {
-    private val authUseCase: AuthUseCase = TODO()
+    private val authUseCase: AuthUseCase by inject()
+    private val inputController: InputController by inject()
     private val job = Job()
     private var authenticationSubscription: Disposable? = null
 
@@ -29,6 +32,7 @@ class MainActivity : Activity() {
                 startActivity(Intent(this, GoogleSignInActivity::class.java))
             }
         }
+        inputController.init()
     }
 
     override fun onDestroy() {
