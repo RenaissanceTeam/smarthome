@@ -1,33 +1,54 @@
 package smarthome.raspberry.data.remote
 
 import io.reactivex.Observable
-import smarthome.library.common.*
+import smarthome.library.common.DeviceUpdate
+import smarthome.library.common.HomesReferencesStorage
+import smarthome.library.common.IotDevice
+import smarthome.library.common.SmartHomeStorage
 import smarthome.raspberry.data.RemoteStorage
+import smarthome.raspberry.data.RemoteStorageInput
 
-class RemoteStorageImpl : RemoteStorage {
+class RemoteStorageImpl(
+        private val input: RemoteStorageInput,
+        private val homeStorageFactory: (String) -> SmartHomeStorage,
+        private val homesReferencesStorageFactory: (String) -> HomesReferencesStorage) :
+        RemoteStorage {
 
-    private val homeStorage: SmartHomeStorage = TODO()
-    private val instanceTokenStorage: InstanceTokenStorage = TODO()
-    private val messageQueue: MessageQueue = TODO()
-    private val homesReferencesStorage: HomesReferencesStorage = TODO()
+    private var homeStorage: SmartHomeStorage? = null
+    private var homesReferencesStorage: HomesReferencesStorage? = null
+
+    private suspend fun getHomeStorage(): SmartHomeStorage {
+        if (homeStorage == null) {
+            homeStorage = homeStorageFactory(input.getHomeId())
+        }
+        return homeStorage!!
+    }
+
+    private suspend fun getHomesReferenecesStorage(): HomesReferencesStorage {
+        if (homesReferencesStorage == null) {
+            homesReferencesStorage = homesReferencesStorageFactory(input.getUserId())
+        }
+        return homesReferencesStorage!!
+    }
+
 
     override suspend fun updateDevice(device: IotDevice) {
-        homeStorage.updateDevice(device)
+        getHomeStorage().updateDevice(device)
     }
 
     override suspend fun createHome(homeId: String) {
-        homesReferencesStorage.addHomeReference(homeId)
-        homeStorage.createSmartHome()
+        getHomesReferenecesStorage().addHomeReference(homeId)
+        getHomeStorage().createSmartHome()
     }
 
     override suspend fun isHomeIdUnique(homeId: String): Boolean {
-        val exists = homesReferencesStorage.checkIfHomeExists(homeId)
+        val exists = getHomesReferenecesStorage().checkIfHomeExists(homeId)
 
         return !exists
     }
 
     override suspend fun getDevices(): Observable<DeviceUpdate> {
-        return homeStorage.observeDevicesUpdates()
+        return getHomeStorage().observeDevicesUpdates()
     }
 
     //    suspend fun getMessageQueue(): MessageQueue {
@@ -38,18 +59,18 @@ class RemoteStorageImpl : RemoteStorage {
 //    }
 
     override suspend fun addPendingDevice(device: IotDevice) {
-        homeStorage.addPendingDevice(device)
+        getHomeStorage().addPendingDevice(device)
     }
 
     override suspend fun removePendingDevice(device: IotDevice) {
-        homeStorage.removePendingDevice(device)
+        getHomeStorage().removePendingDevice(device)
     }
 
     override suspend fun addDevice(device: IotDevice) {
-        homeStorage.addDevice(device)
+        getHomeStorage().addDevice(device)
     }
 
     override suspend fun removeDevice(device: IotDevice) {
-        homeStorage.removeDevice(device)
+        getHomeStorage().removeDevice(device)
     }
 }
