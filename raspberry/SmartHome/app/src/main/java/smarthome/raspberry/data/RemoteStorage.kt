@@ -15,7 +15,3 @@ interface RemoteStorage {
     suspend fun removeDevice(device: IotDevice)
 }
 
-interface RemoteStorageInput {
-    suspend fun getUserId(): String
-    suspend fun getHomeId(): String
-}

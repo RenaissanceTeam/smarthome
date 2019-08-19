@@ -14,12 +14,12 @@ class HomeRepositoryImpl(
         devicesUseCaseFactory: (HomeRepository) -> DevicesUseCase,
         homeUseCaseFactory: (HomeRepository) -> HomeUseCase,
         controllersUseCaseFactory: (HomeRepository) -> ControllersUseCase,
-        remoteStorageFactory: (RemoteStorageInput) -> RemoteStorage,
+        remoteStorageFactory: (HomeInfoSource) -> RemoteStorage,
         deviceChannelsFactories: Map<String, (DeviceChannelOutput) -> DeviceChannel>,
         private val authRepo: AuthRepo
 ) : HomeRepository,
         DeviceChannelOutput,
-        LocalStorageInput, LocalStorageOutput, RemoteStorageInput {
+        LocalStorageInput, LocalStorageOutput, HomeInfoSource {
 
     private val devicesUseCase = devicesUseCaseFactory(this)
     private val homeUseCase = homeUseCaseFactory(this)
