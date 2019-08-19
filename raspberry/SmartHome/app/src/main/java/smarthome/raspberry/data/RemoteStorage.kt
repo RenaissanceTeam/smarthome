@@ -8,7 +8,6 @@ interface RemoteStorage {
     suspend fun updateDevice(device: IotDevice)
     suspend fun createHome(homeId: String)
     suspend fun isHomeIdUnique(homeId: String): Boolean
-    suspend fun getDevices(): Observable<DeviceUpdate>
     suspend fun addPendingDevice(device: IotDevice)
     suspend fun removePendingDevice(device: IotDevice)
     suspend fun addDevice(device: IotDevice)

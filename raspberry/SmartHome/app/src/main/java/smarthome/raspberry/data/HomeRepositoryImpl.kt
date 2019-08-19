@@ -1,5 +1,6 @@
 package smarthome.raspberry.data
 
+import io.reactivex.Observable
 import smarthome.library.common.*
 import smarthome.raspberry.domain.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
@@ -43,11 +44,11 @@ class HomeRepositoryImpl(
         return controller
     }
 
-    override suspend fun getUserId(): String {
+    override fun getObservableUserId(): Observable<String> {
         return authRepo.getUserId()
     }
 
-    override suspend fun getHomeId(): String {
+    override fun getObservableHomeId(): Observable<String> {
         return localStorage.getHomeId()
     }
 

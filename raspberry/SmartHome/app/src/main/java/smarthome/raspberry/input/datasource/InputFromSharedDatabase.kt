@@ -1,6 +1,7 @@
 package smarthome.raspberry.input.datasource
 
-import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.runBlocking
 import smarthome.library.common.DeviceUpdate
 import smarthome.library.common.SmartHomeStorage
 import smarthome.raspberry.data.HomeInfoSource
@@ -10,14 +11,21 @@ class InputFromSharedDatabase(private val homeInfoSource: HomeInfoSource,
                               private val databaseFactory: (String) -> SmartHomeStorage) :
         InputControllerDataSource {
     private var storage: SmartHomeStorage? = null
-    private suspend fun getStorage(): SmartHomeStorage {
-        if (storage == null) {
-            storage = databaseFactory(homeInfoSource.getUserId())
-        }
-        return storage!!
-    }
 
-    override suspend fun getDeviceUpdates(): Observable<DeviceUpdate> {
-        return getStorage().observeDevicesUpdates()
+    private var uidSubscription: Disposable? = null
+    private var deviceUpdateSubscription: Disposable? = null
+
+    override suspend fun onDeviceUpdate(action: (DeviceUpdate) -> Unit) {
+        uidSubscription?.dispose()
+        uidSubscription = homeInfoSource.getObservableUserId().subscribe {
+            deviceUpdateSubscription?.dispose()
+            val database = databaseFactory(it)
+            storage = database
+
+            runBlocking {
+                deviceUpdateSubscription =
+                        database.observeDevicesUpdates().subscribe(action)
+            }
+        }
     }
 }

@@ -2,18 +2,24 @@ package smarthome.raspberry.data
 
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 import smarthome.raspberry.NoAuthentication
 import smarthome.raspberry.domain.AuthRepo
 import smarthome.raspberry.domain.usecases.AuthUseCase
 
 class AuthRepoImpl : AuthRepo {
-    private val authStatus = PublishSubject.create<AuthUseCase.AuthStatus>()
+    private val authStatus = BehaviorSubject.create<AuthUseCase.AuthStatus>()
+    private val userId = BehaviorSubject.create<String>()
 
     init {
         FirebaseAuth.getInstance().addAuthStateListener {
-            if (it.currentUser != null) authStatus.onNext(AuthUseCase.AuthStatus.SIGNED_IN)
-            else authStatus.onNext(AuthUseCase.AuthStatus.NOT_SIGNED_IN)
+            val currentUser = it.currentUser
+            if (currentUser != null) {
+                authStatus.onNext(AuthUseCase.AuthStatus.SIGNED_IN)
+                userId.onNext(currentUser.uid)
+            } else {
+                authStatus.onNext(AuthUseCase.AuthStatus.NOT_SIGNED_IN)
+            }
         }
     }
 
@@ -21,7 +27,7 @@ class AuthRepoImpl : AuthRepo {
         return authStatus
     }
 
-    override fun getUserId(): String {
-        return FirebaseAuth.getInstance().currentUser?.uid ?: throw NoAuthentication()
+    override fun getUserId(): Observable<String> {
+        return userId
     }
 }

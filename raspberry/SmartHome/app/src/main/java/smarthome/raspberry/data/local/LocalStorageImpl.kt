@@ -1,5 +1,10 @@
 package smarthome.raspberry.data.local
 
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.data.LocalStorage
@@ -12,15 +17,21 @@ class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
                        private val localDevicesStorage: LocalDevicesStorage
 ) : LocalStorage {
 
+    private val ioScope = CoroutineScope(Dispatchers.IO)
+    private val homeId = BehaviorSubject.create<String>()
+
+    init {
+        if (!preferences.isHomeIdExists()) {
+            ioScope.launch { saveNewHomeId() }
+        }
+    }
+
     override fun getDevices(): MutableList<IotDevice> {
         return localDevicesStorage.getSavedDevices(IotDeviceGroup.ACTIVE).toMutableList()
     }
 
-    override suspend fun getHomeId(): String {
-        if (!preferences.isHomeIdExists()) {
-            saveNewHomeId()
-        }
-        return preferences.getHomeId()
+    override fun getHomeId(): Observable<String> {
+        return homeId
     }
 
     private suspend fun saveNewHomeId() {
@@ -28,6 +39,7 @@ class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
         preferences.setHomeId(homeId)
 
         output.createHome(homeId)
+        this.homeId.onNext(homeId)
     }
 
     override fun getPendingDevices(): MutableList<IotDevice> {

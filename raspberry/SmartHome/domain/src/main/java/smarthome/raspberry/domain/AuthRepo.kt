@@ -5,5 +5,5 @@ import smarthome.raspberry.domain.usecases.AuthUseCase
 
 interface AuthRepo {
     fun getAuthStatus(): Observable<AuthUseCase.AuthStatus>
-    fun getUserId(): String
+    fun getUserId(): Observable<String>
 }
