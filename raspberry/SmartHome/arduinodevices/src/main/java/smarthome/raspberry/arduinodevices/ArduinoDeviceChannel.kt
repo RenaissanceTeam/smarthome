@@ -10,8 +10,8 @@ import smarthome.raspberry.arduinodevices.server.UdpServer
 import smarthome.raspberry.arduinodevices.server.WebServer
 
 class ArduinoDeviceChannel(private val output: DeviceChannelOutput) : DeviceChannel {
-    private val communicationServer: WebServer = TODO()
-    private val initilizationServer: UdpServer = TODO()
+    private val communicationServer = WebServer(output)
+    private val initilizationServer = UdpServer()
 
     private fun getArduinoDeviceApi(ip: String): ArduinoDeviceApi {
         val gson = GsonBuilder()

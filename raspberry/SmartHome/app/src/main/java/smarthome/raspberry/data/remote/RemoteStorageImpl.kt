@@ -6,10 +6,10 @@ import smarthome.library.common.HomesReferencesStorage
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHomeStorage
 import smarthome.raspberry.data.RemoteStorage
-import smarthome.raspberry.data.RemoteStorageInput
+import smarthome.raspberry.data.HomeInfoSource
 
 class RemoteStorageImpl(
-        private val input: RemoteStorageInput,
+        private val input: HomeInfoSource,
         private val homeStorageFactory: (String) -> SmartHomeStorage,
         private val homesReferencesStorageFactory: (String) -> HomesReferencesStorage) :
         RemoteStorage {

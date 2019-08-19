@@ -22,6 +22,8 @@ import smarthome.raspberry.domain.usecases.ControllersUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
 import smarthome.raspberry.input.InputController
+import smarthome.raspberry.input.InputControllerDataSource
+import smarthome.raspberry.input.datasource.InputFromSharedDatabase
 
 
 val dataModule = module {
@@ -37,6 +39,11 @@ val dataModule = module {
             }
     )
 
+    single { InputController(get(), get(), get()) }
+    factory {
+        InputFromSharedDatabase(get(),
+                { FirestoreSmartHomeStorage(it) }) as InputControllerDataSource
+    }
     single {
         HomeRepositoryImpl(
                 localStorageFactory = { input, output ->
@@ -53,11 +60,10 @@ val dataModule = module {
                 },
                 authRepo = get()) as HomeRepository
     } binds (arrayOf(
-            InputController::class,
             LocalStorageInput::class,
             LocalStorageOutput::class,
             DeviceChannelOutput::class,
-            RemoteStorageInput::class
+            HomeInfoSource::class
     ))
     single { AuthRepoImpl() as AuthRepo }
 }
