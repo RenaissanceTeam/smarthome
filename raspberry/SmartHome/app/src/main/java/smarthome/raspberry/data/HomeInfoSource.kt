@@ -1,6 +1,8 @@
 package smarthome.raspberry.data
 
+import io.reactivex.Observable
+
 interface HomeInfoSource {
-    suspend fun getUserId(): String
-    suspend fun getHomeId(): String
+    fun getObservableUserId(): Observable<String>
+    fun getObservableHomeId(): Observable<String>
 }

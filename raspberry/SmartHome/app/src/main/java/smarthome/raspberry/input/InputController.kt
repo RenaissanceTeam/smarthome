@@ -15,12 +15,11 @@ class InputController(private val devicesUseCase: DevicesUseCase,
                       private val repository: HomeRepository,
                       private val input: InputControllerDataSource) {
     private val ioScope = CoroutineScope(Dispatchers.IO)
-    private var devicesSubscription: Disposable? = null
 
     fun init() {
         ioScope.launch {
-            devicesSubscription = input.getDeviceUpdates().subscribe {
-                if (it.isInnerCall) return@subscribe
+            input.onDeviceUpdate {
+                if (it.isInnerCall) return@onDeviceUpdate
                 ioScope.launch { onUserRequest(it.devices) }
             }
         }
