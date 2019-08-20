@@ -71,6 +71,7 @@ val dataModule = module {
 val useCasesModule = module {
     factory { DevicesUseCase(get()) }
     factory { AuthUseCase(get()) }
+    factory { HomeUseCase(get()) }
 }
 
 

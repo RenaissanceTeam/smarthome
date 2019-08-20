@@ -23,6 +23,8 @@ class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
     init {
         if (!preferences.isHomeIdExists()) {
             ioScope.launch { saveNewHomeId() }
+        } else {
+            homeId.onNext(preferences.getHomeId())
         }
     }
 

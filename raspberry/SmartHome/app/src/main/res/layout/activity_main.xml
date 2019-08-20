@@ -8,19 +8,43 @@
 
     <TextView
         android:id="@+id/home_label"
-        android:layout_marginStart="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
         android:text="Home id:"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         app:layout_constraintBaseline_toBaselineOf="@id/home_label"
         app:layout_constraintStart_toEndOf="@id/home_label" />
+
+    <TextView
+        android:id="@+id/user_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User id:"
+        app:layout_constraintStart_toStartOf="@id/home_label"
+        app:layout_constraintTop_toBottomOf="@id/home_label" />
+
+    <TextView
+        android:id="@+id/auth_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/user_label"
+        app:layout_constraintStart_toEndOf="@id/user_label" />
+
+    <TextView
+        android:id="@+id/user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/user_label"
+        app:layout_constraintStart_toEndOf="@id/auth_status" />
 
 </android.support.constraint.ConstraintLayout>

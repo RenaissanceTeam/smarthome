@@ -1,7 +1,7 @@
 package smarthome.raspberry.data
 
 import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxkotlin.Observables
 import smarthome.library.common.*
 import smarthome.raspberry.domain.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
@@ -55,7 +55,8 @@ class HomeRepositoryImpl(
     }
 
     override fun getHomeInfo(): Observable<HomeInfo> {
-        return PublishSubject.create()
+        return Observables.combineLatest(getObservableUserId().startWith(""),
+                getObservableHomeId().startWith(""), ::HomeInfo)
     }
 
     override suspend fun proceedWriteController(controller: BaseController,
