@@ -52,6 +52,7 @@ dependencies {
 
     testImplementation libs.mockito
     implementation libs.rxJava
+    implementation libs.rxKotlin
     implementation libs.rxAndroid
     implementation libs.coroutinesCore
     implementation libs.coroutinesAndroid

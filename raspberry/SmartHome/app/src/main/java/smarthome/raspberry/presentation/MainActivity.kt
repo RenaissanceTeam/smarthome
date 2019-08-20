@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Job
 import org.koin.android.ext.android.inject
 import smarthome.raspberry.BuildConfig
@@ -21,8 +22,8 @@ class MainActivity : Activity() {
     private val authUseCase: AuthUseCase by inject()
     private val homeUseCase: HomeUseCase by inject()
     private val inputController: InputController by inject()
-    private val job = Job()
     private var authenticationSubscription: Disposable? = null
+    private var homeInfoSubscription: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +34,20 @@ class MainActivity : Activity() {
             if (it == AuthUseCase.AuthStatus.NOT_SIGNED_IN) {
                 startActivity(Intent(this, GoogleSignInActivity::class.java))
             }
+
+            auth_status.text = it.toString()
         }
         inputController.init()
 
-        homeUseCase.getHomeInfo()
-
+        homeInfoSubscription = homeUseCase.getHomeInfo().subscribe {
+            home.text = it.homeId
+            user.text = it.userId
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         authenticationSubscription?.dispose()
-        job.cancel()
+        homeInfoSubscription?.dispose()
     }
 }
