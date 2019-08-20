@@ -1,16 +1,14 @@
 package smarthome.raspberry.data.remote
 
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import smarthome.library.common.DeviceUpdate
 import smarthome.library.common.HomesReferencesStorage
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHomeStorage
-import smarthome.raspberry.data.RemoteStorage
 import smarthome.raspberry.data.HomeInfoSource
+import smarthome.raspberry.data.RemoteStorage
 
 class RemoteStorageImpl(
-        private val input: HomeInfoSource,
+        input: HomeInfoSource,
         private val homeStorageFactory: (String) -> SmartHomeStorage,
         private val homesReferencesStorageFactory: (String) -> HomesReferencesStorage) :
         RemoteStorage {
@@ -24,7 +22,7 @@ class RemoteStorageImpl(
         uidSubscription = input.getObservableUserId().subscribe {
             homesReferencesStorage = homesReferencesStorageFactory(it)
         }
-        homeRefSubscription= input.getObservableHomeId().subscribe {
+        homeRefSubscription = input.getObservableHomeId().subscribe {
             homeStorage = homeStorageFactory(it)
         }
     }
@@ -34,7 +32,7 @@ class RemoteStorageImpl(
     }
 
     override suspend fun createHome(homeId: String) {
-       homesReferencesStorage?.addHomeReference(homeId)
+        homesReferencesStorage?.addHomeReference(homeId)
         homeStorage?.createSmartHome()
     }
 

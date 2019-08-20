@@ -1,8 +1,10 @@
 package smarthome.raspberry.domain
 
+import io.reactivex.Observable
 import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerState
 import smarthome.library.common.IotDevice
+import smarthome.raspberry.domain.models.HomeInfo
 
 
 interface HomeRepository {
@@ -16,4 +18,5 @@ interface HomeRepository {
     suspend fun removePendingDevice(device: IotDevice)
     suspend fun addDevice(device: IotDevice)
     suspend fun removeDevice(device: IotDevice)
+    fun getHomeInfo(): Observable<HomeInfo>
 }

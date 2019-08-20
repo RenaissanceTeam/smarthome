@@ -1,11 +1,13 @@
 package smarthome.raspberry.data
 
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import smarthome.library.common.*
 import smarthome.raspberry.domain.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.NoControllerException
 import smarthome.raspberry.domain.NoDeviceException
+import smarthome.raspberry.domain.models.HomeInfo
 import smarthome.raspberry.domain.usecases.ControllersUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
@@ -50,6 +52,10 @@ class HomeRepositoryImpl(
 
     override fun getObservableHomeId(): Observable<String> {
         return localStorage.getHomeId()
+    }
+
+    override fun getHomeInfo(): Observable<HomeInfo> {
+        return PublishSubject.create()
     }
 
     override suspend fun proceedWriteController(controller: BaseController,

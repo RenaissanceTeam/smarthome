@@ -9,9 +9,13 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.Mockito.verify
 import smarthome.library.common.*
+import smarthome.raspberry.domain.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.NoControllerException
 import smarthome.raspberry.domain.NoDeviceException
+import smarthome.raspberry.domain.usecases.ControllersUseCase
+import smarthome.raspberry.domain.usecases.DevicesUseCase
+import smarthome.raspberry.domain.usecases.HomeUseCase
 
 abstract class A(name: String, description: String?,
                  serveState: DeviceServeState, guid: Long,
@@ -34,14 +38,17 @@ class HomeRepositoryImplTest {
     private val device_A: A = mock()
     private val device_B: B = mock()
     private val controller: BaseController = mock()
-
+    private val devicesUseCase: DevicesUseCase = mock()
+    private val homeUseCase: HomeUseCase = mock()
+    private val controllersUseCase: ControllersUseCase = mock()
+    private val authRepo: AuthRepo = mock()
 
 
     @Test
     fun hasController_proceedReadController_ReadStateFromChannel() {
         runBlocking {
-            repo = HomeRepositoryImpl(localStorage, remoteStorage, mapOf(
-                    device_A.javaClass to deviceChannel_A
+            repo = createRepository(mapOf(
+                    device_A.javaClass.simpleName to deviceChannel_A
             ))
 
             whenever(localStorage.findDevice(controller)).then { device_A }
@@ -50,12 +57,22 @@ class HomeRepositoryImplTest {
         }
     }
 
+    private fun createRepository(
+            devices: Map<String, DeviceChannel>): HomeRepositoryImpl {
+        return HomeRepositoryImpl(
+                { a, b -> localStorage }, { devicesUseCase }, { homeUseCase },
+                { controllersUseCase },
+                { remoteStorage }, devices.mapValues { { _: DeviceChannelOutput -> it.value } },
+                authRepo
+        )
+    }
+
     @Test
     fun hasTwoChannels_proceedReadController_ReadStateFromProperChannel() {
         runBlocking {
-            repo = HomeRepositoryImpl(localStorage, remoteStorage, mapOf(
-                    device_A.javaClass to deviceChannel_A,
-                    device_B.javaClass to deviceChannel_B
+            repo = createRepository(mapOf(
+                    device_A.javaClass.simpleName to deviceChannel_A,
+                    device_B.javaClass.simpleName to deviceChannel_B
             ))
 
             whenever(localStorage.findDevice(any())).then { device_A }
@@ -71,9 +88,9 @@ class HomeRepositoryImplTest {
     @Test
     fun hasTwoChannels_proceedWrite_WriteStateToProperChannel() {
         runBlocking {
-            repo = HomeRepositoryImpl(localStorage, remoteStorage, mapOf(
-                    device_A.javaClass to deviceChannel_A,
-                    device_B.javaClass to deviceChannel_B
+            repo = createRepository(mapOf(
+                    device_A.javaClass.simpleName to deviceChannel_A,
+                    device_B.javaClass.simpleName to deviceChannel_B
             ))
 
             val state = ControllerState()
@@ -87,10 +104,9 @@ class HomeRepositoryImplTest {
     @Test
     fun noDevices_findController_shouldThrow() {
         runBlocking {
-            val repo: DeviceChannelOutput =
-                    HomeRepositoryImpl(localStorage, remoteStorage, mapOf(
-                            device_A.javaClass to deviceChannel_A
-                    ))
+            val repo: DeviceChannelOutput = createRepository(mapOf(
+                    device_A.javaClass.simpleName to deviceChannel_A
+            ))
 
             whenever(localStorage.getDevices()).thenReturn(mutableListOf())
 
@@ -103,10 +119,9 @@ class HomeRepositoryImplTest {
     @Test
     fun hasDevicesWithProperController_findController_shouldReturnController() {
         runBlocking {
-            val repo: DeviceChannelOutput =
-                    HomeRepositoryImpl(localStorage, remoteStorage, mapOf(
-                            device_A.javaClass to deviceChannel_A
-                    ))
+            val repo: DeviceChannelOutput = createRepository(mapOf(
+                    device_A.javaClass.simpleName to deviceChannel_A
+            ))
 
             val guid = 123L
             val notProperController = mock<BaseController>()
@@ -130,10 +145,9 @@ class HomeRepositoryImplTest {
     @Test
     fun noDevices_findDevice_shouldThrow() {
         runBlocking {
-            val repo: DeviceChannelOutput =
-                    HomeRepositoryImpl(localStorage, remoteStorage, mapOf(
-                            device_A.javaClass to deviceChannel_A
-                    ))
+            val repo: DeviceChannelOutput = createRepository(mapOf(
+                    device_A.javaClass.simpleName to deviceChannel_A
+            ))
 
             whenever(localStorage.getDevices()).thenReturn(mutableListOf())
 
@@ -146,10 +160,9 @@ class HomeRepositoryImplTest {
     @Test
     fun hasDevicesWithProperController_findDevice_ShouldReturnDevice() {
         runBlocking {
-            val repo: DeviceChannelOutput =
-                    HomeRepositoryImpl(localStorage, remoteStorage, mapOf(
-                            device_A.javaClass to deviceChannel_A
-                    ))
+            val repo: DeviceChannelOutput = createRepository(mapOf(
+                    device_A.javaClass.simpleName to deviceChannel_A
+            ))
 
             val guid = 123L
             val notProperController = mock<BaseController>()
