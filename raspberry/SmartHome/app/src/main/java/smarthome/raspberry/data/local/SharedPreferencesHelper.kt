@@ -15,7 +15,7 @@ class SharedPreferencesHelper(context: Context) {
     private val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("smarthome", MODE_PRIVATE)
 
-    fun isHomeIdExists(): Boolean {
+    fun hasSavedHomeId(): Boolean {
          return sharedPreferences.getString(HOME_ID_KEY, DEFAULT_HOME_ID) != DEFAULT_HOME_ID
     }
 

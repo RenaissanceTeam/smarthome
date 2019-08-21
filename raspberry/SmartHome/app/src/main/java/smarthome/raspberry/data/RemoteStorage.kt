@@ -4,7 +4,7 @@ import smarthome.library.common.IotDevice
 
 interface RemoteStorage {
     suspend fun updateDevice(device: IotDevice)
-    suspend fun createHome(homeId: String)
+    suspend fun saveHome(homeId: String)
     suspend fun isHomeIdUnique(homeId: String): Boolean
     suspend fun addPendingDevice(device: IotDevice)
     suspend fun removePendingDevice(device: IotDevice)

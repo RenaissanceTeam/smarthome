@@ -31,7 +31,7 @@ class RemoteStorageImpl(
         homeStorage?.updateDevice(device)
     }
 
-    override suspend fun createHome(homeId: String) {
+    override suspend fun saveHome(homeId: String) {
         homesReferencesStorage?.addHomeReference(homeId)
         homeStorage?.createSmartHome()
     }

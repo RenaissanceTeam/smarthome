@@ -1,5 +1,6 @@
 package smarthome.library.datalibrary
 
+import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -22,7 +23,6 @@ class FirestoreHomesReferencesStorage(
 
     private val ref: DocumentReference = db.collection(ACCOUNTS_NODE).document(uid)
 
-
     override suspend fun replaceHomesReferences(homesReferences: HomesReferences) {
         suspendCoroutine<Unit> {
             ref.set(homesReferences).withContinuation(it)
@@ -36,13 +36,16 @@ class FirestoreHomesReferencesStorage(
     }
 
     override suspend fun addHomeReference(homeReference: String) {
-        val homeSnapshot = suspendCoroutine<DocumentSnapshot> {
-            ref.get().withObjectContinuation(it)
+        val homeExists = try {
+            suspendCoroutine<DocumentSnapshot> {
+                ref.get().withObjectContinuation(it)
+            }.exists()
+        } catch (e: NullPointerException) {
+            false
         }
 
-
         suspendCoroutine<Unit> { continuation ->
-            val task = if (homeSnapshot.exists()) {
+            val task = if (homeExists) {
                 taskUpdateHomeReference(homeReference)
             } else {
                 taskNewHomeReference(homeReference)
@@ -58,7 +61,6 @@ class FirestoreHomesReferencesStorage(
     private fun taskNewHomeReference(homeReference: String): Task<Void> {
         return ref.set(HomesReferences(mutableListOf(homeReference)))
     }
-
 
     override suspend fun getHomesReferences(): HomesReferences {
         return suspendCoroutine {

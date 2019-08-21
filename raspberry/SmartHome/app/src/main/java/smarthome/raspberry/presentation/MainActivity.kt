@@ -5,9 +5,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Job
 import org.koin.android.ext.android.inject
 import smarthome.raspberry.BuildConfig
 import smarthome.raspberry.R
@@ -30,19 +30,27 @@ class MainActivity : Activity() {
         setContentView(R.layout.activity_main)
         if (DEBUG) Log.d(TAG, "onCreate")
 
-        authenticationSubscription = authUseCase.isAuthenticated().subscribe {
-            if (it == AuthUseCase.AuthStatus.NOT_SIGNED_IN) {
-                startActivity(Intent(this, GoogleSignInActivity::class.java))
-            }
+        authenticationSubscription = authUseCase.isAuthenticated()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    if (it == AuthUseCase.AuthStatus.NOT_SIGNED_IN) {
+                        startActivity(Intent(this, GoogleSignInActivity::class.java))
+                    }
 
-            auth_status.text = it.toString()
-        }
+                    auth_status.text = it.toString()
+                }
         inputController.init()
 
-        homeInfoSubscription = homeUseCase.getHomeInfo().subscribe {
-            home.text = it.homeId
-            user.text = it.userId
-        }
+        homeInfoSubscription = homeUseCase.getHomeInfo()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    home.text = it.homeId
+                    user.text = it.userId
+                }
+
+        homeUseCase.launchStateMachine()
+
+        smarthome.raspberry.domain.Log.logger = { Log.e("DomainLog", it) }
     }
 
     override fun onDestroy() {

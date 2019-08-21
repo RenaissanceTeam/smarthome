@@ -2,20 +2,21 @@ package smarthome.raspberry.data.local
 
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.data.LocalStorage
-import smarthome.raspberry.data.LocalStorageInput
-import smarthome.raspberry.data.LocalStorageOutput
 
 class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
                        private val localDevicesStorage: LocalDevicesStorage
 ) : LocalStorage {
 
     private val homeId = BehaviorSubject.create<String>()
+
+    init {
+        if (preferences.hasSavedHomeId()) {
+            homeId.onNext(preferences.getHomeId())
+        }
+    }
 
     override fun getDevices(): MutableList<IotDevice> {
         return localDevicesStorage.getSavedDevices(IotDeviceGroup.ACTIVE).toMutableList()

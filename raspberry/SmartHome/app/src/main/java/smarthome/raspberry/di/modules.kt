@@ -32,7 +32,7 @@ val dataModule = module {
     val typeAdapter = RuntimeTypeAdapterFactory.of(BaseController::class.java)
 
     factory { LocalDevicesStorageImpl(typeAdapter) as LocalDevicesStorage }
-    factory { LocalStorageImpl(get(), get(), get(), get()) as LocalStorage }
+    factory { LocalStorageImpl(get(), get()) as LocalStorage }
     val deviceChannels = mapOf(
             ArduinoDevice::class.java.simpleName to { output: DeviceChannelOutput ->
                 ArduinoDeviceChannel(output)
@@ -47,7 +47,7 @@ val dataModule = module {
     single {
         HomeRepositoryImpl(
                 localStorageFactory = { input, output ->
-                    LocalStorageImpl(get(), input, output, get())
+                    LocalStorageImpl(get(), get())
                 },
                 devicesUseCaseFactory = { DevicesUseCase(it) },
                 homeUseCaseFactory = { HomeUseCase(it) },
