@@ -104,7 +104,8 @@ class HomeRepositoryImpl(
         controllersUseCase.notifyControllerChanged(controller)
     }
 
-    override suspend fun createHome(homeId: String) {
+    override suspend fun saveHome(homeId: String) {
+        localStorage.saveHome(homeId)
         remoteStorage.createHome(homeId)
     }
 

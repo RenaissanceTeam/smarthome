@@ -1,7 +1,5 @@
 package smarthome.raspberry.data
 
-import io.reactivex.Observable
-import smarthome.library.common.DeviceUpdate
 import smarthome.library.common.IotDevice
 
 interface RemoteStorage {

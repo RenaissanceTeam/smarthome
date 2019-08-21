@@ -12,21 +12,10 @@ import smarthome.raspberry.data.LocalStorageInput
 import smarthome.raspberry.data.LocalStorageOutput
 
 class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
-                       private val input: LocalStorageInput,
-                       private val output: LocalStorageOutput,
                        private val localDevicesStorage: LocalDevicesStorage
 ) : LocalStorage {
 
-    private val ioScope = CoroutineScope(Dispatchers.IO)
     private val homeId = BehaviorSubject.create<String>()
-
-    init {
-        if (!preferences.isHomeIdExists()) {
-            ioScope.launch { saveNewHomeId() }
-        } else {
-            homeId.onNext(preferences.getHomeId())
-        }
-    }
 
     override fun getDevices(): MutableList<IotDevice> {
         return localDevicesStorage.getSavedDevices(IotDeviceGroup.ACTIVE).toMutableList()
@@ -36,11 +25,8 @@ class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
         return homeId
     }
 
-    private suspend fun saveNewHomeId() {
-        val homeId = input.generateHomeId()
+    override suspend fun saveHome(homeId: String) {
         preferences.setHomeId(homeId)
-
-        output.createHome(homeId)
         this.homeId.onNext(homeId)
     }
 
