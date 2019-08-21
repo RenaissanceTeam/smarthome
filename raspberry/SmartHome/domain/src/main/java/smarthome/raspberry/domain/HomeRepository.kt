@@ -19,4 +19,5 @@ interface HomeRepository {
     suspend fun addDevice(device: IotDevice)
     suspend fun removeDevice(device: IotDevice)
     fun getHomeInfo(): Observable<HomeInfo>
+    suspend fun saveHome(homeId: String)
 }

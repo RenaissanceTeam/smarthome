@@ -1,4 +1,3 @@
 package smarthome.raspberry.domain.models
 
-data class HomeInfo(val homeId: String?,
-                    val userId: String?)
+data class HomeInfo(val userId: String, val homeId: String)
