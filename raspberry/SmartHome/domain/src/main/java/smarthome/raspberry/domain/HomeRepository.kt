@@ -12,7 +12,9 @@ interface HomeRepository {
     suspend fun isHomeIdUnique(homeId: String): Boolean
     fun getCurrentDevices(): MutableList<IotDevice>
     suspend fun proceedReadController(controller: BaseController): BaseController
-    suspend fun proceedWriteController(controller: BaseController, state: ControllerState): BaseController
+    suspend fun proceedWriteController(controller: BaseController,
+                                       state: ControllerState): BaseController
+
     suspend fun saveDevice(device: IotDevice)
     suspend fun addPendingDevice(device: IotDevice)
     suspend fun removePendingDevice(device: IotDevice)

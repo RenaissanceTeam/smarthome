@@ -62,7 +62,7 @@ class LocalStorageImplTest {
 
     @Before
     fun setUp() {
-        whenever(preferencesHelper.isHomeIdExists()).then { true }
+        whenever(preferencesHelper.hasSavedHomeId()).then { true }
     }
 
     @Test

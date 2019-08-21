@@ -37,6 +37,11 @@ class HomeRepositoryImpl(
         remoteStorage.updateDevice(device)
     }
 
+    override suspend fun createHome(homeId: String) {
+        localStorage.saveHome(homeId)
+        remoteStorage.saveHome(homeId)
+    }
+
     override suspend fun proceedReadController(controller: BaseController): BaseController {
         val device = localStorage.findDevice(controller)
         val channel = findSuitableChannel(device)
@@ -106,7 +111,7 @@ class HomeRepositoryImpl(
 
     override suspend fun saveHome(homeId: String) {
         localStorage.saveHome(homeId)
-        remoteStorage.createHome(homeId)
+        remoteStorage.saveHome(homeId)
     }
 
     override suspend fun removePendingDevice(device: IotDevice) {
