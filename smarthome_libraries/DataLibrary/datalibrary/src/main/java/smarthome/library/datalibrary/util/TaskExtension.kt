@@ -1,11 +1,7 @@
 package smarthome.library.datalibrary.util
 
-import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
-import smarthome.library.common.IotDevice
-import smarthome.library.common.SmartHome
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resumeWithException
 
@@ -18,7 +14,6 @@ inline fun <reified U> Task<DocumentSnapshot>.withObjectContinuation(continuatio
 
     this.addOnSuccessListener {
         try {
-            Log.e("asdf", "with object continuation ${it.data}")
             continuation.resumeWith(
                 Result.success(
                     it.toObject(U::class.java)

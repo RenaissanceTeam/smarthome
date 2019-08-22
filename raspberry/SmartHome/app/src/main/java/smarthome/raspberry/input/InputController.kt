@@ -1,6 +1,6 @@
 package smarthome.raspberry.input
 
-import io.reactivex.disposables.Disposable
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,11 +17,9 @@ class InputController(private val devicesUseCase: DevicesUseCase,
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
     fun init() {
-        ioScope.launch {
-            input.onDeviceUpdate {
-                if (it.isInnerCall) return@onDeviceUpdate
-                ioScope.launch { onUserRequest(it.devices) }
-            }
+        input.setActionForNewDeviceUpdate {
+            if (it.isInnerCall) return@setActionForNewDeviceUpdate
+            ioScope.launch { onUserRequest(it.devices) }
         }
     }
 
@@ -36,6 +34,8 @@ class InputController(private val devicesUseCase: DevicesUseCase,
     // todo test: when change only name should NOT trigger remote update
     private suspend fun handleChanges(changedDevices: List<IotDevice>,
                                       notChangedDevices: MutableList<IotDevice>) {
+        Log.d("InputController", "handle changes")
+
         for (changedDevice in changedDevices) {
             val notChangedDevice = notChangedDevices.find { it == changedDevice } ?: continue
 

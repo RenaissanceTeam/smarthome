@@ -15,7 +15,7 @@ class InputFromSharedDatabase(private val homeInfoSource: HomeInfoSource,
     private var uidSubscription: Disposable? = null
     private var deviceUpdateSubscription: Disposable? = null
 
-    override suspend fun onDeviceUpdate(action: (DeviceUpdate) -> Unit) {
+    override fun setActionForNewDeviceUpdate(action: (DeviceUpdate) -> Unit) {
         uidSubscription?.dispose()
         uidSubscription = homeInfoSource.getObservableUserId().subscribe {
             deviceUpdateSubscription?.dispose()
@@ -24,7 +24,9 @@ class InputFromSharedDatabase(private val homeInfoSource: HomeInfoSource,
 
             runBlocking {
                 deviceUpdateSubscription =
-                        database.observeDevicesUpdates().subscribe(action)
+                        database.observeDevicesUpdates()
+                                .mergeWith(database.observePendingDevicesUpdates())
+                                .subscribe(action)
             }
         }
     }
