@@ -9,7 +9,7 @@ import smarthome.raspberry.arduinodevices.server.StoppableServer
 import smarthome.raspberry.arduinodevices.server.UdpServer
 import smarthome.raspberry.arduinodevices.server.WebServer
 
-class ArduinoDeviceChannel(private val output: DeviceChannelOutput) : DeviceChannel {
+class ArduinoDeviceChannel(output: DeviceChannelOutput) : DeviceChannel {
     private val communicationServer = WebServer(output)
     private val initilizationServer = UdpServer()
 
@@ -26,7 +26,6 @@ class ArduinoDeviceChannel(private val output: DeviceChannelOutput) : DeviceChan
     }
 
     init {
-        // todo start server and push events to output
         initilizationServer.startServer()
         communicationServer.startServer()
     }
