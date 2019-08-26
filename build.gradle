@@ -37,10 +37,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        flatDir {
-            dirs '../../../smarthome_libraries/DataLibrary/datalibrary/build/outputs/aar',
-                    '../../../smarthome_libraries/CommonLibrary/common/build/libs'
-        }
     }
 }
 
