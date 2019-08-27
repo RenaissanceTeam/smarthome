@@ -34,10 +34,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:21.0.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.11'
 
-    implementation(name:'common', ext:'jar') {
-        transitive=false
-        changing=true
-    }
+    implementation project(":${gradle.ext.libraryFolder}:common")
 }
 repositories {
     mavenCentral()

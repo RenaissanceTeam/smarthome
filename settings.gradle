@@ -1,1 +1,19 @@
-include ':android_client:android:app', ':presentation', ':data', ':domain'
+
+gradle.ext {
+    clientFolder = "android_client"
+    homeServerFolder = "raspberry"
+    libraryFolder = "smarthome_libraries"
+
+}
+
+include ":${gradle.ext.clientFolder}:app",
+        ":${gradle.ext.clientFolder}:presentation",
+        ":${gradle.ext.clientFolder}:data",
+        ":${gradle.ext.clientFolder}:domain",
+        ":${gradle.ext.libraryFolder}:common",
+        ":${gradle.ext.libraryFolder}:datalibrary",
+        ":${gradle.ext.homeServerFolder}:app",
+        ":${gradle.ext.homeServerFolder}:domain",
+        ":${gradle.ext.homeServerFolder}:arduinodevices",
+        ":${gradle.ext.homeServerFolder}:thirdpartydevices"
+
