@@ -71,17 +71,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.4.0'
 
 
-    implementation(name: 'datalibrary-debug', ext: 'aar') {
-        transitive = false
-        changing = true
-    }
-    implementation(name: 'common', ext: 'jar') {
-        transitive = false
-        changing = true
-    }
-    implementation project(':arduinodevices')
-    implementation project(':domain')
-//    implementation project(path: ':thirdpartydevices')
+    implementation project(":${gradle.ext.libraryFolder}:datalibrary")
+    implementation project(":${gradle.ext.libraryFolder}:common")
+
+    implementation project(":${gradle.ext.homeServerFolder}:arduinodevices")
+    implementation project(":${gradle.ext.homeServerFolder}:domain")
+//    implementation project(":${gradle.ext.homeServerFolder}:thirdpartydevices")
 }
 
 

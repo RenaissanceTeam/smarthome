@@ -45,10 +45,7 @@ dependencies {
     implementation 'com.android.support:support-annotations:28.0.0'
     implementation 'com.google.firebase:firebase-firestore:18.2.0'
 
-    implementation(name:'common', ext:'jar') {
-        transitive=false
-        changing=true
-    }
+    implementation project(":${gradle.ext.libraryFolder}:common")
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

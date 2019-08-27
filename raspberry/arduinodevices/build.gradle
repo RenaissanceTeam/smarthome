@@ -49,10 +49,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-firestore:18.1.0'
 
-    implementation(name:'common', ext:'jar') {
-        transitive=true
-        changing=true
-    }
+    implementation project(":${gradle.ext.libraryFolder}:common")
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     testImplementation 'junit:junit:4.12'

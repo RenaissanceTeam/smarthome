@@ -6,10 +6,7 @@ dependencies {
 
     implementation libs.rxJava
 
-    implementation(name:'common', ext:'jar') {
-        transitive=false
-        changing=true
-    }
+    implementation project(":${gradle.ext.libraryFolder}:common")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
