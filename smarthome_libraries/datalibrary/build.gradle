@@ -30,8 +30,8 @@ dependencies {
     implementation 'com.android.support:support-annotations:28.0.0'
 
     implementation 'com.google.firebase:firebase-core:17.1.0'
-    implementation libs.firebaseAuth
-    implementation libs.firebaseFirestore
+    implementation library.firebaseAuth
+    implementation library.firebaseFirestore
     implementation 'io.reactivex.rxjava2:rxjava:2.2.11'
 
     implementation project(":${gradle.ext.libraryFolder}:common")

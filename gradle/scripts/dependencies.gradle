@@ -1,0 +1,23 @@
+ext {
+    library = [
+            rxJava           : ("io.reactivex.rxjava2:rxjava:$rxjava_version"),
+            rxKotlin         : ("io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"),
+            rxAndroid        : ("io.reactivex.rxjava2:rxandroid:$rxjava_android_version"),
+            koin             : ("org.koin:koin-android:$koin_version"),
+            coroutinesCore   : ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"),
+            coroutinesAndroid: ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"),
+            appCompat        : ("androidx.appcompat:appcompat:1.1.0-rc01"),
+            mockitoCore      : ("org.mockito:mockito-core:$mockitoVersion"),
+            mockitoInline    : ("org.mockito:mockito-inline:$mockitoVersion"),
+            mockitoKotlin    : ("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"),
+            firebaseAuth     : ("com.google.firebase:firebase-auth:19.0.0"),
+            firebaseFirestore: ('com.google.firebase:firebase-firestore:21.0.0'),
+            retrofit         : ("com.squareup.retrofit2:retrofit:$retrofit_version"),
+            retrofitGson     : ("com.squareup.retrofit2:converter-gson:$retrofit_version")
+
+    ]
+
+    groups = [
+            mockito: [library.mockitoCore, library.mockitoInline, library.mockitoKotlin]
+    ]
+}

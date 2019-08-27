@@ -12,7 +12,7 @@ dependencies {
 
     testImplementation "com.google.truth:truth:1.0"
 
-    testImplementation libs.mockito
-    implementation libs.coroutinesCore
-    implementation libs.rxJava
+    testImplementation groups.mockito
+    implementation library.coroutinesCore
+    implementation library.rxJava
 }

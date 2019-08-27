@@ -26,26 +26,26 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation libs.appCompat
+    implementation library.appCompat
     testImplementation 'junit:junit:4.12'
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:17.0.1'
-    implementation libs.firebaseFirestore
-    implementation libs.firebaseAuth
+    implementation library.firebaseFirestore
+    implementation library.firebaseAuth
 
     // Retrofit
-    implementation libs.retrofit
-    implementation libs.retrofitGson
+    implementation library.retrofit
+    implementation library.retrofitGson
 
     // koin - dependency injection
-    implementation libs.koin
+    implementation library.koin
 
     // coroutines
-    implementation libs.coroutinesCore
-    implementation libs.coroutinesAndroid
+    implementation library.coroutinesCore
+    implementation library.coroutinesAndroid
 
-    implementation libs.rxJava
+    implementation library.rxJava
 
     implementation project(":${gradle.ext.libraryFolder}:common")
     implementation project(":${gradle.ext.clientFolder}:domain")

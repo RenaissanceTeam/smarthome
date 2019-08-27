@@ -24,10 +24,10 @@ android {
 dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
-    implementation libs.firebaseAuth
-    implementation libs.firebaseFirestore
-    implementation libs.appCompat
-    implementation libs.koin
+    implementation library.firebaseAuth
+    implementation library.firebaseFirestore
+    implementation library.appCompat
+    implementation library.koin
 
     implementation project(":${gradle.ext.libraryFolder}:common")
     implementation project(":${gradle.ext.libraryFolder}:datalibrary")
