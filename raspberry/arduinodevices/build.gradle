@@ -42,10 +42,10 @@ dependencies {
 
     implementation 'com.android.support:appcompat-v7:28.0.0'
     // retrofit
-    implementation libs.retrofit
-    implementation libs.retrofitGson
+    implementation library.retrofit
+    implementation library.retrofitGson
 
-    implementation libs.firebaseFirestore
+    implementation library.firebaseFirestore
 
     implementation project(":${gradle.ext.libraryFolder}:common")
 

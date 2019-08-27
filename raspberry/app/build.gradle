@@ -51,22 +51,22 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
 
-    testImplementation libs.mockito
-    implementation libs.rxJava
-    implementation libs.rxKotlin
-    implementation libs.rxAndroid
-    implementation libs.coroutinesCore
-    implementation libs.coroutinesAndroid
-    implementation libs.koin
+    testImplementation groups.mockito
+    implementation library.rxJava
+    implementation library.rxKotlin
+    implementation library.rxAndroid
+    implementation library.coroutinesCore
+    implementation library.coroutinesAndroid
+    implementation library.koin
 
     // retrofit
-    implementation libs.retrofit
-    implementation libs.retrofitGson
+    implementation library.retrofit
+    implementation library.retrofitGson
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.7'
-    implementation libs.firebaseFirestore
-    implementation libs.firebaseAuth
+    implementation library.firebaseFirestore
+    implementation library.firebaseAuth
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.firebase:firebase-client-android:2.5.2'
     implementation 'com.google.firebase:firebase-messaging:17.4.0'

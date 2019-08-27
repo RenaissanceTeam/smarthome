@@ -35,7 +35,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation libs.appCompat
+    implementation library.appCompat
     testImplementation 'junit:junit:4.12'
 
     // ViewModel and LiveData
@@ -48,15 +48,15 @@ dependencies {
     // jetpack
     implementation "androidx.preference:preference:1.1.0-rc01"
 
-    implementation libs.coroutinesCore
-    implementation libs.coroutinesAndroid
-    implementation libs.rxAndroid
-    implementation libs.rxJava
+    implementation library.coroutinesCore
+    implementation library.coroutinesAndroid
+    implementation library.rxAndroid
+    implementation library.rxJava
 
     implementation project(":${gradle.ext.libraryFolder}:common")
     implementation project(":${gradle.ext.clientFolder}:domain")
 
-    implementation libs.koin
+    implementation library.koin
     implementation 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
     implementation 'in.srain.cube:ultra-ptr:1.0.11'
 

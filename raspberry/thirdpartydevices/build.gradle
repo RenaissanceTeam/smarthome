@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation 'com.android.support:support-annotations:28.0.0'
-    implementation libs.firebaseFirestore
+    implementation library.firebaseFirestore
 
     implementation project(":${gradle.ext.libraryFolder}:common")
 
