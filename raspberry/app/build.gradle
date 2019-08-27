@@ -3,11 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion compileSdk_version
     defaultConfig {
+        minSdkVersion minSdk_androidthings_version
+        targetSdkVersion targetSdk_version
+
         applicationId "smarthome.raspberry"
-        minSdkVersion 26
-        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -59,13 +60,13 @@ dependencies {
     implementation libs.koin
 
     // retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation libs.retrofit
+    implementation libs.retrofitGson
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.7'
-    implementation 'com.google.firebase:firebase-firestore:18.1.0'
-    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation libs.firebaseFirestore
+    implementation libs.firebaseAuth
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.firebase:firebase-client-android:2.5.2'
     implementation 'com.google.firebase:firebase-messaging:17.4.0'

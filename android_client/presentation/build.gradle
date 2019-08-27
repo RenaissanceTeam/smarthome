@@ -4,12 +4,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
-    compileSdkVersion 28
-
-
+    compileSdkVersion compileSdk_version
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion minSdk_version
+        targetSdkVersion targetSdk_version
         versionCode 1
         versionName "1.0"
 

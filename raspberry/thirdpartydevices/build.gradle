@@ -7,11 +7,11 @@ repositories {
 }
 
 android {
-    compileSdkVersion 28
-
+    compileSdkVersion compileSdk_version
     defaultConfig {
-        minSdkVersion 26
-        targetSdkVersion 28
+        minSdkVersion minSdk_version
+        targetSdkVersion targetSdk_version
+
         versionCode 1
         versionName "1.0"
 
@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation 'com.android.support:support-annotations:28.0.0'
-    implementation 'com.google.firebase:firebase-firestore:18.2.0'
+    implementation libs.firebaseFirestore
 
     implementation project(":${gradle.ext.libraryFolder}:common")
 

@@ -3,12 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
-
-
+    compileSdkVersion compileSdk_version
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdkVersion minSdk_version
+        targetSdkVersion targetSdk_version
+
         versionCode 1
         versionName "1.0"
 
@@ -32,12 +31,12 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:17.0.1'
-    implementation 'com.google.firebase:firebase-firestore:20.2.0'
-    implementation 'com.google.firebase:firebase-auth:18.1.0'
+    implementation libs.firebaseFirestore
+    implementation libs.firebaseAuth
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    implementation libs.retrofit
+    implementation libs.retrofitGson
 
     // koin - dependency injection
     implementation libs.koin

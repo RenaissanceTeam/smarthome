@@ -3,11 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
-
+    compileSdkVersion compileSdk_version
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion minSdk_version
+        targetSdkVersion targetSdk_version
+        
         versionCode 1
         versionName "1.0"
     }
@@ -30,8 +30,8 @@ dependencies {
     implementation 'com.android.support:support-annotations:28.0.0'
 
     implementation 'com.google.firebase:firebase-core:17.1.0'
-    implementation 'com.google.firebase:firebase-auth:19.0.0'
-    implementation 'com.google.firebase:firebase-firestore:21.0.0'
+    implementation libs.firebaseAuth
+    implementation libs.firebaseFirestore
     implementation 'io.reactivex.rxjava2:rxjava:2.2.11'
 
     implementation project(":${gradle.ext.libraryFolder}:common")
