@@ -33,6 +33,8 @@ dependencies {
 
     implementation library.firebaseUiAuth
     implementation library.firebaseMessaging
+
+    implementation library.client_domain
 }
 
 apply plugin: 'kotlin-android-extensions'

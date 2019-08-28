@@ -13,5 +13,5 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.libraryFolder}:datalibrary",
         ":${gradle.ext.homeServerFolder}:app",
         ":${gradle.ext.homeServerFolder}:domain",
-        ":${gradle.ext.homeServerFolder}:arduinodevices",
-        ":${gradle.ext.homeServerFolder}:thirdpartydevices"
+        ":${gradle.ext.homeServerFolder}:arduinodevices" //,
+//        ":${gradle.ext.homeServerFolder}:thirdpartydevices"
