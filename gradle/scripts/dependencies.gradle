@@ -54,7 +54,7 @@ ext {
 
             homeServer_arduinoDevices   : project(":${gradle.ext.homeServerFolder}:arduinodevices"),
             homeServer_domain           : project(":${gradle.ext.homeServerFolder}:domain"),
-            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),
+//            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),
     ]
 
     groups = [

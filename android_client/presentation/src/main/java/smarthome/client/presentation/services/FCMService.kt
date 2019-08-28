@@ -14,8 +14,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.presentation.R
 import smarthome.client.domain.usecases.CloudMessageUseCase
+import smarthome.client.presentation.R
 
 class FCMService : FirebaseMessagingService(), KoinComponent {
     private var notificationManager: NotificationManager? = null
@@ -40,22 +40,21 @@ class FCMService : FirebaseMessagingService(), KoinComponent {
         job.cancel()
     }
 
-    override fun onNewToken(newToken: String?) {
+    override fun onNewToken(newToken: String) {
         ioScope.launch { messageUseCase.onNewToken(newToken) }
     }
 
-    override fun onMessageReceived(message: RemoteMessage?) {
-        message ?: return
-
+    override fun onMessageReceived(message: RemoteMessage) {
         val notification = message.notification ?: return
 
         val messageTitle = notification.title
         val messageBody = notification.body
 
-        val notificationBuilder = NotificationCompat.Builder(this, getString(R.string.alert_notification_channel))
-                .setSmallIcon(R.drawable.round_warning)
-                .setContentTitle(messageTitle)
-                .setContentText(messageBody)
+        val notificationBuilder =
+                NotificationCompat.Builder(this, getString(R.string.alert_notification_channel))
+                        .setSmallIcon(R.drawable.round_warning)
+                        .setContentTitle(messageTitle)
+                        .setContentText(messageBody)
 
 
         val notificationId = System.currentTimeMillis().toInt()
