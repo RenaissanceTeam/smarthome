@@ -1,64 +1,27 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
-android {
-    compileSdkVersion compileSdk_version
-    defaultConfig {
-        minSdkVersion minSdk_version
-        targetSdkVersion targetSdk_version
-
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-
-// "changing" dependencies gradle cache lifetime
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation library.appCompat
+    implementation library.kotlin
+
+    testImplementation library.junit
+    testImplementation groups.mockito
 
     // http server
-    implementation 'com.nanohttpd:nanohttpd-webserver:2.1.1'
+    implementation library.webserver
 
     //coroutines
-    def coroutinesVersion = "1.1.1"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation library.coroutinesCore
+    implementation library.coroutinesAndroid
 
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
     // retrofit
     implementation library.retrofit
     implementation library.retrofitGson
-
     implementation library.firebaseFirestore
-
-    implementation project(":${gradle.ext.libraryFolder}:common")
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    testImplementation 'junit:junit:4.12'
-
-    def mockitoVersion = '3.0.0'
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    testImplementation "org.mockito:mockito-inline:$mockitoVersion"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
-
+    implementation library.common
 }
-repositories {
-    mavenCentral()
-}
+

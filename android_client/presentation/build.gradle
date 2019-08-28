@@ -2,72 +2,37 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
-
-android {
-    compileSdkVersion compileSdk_version
-    defaultConfig {
-        minSdkVersion minSdk_version
-        targetSdkVersion targetSdk_version
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-}
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation library.appCompat
-    testImplementation 'junit:junit:4.12'
+    testImplementation library.junit
 
     // ViewModel and LiveData
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation groups.lifecycle
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     // jetpack
-    implementation "androidx.preference:preference:1.1.0-rc01"
+    implementation library.preference
 
     implementation library.coroutinesCore
     implementation library.coroutinesAndroid
     implementation library.rxAndroid
     implementation library.rxJava
 
-    implementation project(":${gradle.ext.libraryFolder}:common")
-    implementation project(":${gradle.ext.clientFolder}:domain")
+    implementation library.common
+    implementation library.datalibrary
+
 
     implementation library.koin
-    implementation 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
-    implementation 'in.srain.cube:ultra-ptr:1.0.11'
+    implementation library.processButton
+    implementation library.ultraPtr
 
     // ktx
-    implementation 'androidx.core:core-ktx:1.2.0-alpha03'
-    implementation 'androidx.fragment:fragment-ktx:1.2.0-alpha02'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0-alpha01'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.2.0-alpha01'
+    implementation groups.androidXktx
 
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
-    implementation 'com.google.firebase:firebase-messaging:19.0.1'
+    implementation library.firebaseUiAuth
+    implementation library.firebaseMessaging
 }
 
 apply plugin: 'kotlin-android-extensions'

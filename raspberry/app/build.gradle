@@ -45,11 +45,12 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:support-annotations:28.0.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
+
     compileOnly 'com.google.android.things:androidthings:1.0'
     implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
+    testImplementation library.junit
+    testImplementation library.kotlinTestrunner
 
     testImplementation groups.mockito
     implementation library.rxJava
@@ -64,20 +65,20 @@ dependencies {
     implementation library.retrofitGson
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation library.firebaseCore
     implementation library.firebaseFirestore
     implementation library.firebaseAuth
-    implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    implementation 'com.firebase:firebase-client-android:2.5.2'
-    implementation 'com.google.firebase:firebase-messaging:17.4.0'
+    implementation library.playServicesAuth
+    implementation library.firebaseClient
+    implementation library.firebaseMessaging
 
 
-    implementation project(":${gradle.ext.libraryFolder}:datalibrary")
-    implementation project(":${gradle.ext.libraryFolder}:common")
+    implementation library.datalibrary
+    implementation library.common
 
-    implementation project(":${gradle.ext.homeServerFolder}:arduinodevices")
-    implementation project(":${gradle.ext.homeServerFolder}:domain")
-//    implementation project(":${gradle.ext.homeServerFolder}:thirdpartydevices")
+    implementation library.homeServer_arduinoDevices
+    implementation library.homeServer_domain
+//    implementation library.homeServer_thirdpartyDevices
 }
 
 
