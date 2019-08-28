@@ -1,40 +1,18 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
-android {
-    compileSdkVersion compileSdk_version
-    defaultConfig {
-        minSdkVersion minSdk_version
-        targetSdkVersion targetSdk_version
-        
-        versionCode 1
-        versionName "1.0"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-
-// "changing" dependencies gradle cache lifetime
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:support-annotations:28.0.0'
+    implementation library.supportAnnotations
 
-    implementation 'com.google.firebase:firebase-core:17.1.0'
+    implementation library.firebaseCore
     implementation library.firebaseAuth
     implementation library.firebaseFirestore
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.11'
+    implementation library.rxJava
 
-    implementation project(":${gradle.ext.libraryFolder}:common")
+    implementation library.common
+
 }
 repositories {
     mavenCentral()

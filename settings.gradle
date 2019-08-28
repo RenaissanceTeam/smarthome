@@ -3,7 +3,6 @@ gradle.ext {
     clientFolder = "android_client"
     homeServerFolder = "raspberry"
     libraryFolder = "smarthome_libraries"
-
 }
 
 include ":${gradle.ext.clientFolder}:app",
@@ -16,4 +15,3 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.homeServerFolder}:domain",
         ":${gradle.ext.homeServerFolder}:arduinodevices",
         ":${gradle.ext.homeServerFolder}:thirdpartydevices"
-

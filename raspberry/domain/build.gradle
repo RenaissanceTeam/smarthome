@@ -3,14 +3,14 @@ apply plugin: 'kotlin'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    implementation project(":${gradle.ext.libraryFolder}:common")
+    implementation library.kotlin
+    implementation library.common
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
+    testImplementation library.junit
+    testImplementation library.kotlinTestrunner
 
-    testImplementation "com.google.truth:truth:1.0"
+    testImplementation library.googleTruth
 
     testImplementation groups.mockito
     implementation library.coroutinesCore

@@ -1,39 +1,21 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: "androidx.navigation.safeargs.kotlin"
-
-android {
-    compileSdkVersion compileSdk_version
-    defaultConfig {
-        minSdkVersion minSdk_version
-        targetSdkVersion targetSdk_version
-        applicationId "smarthome.client"
-        versionCode 1
-        versionName "1.0"
-        multiDexEnabled true
-    }
-    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation library.multidex
 
     implementation library.firebaseAuth
     implementation library.firebaseFirestore
     implementation library.appCompat
     implementation library.koin
 
-    implementation project(":${gradle.ext.libraryFolder}:common")
-    implementation project(":${gradle.ext.libraryFolder}:datalibrary")
-    implementation project(":${gradle.ext.clientFolder}:presentation")
-    implementation project(":${gradle.ext.clientFolder}:domain")
-    implementation project(":${gradle.ext.clientFolder}:data")
+    implementation library.common
+    implementation library.datalibrary
+    implementation library.client_presentation
+    implementation library.client_domain
+    implementation library.client_data
 }
 
 apply plugin: 'com.google.gms.google-services'
