@@ -1,10 +1,11 @@
 package smarthome.raspberry.data
 
+import io.reactivex.Observable
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 
 interface LocalStorage {
-    suspend fun getHomeId(): String
+    fun getHomeId(): Observable<String>
     fun getDevices(): MutableList<IotDevice>
     fun findDevice(controller: BaseController): IotDevice
     suspend fun addDevice(device: IotDevice)
@@ -13,4 +14,5 @@ interface LocalStorage {
     suspend fun removePendingDevice(device: IotDevice)
     suspend fun removeDevice(device: IotDevice)
     fun getPendingDevices(): MutableList<IotDevice>
+    suspend fun saveHome(homeId: String)
 }

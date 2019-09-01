@@ -5,50 +5,57 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 import smarthome.raspberry.BuildConfig
 import smarthome.raspberry.R
-import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.usecases.AuthUseCase
-import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
+import smarthome.raspberry.input.InputController
 
 private val TAG = MainActivity::class.java.simpleName
 private val DEBUG = BuildConfig.DEBUG
-private val AUTH_ACTIVITY_REQUEST_CODE = 12312
 
 class MainActivity : Activity() {
-    private val authUseCase: AuthUseCase = TODO()
-    private val devicesUseCase: DevicesUseCase = TODO()
-    private val homeUseCase: HomeUseCase = TODO()
-    private val repository: HomeRepository = TODO()
-
-    private val job = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + job)
+    private val authUseCase: AuthUseCase by inject()
+    private val homeUseCase: HomeUseCase by inject()
+    private val inputController: InputController by inject()
+    private var authenticationSubscription: Disposable? = null
+    private var homeInfoSubscription: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (DEBUG) Log.d(TAG, "onCreate")
 
-        if (!authUseCase.isAuthenticated()) {
-            startActivity(Intent(this, GoogleSignInActivity::class.java))
-        } else {
-            initRepository()
-        }
-    }
+        authenticationSubscription = authUseCase.isAuthenticated()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    if (it == AuthUseCase.AuthStatus.NOT_SIGNED_IN) {
+                        startActivity(Intent(this, GoogleSignInActivity::class.java))
+                    }
 
-    private fun initRepository() {
-        uiScope.launch {
-            repository.setupUserInteraction()
-        }
+                    auth_status.text = it.toString()
+                }
+        inputController.init()
+
+        homeInfoSubscription = homeUseCase.getHomeInfo()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    home.text = it.homeId
+                    user.text = it.userId
+                }
+
+        homeUseCase.launchStateMachine()
+
+        smarthome.raspberry.domain.Log.logger = { Log.e("DomainLog", it) }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel()
+        authenticationSubscription?.dispose()
+        homeInfoSubscription?.dispose()
     }
 }

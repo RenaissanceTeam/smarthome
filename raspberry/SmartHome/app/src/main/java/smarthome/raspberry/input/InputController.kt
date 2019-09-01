@@ -1,10 +1,13 @@
 package smarthome.raspberry.input
 
-import io.reactivex.disposables.Disposable
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import smarthome.library.common.*
+import smarthome.library.common.BaseController
+import smarthome.library.common.ControllerServeState
+import smarthome.library.common.DeviceServeState
+import smarthome.library.common.IotDevice
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 
@@ -12,15 +15,11 @@ class InputController(private val devicesUseCase: DevicesUseCase,
                       private val repository: HomeRepository,
                       private val input: InputControllerDataSource) {
     private val ioScope = CoroutineScope(Dispatchers.IO)
-    private var devicesSubscription: Disposable? = null
 
     fun init() {
-        devicesSubscription = input.getDeviceUpdates().subscribe {
-            if (it.isInnerCall) return@subscribe
-
-            ioScope.launch {
-                onUserRequest(it.devices)
-            }
+        input.setActionForNewDeviceUpdate {
+            if (it.isInnerCall) return@setActionForNewDeviceUpdate
+            ioScope.launch { onUserRequest(it.devices) }
         }
     }
 
@@ -35,6 +34,8 @@ class InputController(private val devicesUseCase: DevicesUseCase,
     // todo test: when change only name should NOT trigger remote update
     private suspend fun handleChanges(changedDevices: List<IotDevice>,
                                       notChangedDevices: MutableList<IotDevice>) {
+        Log.d("InputController", "handle changes")
+
         for (changedDevice in changedDevices) {
             val notChangedDevice = notChangedDevices.find { it == changedDevice } ?: continue
 
@@ -46,7 +47,8 @@ class InputController(private val devicesUseCase: DevicesUseCase,
     private suspend fun handleDeviceChanges(changedDevice: IotDevice): Boolean {
         when (changedDevice.serveState) {
             DeviceServeState.PENDING_TO_ADD -> devicesUseCase.addNewDevice(changedDevice)
-            DeviceServeState.ACCEPT_PENDING_TO_ADD -> devicesUseCase.acceptPendingDevice(changedDevice)
+            DeviceServeState.ACCEPT_PENDING_TO_ADD -> devicesUseCase.acceptPendingDevice(
+                    changedDevice)
             DeviceServeState.DELETE -> devicesUseCase.removeDevice(changedDevice)
             else -> return false
         }

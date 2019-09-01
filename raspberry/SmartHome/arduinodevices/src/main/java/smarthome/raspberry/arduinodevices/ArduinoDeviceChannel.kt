@@ -5,13 +5,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import smarthome.library.common.*
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
-import smarthome.raspberry.arduinodevices.server.StoppableServer
 import smarthome.raspberry.arduinodevices.server.UdpServer
 import smarthome.raspberry.arduinodevices.server.WebServer
 
-class ArduinoDeviceChannel(private val output: DeviceChannelOutput) : DeviceChannel {
-    private val communicationServer: WebServer = TODO()
-    private val initilizationServer: UdpServer = TODO()
+class ArduinoDeviceChannel(output: DeviceChannelOutput) : DeviceChannel {
+    private val communicationServer = WebServer(output)
+    private val initilizationServer = UdpServer()
 
     private fun getArduinoDeviceApi(ip: String): ArduinoDeviceApi {
         val gson = GsonBuilder()
@@ -26,7 +25,6 @@ class ArduinoDeviceChannel(private val output: DeviceChannelOutput) : DeviceChan
     }
 
     init {
-        // todo start server and push events to output
         initilizationServer.startServer()
         communicationServer.startServer()
     }
