@@ -7,9 +7,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import smarthome.raspberry.di.dataModule
 import smarthome.raspberry.di.useCasesModule
-import smarthome.raspberry.domain.HomeRepository
-import smarthome.raspberry.domain.usecases.DevicesUseCase
-import smarthome.raspberry.domain.usecases.HomeUseCase
 
 class App : Application() {
     var wakeLock: PowerManager.WakeLock? = null
