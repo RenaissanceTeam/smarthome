@@ -5,7 +5,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import smarthome.library.common.*
 import smarthome.raspberry.arduinodevices.controllers.ArduinoController
-import smarthome.raspberry.arduinodevices.server.StoppableServer
 import smarthome.raspberry.arduinodevices.server.UdpServer
 import smarthome.raspberry.arduinodevices.server.WebServer
 

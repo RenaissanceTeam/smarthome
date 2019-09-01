@@ -6,8 +6,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
 import smarthome.raspberry.domain.HomeRepository
-import smarthome.raspberry.domain.Log
-import smarthome.raspberry.domain.log
 import smarthome.raspberry.domain.models.HomeInfo
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

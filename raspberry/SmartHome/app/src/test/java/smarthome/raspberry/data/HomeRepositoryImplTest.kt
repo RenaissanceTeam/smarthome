@@ -5,7 +5,6 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.Mockito.verify
@@ -14,7 +13,6 @@ import smarthome.raspberry.domain.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.NoControllerException
 import smarthome.raspberry.domain.NoDeviceException
-import smarthome.raspberry.domain.usecases.AuthUseCase
 import smarthome.raspberry.domain.usecases.ControllersUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase

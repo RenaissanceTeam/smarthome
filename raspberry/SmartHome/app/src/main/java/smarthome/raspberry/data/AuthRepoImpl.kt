@@ -1,6 +1,5 @@
 package smarthome.raspberry.data
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
