@@ -1,0 +1,17 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
+
+dependencies {
+    implementation library.gson
+
+    implementation library.supportAnnotations
+    implementation library.firebaseFirestore
+    implementation library.common
+
+    testImplementation library.junit
+    androidTestImplementation library.androidTestRunner
+    implementation library.kotlin
+}
+

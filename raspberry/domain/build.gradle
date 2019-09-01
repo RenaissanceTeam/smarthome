@@ -1,0 +1,18 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation library.kotlin
+    implementation library.common
+
+    testImplementation library.junit
+    testImplementation library.kotlinTestrunner
+
+    testImplementation library.googleTruth
+
+    testImplementation groups.mockito
+    implementation library.coroutinesCore
+    implementation library.rxJava
+}

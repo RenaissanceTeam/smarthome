@@ -1,0 +1,22 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
+
+dependencies {
+    implementation library.multidex
+
+    implementation library.firebaseAuth
+    implementation library.firebaseFirestore
+    implementation library.appCompat
+    implementation library.koin
+
+    implementation library.common
+    implementation library.datalibrary
+    implementation library.client_presentation
+    implementation library.client_domain
+    implementation library.client_data
+}
+
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android-extensions'

@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation library.gson
+    implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
+    implementation library.kotlin
+    implementation library.rxJava
+}

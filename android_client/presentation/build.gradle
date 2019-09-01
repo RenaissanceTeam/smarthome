@@ -1,0 +1,40 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
+
+dependencies {
+    implementation library.appCompat
+    testImplementation library.junit
+
+    // ViewModel and LiveData
+    implementation groups.lifecycle
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    // jetpack
+    implementation library.preference
+
+    implementation library.coroutinesCore
+    implementation library.coroutinesAndroid
+    implementation library.rxAndroid
+    implementation library.rxJava
+
+    implementation library.common
+    implementation library.datalibrary
+
+
+    implementation library.koin
+    implementation library.processButton
+    implementation library.ultraPtr
+
+    // ktx
+    implementation groups.androidXktx
+
+    implementation library.firebaseUiAuth
+    implementation library.firebaseMessaging
+
+    implementation library.client_domain
+}
+
+apply plugin: 'kotlin-android-extensions'
