@@ -2,9 +2,6 @@ package smarthome.library.datalibrary.util
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
-import smarthome.library.common.IotDevice
-import smarthome.library.common.SmartHome
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resumeWithException
 

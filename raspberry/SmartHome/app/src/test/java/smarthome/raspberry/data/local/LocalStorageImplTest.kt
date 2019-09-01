@@ -2,12 +2,14 @@ package smarthome.raspberry.data.local
 
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import io.kotlintest.matchers.collections.shouldBeEmpty
 import io.kotlintest.matchers.collections.shouldContain
 import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.types.shouldBeTypeOf
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Test
 import smarthome.library.common.BaseController
 import smarthome.library.common.DeviceServeState
@@ -56,6 +58,11 @@ class LocalStorageImplTest {
                               guid: Long = 124L, controllers: List<BaseController> = listOf()
     ): Device_B {
         return Device_B(name, description, serveState, guid, controllers)
+    }
+
+    @Before
+    fun setUp() {
+        whenever(preferencesHelper.hasSavedHomeId()).then { true }
     }
 
     @Test

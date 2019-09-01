@@ -1,30 +1,45 @@
 package smarthome.raspberry.data
 
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.Observables
 import smarthome.library.common.*
+import smarthome.raspberry.domain.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.NoControllerException
 import smarthome.raspberry.domain.NoDeviceException
+import smarthome.raspberry.domain.models.HomeInfo
 import smarthome.raspberry.domain.usecases.ControllersUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
-import java.lang.reflect.Type
 
-class HomeRepositoryImpl(private val localStorage: LocalStorage,
-                         private val remoteStorage: RemoteStorage,
-                         private val deviceChannels: Map<Type, DeviceChannel>) : HomeRepository, DeviceChannelOutput,
-        LocalStorageInput, LocalStorageOutput {
+class HomeRepositoryImpl(
+        localStorageFactory: (LocalStorageInput, LocalStorageOutput) -> LocalStorage,
+        devicesUseCaseFactory: (HomeRepository) -> DevicesUseCase,
+        homeUseCaseFactory: (HomeRepository) -> HomeUseCase,
+        controllersUseCaseFactory: (HomeRepository) -> ControllersUseCase,
+        remoteStorageFactory: (HomeInfoSource) -> RemoteStorage,
+        deviceChannelsFactories: Map<String, (DeviceChannelOutput) -> DeviceChannel>,
+        private val authRepo: AuthRepo
+) : HomeRepository,
+        DeviceChannelOutput,
+        LocalStorageInput, LocalStorageOutput, HomeInfoSource {
 
-    private lateinit var devicesUseCase: DevicesUseCase
-    private lateinit var homeUseCase: HomeUseCase
-    private lateinit var controllersUseCase: ControllersUseCase
-
-    override suspend fun setupUserInteraction() {
-        remoteStorage.init()
-    }
+    private val devicesUseCase = devicesUseCaseFactory(this)
+    private val homeUseCase = homeUseCaseFactory(this)
+    private val controllersUseCase = controllersUseCaseFactory(this)
+    private val localStorage = localStorageFactory(this, this)
+    private val deviceChannels: Map<String, DeviceChannel> =
+            deviceChannelsFactories.mapValues { it.value(this) }
+    private val remoteStorage = remoteStorageFactory(this)
 
     override suspend fun saveDevice(device: IotDevice) {
         localStorage.updateDevice(device)
         remoteStorage.updateDevice(device)
+    }
+
+    override suspend fun createHome(homeId: String) {
+        localStorage.saveHome(homeId)
+        remoteStorage.saveHome(homeId)
     }
 
     override suspend fun proceedReadController(controller: BaseController): BaseController {
@@ -36,7 +51,21 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
         return controller
     }
 
-    override suspend fun proceedWriteController(controller: BaseController, state: ControllerState): BaseController {
+    override fun getObservableUserId(): Observable<String> {
+        return authRepo.getUserId()
+    }
+
+    override fun getObservableHomeId(): Observable<String> {
+        return localStorage.getHomeId()
+    }
+
+    override fun getHomeInfo(): Observable<HomeInfo> {
+        return Observables.combineLatest(getObservableUserId().startWith(""),
+                getObservableHomeId().startWith(""), ::HomeInfo)
+    }
+
+    override suspend fun proceedWriteController(controller: BaseController,
+                                                state: ControllerState): BaseController {
         val device = localStorage.findDevice(controller)
         val channel = findSuitableChannel(device)
         val newState = channel.writeState(device, controller, state)
@@ -58,7 +87,7 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
     }
 
     private fun findSuitableChannel(device: IotDevice): DeviceChannel {
-        return deviceChannels[device.javaClass]
+        return deviceChannels[device.javaClass.simpleName]
                 ?: throw IllegalArgumentException("no channel for $device")
     }
 
@@ -80,8 +109,9 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
         controllersUseCase.notifyControllerChanged(controller)
     }
 
-    override suspend fun createHome(homeId: String) {
-        remoteStorage.createHome(homeId)
+    override suspend fun saveHome(homeId: String) {
+        localStorage.saveHome(homeId)
+        remoteStorage.saveHome(homeId)
     }
 
     override suspend fun removePendingDevice(device: IotDevice) {
@@ -98,7 +128,6 @@ class HomeRepositoryImpl(private val localStorage: LocalStorage,
         localStorage.removeDevice(device)
         remoteStorage.removeDevice(device)
     }
-
 
     override suspend fun findController(guid: Long): BaseController {
         val devices = localStorage.getDevices()

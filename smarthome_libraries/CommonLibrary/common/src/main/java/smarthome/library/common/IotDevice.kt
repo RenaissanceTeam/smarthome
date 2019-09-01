@@ -1,7 +1,7 @@
 package smarthome.library.common
 
-open class IotDevice(var name: String,
-                     var description: String?,
+open class IotDevice(var name: String = "",
+                     var description: String? = null,
                      var serveState: DeviceServeState = DeviceServeState.IDLE,
                      val guid: Long = GUID.getGuidForName(name),
                      var controllers: List<BaseController>) {
