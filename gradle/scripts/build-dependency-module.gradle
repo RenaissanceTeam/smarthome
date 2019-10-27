@@ -1,0 +1,4 @@
+apply from: "$rootDir/gradle/scripts/google-services-setup.gradle"
+
+build.dependsOn copyGoogleServices
+clean.dependsOn deleteGoogleServices

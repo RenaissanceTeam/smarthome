@@ -1,0 +1,55 @@
+final String privateFolder = "$rootDir/ignored/private_smarthome"
+
+task clonePrivateGitRepo() {
+    doLast {
+        def destination = file(privateFolder)
+        if (destination.exists()) return
+
+        exec {
+            commandLine "git", "clone", "git@github.com:RenaissanceTeam/private_smarthome.git", privateFolder
+        }
+    }
+}
+
+task copyClientJson(type: Copy) {
+    dependsOn clonePrivateGitRepo
+    mustRunAfter clonePrivateGitRepo
+
+    doLast {
+        from "$privateFolder/services_json/smarthome.client"
+        into "$rootDir/android_client/app"
+
+        prinln "Copied client google-services.json"
+    }
+}
+
+task copyDatalibraryJson(type: Copy) {
+    dependsOn clonePrivateGitRepo
+    mustRunAfter clonePrivateGitRepo
+
+    doLast {
+        from "$privateFolder/services_json/smarthome.library.datalibrary"
+        into "$rootDir/smarthome_libraries/DataLibrary/datalibrary"
+
+        prinln "Copied datalibrary google-services.json"
+    }
+}
+task copyRaspberryJson(type: Copy) {
+    dependsOn clonePrivateGitRepo
+    mustRunAfter clonePrivateGitRepo
+
+    doLast {
+        from "$privateFolder/services_json/smarthome.raspberry"
+        into "$rootDir/raspberry/app"
+
+        prinln "Copied raspberry google-services.json"
+    }
+}
+
+task copyGoogleServices() {
+    dependsOn copyClientJson, copyDatalibraryJson, copyRaspberryJson
+}
+
+task deleteGoogleServices(type: Delete) {
+    delete privateFolder
+}

@@ -1,3 +1,5 @@
+apply from: "$rootDir/gradle/scripts/build-dependency-module.gradle"
+
 android {
     compileSdkVersion compileSdk_version
     defaultConfig {
@@ -29,4 +31,3 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
-
