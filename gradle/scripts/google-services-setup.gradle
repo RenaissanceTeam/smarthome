@@ -1,5 +1,5 @@
-final String privateFolder = "$rootDir/ignored/private_smarthome"
-
+final String privateFolder = "$absoluteRoot/ignored/private_smarthome"
+final String jsonServicesFolder = "services_json"
 task clonePrivateGitRepo() {
     doLast {
         def destination = file(privateFolder)
@@ -15,35 +15,23 @@ task copyClientJson(type: Copy) {
     dependsOn clonePrivateGitRepo
     mustRunAfter clonePrivateGitRepo
 
-    doLast {
-        from "$privateFolder/services_json/smarthome.client"
-        into "$rootDir/android_client/app"
-
-        prinln "Copied client google-services.json"
-    }
+    from "$privateFolder/$jsonServicesFolder/smarthome.client"
+    into "$absoluteRoot/android_client/app"
 }
 
 task copyDatalibraryJson(type: Copy) {
     dependsOn clonePrivateGitRepo
     mustRunAfter clonePrivateGitRepo
 
-    doLast {
-        from "$privateFolder/services_json/smarthome.library.datalibrary"
-        into "$rootDir/smarthome_libraries/DataLibrary/datalibrary"
-
-        prinln "Copied datalibrary google-services.json"
-    }
+    from "$privateFolder/$jsonServicesFolder/smarthome.library.datalibrary"
+    into "$absoluteRoot/smarthome_libraries/datalibrary"
 }
 task copyRaspberryJson(type: Copy) {
     dependsOn clonePrivateGitRepo
     mustRunAfter clonePrivateGitRepo
 
-    doLast {
-        from "$privateFolder/services_json/smarthome.raspberry"
-        into "$rootDir/raspberry/app"
-
-        prinln "Copied raspberry google-services.json"
-    }
+    from "$privateFolder/$jsonServicesFolder/smarthome.raspberry"
+    into "$absoluteRoot/raspberry/app"
 }
 
 task copyGoogleServices() {
