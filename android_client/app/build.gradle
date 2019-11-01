@@ -13,11 +13,16 @@ dependencies {
     implementation library.appCompat
     implementation library.koin
 
+    // modules
     implementation library.common
     implementation library.datalibrary
     implementation library.client_presentation
     implementation library.client_domain
+    implementation library.client_domain_api
     implementation library.client_data
+    implementation library.client_data_api
+    implementation library.client_scripts
+    implementation library.client_scripts_api
 }
 
 apply plugin: 'com.google.gms.google-services'

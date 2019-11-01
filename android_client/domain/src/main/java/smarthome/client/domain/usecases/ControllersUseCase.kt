@@ -1,7 +1,7 @@
 package smarthome.client.domain.usecases
 
-import smarthome.client.domain.HomeRepository
-import smarthome.client.domain.NoControllerException
+import smarthome.client.data_api.HomeRepository
+import smarthome.client.domain_api.NoControllerException
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 

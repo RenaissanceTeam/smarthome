@@ -3,8 +3,9 @@ package smarthome.client.util
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.dsl.module
 import smarhome.client.data.*
-import smarthome.client.domain.AuthenticationRepository
-import smarthome.client.domain.HomeRepository
+import smarthome.client.data_api.AuthenticationRepository
+import smarthome.client.data_api.HomeRepository
+import smarthome.client.data_api.RemoteStorageInput
 import smarthome.client.domain.usecases.*
 import smarthome.library.datalibrary.FirestoreHomesReferencesStorage
 import smarthome.library.datalibrary.FirestoreInstanceTokenStorage
@@ -23,7 +24,7 @@ val usecasesModule = module {
 val repositoryModule = module {
     val homeRepo = HomeRepositoryImpl()
     single { homeRepo as HomeRepository }
-    single { homeRepo as smarthome.client.data_api.RemoteStorageInput }
+    single { homeRepo as RemoteStorageInput }
     single { AuthenticationRepositoryImpl(get()) as AuthenticationRepository }
     single { FirebaseAuth.getInstance() }
 }

@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 import smarthome.library.common.IotDevice
 import smarthome.library.common.scripts.Script
 
-class LocalStorageImpl(private val appContext: Context) : smarthome.client.data_api.LocalStorage {
+class LocalStorageImpl(appContext: Context) : smarthome.client.data_api.LocalStorage {
     private val devices = BehaviorSubject.create<MutableList<IotDevice>>()
     private val scripts = BehaviorSubject.create<MutableList<Script>>()
     private val pendingDevices = BehaviorSubject.create<MutableList<IotDevice>>()

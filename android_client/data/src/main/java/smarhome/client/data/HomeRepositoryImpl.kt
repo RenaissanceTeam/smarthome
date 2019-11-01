@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain.HomeRepository
+import smarthome.client.data_api.HomeRepository
 import smarthome.client.domain.usecases.AuthenticationUseCase
 import smarthome.client.domain.usecases.HomeUseCases
 import smarthome.library.common.BaseController
@@ -58,7 +58,7 @@ class HomeRepositoryImpl :
     }
 
     override suspend fun getSavedAppToken(): String? {
-         return localStorage.getAppToken()
+        return localStorage.getAppToken()
     }
 
     override suspend fun getControllers(): MutableList<BaseController> {
