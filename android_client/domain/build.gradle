@@ -7,8 +7,9 @@ dependencies {
     implementation library.rxJava
     implementation library.kotlin
 
-    // moduless
-    implementation library.common
+    // modules
     implementation library.client_data_api
     implementation library.client_domain_api
+    implementation library.client_entity
+    implementation library.common
 }

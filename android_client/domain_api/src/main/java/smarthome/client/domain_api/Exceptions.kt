@@ -1,5 +1,6 @@
 package smarthome.client.domain_api
 
+import smarthome.client.entity.HomeException
 import smarthome.library.common.BaseController
 
 class NoDeviceException(guid: Long) : HomeException("No device with guid=$guid")

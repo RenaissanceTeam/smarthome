@@ -8,11 +8,11 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain_api.HomeException
 import smarthome.client.domain.usecases.ControllersUseCase
 import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.client.domain.usecases.PendingControllersUseCase
 import smarthome.client.domain.usecases.PendingDevicesUseCase
+import smarthome.client.entity.HomeException
 import smarthome.client.presentation.NoControllerException
 import smarthome.client.presentation.NoDeviceWithControllerException
 import smarthome.client.presentation.fragments.controllerdetail.statechanger.StateChangerType
@@ -54,7 +54,7 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
                 _controller.value = foundController
                 if (foundController.serveState == ControllerServeState.IDLE) _refresh.value = false
                 listenForModelChanges(controllerGuid)
-            } catch (e: smarthome.client.domain_api.HomeException) {
+            } catch (e: HomeException) {
                 TODO()
             }
         }
