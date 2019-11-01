@@ -1,3 +1,4 @@
+include ':scripts'
 
 gradle.ext {
     clientFolder = "android_client"
