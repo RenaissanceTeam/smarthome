@@ -1,5 +1,7 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
     implementation library.rxJava
@@ -10,6 +12,3 @@ dependencies {
     implementation library.client_data_api
     implementation library.client_domain_api
 }
-
-sourceCompatibility = "8"
-targetCompatibility = "8"

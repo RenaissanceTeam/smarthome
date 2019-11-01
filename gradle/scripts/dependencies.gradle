@@ -42,6 +42,7 @@ ext {
 
 
             // modules
+            client_entity            : project(":${gradle.ext.clientFolder}:entity"),
 
             common                   : project(":${gradle.ext.libraryFolder}:common"),
             datalibrary              : project(":${gradle.ext.libraryFolder}:datalibrary"),
@@ -53,7 +54,6 @@ ext {
             client_data_api          : project(":${gradle.ext.clientFolder}:data_api"),
             client_scripts           : project(":${gradle.ext.clientFolder}:scripts"),
             client_scripts_api       : project(":${gradle.ext.clientFolder}:scripts_api"),
-            client_entity            : project(":${gradle.ext.clientFolder}:entity"),
 
             homeServer_arduinoDevices: project(":${gradle.ext.homeServerFolder}:arduinodevices"),
             homeServer_domain        : project(":${gradle.ext.homeServerFolder}:domain"),
