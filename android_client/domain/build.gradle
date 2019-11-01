@@ -3,8 +3,12 @@ apply plugin: 'kotlin'
 
 dependencies {
     implementation library.rxJava
-    implementation library.common
     implementation library.kotlin
+
+    // moduless
+    implementation library.common
+    implementation library.client_data_api
+    implementation library.client_domain_api
 }
 
 sourceCompatibility = "8"

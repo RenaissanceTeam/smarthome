@@ -16,14 +16,14 @@ import smarthome.library.common.IotDevice
 import smarthome.library.common.scripts.Script
 
 class HomeRepositoryImpl :
-        HomeRepository, RemoteStorageInput, KoinComponent {
+        HomeRepository, smarthome.client.data_api.RemoteStorageInput, KoinComponent {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
     private var deviceSubscription: Disposable? = null
     private val authenticationUseCase: AuthenticationUseCase by inject()
     private val homeUseCases: HomeUseCases by inject()
-    private val localStorage: LocalStorage by inject()
-    private val remoteStorage: RemoteStorage by inject()
+    private val localStorage: smarthome.client.data_api.LocalStorage by inject()
+    private val remoteStorage: smarthome.client.data_api.RemoteStorage by inject()
 
     override suspend fun getDevices(): Observable<MutableList<IotDevice>> {
         if (deviceSubscription == null) observeDevicesUpdates()

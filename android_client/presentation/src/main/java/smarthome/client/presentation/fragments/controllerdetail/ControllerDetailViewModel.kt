@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain.HomeException
+import smarthome.client.domain_api.HomeException
 import smarthome.client.domain.usecases.ControllersUseCase
 import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.client.domain.usecases.PendingControllersUseCase
@@ -54,7 +54,7 @@ class ControllerDetailViewModel : ViewModel(), KoinComponent {
                 _controller.value = foundController
                 if (foundController.serveState == ControllerServeState.IDLE) _refresh.value = false
                 listenForModelChanges(controllerGuid)
-            } catch (e: HomeException) {
+            } catch (e: smarthome.client.domain_api.HomeException) {
                 TODO()
             }
         }
