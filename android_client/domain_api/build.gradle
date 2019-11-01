@@ -2,8 +2,11 @@ apply plugin: 'java-library'
 
 dependencies {
     implementation library.rxJava
-    implementation library.common
     implementation library.kotlin
+
+    // modules
+    implementation library.common
+    implementation library.client_entity
 }
 
 sourceCompatibility = "8"

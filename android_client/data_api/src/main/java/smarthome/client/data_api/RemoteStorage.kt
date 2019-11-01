@@ -1,4 +1,4 @@
-package smarhome.client.data
+package smarthome.client.data_api
 
 import io.reactivex.Observable
 import smarthome.library.common.DeviceUpdate

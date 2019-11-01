@@ -10,7 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain.HomeException
+import smarthome.client.domain_api.HomeException
 import smarthome.client.domain.usecases.DevicesUseCase
 import smarthome.client.domain.usecases.PendingDevicesUseCase
 import smarthome.library.common.IotDevice
@@ -47,7 +47,7 @@ class DeviceDetailViewModel : ViewModel(), KoinComponent {
                 _refresh.value = false
 
                 listenForModelChanges(deviceGuid)
-            } catch (e: HomeException) {
+            } catch (e: smarthome.client.domain_api.HomeException) {
                 TODO()
             }
         }

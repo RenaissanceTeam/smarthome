@@ -23,16 +23,16 @@ val usecasesModule = module {
 val repositoryModule = module {
     val homeRepo = HomeRepositoryImpl()
     single { homeRepo as HomeRepository }
-    single { homeRepo as RemoteStorageInput }
+    single { homeRepo as smarthome.client.data_api.RemoteStorageInput }
     single { AuthenticationRepositoryImpl(get()) as AuthenticationRepository }
     single { FirebaseAuth.getInstance() }
 }
 
 val dataSourceModule = module {
-    single { LocalStorageImpl(get()) as LocalStorage }
+    single { LocalStorageImpl(get()) as smarthome.client.data_api.LocalStorage }
     single {
         RemoteStorageImpl({ FirestoreInstanceTokenStorage(it)  },
                 { FirestoreHomesReferencesStorage(it) },
-                { FirestoreSmartHomeStorage(it) }) as RemoteStorage
+                { FirestoreSmartHomeStorage(it) }) as smarthome.client.data_api.RemoteStorage
     }
 }
