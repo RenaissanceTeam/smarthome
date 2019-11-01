@@ -1,4 +1,4 @@
-include ':scripts'
+include ':scripts', ':scripts_api'
 
 gradle.ext {
     clientFolder = "android_client"
@@ -10,6 +10,8 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.clientFolder}:presentation",
         ":${gradle.ext.clientFolder}:data",
         ":${gradle.ext.clientFolder}:domain",
+        ":${gradle.ext.clientFolder}:scripts",
+        ":${gradle.ext.clientFolder}:scripts_api",
         ":${gradle.ext.libraryFolder}:common",
         ":${gradle.ext.libraryFolder}:datalibrary",
         ":${gradle.ext.homeServerFolder}:app",
