@@ -1,4 +1,4 @@
-package smarthome.client.domain
+package smarthome.client.data_api
 
 import io.reactivex.Observable
 

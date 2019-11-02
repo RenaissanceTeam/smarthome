@@ -1,4 +1,3 @@
-
 gradle.ext {
     clientFolder = "android_client"
     homeServerFolder = "raspberry"
@@ -8,7 +7,12 @@ gradle.ext {
 include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.clientFolder}:presentation",
         ":${gradle.ext.clientFolder}:data",
+        ":${gradle.ext.clientFolder}:data_api",
+        ":${gradle.ext.clientFolder}:entity",
+        ":${gradle.ext.clientFolder}:domain_api",
         ":${gradle.ext.clientFolder}:domain",
+        ":${gradle.ext.clientFolder}:scripts",
+        ":${gradle.ext.clientFolder}:scripts_api",
         ":${gradle.ext.libraryFolder}:common",
         ":${gradle.ext.libraryFolder}:datalibrary",
         ":${gradle.ext.homeServerFolder}:app",

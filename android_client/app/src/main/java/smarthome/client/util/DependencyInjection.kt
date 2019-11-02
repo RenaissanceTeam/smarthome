@@ -3,8 +3,7 @@ package smarthome.client.util
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.dsl.module
 import smarhome.client.data.*
-import smarthome.client.domain.AuthenticationRepository
-import smarthome.client.domain.HomeRepository
+import smarthome.client.data_api.*
 import smarthome.client.domain.usecases.*
 import smarthome.library.datalibrary.FirestoreHomesReferencesStorage
 import smarthome.library.datalibrary.FirestoreInstanceTokenStorage

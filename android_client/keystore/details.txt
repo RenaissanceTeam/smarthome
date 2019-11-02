@@ -1,2 +1,0 @@
-key alias: key
-password: agEW6nVnOy7Pc6eI

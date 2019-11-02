@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import smarthome.client.domain.AuthenticationRepository
+import smarthome.client.data_api.AuthenticationRepository
 
 class AuthenticationRepositoryImpl(private val firebaseAuth: FirebaseAuth): AuthenticationRepository {
     private val isAuthenticated: BehaviorSubject<Boolean> = BehaviorSubject.create()

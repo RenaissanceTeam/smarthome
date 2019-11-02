@@ -1,8 +1,8 @@
 package smarthome.client.domain.usecases
 
 import io.reactivex.Observable
-import smarthome.client.domain.HomeRepository
-import smarthome.client.domain.NoScriptException
+import smarthome.client.data_api.HomeRepository
+import smarthome.client.domain_api.NoScriptException
 import smarthome.library.common.scripts.Script
 
 class ScriptUseCase(private val repository: HomeRepository) {
