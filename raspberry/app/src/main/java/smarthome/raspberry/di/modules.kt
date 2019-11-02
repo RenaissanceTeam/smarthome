@@ -15,9 +15,9 @@ import smarthome.raspberry.data.local.LocalStorageImpl
 import smarthome.raspberry.data.local.SharedPreferencesHelper
 import smarthome.raspberry.data.local.devices.LocalDevicesStorageImpl
 import smarthome.raspberry.data.remote.RemoteStorageImpl
-import smarthome.raspberry.domain.AuthRepo
+import smarthome.raspberry.authentication_api.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
-import smarthome.raspberry.domain.usecases.AuthUseCase
+import smarthome.raspberry.authentication.AuthUseCase
 import smarthome.raspberry.domain.usecases.ControllersUseCase
 import smarthome.raspberry.domain.usecases.DevicesUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
@@ -65,12 +65,12 @@ val dataModule = module {
             DeviceChannelOutput::class,
             HomeInfoSource::class
     ))
-    single { AuthRepoImpl() as AuthRepo }
+    single { AuthRepoImpl() as smarthome.raspberry.authentication_api.AuthRepo }
 }
 
 val useCasesModule = module {
     factory { DevicesUseCase(get()) }
-    factory { AuthUseCase(get()) }
+    factory { smarthome.raspberry.authentication.AuthUseCase(get()) }
     factory { HomeUseCase(get()) }
 }
 

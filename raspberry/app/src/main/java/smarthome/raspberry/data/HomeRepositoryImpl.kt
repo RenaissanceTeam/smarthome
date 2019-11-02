@@ -3,7 +3,7 @@ package smarthome.raspberry.data
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import smarthome.library.common.*
-import smarthome.raspberry.domain.AuthRepo
+import smarthome.raspberry.authentication_api.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.NoControllerException
 import smarthome.raspberry.domain.NoDeviceException
@@ -19,7 +19,7 @@ class HomeRepositoryImpl(
         controllersUseCaseFactory: (HomeRepository) -> ControllersUseCase,
         remoteStorageFactory: (HomeInfoSource) -> RemoteStorage,
         deviceChannelsFactories: Map<String, (DeviceChannelOutput) -> DeviceChannel>,
-        private val authRepo: AuthRepo
+        private val authRepo: smarthome.raspberry.authentication_api.AuthRepo
 ) : HomeRepository,
         DeviceChannelOutput,
         LocalStorageInput, LocalStorageOutput, HomeInfoSource {

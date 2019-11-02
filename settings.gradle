@@ -27,6 +27,10 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.homeServerFolder}:input",
         ":${gradle.ext.homeServerFolder}:input_api",
         ":${gradle.ext.homeServerFolder}:scripts",
-        ":${gradle.ext.homeServerFolder}:scripts_api"
+        ":${gradle.ext.homeServerFolder}:scripts_api",
+        ":${gradle.ext.homeServerFolder}:controllers",
+        ":${gradle.ext.homeServerFolder}:controllers_api",
+        ":${gradle.ext.homeServerFolder}:devices",
+        ":${gradle.ext.homeServerFolder}:devices_api"
 
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"

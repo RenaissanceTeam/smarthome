@@ -9,7 +9,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.Mockito.verify
 import smarthome.library.common.*
-import smarthome.raspberry.domain.AuthRepo
+import smarthome.raspberry.authentication_api.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.NoControllerException
 import smarthome.raspberry.domain.NoDeviceException
@@ -41,7 +41,7 @@ class HomeRepositoryImplTest {
     private val devicesUseCase: DevicesUseCase = mock()
     private val homeUseCase: HomeUseCase = mock()
     private val controllersUseCase: ControllersUseCase = mock()
-    private val authRepo: AuthRepo = mock()
+    private val authRepo: smarthome.raspberry.authentication_api.AuthRepo = mock()
 
 
     @Test

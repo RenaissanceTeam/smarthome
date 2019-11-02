@@ -1,9 +1,9 @@
-package smarthome.raspberry.domain.usecases
+package smarthome.raspberry.authentication
 
 import io.reactivex.Observable
-import smarthome.raspberry.domain.AuthRepo
+import smarthome.raspberry.authentication_api.AuthRepo
 
-class AuthUseCase(private val repo: AuthRepo) {
+class AuthUseCase(private val repo: smarthome.raspberry.authentication_api.AuthRepo) {
     fun isAuthenticated(): Observable<AuthStatus> {
         return repo.getAuthStatus()
     }

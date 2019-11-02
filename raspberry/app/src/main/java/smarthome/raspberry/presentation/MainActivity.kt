@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import smarthome.raspberry.BuildConfig
 import smarthome.raspberry.R
-import smarthome.raspberry.domain.usecases.AuthUseCase
+import smarthome.raspberry.authentication.AuthUseCase
 import smarthome.raspberry.domain.usecases.HomeUseCase
 import smarthome.raspberry.input.InputController
 
@@ -19,7 +19,7 @@ private val TAG = MainActivity::class.java.simpleName
 private val DEBUG = BuildConfig.DEBUG
 
 class MainActivity : Activity() {
-    private val authUseCase: AuthUseCase by inject()
+    private val authUseCase: smarthome.raspberry.authentication.AuthUseCase by inject()
     private val homeUseCase: HomeUseCase by inject()
     private val inputController: InputController by inject()
     private var authenticationSubscription: Disposable? = null
@@ -33,7 +33,7 @@ class MainActivity : Activity() {
         authenticationSubscription = authUseCase.isAuthenticated()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    if (it == AuthUseCase.AuthStatus.NOT_SIGNED_IN) {
+                    if (it == smarthome.raspberry.authentication.AuthUseCase.AuthStatus.NOT_SIGNED_IN) {
                         startActivity(Intent(this, GoogleSignInActivity::class.java))
                     }
 
