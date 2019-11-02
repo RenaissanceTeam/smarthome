@@ -13,9 +13,18 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.clientFolder}:domain",
         ":${gradle.ext.clientFolder}:scripts",
         ":${gradle.ext.clientFolder}:scripts_api",
+
         ":${gradle.ext.libraryFolder}:common",
         ":${gradle.ext.libraryFolder}:datalibrary",
+
         ":${gradle.ext.homeServerFolder}:app",
         ":${gradle.ext.homeServerFolder}:domain",
-        ":${gradle.ext.homeServerFolder}:arduinodevices" //,
+        ":${gradle.ext.homeServerFolder}:arduinodevices",
+        ":${gradle.ext.homeServerFolder}:entity",
+        ":${gradle.ext.homeServerFolder}:domain_api",
+        ":${gradle.ext.homeServerFolder}:authentication",
+        ":${gradle.ext.homeServerFolder}:authentication_api",
+        ":${gradle.ext.homeServerFolder}:input",
+        ":${gradle.ext.homeServerFolder}:input_api"
+
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"
