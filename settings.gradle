@@ -25,6 +25,8 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.homeServerFolder}:authentication",
         ":${gradle.ext.homeServerFolder}:authentication_api",
         ":${gradle.ext.homeServerFolder}:input",
-        ":${gradle.ext.homeServerFolder}:input_api"
+        ":${gradle.ext.homeServerFolder}:input_api",
+        ":${gradle.ext.homeServerFolder}:scripts",
+        ":${gradle.ext.homeServerFolder}:scripts_api"
 
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"
