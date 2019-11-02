@@ -9,21 +9,23 @@ import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.data_api.HomeRepository
+import smarthome.client.data_api.LocalStorage
+import smarthome.client.data_api.RemoteStorage
+import smarthome.client.data_api.RemoteStorageInput
 import smarthome.client.domain.usecases.AuthenticationUseCase
 import smarthome.client.domain.usecases.HomeUseCases
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.library.common.scripts.Script
 
-class HomeRepositoryImpl :
-        HomeRepository, smarthome.client.data_api.RemoteStorageInput, KoinComponent {
+class HomeRepositoryImpl : HomeRepository, RemoteStorageInput, KoinComponent {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
     private var deviceSubscription: Disposable? = null
     private val authenticationUseCase: AuthenticationUseCase by inject()
     private val homeUseCases: HomeUseCases by inject()
-    private val localStorage: smarthome.client.data_api.LocalStorage by inject()
-    private val remoteStorage: smarthome.client.data_api.RemoteStorage by inject()
+    private val localStorage: LocalStorage by inject()
+    private val remoteStorage: RemoteStorage by inject()
 
     override suspend fun getDevices(): Observable<MutableList<IotDevice>> {
         if (deviceSubscription == null) observeDevicesUpdates()
