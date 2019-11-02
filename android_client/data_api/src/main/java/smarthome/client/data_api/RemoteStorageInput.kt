@@ -1,4 +1,4 @@
-package smarhome.client.data
+package smarthome.client.data_api
 
 interface RemoteStorageInput {
     suspend fun getUserId(): String

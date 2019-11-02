@@ -4,6 +4,9 @@ import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import smarthome.client.data_api.NoHomeid
+import smarthome.client.data_api.RemoteStorage
+import smarthome.client.data_api.RemoteStorageInput
 import smarthome.library.common.*
 import smarthome.library.common.scripts.Script
 

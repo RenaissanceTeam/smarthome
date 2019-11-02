@@ -5,10 +5,11 @@ import android.content.Context
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import smarthome.client.data_api.LocalStorage
 import smarthome.library.common.IotDevice
 import smarthome.library.common.scripts.Script
 
-class LocalStorageImpl(private val appContext: Context) : LocalStorage {
+class LocalStorageImpl(appContext: Context) : LocalStorage {
     private val devices = BehaviorSubject.create<MutableList<IotDevice>>()
     private val scripts = BehaviorSubject.create<MutableList<Script>>()
     private val pendingDevices = BehaviorSubject.create<MutableList<IotDevice>>()
