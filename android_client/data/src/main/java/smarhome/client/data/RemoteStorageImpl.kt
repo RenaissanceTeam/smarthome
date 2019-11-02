@@ -5,6 +5,8 @@ import io.reactivex.Observable
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.data_api.NoHomeid
+import smarthome.client.data_api.RemoteStorage
+import smarthome.client.data_api.RemoteStorageInput
 import smarthome.library.common.*
 import smarthome.library.common.scripts.Script
 
@@ -13,12 +15,12 @@ class RemoteStorageImpl(
         private val instanceTokenStorageFactory: (homeId: String) -> InstanceTokenStorage,
         private val homesReferencesStorageFactory: (uid: String) -> HomesReferencesStorage,
         private val homeStorageFactory: (homeId: String) -> SmartHomeStorage
-) : smarthome.client.data_api.RemoteStorage, KoinComponent {
+) : RemoteStorage, KoinComponent {
     private var homeStorage: SmartHomeStorage? = null
     private var instanceTokenStorage: InstanceTokenStorage? = null
     private var homesReferencesStorage: HomesReferencesStorage? = null
     private var messageQueue: MessageQueue? = null
-    private val input: smarthome.client.data_api.RemoteStorageInput by inject()
+    private val input: RemoteStorageInput by inject()
 
 
 //    suspend fun getMessageQueue(): MessageQueue {
