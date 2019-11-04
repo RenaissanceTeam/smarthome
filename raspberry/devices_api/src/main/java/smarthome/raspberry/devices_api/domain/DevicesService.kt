@@ -1,10 +1,6 @@
 package smarthome.raspberry.devices_api.domain
 
-import smarthome.library.common.BaseController
-import smarthome.library.common.ControllerServeState
-import smarthome.library.common.ControllerState
 import smarthome.library.common.IotDevice
-import smarthome.raspberry.devices_api.data.DevicesRepository
 
 interface DevicesService {
 
@@ -24,5 +20,6 @@ interface DevicesService {
 
     suspend fun removeDevice(device: IotDevice)
     suspend fun saveDevice(device: IotDevice)
+    suspend fun getCurrentDevices(): List<IotDevice>
 }
 

@@ -21,7 +21,7 @@ private val DEBUG = BuildConfig.DEBUG
 class MainActivity : Activity() {
     private val authUseCase: smarthome.raspberry.authentication.AuthUseCase by inject()
     private val homeUseCase: smarthome.raspberry.home.HomeUseCase by inject()
-    private val inputController: InputController by inject()
+    private val inputController: smarthome.raspberry.input.InputController by inject()
     private var authenticationSubscription: Disposable? = null
     private var homeInfoSubscription: Disposable? = null
 

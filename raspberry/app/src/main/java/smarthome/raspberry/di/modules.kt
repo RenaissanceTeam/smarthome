@@ -38,10 +38,10 @@ val dataModule = module {
             }
     )
 
-    single { InputController(get(), get(), get()) }
+    single { smarthome.raspberry.input.InputController(get(), get(), get()) }
     factory {
         InputFromSharedDatabase(get(),
-                { FirestoreSmartHomeStorage(it) }) as InputControllerDataSource
+                { FirestoreSmartHomeStorage(it) }) as smarthome.raspberry.input.InputControllerDataSource
     }
     single {
         HomeRepositoryImpl(
