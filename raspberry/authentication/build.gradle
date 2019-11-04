@@ -6,6 +6,7 @@ apply from: "$rootDir/gradle/scripts/android-module.gradle"
 dependencies {
     implementation library.kotlin
     implementation library.rxJava
+    implementation library.firebaseAuth
 
     // modules
     implementation library.homeServer_authentication_api

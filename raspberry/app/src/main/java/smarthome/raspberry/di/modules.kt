@@ -64,7 +64,7 @@ val dataModule = module {
             DeviceChannelOutput::class,
             HomeInfoSource::class
     ))
-    single { AuthRepoImpl() as smarthome.raspberry.authentication_api.AuthRepo }
+    single { smarthome.raspberry.authentication.data.AuthRepoImpl() as smarthome.raspberry.authentication_api.AuthRepo }
 }
 
 val useCasesModule = module {
