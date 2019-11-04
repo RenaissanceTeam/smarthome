@@ -1,4 +1,4 @@
-package smarthome.raspberry.input
+package smarthome.raspberry.input.data
 
 import smarthome.library.common.DeviceUpdate
 

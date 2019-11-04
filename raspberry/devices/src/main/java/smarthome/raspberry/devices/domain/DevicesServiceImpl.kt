@@ -38,5 +38,9 @@ class DevicesServiceImpl(private val repository: DevicesRepository) : DevicesSer
     override suspend fun saveDevice(device: IotDevice) {
         repository.saveDevice(device)
     }
+
+    override suspend fun getCurrentDevices(): List<IotDevice> {
+        return repository.getCurrentDevices()
+    }
 }
 

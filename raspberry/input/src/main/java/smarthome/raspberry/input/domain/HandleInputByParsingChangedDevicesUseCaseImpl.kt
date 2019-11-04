@@ -1,41 +1,39 @@
-package smarthome.raspberry.input
+package smarthome.raspberry.input.domain
 
-import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerServeState
 import smarthome.library.common.DeviceServeState
 import smarthome.library.common.IotDevice
-import smarthome.raspberry.domain.HomeRepository
-import smarthome.raspberry.devices.DevicesUseCase
+import smarthome.raspberry.controllers_api.domain.ReadControllerUseCase
+import smarthome.raspberry.controllers_api.domain.WriteControllerUseCase
+import smarthome.raspberry.devices_api.domain.DevicesService
+import smarthome.raspberry.input_api.domain.HandleInputByParsingChangedDevicesUseCase
 
-class InputController(private val devicesUseCase: smarthome.raspberry.devices.DevicesUseCase,
-                      private val repository: HomeRepository,
-                      private val input: InputControllerDataSource) {
-    private val ioScope = CoroutineScope(Dispatchers.IO)
+// todo someone should start this use case. previously was
+//fun init() {
+//        input.setActionForNewDeviceUpdate {
+//            if (it.isInnerCall) return@setActionForNewDeviceUpdate
+//            ioScope.launch { onUserRequest(it.devices) }
+//        }
+//    }
 
-    fun init() {
-        input.setActionForNewDeviceUpdate {
-            if (it.isInnerCall) return@setActionForNewDeviceUpdate
-            ioScope.launch { onUserRequest(it.devices) }
-        }
-    }
+class HandleInputByParsingChangedDevicesUseCaseImpl(
+        private val devicesService: DevicesService,
+        private val readControllerUseCase: ReadControllerUseCase,
+        private val writeControllerUseCase: WriteControllerUseCase
+) : HandleInputByParsingChangedDevicesUseCase {
 
-    suspend fun onUserRequest(changedDevices: MutableList<IotDevice>) {
+    override suspend fun execute(changedDevices: MutableList<IotDevice>) {
         try {
-            handleChanges(changedDevices, repository.getCurrentDevices())
+            handleChanges(changedDevices, devicesService.getCurrentDevices())
         } catch (e: Throwable) {
-            TODO()
+            throw e
         }
     }
 
     // todo test: when change only name should NOT trigger remote update
     private suspend fun handleChanges(changedDevices: List<IotDevice>,
-                                      notChangedDevices: MutableList<IotDevice>) {
-        Log.d("InputController", "handle changes")
-
+                                      notChangedDevices: List<IotDevice>) {
         for (changedDevice in changedDevices) {
             val notChangedDevice = notChangedDevices.find { it == changedDevice } ?: continue
 
@@ -46,10 +44,10 @@ class InputController(private val devicesUseCase: smarthome.raspberry.devices.De
 
     private suspend fun handleDeviceChanges(changedDevice: IotDevice): Boolean {
         when (changedDevice.serveState) {
-            DeviceServeState.PENDING_TO_ADD -> devicesUseCase.addNewDevice(changedDevice)
-            DeviceServeState.ACCEPT_PENDING_TO_ADD -> devicesUseCase.acceptPendingDevice(
+            DeviceServeState.PENDING_TO_ADD -> devicesService.addNewDevice(changedDevice)
+            DeviceServeState.ACCEPT_PENDING_TO_ADD -> devicesService.acceptPendingDevice(
                     changedDevice)
-            DeviceServeState.DELETE -> devicesUseCase.removeDevice(changedDevice)
+            DeviceServeState.DELETE -> devicesService.removeDevice(changedDevice)
             else -> return false
         }
         return true
@@ -67,14 +65,14 @@ class InputController(private val devicesUseCase: smarthome.raspberry.devices.De
                 .map {
                     when (it.serveState) {
                         ControllerServeState.PENDING_READ ->
-                            devicesUseCase.readController(changedDevice, it)
+                            readControllerUseCase.execute(changedDevice, it)
                         ControllerServeState.PENDING_WRITE -> {
                             if (it.state == null) {
                                 it.serveState = ControllerServeState.IDLE
                             }
 
                             it.state?.let { writeState ->
-                                devicesUseCase.writeController(changedDevice, it, writeState)
+                                writeControllerUseCase.execute(changedDevice, it, writeState)
                             }
                         }
                         else -> return@map

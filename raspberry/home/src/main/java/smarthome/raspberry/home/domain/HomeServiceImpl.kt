@@ -12,6 +12,7 @@ class HomeServiceImpl(private val repository: HomeRepository) : HomeService {
     private val HOME_ID_PREFIX = "home_id"
     private var stateDisposable: Disposable? = null
 
+
     override suspend fun generateUniqueHomeId(): String {
         var homeId: String
         do {

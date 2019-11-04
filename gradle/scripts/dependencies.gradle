@@ -79,11 +79,14 @@ ext {
     ]
 
     groups = [
-            mockito    : [
+            forTest : [
+                    library.junit,
                     library.mockitoCore,
                     library.mockitoInline,
-                    library.mockitoKotlin
+                    library.mockitoKotlin,
+                    library.googleTruth
             ],
+            mockito : [],
             lifecycle  : [
                     library.lifecycleExtensions,
                     library.lifecycleViewModel,
