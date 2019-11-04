@@ -32,24 +32,11 @@ class HomeRepositoryImpl(
             deviceChannelsFactories.mapValues { it.value(this) }
     private val remoteStorage = remoteStorageFactory(this)
 
-    override suspend fun saveDevice(device: IotDevice) {
-        localStorage.updateDevice(device)
-        remoteStorage.updateDevice(device)
-    }
-
     override suspend fun createHome(homeId: String) {
         localStorage.saveHome(homeId)
         remoteStorage.saveHome(homeId)
     }
 
-    override suspend fun proceedReadController(controller: BaseController): BaseController {
-        val device = localStorage.findDevice(controller)
-        val channel = findSuitableChannel(device)
-        val newState = channel.read(device, controller)
-
-        controller.state = newState
-        return controller
-    }
 
     override fun getObservableUserId(): Observable<String> {
         return authRepo.getUserId()
@@ -64,41 +51,12 @@ class HomeRepositoryImpl(
                 getObservableHomeId().startWith(""), ::HomeInfo)
     }
 
-    override suspend fun proceedWriteController(controller: BaseController,
-                                                state: ControllerState): BaseController {
-        val device = localStorage.findDevice(controller)
-        val channel = findSuitableChannel(device)
-        val newState = channel.writeState(device, controller, state)
-
-        controller.state = newState
-        return controller
-    }
-
-    override fun getCurrentDevices(): MutableList<IotDevice> {
-        return localStorage.getDevices()
-    }
-
     override suspend fun generateHomeId(): String {
         return homeUseCase.generateUniqueHomeId()
     }
 
     override suspend fun isHomeIdUnique(homeId: String): Boolean {
         return remoteStorage.isHomeIdUnique(homeId)
-    }
-
-    private fun findSuitableChannel(device: IotDevice): DeviceChannel {
-        return deviceChannels[device.javaClass.simpleName]
-                ?: throw IllegalArgumentException("no channel for $device")
-    }
-
-    override suspend fun addPendingDevice(device: IotDevice) {
-        localStorage.addPendingDevice(device)
-        remoteStorage.addPendingDevice(device)
-    }
-
-    override suspend fun onControllerChanged(controller: BaseController) {
-        val device = localStorage.findDevice(controller)
-        remoteStorage.updateDevice(device)
     }
 
     override suspend fun onNewDevice(device: IotDevice) {
@@ -114,20 +72,6 @@ class HomeRepositoryImpl(
         remoteStorage.saveHome(homeId)
     }
 
-    override suspend fun removePendingDevice(device: IotDevice) {
-        localStorage.removePendingDevice(device)
-        remoteStorage.removePendingDevice(device)
-    }
-
-    override suspend fun addDevice(device: IotDevice) {
-        localStorage.addDevice(device)
-        remoteStorage.addDevice(device)
-    }
-
-    override suspend fun removeDevice(device: IotDevice) {
-        localStorage.removeDevice(device)
-        remoteStorage.removeDevice(device)
-    }
 
     override suspend fun findController(guid: Long): BaseController {
         val devices = localStorage.getDevices()

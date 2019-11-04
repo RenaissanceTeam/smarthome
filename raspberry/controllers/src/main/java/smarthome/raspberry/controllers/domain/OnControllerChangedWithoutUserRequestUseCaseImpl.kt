@@ -9,6 +9,6 @@ class OnControllerChangedWithoutUserRequestUseCaseImpl(
 ) : OnControllerChangedWithoutUserRequestUseCase {
 
     override suspend fun execute(controller: BaseController) {
-        repository.onControllerChanged(controller)
+        // todo react to controller change
     }
 }

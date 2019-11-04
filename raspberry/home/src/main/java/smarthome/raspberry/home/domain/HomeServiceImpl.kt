@@ -1,22 +1,18 @@
 package smarthome.raspberry.home.domain
 
-import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
-import smarthome.raspberry.domain.HomeRepository
-import smarthome.raspberry.entity.HomeInfo
 import smarthome.raspberry.home_api.data.HomeRepository
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import smarthome.raspberry.home_api.domain.HomeService
+import java.util.*
 import kotlin.random.Random
 
-class HomeUseCase(private val repository: HomeRepository) {
+class HomeServiceImpl(private val repository: HomeRepository) : HomeService {
     private val HOME_ID_PREFIX = "home_id"
     private var stateDisposable: Disposable? = null
 
-    suspend fun generateUniqueHomeId(): String {
+    override suspend fun generateUniqueHomeId(): String {
         var homeId: String
         do {
             homeId = generateHomeId()
@@ -26,19 +22,15 @@ class HomeUseCase(private val repository: HomeRepository) {
     }
 
     private fun generateHomeId(): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-        val currentTime = LocalDateTime.now().format(formatter)
-
+        val currentTime = Date().time
         val randomPart = Random.nextInt(0, 9999).toString()
 
         return "$HOME_ID_PREFIX$currentTime$randomPart"
     }
 
-    fun getHomeInfo(): Observable<smarthome.raspberry.entity.HomeInfo> {
-        return repository.getHomeInfo()
-    }
+    override fun getHomeInfo() = repository.getHomeInfo()
 
-    fun launchStateMachine(scheduler: Scheduler = Schedulers.io()) {
+    override fun launchStateMachine(scheduler: Scheduler) {
         stateDisposable = repository.getHomeInfo()
                 .observeOn(scheduler)
                 .subscribe(
