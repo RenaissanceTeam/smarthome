@@ -1,4 +1,4 @@
-package smarthome.raspberry.scripts_api
+package smarthome.raspberry.scripts_api.data
 
 import smarthome.library.common.scripts.Script
 

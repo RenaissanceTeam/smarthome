@@ -12,7 +12,7 @@ import org.koin.android.ext.android.inject
 import smarthome.raspberry.BuildConfig
 import smarthome.raspberry.R
 import smarthome.raspberry.authentication.AuthUseCase
-import smarthome.raspberry.domain.usecases.HomeUseCase
+import smarthome.raspberry.home.HomeUseCase
 import smarthome.raspberry.input.InputController
 
 private val TAG = MainActivity::class.java.simpleName
@@ -20,7 +20,7 @@ private val DEBUG = BuildConfig.DEBUG
 
 class MainActivity : Activity() {
     private val authUseCase: smarthome.raspberry.authentication.AuthUseCase by inject()
-    private val homeUseCase: HomeUseCase by inject()
+    private val homeUseCase: smarthome.raspberry.home.HomeUseCase by inject()
     private val inputController: InputController by inject()
     private var authenticationSubscription: Disposable? = null
     private var homeInfoSubscription: Disposable? = null
