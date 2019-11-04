@@ -8,7 +8,4 @@ dependencies {
 
     // modules
     implementation library.common
-    implementation library.homeServer_controllers_api
-    implementation library.homeServer_devices_api
-    implementation library.homeServer_channel_api
 }

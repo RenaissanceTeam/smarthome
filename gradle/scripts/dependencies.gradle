@@ -71,6 +71,8 @@ ext {
             homeServer_scripts_api       : project(":${gradle.ext.homeServerFolder}:scripts_api"),
             homeServer_home              : project(":${gradle.ext.homeServerFolder}:home"),
             homeServer_home_api          : project(":${gradle.ext.homeServerFolder}:home_api"),
+            homeServer_channel           : project(":${gradle.ext.homeServerFolder}:channel"),
+            homeServer_channel_api       : project(":${gradle.ext.homeServerFolder}:channel_api"),
 
 
 //            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),
