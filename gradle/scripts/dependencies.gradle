@@ -73,20 +73,21 @@ ext {
             homeServer_home_api          : project(":${gradle.ext.homeServerFolder}:home_api"),
             homeServer_channel           : project(":${gradle.ext.homeServerFolder}:channel"),
             homeServer_channel_api       : project(":${gradle.ext.homeServerFolder}:channel_api"),
+            homeServer_util              : project(":${gradle.ext.homeServerFolder}:util"),
 
 
 //            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),
     ]
 
     groups = [
-            forTest : [
+            forTest    : [
                     library.junit,
                     library.mockitoCore,
                     library.mockitoInline,
                     library.mockitoKotlin,
                     library.googleTruth
             ],
-            mockito : [],
+            mockito    : [],
             lifecycle  : [
                     library.lifecycleExtensions,
                     library.lifecycleViewModel,

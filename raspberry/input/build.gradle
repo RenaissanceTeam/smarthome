@@ -12,6 +12,7 @@ dependencies {
     implementation library.homeServer_input_api
     implementation library.homeServer_devices_api
     implementation library.homeServer_controllers_api
+    implementation library.homeServer_home_api
 
     testImplementation groups.forTest
 }

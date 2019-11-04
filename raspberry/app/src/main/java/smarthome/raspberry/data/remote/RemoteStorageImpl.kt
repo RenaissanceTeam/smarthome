@@ -4,11 +4,11 @@ import io.reactivex.disposables.Disposable
 import smarthome.library.common.HomesReferencesStorage
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHomeStorage
-import smarthome.raspberry.data.HomeInfoSource
+import smarthome.raspberry.home_api.data.HomeInfoSource
 import smarthome.raspberry.data.RemoteStorage
 
 class RemoteStorageImpl(
-        input: HomeInfoSource,
+        input: smarthome.raspberry.home_api.data.HomeInfoSource,
         private val homeStorageFactory: (String) -> SmartHomeStorage,
         private val homesReferencesStorageFactory: (String) -> HomesReferencesStorage) :
         RemoteStorage {

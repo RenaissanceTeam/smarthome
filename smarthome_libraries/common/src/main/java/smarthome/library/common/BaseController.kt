@@ -7,16 +7,12 @@ package smarthome.library.common
 open class BaseController(var name: String,
                           var state: ControllerState? = null,
                           var serveState: ControllerServeState = ControllerServeState.IDLE,
-                          val guid: Long = GUID.getGuidForName(name)) {
+                          val id: Id = Id(name)) {
 
 
-    override fun hashCode(): Int {
-        return guid.toInt()
-    }
+    override fun hashCode() = id.hashCode()
 
-    override fun equals(other: Any?): Boolean {
-        return (other as? BaseController)?.guid == guid
-    }
+    override fun equals(other: Any?) = (other as? BaseController)?.id == id
 }
 
 open class ControllerState

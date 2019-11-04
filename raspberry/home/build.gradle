@@ -6,9 +6,12 @@ apply from: "$rootDir/gradle/scripts/android-module.gradle"
 dependencies {
     implementation library.kotlin
     implementation library.coroutinesCore
+    implementation library.rxJava
+    implementation library.rxKotlin
 
     // modules
     implementation library.homeServer_home_api
+    implementation library.homeServer_authentication_api
     implementation library.common
     implementation library.homeServer_entity
 }

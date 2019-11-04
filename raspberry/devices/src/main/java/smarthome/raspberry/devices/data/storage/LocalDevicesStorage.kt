@@ -1,4 +1,4 @@
-package smarthome.raspberry.data.local
+package smarthome.raspberry.devices.data.storage
 
 import smarthome.library.common.IotDevice
 

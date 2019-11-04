@@ -9,10 +9,10 @@ import smarthome.library.datalibrary.FirestoreSmartHomeStorage
 import smarthome.raspberry.arduinodevices.ArduinoDevice
 import smarthome.raspberry.arduinodevices.ArduinoDeviceChannel
 import smarthome.raspberry.data.*
-import smarthome.raspberry.data.local.LocalDevicesStorage
+import smarthome.raspberry.devices.data.storage.LocalDevicesStorage
 import smarthome.raspberry.data.local.LocalStorageImpl
-import smarthome.raspberry.data.local.SharedPreferencesHelper
-import smarthome.raspberry.data.local.devices.LocalDevicesStorageImpl
+import smarthome.raspberry.util.SharedPreferencesHelper
+import smarthome.raspberry.devices.data.storage.LocalDevicesStorageImpl
 import smarthome.raspberry.data.remote.RemoteStorageImpl
 import smarthome.raspberry.authentication_api.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
@@ -26,11 +26,13 @@ import smarthome.raspberry.input.datasource.InputFromSharedDatabase
 
 
 val dataModule = module {
-    factory { SharedPreferencesHelper(get()) }
+    factory { smarthome.raspberry.util.SharedPreferencesHelper(get()) }
 
     val typeAdapter = RuntimeTypeAdapterFactory.of(BaseController::class.java)
 
-    factory { LocalDevicesStorageImpl(typeAdapter) as LocalDevicesStorage }
+    factory { smarthome.raspberry.devices.data.storage.LocalDevicesStorageImpl(
+            typeAdapter) as smarthome.raspberry.devices.data.storage.LocalDevicesStorage
+    }
     factory { LocalStorageImpl(get(), get()) as LocalStorage }
     val deviceChannels = mapOf(
             ArduinoDevice::class.java.simpleName to { output: DeviceChannelOutput ->
@@ -62,7 +64,7 @@ val dataModule = module {
             LocalStorageInput::class,
             LocalStorageOutput::class,
             DeviceChannelOutput::class,
-            HomeInfoSource::class
+            smarthome.raspberry.home_api.data.HomeInfoSource::class
     ))
     single { smarthome.raspberry.authentication.data.AuthRepoImpl() as smarthome.raspberry.authentication_api.AuthRepo }
 }
