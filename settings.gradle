@@ -35,6 +35,7 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.homeServerFolder}:home",
         ":${gradle.ext.homeServerFolder}:home_api",
         ":${gradle.ext.homeServerFolder}:channel",
-        ":${gradle.ext.homeServerFolder}:channel_api"
+        ":${gradle.ext.homeServerFolder}:channel_api",
+        ":${gradle.ext.homeServerFolder}:util"
 
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"

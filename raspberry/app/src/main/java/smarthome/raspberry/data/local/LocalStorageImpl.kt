@@ -6,25 +6,10 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.data.LocalStorage
 
-class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
-                       private val localDevicesStorage: LocalDevicesStorage
+class LocalStorageImpl(private val preferences: smarthome.raspberry.util.SharedPreferencesHelper,
+                       private val localDevicesStorage: smarthome.raspberry.devices.data.storage.LocalDevicesStorage
 ) : LocalStorage {
 
-    private val homeId = BehaviorSubject.create<String>()
-
-    init {
-        if (preferences.hasSavedHomeId()) {
-            homeId.onNext(preferences.getHomeId())
-        }
-    }
-
-    override fun getDevices(): MutableList<IotDevice> {
-        return localDevicesStorage.getSavedDevices(IotDeviceGroup.ACTIVE).toMutableList()
-    }
-
-    override fun getHomeId(): Observable<String> {
-        return homeId
-    }
 
     override suspend fun saveHome(homeId: String) {
         preferences.setHomeId(homeId)
@@ -32,7 +17,8 @@ class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
     }
 
     override fun getPendingDevices(): MutableList<IotDevice> {
-        return localDevicesStorage.getSavedDevices(IotDeviceGroup.PENDING).toMutableList()
+        return localDevicesStorage.getSavedDevices(
+                smarthome.raspberry.devices.data.storage.IotDeviceGroup.PENDING).toMutableList()
     }
 
     override fun findDevice(controller: BaseController): IotDevice {
@@ -40,22 +26,22 @@ class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
     }
 
     override fun updateDevice(device: IotDevice) {
-        localDevicesStorage.updateDevice(device, IotDeviceGroup.ACTIVE)
+        localDevicesStorage.updateDevice(device, smarthome.raspberry.devices.data.storage.IotDeviceGroup.ACTIVE)
     }
 
     override suspend fun addDevice(device: IotDevice) {
-        localDevicesStorage.add(device, IotDeviceGroup.ACTIVE)
+        localDevicesStorage.add(device, smarthome.raspberry.devices.data.storage.IotDeviceGroup.ACTIVE)
     }
 
     override suspend fun addPendingDevice(device: IotDevice) {
-        localDevicesStorage.add(device, IotDeviceGroup.PENDING)
+        localDevicesStorage.add(device, smarthome.raspberry.devices.data.storage.IotDeviceGroup.PENDING)
     }
 
     override suspend fun removePendingDevice(device: IotDevice) {
-        localDevicesStorage.remove(device, IotDeviceGroup.PENDING)
+        localDevicesStorage.remove(device, smarthome.raspberry.devices.data.storage.IotDeviceGroup.PENDING)
     }
 
     override suspend fun removeDevice(device: IotDevice) {
-        localDevicesStorage.remove(device, IotDeviceGroup.ACTIVE)
+        localDevicesStorage.remove(device, smarthome.raspberry.devices.data.storage.IotDeviceGroup.ACTIVE)
     }
 }

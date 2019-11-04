@@ -17,7 +17,7 @@ import smarthome.library.common.IotDevice
 import smarthome.raspberry.data.LocalStorage
 import smarthome.raspberry.data.LocalStorageInput
 import smarthome.raspberry.data.LocalStorageOutput
-import smarthome.raspberry.data.local.devices.LocalDevicesStorageImpl
+import smarthome.raspberry.devices.data.storage.LocalDevicesStorageImpl
 
 
 class Device_A(name: String, description: String?, serveState: DeviceServeState, guid: Long,
@@ -31,16 +31,17 @@ class Device_B(name: String, description: String?, serveState: DeviceServeState,
 
 class LocalStorageImplTest {
 
-    private val preferencesHelper = mock<SharedPreferencesHelper>()
+    private val preferencesHelper = mock<smarthome.raspberry.util.SharedPreferencesHelper>()
     private val input = mock<LocalStorageInput>()
     private val output = mock<LocalStorageOutput>()
     private val adapter = RuntimeTypeAdapterFactory
             .of(IotDevice::class.java)
             .registerSubtype(Device_A::class.java)
             .registerSubtype(Device_B::class.java)
-    private val storage: LocalDevicesStorage = LocalDevicesStorageImpl(adapter)
+    private val storage: smarthome.raspberry.devices.data.storage.LocalDevicesStorage =
+            smarthome.raspberry.devices.data.storage.LocalDevicesStorageImpl(adapter)
 
-    private fun createStorage(prefsHelper: SharedPreferencesHelper = preferencesHelper,
+    private fun createStorage(prefsHelper: smarthome.raspberry.util.SharedPreferencesHelper = preferencesHelper,
                               input: LocalStorageInput = this.input,
                               output: LocalStorageOutput = this.output): LocalStorage {
         return LocalStorageImpl(prefsHelper, input, output, storage)
