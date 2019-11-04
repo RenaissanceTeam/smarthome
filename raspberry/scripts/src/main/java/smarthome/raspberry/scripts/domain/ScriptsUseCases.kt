@@ -1,4 +1,4 @@
-package smarthome.raspberry.domain.usecases
+package smarthome.raspberry.scripts.domain
 
 import smarthome.library.common.scripts.Script
 import smarthome.raspberry.scripts_api.ScriptsRepository

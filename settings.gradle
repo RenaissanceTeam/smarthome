@@ -31,6 +31,8 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.homeServerFolder}:controllers",
         ":${gradle.ext.homeServerFolder}:controllers_api",
         ":${gradle.ext.homeServerFolder}:devices",
-        ":${gradle.ext.homeServerFolder}:devices_api"
+        ":${gradle.ext.homeServerFolder}:devices_api",
+        ":${gradle.ext.homeServerFolder}:home",
+        ":${gradle.ext.homeServerFolder}:home_api"
 
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"

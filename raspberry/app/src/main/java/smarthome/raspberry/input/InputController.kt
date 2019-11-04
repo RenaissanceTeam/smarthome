@@ -9,9 +9,9 @@ import smarthome.library.common.ControllerServeState
 import smarthome.library.common.DeviceServeState
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.domain.HomeRepository
-import smarthome.raspberry.domain.usecases.DevicesUseCase
+import smarthome.raspberry.devices.DevicesUseCase
 
-class InputController(private val devicesUseCase: DevicesUseCase,
+class InputController(private val devicesUseCase: smarthome.raspberry.devices.DevicesUseCase,
                       private val repository: HomeRepository,
                       private val input: InputControllerDataSource) {
     private val ioScope = CoroutineScope(Dispatchers.IO)

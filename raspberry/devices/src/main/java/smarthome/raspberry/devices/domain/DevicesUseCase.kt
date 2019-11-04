@@ -1,12 +1,12 @@
-package smarthome.raspberry.domain.usecases
+package smarthome.raspberry.devices.domain
 
 import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerServeState
 import smarthome.library.common.ControllerState
 import smarthome.library.common.IotDevice
-import smarthome.raspberry.domain.HomeRepository
+import smarthome.raspberry.devices_api.data.DevicesRepository
 
-class DevicesUseCase(private val repository: HomeRepository) {
+class DevicesUseCase(private val repository: DevicesRepository) {
 
     /**
      * Triggered when new device should be added to the smarthome.

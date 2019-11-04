@@ -11,13 +11,13 @@ import smarthome.library.common.ControllerServeState
 import smarthome.library.common.ControllerState
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.domain.HomeRepository
-import smarthome.raspberry.domain.usecases.DevicesUseCase
+import smarthome.raspberry.devices.DevicesUseCase
 
 class InputControllerTest {
 
     private val repo: HomeRepository = mock()
     private val inputSource: InputControllerDataSource = mock()
-    private val devicesUseCase = mock<DevicesUseCase>()
+    private val devicesUseCase = mock<smarthome.raspberry.devices.DevicesUseCase>()
     private val idleController = createController(1)
     private val idleDevice = createDevice(2, mutableListOf(idleController))
 

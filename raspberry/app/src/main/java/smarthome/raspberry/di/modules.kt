@@ -1,7 +1,6 @@
 package smarthome.raspberry.di
 
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory
-import org.koin.dsl.binds
 import org.koin.dsl.module
 import smarthome.library.common.BaseController
 import smarthome.library.common.DeviceChannelOutput
@@ -18,9 +17,9 @@ import smarthome.raspberry.data.remote.RemoteStorageImpl
 import smarthome.raspberry.authentication_api.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.authentication.AuthUseCase
-import smarthome.raspberry.domain.usecases.ControllersUseCase
-import smarthome.raspberry.domain.usecases.DevicesUseCase
-import smarthome.raspberry.domain.usecases.HomeUseCase
+import smarthome.raspberry.controllers.ControllersUseCase
+import smarthome.raspberry.devices.DevicesUseCase
+import smarthome.raspberry.home.HomeUseCase
 import smarthome.raspberry.input.InputController
 import smarthome.raspberry.input.InputControllerDataSource
 import smarthome.raspberry.input.datasource.InputFromSharedDatabase
@@ -49,9 +48,9 @@ val dataModule = module {
                 localStorageFactory = { input, output ->
                     LocalStorageImpl(get(), get())
                 },
-                devicesUseCaseFactory = { DevicesUseCase(it) },
-                homeUseCaseFactory = { HomeUseCase(it) },
-                controllersUseCaseFactory = { ControllersUseCase(it) },
+                devicesUseCaseFactory = { smarthome.raspberry.devices.DevicesUseCase(it) },
+                homeUseCaseFactory = { smarthome.raspberry.home.HomeUseCase(it) },
+                controllersUseCaseFactory = { smarthome.raspberry.controllers.ControllersUseCase(it) },
                 deviceChannelsFactories = deviceChannels,
                 remoteStorageFactory = {
                     RemoteStorageImpl(it,
@@ -69,9 +68,9 @@ val dataModule = module {
 }
 
 val useCasesModule = module {
-    factory { DevicesUseCase(get()) }
+    factory { smarthome.raspberry.devices.DevicesUseCase(get()) }
     factory { smarthome.raspberry.authentication.AuthUseCase(get()) }
-    factory { HomeUseCase(get()) }
+    factory { smarthome.raspberry.home.HomeUseCase(get()) }
 }
 
 

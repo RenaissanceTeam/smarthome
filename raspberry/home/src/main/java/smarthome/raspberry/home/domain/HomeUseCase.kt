@@ -1,4 +1,4 @@
-package smarthome.raspberry.domain.usecases
+package smarthome.raspberry.home.domain
 
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -6,7 +6,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
 import smarthome.raspberry.domain.HomeRepository
-import smarthome.raspberry.domain.models.HomeInfo
+import smarthome.raspberry.entity.HomeInfo
+import smarthome.raspberry.home_api.data.HomeRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
@@ -33,7 +34,7 @@ class HomeUseCase(private val repository: HomeRepository) {
         return "$HOME_ID_PREFIX$currentTime$randomPart"
     }
 
-    fun getHomeInfo(): Observable<HomeInfo> {
+    fun getHomeInfo(): Observable<smarthome.raspberry.entity.HomeInfo> {
         return repository.getHomeInfo()
     }
 
@@ -55,9 +56,9 @@ class HomeUseCase(private val repository: HomeRepository) {
                 )
     }
 
-    private fun hasUser(it: HomeInfo) = it.userId.isNotEmpty()
+    private fun hasUser(it: smarthome.raspberry.entity.HomeInfo) = it.userId.isNotEmpty()
 
-    private fun hasHomeId(info: HomeInfo) = info.homeId.isNotEmpty()
+    private fun hasHomeId(info: smarthome.raspberry.entity.HomeInfo) = info.homeId.isNotEmpty()
 
     private suspend fun createHome() {
         val homeId = generateUniqueHomeId()

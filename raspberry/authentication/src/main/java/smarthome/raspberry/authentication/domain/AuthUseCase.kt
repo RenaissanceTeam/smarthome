@@ -1,4 +1,4 @@
-package smarthome.raspberry.authentication
+package smarthome.raspberry.authentication.domain
 
 import io.reactivex.Observable
 import smarthome.raspberry.authentication_api.AuthRepo

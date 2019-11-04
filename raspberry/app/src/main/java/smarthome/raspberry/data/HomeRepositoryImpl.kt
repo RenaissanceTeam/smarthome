@@ -7,16 +7,16 @@ import smarthome.raspberry.authentication_api.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.NoControllerException
 import smarthome.raspberry.domain.NoDeviceException
-import smarthome.raspberry.domain.models.HomeInfo
-import smarthome.raspberry.domain.usecases.ControllersUseCase
-import smarthome.raspberry.domain.usecases.DevicesUseCase
-import smarthome.raspberry.domain.usecases.HomeUseCase
+import smarthome.raspberry.entity.HomeInfo
+import smarthome.raspberry.controllers.ControllersUseCase
+import smarthome.raspberry.devices.DevicesUseCase
+import smarthome.raspberry.home.HomeUseCase
 
 class HomeRepositoryImpl(
         localStorageFactory: (LocalStorageInput, LocalStorageOutput) -> LocalStorage,
-        devicesUseCaseFactory: (HomeRepository) -> DevicesUseCase,
-        homeUseCaseFactory: (HomeRepository) -> HomeUseCase,
-        controllersUseCaseFactory: (HomeRepository) -> ControllersUseCase,
+        devicesUseCaseFactory: (HomeRepository) -> smarthome.raspberry.devices.DevicesUseCase,
+        homeUseCaseFactory: (HomeRepository) -> smarthome.raspberry.home.HomeUseCase,
+        controllersUseCaseFactory: (HomeRepository) -> smarthome.raspberry.controllers.ControllersUseCase,
         remoteStorageFactory: (HomeInfoSource) -> RemoteStorage,
         deviceChannelsFactories: Map<String, (DeviceChannelOutput) -> DeviceChannel>,
         private val authRepo: smarthome.raspberry.authentication_api.AuthRepo
@@ -59,7 +59,7 @@ class HomeRepositoryImpl(
         return localStorage.getHomeId()
     }
 
-    override fun getHomeInfo(): Observable<HomeInfo> {
+    override fun getHomeInfo(): Observable<smarthome.raspberry.entity.HomeInfo> {
         return Observables.combineLatest(getObservableUserId().startWith(""),
                 getObservableHomeId().startWith(""), ::HomeInfo)
     }

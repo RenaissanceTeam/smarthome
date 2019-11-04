@@ -13,9 +13,9 @@ import smarthome.raspberry.authentication_api.AuthRepo
 import smarthome.raspberry.domain.HomeRepository
 import smarthome.raspberry.domain.NoControllerException
 import smarthome.raspberry.domain.NoDeviceException
-import smarthome.raspberry.domain.usecases.ControllersUseCase
-import smarthome.raspberry.domain.usecases.DevicesUseCase
-import smarthome.raspberry.domain.usecases.HomeUseCase
+import smarthome.raspberry.controllers.ControllersUseCase
+import smarthome.raspberry.devices.DevicesUseCase
+import smarthome.raspberry.home.HomeUseCase
 
 abstract class A(name: String, description: String?,
                  serveState: DeviceServeState, guid: Long,
@@ -38,9 +38,9 @@ class HomeRepositoryImplTest {
     private val device_A: A = mock()
     private val device_B: B = mock()
     private val controller: BaseController = mock()
-    private val devicesUseCase: DevicesUseCase = mock()
-    private val homeUseCase: HomeUseCase = mock()
-    private val controllersUseCase: ControllersUseCase = mock()
+    private val devicesUseCase: smarthome.raspberry.devices.DevicesUseCase = mock()
+    private val homeUseCase: smarthome.raspberry.home.HomeUseCase = mock()
+    private val controllersUseCase: smarthome.raspberry.controllers.ControllersUseCase = mock()
     private val authRepo: smarthome.raspberry.authentication_api.AuthRepo = mock()
 
 
