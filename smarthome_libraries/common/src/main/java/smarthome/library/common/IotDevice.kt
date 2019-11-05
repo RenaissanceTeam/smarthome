@@ -4,6 +4,7 @@ open class IotDevice(var name: String = "",
                      var description: String? = null,
                      var serveState: DeviceServeState = DeviceServeState.IDLE,
                      val id: Id = Id(name),
+                     @Deprecated("use id instead") val guid: Long = 1L,
                      var controllers: List<BaseController>) {
 
     override fun hashCode() = id.hashCode()

@@ -153,7 +153,7 @@ class FirestoreSmartHomeStorage(
 
 
     private fun getDeviceRef(iotDevice: IotDevice): DocumentReference {
-        return devicesRef.document(iotDevice.guid.toString())
+        return devicesRef.document(iotDevice.id.toString())
     }
 
     private fun getDeviceRef(guid: Long): DocumentReference {
@@ -161,6 +161,6 @@ class FirestoreSmartHomeStorage(
     }
 
     private fun getPendingDeviceRef(iotDevice: IotDevice): DocumentReference {
-        return pendingDevicesRef.document(iotDevice.guid.toString())
+        return pendingDevicesRef.document(iotDevice.id.toString())
     }
 }

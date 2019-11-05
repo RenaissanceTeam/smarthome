@@ -6,8 +6,8 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.data.LocalStorage
 
-class LocalStorageImpl(private val preferences: smarthome.raspberry.util.SharedPreferencesHelper,
-                       private val localDevicesStorage: smarthome.raspberry.devices.data.storage.LocalDevicesStorage
+class LocalStorageImpl(private val preferences: SharedPreferencesHelper,
+                       private val localDevicesStorage: LocalDevicesStorage
 ) : LocalStorage {
 
 
@@ -21,9 +21,6 @@ class LocalStorageImpl(private val preferences: smarthome.raspberry.util.SharedP
                 smarthome.raspberry.devices.data.storage.IotDeviceGroup.PENDING).toMutableList()
     }
 
-    override fun findDevice(controller: BaseController): IotDevice {
-        return getDevices().find { it.controllers.contains(controller) } ?: TODO()
-    }
 
     override fun updateDevice(device: IotDevice) {
         localDevicesStorage.updateDevice(device, smarthome.raspberry.devices.data.storage.IotDeviceGroup.ACTIVE)

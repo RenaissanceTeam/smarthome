@@ -7,6 +7,7 @@ package smarthome.library.common
 open class BaseController(var name: String,
                           var state: ControllerState? = null,
                           var serveState: ControllerServeState = ControllerServeState.IDLE,
+                          @Deprecated("use id instead") val guid: Long = 1L,
                           val id: Id = Id(name)) {
 
 
