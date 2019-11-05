@@ -1,3 +1,4 @@
+include ':notification', ':notification_api'
 gradle.ext {
     clientFolder = "android_client"
     homeServerFolder = "raspberry"
@@ -36,6 +37,8 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.homeServerFolder}:home_api",
         ":${gradle.ext.homeServerFolder}:channel",
         ":${gradle.ext.homeServerFolder}:channel_api",
+        ":${gradle.ext.homeServerFolder}:notification",
+        ":${gradle.ext.homeServerFolder}:notification_api",
         ":${gradle.ext.homeServerFolder}:util"
 
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"
