@@ -11,15 +11,11 @@ import smarthome.library.common.IotDevice
 import smarthome.raspberry.util.SharedPreferencesHelper
 
 class LocalStorageImplTest {
-    
-    private lateinit var sharedPreferences: SharedPreferencesHelper
     private lateinit var localStorage: LocalStorage
-    
     
     @Before
     fun setUp() {
-        sharedPreferences = mock {}
-        localStorage = LocalStorageImpl(sharedPreferences)
+        localStorage = LocalStorageImpl()
     }
     
     @Test
@@ -65,5 +61,4 @@ class LocalStorageImplTest {
         localStorage.updateDevice(updateDevice, IotDeviceGroup.ACTIVE)
         assertThat(localStorage.getDevices().find { it == device }?.controllers).isEqualTo(controllersAfter)
     }
-    
 }
