@@ -74,6 +74,8 @@ ext {
             homeServer_channel           : project(":${gradle.ext.homeServerFolder}:channel"),
             homeServer_channel_api       : project(":${gradle.ext.homeServerFolder}:channel_api"),
             homeServer_util              : project(":${gradle.ext.homeServerFolder}:util"),
+            homeServer_notification      : project(":${gradle.ext.homeServerFolder}:notification"),
+            homeServer_notification_api  : project(":${gradle.ext.homeServerFolder}:notification_api"),
 
 
 //            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),
