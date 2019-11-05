@@ -14,4 +14,5 @@ dependencies {
     implementation library.homeServer_authentication_api
     implementation library.common
     implementation library.homeServer_entity
+    implementation library.homeServer_util
 }
