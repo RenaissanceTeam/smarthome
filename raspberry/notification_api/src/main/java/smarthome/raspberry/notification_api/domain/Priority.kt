@@ -1,4 +1,4 @@
-package smarthome.raspberry.data.remote.fcm
+package smarthome.raspberry.notification_api.domain
 
 enum class Priority {
     NORMAL, HIGH;
