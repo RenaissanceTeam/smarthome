@@ -1,4 +1,4 @@
-package smarthome.raspberry.presentation;
+package smarthome.raspberry.authentication.presentation;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -105,7 +105,7 @@ public class GoogleSignInActivity extends FragmentActivity implements
 
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                if (DEBUG) Log.d(TAG, "Google sign in failed", e);
+                if (BuildConfig.DEBUG) Log.d(TAG, "Google sign in failed", e);
                 Toast.makeText(GoogleSignInActivity.this, "Auth failed, try later", Toast.LENGTH_SHORT).show();
                 updateUI(null);
 
@@ -124,7 +124,7 @@ public class GoogleSignInActivity extends FragmentActivity implements
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        if (DEBUG) Log.d(TAG, "signInWithCredential:success");
+                        if (BuildConfig.DEBUG) Log.d(TAG, "signInWithCredential:success");
 
                         Toast.makeText(getApplicationContext(), "Authorization succeeded.", Toast.LENGTH_SHORT).show();
 
@@ -134,7 +134,7 @@ public class GoogleSignInActivity extends FragmentActivity implements
                         startActivity(intent);
                     } else {
                         // If sign in fails, display a message to the user.
-                        if (DEBUG) Log.d(TAG, "signInWithCredential:failure", task.getException());
+                        if (BuildConfig.DEBUG) Log.d(TAG, "signInWithCredential:failure", task.getException());
 
                         Toast.makeText(getApplicationContext(), "Authorization failed.", Toast.LENGTH_SHORT).show();
                         updateUI(null);
