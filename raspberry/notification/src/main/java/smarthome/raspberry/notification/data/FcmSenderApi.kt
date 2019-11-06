@@ -1,4 +1,4 @@
-package smarthome.raspberry.data.remote.fcm
+package smarthome.raspberry.notification.data
 
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
