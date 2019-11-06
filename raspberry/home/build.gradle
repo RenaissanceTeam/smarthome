@@ -7,7 +7,12 @@ dependencies {
     implementation library.kotlin
     implementation library.coroutinesCore
     implementation library.rxJava
+    implementation library.rxAndroid
     implementation library.rxKotlin
+    implementation library.appCompat
+    implementation library.fragmentKtx
+    implementation groups.lifecycle
+    implementation library.koin
 
     // modules
     implementation library.homeServer_home_api
