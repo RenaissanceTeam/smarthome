@@ -4,23 +4,23 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.devices_api.domain.GetDeviceByControllerUseCase
 import smarthome.raspberry.notification.R
-import smarthome.raspberry.notification_api.domain.ComposeDataMessageUseCase
-import smarthome.raspberry.notification_api.domain.Message
+import smarthome.raspberry.notification_api.domain.ComposeDataNotificationUseCase
+import smarthome.raspberry.notification_api.domain.Notification
 import smarthome.raspberry.notification_api.domain.Priority
 import smarthome.raspberry.util.ResourceProvider
 
-class ComposeDataMessageUseCaseImpl(private val resourceProvider: ResourceProvider,
-                                    private val getDeviceByControllerUseCase: GetDeviceByControllerUseCase) :
-    ComposeDataMessageUseCase {
+class ComposeDataNotificationUseCaseImpl(private val resourceProvider: ResourceProvider,
+                                         private val getDeviceByControllerUseCase: GetDeviceByControllerUseCase) :
+    ComposeDataNotificationUseCase {
     
     
-    override suspend fun execute(controller: BaseController, priority: Priority): Message {
+    override suspend fun execute(controller: BaseController, priority: Priority): Notification {
         val device = getDeviceByControllerUseCase.execute(controller)
         
-        return Message(
-            composeAlertTitle(controller),
-            composeAlertBody(controller, device),
-            arrayOf(""), MessageType.DATA.name, priority.name)
+        return Notification(
+                composeAlertTitle(controller),
+                composeAlertBody(controller, device),
+                arrayOf(""), NotificationType.DATA.name, priority.name)
     }
     
     private fun composeAlertTitle(controller: BaseController): String {
