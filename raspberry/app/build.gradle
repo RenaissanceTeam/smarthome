@@ -43,45 +43,7 @@ android {
 
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:support-annotations:28.0.0'
-    implementation library.appCompat
-
-    compileOnly 'com.google.android.things:androidthings:1.0'
-    implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
-
-    testImplementation library.junit
-    testImplementation library.kotlinTestrunner
-
-    testImplementation groups.mockito
-    implementation library.rxJava
-    implementation library.rxKotlin
-    implementation library.rxAndroid
-    implementation library.coroutinesCore
-    implementation library.coroutinesAndroid
-    implementation library.koin
-
-    // retrofit
-    implementation library.retrofit
-    implementation library.retrofitGson
-
-    // Firebase
-    implementation library.firebaseCore
-    implementation library.firebaseFirestore
-    implementation library.firebaseAuth
-    implementation library.playServicesAuth
-    implementation library.firebaseClient
-    implementation library.firebaseMessaging
-
-
-    implementation library.datalibrary
-    implementation library.common
-
-    implementation library.homeServer_arduinoDevices
-    implementation library.homeServer_domain
-//    implementation library.homeServer_thirdpartyDevices
 }
 
 

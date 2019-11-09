@@ -18,5 +18,4 @@ internal abstract class BaseRequestHandler(protected val output: DeviceChannelOu
         val controllerGuid = params.getValue("controller_guid").toLong()
         return output.findController(controllerGuid)
     }
-
 }

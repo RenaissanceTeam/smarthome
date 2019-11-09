@@ -13,8 +13,6 @@
     <string name="google_status_fmt">Current e-mail: %s</string>
 
     <string name="settings_auth">Account</string>
-    <string name="alert_trigger">Alert has been triggered</string>
-    <string name="alert_body">New state is %s. Device is %s</string>
 
     <!-- Auth -->
 
