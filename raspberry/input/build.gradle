@@ -1,0 +1,18 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
+
+dependencies {
+    implementation library.kotlin
+    implementation library.coroutinesCore
+
+    // modules
+    implementation library.common
+    implementation library.homeServer_input_api
+    implementation library.homeServer_devices_api
+    implementation library.homeServer_controllers_api
+    implementation library.homeServer_home_api
+
+    testImplementation groups.forTest
+}

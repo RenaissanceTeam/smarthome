@@ -1,14 +1,13 @@
 package smarthome.library.common
 
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.HashSet
-
+import java.util.*
 import kotlin.random.Random
 
 /**
  * IoT device can be identified by its guid. As well as its controllers
  */
+@Deprecated("use Id.kt instead")
 object GUID {
     private val mGuids = HashSet<Long>()
 
