@@ -1,7 +1,7 @@
 package smarthome.raspberry.notification.domain
 
-enum class MessageType {
-    NOTIFICATION, DATA;
+enum class NotificationType {
+    ALERT, DATA;
 
     override fun toString(): String {
         return super.toString().toLowerCase()
