@@ -1,7 +1,7 @@
 package smarthome.raspberry.di
 
-import org.koin.core.module.Module
+import smarthome.raspberry.authentication.di.authenticationModule
 
-val appModules = listOf<Module>(
-
+val appModules = listOf(
+        authenticationModule
 )
