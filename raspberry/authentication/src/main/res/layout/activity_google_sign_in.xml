@@ -4,7 +4,6 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     android:orientation="vertical"
     android:weightSum="4">
 
@@ -20,14 +19,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="36dp"
-            android:textColor="@color/colorAccent"
             android:text="@string/google_sign_in_title_text" />
 
         <TextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
             android:text="@string/signed_out" />
 
     </LinearLayout>
@@ -36,8 +33,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/black">
+        android:layout_weight="1">
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
@@ -66,11 +62,11 @@
                 android:text="@string/sign_out" />
 
             <Button
-                android:id="@+id/disconnect_button"
+                android:id="@+id/delete_all"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/disconnect"/>
+                android:text="@string/delete_all"/>
         </LinearLayout>
 
     </RelativeLayout>
