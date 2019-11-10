@@ -13,7 +13,7 @@ import smarthome.raspberry.input_api.domain.HandleInputByParsingChangedDevicesUs
 //fun init() {
 //        input.setActionForNewDeviceUpdate {
 //            if (it.isInnerCall) return@setActionForNewDeviceUpdate
-//            ioScope.launch { onUserRequest(it.devices) }
+//            ioScope.execute { onUserRequest(it.devices) }
 //        }
 //    }
 
