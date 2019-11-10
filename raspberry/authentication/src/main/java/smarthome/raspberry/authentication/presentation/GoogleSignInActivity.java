@@ -11,10 +11,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.FragmentActivity;
-
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -30,10 +26,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import smarthome.raspberry.R;
-
-import static smarthome.raspberry.BuildConfig.DEBUG;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
+import smarthome.raspberry.authentication.R;
+import smarthome.raspberry.home_api.presentation.MainFlowLauncher;
 
 public class GoogleSignInActivity extends FragmentActivity implements
         View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
@@ -49,7 +46,8 @@ public class GoogleSignInActivity extends FragmentActivity implements
     private TextView mStatusTextView;
 
     private ProgressDialog mProgressDialog;
-
+    private MainFlowLauncher mainFlowLauncher;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +103,6 @@ public class GoogleSignInActivity extends FragmentActivity implements
 
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                if (BuildConfig.DEBUG) Log.d(TAG, "Google sign in failed", e);
                 Toast.makeText(GoogleSignInActivity.this, "Auth failed, try later", Toast.LENGTH_SHORT).show();
                 updateUI(null);
 
@@ -124,17 +121,13 @@ public class GoogleSignInActivity extends FragmentActivity implements
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        if (BuildConfig.DEBUG) Log.d(TAG, "signInWithCredential:success");
 
                         Toast.makeText(getApplicationContext(), "Authorization succeeded.", Toast.LENGTH_SHORT).show();
 
                         //startActivity(new Intent(GoogleSignInActivity.this, MainActivity.class));
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
+                        mainFlowLauncher.launch();
                     } else {
                         // If sign in fails, display a message to the user.
-                        if (BuildConfig.DEBUG) Log.d(TAG, "signInWithCredential:failure", task.getException());
 
                         Toast.makeText(getApplicationContext(), "Authorization failed.", Toast.LENGTH_SHORT).show();
                         updateUI(null);

@@ -3,26 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
-preBuild.dependsOn copyRaspberryJson
-
 android {
-    compileSdkVersion compileSdk_version
-    defaultConfig {
-        minSdkVersion minSdk_androidthings_version
-        targetSdkVersion targetSdk_version
-
-        applicationId "smarthome.raspberry"
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
@@ -35,19 +16,13 @@ android {
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
-
 
 dependencies {
+    implementation groups.koinWithExt
+    testImplementation groups.forTest
+    testImplementation library.koin_test
 
-}
-
-
-apply plugin: 'com.google.gms.google-services'
-repositories {
-    mavenCentral()
+    implementation library.homeServer_authentication
+    implementation library.homeServer_authentication_api
 }

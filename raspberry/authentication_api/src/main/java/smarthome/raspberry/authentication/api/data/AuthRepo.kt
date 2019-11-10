@@ -1,7 +1,7 @@
-package smarthome.raspberry.authentication_api.data
+package smarthome.raspberry.authentication.api.data
 
 import io.reactivex.Observable
-import smarthome.raspberry.authentication_api.domain.AuthStatus
+import smarthome.raspberry.authentication.api.domain.AuthStatus
 
 interface AuthRepo {
     fun getAuthStatus(): Observable<AuthStatus>

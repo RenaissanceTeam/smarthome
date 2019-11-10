@@ -2,8 +2,8 @@ package smarthome.raspberry.authentication.data
 
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.subjects.BehaviorSubject
-import smarthome.raspberry.authentication_api.data.AuthRepo
-import smarthome.raspberry.authentication_api.domain.AuthStatus
+import smarthome.raspberry.authentication.api.data.AuthRepo
+import smarthome.raspberry.authentication.api.domain.AuthStatus
 
 class AuthRepoImpl : AuthRepo {
     private val authStatus = BehaviorSubject.create<AuthStatus>()
