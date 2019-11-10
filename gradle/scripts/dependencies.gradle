@@ -1,3 +1,5 @@
+apply from: "$rootDir/gradle/scripts/dependencies-versions.gradle"
+
 ext {
     library = [
             rxJava                       : ("io.reactivex.rxjava2:rxjava:$rxjava_version"),
