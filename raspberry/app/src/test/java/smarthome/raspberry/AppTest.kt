@@ -7,11 +7,8 @@ import org.koin.test.check.checkModules
 import smarthome.raspberry.di.appModules
 
 class AppTest: KoinTest {
-    
     @Test
     fun `koin modules should pass checkModules`() {
-        koinApplication {
-            appModules
-        }.checkModules()
+        koinApplication { modules(appModules) }.checkModules()
     }
 }
