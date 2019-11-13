@@ -20,4 +20,6 @@ dependencies {
     implementation library.common
     implementation library.homeServer_entity
     implementation library.homeServer_util
+
+    testImplementation groups.forTest
 }
