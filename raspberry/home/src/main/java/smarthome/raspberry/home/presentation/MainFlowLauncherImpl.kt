@@ -2,8 +2,8 @@ package smarthome.raspberry.home.presentation
 
 import android.content.Context
 import android.content.Intent
+import smarthome.raspberry.home.api.presentation.MainFlowLauncher
 import smarthome.raspberry.home.presentation.main.MainActivity
-import smarthome.raspberry.home_api.presentation.MainFlowLauncher
 
 class MainFlowLauncherImpl(
         private val context: Context

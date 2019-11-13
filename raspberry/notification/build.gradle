@@ -8,6 +8,7 @@ dependencies {
     implementation library.retrofit
     implementation library.coroutinesCore
     implementation groups.koinWithExt
+    implementation library.gson
 
     // modules
     implementation library.homeServer_notification_api

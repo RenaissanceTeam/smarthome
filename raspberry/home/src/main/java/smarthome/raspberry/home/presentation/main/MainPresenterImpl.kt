@@ -7,11 +7,13 @@ import io.reactivex.rxkotlin.subscribeBy
 import smarthome.raspberry.authentication.api.domain.AuthStatus
 import smarthome.raspberry.authentication.api.domain.GetAuthStatusUseCase
 import smarthome.raspberry.authentication.api.flow.SignInFlowLauncher
+import smarthome.raspberry.home.api.domain.GetHomeInfoUseCase
 import smarthome.raspberry.home.api.domain.HomeService
 
 class MainPresenterImpl(
         private val getAuthStatusUseCase: GetAuthStatusUseCase,
         private val signInFlowLauncher: SignInFlowLauncher,
+        private val getHomeInfoUseCase: GetHomeInfoUseCase,
         private val homeService: HomeService,
         private val view: MainView
 ) : MainPresenter {
@@ -26,7 +28,7 @@ class MainPresenterImpl(
                 view.setAuthStatus(it.toString())
             }
         
-        homeService.getHomeInfo()
+        getHomeInfoUseCase.execute()
             .subscribeBy {
                 view.setHomeInfo(it)
             }

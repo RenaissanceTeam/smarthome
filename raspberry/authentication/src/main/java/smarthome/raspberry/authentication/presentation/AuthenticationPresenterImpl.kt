@@ -13,8 +13,8 @@ import smarthome.raspberry.authentication.api.domain.GetAuthStatusUseCase
 import smarthome.raspberry.authentication.api.domain.GetUserInfoUseCase
 import smarthome.raspberry.authentication.domain.internal.AuthenticateWithFirebaseUseCase
 import smarthome.raspberry.authentication.domain.internal.SignOutOfFirebaseUseCase
-import smarthome.raspberry.home_api.domain.ClearHomeInfoUseCase
-import smarthome.raspberry.home_api.presentation.MainFlowLauncher
+import smarthome.raspberry.home.api.domain.ClearHomeInfoUseCase
+import smarthome.raspberry.home.api.presentation.MainFlowLauncher
 
 class AuthenticationPresenterImpl(
         private val view: AuthenticationView,
