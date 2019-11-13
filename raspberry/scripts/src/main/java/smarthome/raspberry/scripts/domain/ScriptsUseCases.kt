@@ -1,9 +1,9 @@
 package smarthome.raspberry.scripts.domain
 
 import smarthome.library.common.scripts.Script
-import smarthome.raspberry.scripts_api.ScriptsRepository
+import smarthome.raspberry.scripts.data.ScriptsRepository
 
-class ScriptsUseCases(private val repository: smarthome.raspberry.scripts_api.ScriptsRepository) {
+class ScriptsUseCases(private val repository: ScriptsRepository) {
     suspend fun onNewScript(newScript: Script) {
         repository.save(newScript)
 
