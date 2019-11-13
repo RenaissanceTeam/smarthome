@@ -1,7 +1,7 @@
 package smarthome.raspberry.devices.domain
 
 import smarthome.library.common.IotDevice
-import smarthome.raspberry.devices_api.data.DevicesRepository
+import smarthome.raspberry.devices.data.DevicesRepository
 import smarthome.raspberry.devices_api.domain.DevicesService
 
 class DevicesServiceImpl(private val repository: DevicesRepository) : DevicesService {

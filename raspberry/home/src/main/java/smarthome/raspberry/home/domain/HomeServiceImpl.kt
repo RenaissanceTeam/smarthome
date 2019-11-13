@@ -4,9 +4,9 @@ import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.runBlocking
 import smarthome.raspberry.authentication.api.domain.GetUserIdUseCase
-import smarthome.raspberry.home_api.data.HomeRepository
-import smarthome.raspberry.home_api.domain.GetHomeIdUseCase
-import smarthome.raspberry.home_api.domain.HomeService
+import smarthome.raspberry.home.data.HomeRepository
+import smarthome.raspberry.home.api.domain.GetHomeIdUseCase
+import smarthome.raspberry.home.api.domain.HomeService
 import java.util.*
 import kotlin.random.Random
 

@@ -2,8 +2,8 @@ package smarthome.raspberry.devices.domain
 
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
-import smarthome.raspberry.devices_api.data.DevicesRepository
-import smarthome.raspberry.devices_api.domain.GetDeviceByControllerUseCase
+import smarthome.raspberry.devices.data.DevicesRepository
+import smarthome.raspberry.devices.api.domain.GetDeviceByControllerUseCase
 
 class GetDeviceByControllerUseCaseImpl(
         private val devicesRepository: DevicesRepository

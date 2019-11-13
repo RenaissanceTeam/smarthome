@@ -5,7 +5,6 @@ import io.reactivex.rxkotlin.Observables
 import smarthome.raspberry.entity.HomeInfo
 import smarthome.raspberry.home.data.storage.LocalStorage
 import smarthome.raspberry.home.data.storage.RemoteStorage
-import smarthome.raspberry.home_api.data.HomeRepository
 
 class HomeRepositoryImpl(
         private val localStorage: LocalStorage,
