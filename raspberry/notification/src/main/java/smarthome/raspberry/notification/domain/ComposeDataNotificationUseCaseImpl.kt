@@ -2,11 +2,11 @@ package smarthome.raspberry.notification.domain
 
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
-import smarthome.raspberry.devices_api.domain.GetDeviceByControllerUseCase
+import smarthome.raspberry.devices.api.domain.GetDeviceByControllerUseCase
 import smarthome.raspberry.notification.R
 import smarthome.raspberry.notification_api.domain.ComposeDataNotificationUseCase
-import smarthome.raspberry.notification_api.domain.Notification
-import smarthome.raspberry.notification_api.domain.Priority
+import smarthome.raspberry.notification.api.domain.Notification
+import smarthome.raspberry.notification.api.domain.Priority
 import smarthome.raspberry.util.ResourceProvider
 
 class ComposeDataNotificationUseCaseImpl(private val resourceProvider: ResourceProvider,

@@ -25,4 +25,27 @@ dependencies {
 
     implementation library.homeServer_authentication
     implementation library.homeServer_authentication_api
+
+    implementation library.homeServer_channel
+    implementation library.homeServer_channel_api
+
+    implementation library.homeServer_controllers
+    implementation library.homeServer_controllers_api
+
+    implementation library.homeServer_devices
+    implementation library.homeServer_devices_api
+
+    implementation library.homeServer_home
+    implementation library.homeServer_home_api
+
+    implementation library.homeServer_input
+    implementation library.homeServer_input_api
+
+    implementation library.homeServer_notification
+    implementation library.homeServer_notification_api
+
+    implementation library.homeServer_scripts
+    implementation library.homeServer_scripts_api
+
+    implementation library.homeServer_util
 }

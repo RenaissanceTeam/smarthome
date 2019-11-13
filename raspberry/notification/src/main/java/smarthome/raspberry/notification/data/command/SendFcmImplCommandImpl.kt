@@ -4,7 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import smarthome.raspberry.notification.data.FcmSenderApi
 import smarthome.raspberry.notification.data.mapper.NotificationToRequestBodyMapper
-import smarthome.raspberry.notification_api.domain.Notification
+import smarthome.raspberry.notification.api.domain.Notification
 
 class SendFcmImplCommandImpl(
         private val fcmSenderApi: FcmSenderApi,

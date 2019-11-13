@@ -1,2 +1,2 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="smarthome.raspberry.scripts_api" />
+    package="smarthome.raspberry.scripts.api" />
