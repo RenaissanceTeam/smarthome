@@ -16,4 +16,6 @@ dependencies {
     implementation library.homeServer_authentication_api
     implementation library.homeServer_home_api
     implementation library.homeServer_google_services
+
+    testImplementation groups.forTest
 }

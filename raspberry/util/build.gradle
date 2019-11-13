@@ -8,4 +8,6 @@ dependencies {
     implementation library.kotlin
     implementation library.rxJava
     implementation library.coroutinesCore
+
+    testImplementation groups.forTest
 }
