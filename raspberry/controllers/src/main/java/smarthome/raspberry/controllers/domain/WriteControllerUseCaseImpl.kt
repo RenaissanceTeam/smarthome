@@ -4,16 +4,19 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerServeState
 import smarthome.library.common.ControllerState
 import smarthome.library.common.IotDevice
-import smarthome.raspberry.controllers.data.ControllersRepository
+import smarthome.raspberry.channel.api.domain.GetChannelForDeviceUseCase
 import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
-import smarthome.raspberry.devices_api.domain.DevicesService
+import smarthome.raspberry.devices.api.domain.DevicesService
 
 class WriteControllerUseCaseImpl(
-        private val repository: ControllersRepository,
+        private val getChannelForDeviceUseCase: GetChannelForDeviceUseCase,
         private val devicesService: DevicesService
 ) : WriteControllerUseCase {
     override suspend fun execute(device: IotDevice, controller: BaseController, state: ControllerState) {
-        repository.proceedWriteController(controller, state)
+        val channel = getChannelForDeviceUseCase.execute(device)
+        val newState = channel.writeState(device, controller, state)
+
+        controller.state = newState
         controller.serveState = ControllerServeState.IDLE
 
         devicesService.saveDevice(device)
