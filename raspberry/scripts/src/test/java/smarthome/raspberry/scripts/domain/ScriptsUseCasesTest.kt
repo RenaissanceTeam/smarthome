@@ -1,4 +1,4 @@
-package smarthome.raspberry.domain.usecases
+package smarthome.raspberry.scripts.domain
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -10,7 +10,7 @@ import org.junit.Test
 import smarthome.library.common.scripts.Action
 import smarthome.library.common.scripts.Condition
 import smarthome.library.common.scripts.Script
-import smarthome.raspberry.domain.ScriptsRepository
+import smarthome.raspberry.scripts.data.ScriptsRepository
 
 
 class ScriptsUseCasesTest {
