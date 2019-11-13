@@ -10,6 +10,7 @@ dependencies {
     implementation library.rxAndroid
     implementation library.rxKotlin
     implementation library.appCompat
+    implementation library.constraintLayout
     implementation library.fragmentKtx
     implementation groups.lifecycle
     implementation groups.koinWithExt
