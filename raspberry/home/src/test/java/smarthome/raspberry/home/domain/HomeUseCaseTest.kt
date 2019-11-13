@@ -1,4 +1,4 @@
-package smarthome.raspberry.domain.usecases
+package smarthome.raspberry.domain.usecases.smarthome.raspberry.home.domain
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
