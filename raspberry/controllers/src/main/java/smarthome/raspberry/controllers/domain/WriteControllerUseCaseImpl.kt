@@ -6,7 +6,6 @@ import smarthome.library.common.ControllerState
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.channel.api.domain.GetChannelForDeviceUseCase
 import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
-import smarthome.raspberry.devices.api.domain.DevicesService
 import smarthome.raspberry.devices.api.domain.SaveDeviceUseCase
 
 class WriteControllerUseCaseImpl(
