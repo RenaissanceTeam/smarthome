@@ -6,7 +6,7 @@ import smarthome.library.common.DeviceServeState
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
 import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
-import smarthome.raspberry.devices.api.domain.DevicesService
+import smarthome.raspberry.devices.api.domain.*
 import smarthome.raspberry.input.api.domain.HandleInputByParsingChangedDevicesUseCase
 
 // todo someone should start this use case. previously was
@@ -18,14 +18,17 @@ import smarthome.raspberry.input.api.domain.HandleInputByParsingChangedDevicesUs
 //    }
 
 class HandleInputByParsingChangedDevicesUseCaseImpl(
-        private val devicesService: DevicesService,
+        private val getDevicesUseCase: GetDevicesUseCase,
+        private val addDeviceUseCase: AddDeviceUseCase,
+        private val acceptPendingDeviceUseCase: AcceptPendingDeviceUseCase,
         private val readControllerUseCase: ReadControllerUseCase,
-        private val writeControllerUseCase: WriteControllerUseCase
+        private val writeControllerUseCase: WriteControllerUseCase,
+        private val removeDeviceUseCase: RemoveDeviceUseCase
 ) : HandleInputByParsingChangedDevicesUseCase {
 
     override suspend fun execute(changedDevices: MutableList<IotDevice>) {
         try {
-            handleChanges(changedDevices, devicesService.getCurrentDevices())
+            handleChanges(changedDevices, getDevicesUseCase.execute())
         } catch (e: Throwable) {
             throw e
         }
@@ -44,10 +47,10 @@ class HandleInputByParsingChangedDevicesUseCaseImpl(
 
     private suspend fun handleDeviceChanges(changedDevice: IotDevice): Boolean {
         when (changedDevice.serveState) {
-            DeviceServeState.PENDING_TO_ADD -> devicesService.addNewDevice(changedDevice)
-            DeviceServeState.ACCEPT_PENDING_TO_ADD -> devicesService.acceptPendingDevice(
+            DeviceServeState.PENDING_TO_ADD -> addDeviceUseCase.execute(changedDevice)
+            DeviceServeState.ACCEPT_PENDING_TO_ADD -> acceptPendingDeviceUseCase.execute(
                     changedDevice)
-            DeviceServeState.DELETE -> devicesService.removeDevice(changedDevice)
+            DeviceServeState.DELETE -> removeDeviceUseCase.execute(changedDevice)
             else -> return false
         }
         return true

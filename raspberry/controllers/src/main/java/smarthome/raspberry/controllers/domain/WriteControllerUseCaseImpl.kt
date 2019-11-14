@@ -7,10 +7,11 @@ import smarthome.library.common.IotDevice
 import smarthome.raspberry.channel.api.domain.GetChannelForDeviceUseCase
 import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
 import smarthome.raspberry.devices.api.domain.DevicesService
+import smarthome.raspberry.devices.api.domain.SaveDeviceUseCase
 
 class WriteControllerUseCaseImpl(
         private val getChannelForDeviceUseCase: GetChannelForDeviceUseCase,
-        private val devicesService: DevicesService
+        private val saveDeviceUseCase: SaveDeviceUseCase
 ) : WriteControllerUseCase {
     override suspend fun execute(device: IotDevice, controller: BaseController, state: ControllerState) {
         val channel = getChannelForDeviceUseCase.execute(device)
@@ -19,6 +20,6 @@ class WriteControllerUseCaseImpl(
         controller.state = newState
         controller.serveState = ControllerServeState.IDLE
 
-        devicesService.saveDevice(device)
+        saveDeviceUseCase.execute(device)
     }
 }

@@ -12,12 +12,18 @@ import smarthome.library.common.ControllerState
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
 import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
-import smarthome.raspberry.devices.api.domain.DevicesService
+import smarthome.raspberry.devices.api.domain.AcceptPendingDeviceUseCase
+import smarthome.raspberry.devices.api.domain.AddDeviceUseCase
+import smarthome.raspberry.devices.api.domain.GetDevicesUseCase
+import smarthome.raspberry.devices.api.domain.RemoveDeviceUseCase
 import smarthome.raspberry.input.api.domain.HandleInputByParsingChangedDevicesUseCase
 
 class HandleInputByParsingChangedDevicesUseCaseImplTest {
 
-    private lateinit var devicesService: DevicesService
+    private lateinit var getDevicesUseCase: GetDevicesUseCase
+    private lateinit var addDeviceUseCase: AddDeviceUseCase
+    private lateinit var removeDeviceUseCase: RemoveDeviceUseCase
+    private lateinit var acceptPendingDeviceUseCase: AcceptPendingDeviceUseCase
     private lateinit var readControllerUseCase: ReadControllerUseCase
     private lateinit var writeControllerUseCase: WriteControllerUseCase
     private lateinit var useCase: HandleInputByParsingChangedDevicesUseCase
@@ -30,18 +36,24 @@ class HandleInputByParsingChangedDevicesUseCaseImplTest {
 
     @Before
     fun setup() {
-        devicesService = mock {}
+        getDevicesUseCase = mock {}
+        addDeviceUseCase = mock {}
+        removeDeviceUseCase = mock {}
+        acceptPendingDeviceUseCase = mock {}
         readControllerUseCase = mock {}
         writeControllerUseCase = mock {}
-        useCase = HandleInputByParsingChangedDevicesUseCaseImpl(devicesService,
+        useCase = HandleInputByParsingChangedDevicesUseCaseImpl(getDevicesUseCase,
+                                                                addDeviceUseCase,
+                                                                acceptPendingDeviceUseCase,
                                                                 readControllerUseCase,
-                                                                writeControllerUseCase)
+                                                                writeControllerUseCase,
+                                                                removeDeviceUseCase)
     }
 
     @Test
     fun `when user request is read controller should call read controller use case`() {
         runBlocking {
-            whenever(devicesService.getCurrentDevices()).thenAnswer { mutableListOf(idleDevice) }
+            whenever(getDevicesUseCase.execute()).thenAnswer { mutableListOf(idleDevice) }
 
             useCase.execute(mutableListOf(pendingReadDevice))
 
@@ -82,7 +94,7 @@ class HandleInputByParsingChangedDevicesUseCaseImplTest {
             pendingToWriteController.state = newState
             val pendingToWriteDevice = createDevice(2, mutableListOf(pendingToWriteController))
 
-            whenever(devicesService.getCurrentDevices()).thenReturn(mutableListOf(idleDevice))
+            whenever(getDevicesUseCase.execute()).thenReturn(mutableListOf(idleDevice))
             useCase.execute(mutableListOf(pendingToWriteDevice))
 
             verify(writeControllerUseCase)
