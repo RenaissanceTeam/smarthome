@@ -1,0 +1,14 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
+
+dependencies {
+    implementation library.kotlin
+    implementation groups.koinWithExt
+
+    // modules
+    implementation library.common
+    implementation library.datalibrary
+    implementation library.homeServer_home_api
+}

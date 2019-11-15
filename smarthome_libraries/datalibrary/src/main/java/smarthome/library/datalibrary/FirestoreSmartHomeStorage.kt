@@ -17,15 +17,13 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class FirestoreSmartHomeStorage(
-    private val homeId: String,
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val homeId: String
 ) : SmartHomeStorage {
 
-    private val homeRef: DocumentReference = db.collection(HOMES_NODE).document(homeId)
-    private val devicesRef: CollectionReference = homeRef.collection(HOME_DEVICES_NODE)
-    private val pendingDevicesRef: CollectionReference = homeRef.collection(PENDING_DEVICES_NODE)
-    private var devicesRegistration: ListenerRegistration? = null
-    private var pendingDevicesRegistration: ListenerRegistration? = null
+    private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+    private val homeRef: DocumentReference by lazy { db.collection(HOMES_NODE).document(homeId) }
+    private val devicesRef: CollectionReference by lazy { homeRef.collection(HOME_DEVICES_NODE) }
+    private val pendingDevicesRef: CollectionReference by lazy { homeRef.collection(PENDING_DEVICES_NODE) }
 
     override suspend fun createSmartHome() {
         suspendCoroutine<Unit> {
@@ -143,9 +141,8 @@ class FirestoreSmartHomeStorage(
             }
 
             when (mode) {
-                ObserverMode.DEVICES -> devicesRegistration = devicesRef.addSnapshotListener(eventListener)
-                ObserverMode.PENDING_DEVICES -> pendingDevicesRegistration =
-                    pendingDevicesRef.addSnapshotListener(eventListener)
+                ObserverMode.DEVICES -> devicesRef.addSnapshotListener(eventListener)
+                ObserverMode.PENDING_DEVICES -> pendingDevicesRef.addSnapshotListener(eventListener)
             }
         }
 

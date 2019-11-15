@@ -1,6 +1,5 @@
 package smarthome.library.datalibrary
 
-import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -17,11 +16,10 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class FirestoreHomesReferencesStorage(
-    uid: String,
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    uid: String
 ) : HomesReferencesStorage {
-
-    private val ref: DocumentReference = db.collection(ACCOUNTS_NODE).document(uid)
+    private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+    private val ref: DocumentReference by lazy { db.collection(ACCOUNTS_NODE).document(uid) }
 
     override suspend fun replaceHomesReferences(homesReferences: HomesReferences) {
         suspendCoroutine<Unit> {

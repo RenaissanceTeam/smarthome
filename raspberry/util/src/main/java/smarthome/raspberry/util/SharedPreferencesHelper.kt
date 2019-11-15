@@ -10,8 +10,9 @@ import kotlinx.coroutines.withContext
 
 class SharedPreferencesHelper(context: Context) {
 
-    private val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences("smarthome", MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences by lazy {
+        context.getSharedPreferences("smarthome", MODE_PRIVATE)
+    }
 
     @SuppressLint("ApplySharedPref")
     suspend fun setString(key: String, value: String) {
