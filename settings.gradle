@@ -37,6 +37,7 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.homeServerFolder}:notification",
         ":${gradle.ext.homeServerFolder}:notification_api",
         ":${gradle.ext.homeServerFolder}:util",
+        ":${gradle.ext.homeServerFolder}:external",
         ":${gradle.ext.homeServerFolder}:google_services"
 
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"

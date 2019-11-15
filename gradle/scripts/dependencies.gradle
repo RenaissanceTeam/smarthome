@@ -81,6 +81,7 @@ ext {
             homeServer_notification      : project(":${gradle.ext.homeServerFolder}:notification"),
             homeServer_notification_api  : project(":${gradle.ext.homeServerFolder}:notification_api"),
             homeServer_google_services   : project(":${gradle.ext.homeServerFolder}:google_services"),
+            homeServer_external   : project(":${gradle.ext.homeServerFolder}:external"),
 
 
 //            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),

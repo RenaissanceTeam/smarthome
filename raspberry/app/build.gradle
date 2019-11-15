@@ -23,6 +23,7 @@ dependencies {
     testImplementation groups.forTest
     testImplementation library.koin_test
 
+    // modules
     implementation library.homeServer_authentication
     implementation library.homeServer_authentication_api
 
@@ -48,4 +49,5 @@ dependencies {
     implementation library.homeServer_scripts_api
 
     implementation library.homeServer_util
+    implementation library.homeServer_external
 }
