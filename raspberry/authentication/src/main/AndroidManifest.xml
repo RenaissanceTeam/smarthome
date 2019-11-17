@@ -2,7 +2,7 @@
     package="smarthome.raspberry.authentication">
 
     <application>
-        <activity android:name=".presentation.GoogleSignInActivity">
+        <activity android:name=".presentation.AuthenticationActivity">
             <intent-filter>
                 <action android:name="raspberry.smarthome.auth" />
 

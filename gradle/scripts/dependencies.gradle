@@ -1,13 +1,17 @@
+apply from: "$rootDir/gradle/scripts/dependencies-versions.gradle"
+
 ext {
     library = [
             rxJava                       : ("io.reactivex.rxjava2:rxjava:$rxjava_version"),
             rxKotlin                     : ("io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"),
             rxAndroid                    : ("io.reactivex.rxjava2:rxandroid:$rxjava_android_version"),
             koin                         : ("org.koin:koin-android:$koin_version"),
+            koin_ext                     : ("org.koin:koin-core-ext:$koin_version"),
+            koin_test                    : ("org.koin:koin-test:$koin_version"),
             coroutinesCore               : ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"),
             coroutinesAndroid            : ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"),
             appCompat                    : ("androidx.appcompat:appcompat:$appCompat_version"),
-            activity                    : ("androidx.activity:activity-ktx:$appCompat_version"),
+            activity                     : ("androidx.activity:activity-ktx:$appCompat_version"),
             mockitoCore                  : ("org.mockito:mockito-core:$mockito_version"),
             mockitoInline                : ("org.mockito:mockito-inline:$mockito_version"),
             mockitoKotlin                : ("com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlin_version"),
@@ -77,6 +81,7 @@ ext {
             homeServer_util              : project(":${gradle.ext.homeServerFolder}:util"),
             homeServer_notification      : project(":${gradle.ext.homeServerFolder}:notification"),
             homeServer_notification_api  : project(":${gradle.ext.homeServerFolder}:notification_api"),
+            homeServer_google_services   : project(":${gradle.ext.homeServerFolder}:google_services"),
 
 
 //            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),
@@ -89,6 +94,10 @@ ext {
                     library.mockitoInline,
                     library.mockitoKotlin,
                     library.googleTruth
+            ],
+            koinWithExt: [
+                    library.koin,
+                    library.koin_ext
             ],
             mockito    : [],
             lifecycle  : [
