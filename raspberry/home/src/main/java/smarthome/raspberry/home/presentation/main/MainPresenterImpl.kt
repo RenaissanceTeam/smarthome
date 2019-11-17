@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import io.reactivex.rxkotlin.subscribeBy
-import smarthome.raspberry.authentication_api.domain.AuthStatus
-import smarthome.raspberry.authentication_api.domain.GetAuthStatusUseCase
-import smarthome.raspberry.authentication_api.flow.SignInFlowLauncher
+import smarthome.raspberry.authentication.api.domain.AuthStatus
+import smarthome.raspberry.authentication.api.domain.GetAuthStatusUseCase
+import smarthome.raspberry.authentication.api.flow.SignInFlowLauncher
 import smarthome.raspberry.home_api.domain.HomeService
 
 class MainPresenterImpl(

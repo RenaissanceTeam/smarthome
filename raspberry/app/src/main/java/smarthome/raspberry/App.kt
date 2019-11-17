@@ -5,8 +5,7 @@ import android.content.Context
 import android.os.PowerManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import smarthome.raspberry.di.dataModule
-import smarthome.raspberry.di.useCasesModule
+import smarthome.raspberry.di.appModules
 
 class App : Application() {
     var wakeLock: PowerManager.WakeLock? = null
@@ -16,7 +15,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(listOf(dataModule, useCasesModule))
+            modules(appModules)
         }
         wakeLock =
                 (getSystemService(Context.POWER_SERVICE) as PowerManager).run {

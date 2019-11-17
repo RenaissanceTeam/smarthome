@@ -31,7 +31,7 @@ task copyRaspberryJson(type: Copy) {
     mustRunAfter clonePrivateGitRepo
 
     from "$privateFolder/$jsonServicesFolder/smarthome.raspberry"
-    into "$absoluteRoot/raspberry/app"
+    into "$absoluteRoot/raspberry/google_services"
 }
 
 task copyGoogleServices() {
