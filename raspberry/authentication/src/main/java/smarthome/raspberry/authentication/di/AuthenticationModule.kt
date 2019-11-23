@@ -56,14 +56,13 @@ private val presentation = module {
     // todo - how to provide view inside presenter
 }
 
-
-fun authenticationModule(
-        frameworkDependentModule: Module? = null
-): List<Module> = listOf(
+val authenticationModule: List<Module> = listOf(
         presentation,
         domain,
         data,
         flow
-).apply {
-    this + frameworkDependentModule
-}
+)
+
+val authenticationFrameworkDependentTypes = listOf(
+        FirebaseAuth::class.java
+)
