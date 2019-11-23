@@ -27,7 +27,7 @@ private val data = module {
         NotificationToRequestBodyMapperImpl(get(named("notification")))
     }
     factoryBy<SendFcmCommand, SendFcmCommandImpl>()
-    single<Gson>(named("notification")) { Gson() }
+    single(named("notification")) { Gson() }
     factory<FcmSenderApi> {
         Retrofit.Builder()
                 .baseUrl(get<ResourceProvider>().resources.getString(R.string.fcm_sender_url))
