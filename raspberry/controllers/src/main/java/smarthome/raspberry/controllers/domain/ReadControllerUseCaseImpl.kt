@@ -5,11 +5,11 @@ import smarthome.library.common.ControllerServeState
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.channel.api.domain.GetChannelForDeviceUseCase
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
-import smarthome.raspberry.devices.api.domain.DevicesService
+import smarthome.raspberry.devices.api.domain.SaveDeviceUseCase
 
 class ReadControllerUseCaseImpl(
         private val getChannelForDeviceUseCase: GetChannelForDeviceUseCase,
-        private val devicesService: DevicesService) :
+        private val saveDeviceUseCase: SaveDeviceUseCase) :
         ReadControllerUseCase {
 
     override suspend fun execute(device: IotDevice, controller: BaseController) {
@@ -19,6 +19,6 @@ class ReadControllerUseCaseImpl(
         controller.state = newState
         controller.serveState = ControllerServeState.IDLE
 
-        devicesService.saveDevice(device)
+        saveDeviceUseCase.execute(device)
     }
 }
