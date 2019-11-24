@@ -1,8 +1,8 @@
 package smarthome.raspberry.controllers.domain
 
 import smarthome.library.common.BaseController
-import smarthome.raspberry.controllers_api.data.ControllersRepository
-import smarthome.raspberry.controllers_api.domain.OnControllerChangedWithoutUserRequestUseCase
+import smarthome.raspberry.controllers.data.ControllersRepository
+import smarthome.raspberry.controllers.api.domain.OnControllerChangedWithoutUserRequestUseCase
 
 class OnControllerChangedWithoutUserRequestUseCaseImpl(
         private val repository: ControllersRepository

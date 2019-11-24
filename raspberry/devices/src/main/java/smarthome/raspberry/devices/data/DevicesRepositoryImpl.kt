@@ -4,7 +4,6 @@ import smarthome.library.common.IotDevice
 import smarthome.raspberry.devices.data.storage.IotDeviceGroup
 import smarthome.raspberry.devices.data.storage.LocalStorage
 import smarthome.raspberry.devices.data.storage.RemoteStorage
-import smarthome.raspberry.devices_api.data.DevicesRepository
 
 class DevicesRepositoryImpl(
         private val localStorage: LocalStorage,

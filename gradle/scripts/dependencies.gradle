@@ -61,8 +61,6 @@ ext {
             client_scripts_api           : project(":${gradle.ext.clientFolder}:scripts_api"),
 
             homeServer_arduinoDevices    : project(":${gradle.ext.homeServerFolder}:arduinodevices"),
-            homeServer_domain            : project(":${gradle.ext.homeServerFolder}:domain"),
-            homeServer_domain_api        : project(":${gradle.ext.homeServerFolder}:domain_api"),
             homeServer_authentication    : project(":${gradle.ext.homeServerFolder}:authentication"),
             homeServer_authentication_api: project(":${gradle.ext.homeServerFolder}:authentication_api"),
             homeServer_controllers       : project(":${gradle.ext.homeServerFolder}:controllers"),

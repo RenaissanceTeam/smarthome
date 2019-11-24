@@ -7,13 +7,13 @@ import io.reactivex.rxkotlin.subscribeBy
 import smarthome.raspberry.authentication.api.domain.AuthStatus
 import smarthome.raspberry.authentication.api.domain.GetAuthStatusUseCase
 import smarthome.raspberry.authentication.api.flow.SignInFlowLauncher
-import smarthome.raspberry.home_api.domain.HomeService
+import smarthome.raspberry.home.api.domain.HomeService
 
 class MainPresenterImpl(
-    private val getAuthStatusUseCase: GetAuthStatusUseCase,
-    private val signInFlowLauncher: SignInFlowLauncher,
-    private val homeService: HomeService,
-    private val view: MainView
+        private val getAuthStatusUseCase: GetAuthStatusUseCase,
+        private val signInFlowLauncher: SignInFlowLauncher,
+        private val homeService: HomeService,
+        private val view: MainView
 ) : MainPresenter {
     
     @SuppressLint("CheckResult")

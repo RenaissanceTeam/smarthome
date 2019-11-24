@@ -4,9 +4,9 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.runBlocking
 import smarthome.library.common.DeviceUpdate
 import smarthome.library.common.SmartHomeStorage
-import smarthome.raspberry.home_api.data.HomeInfoSource
+import smarthome.raspberry.home.data.HomeInfoSource
 
-class InputFromSharedDatabase(private val homeInfoSource: HomeInfoSource,
+class InputFromSharedDatabase(private val homeInfoSource: smarthome.raspberry.home.data.HomeInfoSource,
                               private val databaseFactory: (String) -> SmartHomeStorage) :
         InputControllerDataSource {
     private var storage: SmartHomeStorage? = null

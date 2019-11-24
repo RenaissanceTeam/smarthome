@@ -4,8 +4,8 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerServeState
 import smarthome.library.common.ControllerState
 import smarthome.library.common.IotDevice
-import smarthome.raspberry.controllers_api.data.ControllersRepository
-import smarthome.raspberry.controllers_api.domain.WriteControllerUseCase
+import smarthome.raspberry.controllers.data.ControllersRepository
+import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
 import smarthome.raspberry.devices_api.domain.DevicesService
 
 class WriteControllerUseCaseImpl(
