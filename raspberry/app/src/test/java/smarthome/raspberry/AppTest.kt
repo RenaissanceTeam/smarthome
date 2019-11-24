@@ -8,12 +8,10 @@ import com.nhaarman.mockitokotlin2.mock
 import org.junit.Test
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.koinApplication
-import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.check.checkModules
-import org.mockito.Mockito
-import smarthome.raspberry.authentication.di.authenticationFrameworkDependentTypes
 import smarthome.raspberry.di.appModules
+import smarthome.raspberry.di.mocks.frameworkDependentClasses
 import smarthome.raspberry.notification.R
 
 class AppTest : KoinTest {
@@ -32,12 +30,7 @@ class AppTest : KoinTest {
     fun `koin modules should pass checkModules`() {
         koinApplication {
             androidContext(mockedContext)
-            modules(appModules)
-            modules(
-                    module(override = true) {
-                        single { Mockito.mock(authenticationFrameworkDependentTypes.first()) }
-                    }
-            )
+            modules(appModules + frameworkDependentClasses)
         }.checkModules()
     }
 }
