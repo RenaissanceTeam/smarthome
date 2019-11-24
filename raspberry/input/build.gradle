@@ -5,6 +5,7 @@ apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
     implementation library.kotlin
+    implementation library.rxJava
     implementation library.coroutinesCore
     implementation groups.koinWithExt
 
@@ -14,6 +15,7 @@ dependencies {
     implementation library.homeServer_devices_api
     implementation library.homeServer_controllers_api
     implementation library.homeServer_home_api
+    implementation library.homeServer_authentication_api
 
     testImplementation groups.forTest
 }

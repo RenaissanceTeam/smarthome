@@ -8,10 +8,13 @@ dependencies {
     implementation library.retrofit
     implementation library.coroutinesCore
     implementation groups.koinWithExt
+    implementation library.gson
 
     // modules
     implementation library.homeServer_notification_api
     implementation library.common
     implementation library.homeServer_util
     implementation library.homeServer_devices_api
+
+    testImplementation groups.forTest
 }

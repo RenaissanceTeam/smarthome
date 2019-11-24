@@ -5,5 +5,4 @@ import smarthome.library.common.IotDevice
 
 interface ReadControllerUseCase {
     suspend fun execute(device: IotDevice, controller: BaseController)
-
 }

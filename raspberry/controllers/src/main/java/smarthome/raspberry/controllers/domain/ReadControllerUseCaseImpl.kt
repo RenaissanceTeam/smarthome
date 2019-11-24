@@ -3,9 +3,9 @@ package smarthome.raspberry.controllers.domain
 import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerServeState
 import smarthome.library.common.IotDevice
-import smarthome.raspberry.api.channel.domain.GetChannelForDeviceUseCase
+import smarthome.raspberry.channel.api.domain.GetChannelForDeviceUseCase
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
-import smarthome.raspberry.devices_api.domain.DevicesService
+import smarthome.raspberry.devices.api.domain.DevicesService
 
 class ReadControllerUseCaseImpl(
         private val getChannelForDeviceUseCase: GetChannelForDeviceUseCase,

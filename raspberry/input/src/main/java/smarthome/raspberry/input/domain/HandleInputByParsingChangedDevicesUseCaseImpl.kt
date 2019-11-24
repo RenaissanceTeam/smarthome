@@ -6,8 +6,8 @@ import smarthome.library.common.DeviceServeState
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
 import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
-import smarthome.raspberry.devices_api.domain.DevicesService
-import smarthome.raspberry.input_api.domain.HandleInputByParsingChangedDevicesUseCase
+import smarthome.raspberry.devices.api.domain.DevicesService
+import smarthome.raspberry.input.api.domain.HandleInputByParsingChangedDevicesUseCase
 
 // todo someone should start this use case. previously was
 //fun init() {
