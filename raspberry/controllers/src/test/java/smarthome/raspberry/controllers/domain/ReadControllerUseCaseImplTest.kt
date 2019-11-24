@@ -12,10 +12,11 @@ import smarthome.library.common.*
 import smarthome.raspberry.channel.api.domain.GetChannelForDeviceUseCase
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
 import smarthome.raspberry.devices.api.domain.DevicesService
+import smarthome.raspberry.devices.api.domain.SaveDeviceUseCase
 
 class ReadControllerUseCaseImplTest {
     private lateinit var getChannelForDeviceUseCase: GetChannelForDeviceUseCase
-    private lateinit var devicesService: DevicesService
+    private lateinit var saveDeviceUseCase: SaveDeviceUseCase
     private lateinit var readControllerUseCase: ReadControllerUseCase
 
     private val pendingController = BaseController(name = "", id = Id("1"))
@@ -29,9 +30,9 @@ class ReadControllerUseCaseImplTest {
         getChannelForDeviceUseCase = mock {
             onBlocking { execute(any()) }.thenReturn(mock {})
         }
-        devicesService = mock {}
+        saveDeviceUseCase = mock {}
         readControllerUseCase =
-                ReadControllerUseCaseImpl(getChannelForDeviceUseCase, devicesService)
+                ReadControllerUseCaseImpl(getChannelForDeviceUseCase, saveDeviceUseCase)
     }
 
     @Test
@@ -71,7 +72,7 @@ class ReadControllerUseCaseImplTest {
     fun `when controller is read it's device should be saved`() {
         runBlocking {
             readControllerUseCase.execute(pendingDevice, pendingController)
-            verify(devicesService).saveDevice(pendingDevice)
+            verify(saveDeviceUseCase).execute(pendingDevice)
         }
     }
 
