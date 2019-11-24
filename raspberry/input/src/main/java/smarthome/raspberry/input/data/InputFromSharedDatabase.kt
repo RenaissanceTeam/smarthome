@@ -4,9 +4,9 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.runBlocking
 import smarthome.library.common.DeviceUpdate
 import smarthome.library.common.SmartHomeStorage
-import smarthome.raspberry.home.data.HomeInfoSource
+import smarthome.raspberry.authentication.api.domain.GetUserIdUseCase
 
-class InputFromSharedDatabase(private val homeInfoSource: smarthome.raspberry.home.data.HomeInfoSource,
+class InputFromSharedDatabase(private val getUserIdUseCase: GetUserIdUseCase,
                               private val databaseFactory: (String) -> SmartHomeStorage) :
         InputControllerDataSource {
     private var storage: SmartHomeStorage? = null
@@ -16,7 +16,7 @@ class InputFromSharedDatabase(private val homeInfoSource: smarthome.raspberry.ho
 
     override fun setActionForNewDeviceUpdate(action: (DeviceUpdate) -> Unit) {
         uidSubscription?.dispose()
-        uidSubscription = homeInfoSource.getObservableUserId().subscribe {
+        uidSubscription = getUserIdUseCase.execute().subscribe {
             deviceUpdateSubscription?.dispose()
             val database = databaseFactory(it)
             storage = database

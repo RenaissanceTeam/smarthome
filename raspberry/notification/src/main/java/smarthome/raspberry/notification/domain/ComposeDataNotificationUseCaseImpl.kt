@@ -4,14 +4,14 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.devices.api.domain.GetDeviceByControllerUseCase
 import smarthome.raspberry.notification.R
-import smarthome.raspberry.notification_api.domain.ComposeDataNotificationUseCase
+import smarthome.raspberry.notification.api.domain.ComposeDataNotificationUseCase
 import smarthome.raspberry.notification.api.domain.Notification
 import smarthome.raspberry.notification.api.domain.Priority
 import smarthome.raspberry.util.ResourceProvider
 
 class ComposeDataNotificationUseCaseImpl(private val resourceProvider: ResourceProvider,
                                          private val getDeviceByControllerUseCase: GetDeviceByControllerUseCase) :
-    ComposeDataNotificationUseCase {
+        ComposeDataNotificationUseCase {
     
     
     override suspend fun execute(controller: BaseController, priority: Priority): Notification {

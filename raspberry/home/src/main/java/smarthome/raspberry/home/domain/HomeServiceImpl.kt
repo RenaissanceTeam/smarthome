@@ -3,17 +3,15 @@ package smarthome.raspberry.home.domain
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.runBlocking
-import smarthome.raspberry.authentication.api.domain.GetUserIdUseCase
-import smarthome.raspberry.home.data.HomeRepository
-import smarthome.raspberry.home.api.domain.GetHomeIdUseCase
+import smarthome.raspberry.home.api.domain.GetHomeInfoUseCase
 import smarthome.raspberry.home.api.domain.HomeService
+import smarthome.raspberry.home.data.HomeRepository
 import java.util.*
 import kotlin.random.Random
 
 class HomeServiceImpl(
         private val repository: HomeRepository,
-        private val getHomeIdUseCase: GetHomeIdUseCase,
-        private val getUserIdUseCase: GetUserIdUseCase
+        private val getHomeInfoUseCase: GetHomeInfoUseCase
 ) : HomeService {
     private val HOME_ID_PREFIX = "home_id"
     private var stateDisposable: Disposable? = null
@@ -35,11 +33,8 @@ class HomeServiceImpl(
         return "$HOME_ID_PREFIX$currentTime$randomPart"
     }
 
-    override fun getHomeInfo() = repository.getHomeInfo(getUserIdUseCase.execute(),
-                                                        getHomeIdUseCase.execute())
-
     override fun launchStateMachine(scheduler: Scheduler) {
-        stateDisposable = getHomeInfo()
+        stateDisposable = getHomeInfoUseCase.execute()
                 .observeOn(scheduler)
                 .subscribe(
                         {

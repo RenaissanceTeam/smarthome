@@ -10,6 +10,7 @@ dependencies {
     implementation library.rxAndroid
     implementation library.rxKotlin
     implementation library.appCompat
+    implementation library.constraintLayout
     implementation library.fragmentKtx
     implementation groups.lifecycle
     implementation groups.koinWithExt
@@ -20,4 +21,6 @@ dependencies {
     implementation library.common
     implementation library.homeServer_entity
     implementation library.homeServer_util
+
+    testImplementation groups.forTest
 }
