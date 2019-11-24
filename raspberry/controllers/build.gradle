@@ -5,6 +5,7 @@ apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
     implementation library.kotlin
+    implementation groups.koinWithExt
 
     // modules
     implementation library.common

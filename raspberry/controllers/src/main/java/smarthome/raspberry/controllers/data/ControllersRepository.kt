@@ -1,0 +1,3 @@
+package smarthome.raspberry.controllers.data
+
+interface ControllersRepository

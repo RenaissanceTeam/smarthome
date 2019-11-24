@@ -2,7 +2,7 @@ package smarthome.raspberry.notification.data.mapper
 
 import com.google.gson.Gson
 import okhttp3.RequestBody
-import smarthome.raspberry.notification_api.domain.Notification
+import smarthome.raspberry.notification.api.domain.Notification
 
 class NotificationToRequestBodyMapperImpl(
         private val gson: Gson

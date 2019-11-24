@@ -2,9 +2,9 @@ package smarthome.raspberry.devices.domain
 
 import smarthome.library.common.Id
 import smarthome.library.common.IotDevice
-import smarthome.raspberry.devices_api.data.DevicesRepository
-import smarthome.raspberry.devices_api.domain.GetDeviceByIdUseCase
-import smarthome.raspberry.devices_api.domain.NoDeviceException
+import smarthome.raspberry.devices.data.DevicesRepository
+import smarthome.raspberry.devices.api.domain.GetDeviceByIdUseCase
+import smarthome.raspberry.devices.api.domain.NoDeviceException
 
 class GetDeviceByIdUseCaseImpl(
         val repository: DevicesRepository

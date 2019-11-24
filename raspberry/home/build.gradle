@@ -12,7 +12,7 @@ dependencies {
     implementation library.appCompat
     implementation library.fragmentKtx
     implementation groups.lifecycle
-    implementation library.koin
+    implementation groups.koinWithExt
 
     // modules
     implementation library.homeServer_home_api
