@@ -62,7 +62,3 @@ val authenticationModule: List<Module> = listOf(
         data,
         flow
 )
-
-val authenticationFrameworkDependentTypes = listOf(
-        FirebaseAuth::class.java
-)
