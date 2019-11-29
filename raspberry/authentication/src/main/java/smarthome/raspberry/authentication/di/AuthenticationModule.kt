@@ -6,6 +6,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
@@ -22,6 +23,10 @@ import smarthome.raspberry.authentication.domain.GetAuthStatusUseCaseImpl
 import smarthome.raspberry.authentication.domain.GetUserIdUseCaseImpl
 import smarthome.raspberry.authentication.domain.GetUserInfoUseCaseImpl
 import smarthome.raspberry.authentication.flow.SignInFlowLauncherImpl
+import smarthome.raspberry.authentication.presentation.AuthenticationActivity
+import smarthome.raspberry.authentication.presentation.AuthenticationPresenter
+import smarthome.raspberry.authentication.presentation.AuthenticationPresenterImpl
+import smarthome.raspberry.authentication.presentation.AuthenticationView
 import smarthome.raspberry.util.ResourceProvider
 
 private val domain = module {
@@ -53,7 +58,19 @@ private fun provideGoogleApiClient(resources: ResourceProvider, context: Context
 }
 
 private val presentation = module {
-    // todo - how to provide view inside presenter
+    scope(named<AuthenticationActivity>()) {
+        scoped<AuthenticationPresenter> { (view: AuthenticationView) ->
+            AuthenticationPresenterImpl(
+                    view = view,
+                    authenticateWithFirebaseUseCase = get(),
+                    signOutOfFirebaseUseCase = get(),
+                    mainFlowLauncher = get(),
+                    clearHomeInfoUseCase = get(),
+                    getAuthStatusUseCase = get(),
+                    getUserInfoUseCase = get()
+            )
+        }
+    }
 }
 
 val authenticationModule: List<Module> = listOf(

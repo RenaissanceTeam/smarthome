@@ -14,6 +14,8 @@ import com.google.android.gms.common.api.Status
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_google_sign_in.*
 import org.koin.android.ext.android.inject
+import org.koin.android.scope.currentScope
+import org.koin.core.parameter.parametersOf
 import smarthome.raspberry.authentication.R
 
 class AuthenticationActivity : AppCompatActivity(), AuthenticationView {
@@ -23,7 +25,7 @@ class AuthenticationActivity : AppCompatActivity(), AuthenticationView {
 
     private val mAuth: FirebaseAuth by inject()
     private val apiClient: GoogleApiClient by inject()
-    private val presenter: AuthenticationPresenter by inject()
+    private val presenter: AuthenticationPresenter by currentScope.inject { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,18 +34,6 @@ class AuthenticationActivity : AppCompatActivity(), AuthenticationView {
         sign_in_button.setOnClickListener { presenter.signIn() }
         sign_out_button.setOnClickListener { presenter.sighOut() }
         delete_all.setOnClickListener { presenter.deleteAll() }
-
-// todo provide ?
-//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id))
-//                .requestEmail()
-//                .build()
-//        apiClient = GoogleApiClient.Builder(this)
-//                .enableAutoManage(this, this)
-//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-//                .build()
-//
-//        mAuth = FirebaseAuth.getInstance()
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
