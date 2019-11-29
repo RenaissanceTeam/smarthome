@@ -5,20 +5,19 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
+import org.koin.android.scope.currentScope
+import org.koin.core.parameter.parametersOf
 import smarthome.raspberry.entity.HomeInfo
 import smarthome.raspberry.home.R
 
 
 class MainActivity : AppCompatActivity(), MainView {
-    private val presenter: MainPresenter by inject()
+    private val presenter: MainPresenter by currentScope.inject { parametersOf(this) }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         lifecycle.addObserver(presenter)
-
-
-//        inputController.init()
     }
     
     override fun setAuthStatus(toString: String) {

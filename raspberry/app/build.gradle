@@ -20,6 +20,7 @@ android {
 
 dependencies {
     implementation groups.koinWithExt
+    implementation library.appCompat
     testImplementation groups.forTest
     testImplementation library.koin_test
 

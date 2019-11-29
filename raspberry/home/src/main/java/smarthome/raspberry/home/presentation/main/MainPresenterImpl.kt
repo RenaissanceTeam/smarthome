@@ -17,7 +17,7 @@ class MainPresenterImpl(
         private val launchUseCase: LaunchUseCase,
         private val view: MainView
 ) : MainPresenter {
-    
+
     @SuppressLint("CheckResult")
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreateView() {
@@ -28,11 +28,7 @@ class MainPresenterImpl(
                 view.setAuthStatus(it.toString())
             }
         
-        getHomeInfoUseCase.execute()
-            .subscribeBy {
-                view.setHomeInfo(it)
-            }
-
+        getHomeInfoUseCase.execute().subscribeBy { view.setHomeInfo(it) }
         launchUseCase.execute()
     }
 }

@@ -6,6 +6,8 @@ ext {
             rxKotlin                     : ("io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"),
             rxAndroid                    : ("io.reactivex.rxjava2:rxandroid:$rxjava_android_version"),
             koin                         : ("org.koin:koin-android:$koin_version"),
+            koinScope                    : ("org.koin:koin-android-scope:$koin_version"),
+            koinViewModel                : ("org.koin:koin-android-viewmodel:$koin_version"),
             koin_ext                     : ("org.koin:koin-core-ext:$koin_version"),
             koin_test                    : ("org.koin:koin-test:$koin_version"),
             coroutinesCore               : ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"),

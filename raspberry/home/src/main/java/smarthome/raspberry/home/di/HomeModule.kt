@@ -1,5 +1,6 @@
 package smarthome.raspberry.home.di
 
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
@@ -19,6 +20,10 @@ import smarthome.raspberry.home.domain.GetHomeIdUseCaseImpl
 import smarthome.raspberry.home.domain.GetHomeInfoUseCaseImpl
 import smarthome.raspberry.home.domain.LaunchUseCaseImpl
 import smarthome.raspberry.home.presentation.MainFlowLauncherImpl
+import smarthome.raspberry.home.presentation.main.MainActivity
+import smarthome.raspberry.home.presentation.main.MainPresenter
+import smarthome.raspberry.home.presentation.main.MainPresenterImpl
+import smarthome.raspberry.home.presentation.main.MainView
 
 private val domain = module {
     factoryBy<GenerateUniqueHomeIdUseCase, GenerateUniqueHomeIdUseCaseImpl>()
@@ -34,13 +39,20 @@ private val data = module {
 }
 
 private val presentation = module {
-    // todo - how to provide view inside presenter
+    scope(named<MainActivity>()) {
+        scoped<MainPresenter> { (view: MainView) ->  MainPresenterImpl(
+                getAuthStatusUseCase = get(),
+                signInFlowLauncher = get(),
+                getHomeInfoUseCase = get(),
+                launchUseCase = get(),
+                view = view
+        ) }
+    }
 }
 
 private val flow = module {
     factoryBy<MainFlowLauncher, MainFlowLauncherImpl>()
 }
-
 
 val homeModule = listOf(
         domain,
