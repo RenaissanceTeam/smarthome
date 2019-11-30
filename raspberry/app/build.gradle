@@ -51,6 +51,4 @@ dependencies {
 
     implementation library.homeServer_util
     implementation library.homeServer_external
-
-    testImplementation library.homeServer_di_mocks
 }
