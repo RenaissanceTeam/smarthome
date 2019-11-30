@@ -1,5 +1,7 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -8,4 +10,5 @@ dependencies {
     implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
     implementation library.kotlin
     implementation library.rxJava
+
 }
