@@ -17,8 +17,5 @@ dependencies {
     implementation library.datalibrary_api
 
 }
-repositories {
-    mavenCentral()
-}
 
 apply plugin: 'com.google.gms.google-services'

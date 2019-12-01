@@ -1,9 +1,17 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
+
+preBuild.dependsOn copyDatalibraryJson
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation library.supportAnnotations
 
     implementation library.kotlin
     implementation library.rxJava
+
+    implementation library.common
 }
+
+apply plugin: 'com.google.gms.google-services'
