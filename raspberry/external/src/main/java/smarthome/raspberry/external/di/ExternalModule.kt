@@ -1,20 +1,22 @@
 package smarthome.raspberry.external.di
 
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import smarthome.library.datalibrary.api.SmartHomeStorage
+import org.koin.experimental.builder.factoryBy
+import smarthome.library.datalibrary.FirestoreHomesReferencesStorage
+import smarthome.library.datalibrary.FirestoreInstanceTokenStorage
+import smarthome.library.datalibrary.FirestoreMessageQueue
 import smarthome.library.datalibrary.FirestoreSmartHomeStorage
-import smarthome.raspberry.external.datalibrary.DatalibraryAdapter
+import smarthome.library.datalibrary.api.HomesReferencesStorage
+import smarthome.library.datalibrary.api.InstanceTokenStorage
+import smarthome.library.datalibrary.api.MessageQueue
+import smarthome.library.datalibrary.api.SmartHomeStorage
 
+// todo maybe move it to datalibrary module, but only if use koin of client side as well..
 val externalModule = listOf(
         module {
-            
-            scope(named("homeId")) {
-                scoped<smarthome.library.datalibrary.api.SmartHomeStorage> {
-                    FirestoreSmartHomeStorage(get(named("homeId")))
-                }
-            }
-            
-            factory { DatalibraryAdapter.provideHomesReferencesStorage()}
+            factoryBy<HomesReferencesStorage, FirestoreHomesReferencesStorage>()
+            factoryBy<MessageQueue, FirestoreMessageQueue>()
+            factoryBy<SmartHomeStorage, FirestoreSmartHomeStorage>()
+            factoryBy<InstanceTokenStorage, FirestoreInstanceTokenStorage>()
         }
 )
