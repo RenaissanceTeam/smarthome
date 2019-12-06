@@ -3,8 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
-preBuild.dependsOn copyDatalibraryJson
-
 dependencies {
     implementation library.supportAnnotations
 
@@ -13,5 +11,3 @@ dependencies {
 
     implementation library.common
 }
-
-apply plugin: 'com.google.gms.google-services'

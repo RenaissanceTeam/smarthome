@@ -1,6 +1,9 @@
-package smarthome.library.common
+package smarthome.library.datalibrary.api
 
 import io.reactivex.Observable
+import smarthome.library.common.DeviceUpdate
+import smarthome.library.common.IotDevice
+import smarthome.library.common.SmartHome
 
 interface SmartHomeStorage {
     suspend fun createSmartHome()

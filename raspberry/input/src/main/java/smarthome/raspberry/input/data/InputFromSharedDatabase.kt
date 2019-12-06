@@ -3,13 +3,13 @@ package smarthome.raspberry.input.data
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.runBlocking
 import smarthome.library.common.DeviceUpdate
-import smarthome.library.common.SmartHomeStorage
+import smarthome.library.datalibrary.api.SmartHomeStorage
 import smarthome.raspberry.authentication.api.domain.GetUserIdUseCase
 
 class InputFromSharedDatabase(private val getUserIdUseCase: GetUserIdUseCase,
-                              private val databaseFactory: (String) -> SmartHomeStorage) :
+                              private val databaseFactory: (String) -> smarthome.library.datalibrary.api.SmartHomeStorage) :
         InputControllerDataSource {
-    private var storage: SmartHomeStorage? = null
+    private var storage: smarthome.library.datalibrary.api.SmartHomeStorage? = null
 
     private var uidSubscription: Disposable? = null
     private var deviceUpdateSubscription: Disposable? = null
