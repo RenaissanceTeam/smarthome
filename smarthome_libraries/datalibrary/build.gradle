@@ -16,6 +16,8 @@ dependencies {
     implementation library.common
     implementation library.datalibrary_api
 
+    testImplementation groups.forTest
+    testImplementation library.coroutinesCore
 }
 
 apply plugin: 'com.google.gms.google-services'

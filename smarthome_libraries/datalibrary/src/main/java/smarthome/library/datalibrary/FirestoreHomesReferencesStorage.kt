@@ -19,8 +19,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class FirestoreHomesReferencesStorage(userIdHolder: UserIdHolder) : HomesReferencesStorage {
     private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
-    private val ref: DocumentReference by DependOnChangeable(
-            userIdHolder) {
+    private val ref: DocumentReference by DependOnChangeable(userIdHolder) {
         db.collection(ACCOUNTS_NODE).document(it)
     }
 
