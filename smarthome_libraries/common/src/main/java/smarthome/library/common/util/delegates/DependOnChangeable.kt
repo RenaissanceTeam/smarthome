@@ -1,5 +1,6 @@
-package smarthome.library.common.util
+package smarthome.library.common.util.delegates
 
+import smarthome.library.common.util.Holder
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 

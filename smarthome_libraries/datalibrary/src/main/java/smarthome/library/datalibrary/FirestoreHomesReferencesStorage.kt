@@ -6,7 +6,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import smarthome.library.common.HomesReferences
-import smarthome.library.common.util.DependOnChangeable
+import smarthome.library.common.util.delegates.DependOnChangeable
 import smarthome.library.datalibrary.api.HomesReferencesStorage
 import smarthome.library.datalibrary.api.boundary.UserIdHolder
 import smarthome.library.datalibrary.constants.ACCOUNTS_NODE
@@ -19,7 +19,8 @@ import kotlin.coroutines.suspendCoroutine
 
 class FirestoreHomesReferencesStorage(userIdHolder: UserIdHolder) : HomesReferencesStorage {
     private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
-    private val ref: DocumentReference by DependOnChangeable(userIdHolder) {
+    private val ref: DocumentReference by DependOnChangeable(
+            userIdHolder) {
         db.collection(ACCOUNTS_NODE).document(it)
     }
 
