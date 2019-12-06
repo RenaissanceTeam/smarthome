@@ -4,23 +4,21 @@ import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 
-const val TAG = "DataLibrary"
-
-const val DEFAULT_HOME_ID = "default_home_id"
+internal const val TAG = "DataLibrary"
 
 // database
-const val ACCOUNTS_NODE = "accounts"
-const val HOMES_NODE = "homes"
+internal const val ACCOUNTS_NODE = "accounts"
+internal const val HOMES_NODE = "homes"
 
-const val ACCOUNT_HOMES_ARRAY_REF = "homes"
-const val HOME_DEVICES_NODE = "devices"
-const val HOME_USERS_NODE = "users"
-const val MESSAGES_NODE = "message_queue"
-const val PENDING_DEVICES_NODE = "pending_devices"
+internal const val ACCOUNT_HOMES_ARRAY_REF = "homes"
+internal const val HOME_DEVICES_NODE = "devices"
+internal const val HOME_USERS_NODE = "users"
+internal const val MESSAGES_NODE = "message_queue"
+internal const val PENDING_DEVICES_NODE = "pending_devices"
 
-const val FIREBASE_READ_VALUE_ERROR = "Failed to read value"
+internal const val FIREBASE_READ_VALUE_ERROR = "Failed to read value"
 
 
 // default listeners for requests
-val defSuccessListener: OnSuccessListener<Void> = OnSuccessListener { Log.d(TAG, "data updated successfully") }
-val defFailureListener: OnFailureListener = OnFailureListener { e -> Log.w(TAG, "firestore error", e) }
+internal val defSuccessListener: OnSuccessListener<Void> = OnSuccessListener { Log.d(TAG, "data updated successfully") }
+internal val defFailureListener: OnFailureListener = OnFailureListener { e -> Log.w(TAG, "firestore error", e) }
