@@ -42,7 +42,7 @@ class FirestoreMessageQueue(
 
     override fun subscribe(listener: MessageListener) {
         registration = ref.addSnapshotListener(EventListener {snapshot, e ->
-            if(e != null) {
+            if (e != null) {
                 Log.w(TAG, "Devices updates listen failed", e)
                 return@EventListener
             }
