@@ -1,10 +1,10 @@
 package smarthome.raspberry.devices.data.storage
 
 import smarthome.library.common.IotDevice
-import smarthome.library.common.SmartHomeStorage
+import smarthome.library.datalibrary.api.SmartHomeStorage
 
 class RemoteStorageImpl (
-    private val homeStorage: SmartHomeStorage
+    private val homeStorage: smarthome.library.datalibrary.api.SmartHomeStorage
 ) : RemoteStorage {
     override suspend fun updateDevice(device: IotDevice) {
         homeStorage.updateDevice(device)

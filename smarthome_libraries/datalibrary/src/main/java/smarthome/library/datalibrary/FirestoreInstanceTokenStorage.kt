@@ -3,7 +3,7 @@ package smarthome.library.datalibrary
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Observable
 import smarthome.library.common.InstanceToken
-import smarthome.library.common.InstanceTokenStorage
+import smarthome.library.datalibrary.api.InstanceTokenStorage
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.constants.HOME_USERS_NODE
 import smarthome.library.datalibrary.util.withContinuation

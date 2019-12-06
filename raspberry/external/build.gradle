@@ -11,6 +11,6 @@ dependencies {
     // modules
     implementation library.common
     implementation library.datalibrary
+    implementation library.datalibrary_api
     implementation library.homeServer_home_api
-
 }
