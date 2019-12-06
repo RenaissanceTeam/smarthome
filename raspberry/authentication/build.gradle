@@ -19,6 +19,8 @@ dependencies {
     implementation library.homeServer_home_api
     implementation library.homeServer_google_services
     implementation library.homeServer_util
+    implementation library.datalibrary_api
+    implementation library.common
 
     testImplementation groups.forTest
 }
