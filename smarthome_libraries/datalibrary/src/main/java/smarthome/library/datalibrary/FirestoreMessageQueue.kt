@@ -1,9 +1,11 @@
 package smarthome.library.datalibrary
 
 import android.util.Log
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import smarthome.library.common.MessageListener
-import smarthome.library.common.MessageQueue
 import smarthome.library.common.constants.CHANGE_DEVICE_STATUS
 import smarthome.library.common.constants.DISCOVER_ALL
 import smarthome.library.common.constants.DISCOVER_DEVICE
@@ -11,6 +13,9 @@ import smarthome.library.common.message.ChangeDeviceStatusRequest
 import smarthome.library.common.message.DiscoverAllDevicesRequest
 import smarthome.library.common.message.DiscoverDeviceRequest
 import smarthome.library.common.message.Message
+import smarthome.library.common.util.delegates.DependOnChangeable
+import smarthome.library.datalibrary.api.MessageQueue
+import smarthome.library.datalibrary.api.boundary.HomeIdHolder
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.constants.MESSAGES_NODE
 import smarthome.library.datalibrary.constants.TAG
@@ -18,15 +23,13 @@ import smarthome.library.datalibrary.constants.WrongMessageType
 import smarthome.library.datalibrary.util.withContinuation
 import kotlin.coroutines.suspendCoroutine
 
-class FirestoreMessageQueue(
-    private val homeId: String,
+class FirestoreMessageQueue(homeIdHolder: HomeIdHolder) :
+        MessageQueue {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-) : MessageQueue {
-
-    private val ref: CollectionReference = db.collection(HOMES_NODE).document(homeId).collection(MESSAGES_NODE)
-
+    private val ref by DependOnChangeable(homeIdHolder) {
+        db.collection(HOMES_NODE).document(it).collection(MESSAGES_NODE)
+    }
     private var registration: ListenerRegistration? = null
-
 
     override suspend fun postMessage(message: Message) {
         suspendCoroutine<Unit> {
@@ -41,7 +44,7 @@ class FirestoreMessageQueue(
     }
 
     override fun subscribe(listener: MessageListener) {
-        registration = ref.addSnapshotListener(EventListener {snapshot, e ->
+        registration = ref.addSnapshotListener(EventListener { snapshot, e ->
             if (e != null) {
                 Log.w(TAG, "Devices updates listen failed", e)
                 return@EventListener
@@ -55,15 +58,15 @@ class FirestoreMessageQueue(
                 val messageType: String = doc.get("messageType") as String
                 val message = when (messageType) {
                     CHANGE_DEVICE_STATUS -> doc.toObject(ChangeDeviceStatusRequest::class.java)
-                    DISCOVER_ALL -> doc.toObject(DiscoverAllDevicesRequest::class.java)
-                    DISCOVER_DEVICE -> doc.toObject(DiscoverDeviceRequest::class.java)
-                    else -> throw WrongMessageType(messageType)
+                    DISCOVER_ALL         -> doc.toObject(DiscoverAllDevicesRequest::class.java)
+                    DISCOVER_DEVICE      -> doc.toObject(DiscoverDeviceRequest::class.java)
+                    else                 -> throw WrongMessageType(messageType)
                 }
                 devices.add(message)
             }
 
             listener(devices, snapshot.metadata.hasPendingWrites())
-        } )
+        })
     }
 
     private fun getMessageRef(message: Message): DocumentReference {

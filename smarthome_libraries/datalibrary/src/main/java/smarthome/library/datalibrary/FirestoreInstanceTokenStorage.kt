@@ -12,13 +12,9 @@ import smarthome.library.datalibrary.util.withContinuation
 import smarthome.library.datalibrary.util.withObjectContinuation
 import kotlin.coroutines.suspendCoroutine
 
-class FirestoreInstanceTokenStorage(
-        homeIdHolder: HomeIdHolder
-) : InstanceTokenStorage {
-
+class FirestoreInstanceTokenStorage(homeIdHolder: HomeIdHolder) : InstanceTokenStorage {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val usersRef by DependOnChangeable(
-            homeIdHolder) {
+    private val usersRef by DependOnChangeable(homeIdHolder) {
         db.collection(HOMES_NODE).document(it).collection(HOME_USERS_NODE)
     }
 
@@ -59,6 +55,4 @@ class FirestoreInstanceTokenStorage(
 //            })
 //        }
     }
-}
-
 }
