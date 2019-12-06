@@ -4,6 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
+import smarthome.library.common.util.delegates.DependOnChangeable
 
 class DependOnChangeableTest {
     private lateinit var changeable: Holder<String>
@@ -17,7 +18,8 @@ class DependOnChangeableTest {
     fun `when get() should use the changeable value for the result`() {
         val current = ""
         whenever(changeable.get()).thenReturn(current)
-        val result: String by DependOnChangeable(changeable) { it }
+        val result: String by DependOnChangeable(
+                changeable) { it }
 
         assertThat(result).isEqualTo(current)
     }
@@ -28,7 +30,8 @@ class DependOnChangeableTest {
 
         whenever(changeable.get()).thenReturn(current)
         val calculation = mock<(String) -> String>()
-        val result: String by DependOnChangeable(changeable, calculation)
+        val result: String by DependOnChangeable(changeable,
+                                                                                         calculation)
 
         val a = result
         verify(calculation).invoke(current)
@@ -42,7 +45,8 @@ class DependOnChangeableTest {
         val changed = "changed"
         whenever(changeable.get()).thenReturn(current)
         val calculation = mock<(String) -> String>()
-        val result: String by DependOnChangeable(changeable, calculation)
+        val result: String by DependOnChangeable(changeable,
+                                                                                         calculation)
 
         val a = result
         verify(calculation).invoke(current)
@@ -61,7 +65,8 @@ class DependOnChangeableTest {
         val calculation = mock<(String) -> String> {
             on { invoke(any()) }.thenReturn("result")
         }
-        val result: String by DependOnChangeable(changeable, calculation)
+        val result: String by DependOnChangeable(changeable,
+                                                                                         calculation)
 
         val a = result
         verify(calculation).invoke(current)
