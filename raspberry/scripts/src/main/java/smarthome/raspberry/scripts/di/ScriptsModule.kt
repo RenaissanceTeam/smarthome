@@ -1,7 +1,5 @@
 package smarthome.raspberry.scripts.di
 
-import org.koin.dsl.module
+import org.koin.core.module.Module
 
-val scriptsModule = module {
-
-}
+val scriptsModule = listOf<Module>()

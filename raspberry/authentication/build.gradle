@@ -10,12 +10,15 @@ dependencies {
     implementation library.rxJava
     implementation library.playServicesAuth
     implementation library.firebaseAuth
+
     implementation groups.koinWithExt
+    implementation library.koinScope
 
     // modules
     implementation library.homeServer_authentication_api
     implementation library.homeServer_home_api
     implementation library.homeServer_google_services
+    implementation library.homeServer_util
 
     testImplementation groups.forTest
 }
