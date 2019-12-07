@@ -9,11 +9,14 @@ dependencies {
     implementation library.rxJava
     implementation library.rxAndroid
     implementation library.rxKotlin
+
     implementation library.appCompat
     implementation library.constraintLayout
     implementation library.fragmentKtx
     implementation groups.lifecycle
+
     implementation groups.koinWithExt
+    implementation library.koinScope
 
     // modules
     implementation library.homeServer_home_api

@@ -29,6 +29,10 @@ class LaunchUseCaseImpl(
                         },
                         onError = {}
                 )
+
+        // todo listen for data changes - user input
+        // todo listen for devices - devices input
+
     }
 
     private fun hasUser(it: smarthome.raspberry.entity.HomeInfo) = it.userId.isNotEmpty()
