@@ -4,7 +4,7 @@ import smarthome.library.common.IotDevice
 import smarthome.library.datalibrary.api.SmartHomeStorage
 
 class RemoteStorageImpl (
-    private val homeStorage: smarthome.library.datalibrary.api.SmartHomeStorage
+    private val homeStorage: SmartHomeStorage
 ) : RemoteStorage {
     override suspend fun updateDevice(device: IotDevice) {
         homeStorage.updateDevice(device)

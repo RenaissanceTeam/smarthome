@@ -7,9 +7,9 @@ import smarthome.library.datalibrary.api.SmartHomeStorage
 import smarthome.raspberry.authentication.api.domain.GetUserIdUseCase
 
 class InputFromSharedDatabase(private val getUserIdUseCase: GetUserIdUseCase,
-                              private val databaseFactory: (String) -> smarthome.library.datalibrary.api.SmartHomeStorage) :
+                              private val databaseFactory: (String) -> SmartHomeStorage) :
         InputControllerDataSource {
-    private var storage: smarthome.library.datalibrary.api.SmartHomeStorage? = null
+    private var storage: SmartHomeStorage? = null
 
     private var uidSubscription: Disposable? = null
     private var deviceUpdateSubscription: Disposable? = null
