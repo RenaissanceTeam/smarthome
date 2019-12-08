@@ -1,4 +1,6 @@
-package smarthome.library.common
+package smarthome.library.datalibrary.api
+
+import smarthome.library.common.HomesReferences
 
 interface HomesReferencesStorage {
 

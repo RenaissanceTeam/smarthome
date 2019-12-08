@@ -3,19 +3,20 @@ package smarthome.library.datalibrary
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Observable
 import smarthome.library.common.InstanceToken
-import smarthome.library.common.InstanceTokenStorage
+import smarthome.library.common.util.delegates.DependOnChangeable
+import smarthome.library.datalibrary.api.InstanceTokenStorage
+import smarthome.library.datalibrary.api.boundary.HomeIdHolder
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.constants.HOME_USERS_NODE
 import smarthome.library.datalibrary.util.withContinuation
 import smarthome.library.datalibrary.util.withObjectContinuation
 import kotlin.coroutines.suspendCoroutine
 
-class FirestoreInstanceTokenStorage(
-    homeId: String,
-    db: FirebaseFirestore = FirebaseFirestore.getInstance()
-) : InstanceTokenStorage {
-
-    private val usersRef = db.collection(HOMES_NODE).document(homeId).collection(HOME_USERS_NODE)
+class FirestoreInstanceTokenStorage(homeIdHolder: HomeIdHolder) : InstanceTokenStorage {
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val usersRef by DependOnChangeable(homeIdHolder) {
+        db.collection(HOMES_NODE).document(it).collection(HOME_USERS_NODE)
+    }
 
     override suspend fun saveToken(userId: String, token: String) {
         suspendCoroutine<Unit> {
@@ -54,5 +55,4 @@ class FirestoreInstanceTokenStorage(
 //            })
 //        }
     }
-
 }

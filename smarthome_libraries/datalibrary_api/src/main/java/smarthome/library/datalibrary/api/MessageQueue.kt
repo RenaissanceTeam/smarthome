@@ -1,5 +1,6 @@
-package smarthome.library.common
+package smarthome.library.datalibrary.api
 
+import smarthome.library.common.MessageListener
 import smarthome.library.common.message.Message
 
 interface MessageQueue {

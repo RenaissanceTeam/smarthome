@@ -1,0 +1,13 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
+
+dependencies {
+    implementation library.supportAnnotations
+
+    implementation library.kotlin
+    implementation library.rxJava
+
+    implementation library.common
+}

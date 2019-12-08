@@ -45,22 +45,23 @@ ext {
             kotlinTestrunner             : ("io.kotlintest:kotlintest-runner-junit5:$kotlinTestrunner_version"),
             googleTruth                  : ("com.google.truth:truth:$googleTruth_version"),
             androidTestRunner            : ("com.android.support.test:runner:$androidTestRunner_version"),
-            gson                         : ("com.google.code.gson:gson:$gson_version"),
-            supportAnnotations           : ("com.android.support:support-annotations:$supportLibrary_version"),
+            gson               : ("com.google.code.gson:gson:$gson_version"),
+            supportAnnotations : ("com.android.support:support-annotations:$supportLibrary_version"),
 
 
             // modules
-            client_entity                : project(":${gradle.ext.clientFolder}:entity"),
+            client_entity      : project(":${gradle.ext.clientFolder}:entity"),
 
-            common                       : project(":${gradle.ext.libraryFolder}:common"),
-            datalibrary                  : project(":${gradle.ext.libraryFolder}:datalibrary"),
+            common             : project(":${gradle.ext.libraryFolder}:common"),
+            datalibrary        : project(":${gradle.ext.libraryFolder}:datalibrary"),
+            datalibrary_api    : project(":${gradle.ext.libraryFolder}:datalibrary_api"),
 
-            client_presentation          : project(":${gradle.ext.clientFolder}:presentation"),
-            client_domain                : project(":${gradle.ext.clientFolder}:domain"),
-            client_domain_api            : project(":${gradle.ext.clientFolder}:domain_api"),
-            client_data                  : project(":${gradle.ext.clientFolder}:data"),
-            client_data_api              : project(":${gradle.ext.clientFolder}:data_api"),
-            client_scripts               : project(":${gradle.ext.clientFolder}:scripts"),
+            client_presentation: project(":${gradle.ext.clientFolder}:presentation"),
+            client_domain      : project(":${gradle.ext.clientFolder}:domain"),
+            client_domain_api  : project(":${gradle.ext.clientFolder}:domain_api"),
+            client_data        : project(":${gradle.ext.clientFolder}:data"),
+            client_data_api    : project(":${gradle.ext.clientFolder}:data_api"),
+            client_scripts     : project(":${gradle.ext.clientFolder}:scripts"),
             client_scripts_api           : project(":${gradle.ext.clientFolder}:scripts_api"),
 
             homeServer_arduinoDevices    : project(":${gradle.ext.homeServerFolder}:arduinodevices"),
