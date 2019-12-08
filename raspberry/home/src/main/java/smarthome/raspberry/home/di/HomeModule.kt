@@ -4,11 +4,13 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
+import smarthome.library.datalibrary.api.boundary.HomeIdHolder
 import smarthome.raspberry.home.api.domain.GenerateUniqueHomeIdUseCase
 import smarthome.raspberry.home.api.domain.GetHomeIdUseCase
 import smarthome.raspberry.home.api.domain.GetHomeInfoUseCase
 import smarthome.raspberry.home.api.domain.LaunchUseCase
 import smarthome.raspberry.home.api.presentation.MainFlowLauncher
+import smarthome.raspberry.home.data.HomeIdHolderImpl
 import smarthome.raspberry.home.data.HomeRepository
 import smarthome.raspberry.home.data.HomeRepositoryImpl
 import smarthome.raspberry.home.data.storage.LocalStorage
@@ -36,6 +38,7 @@ private val data = module {
     singleBy<HomeRepository, HomeRepositoryImpl>()
     factoryBy<LocalStorage, LocalStorageImpl>()
     factoryBy<RemoteStorage, RemoteStorageImpl>()
+    singleBy<HomeIdHolder, HomeIdHolderImpl>()
 }
 
 private val presentation = module {

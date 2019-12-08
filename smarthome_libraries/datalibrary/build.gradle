@@ -14,10 +14,10 @@ dependencies {
     implementation library.rxJava
 
     implementation library.common
+    implementation library.datalibrary_api
 
-}
-repositories {
-    mavenCentral()
+    testImplementation groups.forTest
+    testImplementation library.coroutinesCore
 }
 
 apply plugin: 'com.google.gms.google-services'

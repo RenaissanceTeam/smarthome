@@ -6,9 +6,11 @@ apply from: "$rootDir/gradle/scripts/android-module.gradle"
 dependencies {
     implementation library.kotlin
     implementation groups.koinWithExt
+    implementation library.koinScope
 
     // modules
     implementation library.common
     implementation library.datalibrary
+    implementation library.datalibrary_api
     implementation library.homeServer_home_api
 }

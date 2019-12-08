@@ -10,6 +10,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
+import smarthome.library.datalibrary.api.boundary.UserIdHolder
 import smarthome.raspberry.authentication.R
 import smarthome.raspberry.authentication.api.domain.GetAuthStatusUseCase
 import smarthome.raspberry.authentication.api.domain.GetUserIdUseCase
@@ -17,6 +18,7 @@ import smarthome.raspberry.authentication.api.domain.GetUserInfoUseCase
 import smarthome.raspberry.authentication.api.flow.SignInFlowLauncher
 import smarthome.raspberry.authentication.data.AuthRepo
 import smarthome.raspberry.authentication.data.AuthRepoImpl
+import smarthome.raspberry.authentication.data.UserIdHolderImpl
 import smarthome.raspberry.authentication.data.mapper.FirebaseUserToUserMapper
 import smarthome.raspberry.authentication.data.mapper.FirebaseUserToUserMapperImpl
 import smarthome.raspberry.authentication.domain.GetAuthStatusUseCaseImpl
@@ -44,6 +46,7 @@ private val data = module {
     singleBy<AuthRepo, AuthRepoImpl>()
     factory { FirebaseAuth.getInstance() }
     factory { provideGoogleApiClient(get(), get()) }
+    singleBy<UserIdHolder, UserIdHolderImpl>()
 }
 
 private fun provideGoogleApiClient(resources: ResourceProvider, context: Context): GoogleApiClient {

@@ -6,7 +6,9 @@ import io.reactivex.Observable
 import smarthome.library.common.DeviceUpdate
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
-import smarthome.library.common.SmartHomeStorage
+import smarthome.library.common.util.delegates.DependOnChangeable
+import smarthome.library.datalibrary.api.SmartHomeStorage
+import smarthome.library.datalibrary.api.boundary.HomeIdHolder
 import smarthome.library.datalibrary.constants.HOMES_NODE
 import smarthome.library.datalibrary.constants.HOME_DEVICES_NODE
 import smarthome.library.datalibrary.constants.PENDING_DEVICES_NODE
@@ -17,17 +19,22 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class FirestoreSmartHomeStorage(
-    private val homeId: String
+        private val db: FirebaseFirestore,
+        homeIdHolder: HomeIdHolder
 ) : SmartHomeStorage {
-
-    private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
-    private val homeRef: DocumentReference by lazy { db.collection(HOMES_NODE).document(homeId) }
-    private val devicesRef: CollectionReference by lazy { homeRef.collection(HOME_DEVICES_NODE) }
-    private val pendingDevicesRef: CollectionReference by lazy { homeRef.collection(PENDING_DEVICES_NODE) }
+    private val homeRef: DocumentReference by DependOnChangeable(homeIdHolder) {
+        db.collection(HOMES_NODE).document(it)
+    }
+    private val devicesRef: CollectionReference by DependOnChangeable(homeIdHolder) {
+        homeRef.collection(HOME_DEVICES_NODE)
+    }
+    private val pendingDevicesRef: CollectionReference by DependOnChangeable(homeIdHolder) {
+        homeRef.collection(PENDING_DEVICES_NODE)
+    }
 
     override suspend fun createSmartHome() {
         suspendCoroutine<Unit> {
-            db.collection(HOMES_NODE).document(homeId).set(mapOf(Pair("exists", "true"))).withContinuation(it)
+            homeRef.set(mapOf(Pair("exists", "true"))).withContinuation(it)
         }
     }
 
