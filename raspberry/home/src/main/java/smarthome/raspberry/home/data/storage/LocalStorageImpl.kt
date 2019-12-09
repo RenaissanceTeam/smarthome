@@ -4,7 +4,7 @@ import smarthome.raspberry.util.SharedPreferencesHelper
 
 class LocalStorageImpl(private val preferences: SharedPreferencesHelper):
     LocalStorage {
-
+    
     override suspend fun saveHome(homeId: String) {
         preferences.setString(HOME_ID, homeId)
     }
