@@ -31,7 +31,7 @@ class StorageHelper(private val storage: PersistentStorage) {
     
     
     fun <T : Any> get(key: String, expectedType: KClass<T>): T {
-        val preference = getPreferenceByKey(key)
+        val preference = obtainPreference(key, expectedType)
         val saved = preference.get()
         
         return convertToExpectedType(expectedType, saved)
