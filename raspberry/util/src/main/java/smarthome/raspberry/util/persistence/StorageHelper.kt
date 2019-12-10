@@ -1,16 +1,10 @@
 package smarthome.raspberry.util.persistence
 
-import android.annotation.SuppressLint
 import smarthome.raspberry.util.persistence.preferences.Preference
 import kotlin.reflect.KClass
 
-class SharedPreferencesHelper(private val storage: PersistentStorage) {
+class StorageHelper(private val storage: PersistentStorage) {
     private val preferences = mutableMapOf<String, Preference<*>>()
-    
-    @SuppressLint("ApplySharedPref")
-    suspend fun setString(key: String, value: String) {
-        TODO()
-    }
     
     private inline fun <reified CONTEXT> withCast(data: Any) =
         data as? CONTEXT ?: throw IllegalStateException()
@@ -51,10 +45,6 @@ class SharedPreferencesHelper(private val storage: PersistentStorage) {
             "can't access key=$key as it is not stored")
     }
     
-    fun getString(key: String, default: String = ""): String {
-        TODO()
-    }
-    
     //    fun <T> observe(key: String): Observable<T> {
 //        return observables[key] ?: createNewObservable<T>(key)
 //    }
@@ -62,7 +52,4 @@ class SharedPreferencesHelper(private val storage: PersistentStorage) {
 //    private fun <T> createNewObservable(key: String): PublishSubject<T> {
 //        return PublishSubject.create<T>().apply { observables[key] = this }
 //    }
-    
-    
-
 }

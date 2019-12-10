@@ -1,4 +1,4 @@
-package smarthome.raspberry.util
+package smarthome.raspberry.util.persistence
 
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.mock
@@ -8,20 +8,20 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import smarthome.raspberry.util.persistence.PersistentStorage
-import smarthome.raspberry.util.persistence.SharedPreferencesHelper
+import smarthome.raspberry.util.persistence.StorageHelper
 import smarthome.raspberry.util.persistence.get
 import smarthome.raspberry.util.persistence.set
 import kotlin.test.assertFailsWith
 
-class SharedPreferencesHelperTest {
+class StorageHelperTest {
     
     private lateinit var storage: PersistentStorage
-    private lateinit var sharedPreferencesHelper: SharedPreferencesHelper
+    private lateinit var storageHelper: StorageHelper
     
     @Before
     fun setUp() {
         storage = mock {}
-        sharedPreferencesHelper = SharedPreferencesHelper(storage)
+        storageHelper = StorageHelper(storage)
     }
     
 //    @Test
@@ -48,38 +48,38 @@ class SharedPreferencesHelperTest {
         val value = "a"
         val key = "key"
         runBlocking {
-            sharedPreferencesHelper.set(key, value)
+            storageHelper.set(key, value)
         }
         whenever(storage.get(key, String::class)).then { value}
-        val result = sharedPreferencesHelper.get<String>(key)
+        val result = storageHelper.get<String>(key)
 
         assertThat(result).isEqualTo(value)
     }
     @Test
     fun `when trying to read preference that is not stored should throw`() {
         assertFailsWith<IllegalArgumentException> {
-            sharedPreferencesHelper.get<String>("something")
+            storageHelper.get<String>("something")
         }
     }
     
     @Test
     fun `when read preference of type other than expected should throw`() {
         runBlocking {
-            sharedPreferencesHelper.set("int", 1)
+            storageHelper.set("int", 1)
         }
         whenever(storage.get("int", Int::class)).then { 0 }
         assertFailsWith<IllegalArgumentException> {
-            val result = sharedPreferencesHelper.get<String>("int")
+            val result = storageHelper.get<String>("int")
         }
     }
     
     @Test
     fun `when set values of type other than already saved should throw`() {
         runBlocking {
-            sharedPreferencesHelper.set("int", 1)
+            storageHelper.set("int", 1)
             
             assertFailsWith<IllegalArgumentException> {
-                sharedPreferencesHelper.set("int", "str")
+                storageHelper.set("int", "str")
             }
         }
     }
@@ -92,10 +92,10 @@ class SharedPreferencesHelperTest {
         runBlocking {
             whenever(storage.get(key, Int::class)).then { 0 }
     
-            sharedPreferencesHelper.set(key, value)
+            storageHelper.set(key, value)
             verify(storage).set(key, value)
             
-            sharedPreferencesHelper.get<Int>(key)
+            storageHelper.get<Int>(key)
             verify(storage).get<Int>(key)
         }
     }
