@@ -1,6 +1,6 @@
 package smarthome.raspberry.home.data.storage
 
-import smarthome.raspberry.util.SharedPreferencesHelper
+import smarthome.raspberry.util.persistence.SharedPreferencesHelper
 
 class LocalStorageImpl(private val preferences: SharedPreferencesHelper):
     LocalStorage {

@@ -7,7 +7,7 @@ import org.junit.Test
 import smarthome.raspberry.home.api.domain.GetHomeIdUseCase
 import smarthome.raspberry.home.domain.GetHomeIdUseCaseImpl.Companion.EMPTY_HOME_ID
 import smarthome.raspberry.home.domain.GetHomeIdUseCaseImpl.Companion.HOME_ID
-import smarthome.raspberry.util.SharedPreferencesHelper
+import smarthome.raspberry.util.persistence.SharedPreferencesHelper
 
 class GetHomeIdUseCaseImplTest {
     private lateinit var prefs: SharedPreferencesHelper
