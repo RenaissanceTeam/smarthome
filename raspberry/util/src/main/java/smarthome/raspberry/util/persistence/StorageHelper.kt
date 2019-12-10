@@ -9,12 +9,9 @@ import kotlin.reflect.KClass
 class StorageHelper(private val storage: PersistentStorage) {
     private val preferences = mutableMapOf<String, Preference<*>>()
     
-    private inline fun <reified CONTEXT> withCast(data: Any) =
-        data as? CONTEXT ?: throw IllegalStateException()
-    
-    
     suspend fun <T : Any> set(key: String, value: T, expectedType: KClass<T>) {
-        obtainPreference(key, expectedType).set(value)
+        obtainPreference(key, expectedType)
+            .set(value)
     }
     
     private fun <T : Any> obtainPreference(key: String, expectedType: KClass<T>): Preference<T> {
@@ -22,17 +19,27 @@ class StorageHelper(private val storage: PersistentStorage) {
             true -> {
                 val pref = preferences[key]!!
                 if (pref.ofType != expectedType) throw IllegalArgumentException()
+                
                 return withCast(pref)
             }
             false -> PersistentPreference(key, expectedType, storage).apply { preferences[key] = this }
         }
     }
     
+    private inline fun <reified CONTEXT> withCast(data: Any) =
+        data as? CONTEXT ?: throw IllegalStateException()
+    
+    
     fun <T : Any> get(key: String, expectedType: KClass<T>): T {
         val preference = getPreferenceByKey(key)
         val saved = preference.get()
         
         return convertToExpectedType(expectedType, saved)
+    }
+    
+    private fun getPreferenceByKey(key: String): Preference<*> {
+        return preferences[key] ?: throw IllegalArgumentException(
+            "can't access key=$key as it is not stored")
     }
     
     private fun <T : Any> convertToExpectedType(expectedType: KClass<T>, from: Any): T {
@@ -42,12 +49,7 @@ class StorageHelper(private val storage: PersistentStorage) {
             throw IllegalArgumentException()
         }
     }
-    
-    private fun getPreferenceByKey(key: String): Preference<*> {
-        return preferences[key] ?: throw IllegalArgumentException(
-            "can't access key=$key as it is not stored")
-    }
-    
+
     fun <T: Any> observe(key: String, expectedType: KClass<T>): Observable<T> {
         val preference = obtainPreference(key, expectedType)
         val savedObservable = preference as? ObservablePreference<T>
@@ -58,7 +60,4 @@ class StorageHelper(private val storage: PersistentStorage) {
         
         return observable.observe()
     }
-//    private fun <T> createNewObservable(key: String): PublishSubject<T> {
-//        return PublishSubject.create<T>().apply { observables[key] = this }
-//    }
 }
