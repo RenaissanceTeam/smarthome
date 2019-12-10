@@ -2,7 +2,7 @@ package smarthome.raspberry.home.domain
 
 import io.reactivex.Observable
 import smarthome.raspberry.home.api.domain.GetHomeIdUseCase
-import smarthome.raspberry.util.SharedPreferencesHelper
+import smarthome.raspberry.util.persistence.SharedPreferencesHelper
 
 class GetHomeIdUseCaseImpl(private val sharedPreferencesHelper: SharedPreferencesHelper): GetHomeIdUseCase {
     
