@@ -1,5 +1,8 @@
 package smarthome.raspberry.util.persistence
 
+import io.reactivex.Observable
+import smarthome.raspberry.util.persistence.preferences.ObservablePreference
+import smarthome.raspberry.util.persistence.preferences.PersistentPreference
 import smarthome.raspberry.util.persistence.preferences.Preference
 import kotlin.reflect.KClass
 
@@ -21,7 +24,7 @@ class StorageHelper(private val storage: PersistentStorage) {
                 if (pref.ofType != expectedType) throw IllegalArgumentException()
                 return withCast(pref)
             }
-            false -> Preference(key, expectedType, storage).apply { preferences[key] = this }
+            false -> PersistentPreference(key, expectedType, storage).apply { preferences[key] = this }
         }
     }
     
@@ -45,10 +48,16 @@ class StorageHelper(private val storage: PersistentStorage) {
             "can't access key=$key as it is not stored")
     }
     
-    //    fun <T> observe(key: String): Observable<T> {
-//        return observables[key] ?: createNewObservable<T>(key)
-//    }
-//
+    fun <T: Any> observe(key: String, expectedType: KClass<T>): Observable<T> {
+        val preference = obtainPreference(key, expectedType)
+        val savedObservable = preference as? ObservablePreference<T>
+        
+        val observable = savedObservable ?: ObservablePreference(preference).apply {
+            preferences[key] = this
+        }
+        
+        return observable.observe()
+    }
 //    private fun <T> createNewObservable(key: String): PublishSubject<T> {
 //        return PublishSubject.create<T>().apply { observables[key] = this }
 //    }

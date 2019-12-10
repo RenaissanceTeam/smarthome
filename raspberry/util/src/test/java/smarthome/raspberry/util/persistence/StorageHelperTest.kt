@@ -24,25 +24,25 @@ class StorageHelperTest {
         storageHelper = StorageHelper(storage)
     }
     
-//    @Test
-//    fun `when set new value for key should emit value for observable`() {
-//        val first = "first"
-//        val second = "second"
-//
-//        val result = sharedPreferencesHelper.observe<String>("key").test()
-//
-//        runBlocking {
-//            sharedPreferencesHelper.setString("key", first)
-//            sharedPreferencesHelper.setString("key", second)
-//        }
-//
-//        result
-//            .assertValueAt(0, first)
-//            .assertValueAt(1, second)
-//    }
+    @Test
+    fun `when set new value for key should emit value for observable`() {
+        val first = "first"
+        val second = "second"
+        val key = "key"
+        
+        val result = storageHelper.observe<String>(key).test()
+
+        runBlocking {
+            storageHelper.set(key, first)
+            storageHelper.set(key, second)
+        }
+
+        result
+            .assertValueAt(0, first)
+            .assertValueAt(1, second)
+    }
     
-    
-    
+
     @Test
     fun `when set new value to preference it should hold it and return on read`() {
         val value = "a"
