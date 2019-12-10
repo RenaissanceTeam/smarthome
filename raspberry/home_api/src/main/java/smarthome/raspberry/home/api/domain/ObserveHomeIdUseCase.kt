@@ -2,6 +2,6 @@ package smarthome.raspberry.home.api.domain
 
 import io.reactivex.Observable
 
-interface GetHomeIdUseCase {
+interface ObserveHomeIdUseCase {
     fun execute(): Observable<String>
 }
