@@ -5,12 +5,12 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import smarthome.raspberry.home.api.domain.GetHomeIdUseCase
-import smarthome.raspberry.home.domain.GetHomeIdUseCaseImpl.Companion.EMPTY_HOME_ID
 import smarthome.raspberry.home.domain.GetHomeIdUseCaseImpl.Companion.HOME_ID
-import smarthome.raspberry.util.persistence.SharedPreferencesHelper
+import smarthome.raspberry.util.persistence.StorageHelper
+import smarthome.raspberry.util.persistence.get
 
 class GetHomeIdUseCaseImplTest {
-    private lateinit var prefs: SharedPreferencesHelper
+    private lateinit var prefs: StorageHelper
     private lateinit var useCase: GetHomeIdUseCase
     
     @Before
@@ -21,7 +21,7 @@ class GetHomeIdUseCaseImplTest {
     
     @Test
     fun `when there is no saved home id should emit empty string`() {
-        whenever(prefs.getString(HOME_ID, EMPTY_HOME_ID)).then { EMPTY_HOME_ID }
+        whenever(prefs.get<String>(HOME_ID)).then { throw IllegalArgumentException() }
         val result = useCase.execute().test()
         
         result.assertValue { it.isEmpty() }
@@ -30,8 +30,8 @@ class GetHomeIdUseCaseImplTest {
     @Test
     fun `when there is saved home id should return it`() {
         val homeId = "home id"
-        whenever(prefs.getString(HOME_ID, EMPTY_HOME_ID)).then { homeId }
-        
+        whenever(prefs.get<String>(HOME_ID)).then { homeId }
+    
         val result = useCase.execute().test()
     
         result.assertValue { it == homeId }

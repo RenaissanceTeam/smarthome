@@ -2,12 +2,19 @@ package smarthome.raspberry.home.domain
 
 import io.reactivex.Observable
 import smarthome.raspberry.home.api.domain.GetHomeIdUseCase
-import smarthome.raspberry.util.persistence.SharedPreferencesHelper
+import smarthome.raspberry.util.persistence.StorageHelper
+import smarthome.raspberry.util.persistence.get
 
-class GetHomeIdUseCaseImpl(private val sharedPreferencesHelper: SharedPreferencesHelper): GetHomeIdUseCase {
+class GetHomeIdUseCaseImpl(private val storageHelper: StorageHelper): GetHomeIdUseCase {
     
     override fun execute(): Observable<String> {
-        return Observable.just(sharedPreferencesHelper.getString(HOME_ID, EMPTY_HOME_ID))
+        val homeId = try {
+            storageHelper.get<String>(HOME_ID)
+        } catch (e: IllegalArgumentException) {
+            EMPTY_HOME_ID
+        }
+        
+        return Observable.just(homeId)
     }
     
     companion object {

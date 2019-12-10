@@ -5,7 +5,7 @@ import org.koin.dsl.module
 import org.koin.experimental.builder.factory
 import smarthome.raspberry.util.ResourceProvider
 import smarthome.raspberry.util.persistence.PersistentStorage
-import smarthome.raspberry.util.persistence.SharedPreferencesHelper
+import smarthome.raspberry.util.persistence.StorageHelper
 import smarthome.raspberry.util.persistence.sharedprefs.SharedPreferencesAdapter
 
 private val innerModule = module {
@@ -19,7 +19,7 @@ private val innerModule = module {
             )
         )
     }
-    factory<SharedPreferencesHelper>()
+    factory<StorageHelper>()
     
 }
 

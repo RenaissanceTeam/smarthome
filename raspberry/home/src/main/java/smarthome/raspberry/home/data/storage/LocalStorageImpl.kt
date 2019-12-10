@@ -1,12 +1,13 @@
 package smarthome.raspberry.home.data.storage
 
-import smarthome.raspberry.util.persistence.SharedPreferencesHelper
+import smarthome.raspberry.util.persistence.StorageHelper
+import smarthome.raspberry.util.persistence.set
 
-class LocalStorageImpl(private val preferences: SharedPreferencesHelper):
+class LocalStorageImpl(private val preferences: StorageHelper):
     LocalStorage {
     
     override suspend fun saveHome(homeId: String) {
-        preferences.setString(HOME_ID, homeId)
+        preferences.set(HOME_ID, homeId)
     }
     
     companion object {
