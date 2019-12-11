@@ -8,6 +8,7 @@ dependencies {
     implementation library.kotlin
     implementation library.rxJava
     implementation library.coroutinesCore
+    implementation library.appCompat
 
     testImplementation groups.forTest
 }
