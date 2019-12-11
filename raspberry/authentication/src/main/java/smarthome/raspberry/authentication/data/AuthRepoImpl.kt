@@ -7,8 +7,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.subjects.BehaviorSubject
 import smarthome.raspberry.authentication.api.domain.AuthStatus
+import smarthome.raspberry.authentication.api.domain.Credentials
 import smarthome.raspberry.authentication.api.domain.User
 import smarthome.raspberry.authentication.api.domain.exceptions.NotSignedInException
+import smarthome.raspberry.authentication.data.command.SignInCommand
 import smarthome.raspberry.authentication.data.mapper.FirebaseUserToUserMapper
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -16,6 +18,7 @@ import kotlin.coroutines.suspendCoroutine
 class AuthRepoImpl(
         private val auth: FirebaseAuth,
         private val apiClient: GoogleApiClient,
+        private val signInCommand: SignInCommand,
         private val userMapper: FirebaseUserToUserMapper
 ) : AuthRepo {
     private val authStatus = BehaviorSubject.create<AuthStatus>()
@@ -25,24 +28,10 @@ class AuthRepoImpl(
     override fun getAuthStatus() = authStatus
     override fun getUserId() = userId
 
-    override suspend fun signIn(credential: AuthCredential): User {
-        return userMapper.map(signInWithCredentials(credential)).apply {
+    override suspend fun signIn(credential: Credentials): User {
+        return signInCommand.execute(credential).apply {
             authStatus.onNext(AuthStatus.SIGNED_IN)
             userId.onNext(id)
-        }
-    }
-
-    private suspend fun signInWithCredentials(credential: AuthCredential): FirebaseUser {
-        return suspendCoroutine { continuation ->
-            auth.signInWithCredential(credential).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    task.result?.user?.let {
-                        continuation.resumeWith(Result.success(it))
-                    } ?: continuation.resumeWithException(Throwable("user == null"))
-                } else {
-                    continuation.resumeWithException(task.exception ?: Throwable())
-                }
-            }
         }
     }
 
