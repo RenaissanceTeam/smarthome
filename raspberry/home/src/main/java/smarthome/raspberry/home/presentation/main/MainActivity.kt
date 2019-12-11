@@ -4,7 +4,6 @@ package smarthome.raspberry.home.presentation.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.ext.android.inject
 import org.koin.android.scope.currentScope
 import org.koin.core.parameter.parametersOf
 import smarthome.raspberry.entity.HomeInfo
