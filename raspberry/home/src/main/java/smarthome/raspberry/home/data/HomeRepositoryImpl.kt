@@ -18,10 +18,6 @@ class HomeRepositoryImpl(
         return Observables.combineLatest(userId, localStorage.getHomeId(), ::HomeInfo)
     }
     
-    override fun getHomeId(): Observable<String> {
-        return localStorage.getHomeId()
-    }
-    
     override suspend fun saveHome(homeId: String) {
         localStorage.saveHome(homeId)
         remoteStorage.saveHome(homeId)
