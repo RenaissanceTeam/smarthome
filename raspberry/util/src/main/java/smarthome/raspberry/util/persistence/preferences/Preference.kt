@@ -6,4 +6,5 @@ interface Preference<T: Any> {
     val ofType: KClass<T>
     fun get(): T
     suspend fun set(value: T)
+    fun setDefault(value: T)
 }

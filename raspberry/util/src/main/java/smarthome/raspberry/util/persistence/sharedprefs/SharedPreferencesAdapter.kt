@@ -3,6 +3,7 @@ package smarthome.raspberry.util.persistence.sharedprefs
 import android.content.SharedPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import smarthome.raspberry.util.persistence.NoStoredPreference
 import smarthome.raspberry.util.persistence.PersistentStorage
 import kotlin.reflect.KClass
 
@@ -20,7 +21,7 @@ class SharedPreferencesAdapter(private val prefs: SharedPreferences) :
     }
     
     override fun <T : Any> get(key: String, typeParam: KClass<T>): T {
-        if (!prefs.contains(key)) throw IllegalArgumentException("no stored value for $key")
+        if (!prefs.contains(key)) throw NoStoredPreference(key)
         
         return when (typeParam) {
             String::class -> prefs.getString(key, "") as T

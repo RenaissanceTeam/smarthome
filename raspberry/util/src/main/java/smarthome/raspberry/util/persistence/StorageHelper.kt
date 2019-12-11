@@ -14,6 +14,10 @@ class StorageHelper(private val storage: PersistentStorage) {
             .set(value)
     }
     
+    fun <T: Any> setDefault(key: String, value: T, expectedType: KClass<T>) {
+        obtainPreference(key, expectedType).setDefault(value)
+    }
+    
     private fun <T : Any> obtainPreference(key: String, expectedType: KClass<T>): Preference<T> {
         return when (preferences.contains(key)) {
             true -> {
@@ -37,14 +41,9 @@ class StorageHelper(private val storage: PersistentStorage) {
         return convertToExpectedType(expectedType, saved)
     }
     
-    private fun getPreferenceByKey(key: String): Preference<*> {
-        return preferences[key] ?: throw IllegalArgumentException(
-            "can't access key=$key as it is not stored")
-    }
-    
     private fun <T : Any> convertToExpectedType(expectedType: KClass<T>, from: Any): T {
         try {
-            return expectedType.java.cast(from) ?: throw IllegalStateException()
+            return expectedType.java.cast(from) ?: throw TypeAccessException(from::class, expectedType)
         } catch (e: ClassCastException) {
             throw IllegalArgumentException()
         }

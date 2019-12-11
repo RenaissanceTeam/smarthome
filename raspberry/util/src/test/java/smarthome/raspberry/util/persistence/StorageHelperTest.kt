@@ -7,10 +7,6 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import smarthome.raspberry.util.persistence.PersistentStorage
-import smarthome.raspberry.util.persistence.StorageHelper
-import smarthome.raspberry.util.persistence.get
-import smarthome.raspberry.util.persistence.set
 import kotlin.test.assertFailsWith
 
 class StorageHelperTest {
@@ -50,15 +46,18 @@ class StorageHelperTest {
         runBlocking {
             storageHelper.set(key, value)
         }
-        whenever(storage.get(key, String::class)).then { value}
+        whenever(storage.get(key, String::class)).then { value }
         val result = storageHelper.get<String>(key)
 
         assertThat(result).isEqualTo(value)
     }
     @Test
     fun `when trying to read preference that is not stored should throw`() {
-        assertFailsWith<IllegalArgumentException> {
-            storageHelper.get<String>("something")
+        val key = "something"
+        whenever(storage.get<String>(key)).then { throw NoStoredPreference(key) }
+        
+        assertFailsWith<NoStoredPreference> {
+            storageHelper.get<String>(key)
         }
     }
     
@@ -98,5 +97,17 @@ class StorageHelperTest {
             storageHelper.get<Int>(key)
             verify(storage).get<Int>(key)
         }
+    }
+    
+    @Test
+    fun `when default saved to preference should return in on read`() {
+        val default = 1
+        val key = "int"
+        
+        storageHelper.setDefault(key, default)
+        whenever(storage.get<Int>(key)).then { throw NoStoredPreference(key) }
+        val result: Int = storageHelper.get(key)
+        
+        assertThat(result).isEqualTo(default)
     }
 }
