@@ -21,6 +21,8 @@ import smarthome.raspberry.authentication.data.AuthRepoImpl
 import smarthome.raspberry.authentication.data.UserIdHolderImpl
 import smarthome.raspberry.authentication.data.command.SignInCommand
 import smarthome.raspberry.authentication.data.command.SignInCommandImpl
+import smarthome.raspberry.authentication.data.command.SignOutCommand
+import smarthome.raspberry.authentication.data.command.SignOutCommandImpl
 import smarthome.raspberry.authentication.data.mapper.*
 import smarthome.raspberry.authentication.domain.GetAuthStatusUseCaseImpl
 import smarthome.raspberry.authentication.domain.GetUserIdUseCaseImpl
@@ -49,6 +51,7 @@ private val data = module {
     factory { provideGoogleApiClient(get(), get()) }
     singleBy<UserIdHolder, UserIdHolderImpl>()
     factoryBy<SignInCommand, SignInCommandImpl>()
+    factoryBy<SignOutCommand, SignOutCommandImpl>()
     factoryBy<CredentialsToAuthCredentialsMapper, CredentialsToAuthCredentialsMapperImpl>()
     factoryBy<GoogleSignInAccountToCredentialsMapper, GoogleSignInAccountToCredentialsMapperImpl>()
 }
