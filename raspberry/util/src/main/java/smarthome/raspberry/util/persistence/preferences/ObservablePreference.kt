@@ -14,6 +14,10 @@ class ObservablePreference<T : Any>(private val from: Preference<T>) : Preferenc
         return from.get()
     }
     
+    override fun setDefault(value: T) {
+        from.setDefault(value)
+    }
+    
     override suspend fun set(value: T) {
         from.set(value)
         subject.onNext(value)
