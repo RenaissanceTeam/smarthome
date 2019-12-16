@@ -15,7 +15,7 @@ class StorageHelper(private val storage: PersistentStorage) {
     }
     
     fun <T: Any> setDefault(key: String, value: T, expectedType: KClass<T>) {
-        obtainPreference(key, expectedType).setDefault(value)
+        obtainPreference(key, expectedType).default = value
     }
     
     private fun <T : Any> obtainPreference(key: String, expectedType: KClass<T>): Preference<T> {
@@ -51,12 +51,19 @@ class StorageHelper(private val storage: PersistentStorage) {
 
     fun <T: Any> observe(key: String, expectedType: KClass<T>): Observable<T> {
         val preference = obtainPreference(key, expectedType)
+        val observable = obtainObservablePreference(preference, key)
+    
+        return observable.observe()
+    }
+    
+    private fun <T : Any> obtainObservablePreference(
+        preference: Preference<T>,
+        key: String
+    ): ObservablePreference<T> {
         val savedObservable = preference as? ObservablePreference<T>
         
-        val observable = savedObservable ?: ObservablePreference(preference).apply {
+        return savedObservable ?: ObservablePreference(preference).apply {
             preferences[key] = this
         }
-        
-        return observable.observe()
     }
 }

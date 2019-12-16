@@ -1,6 +1,7 @@
 package smarthome.raspberry.home.domain
 
 import android.annotation.SuppressLint
+import android.util.Log
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
@@ -21,6 +22,7 @@ class LaunchUseCaseImpl(
                 .observeOn(Schedulers.io())
                 .subscribeBy(
                         onNext = {
+                            Log.d("SSSS", it.toString())
                             runBlocking {
                                 if (hasUser(it) && !hasHomeId(it)) {
                                     createHome()

@@ -25,7 +25,8 @@ class StorageHelperTest {
         val first = "first"
         val second = "second"
         val key = "key"
-        
+    
+        whenever(storage.get<String>(key)).then { throw NoStoredPreference(key) }
         val result = storageHelper.observe<String>(key).test()
 
         runBlocking {
@@ -109,5 +110,43 @@ class StorageHelperTest {
         val result: Int = storageHelper.get(key)
         
         assertThat(result).isEqualTo(default)
+    }
+    
+    @Test
+    fun `with default and saved persistent value should return persistent in read`() {
+        val default = 1
+        val saved = 2
+        val key = "int"
+    
+        storageHelper.setDefault(key, default)
+        whenever(storage.get<Int>(key)).then { saved }
+        
+        val result: Int = storageHelper.get(key)
+    
+        assertThat(result).isEqualTo(saved)
+    }
+    
+    @Test
+    fun `when default set and no saved persistent should start with default on observe`() {
+        val default = 1
+        val key = "int"
+    
+        storageHelper.setDefault(key, default)
+        whenever(storage.get<Int>(key)).then { throw NoStoredPreference(key) }
+        
+        storageHelper.observe<Int>(key).test().assertValue { it == default }
+    }
+    
+    
+    @Test
+    fun `when default set and have saved persistent should start with saved on observe`() {
+        val default = 1
+        val saved = 2
+        val key = "int"
+        
+        storageHelper.setDefault(key, default)
+        whenever(storage.get<Int>(key)).then { saved }
+        
+        storageHelper.observe<Int>(key).test().assertValue { it == saved }
     }
 }
