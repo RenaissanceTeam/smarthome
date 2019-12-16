@@ -11,8 +11,10 @@ dependencies {
     implementation library.retrofit
     implementation library.retrofitGson
     implementation library.firebaseFirestore
-    implementation library.common
+    implementation groups.koinWithExt
 
-    testImplementation library.junit
-    testImplementation groups.mockito
+    implementation library.common
+    implementation library.homeServer_channel_api
+
+    testImplementation groups.forTest
 }

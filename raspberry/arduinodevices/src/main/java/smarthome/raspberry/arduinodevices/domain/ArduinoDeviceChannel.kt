@@ -9,10 +9,11 @@ import smarthome.raspberry.arduinodevices.domain.controllers.ArduinoController
 import smarthome.raspberry.arduinodevices.data.server.UdpServer
 import smarthome.raspberry.arduinodevices.data.server.WebServer
 
-class ArduinoDeviceChannel(output: DeviceChannelOutput) : DeviceChannel {
-    private val communicationServer = WebServer(output)
-    private val initilizationServer = UdpServer()
-
+class ArduinoDeviceChannel(
+    val httpServer: WebServer,
+    val udpServer: UdpServer
+) : DeviceChannel {
+    
     private fun getArduinoDeviceApi(ip: String): ArduinoDeviceApi {
         val gson = GsonBuilder()
                 .setLenient()
@@ -27,8 +28,8 @@ class ArduinoDeviceChannel(output: DeviceChannelOutput) : DeviceChannel {
     }
 
     init {
-        initilizationServer.startServer()
-        communicationServer.startServer()
+        udpServer.startServer()
+//        communicationServer.startServer()
     }
 
     override suspend fun read(device: IotDevice, controller: BaseController): ControllerState {
