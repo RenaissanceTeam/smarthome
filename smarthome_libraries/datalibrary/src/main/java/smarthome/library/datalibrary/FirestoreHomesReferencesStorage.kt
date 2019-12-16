@@ -1,10 +1,11 @@
 package smarthome.library.datalibrary
 
 import com.google.android.gms.tasks.Task
+import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import smarthome.library.common.HomesReferences
 import smarthome.library.common.util.delegates.DependOnChangeable
 import smarthome.library.datalibrary.api.HomesReferencesStorage
@@ -37,22 +38,16 @@ class FirestoreHomesReferencesStorage(userIdHolder: UserIdHolder) : HomesReferen
 
     override suspend fun addHomeReference(homeReference: String) {
         val homeExists = try {
-            suspendCoroutine<DocumentSnapshot> {
-                ref.get().withObjectContinuation(it)
-            }.exists()
-        } catch (e: NullPointerException) {
+            ref.get().await().exists()
+        } catch (e: FirebaseException) {
             false
         }
-
-        suspendCoroutine<Unit> { continuation ->
-            val task = if (homeExists) {
+        
+        if (homeExists) {
                 taskUpdateHomeReference(homeReference)
-            } else {
+        } else {
                 taskNewHomeReference(homeReference)
-            }
-
-            task.withContinuation(continuation)
-        }
+        }.await()
     }
 
     private fun taskUpdateHomeReference(homeReference: String) =

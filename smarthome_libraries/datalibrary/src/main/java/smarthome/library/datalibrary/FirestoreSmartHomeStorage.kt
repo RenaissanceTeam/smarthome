@@ -1,8 +1,10 @@
 package smarthome.library.datalibrary
 
+import android.util.Log
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import io.reactivex.Observable
+import kotlinx.coroutines.tasks.await
 import smarthome.library.common.DeviceUpdate
 import smarthome.library.common.IotDevice
 import smarthome.library.common.SmartHome
@@ -33,9 +35,7 @@ class FirestoreSmartHomeStorage(
     }
 
     override suspend fun createSmartHome() {
-        suspendCoroutine<Unit> {
-            homeRef.set(mapOf(Pair("exists", "true"))).withContinuation(it)
-        }
+        homeRef.set(mapOf("exists" to "true")).await()
     }
 
     override suspend fun postSmartHome(smartHome: SmartHome) {

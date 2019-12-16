@@ -1,7 +1,6 @@
 package smarthome.raspberry.home.presentation.main
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import io.reactivex.rxkotlin.subscribeBy
@@ -23,7 +22,6 @@ class MainPresenterImpl(
     @SuppressLint("CheckResult")
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreateView() {
-        Log.d("SMARTHOME", "onCreate()")
         getAuthStatusUseCase.execute()
             .subscribeBy {
                 if (it == AuthStatus.NOT_SIGNED_IN) signInFlowLauncher.launch()

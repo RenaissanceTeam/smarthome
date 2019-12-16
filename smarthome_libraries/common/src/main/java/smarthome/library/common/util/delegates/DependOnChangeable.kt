@@ -13,6 +13,7 @@ class DependOnChangeable<R, CHANGEABLE, T>(
 
     override fun getValue(thisRef: R, property: KProperty<*>): T {
         val currentChangeable = changeableHolder.get()
+
         if (currentChangeable == lastChangeable) {
             return state ?: updateState(currentChangeable)
         }
