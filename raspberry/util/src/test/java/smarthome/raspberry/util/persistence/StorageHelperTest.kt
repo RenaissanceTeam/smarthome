@@ -149,4 +149,23 @@ class StorageHelperTest {
         
         storageHelper.observe<Int>(key).test().assertValue { it == saved }
     }
+    
+    @Test
+    fun `when subscribe from two sources both should receive new emitted item`() {
+        val value1 = 1
+        val value2 = 2
+        val key = "int"
+        whenever(storage.get<Int>(key)).then { throw NoStoredPreference(key) }
+    
+        val sub1 = storageHelper.observe<Int>(key).test()
+        val sub2 = storageHelper.observe<Int>(key).test()
+        
+        runBlocking {
+            storageHelper.set(key, value1)
+            storageHelper.set(key, value2)
+        }
+        
+        sub1.assertValues(value1, value2)
+        sub2.assertValues(value1, value2)
+    }
 }

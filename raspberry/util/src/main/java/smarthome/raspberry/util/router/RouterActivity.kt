@@ -26,7 +26,5 @@ open class RouterActivity : Router, AppCompatActivity() {
     
     override fun <T : Any> startFlow(to: KClass<T>, flags: Int) {
         startActivity(Intent(this, to.java).setFlags(flags))
-    
     }
-    
 }
