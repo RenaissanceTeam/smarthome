@@ -1,36 +1,28 @@
-package smarthome.raspberry.arduinodevices.server
+package smarthome.raspberry.arduinodevices.data.server
 
-import android.util.Log
 import fi.iki.elonen.NanoHTTPD
 import kotlinx.coroutines.runBlocking
 import smarthome.library.common.DeviceChannelOutput
-import smarthome.raspberry.arduinodevices.server.httphandlers.AlertPost
-import smarthome.raspberry.arduinodevices.server.httphandlers.InitPost
-import smarthome.raspberry.arduinodevices.server.httphandlers.RequestHandler
+import smarthome.raspberry.arduinodevices.data.server.httphandlers.AlertPost
+import smarthome.raspberry.arduinodevices.data.server.httphandlers.InitPost
+import smarthome.raspberry.arduinodevices.data.server.httphandlers.RequestHandler
 import java.io.IOException
 
-const val TAG = "WebServer"
-const val PORT = 8080
-
-internal class WebServer(deviceChannelOutput: DeviceChannelOutput) : NanoHTTPD(PORT),
+internal class WebServer(deviceChannelOutput: DeviceChannelOutput) : NanoHTTPD(8080),
         StoppableServer {
     private val handler = WebHandler(deviceChannelOutput)
     override fun serve(session: IHTTPSession): Response {
         return try {
             runBlocking { handler.handle(session) }
         } catch (e: Exception) {
-            Log.d(TAG, "can't serve: $e")
             Response("error $e")
         }
     }
 
     override fun startServer() {
         try {
-            Log.d(TAG, "start web server on ${Helpers.localIpAddress}")
-
             start()
         } catch (e: IOException) {
-            Log.e(TAG, "startServer: ", e)
         }
     }
 

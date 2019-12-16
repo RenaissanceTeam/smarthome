@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.server
+package smarthome.raspberry.arduinodevices.data.server
 
 import android.util.Log
 import com.squareup.okhttp.OkHttpClient
@@ -48,8 +48,6 @@ class UdpServer : StoppableServer {
     }
 
     private fun onReceiveFromUpd(receivePacket: DatagramPacket) {
-        val sentence = String(receivePacket.data)
-        if (DEBUG) Log.d(TAG, "received: $sentence")
         // todo how to get only valid info??
         // todo check if secured udp packet received
         // todo check if udp packet from iot device
@@ -65,7 +63,6 @@ class UdpServer : StoppableServer {
                 .newCall(request)
                 .execute()
 
-        Log.d(TAG, "onReceiveFromUpd: request=" + request + "headers: " + request.headers() + ", response=" + response)
         response.body().close()
     }
 

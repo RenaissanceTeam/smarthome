@@ -1,8 +1,9 @@
-package smarthome.raspberry.arduinodevices
+package smarthome.raspberry.arduinodevices.data
 
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import smarthome.raspberry.arduinodevices.data.dto.ArduinoControllerResponse
 
 interface ArduinoDeviceApi {
 
@@ -16,6 +17,4 @@ interface ArduinoDeviceApi {
 
 }
 
-
-class ArduinoControllerResponse(val response: String)
 

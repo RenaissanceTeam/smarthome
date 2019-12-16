@@ -2,7 +2,7 @@
 //
 //import java.io.IOException;
 //
-//import smarthome.raspberry.arduinodevices.ArduinoControllerResponse;
+//import smarthome.raspberry.arduinodevices.data.dto.ArduinoControllerResponse;
 //
 //public interface ArduinoWritable {
 //    /**

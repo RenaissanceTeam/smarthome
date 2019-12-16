@@ -1,12 +1,13 @@
-package smarthome.raspberry.arduinodevices
+package smarthome.raspberry.arduinodevices.domain
 
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import smarthome.library.common.*
-import smarthome.raspberry.arduinodevices.controllers.ArduinoController
-import smarthome.raspberry.arduinodevices.server.UdpServer
-import smarthome.raspberry.arduinodevices.server.WebServer
+import smarthome.raspberry.arduinodevices.data.ArduinoDeviceApi
+import smarthome.raspberry.arduinodevices.domain.controllers.ArduinoController
+import smarthome.raspberry.arduinodevices.data.server.UdpServer
+import smarthome.raspberry.arduinodevices.data.server.WebServer
 
 class ArduinoDeviceChannel(output: DeviceChannelOutput) : DeviceChannel {
     private val communicationServer = WebServer(output)
@@ -21,7 +22,8 @@ class ArduinoDeviceChannel(output: DeviceChannelOutput) : DeviceChannel {
                 .baseUrl("http://$ip:8080/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
-                .create(ArduinoDeviceApi::class.java)
+                .create(
+                    ArduinoDeviceApi::class.java)
     }
 
     init {

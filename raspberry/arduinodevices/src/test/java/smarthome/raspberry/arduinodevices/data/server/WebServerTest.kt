@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.server
+package smarthome.raspberry.arduinodevices.data.server
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
@@ -10,8 +10,8 @@ import org.junit.Before
 import org.junit.Test
 import smarthome.library.common.BaseController
 import smarthome.library.common.DeviceChannelOutput
-import smarthome.raspberry.arduinodevices.ArduinoDevice
-import smarthome.raspberry.arduinodevices.StringValueState
+import smarthome.raspberry.arduinodevices.domain.ArduinoDevice
+import smarthome.raspberry.arduinodevices.domain.state.StringValueState
 
 class WebServerTest {
 

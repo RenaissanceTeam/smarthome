@@ -1,12 +1,10 @@
-package smarthome.raspberry.arduinodevices.server
+package smarthome.raspberry.arduinodevices.data.server
 
 import com.google.gson.Gson
 import fi.iki.elonen.NanoHTTPD
 import java.io.IOException
 import java.net.Inet4Address
-import java.net.InetAddress
 import java.net.NetworkInterface
-import java.util.Enumeration
 
 object Helpers {
 

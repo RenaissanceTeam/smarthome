@@ -4,24 +4,15 @@ apply plugin: 'kotlin-android-extensions'
 apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
-    implementation library.appCompat
     implementation library.kotlin
-
-    testImplementation library.junit
-    testImplementation groups.mockito
-
-    // http server
     implementation library.webserver
-
-    //coroutines
     implementation library.coroutinesCore
     implementation library.coroutinesAndroid
-
-
-    // retrofit
     implementation library.retrofit
     implementation library.retrofitGson
     implementation library.firebaseFirestore
     implementation library.common
-}
 
+    testImplementation library.junit
+    testImplementation groups.mockito
+}
