@@ -7,6 +7,8 @@ dependencies {
     implementation groups.koinWithExt
     implementation library.kotlin
     implementation library.rxJava
+    implementation library.rxAndroid
+    implementation library.rxKotlin
     implementation library.coroutinesCore
     implementation library.appCompat
 

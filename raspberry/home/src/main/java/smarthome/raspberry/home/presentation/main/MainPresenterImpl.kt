@@ -10,6 +10,7 @@ import smarthome.raspberry.authentication.api.domain.GetAuthStatusUseCase
 import smarthome.raspberry.authentication.api.flow.SignInFlowLauncher
 import smarthome.raspberry.home.api.domain.GetHomeInfoUseCase
 import smarthome.raspberry.home.api.domain.LaunchUseCase
+import smarthome.raspberry.util.subscribeOnUiBy
 
 class MainPresenterImpl(
         private val getAuthStatusUseCase: GetAuthStatusUseCase,
@@ -30,7 +31,7 @@ class MainPresenterImpl(
                 view.setAuthStatus(it.toString())
             }
         
-        getHomeInfoUseCase.execute().subscribeBy { view.setHomeInfo(it) }
+        getHomeInfoUseCase.execute().subscribeOnUiBy { view.setHomeInfo(it) }
         launchUseCase.execute()
     }
 }
