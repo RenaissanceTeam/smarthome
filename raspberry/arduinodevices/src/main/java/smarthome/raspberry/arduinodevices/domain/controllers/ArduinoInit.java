@@ -1,7 +1,7 @@
 //package smarthome.raspberry.arduinodevices.controllers;
 //
 //import smarthome.library.common.ControllerType;
-//import smarthome.raspberry.arduinodevices.ArduinoDevice;
+//import smarthome.raspberry.arduinodevices.domain.ArduinoDevice;
 //
 //public class ArduinoInit extends ArduinoController {
 //    public ArduinoInit(ArduinoDevice device, String name, ControllerType type, int indexInArduinoServicesArray) {

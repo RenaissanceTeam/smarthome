@@ -4,8 +4,8 @@
 //
 //import retrofit2.Call;
 //import smarthome.library.common.ControllerType;
-//import smarthome.raspberry.arduinodevices.ArduinoControllerResponse;
-//import smarthome.raspberry.arduinodevices.ArduinoDevice;
+//import smarthome.raspberry.arduinodevices.data.dto.ArduinoControllerResponse;
+//import smarthome.raspberry.arduinodevices.domain.ArduinoDevice;
 //import smarthome.raspberry.arduinodevices.ArduinoDeviceAPI;
 //
 //public class ArduinoReadFloat extends ArduinoController implements ArduinoReadable {

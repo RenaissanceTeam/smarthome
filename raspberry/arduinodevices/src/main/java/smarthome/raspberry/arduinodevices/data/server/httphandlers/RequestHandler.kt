@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.server.httphandlers
+package smarthome.raspberry.arduinodevices.data.server.httphandlers
 
 import fi.iki.elonen.NanoHTTPD
 

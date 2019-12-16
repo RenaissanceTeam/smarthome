@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.server
+package smarthome.raspberry.arduinodevices.data.server
 
 interface StoppableServer {
     fun startServer()
