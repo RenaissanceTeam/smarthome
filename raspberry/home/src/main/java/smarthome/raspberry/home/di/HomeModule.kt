@@ -6,10 +6,9 @@ import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
 import smarthome.library.datalibrary.api.boundary.HomeIdHolder
 import smarthome.raspberry.home.api.domain.*
+import smarthome.raspberry.home.api.domain.lifecycle.ObserveHomeLifecycleUseCase
 import smarthome.raspberry.home.api.presentation.MainFlowLauncher
-import smarthome.raspberry.home.data.HomeIdHolderImpl
-import smarthome.raspberry.home.data.HomeRepository
-import smarthome.raspberry.home.data.HomeRepositoryImpl
+import smarthome.raspberry.home.data.*
 import smarthome.raspberry.home.data.storage.LocalStorage
 import smarthome.raspberry.home.data.storage.LocalStorageImpl
 import smarthome.raspberry.home.data.storage.RemoteStorage
@@ -27,6 +26,9 @@ private val domain = module {
     factoryBy<LaunchUseCase, LaunchUseCaseImpl>()
     factoryBy<ObserveHomeIdUseCase, ObserveHomeIdUseCaseImpl>()
     factoryBy<ClearHomeInfoUseCase, ClearHomeInfoUseCaseImpl>()
+    factoryBy<ObserveHomeLifecycleUseCase, ObserveHomeLifecycleUseCaseImpl>()
+    factoryBy<ObserveHomeEventsUseCase, ObserveHomeEventsUseCaseImpl>()
+    factoryBy<EventBusRepository, EventBusRepositoryImpl>()
 }
 
 private val data = module {
