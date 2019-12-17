@@ -1,3 +1,3 @@
 package smarthome.raspberry.arduinodevices.data.server.entity
 
-class BadParams : Throwable()
+class BadParams(val info: String = "") : Throwable(info)
