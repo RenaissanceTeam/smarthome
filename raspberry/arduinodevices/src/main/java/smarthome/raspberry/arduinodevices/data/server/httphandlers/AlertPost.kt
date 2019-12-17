@@ -11,7 +11,7 @@ import smarthome.raspberry.arduinodevices.domain.state.StringValueState
 class AlertPost: RequestHandler {
     override val identifier = RequestIdentifier(Method.POST, "/iot/alert")
     
-    override suspend fun serve(): Response {
+    override suspend fun serve(parameters: Map<String, String>): Response {
         TODO()
     }
     
