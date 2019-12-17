@@ -4,7 +4,8 @@ import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import fi.iki.elonen.NanoHTTPD
-import fi.iki.elonen.NanoHTTPD.*
+import fi.iki.elonen.NanoHTTPD.Method
+import fi.iki.elonen.NanoHTTPD.Response
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -58,7 +59,24 @@ class WebServerTest {
     }
     
     @Test
-    fun `when add handler should check for matching identifier`() {
+    fun `matching handler should use the same uri path`() {
+        val invalidPaths = listOf("/", "/a", "/b")
+        val validPath = "c"
+        val validResponse = mock<Response> {}
+        val method = Method.GET
     
+        val handler = mock<RequestHandler> {
+            on { identifier }.then { RequestIdentifier(method, validPath) }
+            on { runBlocking { serve() } }.then { validResponse }
+        }
+        
+        webServer.setHandler(handler)
+    
+        for (path in invalidPaths) {
+            val response = webServer.serve(RequestIdentifier(method, path))
+            assertThat(response).isEqualTo(RESPONSE_NOT_FOUND)
+        }
+        
+        assertThat(webServer.serve(RequestIdentifier(method, validPath))).isEqualTo(validResponse)
     }
 }
