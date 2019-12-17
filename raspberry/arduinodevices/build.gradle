@@ -11,12 +11,15 @@ dependencies {
     implementation library.retrofit
     implementation library.retrofitGson
     implementation library.firebaseFirestore
+    implementation library.rxJava
+    implementation library.rxKotlin
     implementation groups.koinWithExt
 
     implementation library.common
     implementation library.homeServer_channel_api
     implementation library.homeServer_controllers_api
     implementation library.homeServer_devices_api
+    implementation library.homeServer_home_api
 
     testImplementation groups.forTest
 }

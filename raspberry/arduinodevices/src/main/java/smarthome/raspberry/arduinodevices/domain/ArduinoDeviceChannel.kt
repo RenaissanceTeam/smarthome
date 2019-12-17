@@ -1,6 +1,7 @@
 package smarthome.raspberry.arduinodevices.domain
 
 import com.google.gson.GsonBuilder
+import io.reactivex.rxkotlin.subscribeBy
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import smarthome.library.common.*
@@ -8,15 +9,29 @@ import smarthome.raspberry.arduinodevices.data.ArduinoDeviceApi
 import smarthome.raspberry.arduinodevices.domain.controllers.ArduinoController
 import smarthome.raspberry.arduinodevices.data.server.UdpServer
 import smarthome.raspberry.arduinodevices.data.server.api.WebServer
+import smarthome.raspberry.home.api.domain.lifecycle.ObserveHomeLifecycleUseCase
+import smarthome.raspberry.home.api.domain.lifecycle.Paused
+import smarthome.raspberry.home.api.domain.lifecycle.Resumed
 
 class ArduinoDeviceChannel(
-    val httpServer: WebServer,
-    val udpServer: UdpServer
+    httpServer: WebServer,
+    udpServer: UdpServer,
+    observeHomeLifecycleUseCase: ObserveHomeLifecycleUseCase
 ) : DeviceChannel {
     
     init {
-        udpServer.startServer()
-//        communicationServer.startServer()
+        observeHomeLifecycleUseCase.execute().subscribeBy {
+            when (it) {
+                is Paused -> {
+                    httpServer.stop()
+                    udpServer.stopServer()
+                }
+                is Resumed -> {
+                    httpServer.start()
+                    udpServer.startServer()
+                }
+            }
+        }
     }
     
     private fun getArduinoDeviceApi(ip: String): ArduinoDeviceApi {
