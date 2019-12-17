@@ -1,14 +1,14 @@
 package smarthome.raspberry.authentication.domain.internal
 
-import com.google.firebase.auth.AuthCredential
+import smarthome.raspberry.authentication.api.domain.Credentials
 import smarthome.raspberry.authentication.api.domain.User
 import smarthome.raspberry.authentication.data.AuthRepo
 
-class AuthenticateWithFirebaseUseCaseImpl(
+class AuthenticateWithCredentialsUseCaseImpl(
         private val repo: AuthRepo
-) : AuthenticateWithFirebaseUseCase {
-
-    override suspend fun execute(credential: AuthCredential): User {
+) : AuthenticateWithCredentialsUseCase {
+    
+    override suspend fun execute(credential: Credentials): User {
         return repo.signIn(credential)
     }
 }

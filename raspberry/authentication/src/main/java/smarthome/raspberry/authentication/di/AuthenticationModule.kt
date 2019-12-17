@@ -19,8 +19,11 @@ import smarthome.raspberry.authentication.api.flow.SignInFlowLauncher
 import smarthome.raspberry.authentication.data.AuthRepo
 import smarthome.raspberry.authentication.data.AuthRepoImpl
 import smarthome.raspberry.authentication.data.UserIdHolderImpl
-import smarthome.raspberry.authentication.data.mapper.FirebaseUserToUserMapper
-import smarthome.raspberry.authentication.data.mapper.FirebaseUserToUserMapperImpl
+import smarthome.raspberry.authentication.data.command.SignInCommand
+import smarthome.raspberry.authentication.data.command.SignInCommandImpl
+import smarthome.raspberry.authentication.data.command.SignOutCommand
+import smarthome.raspberry.authentication.data.command.SignOutCommandImpl
+import smarthome.raspberry.authentication.data.mapper.*
 import smarthome.raspberry.authentication.domain.GetAuthStatusUseCaseImpl
 import smarthome.raspberry.authentication.domain.GetUserIdUseCaseImpl
 import smarthome.raspberry.authentication.domain.GetUserInfoUseCaseImpl
@@ -47,6 +50,10 @@ private val data = module {
     factory { FirebaseAuth.getInstance() }
     factory { provideGoogleApiClient(get(), get()) }
     singleBy<UserIdHolder, UserIdHolderImpl>()
+    factoryBy<SignInCommand, SignInCommandImpl>()
+    factoryBy<SignOutCommand, SignOutCommandImpl>()
+    factoryBy<CredentialsToAuthCredentialsMapper, CredentialsToAuthCredentialsMapperImpl>()
+    factoryBy<GoogleSignInAccountToCredentialsMapper, GoogleSignInAccountToCredentialsMapperImpl>()
 }
 
 private fun provideGoogleApiClient(resources: ResourceProvider, context: Context): GoogleApiClient {
@@ -65,7 +72,7 @@ private val presentation = module {
         scoped<AuthenticationPresenter> { (view: AuthenticationView) ->
             AuthenticationPresenterImpl(
                     view = view,
-                    authenticateWithFirebaseUseCase = get(),
+                    authenticateWithCredentialsUseCase = get(),
                     signOutOfFirebaseUseCase = get(),
                     mainFlowLauncher = get(),
                     clearHomeInfoUseCase = get(),
