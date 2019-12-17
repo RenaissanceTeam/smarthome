@@ -3,29 +3,43 @@ package smarthome.raspberry.arduinodevices.data.server
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import fi.iki.elonen.NanoHTTPD
 import fi.iki.elonen.NanoHTTPD.Method
-import fi.iki.elonen.NanoHTTPD.Response
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import smarthome.raspberry.arduinodevices.data.server.entity.RequestIdentifier
+import smarthome.raspberry.arduinodevices.data.server.entity.Response
+import smarthome.raspberry.arduinodevices.data.server.entity.notFound
+
+class MockWebServerGate : WebServerGate {
+    private lateinit var action: (RequestIdentifier) -> Response
+    override fun start() {}
+    override fun stop() {}
+    override fun setOnRequest(action: (RequestIdentifier) -> Response) {
+        this.action = action
+    }
+    
+    fun trigger(request: RequestIdentifier) = action(request)
+}
+
 
 class WebServerTest {
-    private lateinit var nanoHTTPD: NanoHTTPD
     private lateinit var webServer: WebServer
+    private lateinit var webServerGate: MockWebServerGate
     
     @Before
     fun setUp() {
-        nanoHTTPD = mock {}
-        webServer = WebServerImpl(nanoHTTPD)
+        webServerGate = MockWebServerGate()
+        webServer = WebServerImpl(webServerGate)
     }
     
     @Test
     fun `when no handler found for request should return 404`() {
         val request = RequestIdentifier(Method.GET, "/")
-        val result = webServer.serve(request)
-        
-        assertThat(result.status).isEqualTo(Response.Status.NOT_FOUND)
+        webServer.start()
+        val result = webServerGate.trigger(request)
+    
+        assertThat(result).isEqualTo(notFound)
     }
     
     @Test
@@ -36,8 +50,9 @@ class WebServerTest {
         }
         
         webServer.setHandler(handler)
-        webServer.serve(request)
-        
+        webServer.start()
+        webServerGate.trigger(request)
+    
         runBlocking {
             verify(handler).serve()
         }
@@ -53,9 +68,10 @@ class WebServerTest {
         }
     
         webServer.setHandler(handler)
-        val result = webServer.serve(requestPost)
-        
-        assertThat(result.status).isEqualTo(Response.Status.NOT_FOUND)
+        webServer.start()
+        val result = webServerGate.trigger(requestPost)
+    
+        assertThat(result).isEqualTo(notFound)
     }
     
     @Test
@@ -66,17 +82,22 @@ class WebServerTest {
         val method = Method.GET
     
         val handler = mock<RequestHandler> {
-            on { identifier }.then { RequestIdentifier(method, validPath) }
+            on { identifier }.then {
+                RequestIdentifier(
+                    method, validPath)
+            }
             on { runBlocking { serve() } }.then { validResponse }
         }
-        
-        webServer.setHandler(handler)
     
-        for (path in invalidPaths) {
-            val response = webServer.serve(RequestIdentifier(method, path))
-            assertThat(response).isEqualTo(RESPONSE_NOT_FOUND)
-        }
+        webServer.start()
+        webServer.setHandler(handler)
         
-        assertThat(webServer.serve(RequestIdentifier(method, validPath))).isEqualTo(validResponse)
+        for (path in invalidPaths) {
+            val response = webServerGate.trigger(RequestIdentifier(method, path))
+            assertThat(response).isEqualTo(notFound)
+        }
+    
+        val response = webServerGate.trigger(RequestIdentifier(method, validPath))
+        assertThat(response).isEqualTo(validResponse)
     }
 }

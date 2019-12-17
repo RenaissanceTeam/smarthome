@@ -2,9 +2,16 @@ package smarthome.raspberry.arduinodevices.data.server.di
 
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
-import smarthome.raspberry.arduinodevices.data.server.mapper.HttpSessionToRequestIdentifierMapper
-import smarthome.raspberry.arduinodevices.data.server.mapper.HttpSessionToRequestIdentifierMapperImpl
+import smarthome.raspberry.arduinodevices.data.server.nano.NanoHttpdToWebServerAdapter
+import smarthome.raspberry.arduinodevices.data.server.WebServer
+import smarthome.raspberry.arduinodevices.data.server.WebServerGate
+import smarthome.raspberry.arduinodevices.data.server.WebServerImpl
+import smarthome.raspberry.arduinodevices.data.server.mapper.*
 
 val serverModule = module {
     factoryBy<HttpSessionToRequestIdentifierMapper, HttpSessionToRequestIdentifierMapperImpl>()
+    factoryBy<ResponseCodeToStatusMapper, ResponseCodeToStatusMapperImpl>()
+    factoryBy<ResponseToNanoResponseMapper, ResponseToNanoResponseMapperImpl>()
+    factoryBy<WebServer, WebServerImpl>()
+    factoryBy<WebServerGate, NanoHttpdToWebServerAdapter>()
 }

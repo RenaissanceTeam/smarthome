@@ -1,32 +1,10 @@
 package smarthome.raspberry.arduinodevices.data.server
 
-import fi.iki.elonen.NanoHTTPD
-import fi.iki.elonen.NanoHTTPD.*
-import kotlinx.coroutines.runBlocking
-
-
-class WebServerImpl(
-    private val nanoHTTPD: NanoHTTPD
-    ) : WebServer {
-    private val handlers = mutableListOf<RequestHandler>()
-    
-    override fun setHandler(handler: RequestHandler) {
-        handlers.add(handler)
-    }
-    
-    
-    override fun serve(request: RequestIdentifier): Response {
-        return when (val handler = handlers.find { it.identifier == request }) {
-            null -> RESPONSE_NOT_FOUND
-            else -> runBlocking { handler.serve() }
-        }
-    }
-}
 
 interface WebServer {
-
     fun setHandler(handler: RequestHandler)
-    fun serve(request: RequestIdentifier): Response
+    fun start()
+    fun stop()
 
 //    override fun serve(session: IHTTPSession): Response {
 //        return try {
