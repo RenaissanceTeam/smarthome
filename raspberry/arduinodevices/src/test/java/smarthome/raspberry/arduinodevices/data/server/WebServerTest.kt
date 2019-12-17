@@ -9,21 +9,17 @@ import org.junit.Test
 import smarthome.raspberry.arduinodevices.data.server.api.RequestHandler
 import smarthome.raspberry.arduinodevices.data.server.api.WebServer
 import smarthome.raspberry.arduinodevices.data.server.api.WebServerGate
-import smarthome.raspberry.arduinodevices.data.server.entity.Method
-import smarthome.raspberry.arduinodevices.data.server.entity.RequestIdentifier
-import smarthome.raspberry.arduinodevices.data.server.entity.Response
-import smarthome.raspberry.arduinodevices.data.server.entity.notFound
+import smarthome.raspberry.arduinodevices.data.server.entity.*
 
-class MockWebServerGate :
-    WebServerGate {
-    private lateinit var action: (RequestIdentifier) -> Response
+class MockWebServerGate : WebServerGate {
+    private lateinit var action: (RequestIdentifier, Map<String, String>) -> Response
     override fun start() {}
     override fun stop() {}
-    override fun setOnRequest(action: (RequestIdentifier) -> Response) {
+    override fun setOnRequest(action: (RequestIdentifier, Map<String, String>) -> Response) {
         this.action = action
     }
     
-    fun trigger(request: RequestIdentifier) = action(request)
+    fun trigger(request: RequestIdentifier, params: Map<String, String> = emptyMap()) = action(request, params)
 }
 
 
@@ -87,8 +83,7 @@ class WebServerTest {
     
         val handler = mock<RequestHandler> {
             on { identifier }.then {
-                RequestIdentifier(
-                    method, validPath)
+                RequestIdentifier(method, validPath)
             }
             on { runBlocking { serve() } }.then { validResponse }
         }
@@ -104,4 +99,86 @@ class WebServerTest {
         val response = webServerGate.trigger(RequestIdentifier(method, validPath))
         assertThat(response).isEqualTo(validResponse)
     }
+    
+    @Test
+    fun `if handler doesn't contain parameter should return not found`() {
+        val validPath = "c"
+        val method = Method.GET
+        
+        val handler = mock<RequestHandler> {
+            on { identifier }.then {
+                RequestIdentifier(method, validPath)
+            }
+        }
+        
+        webServer.start()
+        webServer.setHandler(handler)
+        
+        val response = webServerGate.trigger(
+            RequestIdentifier(
+                method,
+                validPath,
+                parameters = setOf("key")
+            )
+        )
+        
+        
+        assertThat(response.code).isEqualTo(NOT_FOUND_CODE)
+    }
+    
+    @Test
+    fun `when parameters provided are not the same as handler expects should return 404`() {
+        val validPath = "c"
+        val method = Method.GET
+    
+        val handler = mock<RequestHandler> {
+            on { identifier }.then {
+                RequestIdentifier(method, validPath, setOf("a"))
+            }
+        }
+    
+        webServer.start()
+        webServer.setHandler(handler)
+    
+        val response = webServerGate.trigger(
+            RequestIdentifier(
+                method,
+                validPath,
+                setOf("b")
+            )
+        )
+    
+        assertThat(response.code).isEqualTo(NOT_FOUND_CODE)
+    }
+    
+    @Test
+    fun `if handler contains all parameters should use it for request`() {
+        val validPath = "c"
+        val method = Method.GET
+        val obliged = setOf("a", "b")
+    
+        val handler = mock<RequestHandler> {
+            on { identifier }.then {
+                RequestIdentifier(method, validPath, obliged)
+            }
+        }
+    
+        webServer.start()
+        webServer.setHandler(handler)
+    
+        val response = webServerGate.trigger(
+            RequestIdentifier(method, validPath, parameters = setOf("a", "b")),
+            params = mapOf(
+                "a" to "aval",
+                "b" to "bval"
+            )
+        
+        )
+        
+        runBlocking { verify(handler).serve( mapOf(
+            "a" to "aval",
+            "b" to "bval"
+        )) }
+    }
+    
 }

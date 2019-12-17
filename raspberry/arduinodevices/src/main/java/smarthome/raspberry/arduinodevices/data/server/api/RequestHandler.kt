@@ -6,6 +6,6 @@ import smarthome.raspberry.arduinodevices.data.server.entity.Response
 interface RequestHandler {
     val identifier: RequestIdentifier
     
-    suspend fun serve(): Response
+    suspend fun serve(parameters: Map<String, String> = emptyMap()): Response
 }
 

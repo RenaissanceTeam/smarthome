@@ -26,10 +26,15 @@ class WebServerImpl(
         gate.stop()
     }
     
-    private fun serve(request: RequestIdentifier): Response {
+    private fun serve(request: RequestIdentifier, params: Map<String, String>): Response {
         return when (val handler = handlers[request]) {
             null -> notFound
-            else -> runBlocking { handler.serve() }
+            else -> {
+                val keysExpected = handler.identifier.parameters
+                if (!params.keys.containsAll(keysExpected)) return notFound
+                
+                runBlocking { handler.serve(params) }
+            }
         }
     }
 }

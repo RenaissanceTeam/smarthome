@@ -9,7 +9,8 @@ class HttpSessionToRequestIdentifierMapperImpl(
     override fun map(session: NanoHTTPD.IHTTPSession): RequestIdentifier {
         return RequestIdentifier(
             methodMapper.map(session.method),
-            session.uri
+            session.uri,
+            session.parms.keys
         )
     }
 }

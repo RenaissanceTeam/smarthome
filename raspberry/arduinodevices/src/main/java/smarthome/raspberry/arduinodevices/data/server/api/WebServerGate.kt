@@ -6,5 +6,5 @@ import smarthome.raspberry.arduinodevices.data.server.entity.Response
 interface WebServerGate {
     fun start()
     fun stop()
-    fun setOnRequest(action: (RequestIdentifier) -> Response)
+    fun setOnRequest(action: (RequestIdentifier, params: Map<String, String>) -> Response)
 }

@@ -11,7 +11,6 @@ class NanoHttpdToWebServerAdapter(
     private val sessionMapper: HttpSessionToRequestIdentifierMapper,
     private val responseMapper: ResponseToNanoResponseMapper
 ) : WebServerGate {
-    private var action: ((RequestIdentifier) -> Response)? = null
     
     override fun start() {
         nanoHttpd.start()
@@ -21,9 +20,9 @@ class NanoHttpdToWebServerAdapter(
         nanoHttpd.stop()
     }
     
-    override fun setOnRequest(action: (RequestIdentifier) -> Response) {
+    override fun setOnRequest(action: (RequestIdentifier, Map<String, String>) -> Response) {
         nanoHttpd.setDelegate {
-            val response = action(sessionMapper.map(it))
+            val response = action(sessionMapper.map(it), it.parms)
             responseMapper.map(response)
         }
     }
