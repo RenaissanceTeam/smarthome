@@ -1,13 +1,31 @@
-//package smarthome.raspberry.arduinodevices.data.server.httphandlers
-//
-//import fi.iki.elonen.NanoHTTPD
-//import smarthome.library.common.DeviceChannelOutput
-//import smarthome.raspberry.arduinodevices.domain.ArduinoDevice
-//import smarthome.raspberry.arduinodevices.domain.state.StringValueStateParser
-//import smarthome.raspberry.arduinodevices.domain.controllers.ArduinoController
-//
-//internal class InitPost(output: DeviceChannelOutput)
-//    : BaseRequestHandler(output) {
+package smarthome.raspberry.arduinodevices.data.server.httphandlers
+
+import smarthome.raspberry.arduinodevices.data.server.api.RequestHandler
+import smarthome.raspberry.arduinodevices.data.server.entity.*
+import smarthome.raspberry.arduinodevices.data.server.mapper.JsonDeviceMapper
+import smarthome.raspberry.arduinodevices.data.server.takeIfNotEmpty
+
+class InitPost(
+    private val deviceMapper: JsonDeviceMapper
+) : RequestHandler {
+    override val identifier = RequestIdentifier(
+        Method.POST,
+        "/iot/init",
+        parameters = setOf(
+            body
+        )
+    )
+    
+    override suspend fun serve(request: Request): Response {
+        return withCaughtErrors {
+            val deviceJson = request.body.takeIf { it.isNotEmpty() } ?: throw BadParams("empty body for init post")
+            val device = deviceMapper.map(deviceJson)
+        
+            success()
+        }
+    }
+    
+    
 //    override suspend fun serve(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
 //        return if (initNewArduinoDevice(session)) {
 //            NanoHTTPD.Response("Added successfully")
@@ -31,17 +49,4 @@
 //        return true
 //    }
 //
-//    private fun parseControllers(rawServices: List<String>, serviceNames: List<String>, device: ArduinoDevice): List<ArduinoController> {
-//        val controllers = mutableListOf<ArduinoController>()
-//
-//        for (i in rawServices.indices) {
-//            val id = Integer.parseInt(rawServices[i].trim { it <= ' ' })
-//            val name = serviceNames[i]
-//
-//            val controller = ArduinoController(name, device, i, StringValueStateParser())
-//            controllers.add(controller)
-//        }
-//
-//        return controllers
-//    }
-//}
+}

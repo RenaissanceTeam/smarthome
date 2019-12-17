@@ -1,6 +1,7 @@
 package smarthome.raspberry.arduinodevices.data.server
 
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
@@ -12,14 +13,15 @@ import smarthome.raspberry.arduinodevices.data.server.api.WebServerGate
 import smarthome.raspberry.arduinodevices.data.server.entity.*
 
 class MockWebServerGate : WebServerGate {
-    private lateinit var action: (RequestIdentifier, Map<String, String>) -> Response
+    private lateinit var action: (Request) -> Response
     override fun start() {}
     override fun stop() {}
-    override fun setOnRequest(action: (RequestIdentifier, Map<String, String>) -> Response) {
+    override fun setOnRequest(action: (Request) -> Response) {
         this.action = action
     }
     
-    fun trigger(request: RequestIdentifier, params: Map<String, String> = emptyMap()) = action(request, params)
+    fun trigger(request: RequestIdentifier, params: Map<String, String> = emptyMap()) =
+        action(requestWith(request, params))
 }
 
 
@@ -54,7 +56,7 @@ class WebServerTest {
         webServerGate.trigger(request)
     
         runBlocking {
-            verify(handler).serve()
+            verify(handler).serve(Request(request))
         }
     }
     
@@ -85,7 +87,7 @@ class WebServerTest {
             on { identifier }.then {
                 RequestIdentifier(method, validPath)
             }
-            on { runBlocking { serve() } }.then { validResponse }
+            on { runBlocking { serve(any()) } }.then { validResponse }
         }
     
         webServer.start()
@@ -174,11 +176,13 @@ class WebServerTest {
             )
         
         )
-        
-        runBlocking { verify(handler).serve( mapOf(
-            "a" to "aval",
-            "b" to "bval"
-        )) }
+    
+        runBlocking {
+            verify(handler).serve(requestWith(
+                RequestIdentifier(method, validPath, parameters = setOf("a", "b")),
+                mapOf("a" to "aval", "b" to "bval")
+            ))
+        }
     }
     
 }

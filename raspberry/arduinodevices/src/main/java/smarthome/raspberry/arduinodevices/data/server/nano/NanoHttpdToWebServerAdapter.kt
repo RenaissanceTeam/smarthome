@@ -1,14 +1,14 @@
 package smarthome.raspberry.arduinodevices.data.server.nano
 
 import smarthome.raspberry.arduinodevices.data.server.api.WebServerGate
-import smarthome.raspberry.arduinodevices.data.server.entity.RequestIdentifier
+import smarthome.raspberry.arduinodevices.data.server.entity.Request
 import smarthome.raspberry.arduinodevices.data.server.entity.Response
-import smarthome.raspberry.arduinodevices.data.server.mapper.HttpSessionToRequestIdentifierMapper
+import smarthome.raspberry.arduinodevices.data.server.mapper.HttpSessionToRequestMapper
 import smarthome.raspberry.arduinodevices.data.server.mapper.ResponseToNanoResponseMapper
 
 class NanoHttpdToWebServerAdapter(
     private val nanoHttpd: DelegatableNanoHttpd,
-    private val sessionMapper: HttpSessionToRequestIdentifierMapper,
+    private val sessionMapper: HttpSessionToRequestMapper,
     private val responseMapper: ResponseToNanoResponseMapper
 ) : WebServerGate {
     
@@ -20,10 +20,11 @@ class NanoHttpdToWebServerAdapter(
         nanoHttpd.stop()
     }
     
-    override fun setOnRequest(action: (RequestIdentifier, Map<String, String>) -> Response) {
+    override fun setOnRequest(action: (Request) -> Response) {
         nanoHttpd.setDelegate {
-            val response = action(sessionMapper.map(it), it.parms)
+            val response = action(sessionMapper.map(it))
             responseMapper.map(response)
         }
     }
+    
 }

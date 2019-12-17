@@ -11,8 +11,10 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerState
 import smarthome.library.common.Id
 import smarthome.raspberry.arduinodevices.data.server.entity.BAD_REQUEST_CODE
+import smarthome.raspberry.arduinodevices.data.server.entity.RequestIdentifier
 import smarthome.raspberry.arduinodevices.data.server.entity.SUCCESS_CODE
 import smarthome.raspberry.arduinodevices.data.server.mapper.ValuePayloadToControllerStateMapper
+import smarthome.raspberry.arduinodevices.data.server.requestWith
 import smarthome.raspberry.controllers.api.domain.GetControllerByIdUseCase
 import smarthome.raspberry.controllers.api.domain.OnControllerChangedWithoutUserRequestUseCase
 
@@ -35,7 +37,7 @@ class AlertPostTest {
     @Test
     fun `when improper guid passed should return bad request`() {
         val result = runBlocking {
-            alertPost.serve(mapOf(controllerId to "", value to "value"))
+            alertPost.serve(requestWith(mapOf(controllerId to "", value to "value")))
         }
         
         assertThat(result.code).isEqualTo(BAD_REQUEST_CODE)
@@ -44,7 +46,7 @@ class AlertPostTest {
     @Test
     fun `should return success code when everything ok`() {
         val result = runBlocking {
-            alertPost.serve(mapOf(controllerId to "1", value to "value"))
+            alertPost.serve(requestWith(mapOf(controllerId to "1", value to "value")))
         }
         
         assertThat(result.code).isEqualTo(SUCCESS_CODE)
@@ -59,7 +61,7 @@ class AlertPostTest {
             whenever(getControllerByIdUseCase.execute(Id(("1")))).then { controller }
             whenever(valueMapper.map("value")).then { state }
     
-            alertPost.serve(mapOf(controllerId to "1", value to "value"))
+            alertPost.serve(requestWith(mapOf(controllerId to "1", value to "value")))
             
             verify(onControllerChangedUC).execute(controller, state)
         }

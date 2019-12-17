@@ -9,11 +9,12 @@ import smarthome.raspberry.arduinodevices.data.server.WebServerImpl
 import smarthome.raspberry.arduinodevices.data.server.mapper.*
 
 val serverModule = module {
-    factoryBy<HttpSessionToRequestIdentifierMapper, HttpSessionToRequestIdentifierMapperImpl>()
+    factoryBy<HttpSessionToRequestMapper, HttpSessionToRequestMapperImpl>()
     factoryBy<ResponseCodeToStatusMapper, ResponseCodeToStatusMapperImpl>()
     factoryBy<ResponseToNanoResponseMapper, ResponseToNanoResponseMapperImpl>()
     factoryBy<WebServer, WebServerImpl>()
     factoryBy<WebServerGate, NanoHttpdToWebServerAdapter>()
     factoryBy<NanoMethodToMethodMapper, NanoMethodToMethodMapperImpl>()
     factoryBy<ValuePayloadToControllerStateMapper, ValuePayloadToControllerStateMapperImpl>()
+    factoryBy<JsonDeviceMapper, JsonDeviceMapperImpl>()
 }
