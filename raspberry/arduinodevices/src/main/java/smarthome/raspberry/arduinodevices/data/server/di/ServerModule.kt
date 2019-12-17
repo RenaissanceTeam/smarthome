@@ -15,4 +15,5 @@ val serverModule = module {
     factoryBy<WebServer, WebServerImpl>()
     factoryBy<WebServerGate, NanoHttpdToWebServerAdapter>()
     factoryBy<NanoMethodToMethodMapper, NanoMethodToMethodMapperImpl>()
+    factoryBy<ValuePayloadToControllerStateMapper, ValuePayloadToControllerStateMapperImpl>()
 }
