@@ -6,7 +6,7 @@ import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
 import smarthome.library.datalibrary.api.boundary.HomeIdHolder
 import smarthome.raspberry.home.api.domain.GenerateUniqueHomeIdUseCase
-import smarthome.raspberry.home.api.domain.GetHomeIdUseCase
+import smarthome.raspberry.home.api.domain.ObserveHomeIdUseCase
 import smarthome.raspberry.home.api.domain.GetHomeInfoUseCase
 import smarthome.raspberry.home.api.domain.LaunchUseCase
 import smarthome.raspberry.home.api.presentation.MainFlowLauncher
@@ -18,7 +18,7 @@ import smarthome.raspberry.home.data.storage.LocalStorageImpl
 import smarthome.raspberry.home.data.storage.RemoteStorage
 import smarthome.raspberry.home.data.storage.RemoteStorageImpl
 import smarthome.raspberry.home.domain.GenerateUniqueHomeIdUseCaseImpl
-import smarthome.raspberry.home.domain.GetHomeIdUseCaseImpl
+import smarthome.raspberry.home.domain.ObserveHomeIdUseCaseImpl
 import smarthome.raspberry.home.domain.GetHomeInfoUseCaseImpl
 import smarthome.raspberry.home.domain.LaunchUseCaseImpl
 import smarthome.raspberry.home.presentation.MainFlowLauncherImpl
@@ -31,7 +31,7 @@ private val domain = module {
     factoryBy<GenerateUniqueHomeIdUseCase, GenerateUniqueHomeIdUseCaseImpl>()
     factoryBy<GetHomeInfoUseCase, GetHomeInfoUseCaseImpl>()
     factoryBy<LaunchUseCase, LaunchUseCaseImpl>()
-    factoryBy<GetHomeIdUseCase, GetHomeIdUseCaseImpl>()
+    factoryBy<ObserveHomeIdUseCase, ObserveHomeIdUseCaseImpl>()
 }
 
 private val data = module {
