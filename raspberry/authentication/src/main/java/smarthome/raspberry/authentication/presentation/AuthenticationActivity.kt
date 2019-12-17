@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
@@ -17,6 +18,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.scope.currentScope
 import org.koin.core.parameter.parametersOf
 import smarthome.raspberry.authentication.R
+import smarthome.raspberry.authentication.data.mapper.GoogleSignInAccountToCredentialsMapper
 
 class AuthenticationActivity : AppCompatActivity(), AuthenticationView {
     companion object {
@@ -25,6 +27,7 @@ class AuthenticationActivity : AppCompatActivity(), AuthenticationView {
 
     private val mAuth: FirebaseAuth by inject()
     private val apiClient: GoogleApiClient by inject()
+    private val googleSignInAccountToCredentialsMapper: GoogleSignInAccountToCredentialsMapper by inject()
     private val presenter: AuthenticationPresenter by currentScope.inject { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +47,9 @@ class AuthenticationActivity : AppCompatActivity(), AuthenticationView {
             try {
                 val account = task.getResult(ApiException::class.java)
                         ?: throw ApiException(Status.RESULT_DEAD_CLIENT)
-                presenter.onAuthenticationSuccess(account)
+                val credentials = googleSignInAccountToCredentialsMapper.map(account)
+                
+                presenter.onAuthenticationSuccess(credentials)
             } catch (e: ApiException) {
                 presenter.onAuthenticationFail()
             }

@@ -3,27 +3,26 @@ package smarthome.raspberry.authentication.presentation
 import android.annotation.SuppressLint
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import smarthome.raspberry.authentication.api.domain.AuthStatus
+import smarthome.raspberry.authentication.api.domain.Credentials
 import smarthome.raspberry.authentication.api.domain.GetAuthStatusUseCase
 import smarthome.raspberry.authentication.api.domain.GetUserInfoUseCase
-import smarthome.raspberry.authentication.domain.internal.AuthenticateWithFirebaseUseCase
+import smarthome.raspberry.authentication.domain.internal.AuthenticateWithCredentialsUseCase
 import smarthome.raspberry.authentication.domain.internal.SignOutOfFirebaseUseCase
 import smarthome.raspberry.home.api.domain.ClearHomeInfoUseCase
 import smarthome.raspberry.home.api.presentation.MainFlowLauncher
 
 class AuthenticationPresenterImpl(
-        private val view: AuthenticationView,
-        private val authenticateWithFirebaseUseCase: AuthenticateWithFirebaseUseCase,
-        private val signOutOfFirebaseUseCase: SignOutOfFirebaseUseCase,
-        private val mainFlowLauncher: MainFlowLauncher,
-        private val clearHomeInfoUseCase: ClearHomeInfoUseCase,
-        private val getAuthStatusUseCase: GetAuthStatusUseCase,
-        private val getUserInfoUseCase: GetUserInfoUseCase
+    private val view: AuthenticationView,
+    private val authenticateWithCredentialsUseCase: AuthenticateWithCredentialsUseCase,
+    private val signOutOfFirebaseUseCase: SignOutOfFirebaseUseCase,
+    private val mainFlowLauncher: MainFlowLauncher,
+    private val clearHomeInfoUseCase: ClearHomeInfoUseCase,
+    private val getAuthStatusUseCase: GetAuthStatusUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase
 ) : AuthenticationPresenter {
     private val scope = CoroutineScope(Dispatchers.Main)
 
@@ -63,14 +62,12 @@ class AuthenticationPresenterImpl(
         }
     }
 
-    override fun onAuthenticationSuccess(account: GoogleSignInAccount) {
+    override fun onAuthenticationSuccess(credentials: Credentials) {
         view.setState(AuthenticationState.Loading)
 
-        val credential =
-                GoogleAuthProvider.getCredential(account.idToken, null)
         scope.launch {
             try {
-                authenticateWithFirebaseUseCase.execute(credential)
+                authenticateWithCredentialsUseCase.execute(credentials)
                 mainFlowLauncher.launch()
             } catch (e: Throwable) {
                 view.setState(
