@@ -7,11 +7,15 @@ import fi.iki.elonen.NanoHTTPD.Method
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import smarthome.raspberry.arduinodevices.data.server.api.RequestHandler
+import smarthome.raspberry.arduinodevices.data.server.api.WebServer
+import smarthome.raspberry.arduinodevices.data.server.api.WebServerGate
 import smarthome.raspberry.arduinodevices.data.server.entity.RequestIdentifier
 import smarthome.raspberry.arduinodevices.data.server.entity.Response
 import smarthome.raspberry.arduinodevices.data.server.entity.notFound
 
-class MockWebServerGate : WebServerGate {
+class MockWebServerGate :
+    WebServerGate {
     private lateinit var action: (RequestIdentifier) -> Response
     override fun start() {}
     override fun stop() {}

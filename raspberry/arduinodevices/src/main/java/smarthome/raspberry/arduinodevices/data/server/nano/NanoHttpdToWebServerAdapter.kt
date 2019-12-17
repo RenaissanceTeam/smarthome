@@ -1,6 +1,6 @@
 package smarthome.raspberry.arduinodevices.data.server.nano
 
-import smarthome.raspberry.arduinodevices.data.server.WebServerGate
+import smarthome.raspberry.arduinodevices.data.server.api.WebServerGate
 import smarthome.raspberry.arduinodevices.data.server.entity.RequestIdentifier
 import smarthome.raspberry.arduinodevices.data.server.entity.Response
 import smarthome.raspberry.arduinodevices.data.server.mapper.HttpSessionToRequestIdentifierMapper
