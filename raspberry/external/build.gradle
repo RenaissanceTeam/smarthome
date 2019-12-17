@@ -7,6 +7,7 @@ dependencies {
     implementation library.kotlin
     implementation groups.koinWithExt
     implementation library.koinScope
+    implementation library.firebaseFirestore
 
     // modules
     implementation library.common
