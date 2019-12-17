@@ -7,7 +7,7 @@ import smarthome.library.common.*
 import smarthome.raspberry.arduinodevices.data.ArduinoDeviceApi
 import smarthome.raspberry.arduinodevices.domain.controllers.ArduinoController
 import smarthome.raspberry.arduinodevices.data.server.UdpServer
-import smarthome.raspberry.arduinodevices.data.server.WebServer
+import smarthome.raspberry.arduinodevices.data.server.api.WebServer
 
 class ArduinoDeviceChannel(
     val httpServer: WebServer,

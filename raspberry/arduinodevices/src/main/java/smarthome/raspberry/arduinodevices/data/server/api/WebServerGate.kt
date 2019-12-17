@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.data.server
+package smarthome.raspberry.arduinodevices.data.server.api
 
 import smarthome.raspberry.arduinodevices.data.server.entity.RequestIdentifier
 import smarthome.raspberry.arduinodevices.data.server.entity.Response

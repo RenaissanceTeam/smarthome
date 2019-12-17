@@ -1,9 +1,7 @@
 package smarthome.raspberry.arduinodevices.data.server
 
-import android.util.Log
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
-import smarthome.raspberry.arduinodevices.BuildConfig.DEBUG
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -12,19 +10,19 @@ import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 
 
-class UdpServer : StoppableServer {
+class UdpServer {
     private val TAG = UdpServer::class.java.simpleName
     private val PORT = 59743
     private val ARDUINO_INIT_URL = "http://%s:8080/init"
     private val REMOTE_ADDR_HEADER = "Remote_Addr"
     private val isRunning = AtomicBoolean(false)
-
-    override fun startServer() {
+    
+    fun startServer() {
         isRunning.set(true)
         Executors.newSingleThreadExecutor().submit{ startListening() }
     }
-
-    override fun stopServer() {
+    
+    fun stopServer() {
         isRunning.set(false)
     }
 
