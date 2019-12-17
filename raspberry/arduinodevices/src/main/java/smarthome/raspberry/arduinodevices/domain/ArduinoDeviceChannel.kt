@@ -14,6 +14,11 @@ class ArduinoDeviceChannel(
     val udpServer: UdpServer
 ) : DeviceChannel {
     
+    init {
+        udpServer.startServer()
+//        communicationServer.startServer()
+    }
+    
     private fun getArduinoDeviceApi(ip: String): ArduinoDeviceApi {
         val gson = GsonBuilder()
                 .setLenient()
@@ -23,14 +28,9 @@ class ArduinoDeviceChannel(
                 .baseUrl("http://$ip:8080/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
-                .create(
-                    ArduinoDeviceApi::class.java)
+                .create(ArduinoDeviceApi::class.java)
     }
 
-    init {
-        udpServer.startServer()
-//        communicationServer.startServer()
-    }
 
     override suspend fun read(device: IotDevice, controller: BaseController): ControllerState {
         require(device is ArduinoDevice)
