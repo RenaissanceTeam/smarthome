@@ -3,13 +3,13 @@ package smarthome.raspberry.arduinodevices.data.server
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import fi.iki.elonen.NanoHTTPD.Method
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import smarthome.raspberry.arduinodevices.data.server.api.RequestHandler
 import smarthome.raspberry.arduinodevices.data.server.api.WebServer
 import smarthome.raspberry.arduinodevices.data.server.api.WebServerGate
+import smarthome.raspberry.arduinodevices.data.server.entity.Method
 import smarthome.raspberry.arduinodevices.data.server.entity.RequestIdentifier
 import smarthome.raspberry.arduinodevices.data.server.entity.Response
 import smarthome.raspberry.arduinodevices.data.server.entity.notFound
