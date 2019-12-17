@@ -3,13 +3,11 @@ package smarthome.raspberry.home.domain
 import io.reactivex.Observable
 import smarthome.raspberry.home.api.domain.ObserveHomeIdUseCase
 import smarthome.raspberry.home.data.HomeRepository
-import smarthome.raspberry.util.persistence.StorageHelper
-import smarthome.raspberry.util.persistence.observe
+import smarthome.raspberry.home.data.storage.LocalStorage
 
-class ObserveHomeIdUseCaseImpl(private val repository: HomeRepository): ObserveHomeIdUseCase {
-    override fun execute(): Observable<String> = repository.getHomeId()
+class ObserveHomeIdUseCaseImpl(
+    private val storage: LocalStorage
+) : ObserveHomeIdUseCase {
     
-    companion object {
-        internal const val HOME_ID = "HOME_ID"
-    }
+    override fun execute(): Observable<String> = storage.getHomeId()
 }

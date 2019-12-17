@@ -7,5 +7,4 @@ interface HomeRepository {
     suspend fun isHomeIdUnique(homeId: String): Boolean
     fun getHomeInfo(userId: Observable<String>): Observable<HomeInfo>
     suspend fun saveHome(homeId: String)
-    fun getHomeId(): Observable<String>
 }
