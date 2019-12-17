@@ -17,7 +17,7 @@ class WebServerImpl(
     
     override fun serve(request: RequestIdentifier): Response {
         return when (val handler = handlers.find { it.identifier == request }) {
-            null -> Response(notFound, MIME_PLAINTEXT, "Resource not found")
+            null -> RESPONSE_NOT_FOUND
             else -> runBlocking { handler.serve() }
         }
     }
