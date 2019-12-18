@@ -32,6 +32,7 @@ private val domain = module {
     factoryBy<ObserveHomeIdUseCase, ObserveHomeIdUseCaseImpl>()
     factoryBy<ClearHomeInfoUseCase, ClearHomeInfoUseCaseImpl>()
     eventbusDomain
+    singleBy<HomeStateMachine, HomeStateMachineImpl>()
 }
 
 private val eventbusDomain = module {
