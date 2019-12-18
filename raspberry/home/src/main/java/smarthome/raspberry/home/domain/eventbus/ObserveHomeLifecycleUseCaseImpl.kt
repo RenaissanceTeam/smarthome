@@ -1,9 +1,9 @@
-package smarthome.raspberry.home.domain
+package smarthome.raspberry.home.domain.eventbus
 
 import io.reactivex.Observable
-import smarthome.raspberry.home.api.domain.lifecycle.HomeLifecycleEvent
-import smarthome.raspberry.home.api.domain.ObserveHomeEventsUseCase
-import smarthome.raspberry.home.api.domain.lifecycle.ObserveHomeLifecycleUseCase
+import smarthome.raspberry.home.api.domain.eventbus.events.HomeLifecycleEvent
+import smarthome.raspberry.home.api.domain.eventbus.ObserveHomeEventsUseCase
+import smarthome.raspberry.home.api.domain.eventbus.ObserveHomeLifecycleUseCase
 
 class ObserveHomeLifecycleUseCaseImpl(
     private val homeEvents: ObserveHomeEventsUseCase

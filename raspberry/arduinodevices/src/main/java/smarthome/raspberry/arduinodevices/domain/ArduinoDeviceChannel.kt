@@ -9,9 +9,9 @@ import smarthome.raspberry.arduinodevices.data.ArduinoDeviceApi
 import smarthome.raspberry.arduinodevices.domain.controllers.ArduinoController
 import smarthome.raspberry.arduinodevices.data.server.UdpServer
 import smarthome.raspberry.arduinodevices.data.server.api.WebServer
-import smarthome.raspberry.home.api.domain.lifecycle.ObserveHomeLifecycleUseCase
-import smarthome.raspberry.home.api.domain.lifecycle.Paused
-import smarthome.raspberry.home.api.domain.lifecycle.Resumed
+import smarthome.raspberry.home.api.domain.eventbus.ObserveHomeLifecycleUseCase
+import smarthome.raspberry.home.api.domain.eventbus.events.Paused
+import smarthome.raspberry.home.api.domain.eventbus.events.Resumed
 
 class ArduinoDeviceChannel(
     httpServer: WebServer,

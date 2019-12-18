@@ -5,10 +5,11 @@ import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
-import smarthome.raspberry.home.api.domain.HomeEventBusEvent
-import smarthome.raspberry.home.api.domain.lifecycle.HomeLifecycleEvent
-import smarthome.raspberry.home.api.domain.ObserveHomeEventsUseCase
-import smarthome.raspberry.home.api.domain.lifecycle.ObserveHomeLifecycleUseCase
+import smarthome.raspberry.home.api.domain.eventbus.events.Event
+import smarthome.raspberry.home.api.domain.eventbus.events.HomeLifecycleEvent
+import smarthome.raspberry.home.api.domain.eventbus.ObserveHomeEventsUseCase
+import smarthome.raspberry.home.api.domain.eventbus.ObserveHomeLifecycleUseCase
+import smarthome.raspberry.home.domain.eventbus.ObserveHomeLifecycleUseCaseImpl
 
 class ObserveHomeLifecycleUseCaseImplTest {
     
@@ -18,15 +19,17 @@ class ObserveHomeLifecycleUseCaseImplTest {
     @Before
     fun setUp() {
         homeEvents = mock {}
-        homeLifecycleUseCase = ObserveHomeLifecycleUseCaseImpl(homeEvents)
+        homeLifecycleUseCase =
+            ObserveHomeLifecycleUseCaseImpl(
+                homeEvents)
     }
     
     @Test
     fun `should filter for home lifecycle events`() {
         val observable = Observable.just(
             mock<HomeLifecycleEvent>(),
-            mock<HomeEventBusEvent>(),
-            mock<HomeEventBusEvent>(),
+            mock<Event>(),
+            mock<Event>(),
             mock<HomeLifecycleEvent>()
         )
         
