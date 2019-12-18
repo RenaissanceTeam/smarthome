@@ -31,8 +31,11 @@ private val domain = module {
     factoryBy<LaunchUseCase, LaunchUseCaseImpl>()
     factoryBy<ObserveHomeIdUseCase, ObserveHomeIdUseCaseImpl>()
     factoryBy<ClearHomeInfoUseCase, ClearHomeInfoUseCaseImpl>()
-    eventbusDomain
+    factoryBy<PublishEventUseCase, PublishEventUseCaseImpl>()
+    factoryBy<ObserveHomeLifecycleUseCase, ObserveHomeLifecycleUseCaseImpl>()
+    factoryBy<ObserveHomeEventsUseCase, ObserveHomeEventsUseCaseImpl>()
     singleBy<HomeStateMachine, HomeStateMachineImpl>()
+    singleBy<CreateHomeUseCase, CreateHomeUseCaseImpl>()
     single {
         HomeStateResolver(
             publishEvent = get(),
@@ -41,12 +44,6 @@ private val domain = module {
             createHomeUseCase = get()
         )
     }
-}
-
-private val eventbusDomain = module {
-    factoryBy<PublishEventUseCase, PublishEventUseCaseImpl>()
-    factoryBy<ObserveHomeLifecycleUseCase, ObserveHomeLifecycleUseCaseImpl>()
-    factoryBy<ObserveHomeEventsUseCase, ObserveHomeEventsUseCaseImpl>()
 }
 
 private val data = module {
