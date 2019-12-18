@@ -7,39 +7,16 @@ import kotlinx.coroutines.runBlocking
 import smarthome.raspberry.entity.HomeInfo
 import smarthome.raspberry.home.api.domain.GenerateUniqueHomeIdUseCase
 import smarthome.raspberry.home.api.domain.GetHomeInfoUseCase
+import smarthome.raspberry.home.api.domain.HomeStateMachine
 import smarthome.raspberry.home.api.domain.LaunchUseCase
 import smarthome.raspberry.home.data.HomeRepository
 
 class LaunchUseCaseImpl(
-        private val generateUniqueHomeIdUseCase: GenerateUniqueHomeIdUseCase,
-        private val repository: HomeRepository,
-        private val getHomeInfoUseCase: GetHomeInfoUseCase
+    private val homeStateMachine: HomeStateMachine
 ) : LaunchUseCase {
 
     @SuppressLint("CheckResult")
     override fun execute() {
-        getHomeInfoUseCase.execute()
-                .observeOn(Schedulers.io())
-                .subscribeBy(
-                        onNext = {
-                            runBlocking {
-                                if (hasUser(it) && !hasHomeId(it)) {
-                                    createHome()
-                                }
-                            }
-                        },
-                        onError = {}
-                )
-
-        
-        // todo listen for data changes - user input
-    }
-    
-    private fun hasUser(it: HomeInfo) = it.userId.isNotEmpty()
-    private fun hasHomeId(info: HomeInfo) = info.homeId.isNotEmpty()
-
-    private suspend fun createHome() {
-        val homeId = generateUniqueHomeIdUseCase.execute()
-        repository.saveHome(homeId)
+        homeStateMachine.launch()
     }
 }
