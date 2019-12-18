@@ -25,8 +25,8 @@ class ArduinoDeviceChannel(
     private val arduinoApiGson: Gson,
     private val valueToStateMapper: ValuePayloadToControllerStateMapper,
     private val stateToValueMapper: ControllerStateToValuePayloadMapper
-    
 ) : DeviceChannel {
+    override fun canWorkWith(iotDevice: IotDevice) = iotDevice is ArduinoDevice
     
     init {
         observeHomeLifecycleUseCase.execute().subscribeBy {
