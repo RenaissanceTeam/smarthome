@@ -5,6 +5,7 @@ package smarthome.library.common
  * or scheduled events.
  */
 interface DeviceChannel {
+    fun canWorkWith(iotDevice: IotDevice): Boolean
     suspend fun read(device: IotDevice, controller: BaseController): ControllerState
     suspend fun writeState(device: IotDevice, controller: BaseController, state: ControllerState): ControllerState
 }
