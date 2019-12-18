@@ -5,5 +5,6 @@ import io.reactivex.Observable
 interface LocalStorage {
     suspend fun saveHome(homeId: String)
     fun getHomeId(): Observable<String>
+    fun hasHomeId(): Boolean
 }
 
