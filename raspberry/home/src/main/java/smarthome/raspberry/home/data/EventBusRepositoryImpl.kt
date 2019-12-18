@@ -2,6 +2,7 @@ package smarthome.raspberry.home.data
 
 import io.reactivex.subjects.PublishSubject
 import smarthome.raspberry.home.api.domain.eventbus.events.Event
+import smarthome.raspberry.home.api.domain.eventbus.events.Paused
 
 class EventBusRepositoryImpl : EventBusRepository {
     private val eventBus = PublishSubject.create<Event>()

@@ -31,8 +31,8 @@ class LaunchUseCaseImpl(
                         onError = {}
                 )
 
+        
         // todo listen for data changes - user input
-        // todo listen for devices - devices input
     }
     
     private fun hasUser(it: HomeInfo) = it.userId.isNotEmpty()
