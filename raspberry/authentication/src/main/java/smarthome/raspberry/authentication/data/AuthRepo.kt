@@ -9,6 +9,7 @@ interface AuthRepo {
     fun getAuthStatus(): Observable<AuthStatus>
     fun getUserId(): Observable<String>
     fun getUser(): User
+    fun hasUser(): Boolean
     suspend fun signIn(credential: Credentials): User
     suspend fun signOut()
 }

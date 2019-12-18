@@ -9,7 +9,7 @@ class PublishEventUseCaseImpl(
     private val eventBusRepository: EventBusRepository,
     private val homeStateMachine: HomeStateMachine
 ): PublishEventUseCase {
-    override fun publish(event: Event) {
+    override fun execute(event: Event) {
         eventBusRepository.addEvent(event)
         homeStateMachine.registerEvent(event)
     }
