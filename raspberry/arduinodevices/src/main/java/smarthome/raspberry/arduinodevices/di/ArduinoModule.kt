@@ -14,16 +14,11 @@ import smarthome.raspberry.arduinodevices.data.server.di.serverModule
 import smarthome.raspberry.arduinodevices.domain.ArduinoDeviceChannel
 import smarthome.raspberry.channel.api.domain.arduinoChannel
 
-val arduinoModule = module {
-    domain
-    data
-    
-}
 
 private val domain = module {
     single<DeviceChannel>(named(arduinoChannel)) {
         ArduinoDeviceChannel(
-        httpServer = get(),
+            httpServer = get(),
             udpServer = get(),
             observeHomeLifecycleUseCase = get(),
             arduinoApiGson = get(named(arduinoApiGson)),
@@ -33,7 +28,6 @@ private val domain = module {
 }
 
 private val data = module {
-    serverModule
     factoryBy<ValuePayloadToControllerStateMapper, ValuePayloadToControllerStateMapperImpl>()
     factoryBy<ControllerStateToValuePayloadMapper, ControllerStateToValuePayloadMapperImpl>()
     single<Gson>(named(arduinoApiGson)) {
@@ -42,6 +36,13 @@ private val data = module {
             .create()
     }
 }
+
+
+val arduinoModule = listOf(
+    domain,
+    data,
+    serverModule
+)
 
 private const val deviceGson = "deviceGson"
 private const val arduinoApiGson = "arduinoApiGson"

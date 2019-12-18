@@ -1,18 +1,11 @@
 package smarthome.raspberry.home.domain
 
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.runBlocking
-import smarthome.raspberry.authentication.api.flow.SignInFlowLauncher
-import smarthome.raspberry.home.api.domain.CreateHomeUseCase
 import smarthome.raspberry.home.api.domain.HomeStateMachine
 import smarthome.raspberry.home.api.domain.eventbus.events.*
 import smarthome.raspberry.home.data.EventBusRepository
 
 class HomeStateMachineImpl(
-    private val eventBusRepository: EventBusRepository,
-    private val signInFlowLauncher: SignInFlowLauncher,
-    private val createHomeUseCase: CreateHomeUseCase
+    private val eventBusRepository: EventBusRepository
 ) : HomeStateMachine {
     // todo refactor with https://github.com/Tinder/StateMachine, for now just dumb implementation
     
@@ -38,15 +31,4 @@ class HomeStateMachineImpl(
             }
         }
     }
-    
-    private val stateResolver = eventBusRepository.getEvents()
-        .observeOn(Schedulers.io())
-        .subscribeBy {
-            when (it) {
-                is NeedUser -> {
-                    signInFlowLauncher.launch()
-                }
-                is NeedHomeIdentifier -> runBlocking { createHomeUseCase.execute() }
-            }
-        }
 }
