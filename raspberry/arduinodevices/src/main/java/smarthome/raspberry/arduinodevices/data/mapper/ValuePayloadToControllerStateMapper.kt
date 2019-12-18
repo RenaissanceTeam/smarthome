@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.data.server.mapper
+package smarthome.raspberry.arduinodevices.data.mapper
 
 import smarthome.library.common.ControllerState
 

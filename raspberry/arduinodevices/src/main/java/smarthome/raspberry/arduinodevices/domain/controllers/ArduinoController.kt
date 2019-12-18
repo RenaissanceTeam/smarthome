@@ -7,6 +7,5 @@ import smarthome.raspberry.arduinodevices.domain.state.StateParser
 internal class ArduinoController(
     name: String,
     val device: ArduinoDevice,
-    val indexInArduinoServicesArray: Int,
-    val parser: StateParser
+    val indexInArduinoServicesArray: Int
 ) : BaseController(name)
