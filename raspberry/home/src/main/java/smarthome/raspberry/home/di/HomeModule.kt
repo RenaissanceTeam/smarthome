@@ -33,6 +33,14 @@ private val domain = module {
     factoryBy<ClearHomeInfoUseCase, ClearHomeInfoUseCaseImpl>()
     eventbusDomain
     singleBy<HomeStateMachine, HomeStateMachineImpl>()
+    single {
+        HomeStateResolver(
+            publishEvent = get(),
+            getEventsUseCase = get(),
+            repo = get(),
+            createHomeUseCase = get()
+        )
+    }
 }
 
 private val eventbusDomain = module {
