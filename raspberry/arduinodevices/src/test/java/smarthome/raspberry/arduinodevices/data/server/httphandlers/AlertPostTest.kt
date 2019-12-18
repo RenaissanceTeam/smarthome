@@ -11,9 +11,8 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerState
 import smarthome.library.common.Id
 import smarthome.raspberry.arduinodevices.data.server.entity.BAD_REQUEST_CODE
-import smarthome.raspberry.arduinodevices.data.server.entity.RequestIdentifier
 import smarthome.raspberry.arduinodevices.data.server.entity.SUCCESS_CODE
-import smarthome.raspberry.arduinodevices.data.server.mapper.ValuePayloadToControllerStateMapper
+import smarthome.raspberry.arduinodevices.data.mapper.ValuePayloadToControllerStateMapper
 import smarthome.raspberry.arduinodevices.data.server.requestWith
 import smarthome.raspberry.controllers.api.domain.GetControllerByIdUseCase
 import smarthome.raspberry.controllers.api.domain.OnControllerChangedWithoutUserRequestUseCase
