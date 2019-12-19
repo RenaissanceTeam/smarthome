@@ -29,9 +29,4 @@ val repositoryModule = module {
 
 val dataSourceModule = module {
     single { LocalStorageImpl(get()) as LocalStorage }
-    single {
-        RemoteStorageImpl({ FirestoreInstanceTokenStorage(it)  },
-                { FirestoreHomesReferencesStorage(it) },
-                { FirestoreSmartHomeStorage(it) }) as RemoteStorage
-    }
 }
