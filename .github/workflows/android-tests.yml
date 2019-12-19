@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Run Raspberry Tests
         working-directory: ./raspberry
-        run: ./../gradlew testDebugUnitTest --stacktrace 
+        run: ./gradlew testDebugUnitTest --stacktrace 
           
 #       - name: Run Datalibrary Tests
 #         working-directory: ./smarthome_libraries
