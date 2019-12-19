@@ -1,6 +1,5 @@
 package smarthome.library.datalibrary
 
-import android.util.Log
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import io.reactivex.Observable
@@ -24,6 +23,7 @@ class FirestoreSmartHomeStorage(
         private val db: FirebaseFirestore,
         homeIdHolder: HomeIdHolder
 ) : SmartHomeStorage {
+
     private val homeRef: DocumentReference by DependOnChangeable(homeIdHolder) {
         db.collection(HOMES_NODE).document(it)
     }
@@ -42,30 +42,11 @@ class FirestoreSmartHomeStorage(
         for (device in smartHome.devices) addDevice(device)
     }
 
-    override suspend fun getSmartHome(): SmartHome {
-        return suspendCoroutine { continuation ->
-            devicesRef.get()
-                .addOnSuccessListener { documents ->
-                    try {
-                        val smartHome = SmartHome()
-                        documents.forEach { smartHome.devices.add(it.toObject(IotDevice::class.java)) }
-
-                        continuation.resumeWith(Result.success(smartHome))
-                    } catch (e: Throwable) {
-                        continuation.resumeWithException(e)
-                    }
-                }
-                .addOnFailureListener { continuation.resumeWithException(it) }
-        }
-    }
-
-
     override suspend fun addDevice(iotDevice: IotDevice) {
         suspendCoroutine<Unit> {
             getDeviceRef(iotDevice).set(iotDevice).withContinuation(it)
         }
     }
-
 
     override suspend fun updateDevice(device: IotDevice) {
         suspendCoroutine<Unit> {
@@ -154,7 +135,6 @@ class FirestoreSmartHomeStorage(
         }
 
     }
-
 
     private fun getDeviceRef(iotDevice: IotDevice): DocumentReference {
         return devicesRef.document(iotDevice.id.toString())

@@ -11,6 +11,11 @@ class LocalStorageImpl : LocalStorage {
         groupDevices[groupDevices.indexOf(device)] = device
     }
     
+    override fun getDeviceGroup(device: IotDevice): IotDeviceGroup {
+        return devices.filterValues { it.contains(device) }.keys.takeIf { it.isNotEmpty() }?.first()
+            ?: TODO()
+    }
+    
     override fun addDevice(device: IotDevice, group: IotDeviceGroup) {
         val groupDevices = devices[group] ?: mutableListOf<IotDevice>().also { devices[group] = it }
         groupDevices.add(device)
