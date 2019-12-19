@@ -11,6 +11,10 @@ jobs:
       - uses: actions/checkout@v1
       - name: Mock google services json 
         run: |
+          mkdir -p ignored/private_smarthome/services_json/smarthome.client
+          mkdir -p ignored/private_smarthome/services_json/smarthome.library.datalibrary
+          mkdir -p ignored/private_smarthome/services_json/smarthome.raspberry
+          
           echo '{}' >> ignored/private_smarthome/services_json/smarthome.client/google-services.json
           echo '{}' >> ignored/private_smarthome/services_json/smarthome.library.datalibrary/google-services.json
           echo '{}' >> ignored/private_smarthome/services_json/smarthome.raspberry/google-services.json
