@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Mock google services json 
+        run: |
+          echo '{}' >> ignored/private_smarthome/services_json/smarthome.client/google-services.json
+          echo '{}' >> ignored/private_smarthome/services_json/smarthome.library.datalibrary/google-services.json
+          echo '{}' >> ignored/private_smarthome/services_json/smarthome.raspberry/google-services.json
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Run Tests
