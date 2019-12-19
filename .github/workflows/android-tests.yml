@@ -1,0 +1,24 @@
+name: Android CI
+
+on: 
+  pull_request:
+    branches:
+        - dev
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Mock google services json 
+        run: |
+          mkdir -p ignored/private_smarthome/services_json/smarthome.client
+          mkdir -p ignored/private_smarthome/services_json/smarthome.library.datalibrary
+          mkdir -p ignored/private_smarthome/services_json/smarthome.raspberry
+          
+          cp ./.github/mock-google-services.json ignored/private_smarthome/services_json/smarthome.client/google-services.json
+          cp ./.github/mock-google-services.json ignored/private_smarthome/services_json/smarthome.library.datalibrary/google-services.json
+          cp ./.github/mock-google-services.json ignored/private_smarthome/services_json/smarthome.raspberry/google-services.json
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Run Tests
+        run: ./gradlew testDebugUnitTest
