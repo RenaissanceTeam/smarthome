@@ -1,7 +1,9 @@
 package smarthome.library.datalibrary
 
-import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.tasks.Tasks.await
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,7 +22,6 @@ class FirestoreSmartHomeStorageTest {
     private lateinit var storage: FirestoreSmartHomeStorage
     private val homeId = BehaviorSubject.create<String>()
     private lateinit var collection: CollectionReference
-//    private lateinit var documentReference: DocumentReference
     private lateinit var task: Task<Void>
     private lateinit var db: FirebaseFirestore
 
@@ -28,11 +29,10 @@ class FirestoreSmartHomeStorageTest {
     fun setup() {
         collection = mock { }
         task = mock {
-            on { addOnSuccessListener(any()) }.then {
-                it.getArgument<OnSuccessListener<Any>>(0).onSuccess(Unit)
+            on { addOnCompleteListener (any()) }.then {
+                it.getArgument<OnCompleteListener<Any>>(0).onComplete(mock{ })
                 task
             }
-            on { addOnFailureListener(any()) }.then { task }
         }
         db = mock {
             on { collection(any()) }.then { collection }
@@ -63,7 +63,6 @@ class FirestoreSmartHomeStorageTest {
             homeId.onNext("2")
             storage.createSmartHome()
             verify(otherDocumentReference).set(any())
-
         }
     }
 }

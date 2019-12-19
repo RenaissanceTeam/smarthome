@@ -9,12 +9,16 @@ import smarthome.client.data_api.RemoteStorage
 import smarthome.client.data_api.RemoteStorageInput
 import smarthome.library.common.*
 import smarthome.library.common.scripts.Script
+import smarthome.library.datalibrary.api.HomesReferencesStorage
+import smarthome.library.datalibrary.api.InstanceTokenStorage
+import smarthome.library.datalibrary.api.MessageQueue
+import smarthome.library.datalibrary.api.SmartHomeStorage
 
 
 class RemoteStorageImpl(
-        private val instanceTokenStorageFactory: (homeId: String) -> InstanceTokenStorage,
-        private val homesReferencesStorageFactory: (uid: String) -> HomesReferencesStorage,
-        private val homeStorageFactory: (homeId: String) -> SmartHomeStorage
+    private val instanceTokenStorageFactory: (homeId: String) -> InstanceTokenStorage,
+    private val homesReferencesStorageFactory: (uid: String) -> HomesReferencesStorage,
+    private val homeStorageFactory: (homeId: String) -> SmartHomeStorage
 ) : RemoteStorage, KoinComponent {
     private var homeStorage: SmartHomeStorage? = null
     private var instanceTokenStorage: InstanceTokenStorage? = null
