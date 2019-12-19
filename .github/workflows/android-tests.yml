@@ -15,9 +15,9 @@ jobs:
           mkdir -p ignored/private_smarthome/services_json/smarthome.library.datalibrary
           mkdir -p ignored/private_smarthome/services_json/smarthome.raspberry
           
-          echo '{}' >> ignored/private_smarthome/services_json/smarthome.client/google-services.json
-          echo '{}' >> ignored/private_smarthome/services_json/smarthome.library.datalibrary/google-services.json
-          echo '{}' >> ignored/private_smarthome/services_json/smarthome.raspberry/google-services.json
+          cp ./.github/mock-google-services.json ignored/private_smarthome/services_json/smarthome.client/google-services.json
+          cp ./.github/mock-google-services.json ignored/private_smarthome/services_json/smarthome.library.datalibrary/google-services.json
+          cp ./.github/mock-google-services.json ignored/private_smarthome/services_json/smarthome.raspberry/google-services.json
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Run Tests
