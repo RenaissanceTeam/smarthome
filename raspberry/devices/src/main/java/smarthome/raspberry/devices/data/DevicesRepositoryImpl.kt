@@ -13,7 +13,12 @@ class DevicesRepositoryImpl(
         localStorage.updateDevice(device, IotDeviceGroup.ACTIVE)
         remoteStorage.updateDevice(device)
     }
-
+    
+    override suspend fun savePendingDevice(device: IotDevice) {
+        localStorage.updateDevice(device, IotDeviceGroup.PENDING)
+        remoteStorage.updatePendingDevice(device)
+    }
+    
     override suspend fun addPendingDevice(device: IotDevice) {
         localStorage.addDevice(device, IotDeviceGroup.PENDING)
         remoteStorage.addPendingDevice(device)
@@ -33,7 +38,11 @@ class DevicesRepositoryImpl(
         localStorage.removeDevice(device, IotDeviceGroup.PENDING)
         remoteStorage.removeDevice(device)
     }
-
+    
+    override fun getDeviceGroup(device: IotDevice): IotDeviceGroup {
+        return localStorage.getDeviceGroup(device)
+    }
+    
     override suspend fun getCurrentDevices(): List<IotDevice> {
         return localStorage.getDevices()
     }
