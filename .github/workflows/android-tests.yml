@@ -11,18 +11,18 @@ jobs:
       - name: Run Raspberry Tests
         working-directory: ./raspberry
         run: | 
-          ./../gradlew testDebugUnitTest
+          ../gradlew testDebugUnitTest --stacktrace
           cd ..   
-      - name: Run Datalibrary Tests
-        working-directory: ./smarthome_libraries
-        run: | 
-          ./../gradlew testDebugUnitTest
-          cd ..
-      - name: Run Client Tests
-        working-directory: ./android_client
-        run: | 
-          ./../gradlew testDebugUnitTest
-          cd ..
+#       - name: Run Datalibrary Tests
+#         working-directory: ./smarthome_libraries
+#         run: | 
+#           ./../gradlew testDebugUnitTest
+#           cd ..
+#       - name: Run Client Tests
+#         working-directory: ./android_client
+#         run: | 
+#           ./../gradlew testDebugUnitTest
+#           cd ..
           
       
           
