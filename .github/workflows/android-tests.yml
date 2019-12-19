@@ -1,0 +1,29 @@
+name: Android CI
+
+on: 
+  pull_request:
+    branches:
+        - dev
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Raspberry Tests
+        run: | 
+          cd raspberry
+          ./../gradlew testDebugUnitTest
+          cd ..   
+      - name: Run Datalibrary Tests
+        run: | 
+          cd smarthome_libraries
+          ./../gradlew testDebugUnitTest
+          cd ..
+      - name: Run Client Tests
+        run: | 
+          cd android_client
+          ./../gradlew testDebugUnitTest
+          cd ..
+          
+      
+          
+          
