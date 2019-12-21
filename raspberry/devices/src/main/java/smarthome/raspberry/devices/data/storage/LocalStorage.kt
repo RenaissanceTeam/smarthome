@@ -8,5 +8,6 @@ interface LocalStorage {
     fun removeDevice(device: IotDevice, group: IotDeviceGroup)
     fun getDevices(group: IotDeviceGroup): List<IotDevice>
     fun getDevices(): List<IotDevice>
+    fun getDeviceGroup(device: IotDevice): IotDeviceGroup
 }
 

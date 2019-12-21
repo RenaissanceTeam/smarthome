@@ -8,7 +8,6 @@ import smarthome.library.common.SmartHome
 interface SmartHomeStorage {
     suspend fun createSmartHome()
     suspend fun postSmartHome(smartHome: SmartHome)
-    suspend fun getSmartHome(): SmartHome
     suspend fun addDevice(iotDevice: IotDevice)
     suspend fun updateDevice(device: IotDevice)
     suspend fun getDevice(guid: Long): IotDevice
