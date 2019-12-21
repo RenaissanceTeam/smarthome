@@ -21,11 +21,7 @@ import smarthome.raspberry.authentication.R
 import smarthome.raspberry.authentication.data.mapper.GoogleSignInAccountToCredentialsMapper
 
 class AuthenticationActivity : AppCompatActivity(), AuthenticationView {
-    companion object {
-        private const val RC_SIGN_IN = 9001
-    }
-
-    private val mAuth: FirebaseAuth by inject()
+    
     private val apiClient: GoogleApiClient by inject()
     private val googleSignInAccountToCredentialsMapper: GoogleSignInAccountToCredentialsMapper by inject()
     private val presenter: AuthenticationPresenter by currentScope.inject { parametersOf(this) }
@@ -96,5 +92,9 @@ class AuthenticationActivity : AppCompatActivity(), AuthenticationView {
                 sign_out_and_disconnect.visibility = View.VISIBLE
             }
         }
+    }
+    
+    companion object {
+        private const val RC_SIGN_IN = 9001
     }
 }

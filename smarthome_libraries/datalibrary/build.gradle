@@ -7,6 +7,9 @@ preBuild.dependsOn copyDatalibraryJson
 
 dependencies {
     implementation library.supportAnnotations
+    implementation library.kotlin
+    implementation library.coroutinesCore
+    implementation library.coroutinesExtPlayServices
 
     implementation library.firebaseCore
     implementation library.firebaseAuth

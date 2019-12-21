@@ -11,7 +11,6 @@ fun <T> Task<T>.withContinuation(continuation: Continuation<Unit>) {
 }
 
 inline fun <reified U> Task<DocumentSnapshot>.withObjectContinuation(continuation: Continuation<U>) {
-
     this.addOnSuccessListener {
         try {
             continuation.resumeWith(

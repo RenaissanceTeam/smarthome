@@ -29,6 +29,10 @@ import smarthome.raspberry.authentication.data.query.GetUserQueryImpl
 import smarthome.raspberry.authentication.domain.GetAuthStatusUseCaseImpl
 import smarthome.raspberry.authentication.domain.GetUserIdUseCaseImpl
 import smarthome.raspberry.authentication.domain.GetUserInfoUseCaseImpl
+import smarthome.raspberry.authentication.domain.internal.AuthenticateWithCredentialsUseCase
+import smarthome.raspberry.authentication.domain.internal.AuthenticateWithCredentialsUseCaseImpl
+import smarthome.raspberry.authentication.domain.internal.SignOutOfFirebaseUseCase
+import smarthome.raspberry.authentication.domain.internal.SignOutOfFirebaseUseCaseImpl
 import smarthome.raspberry.authentication.flow.SignInFlowLauncherImpl
 import smarthome.raspberry.authentication.presentation.AuthenticationActivity
 import smarthome.raspberry.authentication.presentation.AuthenticationPresenter
@@ -40,6 +44,8 @@ private val domain = module {
     factoryBy<GetAuthStatusUseCase, GetAuthStatusUseCaseImpl>()
     factoryBy<GetUserIdUseCase, GetUserIdUseCaseImpl>()
     factoryBy<GetUserInfoUseCase, GetUserInfoUseCaseImpl>()
+    factoryBy<AuthenticateWithCredentialsUseCase, AuthenticateWithCredentialsUseCaseImpl>()
+    factoryBy<SignOutOfFirebaseUseCase, SignOutOfFirebaseUseCaseImpl>()
 }
 
 private val flow = module {

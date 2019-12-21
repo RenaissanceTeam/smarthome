@@ -1,16 +1,14 @@
 package smarthome.raspberry.home.presentation.main
 
-
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.scope.currentScope
 import org.koin.core.parameter.parametersOf
 import smarthome.raspberry.entity.HomeInfo
 import smarthome.raspberry.home.R
+import smarthome.raspberry.util.router.RouterActivity
 
-
-class MainActivity : AppCompatActivity(), MainView {
+class MainActivity : RouterActivity(), MainView {
     private val presenter: MainPresenter by currentScope.inject { parametersOf(this) }
     
     override fun onCreate(savedInstanceState: Bundle?) {
