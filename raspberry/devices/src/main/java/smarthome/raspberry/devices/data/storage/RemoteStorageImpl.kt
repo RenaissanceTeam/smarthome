@@ -9,7 +9,11 @@ class RemoteStorageImpl (
     override suspend fun updateDevice(device: IotDevice) {
         homeStorage.updateDevice(device)
     }
-
+    
+    override suspend fun updatePendingDevice(device: IotDevice) {
+        homeStorage.updatePendingDevice(device)
+    }
+    
     override suspend fun addPendingDevice(device: IotDevice) {
         homeStorage.addPendingDevice(device)
     }
