@@ -1,7 +1,6 @@
 package smarthome.raspberry.home.presentation.main
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import io.reactivex.rxkotlin.subscribeBy
@@ -10,6 +9,7 @@ import smarthome.raspberry.authentication.api.domain.GetAuthStatusUseCase
 import smarthome.raspberry.authentication.api.flow.SignInFlowLauncher
 import smarthome.raspberry.home.api.domain.GetHomeInfoUseCase
 import smarthome.raspberry.home.api.domain.LaunchUseCase
+import smarthome.raspberry.util.subscribeOnUiBy
 
 class MainPresenterImpl(
         private val getAuthStatusUseCase: GetAuthStatusUseCase,
@@ -22,7 +22,6 @@ class MainPresenterImpl(
     @SuppressLint("CheckResult")
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreateView() {
-        Log.d("SMARTHOME", "onCreate()")
         getAuthStatusUseCase.execute()
             .subscribeBy {
                 if (it == AuthStatus.NOT_SIGNED_IN) signInFlowLauncher.launch()
@@ -30,7 +29,7 @@ class MainPresenterImpl(
                 view.setAuthStatus(it.toString())
             }
         
-        getHomeInfoUseCase.execute().subscribeBy { view.setHomeInfo(it) }
+        getHomeInfoUseCase.execute().subscribeOnUiBy { view.setHomeInfo(it) }
         launchUseCase.execute()
     }
 }

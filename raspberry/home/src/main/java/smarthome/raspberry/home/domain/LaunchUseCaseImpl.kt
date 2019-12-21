@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
+import smarthome.raspberry.entity.HomeInfo
 import smarthome.raspberry.home.api.domain.GenerateUniqueHomeIdUseCase
 import smarthome.raspberry.home.api.domain.GetHomeInfoUseCase
 import smarthome.raspberry.home.api.domain.LaunchUseCase
@@ -32,11 +33,10 @@ class LaunchUseCaseImpl(
 
         // todo listen for data changes - user input
         // todo listen for devices - devices input
-
     }
-
-    private fun hasUser(it: smarthome.raspberry.entity.HomeInfo) = it.userId.isNotEmpty()
-    private fun hasHomeId(info: smarthome.raspberry.entity.HomeInfo) = info.homeId.isNotEmpty()
+    
+    private fun hasUser(it: HomeInfo) = it.userId.isNotEmpty()
+    private fun hasHomeId(info: HomeInfo) = info.homeId.isNotEmpty()
 
     private suspend fun createHome() {
         val homeId = generateUniqueHomeIdUseCase.execute()

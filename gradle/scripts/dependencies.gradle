@@ -12,6 +12,7 @@ ext {
             koin_test                    : ("org.koin:koin-test:$koin_version"),
             coroutinesCore               : ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"),
             coroutinesAndroid            : ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"),
+            coroutinesExtPlayServices    : ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"),
             appCompat                    : ("androidx.appcompat:appcompat:$appCompat_version"),
             constraintLayout             : ("androidx.constraintlayout:constraintlayout:$constraintLayout_version"),
             activity                     : ("androidx.activity:activity-ktx:$appCompat_version"),

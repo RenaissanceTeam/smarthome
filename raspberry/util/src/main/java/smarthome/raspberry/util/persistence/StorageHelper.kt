@@ -14,6 +14,10 @@ class StorageHelper(private val storage: PersistentStorage) {
             .set(value)
     }
     
+    fun <T: Any> setDefault(key: String, value: T, expectedType: KClass<T>) {
+        obtainPreference(key, expectedType).default = value
+    }
+    
     private fun <T : Any> obtainPreference(key: String, expectedType: KClass<T>): Preference<T> {
         return when (preferences.contains(key)) {
             true -> {
@@ -37,14 +41,9 @@ class StorageHelper(private val storage: PersistentStorage) {
         return convertToExpectedType(expectedType, saved)
     }
     
-    private fun getPreferenceByKey(key: String): Preference<*> {
-        return preferences[key] ?: throw IllegalArgumentException(
-            "can't access key=$key as it is not stored")
-    }
-    
     private fun <T : Any> convertToExpectedType(expectedType: KClass<T>, from: Any): T {
         try {
-            return expectedType.java.cast(from) ?: throw IllegalStateException()
+            return expectedType.java.cast(from) ?: throw TypeAccessException(from::class, expectedType)
         } catch (e: ClassCastException) {
             throw IllegalArgumentException()
         }
@@ -52,12 +51,19 @@ class StorageHelper(private val storage: PersistentStorage) {
 
     fun <T: Any> observe(key: String, expectedType: KClass<T>): Observable<T> {
         val preference = obtainPreference(key, expectedType)
+        val observable = obtainObservablePreference(preference, key)
+    
+        return observable.observe()
+    }
+    
+    private fun <T : Any> obtainObservablePreference(
+        preference: Preference<T>,
+        key: String
+    ): ObservablePreference<T> {
         val savedObservable = preference as? ObservablePreference<T>
         
-        val observable = savedObservable ?: ObservablePreference(preference).apply {
+        return savedObservable ?: ObservablePreference(preference).apply {
             preferences[key] = this
         }
-        
-        return observable.observe()
     }
 }

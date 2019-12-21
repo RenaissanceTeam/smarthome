@@ -7,10 +7,6 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import smarthome.raspberry.util.persistence.PersistentStorage
-import smarthome.raspberry.util.persistence.StorageHelper
-import smarthome.raspberry.util.persistence.get
-import smarthome.raspberry.util.persistence.set
 import kotlin.test.assertFailsWith
 
 class StorageHelperTest {
@@ -29,7 +25,8 @@ class StorageHelperTest {
         val first = "first"
         val second = "second"
         val key = "key"
-        
+    
+        whenever(storage.get<String>(key)).then { throw NoStoredPreference(key) }
         val result = storageHelper.observe<String>(key).test()
 
         runBlocking {
@@ -50,15 +47,18 @@ class StorageHelperTest {
         runBlocking {
             storageHelper.set(key, value)
         }
-        whenever(storage.get(key, String::class)).then { value}
+        whenever(storage.get(key, String::class)).then { value }
         val result = storageHelper.get<String>(key)
 
         assertThat(result).isEqualTo(value)
     }
     @Test
     fun `when trying to read preference that is not stored should throw`() {
-        assertFailsWith<IllegalArgumentException> {
-            storageHelper.get<String>("something")
+        val key = "something"
+        whenever(storage.get<String>(key)).then { throw NoStoredPreference(key) }
+        
+        assertFailsWith<NoStoredPreference> {
+            storageHelper.get<String>(key)
         }
     }
     
@@ -98,5 +98,74 @@ class StorageHelperTest {
             storageHelper.get<Int>(key)
             verify(storage).get<Int>(key)
         }
+    }
+    
+    @Test
+    fun `when default saved to preference should return in on read`() {
+        val default = 1
+        val key = "int"
+        
+        storageHelper.setDefault(key, default)
+        whenever(storage.get<Int>(key)).then { throw NoStoredPreference(key) }
+        val result: Int = storageHelper.get(key)
+        
+        assertThat(result).isEqualTo(default)
+    }
+    
+    @Test
+    fun `with default and saved persistent value should return persistent in read`() {
+        val default = 1
+        val saved = 2
+        val key = "int"
+    
+        storageHelper.setDefault(key, default)
+        whenever(storage.get<Int>(key)).then { saved }
+        
+        val result: Int = storageHelper.get(key)
+    
+        assertThat(result).isEqualTo(saved)
+    }
+    
+    @Test
+    fun `when default set and no saved persistent should start with default on observe`() {
+        val default = 1
+        val key = "int"
+    
+        storageHelper.setDefault(key, default)
+        whenever(storage.get<Int>(key)).then { throw NoStoredPreference(key) }
+        
+        storageHelper.observe<Int>(key).test().assertValue { it == default }
+    }
+    
+    
+    @Test
+    fun `when default set and have saved persistent should start with saved on observe`() {
+        val default = 1
+        val saved = 2
+        val key = "int"
+        
+        storageHelper.setDefault(key, default)
+        whenever(storage.get<Int>(key)).then { saved }
+        
+        storageHelper.observe<Int>(key).test().assertValue { it == saved }
+    }
+    
+    @Test
+    fun `when subscribe from two sources both should receive new emitted item`() {
+        val value1 = 1
+        val value2 = 2
+        val key = "int"
+        whenever(storage.get<Int>(key)).then { throw NoStoredPreference(key) }
+    
+        val sub1 = storageHelper.observe<Int>(key).test()
+        val sub2 = storageHelper.observe<Int>(key).test()
+        
+        runBlocking {
+            storageHelper.set(key, value1)
+            storageHelper.set(key, value2)
+        }
+        
+        sub1.assertValues(value1, value2)
+        sub2.assertValues(value1, value2)
     }
 }

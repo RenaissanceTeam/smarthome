@@ -33,11 +33,9 @@ class AuthenticationPresenterImpl(
                 .subscribe {
                     when (it) {
                         AuthStatus.SIGNED_IN -> view.setState(
-                                AuthenticationState.Authenticated(
-                                        getUserInfoUseCase.execute()
-                                ))
-                        AuthStatus.NOT_SIGNED_IN -> view.setState(
-                                AuthenticationState.Empty)
+                                AuthenticationState.Authenticated(getUserInfoUseCase.execute())
+                        )
+                        AuthStatus.NOT_SIGNED_IN -> view.setState(AuthenticationState.Empty)
                         else -> {}
                     }
                 }
@@ -70,9 +68,7 @@ class AuthenticationPresenterImpl(
                 authenticateWithCredentialsUseCase.execute(credentials)
                 mainFlowLauncher.launch()
             } catch (e: Throwable) {
-                view.setState(
-                        AuthenticationState.Error(
-                                e.message.orEmpty()))
+                view.setState(AuthenticationState.Error(e.message.orEmpty()))
             }
         }
     }
