@@ -1,8 +1,8 @@
 package smarthome.raspberry.arduinodevices.data.server.entity
 
-import fi.iki.elonen.NanoHTTPD
 
 data class RequestIdentifier(
-    val method: NanoHTTPD.Method,
-    val uri: String
+    val method: Method,
+    val uri: String,
+    val parameters: Set<String> = emptySet()
 )
