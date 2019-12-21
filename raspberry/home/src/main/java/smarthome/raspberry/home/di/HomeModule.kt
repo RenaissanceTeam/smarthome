@@ -6,15 +6,19 @@ import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
 import smarthome.library.datalibrary.api.boundary.HomeIdHolder
 import smarthome.raspberry.home.api.domain.*
+import smarthome.raspberry.home.api.domain.eventbus.ObserveHomeEventsUseCase
+import smarthome.raspberry.home.api.domain.eventbus.ObserveHomeLifecycleUseCase
+import smarthome.raspberry.home.api.domain.eventbus.PublishEventUseCase
 import smarthome.raspberry.home.api.presentation.MainFlowLauncher
-import smarthome.raspberry.home.data.HomeIdHolderImpl
-import smarthome.raspberry.home.data.HomeRepository
-import smarthome.raspberry.home.data.HomeRepositoryImpl
+import smarthome.raspberry.home.data.*
 import smarthome.raspberry.home.data.storage.LocalStorage
 import smarthome.raspberry.home.data.storage.LocalStorageImpl
 import smarthome.raspberry.home.data.storage.RemoteStorage
 import smarthome.raspberry.home.data.storage.RemoteStorageImpl
 import smarthome.raspberry.home.domain.*
+import smarthome.raspberry.home.domain.eventbus.ObserveHomeEventsUseCaseImpl
+import smarthome.raspberry.home.domain.eventbus.ObserveHomeLifecycleUseCaseImpl
+import smarthome.raspberry.home.domain.eventbus.PublishEventUseCaseImpl
 import smarthome.raspberry.home.presentation.MainFlowLauncherImpl
 import smarthome.raspberry.home.presentation.main.MainActivity
 import smarthome.raspberry.home.presentation.main.MainPresenter
@@ -27,6 +31,19 @@ private val domain = module {
     factoryBy<LaunchUseCase, LaunchUseCaseImpl>()
     factoryBy<ObserveHomeIdUseCase, ObserveHomeIdUseCaseImpl>()
     factoryBy<ClearHomeInfoUseCase, ClearHomeInfoUseCaseImpl>()
+    factoryBy<PublishEventUseCase, PublishEventUseCaseImpl>()
+    factoryBy<ObserveHomeLifecycleUseCase, ObserveHomeLifecycleUseCaseImpl>()
+    factoryBy<ObserveHomeEventsUseCase, ObserveHomeEventsUseCaseImpl>()
+    singleBy<HomeStateMachine, HomeStateMachineImpl>()
+    singleBy<CreateHomeUseCase, CreateHomeUseCaseImpl>()
+    single {
+        HomeStateResolver(
+            publishEvent = get(),
+            getEventsUseCase = get(),
+            repo = get(),
+            createHomeUseCase = get()
+        )
+    }
 }
 
 private val data = module {
@@ -34,6 +51,7 @@ private val data = module {
     factoryBy<LocalStorage, LocalStorageImpl>()
     factoryBy<RemoteStorage, RemoteStorageImpl>()
     singleBy<HomeIdHolder, HomeIdHolderImpl>()
+    factoryBy<EventBusRepository, EventBusRepositoryImpl>()
 }
 
 private val presentation = module {

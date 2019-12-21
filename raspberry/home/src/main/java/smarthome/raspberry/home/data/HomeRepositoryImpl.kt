@@ -13,7 +13,9 @@ class HomeRepositoryImpl(
     override suspend fun isHomeIdUnique(homeId: String): Boolean {
         return remoteStorage.isHomeIdUnique(homeId)
     }
-
+    
+    override fun hasHomeId(): Boolean = localStorage.hasHomeId()
+    
     override fun getHomeInfo(userId: Observable<String>): Observable<HomeInfo> {
         return Observables.combineLatest(userId, localStorage.getHomeId(), ::HomeInfo)
     }

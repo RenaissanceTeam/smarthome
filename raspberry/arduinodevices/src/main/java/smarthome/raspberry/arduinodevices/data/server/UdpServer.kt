@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 
 class UdpServer {
-    private val TAG = UdpServer::class.java.simpleName
     private val PORT = 59743
     private val ARDUINO_INIT_URL = "http://%s:8080/init"
     private val REMOTE_ADDR_HEADER = "Remote_Addr"

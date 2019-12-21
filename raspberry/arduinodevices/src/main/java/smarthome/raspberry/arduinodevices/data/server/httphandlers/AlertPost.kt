@@ -3,7 +3,7 @@ package smarthome.raspberry.arduinodevices.data.server.httphandlers
 import smarthome.library.common.Id
 import smarthome.raspberry.arduinodevices.data.server.api.RequestHandler
 import smarthome.raspberry.arduinodevices.data.server.entity.*
-import smarthome.raspberry.arduinodevices.data.server.mapper.ValuePayloadToControllerStateMapper
+import smarthome.raspberry.arduinodevices.data.mapper.ValuePayloadToControllerStateMapper
 import smarthome.raspberry.arduinodevices.data.server.takeIfNotEmpty
 import smarthome.raspberry.controllers.api.domain.GetControllerByIdUseCase
 import smarthome.raspberry.controllers.api.domain.OnControllerChangedWithoutUserRequestUseCase

@@ -1,5 +1,6 @@
 package smarthome.raspberry.di
 
+import smarthome.raspberry.arduinodevices.di.arduinoModule
 import smarthome.raspberry.authentication.di.authenticationModule
 import smarthome.raspberry.channel.di.channelModule
 import smarthome.raspberry.controllers.di.controllersModule
@@ -20,4 +21,5 @@ val appModules = authenticationModule +
                  notificationModule +
                  scriptsModule +
                  utilModule +
-                 externalModule
+                 externalModule + arduinoModule
+    
