@@ -15,6 +15,8 @@ dependencies {
 
     implementation library.common
     implementation library.homeServer_channel_api
+    implementation library.homeServer_controllers_api
+    implementation library.homeServer_devices_api
 
     testImplementation groups.forTest
 }
