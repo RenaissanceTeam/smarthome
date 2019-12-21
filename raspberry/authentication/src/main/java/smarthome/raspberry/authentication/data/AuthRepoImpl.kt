@@ -31,6 +31,8 @@ class AuthRepoImpl(
     
     override fun getUser() = user.value ?: throw NotSignedInException()
     
+    override fun hasUser() = authStatus.value == AuthStatus.SIGNED_IN
+    
     override fun getAuthStatus() = authStatus
     
     override fun getUserId(): Observable<String> = user.map { it.id }

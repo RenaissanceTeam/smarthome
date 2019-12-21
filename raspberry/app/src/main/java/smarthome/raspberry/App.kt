@@ -17,6 +17,9 @@ class App : Application() {
             androidContext(this@App)
             modules(appModules)
         }
+    
+        CreateClassesOnAppStart()
+        
         wakeLock =
                 (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
                     newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SmartHome::WakeLock").apply {
