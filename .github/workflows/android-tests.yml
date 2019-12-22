@@ -10,10 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
       - name: Mock google services json 
         run: |
           mkdir -p ignored/private_smarthome/services_json/smarthome.client
@@ -23,9 +19,8 @@ jobs:
           cp ./helpers/mock-google-services.json ignored/private_smarthome/services_json/smarthome.client/google-services.json
           cp ./helpers/mock-google-services.json ignored/private_smarthome/services_json/smarthome.library.datalibrary/google-services.json
           cp ./helpers/mock-google-services.json ignored/private_smarthome/services_json/smarthome.raspberry/google-services.json
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Unit Test
-        uses: msfjarvis/setup-android@0.2
+        uses: msfjarvis/setup-android@1.0
         with:
-          gradleTasks: testDebugUnitTest
+          entrypoint: ./gradlew
+          args: testDebugUnitTest
