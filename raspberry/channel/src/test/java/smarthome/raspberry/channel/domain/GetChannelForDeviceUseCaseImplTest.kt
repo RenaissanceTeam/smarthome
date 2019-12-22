@@ -36,7 +36,7 @@ class GetChannelForDeviceUseCaseImplTest {
     fun `when has channel for device should return it`() {
         val device = mock<IotDevice>()
         val channel = mock<DeviceChannel> {
-            on { canWorkWith(device) }.then { true }
+            on { canWorkWith(device) }.then { false }
         }
         whenever(repo.getDeviceChannels()).then { listOf(channel) }
         
