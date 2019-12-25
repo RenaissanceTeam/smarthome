@@ -10,4 +10,4 @@ open class ArduinoDevice(
     description: String?,
     controllers: List<BaseController>,
     val ip: String
-) : IotDevice(name, description, controllers = controllers)
+) : IotDevice(id = id, name = name, description = description, controllers = controllers)
