@@ -13,7 +13,6 @@ import smarthome.library.common.IotDevice
 import smarthome.library.common.util.RuntimeTypeAdapterFactory
 import smarthome.raspberry.arduinodevices.data.server.entity.InvalidDeviceException
 import smarthome.raspberry.arduinodevices.domain.ArduinoDevice
-import smarthome.raspberry.arduinodevices.domain.controllers.ArduinoController
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
@@ -29,9 +28,9 @@ class NotSupportedDeviceC(
     id: Id, name: String, description: String?, controllers: List<BaseController>, ip: String
 ) : ArduinoDevice(id, name, description, controllers, ip)
 
-class SupportedControllerA(name: String, index: Int): ArduinoController(name, index)
-class SupportedControllerB(name: String, index: Int): ArduinoController(name, index)
-class NotSupportedControllerC(name: String, index: Int): ArduinoController(name, index)
+class SupportedControllerA(name: String): BaseController(name)
+class SupportedControllerB(name: String): BaseController(name)
+class NotSupportedControllerC(name: String): BaseController(name)
 
 class SupportedControllerStateA(val value: String) : ControllerState()
 class SupportedControllerStateB(@SerializedName("value") val intValue: Int) : ControllerState()
