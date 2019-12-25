@@ -1,9 +1,11 @@
 package smarthome.raspberry.arduinodevices.domain
 
 import smarthome.library.common.BaseController
+import smarthome.library.common.Id
 import smarthome.library.common.IotDevice
 
-class ArduinoDevice(
+open class ArduinoDevice(
+    id: Id,
     name: String,
     description: String?,
     controllers: List<BaseController>,
