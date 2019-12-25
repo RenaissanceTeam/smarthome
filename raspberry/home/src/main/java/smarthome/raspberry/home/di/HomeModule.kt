@@ -51,7 +51,7 @@ private val data = module {
     factoryBy<LocalStorage, LocalStorageImpl>()
     factoryBy<RemoteStorage, RemoteStorageImpl>()
     singleBy<HomeIdHolder, HomeIdHolderImpl>()
-    factoryBy<EventBusRepository, EventBusRepositoryImpl>()
+    singleBy<EventBusRepository, EventBusRepositoryImpl>()
 }
 
 private val presentation = module {

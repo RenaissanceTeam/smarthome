@@ -1,5 +1,6 @@
 package smarthome.raspberry.arduinodevices.domain
 
+import android.util.Log
 import com.google.gson.Gson
 import io.reactivex.rxkotlin.subscribeBy
 import retrofit2.Retrofit
@@ -13,6 +14,7 @@ import smarthome.raspberry.arduinodevices.data.mapper.ControllerStateToValuePayl
 import smarthome.raspberry.arduinodevices.data.mapper.ValuePayloadToControllerStateMapper
 import smarthome.raspberry.arduinodevices.data.server.UdpServer
 import smarthome.raspberry.arduinodevices.data.server.api.WebServer
+import smarthome.raspberry.arduinodevices.domain.controllers.Writeable
 import smarthome.raspberry.home.api.domain.eventbus.ObserveHomeLifecycleUseCase
 import smarthome.raspberry.home.api.domain.eventbus.events.Paused
 import smarthome.raspberry.home.api.domain.eventbus.events.Resumed
@@ -29,6 +31,7 @@ class ArduinoDeviceChannel(
     
     init {
         observeHomeLifecycleUseCase.execute().subscribeBy {
+    
             when (it) {
                 is Paused -> {
                     httpServer.stop()
@@ -61,6 +64,7 @@ class ArduinoDeviceChannel(
 
     override suspend fun writeState(device: IotDevice, controller: BaseController, state: ControllerState): ControllerState {
         require(device is ArduinoDevice)
+        require(controller is Writeable)
 
         val api = getArduinoDeviceApi(device.ip)
     
