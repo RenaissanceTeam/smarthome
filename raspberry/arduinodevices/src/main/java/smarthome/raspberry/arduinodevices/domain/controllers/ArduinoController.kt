@@ -1,10 +1,10 @@
 package smarthome.raspberry.arduinodevices.domain.controllers
 
 import smarthome.library.common.BaseController
+import smarthome.library.common.Id
 import smarthome.raspberry.arduinodevices.domain.ArduinoDevice
 
-internal class ArduinoController(
+abstract class ArduinoController(
     name: String,
-    val device: ArduinoDevice,
     val indexInArduinoServicesArray: Int
 ) : BaseController(name)

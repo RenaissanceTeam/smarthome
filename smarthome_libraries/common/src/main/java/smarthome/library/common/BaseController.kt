@@ -15,9 +15,3 @@ open class BaseController(var name: String,
 
     override fun equals(other: Any?) = (other as? BaseController)?.id == id
 }
-
-open class ControllerState
-
-enum class ControllerServeState {
-    PENDING_READ, PENDING_WRITE, IDLE
-}
