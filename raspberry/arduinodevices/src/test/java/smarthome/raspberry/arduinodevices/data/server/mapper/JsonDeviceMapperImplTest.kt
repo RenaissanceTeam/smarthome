@@ -10,6 +10,7 @@ import smarthome.library.common.BaseController
 import smarthome.library.common.ControllerState
 import smarthome.library.common.Id
 import smarthome.library.common.IotDevice
+import smarthome.library.common.constants.typeField
 import smarthome.library.common.util.RuntimeTypeAdapterFactory
 import smarthome.raspberry.arduinodevices.data.server.entity.InvalidDeviceException
 import smarthome.raspberry.arduinodevices.domain.ArduinoDevice
@@ -45,19 +46,19 @@ class JsonDeviceMapperImplTest {
         gson = GsonBuilder()
             .registerTypeAdapterFactory(
                 RuntimeTypeAdapterFactory
-                    .of(IotDevice::class.java, "type")
+                    .of(IotDevice::class.java, typeField)
                     .registerSubtype(SupportedDeviceA::class.java, "A")
                     .registerSubtype(SupportedDeviceB::class.java, "B")
             )
             .registerTypeAdapterFactory(
                 RuntimeTypeAdapterFactory
-                    .of(BaseController::class.java, "type")
+                    .of(BaseController::class.java, typeField)
                     .registerSubtype(SupportedControllerA::class.java, "A")
                     .registerSubtype(SupportedControllerB::class.java, "B")
             )
             .registerTypeAdapterFactory(
                 RuntimeTypeAdapterFactory
-                    .of(ControllerState::class.java, "type")
+                    .of(ControllerState::class.java, typeField)
                     .registerSubtype(SupportedControllerStateA::class.java, "A")
                     .registerSubtype(SupportedControllerStateB::class.java, "B")
             )
@@ -77,7 +78,7 @@ class JsonDeviceMapperImplTest {
     fun `when pass invalid type should throw`() {
         val device = """
             {
-                "type": "C",
+                $typeField: "C",
                 "id": { "id": "" },
                 "name": "",
                 "controllers": [
@@ -95,13 +96,14 @@ class JsonDeviceMapperImplTest {
     fun `when pass device of valid type should successfully map`() {
         val device = """
             {
-                "type": "A",
+                $typeField: "A",
                 "id": { "id": "" },
                 "name": "",
                 "controllers": [ {
+                        $typeField: "A",
                         "id": { "id": "" },
                         "name": "",
-                        "state": { "value": "1" }
+                        "state": { $typeField: "A", "value": "1" }
                     }
                 ]
             }
@@ -117,13 +119,14 @@ class JsonDeviceMapperImplTest {
         val id = Id("some")
         val device = """
             {
-                "type": "A",
+                $typeField: "A",
                 "id": { "id": "some" },
                 "name": "",
                 "controllers": [ {
+                        $typeField: "A",
                         "id": { "id": "" },
                         "name": "",
-                        "state": { "value": "1" }
+                        "state": { $typeField: "A", "value": "1" }
                     }
                 ]
             }
@@ -138,14 +141,14 @@ class JsonDeviceMapperImplTest {
     fun `parsed controllers should be correct`() {
         val device = """
             {
-                "type": "A",
+                $typeField: "A",
                 "id": { "id": "some" },
                 "name": "",
                 "controllers": [ {
-                        "type": "B",
+                        $typeField: "B",
                         "id": { "id": "" },
                         "name": "",
-                        "state": { "value": "1" }
+                        "state": { $typeField: "A", "value": "1" }
                     }
                 ]
             }
@@ -160,7 +163,7 @@ class JsonDeviceMapperImplTest {
     fun `parsed state should be correct`() {
         val device = """
             {
-                "type": "A",
+                $typeField: "A",
                 "id": { "id": "some" },
                 "name": "",
                 "controllers": [ {
