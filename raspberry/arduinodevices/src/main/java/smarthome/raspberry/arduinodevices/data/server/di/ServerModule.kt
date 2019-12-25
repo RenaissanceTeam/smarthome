@@ -16,6 +16,7 @@ import smarthome.raspberry.arduinodevices.data.server.httphandlers.init
 import smarthome.raspberry.arduinodevices.data.server.mapper.*
 import smarthome.raspberry.arduinodevices.data.server.nano.DelegatableNanoHttpd
 import smarthome.raspberry.arduinodevices.data.server.nano.NanoHttpdToWebServerAdapter
+import smarthome.raspberry.devices.api.domain.devicesGson
 
 val serverModule = module {
     singleBy<WebServer, WebServerImpl>()
@@ -24,7 +25,9 @@ val serverModule = module {
     factoryBy<WebServerGate, NanoHttpdToWebServerAdapter>()
     factory { DelegatableNanoHttpd() }
     factoryBy<NanoMethodToMethodMapper, NanoMethodToMethodMapperImpl>()
-    factoryBy<JsonDeviceMapper, JsonDeviceMapperImpl>()
+    factory<JsonDeviceMapper> {
+        JsonDeviceMapperImpl(get(named(devicesGson)))
+    }
     
     factoryBy<HttpSessionToRequestMapper, HttpSessionToRequestMapperImpl>()
     factoryBy<ResponseCodeToStatusMapper, ResponseCodeToStatusMapperImpl>()
