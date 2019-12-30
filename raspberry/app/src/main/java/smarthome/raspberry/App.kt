@@ -1,13 +1,20 @@
 package smarthome.raspberry
 
+import org.koin.core.context.startKoin
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import smarthome.raspberry.di.appModules
 
 @SpringBootApplication
 open class RaspberryApplication
 
 fun main(args: Array<String>) {
+    CreateClassesOnAppStart()
+    startKoin {
+        modules(appModules)
+    }
     runApplication<RaspberryApplication>(*args)
+  
 }
 
 //class App : Application() {
@@ -16,10 +23,7 @@ fun main(args: Array<String>) {
 //    override fun onCreate() {
 //        super.onCreate()
 //
-//        startKoin {
-//            androidContext(this@App)
-//            modules(appModules)
-//        }
+//
 //
 //        CreateClassesOnAppStart()
 //
