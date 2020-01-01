@@ -9,12 +9,11 @@ import smarthome.raspberry.di.appModules
 open class RaspberryApplication
 
 fun main(args: Array<String>) {
-    CreateClassesOnAppStart()
     startKoin {
         modules(appModules)
     }
+//    CreateClassesOnAppStart()
     runApplication<RaspberryApplication>(*args)
-  
 }
 
 //class App : Application() {
