@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import smarthome.raspberry.authentication.api.domain.AuthStatus
-import smarthome.raspberry.authentication.api.domain.Credentials
+import smarthome.raspberry.authentication.api.domain.entity.Credentials
 import smarthome.raspberry.authentication.api.domain.User
 import smarthome.raspberry.authentication.api.domain.exceptions.NotSignedInException
 import smarthome.raspberry.authentication.data.command.SignInCommand
