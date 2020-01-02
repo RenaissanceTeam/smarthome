@@ -13,9 +13,11 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager
 @Configuration
 @EnableWebSecurity
 open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
-
+    
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
+        http.csrf().disable()
+        
         http
             .authorizeRequests()
                 .antMatchers("/", "/login").permitAll()

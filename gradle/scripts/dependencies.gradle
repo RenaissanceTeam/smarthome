@@ -53,6 +53,7 @@ ext {
             spring                       : ("org.springframework.boot:spring-boot-starter"),
             springWeb                    : ("org.springframework.boot:spring-boot-starter-web"),
             springSecurity               : ("org.springframework.boot:spring-boot-starter-security"),
+            jacksonKotlin                : ("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"),
 
 
             // modules

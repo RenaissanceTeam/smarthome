@@ -1,4 +1,3 @@
 package smarthome.raspberry.authentication.api.domain.exceptions
 
-class UserExistsException {
-}
+class UserExistsException: Throwable("already exists")

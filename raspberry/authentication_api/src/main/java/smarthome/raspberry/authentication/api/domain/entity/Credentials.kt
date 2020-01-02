@@ -1,3 +1,3 @@
-package smarthome.raspberry.authentication.api.domain
+package smarthome.raspberry.authentication.api.domain.entity
 
-data class Credentials(val idToken: String)
+class Credentials(val login: String, val password: String)
