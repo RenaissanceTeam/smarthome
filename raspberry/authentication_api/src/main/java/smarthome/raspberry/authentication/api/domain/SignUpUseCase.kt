@@ -1,7 +1,8 @@
 package smarthome.raspberry.authentication.api.domain
 
-import smarthome.raspberry.authentication.api.domain.entity.Credentials
+import smarthome.raspberry.authentication.api.domain.entity.RegistrationInfo
 
 interface SignUpUseCase {
-    fun execute(credentials: Credentials)
+    fun execute(info: RegistrationInfo)
 }
+

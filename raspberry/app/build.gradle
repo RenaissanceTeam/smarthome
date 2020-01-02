@@ -11,6 +11,7 @@ bootJar {
 dependencies {
     implementation library.kotlin
     implementation library.kotlinReflection
+    implementation library.jacksonKotlin
     implementation groups.spring
     implementation library.springSecurity
 
