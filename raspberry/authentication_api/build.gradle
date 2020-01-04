@@ -1,5 +1,4 @@
 apply from: "$rootDir/gradle/scripts/jar-module.gradle"
-apply plugin: "kotlin-jpa"
 
 dependencies {
     implementation library.kotlin

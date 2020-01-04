@@ -4,7 +4,7 @@ import javax.persistence.Entity
 import javax.persistence.Id
 
 @Entity
-data class UserRoles(
+data class UserRole (
     @Id
     val username: String,
     val role: String
