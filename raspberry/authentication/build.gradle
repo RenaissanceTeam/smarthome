@@ -6,6 +6,7 @@ dependencies {
     implementation library.kotlin
     implementation groups.spring
     implementation library.springSecurity
+    implementation library.springData
     implementation library.coroutinesCore
     implementation library.rxJava
     implementation library.playServicesAuth
