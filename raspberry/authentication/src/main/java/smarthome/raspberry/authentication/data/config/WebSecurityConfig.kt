@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
+import smarthome.raspberry.authentication.domain.entity.Roles
 import javax.sql.DataSource
 
 @Configuration
@@ -14,14 +15,13 @@ open class WebSecurityConfig(private val dataSource: DataSource) : WebSecurityCo
     
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
-        http.csrf().disable()
-        
         http
+            .csrf().disable()
             .authorizeRequests()
-                .antMatchers("/", "/login").permitAll()
-                .anyRequest().authenticated()
-                .and()
-            .logout().permitAll()
+                .antMatchers("/login", "/signup").permitAll()
+                .antMatchers("/signup/admin").hasRole(Roles.ADMIN.name)
+                .antMatchers("/api/**").authenticated()
+            .and().logout().permitAll()
     }
     
     override fun configure(auth: AuthenticationManagerBuilder?) {
