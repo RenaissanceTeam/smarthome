@@ -5,7 +5,6 @@ import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
 import smarthome.raspberry.input.api.domain.HandleInputByParsingChangedDevicesUseCase
 import smarthome.raspberry.input.data.InputControllerDataSource
-import smarthome.raspberry.input.data.InputFromSharedDatabase
 import smarthome.raspberry.input.domain.HandleInputByParsingChangedDevicesUseCaseImpl
 
 private val domain = module {
@@ -13,7 +12,6 @@ private val domain = module {
 }
 
 private val data = module {
-    singleBy<InputControllerDataSource, InputFromSharedDatabase>()
 }
 
 val inputModule = listOf(

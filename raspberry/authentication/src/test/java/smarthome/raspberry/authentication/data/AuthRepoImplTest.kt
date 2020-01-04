@@ -8,7 +8,7 @@ import org.junit.Before
 import org.junit.Test
 import smarthome.raspberry.authentication.api.domain.AuthStatus
 import smarthome.raspberry.authentication.api.domain.entity.Credentials
-import smarthome.raspberry.authentication.api.domain.User
+import smarthome.raspberry.authentication.api.domain.entity.User
 import smarthome.raspberry.authentication.api.domain.exceptions.NotSignedInException
 import smarthome.raspberry.authentication.data.command.SignInCommand
 import smarthome.raspberry.authentication.data.command.SignOutCommand
@@ -35,7 +35,8 @@ class AuthRepoImplTest {
     
     @Test
     fun `when user query returns user should emit on user and auth status subjects`() {
-        val user = User("", "")
+        val user =
+            User("", "")
         whenever(getUserQuery.execute()).then { user }
     
         authRepo = AuthRepoImpl(signInCommand, signOutCommand, getUserQuery)
@@ -54,7 +55,8 @@ class AuthRepoImplTest {
     @Test
     fun `when sign in successful should emit user and auth status`() {
         val credentials = mock<Credentials> {}
-        val user = User("", "")
+        val user =
+            User("", "")
     
         runBlocking {
             whenever(signInCommand.execute(credentials)).then { user }

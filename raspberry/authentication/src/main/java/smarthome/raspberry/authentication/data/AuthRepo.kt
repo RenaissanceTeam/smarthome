@@ -1,14 +1,8 @@
 package smarthome.raspberry.authentication.data
 
-import io.reactivex.Observable
-import smarthome.raspberry.authentication.api.domain.AuthStatus
-import smarthome.raspberry.authentication.api.domain.entity.Credentials
-import smarthome.raspberry.authentication.api.domain.User
+import org.springframework.data.jpa.repository.JpaRepository
+import smarthome.raspberry.authentication.domain.entity.User
 
-interface AuthRepo {
-    fun getAuthStatus(): Observable<AuthStatus>
-    fun getUserId(): Observable<String>
-    fun getUser(): User
-    fun hasUser(): Boolean
-    fun checkUserExists(login: String): Boolean
+interface AuthRepo : JpaRepository<User, String> {
+    fun findByUsername(username: String): User?
 }
