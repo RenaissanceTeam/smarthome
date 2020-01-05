@@ -21,5 +21,6 @@ val appModules = authenticationModule +
                  notificationModule +
                  scriptsModule +
                  utilModule +
-                 externalModule + arduinoModule
+                 externalModule +
+                 arduinoModule
     

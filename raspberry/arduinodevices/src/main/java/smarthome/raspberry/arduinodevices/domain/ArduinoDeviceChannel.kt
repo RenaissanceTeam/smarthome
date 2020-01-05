@@ -1,5 +1,6 @@
 package smarthome.raspberry.arduinodevices.domain
 
+import android.util.Log
 import com.google.gson.Gson
 import io.reactivex.rxkotlin.subscribeBy
 import retrofit2.Retrofit
@@ -13,7 +14,7 @@ import smarthome.raspberry.arduinodevices.data.mapper.ControllerStateToValuePayl
 import smarthome.raspberry.arduinodevices.data.mapper.ValuePayloadToControllerStateMapper
 import smarthome.raspberry.arduinodevices.data.server.UdpServer
 import smarthome.raspberry.arduinodevices.data.server.api.WebServer
-import smarthome.raspberry.arduinodevices.domain.controllers.ArduinoController
+import smarthome.raspberry.arduinodevices.domain.controllers.Writeable
 import smarthome.raspberry.home.api.domain.eventbus.ObserveHomeLifecycleUseCase
 import smarthome.raspberry.home.api.domain.eventbus.events.Paused
 import smarthome.raspberry.home.api.domain.eventbus.events.Resumed
@@ -30,6 +31,7 @@ class ArduinoDeviceChannel(
     
     init {
         observeHomeLifecycleUseCase.execute().subscribeBy {
+    
             when (it) {
                 is Paused -> {
                     httpServer.stop()
@@ -53,22 +55,21 @@ class ArduinoDeviceChannel(
 
     override suspend fun read(device: IotDevice, controller: BaseController): ControllerState {
         require(device is ArduinoDevice)
-        require(controller is ArduinoController)
 
         val api = getArduinoDeviceApi(device.ip)
-        val response = api.controllerReadRequest(controller.indexInArduinoServicesArray)
+        val response = api.controllerReadRequest(controller.id)
     
         return valueToStateMapper.map(response.response)
     }
 
     override suspend fun writeState(device: IotDevice, controller: BaseController, state: ControllerState): ControllerState {
         require(device is ArduinoDevice)
-        require(controller is ArduinoController)
+        require(controller is Writeable)
 
         val api = getArduinoDeviceApi(device.ip)
     
         val writeValue = stateToValueMapper.map(state)
-        val response = api.controllerWriteRequest(controller.indexInArduinoServicesArray, writeValue)
+        val response = api.controllerWriteRequest(controller.id, writeValue)
     
         return valueToStateMapper.map(response.response)
     }
