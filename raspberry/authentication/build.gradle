@@ -13,6 +13,7 @@ dependencies {
     implementation library.rxJava
     implementation library.playServicesAuth
     implementation library.firebaseAuth
+    implementation library.jjwt
 
     implementation groups.koinWithExt
     implementation library.koinScope

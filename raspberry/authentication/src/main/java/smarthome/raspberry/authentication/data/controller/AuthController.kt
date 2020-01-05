@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 import smarthome.raspberry.authentication.api.domain.SignInUseCase
 import smarthome.raspberry.authentication.api.domain.SignUpUseCase
+import smarthome.raspberry.authentication.api.domain.dto.TokenResponse
 import smarthome.raspberry.authentication.api.domain.entity.Credentials
 import smarthome.raspberry.authentication.api.domain.entity.RegistrationInfo
 import smarthome.raspberry.authentication.api.domain.exceptions.UserExistsException
@@ -21,19 +22,14 @@ class AuthController(
 ) {
 
     @PostMapping("/login")
-    fun login(@RequestBody credentials: Credentials): Boolean {
-        try {
-            signInUseCase.execute(credentials)
-        } catch (u: UserExistsException) {
-        
-        }
-        return true
+    fun login(@RequestBody credentials: Credentials): TokenResponse {
+        return signInUseCase.execute(credentials)
     }
     
     @PostMapping("/signup")
     fun signUp(@RequestBody credentials: Credentials) {
         try {
-            signUpUseCase.execute(RegistrationInfo(credentials, Roles.USER.name))
+            signUpUseCase.execute(RegistrationInfo(credentials, setOf(Roles.USER.name)))
         } catch (u: UserExistsException) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User ${credentials.login} already exists")
         }
@@ -41,13 +37,14 @@ class AuthController(
     
     @PostMapping("/signup/admin")
     fun signUpAdmin(@RequestBody credentials: Credentials): Boolean {
-        signUpUseCase.execute(RegistrationInfo(credentials, Roles.ADMIN.name))
+        signUpUseCase.execute(
+            RegistrationInfo(credentials, setOf(Roles.USER.name, Roles.ADMIN.name)))
         return true
     }
     
     
     @GetMapping("/api/s")
     fun te() {
-        
+    
     }
 }

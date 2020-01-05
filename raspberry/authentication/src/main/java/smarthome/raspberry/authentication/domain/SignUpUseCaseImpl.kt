@@ -7,7 +7,7 @@ import smarthome.raspberry.authentication.api.domain.exceptions.UserExistsExcept
 import smarthome.raspberry.authentication.data.AuthRepo
 import smarthome.raspberry.authentication.data.UserRoleRepo
 import smarthome.raspberry.authentication.domain.entity.User
-import smarthome.raspberry.authentication.domain.entity.UserRole
+import smarthome.raspberry.authentication.domain.entity.UserRoles
 
 @Component
 class SignUpUseCaseImpl(
@@ -19,7 +19,7 @@ class SignUpUseCaseImpl(
         if (authRepo.findByUsername(info.credentials.login) != null) throw UserExistsException()
         
         val user = User(info.credentials.login, info.credentials.password, true)
-        val userRole = UserRole(user.username, info.role)
+        val userRole = UserRoles(user.username, info.roles)
         
         authRepo.save(user)
         roleRepo.save(userRole)

@@ -13,7 +13,7 @@ import smarthome.raspberry.authentication.api.domain.exceptions.UserExistsExcept
 import smarthome.raspberry.authentication.data.AuthRepo
 import smarthome.raspberry.authentication.data.UserRoleRepo
 import smarthome.raspberry.authentication.domain.entity.User
-import smarthome.raspberry.authentication.domain.entity.UserRole
+import smarthome.raspberry.authentication.domain.entity.UserRoles
 import kotlin.test.assertFailsWith
 
 class SignUpUseCaseImplTest {
@@ -49,6 +49,6 @@ class SignUpUseCaseImplTest {
         useCase.execute(RegistrationInfo(cred, role))
         
         verify(authRepo).save<User>(argThat { this.username == login && this.password == pass })
-        verify(roleRepo).save<UserRole>(argThat { this.username == login && this.role == role })
+        verify(roleRepo).save<UserRoles>(argThat { this.username == login && this.roles == role })
     }
 }
