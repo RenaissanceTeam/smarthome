@@ -1,0 +1,3 @@
+package smarthome.raspberry.arduinodevices.domain.controllers
+
+interface Writeable
