@@ -1,4 +1,0 @@
-apply from: "$rootDir/gradle/scripts/jar-module.gradle"
-
-build.dependsOn copyRaspberryJson
-apply plugin: 'com.google.gms.google-services'
