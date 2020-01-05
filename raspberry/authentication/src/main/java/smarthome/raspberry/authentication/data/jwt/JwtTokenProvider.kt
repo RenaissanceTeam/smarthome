@@ -2,7 +2,6 @@ package smarthome.raspberry.authentication.data.jwt
 
 import io.jsonwebtoken.*
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -13,13 +12,13 @@ open class JwtTokenProvider {
     @Value("\${app.jwtExpirationInMs}")
     private val jwtExpirationInMs = 0
     
-    fun generateToken(authentication: Authentication): String {
-        val userPrincipal = authentication.principal as UserPrincipal
+    fun generateToken(username: String): String {
+        
         val now = Date()
         val expiryDate = Date(now.time + jwtExpirationInMs)
         
         return Jwts.builder()
-            .setSubject(userPrincipal.username)
+            .setSubject(username)
             .setIssuedAt(now)
             .setExpiration(expiryDate)
             .signWith(SignatureAlgorithm.HS512, jwtSecret)
