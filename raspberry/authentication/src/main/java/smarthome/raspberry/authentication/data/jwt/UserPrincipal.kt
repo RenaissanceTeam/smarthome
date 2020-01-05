@@ -8,7 +8,7 @@ import smarthome.raspberry.authentication.domain.entity.UserRoles
 
 class UserPrincipal(private val user: User, private val userRoles: UserRoles) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
-        userRoles.roles.map { SimpleGrantedAuthority(it) }.toMutableList()
+        userRoles.roles.map { SimpleGrantedAuthority("ROLE_$it") }.toMutableList()
     
     override fun isEnabled() = user.enabled
     
