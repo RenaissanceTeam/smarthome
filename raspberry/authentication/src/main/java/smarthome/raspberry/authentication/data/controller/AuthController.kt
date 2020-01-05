@@ -27,19 +27,21 @@ class AuthController(
     }
     
     @PostMapping("/signup")
-    fun signUp(@RequestBody credentials: Credentials) {
+    fun signUp(@RequestBody credentials: Credentials): TokenResponse {
         try {
-            signUpUseCase.execute(RegistrationInfo(credentials, setOf(Roles.USER.name)))
+            return signUpUseCase.execute(RegistrationInfo(credentials, setOf(Roles.USER.name)))
         } catch (u: UserExistsException) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User ${credentials.login} already exists")
         }
     }
     
     @PostMapping("/signup/admin")
-    fun signUpAdmin(@RequestBody credentials: Credentials): Boolean {
-        signUpUseCase.execute(
-            RegistrationInfo(credentials, setOf(Roles.USER.name, Roles.ADMIN.name)))
-        return true
+    fun signUpAdmin(@RequestBody credentials: Credentials): TokenResponse {
+        try {
+            return signUpUseCase.execute(RegistrationInfo(credentials, setOf(Roles.USER.name, Roles.ADMIN.name)))
+        } catch (u: UserExistsException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User ${credentials.login} already exists")
+        }
     }
     
     
