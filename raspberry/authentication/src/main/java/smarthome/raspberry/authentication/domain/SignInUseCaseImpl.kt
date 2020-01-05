@@ -1,23 +1,30 @@
 package smarthome.raspberry.authentication.domain
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import smarthome.raspberry.authentication.api.domain.SignInUseCase
+import smarthome.raspberry.authentication.api.domain.dto.TokenResponse
 import smarthome.raspberry.authentication.api.domain.entity.Credentials
-import smarthome.raspberry.authentication.api.domain.exceptions.UserExistsException
-import smarthome.raspberry.authentication.data.AuthRepo
+import smarthome.raspberry.authentication.data.jwt.JwtTokenProvider
 
 @Component
 class SignInUseCaseImpl(
-    private val authRepo: AuthRepo
+    private val authenticationManager: AuthenticationManager,
+    private val tokenProvider: JwtTokenProvider
 ): SignInUseCase {
     
-    override fun execute(credentials: Credentials) {
-        val user = authRepo.findByUsername(credentials.login)
+    override fun execute(credentials: Credentials): TokenResponse {
+        val authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(
+            credentials.login,
+            credentials.password
+        ))
         
+        SecurityContextHolder.getContext().authentication = authentication
         
-        
+        val token = tokenProvider.generateToken(authentication)
+        return TokenResponse(token)
     }
 }
 
