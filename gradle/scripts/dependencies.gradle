@@ -63,8 +63,6 @@ ext {
             client_entity                : project(":${gradle.ext.clientFolder}:entity"),
 
             common                       : project(":${gradle.ext.libraryFolder}:common"),
-            datalibrary                  : project(":${gradle.ext.libraryFolder}:datalibrary"),
-            datalibrary_api              : project(":${gradle.ext.libraryFolder}:datalibrary_api"),
 
             client_presentation          : project(":${gradle.ext.clientFolder}:presentation"),
             client_domain                : project(":${gradle.ext.clientFolder}:domain"),

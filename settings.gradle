@@ -15,8 +15,6 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.clientFolder}:scripts_api",
 
         ":${gradle.ext.libraryFolder}:common",
-        ":${gradle.ext.libraryFolder}:datalibrary",
-        ":${gradle.ext.libraryFolder}:datalibrary_api",
 
         ":${gradle.ext.homeServerFolder}:app",
         ":${gradle.ext.homeServerFolder}:arduinodevices",

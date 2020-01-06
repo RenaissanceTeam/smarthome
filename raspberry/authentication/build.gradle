@@ -22,7 +22,6 @@ dependencies {
     implementation library.homeServer_authentication_api
     implementation library.homeServer_home_api
     implementation library.homeServer_util
-    implementation library.datalibrary_api
     implementation library.common
 
     testImplementation groups.forTest

@@ -13,7 +13,6 @@ dependencies {
     implementation library.homeServer_home_api
     implementation library.homeServer_authentication_api
     implementation library.common
-    implementation library.datalibrary_api
     implementation library.homeServer_entity
     implementation library.homeServer_util
 
