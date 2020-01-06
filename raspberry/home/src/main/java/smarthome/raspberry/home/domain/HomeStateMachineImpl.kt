@@ -32,3 +32,14 @@ class HomeStateMachineImpl(
         }
     }
 }
+
+//
+//getAuthStatusUseCase.execute()
+//.subscribeBy {
+//    if (it == AuthStatus.NOT_SIGNED_IN) signInFlowLauncher.launch()
+//
+//    view.setAuthStatus(it.toString())
+//}
+//
+//getHomeInfoUseCase.execute(){ view.setHomeInfo(it) }
+//launchUseCase.execute()

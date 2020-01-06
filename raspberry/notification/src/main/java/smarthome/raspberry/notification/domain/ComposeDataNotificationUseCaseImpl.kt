@@ -3,7 +3,6 @@ package smarthome.raspberry.notification.domain
 import smarthome.library.common.BaseController
 import smarthome.library.common.IotDevice
 import smarthome.raspberry.devices.api.domain.GetDeviceByControllerUseCase
-import smarthome.raspberry.notification.R
 import smarthome.raspberry.notification.api.domain.ComposeDataNotificationUseCase
 import smarthome.raspberry.notification.api.domain.Notification
 import smarthome.raspberry.notification.api.domain.Priority
@@ -24,13 +23,13 @@ class ComposeDataNotificationUseCaseImpl(private val resourceProvider: ResourceP
     }
     
     private fun composeAlertTitle(controller: BaseController): String {
-        val base = resourceProvider.resources.getString(R.string.alert_trigger)
+        val base = "Alert"
         if (controller.name.isEmpty()) return base
         return "$base: ${controller.name}"
     }
     
     private fun composeAlertBody(controller: BaseController, device: IotDevice): String {
-        return resourceProvider.resources.getString(R.string.alert_body)
+        return "Default alert body %s %s"
             .format(controller.state, device.name)
     }
 }
