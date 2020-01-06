@@ -15,16 +15,11 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.clientFolder}:scripts_api",
 
         ":${gradle.ext.libraryFolder}:common",
-        ":${gradle.ext.libraryFolder}:datalibrary",
-        ":${gradle.ext.libraryFolder}:datalibrary_api",
 
         ":${gradle.ext.homeServerFolder}:app",
         ":${gradle.ext.homeServerFolder}:arduinodevices",
-        ":${gradle.ext.homeServerFolder}:entity",
         ":${gradle.ext.homeServerFolder}:authentication",
         ":${gradle.ext.homeServerFolder}:authentication_api",
-        ":${gradle.ext.homeServerFolder}:input",
-        ":${gradle.ext.homeServerFolder}:input_api",
         ":${gradle.ext.homeServerFolder}:scripts",
         ":${gradle.ext.homeServerFolder}:scripts_api",
         ":${gradle.ext.homeServerFolder}:controllers",
@@ -37,8 +32,6 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.homeServerFolder}:channel_api",
         ":${gradle.ext.homeServerFolder}:notification",
         ":${gradle.ext.homeServerFolder}:notification_api",
-        ":${gradle.ext.homeServerFolder}:util",
-        ":${gradle.ext.homeServerFolder}:external",
-        ":${gradle.ext.homeServerFolder}:google_services"
+        ":${gradle.ext.homeServerFolder}:util"
 
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"

@@ -35,8 +35,6 @@ dependencies {
     implementation library.client_domain_api
     implementation library.client_entity
     implementation library.common
-    implementation library.datalibrary
-
 }
 
 apply plugin: 'kotlin-android-extensions'

@@ -6,10 +6,9 @@ import smarthome.raspberry.devices.api.domain.GetDeviceByControllerUseCase
 import smarthome.raspberry.notification.api.domain.ComposeDataNotificationUseCase
 import smarthome.raspberry.notification.api.domain.Notification
 import smarthome.raspberry.notification.api.domain.Priority
-import smarthome.raspberry.util.ResourceProvider
 
-class ComposeDataNotificationUseCaseImpl(private val resourceProvider: ResourceProvider,
-                                         private val getDeviceByControllerUseCase: GetDeviceByControllerUseCase) :
+class ComposeDataNotificationUseCaseImpl(
+    private val getDeviceByControllerUseCase: GetDeviceByControllerUseCase) :
         ComposeDataNotificationUseCase {
     
     

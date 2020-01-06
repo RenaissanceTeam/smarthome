@@ -6,5 +6,4 @@ dependencies {
     // modules
     implementation library.common
     implementation library.rxJava
-    implementation library.homeServer_entity
 }
