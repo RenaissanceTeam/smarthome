@@ -9,13 +9,13 @@ bootJar {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.codehaus.groovy:groovy'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-
     implementation library.kotlin
+    implementation library.kotlinReflection
+    implementation library.jacksonKotlin
+    implementation groups.spring
+    implementation library.springSecurity
+    implementation library.springData
+    runtime library.postgres
 
     implementation groups.koinWithExt
     testImplementation groups.forTest

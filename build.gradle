@@ -25,6 +25,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:$build_tools_version"
         classpath "com.google.gms:google-services:$google_services_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.1.RELEASE")
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_safe_args_version"
     }

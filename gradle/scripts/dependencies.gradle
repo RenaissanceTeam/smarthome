@@ -30,6 +30,7 @@ ext {
             multidex                     : ("com.android.support:multidex:$multidex_version"),
             junit                        : ("junit:junit:$junit_version"),
             kotlin                       : ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"),
+            kotlinReflection             : ("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"),
             kotlinTest                   : ("org.jetbrains.kotlin:kotlin-test:$kotlin_version"),
             lifecycleExtensions          : ("androidx.lifecycle:lifecycle-extensions:$lifecycle_version"),
             lifecycleViewModel           : ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"),
@@ -49,6 +50,13 @@ ext {
             androidTestRunner            : ("com.android.support.test:runner:$androidTestRunner_version"),
             gson                         : ("com.google.code.gson:gson:$gson_version"),
             supportAnnotations           : ("com.android.support:support-annotations:$supportLibrary_version"),
+            spring                       : ("org.springframework.boot:spring-boot-starter"),
+            springWeb                    : ("org.springframework.boot:spring-boot-starter-web"),
+            springSecurity               : ("org.springframework.boot:spring-boot-starter-security"),
+            springData                   : ("org.springframework.boot:spring-boot-starter-data-jpa"),
+            jacksonKotlin                : ("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"),
+            postgres                     : ("org.postgresql:postgresql"),
+            jjwt                         : ("io.jsonwebtoken:jjwt:0.9.1"),
 
 
             // modules
@@ -117,6 +125,10 @@ ext {
                     library.navigationFragmentKtx,
                     library.navigationUiKtx,
             ],
+            spring: [
+                    library.spring,
+                    library.springWeb
+            ]
 
     ]
 }
