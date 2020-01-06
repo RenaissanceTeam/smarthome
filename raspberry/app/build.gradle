@@ -45,7 +45,6 @@ dependencies {
     implementation library.homeServer_scripts_api
 
     implementation library.homeServer_util
-    implementation library.homeServer_external
 
     implementation library.homeServer_arduinoDevices
 }
