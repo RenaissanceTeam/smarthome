@@ -63,8 +63,6 @@ ext {
             client_entity                : project(":${gradle.ext.clientFolder}:entity"),
 
             common                       : project(":${gradle.ext.libraryFolder}:common"),
-            datalibrary                  : project(":${gradle.ext.libraryFolder}:datalibrary"),
-            datalibrary_api              : project(":${gradle.ext.libraryFolder}:datalibrary_api"),
 
             client_presentation          : project(":${gradle.ext.clientFolder}:presentation"),
             client_domain                : project(":${gradle.ext.clientFolder}:domain"),
@@ -81,9 +79,6 @@ ext {
             homeServer_controllers_api   : project(":${gradle.ext.homeServerFolder}:controllers_api"),
             homeServer_devices           : project(":${gradle.ext.homeServerFolder}:devices"),
             homeServer_devices_api       : project(":${gradle.ext.homeServerFolder}:devices_api"),
-            homeServer_entity            : project(":${gradle.ext.homeServerFolder}:entity"),
-            homeServer_input             : project(":${gradle.ext.homeServerFolder}:input"),
-            homeServer_input_api         : project(":${gradle.ext.homeServerFolder}:input_api"),
             homeServer_scripts           : project(":${gradle.ext.homeServerFolder}:scripts"),
             homeServer_scripts_api       : project(":${gradle.ext.homeServerFolder}:scripts_api"),
             homeServer_home              : project(":${gradle.ext.homeServerFolder}:home"),
@@ -93,8 +88,6 @@ ext {
             homeServer_util              : project(":${gradle.ext.homeServerFolder}:util"),
             homeServer_notification      : project(":${gradle.ext.homeServerFolder}:notification"),
             homeServer_notification_api  : project(":${gradle.ext.homeServerFolder}:notification_api"),
-            homeServer_google_services   : project(":${gradle.ext.homeServerFolder}:google_services"),
-            homeServer_external          : project(":${gradle.ext.homeServerFolder}:external"),
 
 
 //            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),
