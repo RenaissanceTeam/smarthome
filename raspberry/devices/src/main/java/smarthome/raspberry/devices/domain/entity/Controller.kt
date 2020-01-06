@@ -5,8 +5,7 @@ import javax.persistence.*
 @Entity
 data class Controller(
     @ManyToOne
-    @JoinColumn
-    val deviceName: String,
+    val device: Device,
     @Id @GeneratedValue
     val id: Long = 0,
     val type: String,
