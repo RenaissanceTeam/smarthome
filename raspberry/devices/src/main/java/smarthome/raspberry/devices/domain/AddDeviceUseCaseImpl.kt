@@ -24,7 +24,8 @@ class AddDeviceUseCaseImpl(
         deviceDtoMapper.map(device).let {
             devicesRepository.save(it)
             deviceStatusRepository.save(DeviceStatus(
-                it, DeviceStatuses.PENDING.name
+                device = it,
+                status = DeviceStatuses.PENDING.name
             ))
         }
     }

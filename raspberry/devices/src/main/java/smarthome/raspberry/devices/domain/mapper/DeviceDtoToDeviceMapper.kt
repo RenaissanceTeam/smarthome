@@ -9,12 +9,16 @@ import smarthome.raspberry.devices.domain.entity.Device
 open class DeviceDtoToDeviceMapper(
     private val controllerMapper: ControllerDtoToControllerMapper
 ) {
-    fun map(dto: DeviceDTO): Device = Device(
-        serialName = dto.serialName,
-        type = dto.type,
-        controllers = dto.controllers.map { controllerMapper.map(dto.serialName, it) },
-        description = dto.description,
-        name = dto.name
-    )
+    fun map(dto: DeviceDTO): Device {
+        return Device(
+            serialName = dto.serialName,
+            type = dto.type,
+            controllers = mutableListOf(),
+            description = dto.description,
+            name = dto.name
+        ).apply {
+            dto.controllers.map { (controllers as MutableList).add(controllerMapper.map(this, it)) }
+        }
+    }
 }
 

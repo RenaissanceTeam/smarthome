@@ -39,7 +39,7 @@ open class WebSecurityConfig(
                 .authorizeRequests()
                 .antMatchers("/login", "/signup").permitAll()
                 .antMatchers("/signup/admin").hasRole(Roles.ADMIN.name)
-                .antMatchers("/api/**").authenticated()
+                .antMatchers("/api/**").permitAll()
     }
     
     override fun configure(auth: AuthenticationManagerBuilder?) {
