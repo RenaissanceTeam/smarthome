@@ -19,11 +19,6 @@ import smarthome.raspberry.home.domain.*
 import smarthome.raspberry.home.domain.eventbus.ObserveHomeEventsUseCaseImpl
 import smarthome.raspberry.home.domain.eventbus.ObserveHomeLifecycleUseCaseImpl
 import smarthome.raspberry.home.domain.eventbus.PublishEventUseCaseImpl
-import smarthome.raspberry.home.presentation.MainFlowLauncherImpl
-import smarthome.raspberry.home.presentation.main.MainActivity
-import smarthome.raspberry.home.presentation.main.MainPresenter
-import smarthome.raspberry.home.presentation.main.MainPresenterImpl
-import smarthome.raspberry.home.presentation.main.MainView
 
 private val domain = module {
     factoryBy<GenerateUniqueHomeIdUseCase, GenerateUniqueHomeIdUseCaseImpl>()
@@ -54,27 +49,10 @@ private val data = module {
     singleBy<EventBusRepository, EventBusRepositoryImpl>()
 }
 
-private val presentation = module {
-    scope(named<MainActivity>()) {
-        scoped<MainPresenter> { (view: MainView) ->  MainPresenterImpl(
-                getAuthStatusUseCase = get(),
-                signInFlowLauncher = get(),
-                getHomeInfoUseCase = get(),
-                launchUseCase = get(),
-                view = view
-        ) }
-    }
-}
-
-private val flow = module {
-    factoryBy<MainFlowLauncher, MainFlowLauncherImpl>()
-}
 
 val homeModule = listOf(
         domain,
-        data,
-        flow,
-        presentation
+        data
 )
 
 

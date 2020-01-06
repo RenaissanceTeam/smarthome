@@ -1,7 +1,4 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply from: "$rootDir/gradle/scripts/android-module.gradle"
+apply from: "$rootDir/gradle/scripts/jar-module.gradle"
 
-preBuild.dependsOn copyRaspberryJson
+build.dependsOn copyRaspberryJson
 apply plugin: 'com.google.gms.google-services'

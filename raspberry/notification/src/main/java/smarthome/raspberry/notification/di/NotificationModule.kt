@@ -5,7 +5,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import retrofit2.Retrofit
-import smarthome.raspberry.notification.R
 import smarthome.raspberry.notification.api.domain.ComposeDataNotificationUseCase
 import smarthome.raspberry.notification.api.domain.SendDataNotificationUseCase
 import smarthome.raspberry.notification.data.FcmSenderApi
@@ -15,7 +14,6 @@ import smarthome.raspberry.notification.data.mapper.NotificationToRequestBodyMap
 import smarthome.raspberry.notification.data.mapper.NotificationToRequestBodyMapperImpl
 import smarthome.raspberry.notification.domain.ComposeDataNotificationUseCaseImpl
 import smarthome.raspberry.notification.domain.SendDataNotificationUseCaseImpl
-import smarthome.raspberry.util.ResourceProvider
 
 private val domain = module {
     factoryBy<ComposeDataNotificationUseCase, ComposeDataNotificationUseCaseImpl>()
@@ -29,7 +27,7 @@ private val data = module {
     factoryBy<SendFcmCommand, SendFcmCommandImpl>()
     single(named("notification")) { Gson() }
     factory<FcmSenderApi> {
-        val url = get<ResourceProvider>().resources.getString(R.string.fcm_sender_url)
+        val url = "mock url"
         Retrofit.Builder()
                 .baseUrl(url)
                 .build()

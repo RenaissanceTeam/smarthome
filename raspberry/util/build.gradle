@@ -1,13 +1,9 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply from: "$rootDir/gradle/scripts/android-module.gradle"
+apply from: "$rootDir/gradle/scripts/jar-module.gradle"
 
 dependencies {
     implementation groups.koinWithExt
     implementation library.kotlin
     implementation library.rxJava
-    implementation library.rxAndroid
     implementation library.rxKotlin
     implementation library.coroutinesCore
     implementation library.appCompat

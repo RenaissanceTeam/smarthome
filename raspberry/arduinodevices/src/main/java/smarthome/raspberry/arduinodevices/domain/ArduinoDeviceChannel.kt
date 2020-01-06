@@ -1,6 +1,5 @@
 package smarthome.raspberry.arduinodevices.domain
 
-import android.util.Log
 import com.google.gson.Gson
 import io.reactivex.rxkotlin.subscribeBy
 import retrofit2.Retrofit
