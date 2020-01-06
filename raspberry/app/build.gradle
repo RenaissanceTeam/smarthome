@@ -37,8 +37,6 @@ dependencies {
     implementation library.homeServer_home
     implementation library.homeServer_home_api
 
-    implementation library.homeServer_input
-    implementation library.homeServer_input_api
 
     implementation library.homeServer_notification
     implementation library.homeServer_notification_api
