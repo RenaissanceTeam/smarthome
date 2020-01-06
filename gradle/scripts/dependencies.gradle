@@ -79,7 +79,6 @@ ext {
             homeServer_controllers_api   : project(":${gradle.ext.homeServerFolder}:controllers_api"),
             homeServer_devices           : project(":${gradle.ext.homeServerFolder}:devices"),
             homeServer_devices_api       : project(":${gradle.ext.homeServerFolder}:devices_api"),
-            homeServer_entity            : project(":${gradle.ext.homeServerFolder}:entity"),
             homeServer_scripts           : project(":${gradle.ext.homeServerFolder}:scripts"),
             homeServer_scripts_api       : project(":${gradle.ext.homeServerFolder}:scripts_api"),
             homeServer_home              : project(":${gradle.ext.homeServerFolder}:home"),

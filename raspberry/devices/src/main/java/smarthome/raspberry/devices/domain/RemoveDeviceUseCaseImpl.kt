@@ -8,5 +8,4 @@ class RemoveDeviceUseCaseImpl(private val repository: DevicesRepository): Remove
     override suspend fun execute(device: IotDevice) {
         repository.removeDevice(device)
     }
-
 }

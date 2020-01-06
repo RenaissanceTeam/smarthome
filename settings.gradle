@@ -18,7 +18,6 @@ include ":${gradle.ext.clientFolder}:app",
 
         ":${gradle.ext.homeServerFolder}:app",
         ":${gradle.ext.homeServerFolder}:arduinodevices",
-        ":${gradle.ext.homeServerFolder}:entity",
         ":${gradle.ext.homeServerFolder}:authentication",
         ":${gradle.ext.homeServerFolder}:authentication_api",
         ":${gradle.ext.homeServerFolder}:scripts",
