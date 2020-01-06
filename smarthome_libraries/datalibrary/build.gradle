@@ -17,7 +17,6 @@ dependencies {
     implementation library.rxJava
 
     implementation library.common
-    implementation library.datalibrary_api
 
     testImplementation groups.forTest
     testImplementation library.coroutinesCore

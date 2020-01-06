@@ -9,7 +9,6 @@ dependencies {
     //modules
     implementation library.homeServer_devices_api
     implementation library.common
-    implementation library.datalibrary_api
     implementation library.homeServer_util
 
     testImplementation groups.forTest

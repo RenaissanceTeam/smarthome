@@ -5,9 +5,6 @@ import org.koin.dsl.module
 import smarhome.client.data.*
 import smarthome.client.data_api.*
 import smarthome.client.domain.usecases.*
-import smarthome.library.datalibrary.FirestoreHomesReferencesStorage
-import smarthome.library.datalibrary.FirestoreInstanceTokenStorage
-import smarthome.library.datalibrary.FirestoreSmartHomeStorage
 
 val usecasesModule = module {
     single { AuthenticationUseCase(get()) }
