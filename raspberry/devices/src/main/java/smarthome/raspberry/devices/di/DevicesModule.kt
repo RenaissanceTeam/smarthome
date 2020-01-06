@@ -7,7 +7,6 @@ import smarthome.raspberry.devices.domain.*
 
 private val domain = module {
     factoryBy<AcceptPendingDeviceUseCase, AcceptPendingDeviceUseCaseImpl>()
-    factoryBy<AddDeviceUseCase, AddDeviceUseCaseImpl>()
     factoryBy<GetDeviceByControllerUseCase, GetDeviceByControllerUseCaseImpl>()
     factoryBy<GetDeviceByIdUseCase, GetDeviceByIdUseCaseImpl>()
     factoryBy<GetDevicesUseCase, GetDevicesUseCaseImpl>()
