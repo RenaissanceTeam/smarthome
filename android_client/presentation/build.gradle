@@ -31,5 +31,5 @@ dependencies {
     implementation library.firebaseMessaging
 
     // modules
-    implementation library.client_domain_api
+    implementation library.domain_api
 }

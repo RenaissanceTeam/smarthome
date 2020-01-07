@@ -21,7 +21,7 @@ dependencies {
     implementation library.rxJava
 
     // modules
-    implementation library.client_domain_api
-    implementation library.client_data_api
+    implementation library.domain_api
+    implementation library.data_api
 }
 
