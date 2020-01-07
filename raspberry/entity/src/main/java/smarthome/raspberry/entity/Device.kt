@@ -1,4 +1,4 @@
-package smarthome.raspberry.devices.domain.entity
+package smarthome.raspberry.entity
 
 import javax.persistence.*
 

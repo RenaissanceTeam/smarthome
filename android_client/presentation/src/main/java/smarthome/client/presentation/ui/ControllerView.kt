@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import smarthome.client.domain_api.entity.Controller
+import smarthome.client.domain.api.entity.Controller
 import smarthome.client.presentation.R
 
 

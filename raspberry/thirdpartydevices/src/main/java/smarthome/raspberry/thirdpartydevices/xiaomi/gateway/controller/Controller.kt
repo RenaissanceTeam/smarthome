@@ -1,7 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.controller
 
 import com.google.firebase.firestore.Exclude
-import smarthome.library.common.BaseController
+import smarthome.library.common.Controller
 import smarthome.library.common.GUID
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.Command
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.constants.defStateChangeListener
@@ -12,7 +12,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.net.UdpTransport
 open class Controller(device: GatewayDevice,
                       type: String,
                       transport: UdpTransport? = null)
-    : BaseController() {
+    : Controller() {
 
 
     @Exclude

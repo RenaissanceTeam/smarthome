@@ -18,10 +18,10 @@ class ReadControllerUseCaseImplTest {
     private lateinit var saveDeviceUseCase: SaveDeviceUseCase
     private lateinit var readControllerUseCase: ReadControllerUseCase
 
-    private val pendingController = BaseController(name = "", id = Id("1"))
+    private val pendingController = Controller(name = "", id = Id("1"))
             .apply { serveState = ControllerServeState.PENDING_READ }
     private val pendingDevice =
-            IotDevice(name = "", id = Id("2"), controllers = listOf(pendingController))
+            Device(name = "", id = Id("2"), controllers = listOf(pendingController))
 
 
     @Before

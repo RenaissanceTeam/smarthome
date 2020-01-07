@@ -3,6 +3,8 @@ package smarthome.client.presentation.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import smarthome.client.domain.api.entity.Controller
+import smarthome.client.domain.api.entity.Device
 import smarthome.client.presentation.R
 
 

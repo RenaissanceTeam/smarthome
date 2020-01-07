@@ -4,12 +4,8 @@ import org.koin.dsl.module
 import smarthome.client.domain.usecases.*
 
 val usecasesModule = module {
-    single { AuthenticationUseCase(get()) }
-    single { CloudMessageUseCase(get()) }
-    single { ControllersUseCase(get()) }
-    single { DevicesUseCase(get()) }
-    single { HomeUseCases(get()) }
-    single { PendingControllersUseCase(get()) }
-    single { PendingDevicesUseCase(get()) }
-    single { ScriptUseCase(get()) }
+    single { AuthenticationUseCaseImpl(get()) }
+    single { CloudMessageUseCaseImpl(get()) }
+    single { ControllersUseCaseImpl(get()) }
+    single { DevicesUseCaseImpl(get()) }
 }

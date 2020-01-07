@@ -4,6 +4,7 @@ dependencies {
     implementation library.kotlin
 
     // modules
-    
+    implementation library.homeServer_entity
+
     implementation library.rxJava
 }

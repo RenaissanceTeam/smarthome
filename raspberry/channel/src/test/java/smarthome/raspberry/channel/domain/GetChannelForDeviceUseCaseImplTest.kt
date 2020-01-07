@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import smarthome.library.common.DeviceChannel
-import smarthome.library.common.IotDevice
+import smarthome.library.common.Device
 import smarthome.raspberry.channel.api.domain.GetChannelForDeviceUseCase
 import smarthome.raspberry.channel.api.domain.NoChannelException
 import smarthome.raspberry.channel.data.ChannelRepository
@@ -25,7 +25,7 @@ class GetChannelForDeviceUseCaseImplTest {
     
     @Test
     fun `when no channels can work with device should throw NoChannelException`() {
-        val device = mock<IotDevice>()
+        val device = mock<Device>()
         
         assertFailsWith<NoChannelException> {
             useCase.execute(device)
@@ -34,7 +34,7 @@ class GetChannelForDeviceUseCaseImplTest {
     
     @Test
     fun `when has channel for device should return it`() {
-        val device = mock<IotDevice>()
+        val device = mock<Device>()
         val channel = mock<DeviceChannel> {
             on { canWorkWith(device) }.then { true }
         }

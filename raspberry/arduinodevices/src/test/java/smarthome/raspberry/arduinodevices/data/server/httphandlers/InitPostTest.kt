@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import smarthome.library.common.IotDevice
+import smarthome.library.common.Device
 import smarthome.raspberry.arduinodevices.data.server.entity.BAD_REQUEST_CODE
 import smarthome.raspberry.arduinodevices.data.server.entity.Method
 import smarthome.raspberry.arduinodevices.data.server.entity.Request
@@ -41,7 +41,7 @@ class InitPostTest {
     fun `should call add new device after mapping body`() {
         runBlocking {
             val json = "{}"
-            val device = mock<IotDevice>{}
+            val device = mock<Device>{}
             whenever(mapper.map(json)).then { device }
             initPost.serve(requestWith(json))
             

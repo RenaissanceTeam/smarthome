@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.Disposable
 import org.koin.core.KoinComponent
-import smarthome.client.domain_api.entity.Controller
-import smarthome.client.domain_api.entity.Device
+import smarthome.client.domain.api.entity.Controller
+import smarthome.client.domain.api.entity.Device
 
 class AdditionViewModel : ViewModel(), KoinComponent {
     private val _devices = MutableLiveData<MutableList<Device>>()

@@ -1,5 +1,5 @@
 package smarthome.raspberry.channel.api.domain
 
-import smarthome.library.common.IotDevice
+import smarthome.raspberry.entity.Device
 
-class NoChannelException(device: IotDevice) : Throwable("no channel that can work with $device")
+class NoChannelException(device: Device) : Throwable("no channel that can work with $device")

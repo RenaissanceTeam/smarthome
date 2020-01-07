@@ -1,7 +1,7 @@
 package smarthome.client.presentation
 
-import smarthome.client.entity.HomeException
+import smarthome.client.domain.api.entity.Controller
 
 
-class NoDeviceWithControllerException(controller: Controller) : HomeException("No device with controller=$controller")
-class NoControllerException(guid: Long) : HomeException("No controller with guid=$guid")
+class NoDeviceWithControllerException(controller: Controller) : Throwable("No device with controller=$controller")
+class NoControllerException(guid: Long) : Throwable("No controller with guid=$guid")

@@ -6,26 +6,26 @@ import android.view.ViewGroup
 
 
 interface ActionViewWrapper {
-    companion object {
-        fun withTag(tag: String): Action {
-            TODO()
-//            return when (tag) {
-//                ACTION_READ_CONTROLLER -> ReadAction()
-//                ACTION_WRITE_CONTROLLER -> WriteAction()
-//                else -> throw RuntimeException("No action with tag $tag found")
-//            }
-        }
-
-        fun wrap(action: Action, provider: AllActionsProvider): ActionViewWrapper {
-            TODO()
+//    companion object {
+//        fun withTag(tag: String): Action {
+//            TODO()
+////            return when (tag) {
+////                ACTION_READ_CONTROLLER -> ReadAction()
+////                ACTION_WRITE_CONTROLLER -> WriteAction()
+////                else -> throw RuntimeException("No action with tag $tag found")
+////            }
+//        }
 //
-//            return when (action) {
-//                is ReadAction -> ReadActionViewWrapper(provider, action)
-//                is WriteAction -> WriteActionViewWrapper(provider, action)
-//                else -> throw RuntimeException("No action wrapper for $action found")
-//            }
-        }
-    }
+//        fun wrap(action: Action, provider: AllActionsProvider): ActionViewWrapper {
+//            TODO()
+////
+////            return when (action) {
+////                is ReadAction -> ReadActionViewWrapper(provider, action)
+////                is WriteAction -> WriteActionViewWrapper(provider, action)
+////                else -> throw RuntimeException("No action wrapper for $action found")
+////            }
+//        }
+//    }
 
     fun getView(root: ViewGroup): View
 

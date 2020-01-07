@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import smarthome.library.common.BaseController
+import smarthome.library.common.Controller
 import smarthome.library.common.ControllerState
 import smarthome.library.common.Id
 import smarthome.raspberry.arduinodevices.data.server.entity.BAD_REQUEST_CODE
@@ -54,7 +54,7 @@ class AlertPostTest {
     @Test
     fun `when serve() should trigger OnControllerChanged use case`() {
         runBlocking {
-            val controller = mock<BaseController>()
+            val controller = mock<Controller>()
             val state = mock<ControllerState>()
             
             whenever(getControllerByIdUseCase.execute(Id(("1")))).then { controller }

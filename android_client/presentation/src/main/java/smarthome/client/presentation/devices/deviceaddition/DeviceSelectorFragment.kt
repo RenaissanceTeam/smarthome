@@ -43,16 +43,16 @@ class DeviceSelectorFragment : Fragment() {
     }
 
     private fun processSearchMethod(method: String, args: String?) {
-        sendDiscoverRequest(MessageFactory.createMessage(method, args))
-        activity?.setResult(DISCOVER_REQUEST_CODE)
-        activity?.finish()
+//        sendDiscoverRequest(MessageFactory.createMessage(method, args))
+//        activity?.setResult(DISCOVER_REQUEST_CODE)
+//        activity?.finish()
     }
-
-    private fun sendDiscoverRequest(message: Message) {
-        uiScope.launch {
+//
+//    private fun sendDiscoverRequest(message: Message) {
+//        uiScope.launch {
 //            CloudStorages.getMessageQueue()
 //                    .postMessage(message)
-        }
-    }
+//        }
+//    }
 
 }

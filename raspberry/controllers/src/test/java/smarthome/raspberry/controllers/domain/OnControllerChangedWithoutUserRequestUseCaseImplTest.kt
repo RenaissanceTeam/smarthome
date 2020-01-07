@@ -5,7 +5,7 @@ import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import smarthome.library.common.BaseController
+import smarthome.library.common.Controller
 import smarthome.library.common.ControllerState
 import smarthome.raspberry.controllers.api.domain.OnControllerChangedWithoutUserRequestUseCase
 import smarthome.raspberry.devices.api.domain.GetDeviceByControllerUseCase
@@ -29,7 +29,7 @@ class OnControllerChangedWithoutUserRequestUseCaseImplTest {
     
     @Test
     fun `controller state should be updated after execute`() {
-        val controller = mock<BaseController>()
+        val controller = mock<Controller>()
         val newState = mock<ControllerState>()
         runBlocking {
             useCase.execute(controller, newState)

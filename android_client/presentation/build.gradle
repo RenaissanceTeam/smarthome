@@ -6,6 +6,7 @@ apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
     implementation library.appCompat
+    implementation library.constraintLayout
     testImplementation groups.forTest
 
     // ViewModel and LiveData
@@ -32,5 +33,3 @@ dependencies {
     // modules
     implementation library.client_domain_api
 }
-
-apply plugin: 'kotlin-android-extensions'

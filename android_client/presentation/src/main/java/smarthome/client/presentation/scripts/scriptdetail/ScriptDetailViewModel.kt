@@ -1,22 +1,24 @@
 package smarthome.client.presentation.scripts.scriptdetail
 
 import android.util.Log
-import androidx.lifecycle.*
-import kotlinx.coroutines.launch
-import org.koin.core.KoinComponent
-import org.koin.core.inject
-import smarthome.client.domain.usecases.ControllersUseCase
-import smarthome.client.domain.usecases.DevicesUseCase
-import smarthome.client.domain.usecases.ScriptUseCase
-import smarthome.client.presentation.ACTION_READ_CONTROLLER
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import smarthome.client.domain.api.entity.Controller
+import smarthome.client.domain.api.entity.Script
+import smarthome.client.domain.api.usecase.ControllersUseCase
+import smarthome.client.domain.api.usecase.DevicesUseCase
 import smarthome.client.presentation.NEW_SCRIPT_GUID
 import smarthome.client.presentation.scripts.actions.ActionViewWrapper
 import smarthome.client.presentation.scripts.actions.AllActionsProvider
 import smarthome.client.presentation.scripts.conditions.AllConditionsProvider
 
 
-
-class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvider, KoinComponent {
+class ScriptDetailViewModel(
+    private val devicesUseCase: DevicesUseCase,
+    private val controllersUseCase: ControllersUseCase
+): ViewModel(), AllConditionsProvider, AllActionsProvider {
     private val _script = MutableLiveData<Script>()
     val script: LiveData<Script>
         get() = _script
@@ -29,26 +31,24 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
 //    }
 
     val actions: LiveData<MutableList<ActionViewWrapper>> = Transformations.map(script) {
-        it.actions.map { action -> ActionViewWrapper.wrap(action, this) }.toMutableList()
+//        it.actions.map { action -> ActionViewWrapper.wrap(action, this) }.toMutableList()
+        TODO()
     }
 
     private var copyBeforeEditCondition: Script? = null
-    private val scriptUseCase: ScriptUseCase by inject()
-    private val devicesUseCase: DevicesUseCase by inject()
-    private val controllersUseCase: ControllersUseCase by inject()
 
 
     fun setScriptGuid(guid: Long) {
         if (guid == NEW_SCRIPT_GUID) {
-            _script.value = Script()
+            _script.value = Script("")
         } else {
-            viewModelScope.launch { _script.value = scriptUseCase.getScript(guid) }
+//            viewModelScope.launch { _script.value = scriptUseCase.getScript(guid) }
         }
     }
 
     fun scriptNameChange(name: String) {
         val oldScript = _script.value ?: return
-        _script.value = Script(name, oldScript.conditions, oldScript.actions)
+//        _script.value = Script(name, oldScript.conditions, oldScript.actions)
 
         // todo save to firestore
     }
@@ -77,7 +77,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
         val script = script.value
         script ?: return
 
-        script.actions.add(ActionViewWrapper.withTag(ACTION_READ_CONTROLLER))
+//        script.actions.add(ActionViewWrapper.withTag(ACTION_READ_CONTROLLER))
         _script.value = script
     }
 
@@ -106,7 +106,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
         val actionViewWrappers = actions.value ?: return
         if (actionViewWrappers[position].getTag() == tag) return
 
-        script.actions[position] = ActionViewWrapper.withTag(tag)
+//        script.actions[position] = ActionViewWrapper.withTag(tag)
         _script.value = script
     }
 
@@ -126,22 +126,22 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
         val script = script.value
         script ?: return
 
-        script.conditions.removeAt(position)
+//        script.conditions.removeAt(position)
         _script.value = script
     }
 
     fun onSaveScriptClicked() {
         val script = script.value ?: return
 
-
-        viewModelScope.launch {
-            if (script.name.isNotEmpty() && script.conditions.isNotEmpty() && script.actions.isNotEmpty()) { // todo move to use case
-            isScriptOpen.value = false
-            scriptUseCase.saveScript(script)
-        } else {
-            // todo show not filled fields
-            }
-        }
+        TODO()
+//        viewModelScope.launch {
+////            if (script.name.isNotEmpty() && script.conditions.isNotEmpty() && script.actions.isNotEmpty()) { // todo move to use case
+//            isScriptOpen.value = false
+////            scriptUseCase.saveScript(script)
+//        } else {
+//            // todo show not filled fields
+//            }
+//        }
 
     }
 
@@ -153,7 +153,7 @@ class ScriptDetailViewModel: ViewModel(), AllConditionsProvider, AllActionsProvi
         val script = script.value
         script ?: return
 
-        script.actions.removeAt(position)
+//        script.actions.removeAt(position)
         _script.value = script
     }
 }

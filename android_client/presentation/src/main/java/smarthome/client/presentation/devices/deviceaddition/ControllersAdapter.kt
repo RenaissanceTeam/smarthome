@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import smarthome.client.domain_api.entity.Controller
+import smarthome.client.domain.api.entity.Controller
 import smarthome.client.presentation.R
 
 

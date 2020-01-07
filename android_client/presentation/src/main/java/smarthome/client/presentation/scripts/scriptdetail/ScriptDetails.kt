@@ -16,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.fragment_script_details.*
 import kotlinx.android.synthetic.main.toolbar_with_save.*
+import smarthome.client.domain.api.entity.Script
 import smarthome.client.presentation.R
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
@@ -55,8 +56,8 @@ class ScriptDetails: Fragment() {
             return
         }
         name.setText(script.name)
-        setDecoratedText(condition, script.conditions.joinToString(" AND "))
-        setDecoratedText(action, script.actions.joinToString(" AND "))
+//        setDecoratedText(condition, script.conditions.joinToString(" AND "))
+//        setDecoratedText(action, script.actions.joinToString(" AND "))
     }
 
     private fun setDecoratedText(textView: TextView, text: String) {

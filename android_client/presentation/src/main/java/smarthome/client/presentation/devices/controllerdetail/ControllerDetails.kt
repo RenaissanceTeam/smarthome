@@ -12,6 +12,8 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.controller_item.*
 import kotlinx.android.synthetic.main.fragment_controller_details.*
 import kotlinx.android.synthetic.main.fragment_controller_details.state
+import smarthome.client.domain.api.entity.Controller
+import smarthome.client.domain.api.entity.Device
 import smarthome.client.presentation.R
 import smarthome.client.presentation.devices.controllerdetail.statechanger.ControllerStateChanger
 import smarthome.client.presentation.devices.controllerdetail.statechanger.StateChangerType
@@ -41,8 +43,6 @@ class ControllerDetails : Fragment() {
         viewModel.controller.observe(this) {
             bindController(it)
             val state = it.state ?: return@observe
-            val serveState = it.serveState ?: return@observe
-
 //            stateChanger?.invalidateNewState(state, serveState)
         }
 
@@ -52,7 +52,6 @@ class ControllerDetails : Fragment() {
 
     private fun bindController(controller: Controller) {
         setControllerName(controller)
-        serve_state.text = controller.serveState.toString()
         state.text = controller.state.toString()
     }
 
@@ -66,8 +65,8 @@ class ControllerDetails : Fragment() {
         }
     }
 
-    private fun bindDevice(Device: Device) {
-        device.text = Device.name
+    private fun bindDevice(device: Device) {
+        this.device.text = device.name
     }
 
     private fun invalidateStateChanger(changerType: StateChangerType) {
@@ -104,8 +103,5 @@ class ControllerDetails : Fragment() {
                     }
             ).show()
         }
-
-        if (args.usePending) viewModel.usePending()
-        viewModel.setControllerGuid(args.controllerGuid)
     }
 }
