@@ -12,7 +12,6 @@ dependencies {
     implementation library.coroutinesCore
     implementation library.rxJava
     implementation library.playServicesAuth
-    implementation library.firebaseAuth
     implementation library.jjwt
 
     implementation groups.koinWithExt
@@ -22,7 +21,7 @@ dependencies {
     implementation library.homeServer_authentication_api
     implementation library.homeServer_home_api
     implementation library.homeServer_util
-    implementation library.common
+    
 
     testImplementation groups.forTest
 }

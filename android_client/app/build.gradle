@@ -7,14 +7,10 @@ preBuild.dependsOn copyClientJson
 
 dependencies {
     implementation library.multidex
-
-    implementation library.firebaseAuth
-    implementation library.firebaseFirestore
     implementation library.appCompat
     implementation library.koin
 
     // modules
-    implementation library.common
     implementation library.client_presentation
     implementation library.client_domain
     implementation library.client_domain_api

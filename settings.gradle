@@ -1,20 +1,16 @@
 gradle.ext {
     clientFolder = "android_client"
     homeServerFolder = "raspberry"
-    libraryFolder = "smarthome_libraries"
 }
 
 include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.clientFolder}:presentation",
         ":${gradle.ext.clientFolder}:data",
         ":${gradle.ext.clientFolder}:data_api",
-        ":${gradle.ext.clientFolder}:entity",
         ":${gradle.ext.clientFolder}:domain_api",
         ":${gradle.ext.clientFolder}:domain",
         ":${gradle.ext.clientFolder}:scripts",
         ":${gradle.ext.clientFolder}:scripts_api",
-
-        ":${gradle.ext.libraryFolder}:common",
 
         ":${gradle.ext.homeServerFolder}:app",
         ":${gradle.ext.homeServerFolder}:arduinodevices",
@@ -33,5 +29,6 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.homeServerFolder}:notification",
         ":${gradle.ext.homeServerFolder}:notification_api",
         ":${gradle.ext.homeServerFolder}:util"
+
 
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"

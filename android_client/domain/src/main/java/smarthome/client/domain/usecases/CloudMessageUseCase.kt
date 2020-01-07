@@ -1,6 +1,6 @@
 package smarthome.client.domain.usecases
 
-import smarthome.client.data_api.HomeRepository
+import smarthome.client.data_api.home.HomeRepository
 
 class CloudMessageUseCase(private val homeRepository: HomeRepository) {
     suspend fun onNewToken(newToken: String?) {

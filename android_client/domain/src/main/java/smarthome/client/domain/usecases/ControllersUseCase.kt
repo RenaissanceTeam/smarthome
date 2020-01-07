@@ -1,27 +1,16 @@
 package smarthome.client.domain.usecases
 
-import smarthome.client.data_api.HomeRepository
-import smarthome.client.domain_api.NoControllerException
-import smarthome.library.common.BaseController
-import smarthome.library.common.IotDevice
+import smarthome.client.data_api.home.HomeRepository
+import smarthome.client.domain_api.entity.Controller
 
 class ControllersUseCase(private val repository: HomeRepository) {
-    suspend fun getController(controllerGuid: Long): BaseController {
+    suspend fun getController(id: Long): Controller {
         val controllers = repository.getControllers()
-
-        return controllers.find { it.guid == controllerGuid } ?: throw NoControllerException(controllerGuid)
+        
+        return controllers.find { it.id == id } ?: TODO()
     }
-
-    fun findController(devices: MutableList<IotDevice>, controllerGuid: Long): BaseController {
-        for (device in devices) {
-            val controllers = device.controllers
-            return controllers.find { it.guid == controllerGuid } ?: continue
-        }
-
-        throw NoControllerException(controllerGuid)
-    }
-
-    suspend fun getControllers(): List<BaseController> {
+    
+    suspend fun getControllers(): List<Controller> {
         return repository.getControllers()
     }
 }

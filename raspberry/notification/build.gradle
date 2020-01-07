@@ -9,7 +9,7 @@ dependencies {
 
     // modules
     implementation library.homeServer_notification_api
-    implementation library.common
+    
     implementation library.homeServer_util
     implementation library.homeServer_devices_api
 

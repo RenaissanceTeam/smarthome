@@ -19,12 +19,7 @@ ext {
             mockitoCore                  : ("org.mockito:mockito-core:$mockito_version"),
             mockitoInline                : ("org.mockito:mockito-inline:$mockito_version"),
             mockitoKotlin                : ("com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlin_version"),
-            firebaseAuth                 : ("com.google.firebase:firebase-auth:$firebaseAuth_version"),
-            firebaseFirestore            : ("com.google.firebase:firebase-firestore:$firestore_version"),
-            firebaseCore                 : ("com.google.firebase:firebase-core:$firebaseCore_version"),
-            firebaseUiAuth               : ("com.firebaseui:firebase-ui-auth:$firebaseUi_version"),
             firebaseMessaging            : ("com.google.firebase:firebase-messaging:$firebaseMessaging_version"),
-            firebaseClient               : ("com.firebase:firebase-client-android:$firebaseClient_version"),
             retrofit                     : ("com.squareup.retrofit2:retrofit:$retrofit_version"),
             retrofitGson                 : ("com.squareup.retrofit2:converter-gson:$retrofit_version"),
             multidex                     : ("com.android.support:multidex:$multidex_version"),
@@ -60,10 +55,6 @@ ext {
 
 
             // modules
-            client_entity                : project(":${gradle.ext.clientFolder}:entity"),
-
-            common                       : project(":${gradle.ext.libraryFolder}:common"),
-
             client_presentation          : project(":${gradle.ext.clientFolder}:presentation"),
             client_domain                : project(":${gradle.ext.clientFolder}:domain"),
             client_domain_api            : project(":${gradle.ext.clientFolder}:domain_api"),
@@ -118,7 +109,7 @@ ext {
                     library.navigationFragmentKtx,
                     library.navigationUiKtx,
             ],
-            spring: [
+            spring     : [
                     library.spring,
                     library.springWeb
             ]

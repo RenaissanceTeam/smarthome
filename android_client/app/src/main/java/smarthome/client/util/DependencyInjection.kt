@@ -1,9 +1,6 @@
 package smarthome.client.util
 
-import com.google.firebase.auth.FirebaseAuth
 import org.koin.dsl.module
-import smarhome.client.data.*
-import smarthome.client.data_api.*
 import smarthome.client.domain.usecases.*
 
 val usecasesModule = module {
@@ -15,15 +12,4 @@ val usecasesModule = module {
     single { PendingControllersUseCase(get()) }
     single { PendingDevicesUseCase(get()) }
     single { ScriptUseCase(get()) }
-}
-val repositoryModule = module {
-    val homeRepo = HomeRepositoryImpl()
-    single { homeRepo as HomeRepository }
-    single { homeRepo as RemoteStorageInput }
-    single { AuthenticationRepositoryImpl(get()) as AuthenticationRepository }
-    single { FirebaseAuth.getInstance() }
-}
-
-val dataSourceModule = module {
-    single { LocalStorageImpl(get()) as LocalStorage }
 }

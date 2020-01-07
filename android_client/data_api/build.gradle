@@ -6,8 +6,5 @@ apply from: "$rootDir/gradle/scripts/android-module.gradle"
 dependencies {
     implementation library.kotlin
     implementation library.rxJava
-
-    // modules
-    implementation library.common
-    implementation library.client_entity
+    implementation library.client_domain_api
 }

@@ -12,7 +12,7 @@ dependencies {
     // modules
     implementation library.homeServer_home_api
     implementation library.homeServer_authentication_api
-    implementation library.common
+    
     implementation library.homeServer_util
 
     testImplementation groups.forTest

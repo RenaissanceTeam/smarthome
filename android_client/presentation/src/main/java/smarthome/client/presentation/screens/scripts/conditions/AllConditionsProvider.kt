@@ -1,5 +1,0 @@
-package smarthome.client.presentation.screens.scripts.conditions
-
-import smarthome.client.presentation.screens.scripts.ControllersProvider
-
-interface AllConditionsProvider: ControllersProvider

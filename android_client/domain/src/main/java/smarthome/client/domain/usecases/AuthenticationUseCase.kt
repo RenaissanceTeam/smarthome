@@ -1,7 +1,6 @@
 package smarthome.client.domain.usecases
 
-import io.reactivex.Observable
-import smarthome.client.data_api.AuthenticationRepository
+import smarthome.client.data_api.auth.AuthenticationRepository
 
 class AuthenticationUseCase(private val repository: AuthenticationRepository) {
     fun getAuthenticationStatus() = repository.getAuthenticationStatus()
