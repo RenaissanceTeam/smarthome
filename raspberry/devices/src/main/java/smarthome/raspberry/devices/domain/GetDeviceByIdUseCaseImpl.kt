@@ -1,14 +1,13 @@
 package smarthome.raspberry.devices.domain
 
-import smarthome.library.common.Id
-import smarthome.library.common.IotDevice
 import smarthome.raspberry.devices.api.domain.GetDeviceByIdUseCase
 import smarthome.raspberry.devices.data.DevicesRepository
+import smarthome.raspberry.entity.Device
 
 class GetDeviceByIdUseCaseImpl(
         val repository: DevicesRepository
 ) : GetDeviceByIdUseCase {
-    override suspend fun execute(id: Id): IotDevice {
+    override suspend fun execute(id: Long): Device {
         TODO()
     
     }

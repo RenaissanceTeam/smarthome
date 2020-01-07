@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_device_details.*
+import smarthome.client.domain.api.entity.Device
 import smarthome.client.presentation.R
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
@@ -67,8 +68,7 @@ class DeviceDetails : Fragment() {
         devices.layoutManager = LinearLayoutManager(view.context)
         devices.adapter = ControllersAdapter(viewModel)
         devices.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
-        if (args.usePending) viewModel.usePending()
+        
         viewModel.setDeviceGuid(args.deviceGuid)
 
         device_name.setOnClickListener {

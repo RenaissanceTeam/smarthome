@@ -4,6 +4,8 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import smarthome.client.domain.api.entity.Controller
+import smarthome.client.domain.api.entity.Device
 import smarthome.client.presentation.R
 import smarthome.client.presentation.ui.ControllerView
 

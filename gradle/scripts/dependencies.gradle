@@ -52,6 +52,7 @@ ext {
             jacksonKotlin                : ("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"),
             postgres                     : ("org.postgresql:postgresql"),
             jjwt                         : ("io.jsonwebtoken:jjwt:0.9.1"),
+            jpa                         : ("javax.persistence:persistence-api:1.0"),
 
 
             // modules
@@ -79,6 +80,7 @@ ext {
             homeServer_util              : project(":${gradle.ext.homeServerFolder}:util"),
             homeServer_notification      : project(":${gradle.ext.homeServerFolder}:notification"),
             homeServer_notification_api  : project(":${gradle.ext.homeServerFolder}:notification_api"),
+            homeServer_entity            : project(":${gradle.ext.homeServerFolder}:entity"),
 
 
 //            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),

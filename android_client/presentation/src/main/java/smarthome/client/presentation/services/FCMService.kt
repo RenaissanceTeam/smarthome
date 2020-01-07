@@ -14,7 +14,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.domain.usecases.CloudMessageUseCase
+import smarthome.client.domain.api.usecase.CloudMessageUseCase
 import smarthome.client.presentation.R
 
 class FCMService : FirebaseMessagingService(), KoinComponent {

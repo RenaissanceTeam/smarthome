@@ -1,4 +1,4 @@
-package smarthome.client.domain_api.entity
+package smarthome.client.domain.api.entity
 
 data class Device(
     val id: Long,

@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_scripts.*
+import smarthome.client.domain.api.entity.Script
 import smarthome.client.presentation.NEW_SCRIPT_GUID
 import smarthome.client.presentation.R
-import smarthome.client.presentation.screens.scripts.ScriptsFragmentDirections
 
 
 class ScriptsFragment : Fragment() {
@@ -30,7 +30,7 @@ class ScriptsFragment : Fragment() {
         viewModel.refresh.observe(this) { refresh_layout.isRefreshing = it }
         viewModel.openScriptDetails.observe(this, Observer {
             it ?: return@Observer
-            openScriptDetails(it)
+//            openScriptDetails(it)
         })
     }
 
@@ -48,10 +48,12 @@ class ScriptsFragment : Fragment() {
     }
 
     private fun openScriptDetails(script: Script?) {
-        val action =
-            ScriptsFragmentDirections.actionScriptsFragmentToScriptDetails(
-                script?.guid ?: NEW_SCRIPT_GUID)
-        findNavController().navigate(action)
+//        val action =
+//            ScriptsFragmentDirections.actionScriptsFragmentToScriptDetails(
+//                script?.guid ?: NEW_SCRIPT_GUID)
+//        findNavController().navigate(action)
+        
+        TODO()
     }
 
     private fun setupRecyclerView() {

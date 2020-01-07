@@ -1,8 +1,8 @@
 package smarthome.raspberry.channel.api.domain
 
-import smarthome.library.common.DeviceChannel
-import smarthome.library.common.IotDevice
+import smarthome.raspberry.entity.Device
+import smarthome.raspberry.entity.DeviceChannel
 
 interface GetChannelForDeviceUseCase {
-    fun execute(device: IotDevice): DeviceChannel
+    fun execute(device: Device): DeviceChannel
 }

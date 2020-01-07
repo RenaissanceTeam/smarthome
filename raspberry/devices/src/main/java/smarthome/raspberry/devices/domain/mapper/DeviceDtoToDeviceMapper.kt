@@ -2,8 +2,7 @@ package smarthome.raspberry.devices.domain.mapper
 
 import org.springframework.stereotype.Component
 import smarthome.raspberry.devices.api.domain.dto.DeviceDTO
-import smarthome.raspberry.devices.domain.entity.Device
-
+import smarthome.raspberry.entity.Device
 
 @Component
 open class DeviceDtoToDeviceMapper(

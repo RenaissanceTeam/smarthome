@@ -6,17 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
-import org.koin.core.KoinComponent
-import org.koin.core.inject
-import smarthome.client.domain.usecases.AuthenticationUseCase
+import smarthome.client.domain.api.usecase.AuthenticationUseCase
 
-class SettingsViewModel : ViewModel(), KoinComponent {
+class SettingsViewModel(
+    private val authenticationUseCase: AuthenticationUseCase
+) : ViewModel() {
     private val _currentAccount = MutableLiveData<String>()
     val currentAccount: LiveData<String>
         get() = _currentAccount
 
     private val emailDisposable: Disposable
-    private val authenticationUseCase: AuthenticationUseCase by inject()
 
     init {
         emailDisposable = authenticationUseCase.getEmail().subscribe { _currentAccount.value = it }

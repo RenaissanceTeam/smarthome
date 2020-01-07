@@ -6,10 +6,10 @@ import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import org.junit.Before
 import org.junit.Test
-import smarthome.library.common.BaseController
+import smarthome.library.common.Controller
 import smarthome.library.common.ControllerState
 import smarthome.library.common.Id
-import smarthome.library.common.IotDevice
+import smarthome.library.common.Device
 import smarthome.library.common.constants.typeField
 import smarthome.library.common.util.RuntimeTypeAdapterFactory
 import smarthome.raspberry.arduinodevices.data.server.entity.InvalidDeviceException
@@ -18,20 +18,20 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class SupportedDeviceA(
-    id: Id, name: String, description: String?, controllers: List<BaseController>, ip: String
+    id: Id, name: String, description: String?, controllers: List<Controller>, ip: String
 ) : ArduinoDevice(id, name, description, controllers, ip)
 
 class SupportedDeviceB(
-    id: Id, name: String, description: String?, controllers: List<BaseController>, ip: String
+    id: Id, name: String, description: String?, controllers: List<Controller>, ip: String
 ) : ArduinoDevice(id, name, description, controllers, ip)
 
 class NotSupportedDeviceC(
-    id: Id, name: String, description: String?, controllers: List<BaseController>, ip: String
+    id: Id, name: String, description: String?, controllers: List<Controller>, ip: String
 ) : ArduinoDevice(id, name, description, controllers, ip)
 
-class SupportedControllerA(name: String): BaseController(name)
-class SupportedControllerB(name: String): BaseController(name)
-class NotSupportedControllerC(name: String): BaseController(name)
+class SupportedControllerA(name: String): Controller(name)
+class SupportedControllerB(name: String): Controller(name)
+class NotSupportedControllerC(name: String): Controller(name)
 
 class SupportedControllerStateA(val value: String) : ControllerState()
 class SupportedControllerStateB(@SerializedName("value") val intValue: Int) : ControllerState()
@@ -46,13 +46,13 @@ class JsonDeviceMapperImplTest {
         gson = GsonBuilder()
             .registerTypeAdapterFactory(
                 RuntimeTypeAdapterFactory
-                    .of(IotDevice::class.java, typeField)
+                    .of(Device::class.java, typeField)
                     .registerSubtype(SupportedDeviceA::class.java, "A")
                     .registerSubtype(SupportedDeviceB::class.java, "B")
             )
             .registerTypeAdapterFactory(
                 RuntimeTypeAdapterFactory
-                    .of(BaseController::class.java, typeField)
+                    .of(Controller::class.java, typeField)
                     .registerSubtype(SupportedControllerA::class.java, "A")
                     .registerSubtype(SupportedControllerB::class.java, "B")
             )

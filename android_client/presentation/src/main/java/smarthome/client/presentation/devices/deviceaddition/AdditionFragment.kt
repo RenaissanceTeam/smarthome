@@ -11,10 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_device_addition.*
-import smarthome.client.domain_api.entity.Controller
-import smarthome.client.domain_api.entity.Device
+import smarthome.client.domain.api.entity.Controller
+import smarthome.client.domain.api.entity.Device
 import smarthome.client.presentation.R
-import smarthome.client.presentation.screens.addition.AdditionFragmentDirections
 
 class AdditionFragment : Fragment(),
     ViewNotifier {

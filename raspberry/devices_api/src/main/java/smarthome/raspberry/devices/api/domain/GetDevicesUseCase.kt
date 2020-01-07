@@ -1,7 +1,7 @@
 package smarthome.raspberry.devices.api.domain
 
-import smarthome.library.common.IotDevice
+import smarthome.raspberry.entity.Device
 
 interface GetDevicesUseCase {
-    suspend fun execute(): List<IotDevice>
+    suspend fun execute(): List<Device>
 }

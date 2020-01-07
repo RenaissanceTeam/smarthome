@@ -28,7 +28,8 @@ include ":${gradle.ext.clientFolder}:app",
         ":${gradle.ext.homeServerFolder}:channel_api",
         ":${gradle.ext.homeServerFolder}:notification",
         ":${gradle.ext.homeServerFolder}:notification_api",
-        ":${gradle.ext.homeServerFolder}:util"
+        ":${gradle.ext.homeServerFolder}:util",
+        ":${gradle.ext.homeServerFolder}:entity"
 
 
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"

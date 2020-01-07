@@ -1,4 +1,4 @@
-package smarthome.raspberry.devices.domain.entity
+package smarthome.raspberry.entity
 
 import javax.persistence.*
 
@@ -9,5 +9,6 @@ data class Controller(
     @Id @GeneratedValue
     val id: Long = 0,
     val type: String,
-    val name: String
+    val name: String,
+    val state: String
 )

@@ -9,13 +9,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
-import org.koin.core.inject
-import smarthome.client.domain.usecases.DevicesUseCase
-import smarthome.client.domain.usecases.PendingDevicesUseCase
-import smarthome.client.entity.HomeException
+import smarthome.client.domain.api.entity.Device
+import smarthome.client.domain.api.usecase.DevicesUseCase
 
 
-class DeviceDetailViewModel : ViewModel(), KoinComponent {
+class DeviceDetailViewModel(
+    private val devicesUseCase: DevicesUseCase
+) : ViewModel(), KoinComponent {
     private val _device = MutableLiveData<Device>()
     val device: LiveData<Device>
         get() = _device
@@ -32,10 +32,6 @@ class DeviceDetailViewModel : ViewModel(), KoinComponent {
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private var disposable: Disposable? = null
-    private val devicesUseCase: DevicesUseCase by inject()
-    private val pendingDevicesUseCase: PendingDevicesUseCase by inject()
-
-    var usePending: Boolean = false
 
     fun setDeviceGuid(deviceGuid: Long?) {
         deviceGuid ?: return
@@ -43,20 +39,20 @@ class DeviceDetailViewModel : ViewModel(), KoinComponent {
         uiScope.launch {
             try {
                 _refresh.value = true
-                _device.value = if (!usePending) devicesUseCase.getDevice(deviceGuid) else pendingDevicesUseCase.getPendingDevice(deviceGuid)
+                _device.value = devicesUseCase.getDevice(deviceGuid)
                 _refresh.value = false
 
                 listenForModelChanges(deviceGuid)
-            } catch (e: HomeException) {
+            } catch (e: Throwable) {
                 TODO()
             }
         }
     }
-
-    private suspend fun listenForModelChanges(deviceGuid: Long) {
-        val observable = if (!usePending) devicesUseCase.getDevices() else pendingDevicesUseCase.getPendingDevices()
+    
+    private suspend fun listenForModelChanges(id: Long) {
+        val observable = devicesUseCase.getDevices()
         disposable = observable.subscribe { devices ->
-            val changedDevice = devices.find { it.guid == deviceGuid }
+            val changedDevice = devices.find { it.id == id }
             _device.value = changedDevice
             _refresh.value = false
         }
@@ -77,27 +73,15 @@ class DeviceDetailViewModel : ViewModel(), KoinComponent {
     }
 
     fun deviceNameChanged(name: String) {
-        val device = _device.value ?: return
-        device.name = name
-        updateDevice(device)
+        TODO()
     }
 
     fun deviceDescriptionChanged(description: String) {
-        val device = _device.value ?: return
-        device.description = description
-        updateDevice(device)
-    }
-
-    fun usePending() {
-        usePending = true
+        TODO()
+    
     }
 
     private fun updateDevice(device: Device) {
-        uiScope.launch {
-            _refresh.value = true
-            if (!usePending)
-                devicesUseCase.changeDevice(device)
-            else pendingDevicesUseCase.changePendingDevice(device)
-        }
+        TODO()
     }
 }

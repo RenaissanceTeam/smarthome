@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import smarthome.client.domain_api.entity.Controller
-import smarthome.client.domain_api.entity.Device
+import smarthome.client.domain.api.entity.Controller
+import smarthome.client.domain.api.entity.Device
 import smarthome.client.presentation.R
 
 class DeviceAdapter(private val viewModel: AdditionViewModel,

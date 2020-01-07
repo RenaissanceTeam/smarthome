@@ -13,8 +13,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import smarthome.client.domain.api.entity.Controller
+import smarthome.client.domain.api.entity.Device
 import smarthome.client.presentation.R
-import smarthome.client.presentation.screens.dashboard.DashboardFragmentDirections
 
 
 class DashboardFragment : Fragment() {
@@ -65,14 +66,14 @@ class DashboardFragment : Fragment() {
 
         val action =
             DashboardFragmentDirections.actionDashboardFragmentToDeviceDetails(
-                device.guid)
+                device.id)
         findNavController().navigate(action)
     }
 
     private fun onControllerClick(controller: Controller) {
         val action =
             DashboardFragmentDirections.actionDashboardFragmentToControllerDetails(
-                controller.guid)
+                controller.id)
         findNavController().navigate(action)
     }
 }

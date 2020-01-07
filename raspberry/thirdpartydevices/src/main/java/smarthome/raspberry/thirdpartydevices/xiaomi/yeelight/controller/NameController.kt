@@ -16,6 +16,6 @@ class NameController(device: YeelightDevice) : Controller(device, NAME_CONTROLLE
      * @param params {name} (String)
      */
     override fun write(params: String): Result {
-        return super.controllerWrite(type, params) // TODO: should iotDevice be renamed too?
+        return super.controllerWrite(type, params) // TODO: should Device be renamed too?
     }
 }
