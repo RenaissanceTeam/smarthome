@@ -5,7 +5,7 @@ dependencies {
     implementation groups.koinWithExt
 
     // modules
-    implementation library.common
+    
     implementation library.homeServer_channel_api
 
     testImplementation groups.forTest

@@ -6,7 +6,7 @@ dependencies {
     implementation library.coroutinesCore
 
     // modules
-    implementation library.common
+    
 
     testImplementation groups.forTest
 }

@@ -6,7 +6,7 @@ apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 dependencies {
     implementation library.appCompat
-    testImplementation library.junit
+    testImplementation groups.forTest
 
     // ViewModel and LiveData
     implementation groups.lifecycle
@@ -27,14 +27,10 @@ dependencies {
     // ktx
     implementation groups.androidXktx
 
-    implementation library.firebaseUiAuth
     implementation library.firebaseMessaging
 
     // modules
-    implementation library.client_domain
     implementation library.client_domain_api
-    implementation library.client_entity
-    implementation library.common
 }
 
 apply plugin: 'kotlin-android-extensions'
