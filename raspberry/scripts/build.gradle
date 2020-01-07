@@ -6,7 +6,7 @@ dependencies {
     implementation library.coroutinesCore
 
     // modules
-    implementation library.homeServer_entity
+    implementation library.entity
 
 
     testImplementation groups.forTest

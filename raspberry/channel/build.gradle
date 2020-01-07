@@ -6,8 +6,8 @@ dependencies {
 
     // modules
     
-    implementation library.homeServer_channel_api
-    implementation library.homeServer_entity
+    implementation library.channel_api
+    implementation library.entity
 
     testImplementation groups.forTest
 }
