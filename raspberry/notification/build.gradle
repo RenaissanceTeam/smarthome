@@ -8,11 +8,11 @@ dependencies {
     implementation library.gson
 
     // modules
-    implementation library.homeServer_notification_api
+    implementation library.notification_api
     
-    implementation library.homeServer_util
-    implementation library.homeServer_devices_api
-    implementation library.homeServer_entity
+    implementation library.util
+    implementation library.devices_api
+    implementation library.entity
 
     testImplementation groups.forTest
 }

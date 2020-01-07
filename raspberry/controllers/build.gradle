@@ -7,10 +7,10 @@ dependencies {
 
     // modules
     
-    implementation library.homeServer_controllers_api
-    implementation library.homeServer_devices_api
-    implementation library.homeServer_channel_api
-    implementation library.homeServer_entity
+    implementation library.controllers_api
+    implementation library.devices_api
+    implementation library.channel_api
+    implementation library.entity
 
     testImplementation groups.forTest
 }

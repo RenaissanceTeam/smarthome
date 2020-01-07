@@ -11,11 +11,11 @@ dependencies {
     implementation groups.koinWithExt
     implementation groups.spring
 
-    implementation library.homeServer_channel_api
-    implementation library.homeServer_controllers_api
-    implementation library.homeServer_devices_api
-    implementation library.homeServer_home_api
-    implementation library.homeServer_entity
+    implementation library.channel_api
+    implementation library.controllers_api
+    implementation library.devices_api
+    implementation library.home_api
+    implementation library.entity
 
     testImplementation groups.forTest
 }

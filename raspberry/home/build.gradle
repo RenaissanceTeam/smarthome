@@ -7,14 +7,13 @@ dependencies {
     implementation library.rxKotlin
 
     implementation groups.koinWithExt
-    implementation library.koinScope
 
     // modules
-    implementation library.homeServer_home_api
-    implementation library.homeServer_authentication_api
+    implementation library.home_api
+    implementation library.authentication_api
     
-    implementation library.homeServer_util
-    implementation library.homeServer_entity
+    implementation library.util
+    implementation library.entity
 
     testImplementation groups.forTest
 }

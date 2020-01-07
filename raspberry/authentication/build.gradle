@@ -8,16 +8,14 @@ dependencies {
     implementation library.springData
     implementation library.coroutinesCore
     implementation library.rxJava
-    implementation library.playServicesAuth
     implementation library.jjwt
 
     implementation groups.koinWithExt
-    implementation library.koinScope
 
     // modules
-    implementation library.homeServer_authentication_api
-    implementation library.homeServer_home_api
-    implementation library.homeServer_util
+    implementation library.authentication_api
+    implementation library.home_api
+    implementation library.util
     
 
     testImplementation groups.forTest
