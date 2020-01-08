@@ -17,4 +17,3 @@ val appModules = authenticationModule +
                  notificationModule +
                  scriptsModule +
                  arduinoModule
-

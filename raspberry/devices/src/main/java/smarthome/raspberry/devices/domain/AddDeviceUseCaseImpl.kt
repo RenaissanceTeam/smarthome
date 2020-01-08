@@ -1,17 +1,32 @@
 package smarthome.raspberry.devices.domain
 
-import smarthome.library.common.IotDevice
+import org.springframework.stereotype.Component
 import smarthome.raspberry.devices.api.domain.AddDeviceUseCase
+import smarthome.raspberry.devices.api.domain.dto.DeviceDTO
+import smarthome.raspberry.devices.data.DeviceStatusRepository
 import smarthome.raspberry.devices.data.DevicesRepository
+import smarthome.raspberry.devices.domain.entity.DeviceStatus
+import smarthome.raspberry.devices.domain.entity.DeviceStatuses
+import smarthome.raspberry.devices.domain.mapper.DeviceDtoToDeviceMapper
 
-class AddDeviceUseCaseImpl(private val repository: DevicesRepository) : AddDeviceUseCase {
-    override suspend fun execute(device: IotDevice) {
-        val devices = repository.getCurrentDevices()
+@Component
+class AddDeviceUseCaseImpl(
+    private val devicesRepository: DevicesRepository,
+    private val deviceDtoMapper: DeviceDtoToDeviceMapper,
+    private val deviceStatusRepository: DeviceStatusRepository
 
-        if (devices.contains(device)) {
+) : AddDeviceUseCase {
+    override fun execute(device: DeviceDTO) {
+        if (devicesRepository.findBySerialName(device.serialName) != null) {
             TODO()
         }
-
-        repository.addPendingDevice(device)
+        
+        deviceDtoMapper.map(device).let {
+            devicesRepository.save(it)
+            deviceStatusRepository.save(DeviceStatus(
+                device = it,
+                status = DeviceStatuses.PENDING.name
+            ))
+        }
     }
 }

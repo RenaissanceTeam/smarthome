@@ -8,7 +8,6 @@ class AcceptPendingDeviceUseCaseImpl(
         private val repository: DevicesRepository
 ) : AcceptPendingDeviceUseCase {
     override suspend fun execute(device: IotDevice) {
-        repository.removePendingDevice(device)
-        repository.addDevice(device)
+      TODO()
     }
 }
