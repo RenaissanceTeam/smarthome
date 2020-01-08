@@ -7,12 +7,11 @@ dependencies {
     implementation library.appCompat
     testImplementation groups.forTest
 
+    implementation groups.koinWithExt
+
     // Retrofit
     implementation library.retrofit
     implementation library.retrofitGson
-
-    // koin - dependency injection
-    implementation library.koin
 
     // coroutines
     implementation library.coroutinesCore

@@ -1,4 +1,4 @@
-package smarthome.client.data_api.auth
+package smarthome.client.data.api.auth
 
 import io.reactivex.Observable
 
