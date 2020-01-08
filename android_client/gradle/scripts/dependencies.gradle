@@ -32,6 +32,8 @@ ext {
             lifecycleLivedata            : ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"),
             lifecycleLegacy              : ("androidx.legacy:legacy-support-v4:$androidXLegacy_version"),
             preference                   : ("androidx.preference:preference:$preference_version"),
+            lives                        : ("com.snakydesign.livedataextensions:lives:1.3.0"),
+            archCoreTest                 : ("androidx.arch.core:core-testing:2.0.0-alpha1"),
             processButton                : ("com.github.dmytrodanylyk.android-process-button:library:$processButton_version"),
             ultraPtr                     : ("in.srain.cube:ultra-ptr:$ultraPtr_version"),
             coreKtx                      : ("androidx.core:core-ktx:$coreKtx_version"),
