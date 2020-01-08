@@ -1,26 +1,20 @@
 package smarthome.client.domain.usecases
 
-import smarthome.client.data.api.auth.AuthenticationRepository
+import io.reactivex.Observable
+import smarthome.client.data.api.auth.UserRepository
+import smarthome.client.domain.api.entity.NOT_SIGNED_IN
 import smarthome.client.domain.api.usecase.AuthenticationUseCase
 
 class AuthenticationUseCaseImpl(
-    private val repository: AuthenticationRepository
+    private val repository: UserRepository
 ) : AuthenticationUseCase {
-    override fun getAuthenticationStatus() = repository.getAuthenticationStatus()
-    override fun getEmail() = repository.getEmail()
-    override suspend fun onAuthFail() {
-        repository.setAuthenticationStatus(false)
-        repository.resetEmail()
+    override fun getAuthenticationStatus(): Observable<Boolean> = repository.get().map { it != NOT_SIGNED_IN } // todo change to checking token
+    
+    override fun getUsername(): Observable<String> {
+        return repository.get().map { it.username }
     }
-    override suspend fun onAuthSuccess() {
-        repository.setAuthenticationStatus(true)
-        repository.updateEmail()
-    }
-    override suspend fun signOut() {
-        repository.setAuthenticationStatus(false)
-        repository.resetEmail()
-    }
-    override suspend fun getUserId(): String? {
-        return repository.getUserId()
+
+    override fun signOut() {
+        repository.delete()
     }
 }

@@ -52,14 +52,4 @@ class MainActivity : FragmentActivity() {
         TODO()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            if (resultCode == RESULT_OK) {
-                viewModel.onAuthSuccessful()
-            } else {
-                viewModel.onAuthFailed()
-            }
-        }
-    }
 }
