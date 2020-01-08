@@ -188,4 +188,11 @@
         android:name="smarthome.client.presentationAddDeviceActivity"
         android:label="AddDeviceActivity"
         tools:layout="@layout/activity_add_device" />
+    <fragment
+        android:id="@+id/homeServerFragment"
+        android:name="smarthome.client.presentation.homeserver.HomeServerFragment"
+        android:label="HomeServerFragment" />
+    <action
+        android:id="@+id/action_global_homeServerFragment"
+        app:destination="@id/homeServerFragment" />
 </navigation>

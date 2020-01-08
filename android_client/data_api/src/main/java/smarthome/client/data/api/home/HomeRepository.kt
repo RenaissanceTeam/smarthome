@@ -1,4 +1,4 @@
-package smarthome.client.data_api.home
+package smarthome.client.data.api.home
 
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject

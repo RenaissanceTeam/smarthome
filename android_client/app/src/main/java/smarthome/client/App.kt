@@ -4,7 +4,8 @@ import androidx.multidex.MultiDexApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import smarthome.client.util.usecasesModule
+import smarthome.client.data.di.data
+import smarthome.client.domain.di.domain
 
 class App : MultiDexApplication() {
     override fun onCreate() {
@@ -12,7 +13,10 @@ class App : MultiDexApplication() {
         startKoin{
             androidLogger()
             androidContext(this@App)
-            modules(listOf(usecasesModule))
+            modules(listOf(
+                domain,
+                data
+            ))
         }
     }
 }
