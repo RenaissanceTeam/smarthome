@@ -1,12 +1,15 @@
 package smarthome.client.presentation
 
 import androidx.lifecycle.*
+import com.snakydesign.livedataextensions.filter
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.inject
 import smarthome.client.domain.api.homeserver.usecases.GetHomeServerUseCase
 import smarthome.client.domain.api.usecase.AuthenticationUseCase
 import smarthome.client.presentation.util.KoinViewModel
+import smarthome.client.presentation.util.NavigationEvent
+import smarthome.client.presentation.util.navigateIf
 
 class MainViewModel: KoinViewModel(), LifecycleObserver {
     private val authenticationUseCase: AuthenticationUseCase by inject()
@@ -14,12 +17,16 @@ class MainViewModel: KoinViewModel(), LifecycleObserver {
     
     val isAuthenticated = MutableLiveData<Boolean>()
     val hasHomeServer = MutableLiveData<Boolean>(true)
-    private val authDisposable: Disposable
-
-    init {
-        authDisposable =
-            authenticationUseCase.getAuthenticationStatus().subscribe { isAuthenticated.value = it }
+    val openLogin = isAuthenticated.navigateIf { isAuthenticated ->
+        val needAuth = isAuthenticated?.not() ?: false
+        val serverSet = hasHomeServer.value ?: false
+        
+        return@navigateIf needAuth && serverSet
     }
+    val openHomeServerSetup = hasHomeServer.navigateIf { it?.not() ?: false }
+    
+    private lateinit var authDisposable: Disposable
+
     fun onAuthSuccessful() {
         viewModelScope.launch { authenticationUseCase.onAuthSuccess() }
     }
@@ -37,5 +44,8 @@ class MainViewModel: KoinViewModel(), LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         runCatching { getHomeServerUseCase.execute() }.onFailure { hasHomeServer.value = false }
+    
+        authDisposable =
+            authenticationUseCase.getAuthenticationStatus().subscribe { isAuthenticated.value = it }
     }
 }
