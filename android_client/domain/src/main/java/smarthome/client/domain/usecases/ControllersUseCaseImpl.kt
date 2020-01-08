@@ -1,6 +1,6 @@
 package smarthome.client.domain.usecases
 
-import smarthome.client.data_api.home.HomeRepository
+import smarthome.client.data.api.home.HomeRepository
 import smarthome.client.domain.api.entity.Controller
 import smarthome.client.domain.api.usecase.ControllersUseCase
 
