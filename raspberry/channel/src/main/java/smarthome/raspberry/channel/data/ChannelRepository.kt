@@ -1,6 +1,7 @@
 package smarthome.raspberry.channel.data
 
-import smarthome.library.common.DeviceChannel
+import smarthome.raspberry.entity.DeviceChannel
+
 
 interface ChannelRepository {
     fun getDeviceChannels(): List<DeviceChannel>

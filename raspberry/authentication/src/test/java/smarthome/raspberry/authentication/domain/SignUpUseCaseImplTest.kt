@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
+import smarthome.raspberry.authentication.api.domain.SignInUseCase
 import smarthome.raspberry.authentication.api.domain.SignUpUseCase
 import smarthome.raspberry.authentication.api.domain.entity.Credentials
 import smarthome.raspberry.authentication.api.domain.entity.RegistrationInfo
@@ -18,7 +19,8 @@ import kotlin.test.assertFailsWith
 
 class SignUpUseCaseImplTest {
     private lateinit var useCase: SignUpUseCase
-    
+    private lateinit var signInUseCase: SignInUseCase
+
     private lateinit var authRepo: AuthRepo
     private lateinit var roleRepo: UserRoleRepo
     
@@ -26,7 +28,8 @@ class SignUpUseCaseImplTest {
     fun setUp() {
         authRepo = mock {}
         roleRepo = mock {}
-        useCase = SignUpUseCaseImpl(authRepo, roleRepo)
+        signInUseCase = mock {}
+        useCase = SignUpUseCaseImpl(authRepo, roleRepo, signInUseCase)
     }
     
     @Test
@@ -34,14 +37,14 @@ class SignUpUseCaseImplTest {
         val login = "a"
         val cred = Credentials(login, "pass")
         whenever(authRepo.findByUsername(login)).thenReturn(mock())
-        assertFailsWith<UserExistsException> { useCase.execute(RegistrationInfo(cred, "")) }
+        assertFailsWith<UserExistsException> { useCase.execute(RegistrationInfo(cred, setOf(""))) }
     }
     
     @Test
     fun `when no saved user should create user and role and save to repos`() {
         val login = "a"
         val pass = "pass"
-        val role = "role"
+        val role = setOf("role")
         val cred = Credentials(login, pass)
         
         whenever(authRepo.findByUsername(login)).thenReturn(null)

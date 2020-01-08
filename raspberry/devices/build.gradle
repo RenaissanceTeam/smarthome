@@ -9,9 +9,10 @@ dependencies {
     implementation library.springData
 
     //modules
-    implementation library.homeServer_devices_api
-    implementation library.common
-    implementation library.homeServer_util
+    implementation library.devices_api
+    
+    implementation library.util
+    implementation library.entity
 
     testImplementation groups.forTest
 }

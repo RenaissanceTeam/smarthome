@@ -1,8 +1,8 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.gateway.interfaces
 
-import smarthome.library.common.BaseController
-import smarthome.library.common.IotDevice
+import smarthome.library.common.Controller
+import smarthome.library.common.Device
 
 interface AlarmHandler {
-    fun onAlarm(device: IotDevice, controller: BaseController)
+    fun onAlarm(device: Device, controller: Controller)
 }

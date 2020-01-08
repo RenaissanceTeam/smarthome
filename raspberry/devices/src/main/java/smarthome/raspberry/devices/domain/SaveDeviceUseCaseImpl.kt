@@ -1,11 +1,11 @@
 package smarthome.raspberry.devices.domain
 
-import smarthome.library.common.IotDevice
 import smarthome.raspberry.devices.api.domain.SaveDeviceUseCase
 import smarthome.raspberry.devices.data.DevicesRepository
+import smarthome.raspberry.entity.Device
 
 class SaveDeviceUseCaseImpl(private val repository: DevicesRepository): SaveDeviceUseCase {
-    override suspend fun execute(device: IotDevice) {
+    override suspend fun execute(device: Device) {
         TODO()
     }
 }

@@ -7,21 +7,17 @@ preBuild.dependsOn copyClientJson
 
 dependencies {
     implementation library.multidex
-
-    implementation library.firebaseAuth
-    implementation library.firebaseFirestore
     implementation library.appCompat
     implementation library.koin
 
     // modules
-    implementation library.common
-    implementation library.client_presentation
-    implementation library.client_domain
-    implementation library.client_domain_api
-    implementation library.client_data
-    implementation library.client_data_api
-    implementation library.client_scripts
-    implementation library.client_scripts_api
+    implementation library.presentation
+    implementation library.domain
+    implementation library.domain_api
+    implementation library.data
+    implementation library.data_api
+    implementation library.scripts
+    implementation library.scripts_api
 }
 
 apply plugin: 'com.google.gms.google-services'

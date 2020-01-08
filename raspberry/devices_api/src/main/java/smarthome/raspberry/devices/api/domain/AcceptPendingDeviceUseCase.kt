@@ -1,6 +1,6 @@
 package smarthome.raspberry.devices.api.domain
 
-import smarthome.library.common.IotDevice
+import smarthome.raspberry.entity.Device
 
 /**
  * Accepting device means making it a part of the smarthome, after which it should
@@ -8,5 +8,5 @@ import smarthome.library.common.IotDevice
  * scripts with the device, etc..
  */
 interface AcceptPendingDeviceUseCase {
-    suspend fun execute(device: IotDevice)
+    suspend fun execute(device: Device)
 }

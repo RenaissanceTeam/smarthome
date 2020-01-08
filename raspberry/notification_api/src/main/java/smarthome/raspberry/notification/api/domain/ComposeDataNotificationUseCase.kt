@@ -1,7 +1,7 @@
 package smarthome.raspberry.notification.api.domain
 
-import smarthome.library.common.BaseController
+import smarthome.raspberry.entity.Controller
 
 interface ComposeDataNotificationUseCase {
-    suspend fun execute(controller: BaseController, priority: Priority): Notification
+    suspend fun execute(controller: Controller, priority: Priority): Notification
 }

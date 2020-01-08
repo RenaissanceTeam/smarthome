@@ -1,0 +1,76 @@
+apply from: "$rootDir/gradle/scripts/dependencies-versions.gradle"
+
+ext {
+    library = [
+            rxJava                       : ("io.reactivex.rxjava2:rxjava:$rxjava_version"),
+            rxKotlin                     : ("io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"),
+            koin                         : ("org.koin:koin-android:$koin_version"),
+            koin_ext                     : ("org.koin:koin-core-ext:$koin_version"),
+            koin_test                    : ("org.koin:koin-test:$koin_version"),
+            coroutinesCore               : ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"),
+            coroutinesExtPlayServices    : ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"),
+            mockitoCore                  : ("org.mockito:mockito-core:$mockito_version"),
+            mockitoInline                : ("org.mockito:mockito-inline:$mockito_version"),
+            mockitoKotlin                : ("com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlin_version"),
+            retrofit                     : ("com.squareup.retrofit2:retrofit:$retrofit_version"),
+            retrofitGson                 : ("com.squareup.retrofit2:converter-gson:$retrofit_version"),
+            junit                        : ("junit:junit:$junit_version"),
+            kotlin                       : ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"),
+            kotlinReflection             : ("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"),
+            kotlinTest                   : ("org.jetbrains.kotlin:kotlin-test:$kotlin_version"),
+            kotlinTestrunner             : ("io.kotlintest:kotlintest-runner-junit5:$kotlinTestrunner_version"),
+            googleTruth                  : ("com.google.truth:truth:$googleTruth_version"),
+            gson                         : ("com.google.code.gson:gson:$gson_version"),
+            spring                       : ("org.springframework.boot:spring-boot-starter"),
+            springWeb                    : ("org.springframework.boot:spring-boot-starter-web"),
+            springSecurity               : ("org.springframework.boot:spring-boot-starter-security"),
+            springData                   : ("org.springframework.boot:spring-boot-starter-data-jpa"),
+            jacksonKotlin                : ("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"),
+            postgres                     : ("org.postgresql:postgresql"),
+            jjwt                         : ("io.jsonwebtoken:jjwt:0.9.1"),
+            jpa                         : ("javax.persistence:persistence-api:1.0"),
+
+
+            arduinoDevices    : project(":arduinodevices"),
+            authentication    : project(":authentication"),
+            authentication_api: project(":authentication_api"),
+            controllers       : project(":controllers"),
+            controllers_api   : project(":controllers_api"),
+            devices           : project(":devices"),
+            devices_api       : project(":devices_api"),
+            scripts           : project(":scripts"),
+            scripts_api       : project(":scripts_api"),
+            home              : project(":home"),
+            home_api          : project(":home_api"),
+            channel           : project(":channel"),
+            channel_api       : project(":channel_api"),
+            util              : project(":util"),
+            notification      : project(":notification"),
+            notification_api  : project(":notification_api"),
+            entity            : project(":entity"),
+
+
+//            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),
+    ]
+
+    groups = [
+            forTest    : [
+                    library.junit,
+                    library.mockitoCore,
+                    library.mockitoInline,
+                    library.mockitoKotlin,
+                    library.googleTruth,
+                    library.kotlinTest
+            ],
+            koinWithExt: [
+                    library.koin,
+                    library.koin_ext
+            ],
+            mockito    : [],
+            spring     : [
+                    library.spring,
+                    library.springWeb
+            ]
+
+    ]
+}
