@@ -1,31 +1,16 @@
 package smarthome.client.data.auth
 
 import io.reactivex.Observable
-import smarthome.client.data.api.auth.AuthenticationRepository
+import io.reactivex.subjects.PublishSubject
+import smarthome.client.data.api.auth.UserRepository
+import smarthome.client.domain.api.entity.NOT_SIGNED_IN
+import smarthome.client.domain.api.entity.User
 
-class AuthenticationRepositoryImpl: AuthenticationRepository {
+class UserRepositoryImpl: UserRepository {
+    private val user = PublishSubject.create<User>()
     
-    override fun getAuthenticationStatus(): Observable<Boolean> {
-        return Observable.just(true)
-    }
-    
-    override fun getEmail(): Observable<String> {
-        return Observable.just("email")
-    }
-    
-    override suspend fun setAuthenticationStatus(isAuthenticated: Boolean) {
-
-    }
-    
-    override suspend fun resetEmail() {
-
-    }
-    
-    override suspend fun updateEmail() {
-
-    }
-    
-    override suspend fun getUserId(): String? {
-        return "userId"
+    override fun get() = user
+    override fun delete() {
+        user.onNext(NOT_SIGNED_IN)
     }
 }

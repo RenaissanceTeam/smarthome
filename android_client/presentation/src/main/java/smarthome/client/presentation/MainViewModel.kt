@@ -26,14 +26,6 @@ class MainViewModel: KoinViewModel(), LifecycleObserver {
     val openHomeServerSetup = hasHomeServer.navigateIf { it?.not() ?: false }
     
     private lateinit var authDisposable: Disposable
-
-    fun onAuthSuccessful() {
-        viewModelScope.launch { authenticationUseCase.onAuthSuccess() }
-    }
-
-    fun onAuthFailed() {
-        viewModelScope.launch { authenticationUseCase.onAuthFail() }
-    }
     
     override fun onCleared() {
         super.onCleared()

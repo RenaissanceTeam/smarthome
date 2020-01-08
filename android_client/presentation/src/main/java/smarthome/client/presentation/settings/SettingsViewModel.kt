@@ -15,16 +15,16 @@ class SettingsViewModel(
     val currentAccount: LiveData<String>
         get() = _currentAccount
 
-    private val emailDisposable: Disposable
+    private val usernameDisposable: Disposable
 
     init {
-        emailDisposable = authenticationUseCase.getEmail().subscribe { _currentAccount.value = it }
+        usernameDisposable = authenticationUseCase.getUsername().subscribe { _currentAccount.value = it }
     }
 
     override fun onCleared() {
         super.onCleared()
 
-        emailDisposable.dispose()
+        usernameDisposable.dispose()
     }
 
     fun signOut() = viewModelScope.launch { authenticationUseCase.signOut() }
