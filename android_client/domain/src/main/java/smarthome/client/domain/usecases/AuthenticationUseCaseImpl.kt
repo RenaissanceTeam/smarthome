@@ -1,6 +1,6 @@
 package smarthome.client.domain.usecases
 
-import smarthome.client.data_api.auth.AuthenticationRepository
+import smarthome.client.data.api.auth.AuthenticationRepository
 import smarthome.client.domain.api.usecase.AuthenticationUseCase
 
 class AuthenticationUseCaseImpl(

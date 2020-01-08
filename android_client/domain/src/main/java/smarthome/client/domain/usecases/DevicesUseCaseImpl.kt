@@ -1,7 +1,7 @@
 package smarthome.client.domain.usecases
 
 import io.reactivex.Observable
-import smarthome.client.data_api.home.HomeRepository
+import smarthome.client.data.api.home.HomeRepository
 import smarthome.client.domain.api.entity.Device
 import smarthome.client.domain.api.usecase.DevicesUseCase
 

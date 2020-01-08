@@ -2,22 +2,21 @@ package smarthome.client.presentation.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
-import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.domain.api.entity.Device
 import smarthome.client.domain.api.usecase.AuthenticationUseCase
 import smarthome.client.domain.api.usecase.DevicesUseCase
+import smarthome.client.presentation.util.KoinViewModel
 
 
-class DashboardViewModel(
-    private val devicesUseCase: DevicesUseCase,
-    private val authenticationUseCase: AuthenticationUseCase
-) : ViewModel() {
+class DashboardViewModel : KoinViewModel() {
+    private val devicesUseCase: DevicesUseCase by inject()
+    private val authenticationUseCase: AuthenticationUseCase by inject()
+    
     private val _devices = MutableLiveData<MutableList<Device>>()
     private val _allHomeUpdateState = MutableLiveData<Boolean>()
     private val _toastMessage = MutableLiveData<String?>()
