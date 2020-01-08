@@ -1,6 +1,5 @@
 package smarthome.client.data.auth
 
-import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import smarthome.client.data.api.auth.UserRepository
 import smarthome.client.domain.api.entity.NOT_SIGNED_IN
