@@ -1,7 +1,5 @@
 package smarthome.raspberry.arduinodevices.data.server
 
-import com.squareup.okhttp.OkHttpClient
-import com.squareup.okhttp.Request
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -45,22 +43,22 @@ class UdpServer {
     }
 
     private fun onReceiveFromUpd(receivePacket: DatagramPacket) {
-        // todo how to get only valid info??
-        // todo check if secured udp packet received
-        // todo check if udp packet from iot device
-
-        val ip = receivePacket.address
-
-        val request = Request.Builder()
-                .url(getArduinoInitUrl(ip))
-                .header(REMOTE_ADDR_HEADER, Helpers.localIpAddress)
-                .build()
-
-        val response = OkHttpClient()
-                .newCall(request)
-                .execute()
-
-        response.body().close()
+//        // todo how to get only valid info??
+//        // todo check if secured udp packet received
+//        // todo check if udp packet from iot device
+//
+//        val ip = receivePacket.address
+//
+//        val request = Request.Builder()
+//                .url(getArduinoInitUrl(ip))
+//                .header(REMOTE_ADDR_HEADER, Helpers.localIpAddress)
+//                .build()
+//
+//        val response = OkHttpClient()
+//                .newCall(request)
+//                .execute()
+//
+//        response.body().close()
     }
 
     private fun getArduinoInitUrl(address: InetAddress): String {

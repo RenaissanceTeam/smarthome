@@ -6,6 +6,6 @@ import smarthome.raspberry.devices.data.DevicesRepository
 
 class RemoveDeviceUseCaseImpl(private val repository: DevicesRepository): RemoveDeviceUseCase {
     override suspend fun execute(device: IotDevice) {
-        repository.removeDevice(device)
+        TODO()
     }
 }
