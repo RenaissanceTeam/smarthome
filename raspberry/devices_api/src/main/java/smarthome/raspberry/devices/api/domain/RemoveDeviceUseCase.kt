@@ -1,7 +1,7 @@
 package smarthome.raspberry.devices.api.domain
 
-import smarthome.library.common.IotDevice
+import smarthome.raspberry.entity.Device
 
 interface RemoveDeviceUseCase {
-    suspend fun execute(device: IotDevice)
+    suspend fun execute(device: Device)
 }

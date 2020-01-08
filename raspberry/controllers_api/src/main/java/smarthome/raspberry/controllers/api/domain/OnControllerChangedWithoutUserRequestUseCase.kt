@@ -1,8 +1,8 @@
 package smarthome.raspberry.controllers.api.domain
 
-import smarthome.library.common.BaseController
-import smarthome.library.common.ControllerState
+import smarthome.raspberry.entity.Controller
+
 
 interface OnControllerChangedWithoutUserRequestUseCase {
-    suspend fun execute(controller: BaseController, newState: ControllerState)
+    suspend fun execute(controller: Controller, newState: String)
 }

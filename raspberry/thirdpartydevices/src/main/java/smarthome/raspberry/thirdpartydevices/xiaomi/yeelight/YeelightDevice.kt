@@ -3,7 +3,7 @@ package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight
 import com.google.firebase.firestore.Exclude
 import com.google.gson.annotations.Expose
 import smarthome.library.common.GUID
-import smarthome.library.common.IotDevice
+import smarthome.library.common.Device
 import smarthome.library.common.constants.DeviceTypes.YEELIGHT_DEVICE_TYPE
 import smarthome.raspberry.thirdpartydevices.network.SocketHolder
 import smarthome.raspberry.thirdpartydevices.utils.Utils
@@ -23,7 +23,7 @@ class YeelightDevice(id: String,
                      port: Int = 55443,
                      effect: Effect = Effect.SMOOTH,
                      duration: Int = 500)
-    : IotDevice() {
+    : Device() {
 
     @Expose private val id: String = id
     @Exclude @Expose val metaData: DeviceMetaData = metaData
@@ -39,7 +39,7 @@ class YeelightDevice(id: String,
 
     init {
         name = id
-        guid = GUID.getInstance().getGuidForIotDevice(this)
+        guid = GUID.getInstance().getGuidForDevice(this)
         type = YEELIGHT_DEVICE_TYPE
     }
 
@@ -88,7 +88,7 @@ class YeelightDevice(id: String,
     }
 
     override fun equals(other: Any?): Boolean {
-        val second = other as IotDevice
+        val second = other as Device
         return second.guid == this.guid
     }
 

@@ -1,20 +1,20 @@
 package smarthome.raspberry.controllers.domain
 
-import smarthome.library.common.BaseController
-import smarthome.library.common.ControllerState
 import smarthome.raspberry.controllers.api.domain.OnControllerChangedWithoutUserRequestUseCase
 import smarthome.raspberry.devices.api.domain.GetDeviceByControllerUseCase
 import smarthome.raspberry.devices.api.domain.SaveDeviceUseCase
+import smarthome.raspberry.entity.Controller
 
 class OnControllerChangedWithoutUserRequestUseCaseImpl(
     private val getDeviceByControllerUseCase: GetDeviceByControllerUseCase,
     private val saveDeviceUseCase: SaveDeviceUseCase
 ) : OnControllerChangedWithoutUserRequestUseCase {
 
-    override suspend fun execute(controller: BaseController, newState: ControllerState) {
+    override suspend fun execute(controller: Controller, newState: String) {
         // todo later here check for script conditions
         
-        controller.state = newState
+        TODO()
+//        controller.state = newState
         
         val device = getDeviceByControllerUseCase.execute(controller)
         saveDeviceUseCase.execute(device)

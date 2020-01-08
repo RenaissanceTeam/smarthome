@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import smarthome.library.common.BaseController;
-import smarthome.library.common.IotDevice;
+import smarthome.library.common.Controller;
+import smarthome.library.common.Device;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.DiscoverGatewayCmd;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.ReadDeviceCmd;
 import smarthome.raspberry.thirdpartydevices.xiaomi.gateway.command.ResponseCmd;
@@ -290,24 +290,24 @@ public class GatewayService implements SmokeAlarmListener, StateChangeListener, 
     }
 
     @Override
-    public void onSmokeAlarmStatusChanged(boolean alarm, GatewayDevice device, BaseController controller) {
+    public void onSmokeAlarmStatusChanged(boolean alarm, GatewayDevice device, Controller controller) {
         if (alarm)
             invokeAlarmHandlers(device, controller);
     }
 
     @Override
-    public void onStateChanged(String state, GatewayDevice device, BaseController controller) {
+    public void onStateChanged(String state, GatewayDevice device, Controller controller) {
         if (DEBUG) Log.d("onStateChanged", "new state: " + state);
         invokeAlarmHandlers(device, controller);
     }
 
     @Override
-    public void onWaterLeakStatusChanged(boolean leak, GatewayDevice device, BaseController controller) {
+    public void onWaterLeakStatusChanged(boolean leak, GatewayDevice device, Controller controller) {
         if (leak)
             invokeAlarmHandlers(device, controller);
     }
 
-    private void invokeAlarmHandlers(IotDevice device, BaseController controller) {
+    private void invokeAlarmHandlers(Device device, Controller controller) {
         for (AlarmHandler handler : handlers)
             handler.onAlarm(device, controller);
     }

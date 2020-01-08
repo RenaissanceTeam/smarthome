@@ -4,8 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import smarthome.client.domain.api.entity.Controller
 import smarthome.client.presentation.R
-import smarthome.library.common.BaseController
+
 
 class ControllerView(root: ViewGroup) {
     private val inflater = LayoutInflater.from(root.context)
@@ -16,10 +17,10 @@ class ControllerView(root: ViewGroup) {
     private var boundGuid: Long? = null
 
 
-    fun bind(controller: BaseController) {
+    fun bind(controller: Controller) {
         name.text = controller.name
         state.text = controller.state.toString()
-        boundGuid = controller.guid
+        boundGuid = controller.id
     }
 
     fun onClick(listener: (Long?) -> Unit) {

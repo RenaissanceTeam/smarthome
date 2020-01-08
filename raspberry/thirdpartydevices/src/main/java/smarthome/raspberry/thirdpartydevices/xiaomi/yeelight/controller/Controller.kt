@@ -1,7 +1,7 @@
 package smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.controller
 
 import com.google.firebase.firestore.Exclude
-import smarthome.library.common.BaseController
+import smarthome.library.common.Controller
 import smarthome.library.common.GUID
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.YeelightDevice
 import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.command.Command
@@ -13,7 +13,7 @@ import smarthome.raspberry.thirdpartydevices.xiaomi.yeelight.result.Result
 open class Controller(device: YeelightDevice,
                       type: String,
                       writeCommandListener: WriteCommandListener = defWriteCommandListener)
-    : BaseController() {
+    : Controller() {
 
     @Exclude
     var device: YeelightDevice

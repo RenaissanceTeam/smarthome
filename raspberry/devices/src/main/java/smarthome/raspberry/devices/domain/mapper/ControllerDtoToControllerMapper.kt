@@ -2,8 +2,8 @@ package smarthome.raspberry.devices.domain.mapper
 
 import org.springframework.stereotype.Component
 import smarthome.raspberry.devices.api.domain.dto.ControllerDTO
-import smarthome.raspberry.devices.domain.entity.Controller
-import smarthome.raspberry.devices.domain.entity.Device
+import smarthome.raspberry.entity.Controller
+import smarthome.raspberry.entity.Device
 
 @Component
 open class ControllerDtoToControllerMapper {
@@ -11,6 +11,7 @@ open class ControllerDtoToControllerMapper {
         Controller(
             device = device,
             type = dto.type,
-            name = dto.name
+            name = dto.name,
+            state = dto.state
         )
 }

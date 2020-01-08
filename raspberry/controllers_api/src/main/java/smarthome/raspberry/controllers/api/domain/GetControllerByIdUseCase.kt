@@ -1,8 +1,7 @@
 package smarthome.raspberry.controllers.api.domain
 
-import smarthome.library.common.BaseController
-import smarthome.library.common.Id
+import smarthome.raspberry.entity.Controller
 
 interface GetControllerByIdUseCase {
-    suspend fun execute(id: Id): BaseController
+    suspend fun execute(id: Long): Controller
 }

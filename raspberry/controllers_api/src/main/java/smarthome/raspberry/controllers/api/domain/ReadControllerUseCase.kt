@@ -1,8 +1,9 @@
 package smarthome.raspberry.controllers.api.domain
 
-import smarthome.library.common.BaseController
-import smarthome.library.common.IotDevice
+import smarthome.raspberry.entity.Controller
+import smarthome.raspberry.entity.Device
+
 
 interface ReadControllerUseCase {
-    suspend fun execute(device: IotDevice, controller: BaseController)
+    suspend fun execute(controller: Controller)
 }

@@ -4,6 +4,7 @@ dependencies {
     implementation library.kotlin
 
     // modules
-    implementation library.common
+    implementation library.entity
+
     implementation library.rxJava
 }

@@ -1,0 +1,21 @@
+include ":app",
+        ":arduinodevices",
+        ":authentication",
+        ":authentication_api",
+        ":scripts",
+        ":scripts_api",
+        ":controllers",
+        ":controllers_api",
+        ":devices",
+        ":devices_api",
+        ":home",
+        ":home_api",
+        ":channel",
+        ":channel_api",
+        ":notification",
+        ":notification_api",
+        ":util",
+        ":entity"
+
+
+//        ":${gradle.ext.homeServerFolder}:thirdpartydevices"

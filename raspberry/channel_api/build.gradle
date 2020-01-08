@@ -4,5 +4,6 @@ dependencies {
     implementation library.kotlin
 
     // modules
-    implementation library.common
+    implementation library.devices_api
+    implementation library.entity
 }

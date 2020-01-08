@@ -1,16 +1,15 @@
 package smarthome.raspberry.devices.data
 
 import org.springframework.data.jpa.repository.JpaRepository
-import smarthome.library.common.IotDevice
-import smarthome.raspberry.devices.domain.entity.Device
+import smarthome.raspberry.entity.Device
 
 interface DevicesRepository: JpaRepository<Device, Long> {
     fun findBySerialName(serialName: String): Device?
-//    fun saveDevice(device: IotDevice)
-//    fun savePendingDevice(device: IotDevice)
-//    fun addPendingDevice(device: IotDevice)
-//    fun removePendingDevice(device: IotDevice)
-//    fun addDevice(device: IotDevice)
-//    fun removeDevice(device: IotDevice)
-//    fun getCurrentDevices(): List<IotDevice>
+//    fun saveDevice(device: Device)
+//    fun savePendingDevice(device: Device)
+//    fun addPendingDevice(device: Device)
+//    fun removePendingDevice(device: Device)
+//    fun addDevice(device: Device)
+//    fun removeDevice(device: Device)
+//    fun getCurrentDevices(): List<Device>
 }

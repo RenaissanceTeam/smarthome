@@ -6,10 +6,11 @@ dependencies {
     implementation library.coroutinesCore
 
     // modules
-    implementation library.common
-    implementation library.homeServer_controllers_api
-    implementation library.homeServer_devices_api
-    implementation library.homeServer_channel_api
+    
+    implementation library.controllers_api
+    implementation library.devices_api
+    implementation library.channel_api
+    implementation library.entity
 
     testImplementation groups.forTest
 }

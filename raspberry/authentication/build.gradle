@@ -1,8 +1,5 @@
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 apply plugin: "kotlin-jpa"
-
-apply from: "$rootDir/gradle/scripts/jar-module.gradle"
 
 dependencies {
     implementation library.kotlin
@@ -11,18 +8,15 @@ dependencies {
     implementation library.springData
     implementation library.coroutinesCore
     implementation library.rxJava
-    implementation library.playServicesAuth
-    implementation library.firebaseAuth
     implementation library.jjwt
 
     implementation groups.koinWithExt
-    implementation library.koinScope
 
     // modules
-    implementation library.homeServer_authentication_api
-    implementation library.homeServer_home_api
-    implementation library.homeServer_util
-    implementation library.common
+    implementation library.authentication_api
+    implementation library.home_api
+    implementation library.util
+    
 
     testImplementation groups.forTest
 }

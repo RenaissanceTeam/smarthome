@@ -5,9 +5,9 @@ import com.google.firebase.firestore.Exclude
 import com.google.gson.annotations.Expose
 import org.json.JSONException
 import org.json.JSONObject
-import smarthome.library.common.BaseController
+import smarthome.library.common.Controller
 import smarthome.library.common.GUID
-import smarthome.library.common.IotDevice
+import smarthome.library.common.Device
 import smarthome.library.common.constants.GATEWAY_VOLTAGE_CONTROLLER
 import smarthome.raspberry.thirdpartydevices.BuildConfig
 import smarthome.raspberry.thirdpartydevices.utils.Utils.toJson
@@ -24,7 +24,7 @@ abstract class GatewayDevice(sid: String,
                              stateChangeListener: StateChangeListener? = null,
                              smokeAlarmListener: SmokeAlarmListener? = null,
                              waterLeakListener: WaterLeakListener? = null)
-    : IotDevice () {
+    : Device () {
 
     @Exclude @Expose val sid: String = sid
         @Exclude get
@@ -40,7 +40,7 @@ abstract class GatewayDevice(sid: String,
     init {
         this.name = sid
         this.type = type
-        this.guid = GUID.getInstance().getGuidForIotDevice(this)
+        this.guid = GUID.getInstance().getGuidForDevice(this)
     }
 
     fun recoverControllers() {
@@ -59,7 +59,7 @@ abstract class GatewayDevice(sid: String,
                     (o.getString(VOLTAGE_KEY).toFloat() / 1000).toString() + "v"
     }
 
-    fun getControllerByType(type: String): BaseController {
+    fun getControllerByType(type: String): Controller {
         for (controller in getControllers())
             if (controller.type == type)
                 return controller
@@ -67,7 +67,7 @@ abstract class GatewayDevice(sid: String,
         throw IllegalArgumentException("This device does not have controller with type: $type")
     }
 
-    fun invokeStateListener(state: String, device: GatewayDevice, controller: BaseController) {
+    fun invokeStateListener(state: String, device: GatewayDevice, controller: Controller) {
         stateChangeListener?.onStateChanged(state, device, controller)
     }
 
