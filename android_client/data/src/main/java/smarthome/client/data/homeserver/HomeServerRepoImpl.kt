@@ -3,8 +3,8 @@ package smarthome.client.data.homeserver
 import android.content.Context
 import com.google.gson.Gson
 import smarthome.client.data.api.homeserver.HomeServerRepo
-import smarthome.client.domain.api.entity.HomeServer
 import smarthome.client.domain.api.homeserver.usecases.entity.NoHomeServerException
+import smarthome.client.entity.HomeServer
 
 class HomeServerRepoImpl(
     private val context: Context,
@@ -13,7 +13,8 @@ class HomeServerRepoImpl(
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     override fun get(): HomeServer {
         return try {
-            gson.fromJson(prefs.getString(HOMESERVER_KEY, ""), HomeServer::class.java)
+            gson.fromJson(prefs.getString(HOMESERVER_KEY, ""),
+                smarthome.client.entity.HomeServer::class.java)
         } catch (e: Throwable) {
             throw NoHomeServerException()
         }

@@ -15,6 +15,7 @@ class NavigationEvent {
     }
 }
 
-inline fun <T> LiveData<T>.navigateIf(crossinline predicate : (T?)->Boolean): LiveData<NavigationEvent> {
+inline fun <T> LiveData<T>.navigateIf(
+    crossinline predicate: (T?) -> Boolean): LiveData<NavigationEvent> {
     return this.filter(predicate).map { NavigationEvent() }
 }

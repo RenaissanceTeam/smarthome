@@ -3,6 +3,7 @@ package smarthome.client.presentation
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.*
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.junit.After
 import org.junit.Before
@@ -12,14 +13,14 @@ import org.junit.rules.TestRule
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import smarthome.client.domain.api.homeserver.usecases.GetHomeServerUseCase
-import smarthome.client.domain.api.homeserver.usecases.entity.NoHomeServerException
+import smarthome.client.domain.api.homeserver.usecases.GetActiveHomeServerUseCase
 import smarthome.client.domain.api.usecase.AuthenticationUseCase
 import smarthome.client.presentation.util.NavigationEvent
+import smarthome.client.util.DataStatus
 
 class MainViewModelTest {
     private lateinit var authUseCase: AuthenticationUseCase
-    private lateinit var getHomeServerUseCase: GetHomeServerUseCase
+    private lateinit var getActiveHomeServerUseCase: GetActiveHomeServerUseCase
     private lateinit var viewModel: MainViewModel
     private lateinit var authStatus: BehaviorSubject<Boolean>
     private lateinit var loginObserver: Observer<NavigationEvent>
@@ -34,11 +35,11 @@ class MainViewModelTest {
         authUseCase = mock {
             on { getAuthenticationStatus() }.then { authStatus }
         }
-        getHomeServerUseCase = mock { }
+        getActiveHomeServerUseCase = mock { }
         startKoin {
             modules(module {
                 single { authUseCase }
-                single { getHomeServerUseCase }
+                single { getActiveHomeServerUseCase }
             })
         }
         viewModel = MainViewModel()
@@ -48,7 +49,7 @@ class MainViewModelTest {
         viewModel.openLogin.observeForever(loginObserver)
         viewModel.openHomeServerSetup.observeForever(homeServerObserver)
     }
-
+    
     @After
     fun tearDown() {
         stopKoin()
@@ -70,7 +71,9 @@ class MainViewModelTest {
     
     @Test
     fun `when not authenticated and no home server set should not openLogin, but should openHomeServer`() {
-        whenever(getHomeServerUseCase.execute()).then { throw NoHomeServerException() }
+        whenever(getActiveHomeServerUseCase.execute()).then {
+            Observable.just(DataStatus.from(null))
+        }
         viewModel.onCreate()
         
         authStatus.onNext(false)

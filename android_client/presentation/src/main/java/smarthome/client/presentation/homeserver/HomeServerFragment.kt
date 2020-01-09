@@ -11,7 +11,7 @@ import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_homeserver.*
 import smarthome.client.presentation.R
 
-class HomeServerFragment: Fragment() {
+class HomeServerFragment : Fragment() {
     private val viewModel: HomeServerViewModel by viewModels()
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

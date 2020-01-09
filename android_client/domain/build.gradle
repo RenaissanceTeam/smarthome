@@ -7,8 +7,11 @@ dependencies {
     implementation library.rxJava
     implementation library.kotlin
     implementation groups.koinWithExt
+    implementation groups.forTest
 
     // modules
     implementation library.data_api
     implementation library.domain_api
+    implementation library.entity
+
 }
