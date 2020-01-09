@@ -14,12 +14,11 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
-import smarthome.client.domain.api.usecase.AuthenticationUseCase
+import smarthome.client.presentation.main.MainViewModel
 import smarthome.client.presentation.util.NavigationEvent
 import smarthome.client.util.DataStatus
 
 class MainViewModelTest {
-    private lateinit var authUseCase: AuthenticationUseCase
     private lateinit var observeActiveHomeServerUseCase: ObserveActiveHomeServerUseCase
     private lateinit var viewModel: MainViewModel
     private lateinit var authStatus: BehaviorSubject<Boolean>
@@ -32,11 +31,9 @@ class MainViewModelTest {
     @Before
     fun setUp() {
         authStatus = BehaviorSubject.create()
-        authUseCase = mock {}
         observeActiveHomeServerUseCase = mock { }
         startKoin {
             modules(module {
-                single { authUseCase }
                 single { observeActiveHomeServerUseCase }
             })
         }
