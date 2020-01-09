@@ -1,4 +1,4 @@
-package smarthome.client.domain.api.entity
+package smarthome.client.entity
 
 data class State(
     val type: String,

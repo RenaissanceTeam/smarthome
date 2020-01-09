@@ -14,18 +14,19 @@ class SettingsViewModel(
     private val _currentAccount = MutableLiveData<String>()
     val currentAccount: LiveData<String>
         get() = _currentAccount
-
+    
     private val usernameDisposable: Disposable
-
+    
     init {
-        usernameDisposable = authenticationUseCase.getUsername().subscribe { _currentAccount.value = it }
+        usernameDisposable =
+            authenticationUseCase.getUsername().subscribe { _currentAccount.value = it }
     }
-
+    
     override fun onCleared() {
         super.onCleared()
-
+        
         usernameDisposable.dispose()
     }
-
+    
     fun signOut() = viewModelScope.launch { authenticationUseCase.signOut() }
 }

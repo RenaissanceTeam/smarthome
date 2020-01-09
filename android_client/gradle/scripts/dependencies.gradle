@@ -60,6 +60,7 @@ ext {
             data_api                 : project(":data_api"),
             scripts                  : project(":scripts"),
             scripts_api              : project(":scripts_api"),
+            entity                   : project(":entity"),
     ]
 
     groups = [

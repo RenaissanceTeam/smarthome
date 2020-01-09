@@ -26,16 +26,16 @@ interface ActionViewWrapper {
 ////            }
 //        }
 //    }
-
+    
     fun getView(root: ViewGroup): View
-
+    
     fun isFilled(): Boolean
-
+    
     fun inflateLayout(root: ViewGroup, layout: Int): View {
         val inflater = LayoutInflater.from(root.context)
         return inflater.inflate(layout, root, false)
     }
-
+    
     fun getTag(): String
-
+    
 }

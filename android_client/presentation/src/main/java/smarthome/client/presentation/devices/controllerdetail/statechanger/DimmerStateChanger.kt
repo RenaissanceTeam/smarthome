@@ -13,24 +13,24 @@ class DimmerStateChanger(container: ViewGroup,
                          stateListener: (String) -> Unit,
                          writeListener: (String) -> Unit,
                          readListener: () -> Unit,
-                         upperBound: Int = 100):
-        ControllerStateChanger(container) {
-
+                         upperBound: Int = 100) :
+    ControllerStateChanger(container) {
+    
     private val normalProgress = 0
     private val loadingProgress = 50
     private val unknownState = "Unknown"
-
+    
     override val layout: Int
         get() = R.layout.state_changer_dimmer
-
+    
     private var currentState = ""
     private val seekBar = rootView.findViewById<SeekBar>(R.id.state_changer_seekbar)
     private val writeButton = rootView.findViewById<ActionProcessButton>(R.id.write_button)
     private val readButton = rootView.findViewById<ActionProcessButton>(R.id.read_button)
     private var pressedButton = writeButton
-
+    
     private val step = upperBound / 100
-
+    
     init {
         readButton.setOnClickListener {
             pressedButton = readButton
@@ -49,28 +49,29 @@ class DimmerStateChanger(container: ViewGroup,
                 currentState = res
                 stateListener(res)
             }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) { }
-            override fun onStopTrackingTouch(seekBar: SeekBar?) { }
-
+            
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            
         })
         stateTitle?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val state = s.toString()
                 seekBar.progress = if (state == "") 0 else state.toInt() / step
             }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+            
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
-
-
+    
+    
     override fun invalidateNewState(state: String?, serveState: String?) {
         currentState = state ?: unknownState
-        if (serveState == "up to date" || serveState == null) pressedButton.progress = normalProgress
+        if (serveState == "up to date" || serveState == null) pressedButton.progress =
+            normalProgress
         else pressedButton.progress = loadingProgress
-
+        
     }
-
+    
 }

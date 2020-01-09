@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.Disposable
-import smarthome.client.domain.api.entity.Script
+import smarthome.client.entity.Script
 
 
 class ScriptsViewModel() : ViewModel() {
@@ -16,19 +16,19 @@ class ScriptsViewModel() : ViewModel() {
         get() = _scripts
     val refresh: LiveData<Boolean>
         get() = _refresh
-
+    
     init {
 //        viewModelScope.launch { scriptUseCase.getScripts().subscribe { _scripts.value = it } }
     }
-
+    
     fun onRefresh() {
         _refresh.value = false
     }
-
+    
     fun onScriptClick(script: Script?) {
         openScriptDetails.value = script
     }
-
+    
     override fun onCleared() {
         super.onCleared()
         scriptsDisposable?.dispose()
