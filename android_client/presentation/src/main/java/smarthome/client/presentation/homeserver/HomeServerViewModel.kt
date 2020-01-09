@@ -6,11 +6,13 @@ import kotlinx.coroutines.launch
 import org.koin.core.inject
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.presentation.util.KoinViewModel
+import smarthome.client.presentation.util.NavigationEvent
+import smarthome.client.presentation.util.NavigationLiveData
 
 class HomeServerViewModel : KoinViewModel() {
     private val changeHomeServerUrlUseCase by inject<ChangeHomeServerUrlUseCase>()
     val serverUrl = MutableLiveData<String>("")
-    val close = MutableLiveData<Unit>()
+    val close = NavigationLiveData()
     
     fun save(url: String) {
         viewModelScope.launch {
@@ -18,7 +20,7 @@ class HomeServerViewModel : KoinViewModel() {
                 changeHomeServerUrlUseCase.execute(url)
             }
     
-            close.value = Unit
+            close.trigger()
         }
     }
 }

@@ -24,7 +24,7 @@ class HomeServerFragment : Fragment() {
             input_server.setText(it)
         }
         
-        viewModel.close.observe(this) {
+        viewModel.close.onNavigate(this) {
             view.findNavController().popBackStack()
         }
         
