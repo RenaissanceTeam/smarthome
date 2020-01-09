@@ -202,4 +202,11 @@
         app:destination="@id/homeServerFragment"
         app:launchSingleTop="false"
         app:popUpToInclusive="false" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="smarthome.client.presentation.auth.LoginFragment"
+        android:label="LoginFragment" />
+    <action
+        android:id="@+id/action_global_loginFragment"
+        app:destination="@id/loginFragment" />
 </navigation>

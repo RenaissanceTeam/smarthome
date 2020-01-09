@@ -10,7 +10,7 @@ buildscript {
 
         compileSdk_version = 28
         targetSdk_version = 28
-        minSdk_version = 21
+        minSdk_version = 23
         minSdk_androidthings_version = 26
         absoluteRoot = projectDir
     }

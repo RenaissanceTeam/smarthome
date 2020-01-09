@@ -1,3 +1,3 @@
-package smarthome.client.presentation.main
+package smarthome.client.domain.api.main
 
 class BooleanState() : State<Boolean>(false)

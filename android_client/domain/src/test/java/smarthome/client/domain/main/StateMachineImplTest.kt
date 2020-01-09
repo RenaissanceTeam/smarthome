@@ -1,14 +1,15 @@
-package smarthome.client.presentation.main
+package smarthome.client.domain.main
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import smarthome.client.util.log
+import smarthome.client.domain.api.main.BooleanState
+import smarthome.client.domain.api.main.Need
+import smarthome.client.domain.api.main.StateMachine
 
-class StateMachineTest {
+class StateMachineImplTest {
     
     private lateinit var machine: StateMachine
     private lateinit var login: BooleanState
@@ -22,7 +23,10 @@ class StateMachineTest {
         homeServer = BooleanState()
         needHomeServer = mock {}
         needLogin = mock {}
-        machine = StateMachine(login, homeServer, needHomeServer, needLogin)
+        machine = StateMachineImpl(login, homeServer).apply {
+            setOnNeedHomeServer(needHomeServer)
+            setOnNeedLogin(needLogin)
+        }
     }
     
     @Test
@@ -35,8 +39,17 @@ class StateMachineTest {
     @Test
     fun `when home server is true and no login (by default) should trigger need in login`() {
         homeServer.set(true)
-        login.set(false)
+        login.set(false) // 1
+        login.set(false) // 2
         login.set(true)
-        verify(needLogin, times(2)).invoke()
+        login.set(false) // 3
+        verify(needLogin, times(3)).invoke()
+    }
+    
+    @Test
+    fun `wait for homeServer state to initialize before triggering needs`() {
+        login.set(false)
+        homeServer.set(false)
+        verify(needHomeServer).invoke()
     }
 }
