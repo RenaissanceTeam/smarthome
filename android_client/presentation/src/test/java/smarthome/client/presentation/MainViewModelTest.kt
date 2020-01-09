@@ -32,9 +32,7 @@ class MainViewModelTest {
     @Before
     fun setUp() {
         authStatus = BehaviorSubject.create()
-        authUseCase = mock {
-            on { getAuthenticationStatus() }.then { authStatus }
-        }
+        authUseCase = mock {}
         observeActiveHomeServerUseCase = mock { }
         startKoin {
             modules(module {

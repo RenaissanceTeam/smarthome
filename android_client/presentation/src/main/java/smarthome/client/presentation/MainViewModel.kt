@@ -8,7 +8,6 @@ import io.reactivex.disposables.CompositeDisposable
 import org.koin.core.inject
 import smarthome.client.domain.api.auth.usecases.ObserveAuthenticationStatusUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
-import smarthome.client.domain.api.usecase.AuthenticationUseCase
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.navigateIf
 import smarthome.client.util.DATA
