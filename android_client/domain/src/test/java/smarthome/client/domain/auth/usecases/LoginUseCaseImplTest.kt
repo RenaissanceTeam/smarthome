@@ -18,6 +18,7 @@ class LoginUseCaseImplTest {
     @Before
     fun setUp() {
         command = mock {}
+        saveNewTokenUseCase = mock {}
         useCase = LoginUseCaseImpl(command, saveNewTokenUseCase)
     }
     
