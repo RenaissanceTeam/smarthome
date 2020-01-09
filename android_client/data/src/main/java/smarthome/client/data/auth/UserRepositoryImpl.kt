@@ -10,6 +10,6 @@ class UserRepositoryImpl : UserRepository {
     
     override fun get() = user
     override fun delete() {
-        user.onNext(smarthome.client.entity.NOT_SIGNED_IN)
+        TODO()
     }
 }

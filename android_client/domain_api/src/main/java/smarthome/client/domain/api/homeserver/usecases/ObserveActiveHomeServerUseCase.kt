@@ -4,6 +4,6 @@ import io.reactivex.Observable
 import smarthome.client.entity.HomeServer
 import smarthome.client.util.DataStatus
 
-interface GetActiveHomeServerUseCase {
+interface ObserveActiveHomeServerUseCase {
     fun execute(): Observable<DataStatus<HomeServer>>
 }

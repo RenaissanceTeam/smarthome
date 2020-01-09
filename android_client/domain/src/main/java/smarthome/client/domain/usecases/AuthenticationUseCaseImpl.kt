@@ -10,7 +10,8 @@ class AuthenticationUseCaseImpl(
     override fun getAuthenticationStatus(): Observable<Boolean> = TODO()
     
     override fun getUsername(): Observable<String> {
-        return repository.get().map { it.username }
+        TODO()
+//        return repository.get().map { it.username }
     }
     
     override fun signOut() {

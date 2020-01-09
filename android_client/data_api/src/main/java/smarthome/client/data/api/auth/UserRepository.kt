@@ -8,7 +8,7 @@ import smarthome.client.entity.User
 @Dao
 interface UserRepository {
     @Query("select * from user")
-    fun get(): Observable<User>
+    fun get(): Observable<List<User>>
     
     fun delete()
 }
