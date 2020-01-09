@@ -7,7 +7,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.inject
-import smarthome.client.domain.api.usecase.AuthenticationUseCase
 import smarthome.client.domain.api.usecase.DevicesUseCase
 import smarthome.client.entity.Device
 import smarthome.client.presentation.util.KoinViewModel
@@ -15,14 +14,11 @@ import smarthome.client.presentation.util.KoinViewModel
 
 class DashboardViewModel : KoinViewModel() {
     private val devicesUseCase: DevicesUseCase by inject()
-    private val authenticationUseCase: AuthenticationUseCase by inject()
-    
     private val _devices = MutableLiveData<MutableList<Device>>()
     private val _allHomeUpdateState = MutableLiveData<Boolean>()
     private val _toastMessage = MutableLiveData<String?>()
     
     private var devicesSubscription: Disposable? = null
-    private val authSubscription: Disposable
     
     val devices: LiveData<MutableList<Device>>
         get() = _devices
@@ -33,18 +29,6 @@ class DashboardViewModel : KoinViewModel() {
     val toastMessage: LiveData<String?>
         get() = _toastMessage
     
-    init {
-        authSubscription = authenticationUseCase.getAuthenticationStatus().subscribe {
-            if (it) {
-                requestSmartHomeState()
-            } else {
-                devicesSubscription?.dispose()
-                devicesSubscription = null
-                _toastMessage.value = "Not logged in"
-                // todo show user not logged in placeholder
-            }
-        }
-    }
     
     fun requestSmartHomeState() {
         viewModelScope.launch {
