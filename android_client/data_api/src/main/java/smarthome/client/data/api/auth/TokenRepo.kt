@@ -5,4 +5,5 @@ import smarthome.client.util.DataStatus
 
 interface TokenRepo {
     fun observe(): Observable<DataStatus<String>>
+    fun save(token: String)
 }

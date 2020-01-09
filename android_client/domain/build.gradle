@@ -9,6 +9,7 @@ dependencies {
     implementation library.kotlin
     implementation groups.koinWithExt
     implementation groups.forTest
+    implementation library.coroutinesCore
 
     // modules
     implementation library.data_api
