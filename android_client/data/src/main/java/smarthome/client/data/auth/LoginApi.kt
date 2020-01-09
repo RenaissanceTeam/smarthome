@@ -7,6 +7,5 @@ import smarthome.client.data.auth.dto.Token
 
 interface LoginApi {
     @POST("/login")
-    suspend fun login(@Body
-                      credentials: Credentials): Token
+    suspend fun login(@Body credentials: Credentials): Token
 }
