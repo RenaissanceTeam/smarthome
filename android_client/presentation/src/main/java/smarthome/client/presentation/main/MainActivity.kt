@@ -1,7 +1,6 @@
-package smarthome.client.presentation
+package smarthome.client.presentation.main
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.observe
@@ -10,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
+import smarthome.client.presentation.*
 
 
 class MainActivity : FragmentActivity() {
@@ -19,8 +19,8 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         
-        viewModel.isAuthenticated.observe(this) { if (!it) navigateToLogin() }
-        viewModel.hasHomeServer.observe(this) { if (!it) navigateToHomeServerSelection() }
+        viewModel.openHomeServerSetup.observe(this) { navigateToHomeServerSelection() }
+        viewModel.openLogin.observe(this) { navigateToLogin() }
         
         lifecycle.addObserver(viewModel)
         
@@ -29,19 +29,22 @@ class MainActivity : FragmentActivity() {
         
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         toolbar.setupWithNavController(navController, appBarConfiguration)
-        navController.addOnDestinationChangedListener { a, destination, c ->
-            bottom_navigation.visible = destination.arguments.containsKey(SHOW_BOTTOM_BAR)
-            toolbar.visible = destination.arguments.containsKey(SHOW_TOOL_BAR)
+        
+        navController.addOnDestinationChangedListener { _, _, args ->
+            bottom_navigation.visible = args?.getBoolean(
+                SHOW_BOTTOM_BAR) ?: false
+            toolbar.visible = args?.getBoolean(SHOW_TOOL_BAR) ?: false
         }
     }
     
     private fun navigateToHomeServerSelection() {
-        nav_host_fragment.findNavController().navigate(R.id.action_global_homeServerFragment)
+        nav_host_fragment.findNavController().navigate(
+            R.id.action_global_homeServerFragment)
     }
     
     private fun navigateToLogin() {
-        nav_host_fragment.findNavController().navigate(R.id.action_global_homeServerFragment)
-    
+        nav_host_fragment.findNavController().navigate(
+            R.id.action_global_homeServerFragment)
     }
     
 }

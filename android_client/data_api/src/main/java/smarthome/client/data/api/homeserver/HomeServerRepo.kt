@@ -3,6 +3,7 @@ package smarthome.client.data.api.homeserver
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import io.reactivex.Observable
 import smarthome.client.entity.HomeServer
 
@@ -10,6 +11,13 @@ import smarthome.client.entity.HomeServer
 interface HomeServerRepo {
     @Query("select * from HomeServer")
     fun get(): Observable<List<HomeServer>>
+    
+    @Query("select * from HomeServer where active = 1" )
+    suspend fun getCurrentActive(): HomeServer?
+    
     @Insert
-    fun save(homeServer: HomeServer)
+    suspend fun save(homeServer: HomeServer)
+    
+    @Update
+    suspend fun update(s: HomeServer)
 }

@@ -20,7 +20,7 @@
             android:resource="@drawable/round_warning" />
 
         <activity android:name="smarthome.client.presentation.devices.deviceaddition.AddDeviceActivity"></activity>
-        <activity android:name="smarthome.client.presentation.MainActivity">
+        <activity android:name="smarthome.client.presentation.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

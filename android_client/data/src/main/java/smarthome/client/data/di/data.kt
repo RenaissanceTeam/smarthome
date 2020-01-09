@@ -32,8 +32,8 @@ val data = module {
             .build()
     }
     factory { get<Retrofit>().create(LoginApi::class.java) }
-    single {
-        val build = Room.databaseBuilder(
+    single<AppDatabase> {
+        Room.databaseBuilder(
             get(),
             AppDatabase::class.java,
             "appdb"

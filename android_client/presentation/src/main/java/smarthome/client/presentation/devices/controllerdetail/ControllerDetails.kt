@@ -19,7 +19,6 @@ import smarthome.client.presentation.devices.controllerdetail.statechanger.Contr
 import smarthome.client.presentation.devices.controllerdetail.statechanger.StateChangerType
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
-import smarthome.client.presentationfragments.controllerdetail.ControllerDetailsArgs
 
 class ControllerDetails : Fragment() {
     private val args: ControllerDetailsArgs by navArgs()
