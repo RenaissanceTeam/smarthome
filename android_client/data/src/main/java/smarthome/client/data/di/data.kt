@@ -16,6 +16,7 @@ import smarthome.client.data.auth.LoginCommandImpl
 import smarthome.client.data.auth.TokenRepoImpl
 import smarthome.client.data.home.HomeRepositoryImpl
 import smarthome.client.data.retrofit.HomeServerUrlHolder
+import smarthome.client.data.retrofit.RetrofitFactory
 
 val data = module {
     single {
@@ -25,13 +26,7 @@ val data = module {
         HomeServerUrlHolder(observeActiveHomeServerUseCase = get())
     }
     factoryBy<LoginCommand, LoginCommandImpl>()
-    factory {
-        Retrofit.Builder()
-            .baseUrl(get<HomeServerUrlHolder>().get())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-    factory { get<Retrofit>().create(LoginApi::class.java) }
+    single { RetrofitFactory(urlHolder = get()) }
     single<AppDatabase> {
         Room.databaseBuilder(
             get(),

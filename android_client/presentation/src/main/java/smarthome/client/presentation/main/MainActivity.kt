@@ -9,7 +9,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
-import smarthome.client.presentation.*
+import smarthome.client.presentation.R
+import smarthome.client.presentation.SHOW_BOTTOM_BAR
+import smarthome.client.presentation.SHOW_TOOL_BAR
+import smarthome.client.presentation.visible
 
 
 class MainActivity : FragmentActivity() {
@@ -38,13 +41,11 @@ class MainActivity : FragmentActivity() {
     }
     
     private fun navigateToHomeServerSelection() {
-        nav_host_fragment.findNavController().navigate(
-            R.id.action_global_homeServerFragment)
+        nav_host_fragment.findNavController().navigate(R.id.action_global_homeServerFragment)
     }
     
     private fun navigateToLogin() {
-        nav_host_fragment.findNavController().navigate(
-            R.id.action_global_homeServerFragment)
+        nav_host_fragment.findNavController().navigate(R.id.action_global_loginFragment)
     }
     
 }
