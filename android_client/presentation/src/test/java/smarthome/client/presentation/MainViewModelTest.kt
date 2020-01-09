@@ -13,14 +13,14 @@ import org.junit.rules.TestRule
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import smarthome.client.domain.api.homeserver.usecases.GetActiveHomeServerUseCase
+import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.usecase.AuthenticationUseCase
 import smarthome.client.presentation.util.NavigationEvent
 import smarthome.client.util.DataStatus
 
 class MainViewModelTest {
     private lateinit var authUseCase: AuthenticationUseCase
-    private lateinit var getActiveHomeServerUseCase: GetActiveHomeServerUseCase
+    private lateinit var observeActiveHomeServerUseCase: ObserveActiveHomeServerUseCase
     private lateinit var viewModel: MainViewModel
     private lateinit var authStatus: BehaviorSubject<Boolean>
     private lateinit var loginObserver: Observer<NavigationEvent>
@@ -35,11 +35,11 @@ class MainViewModelTest {
         authUseCase = mock {
             on { getAuthenticationStatus() }.then { authStatus }
         }
-        getActiveHomeServerUseCase = mock { }
+        observeActiveHomeServerUseCase = mock { }
         startKoin {
             modules(module {
                 single { authUseCase }
-                single { getActiveHomeServerUseCase }
+                single { observeActiveHomeServerUseCase }
             })
         }
         viewModel = MainViewModel()
@@ -71,7 +71,7 @@ class MainViewModelTest {
     
     @Test
     fun `when not authenticated and no home server set should not openLogin, but should openHomeServer`() {
-        whenever(getActiveHomeServerUseCase.execute()).then {
+        whenever(observeActiveHomeServerUseCase.execute()).then {
             Observable.just(DataStatus.from(null))
         }
         viewModel.onCreate()

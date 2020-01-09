@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.core.inject
-import smarthome.client.domain.api.homeserver.usecases.GetActiveHomeServerUseCase
+import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.usecase.AuthenticationUseCase
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.navigateIf
@@ -14,7 +14,7 @@ import smarthome.client.util.DATA
 
 class MainViewModel : KoinViewModel(), LifecycleObserver {
     private val authenticationUseCase: AuthenticationUseCase by inject()
-    private val getActiveHomeServerUseCase: GetActiveHomeServerUseCase by inject()
+    private val observeActiveHomeServerUseCase: ObserveActiveHomeServerUseCase by inject()
     
     val isAuthenticated = MutableLiveData<Boolean>()
     val hasHomeServer = MutableLiveData<Boolean>(true)
@@ -39,7 +39,7 @@ class MainViewModel : KoinViewModel(), LifecycleObserver {
         toDispose.add(authenticationUseCase.getAuthenticationStatus().subscribe {
             isAuthenticated.value = it
         })
-        toDispose.addAll(getActiveHomeServerUseCase.execute().subscribe {
+        toDispose.addAll(observeActiveHomeServerUseCase.execute().subscribe {
             hasHomeServer.value = (it.status == DATA)
         })
     }

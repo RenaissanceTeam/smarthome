@@ -6,19 +6,19 @@ import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
 import smarthome.client.data.api.homeserver.HomeServerRepo
-import smarthome.client.domain.api.homeserver.usecases.GetActiveHomeServerUseCase
+import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.entity.HomeServer
 import smarthome.client.util.EMPTY
 
-class GetActiveHomeServerUseCaseImplTest {
-    private lateinit var useCaseActive: GetActiveHomeServerUseCase
+class ObserveActiveHomeServerUseCaseImplTest {
+    private lateinit var useCaseActive: ObserveActiveHomeServerUseCase
     private lateinit var repo: HomeServerRepo
     
     
     @Before
     fun setUp() {
         repo = mock {}
-        useCaseActive = GetActiveHomeServerUseCaseImpl(repo)
+        useCaseActive = ObserveActiveHomeServerUseCaseImpl(repo)
     }
     
     @Test
