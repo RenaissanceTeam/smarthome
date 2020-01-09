@@ -12,12 +12,6 @@ class ChangeHomeServerUrlUseCaseImpl(
             null -> saveNewHomeServer(url)
             else -> updateExistingHomeServer(currentActive, url)
         }
-        
-        
-//        val newHomeServer = repo.runCatching { get() }.getOrDefault(
-//            HomeServer()).copy(url = url)
-//
-//        repo.save(newHomeServer)
     }
     
     private suspend fun saveNewHomeServer(url: String) {
