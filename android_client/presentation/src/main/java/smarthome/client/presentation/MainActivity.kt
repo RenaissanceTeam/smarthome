@@ -19,7 +19,7 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         
-        viewModel.isAuthenticated.observe(this) { if (!it) launchAuthActivity() }
+        viewModel.isAuthenticated.observe(this) { if (!it) navigateToLogin() }
         viewModel.hasHomeServer.observe(this) { if (!it) navigateToHomeServerSelection() }
         
         lifecycle.addObserver(viewModel)
@@ -30,16 +30,8 @@ class MainActivity : FragmentActivity() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         toolbar.setupWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { a, destination, c ->
-            handleVisibility(bottom_navigation, destination.arguments.containsKey(SHOW_BOTTOM_BAR))
-            handleVisibility(toolbar, destination.arguments.containsKey(SHOW_TOOL_BAR))
-        }
-    }
-    
-    private fun handleVisibility(view: View, show: Boolean) {
-        if (show) {
-            view.visibility = View.VISIBLE
-        } else {
-            view.visibility = View.GONE
+            bottom_navigation.visible = destination.arguments.containsKey(SHOW_BOTTOM_BAR)
+            toolbar.visible = destination.arguments.containsKey(SHOW_TOOL_BAR)
         }
     }
     
@@ -47,8 +39,9 @@ class MainActivity : FragmentActivity() {
         nav_host_fragment.findNavController().navigate(R.id.action_global_homeServerFragment)
     }
     
-    private fun launchAuthActivity() {
-        TODO()
+    private fun navigateToLogin() {
+        nav_host_fragment.findNavController().navigate(R.id.action_global_homeServerFragment)
+    
     }
     
 }
