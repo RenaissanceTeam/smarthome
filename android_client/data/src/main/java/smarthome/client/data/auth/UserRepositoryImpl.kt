@@ -1,14 +1,15 @@
 package smarthome.client.data.auth
 
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.Observable
 import smarthome.client.data.api.auth.UserRepository
-import smarthome.client.entity.NOT_SIGNED_IN
 import smarthome.client.entity.User
 
 class UserRepositoryImpl : UserRepository {
-    private val user = PublishSubject.create<User>()
     
-    override fun get() = user
+    override fun get(): Observable<List<User>> {
+        TODO()
+    }
+    
     override fun delete() {
         TODO()
     }
