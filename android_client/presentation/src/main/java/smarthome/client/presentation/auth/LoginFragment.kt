@@ -11,6 +11,10 @@ import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_login.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.visible
+import android.app.Activity
+import android.view.inputmethod.InputMethodManager
+import smarthome.client.presentation.util.hideSoftKeyboard
+
 
 class LoginFragment : Fragment() {
     private val viewModel: LoginViewModel by viewModels()
@@ -31,6 +35,7 @@ class LoginFragment : Fragment() {
             )
         }
         viewModel.close.onNavigate(this) {
+            hideSoftKeyboard()
             view.findNavController().popBackStack()
         }
     }
