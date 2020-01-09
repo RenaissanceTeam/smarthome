@@ -13,6 +13,7 @@ import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUs
 import smarthome.client.domain.api.main.BooleanState
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationEvent
+import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.util.DATA
 import smarthome.client.util.log
 
@@ -23,13 +24,13 @@ class MainViewModel : KoinViewModel(), LifecycleObserver {
     private val loginState: BooleanState by inject(named("login"))
     private val homeServerState: BooleanState by inject(named("homeServer"))
     
-    val openLogin = MutableLiveData<NavigationEvent>()
-    val openHomeServerSetup = MutableLiveData<NavigationEvent>()
+    val openLogin =  NavigationLiveData()
+    val openHomeServerSetup = NavigationLiveData()
     
     private val toDispose = CompositeDisposable()
     init {
-        stateMachine.setOnNeedLogin { openLogin.postValue(NavigationEvent()) }
-        stateMachine.setOnNeedHomeServer { openHomeServerSetup.postValue(NavigationEvent()) }
+        stateMachine.setOnNeedLogin { openLogin.trigger() }
+        stateMachine.setOnNeedHomeServer { openHomeServerSetup.trigger() }
     }
     
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)

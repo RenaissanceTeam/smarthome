@@ -6,17 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.observe
-import androidx.lifecycle.viewModelScope
+import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.coroutines.launch
-import org.koin.core.inject
-import smarthome.client.domain.api.auth.usecases.LoginUseCase
 import smarthome.client.presentation.R
-import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.visible
-import smarthome.client.util.log
 
 class LoginFragment : Fragment() {
     private val viewModel: LoginViewModel by viewModels()
@@ -36,19 +30,9 @@ class LoginFragment : Fragment() {
                 password.text.toString()
             )
         }
+        viewModel.close.onNavigate(this) {
+            view.findNavController().popBackStack()
+        }
     }
 }
 
-class LoginViewModel : KoinViewModel() {
-    val showProgress = MutableLiveData<Boolean>(false)
-    private val loginUseCase: LoginUseCase by inject()
-    
-    fun login(login: String, password: String) {
-        viewModelScope.launch {
-            showProgress.value = true
-            loginUseCase.runCatching { execute(login, password) }.onFailure { log(it) }
-            showProgress.value = false
-        }
-        
-    }
-}

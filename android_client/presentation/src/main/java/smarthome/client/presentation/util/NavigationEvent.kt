@@ -1,10 +1,5 @@
 package smarthome.client.presentation.util
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import com.snakydesign.livedataextensions.filter
-
 class NavigationEvent {
     private var consumed = false
     
@@ -16,7 +11,3 @@ class NavigationEvent {
     }
 }
 
-inline fun <T> LiveData<T>.navigateIf(
-    crossinline predicate: (T?) -> Boolean): LiveData<NavigationEvent> {
-    return this.filter(predicate).map { NavigationEvent() }
-}

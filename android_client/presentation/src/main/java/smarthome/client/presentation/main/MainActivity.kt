@@ -3,7 +3,6 @@ package smarthome.client.presentation.main
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,9 +20,9 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        
-        viewModel.openHomeServerSetup.observe(this) { navigateToHomeServerSelection() }
-        viewModel.openLogin.observe(this) { navigateToLogin() }
+    
+        viewModel.openHomeServerSetup.onNavigate(this) { navigateToHomeServerSelection() }
+        viewModel.openLogin.onNavigate(this) { navigateToLogin() }
         
         lifecycle.addObserver(viewModel)
         
