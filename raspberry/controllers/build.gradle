@@ -1,4 +1,4 @@
-apply from: "$rootDir/gradle/scripts/jar-module.gradle"
+apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 
 dependencies {
     implementation library.kotlin
@@ -6,7 +6,6 @@ dependencies {
     implementation library.coroutinesCore
 
     // modules
-    
     implementation library.controllers_api
     implementation library.devices_api
     implementation library.channel_api

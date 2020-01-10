@@ -2,6 +2,7 @@ package smarthome.raspberry.devices.data.mapper
 
 
 import org.springframework.stereotype.Component
+import smarthome.raspberry.controllers.api.data.mapper.ControllerToGeneralControllerInfoMapper
 import smarthome.raspberry.devices.data.dto.DeviceDetails
 import smarthome.raspberry.entity.Device
 

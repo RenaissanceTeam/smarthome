@@ -1,4 +1,4 @@
-package smarthome.raspberry.devices.data.dto
+package smarthome.raspberry.controllers.api.data.dto
 
 data class GeneralControllerInfo(
         val id: Long,
