@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import smarthome.raspberry.devices.data.DevicesRepository
-import smarthome.raspberry.devices.data.dto.DeviceDetails
-import smarthome.raspberry.devices.data.dto.GeneralDeviceInfo
+import smarthome.raspberry.devices.api.data.dto.DeviceDetails
+import smarthome.raspberry.devices.api.data.dto.GeneralDeviceInfo
 import smarthome.raspberry.devices.data.mapper.DeviceToDeviceDetailsMapper
 import smarthome.raspberry.devices.data.mapper.DeviceToGeneralDeviceInfoMapper
 import smarthome.raspberry.util.exceptions.notFound
