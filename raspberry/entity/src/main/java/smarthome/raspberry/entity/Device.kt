@@ -14,4 +14,3 @@ data class Device(
     @OneToMany(mappedBy = "device", cascade = [CascadeType.ALL])
     val controllers: List<Controller>
 )
-
