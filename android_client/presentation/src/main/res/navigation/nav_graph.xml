@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/controllerDetails"
-        android:name="smarthome.client.presentationfragments.controllerdetail.ControllerDetails"
+        android:name="smarthome.client.presentation.devices.controllerdetail.ControllerDetails"
         android:label="ControllerDetails"
         tools:layout="@layout/fragment_controller_details">
         <argument
@@ -183,16 +183,30 @@
             app:argType="boolean"
             android:defaultValue="true" />
     </fragment>
-    <activity
-        android:id="@+id/addDeviceActivity"
-        android:name="smarthome.client.presentationAddDeviceActivity"
-        android:label="AddDeviceActivity"
-        tools:layout="@layout/activity_add_device" />
     <fragment
         android:id="@+id/homeServerFragment"
         android:name="smarthome.client.presentation.homeserver.HomeServerFragment"
-        android:label="HomeServerFragment" />
+        android:label="HomeServerFragment"
+        tools:layout="@layout/fragment_homeserver">
+        <argument
+            android:name="show_tool_bar"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <argument
+            android:name="show_bottom_bar"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
     <action
         android:id="@+id/action_global_homeServerFragment"
-        app:destination="@id/homeServerFragment" />
+        app:destination="@id/homeServerFragment"
+        app:launchSingleTop="false"
+        app:popUpToInclusive="false" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="smarthome.client.presentation.auth.LoginFragment"
+        android:label="LoginFragment" />
+    <action
+        android:id="@+id/action_global_loginFragment"
+        app:destination="@id/loginFragment" />
 </navigation>

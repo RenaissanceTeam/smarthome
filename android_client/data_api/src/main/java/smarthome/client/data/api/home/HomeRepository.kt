@@ -2,13 +2,13 @@ package smarthome.client.data.api.home
 
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import smarthome.client.domain.api.entity.Controller
-import smarthome.client.domain.api.entity.Device
-import smarthome.client.domain.api.entity.Script
+import smarthome.client.entity.Controller
+import smarthome.client.entity.Device
+import smarthome.client.entity.Script
 
 interface HomeRepository {
     suspend fun getDevices(): Observable<MutableList<Device>>
-
+    
     suspend fun observeDevicesUpdates()
     suspend fun saveAppToken(newToken: String)
     suspend fun getSavedAppToken(): String?

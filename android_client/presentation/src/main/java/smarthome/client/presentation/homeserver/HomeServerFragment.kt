@@ -10,8 +10,9 @@ import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_homeserver.*
 import smarthome.client.presentation.R
+import smarthome.client.presentation.util.hideSoftKeyboard
 
-class HomeServerFragment: Fragment() {
+class HomeServerFragment : Fragment() {
     private val viewModel: HomeServerViewModel by viewModels()
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -24,7 +25,8 @@ class HomeServerFragment: Fragment() {
             input_server.setText(it)
         }
         
-        viewModel.close.observe(this) {
+        viewModel.close.onNavigate(this) {
+            hideSoftKeyboard()
             view.findNavController().popBackStack()
         }
         

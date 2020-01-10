@@ -6,4 +6,6 @@ apply from: "$rootDir/gradle/scripts/android-module.gradle"
 dependencies {
     implementation library.rxJava
     implementation library.kotlin
+
+    implementation library.entity
 }

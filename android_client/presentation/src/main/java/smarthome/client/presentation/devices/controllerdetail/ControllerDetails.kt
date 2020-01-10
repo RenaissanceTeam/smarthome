@@ -12,49 +12,48 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.controller_item.*
 import kotlinx.android.synthetic.main.fragment_controller_details.*
 import kotlinx.android.synthetic.main.fragment_controller_details.state
-import smarthome.client.domain.api.entity.Controller
-import smarthome.client.domain.api.entity.Device
+import smarthome.client.entity.Controller
+import smarthome.client.entity.Device
 import smarthome.client.presentation.R
 import smarthome.client.presentation.devices.controllerdetail.statechanger.ControllerStateChanger
 import smarthome.client.presentation.devices.controllerdetail.statechanger.StateChangerType
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
-import smarthome.client.presentationfragments.controllerdetail.ControllerDetailsArgs
 
 class ControllerDetails : Fragment() {
     private val args: ControllerDetailsArgs by navArgs()
-
+    
     companion object {
         const val FRAGMENT_TAG = "ControllerDetailsFragment"
     }
-
+    
     private val viewModel: smarthome.client.presentation.devices.controllerdetail.ControllerDetailViewModel by viewModels()
-
+    
     private var stateChanger: ControllerStateChanger? = null
-
+    
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-
+        
+        
         viewModel.refresh.observe(this) {
             progress_bar.visibility = if (it) View.VISIBLE else View.GONE
         }
-
+        
         viewModel.controller.observe(this) {
             bindController(it)
             val state = it.state ?: return@observe
 //            stateChanger?.invalidateNewState(state, serveState)
         }
-
+        
         viewModel.device.observe(this, ::bindDevice)
         viewModel.stateChangerType.observe(this, ::invalidateStateChanger)
     }
-
+    
     private fun bindController(controller: Controller) {
         setControllerName(controller)
         state.text = controller.state.toString()
     }
-
+    
     private fun setControllerName(controller: Controller) {
         if (controller.name.isNullOrEmpty()) {
             controller_name.setTextColor(Color.BLACK) // todo add to style
@@ -64,11 +63,11 @@ class ControllerDetails : Fragment() {
             controller_name.text = controller.name
         }
     }
-
+    
     private fun bindDevice(device: Device) {
         this.device.text = device.name
     }
-
+    
     private fun invalidateStateChanger(changerType: StateChangerType) {
         val container = state_changer
 
@@ -87,20 +86,21 @@ class ControllerDetails : Fragment() {
 //            changer.invalidateNewState(it.state, it.serveState)
 //        }
     }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_controller_details, container, false)
     }
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        
         name?.setOnClickListener {
             EditTextDialog.create(view.context,
-                    DialogParameters("controller name", currentValue = viewModel.controller.value?.name
-                            ?: "") {
-                        viewModel.controllerNameChanged(it)
-                    }
+                DialogParameters("controller name", currentValue = viewModel.controller.value?.name
+                    ?: "") {
+                    viewModel.controllerNameChanged(it)
+                }
             ).show()
         }
     }
