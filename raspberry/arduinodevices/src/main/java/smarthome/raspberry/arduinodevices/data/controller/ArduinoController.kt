@@ -8,7 +8,7 @@ import smarthome.raspberry.devices.api.domain.AddDeviceUseCase
 import smarthome.raspberry.devices.api.domain.dto.DeviceDTO
 
 @RestController
-@RequestMapping("api/arduino/")
+@RequestMapping("iot/api/arduino/")
 open class ArduinoController(
     private val addDeviceUseCase: AddDeviceUseCase
 ) {
