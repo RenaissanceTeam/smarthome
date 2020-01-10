@@ -1,10 +1,6 @@
 package smarthome.raspberry.devices.data.dto
 
-import smarthome.raspberry.entity.Controller
-import javax.persistence.CascadeType
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.OneToMany
+import smarthome.raspberry.controllers.api.data.dto.GeneralControllerInfo
 
 data class DeviceDetails(
         val id: Long,
