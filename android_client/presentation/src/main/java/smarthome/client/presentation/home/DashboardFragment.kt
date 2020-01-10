@@ -12,6 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.adapters.GenericItemAdapter
+import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import smarthome.client.entity.Controller
 import smarthome.client.entity.Device
@@ -48,11 +51,18 @@ class DashboardFragment : Fragment() {
         
         devices.layoutManager = LinearLayoutManager(view.context)
         
-        refresh_layout.setOnRefreshListener { viewModel.requestSmartHomeState() }
-        adapterForDevices =
-            DevicesAdapter(layoutInflater, viewModel,
-                ::onDeviceClick, ::onControllerClick)
-        devices?.adapter = adapterForDevices
+        refresh_layout.setOnRefreshListener { viewModel.onRefresh() }
+        
+//        adapterForDevices = DevicesAdapter(layoutInflater, viewModel, ::onDeviceClick, ::onControllerClick)
+//        devices?.adapter = adapterForDevices
+        
+        val itemAdapter = GenericItemAdapter()
+        val fastAdapter = FastAdapter.with(itemAdapter)
+
+        devices.adapter = fastAdapter
+
+        itemAdapter.add((1..10).map { DeviceItem("name $it", "same type") })
+        
         devices?.addItemDecoration(DividerItemDecoration(context, VERTICAL))
     }
     

@@ -30,7 +30,7 @@ class DashboardViewModel : KoinViewModel() {
         get() = _toastMessage
     
     
-    fun requestSmartHomeState() {
+    fun onRefresh() {
         viewModelScope.launch {
             _allHomeUpdateState.value = true
             

@@ -41,4 +41,3 @@ class DeviceViewHolder(itemView: View,
         return controllerView.itemView
     }
 }
-
