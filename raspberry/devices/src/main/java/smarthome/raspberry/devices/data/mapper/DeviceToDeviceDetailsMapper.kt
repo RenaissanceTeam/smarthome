@@ -1,16 +1,19 @@
 package smarthome.raspberry.devices.data.mapper
 
+
 import org.springframework.stereotype.Component
-import smarthome.raspberry.devices.data.dto.GeneralDeviceInfo
+import smarthome.raspberry.devices.data.dto.DeviceDetails
 import smarthome.raspberry.entity.Device
 
 @Component
-open class DeviceToGeneralDeviceInfoMapper(
+open class DeviceToDeviceDetailsMapper(
         private val controllerMapper: ControllerToGeneralControllerInfoMapper
 ) {
-    fun map(device: Device) = GeneralDeviceInfo(
+    fun map(device: Device) = DeviceDetails(
             id = device.id,
+            serialName = device.serialName,
             name = device.name,
+            description = device.description,
             type = device.type,
             controllers = device.controllers.map(controllerMapper::map)
     )
