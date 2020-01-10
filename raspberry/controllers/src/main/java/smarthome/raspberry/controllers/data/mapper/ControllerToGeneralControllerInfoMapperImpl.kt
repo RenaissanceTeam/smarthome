@@ -1,4 +1,4 @@
-package smarthome.raspberry.controllers.data
+package smarthome.raspberry.controllers.data.mapper
 
 import org.springframework.stereotype.Component
 import smarthome.raspberry.controllers.api.data.dto.GeneralControllerInfo
