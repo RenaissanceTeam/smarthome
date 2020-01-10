@@ -15,15 +15,14 @@ class LoginViewModel : KoinViewModel() {
     val close = NavigationLiveData()
     private val loginUseCase: LoginUseCase by inject()
     
-    
     fun login(login: String, password: String) {
         viewModelScope.launch {
             showProgress.postValue(true)
-            loginUseCase.runCatching { execute(login, password) }.onFailure {
+            val loggedIn = loginUseCase.runCatching { execute(login, password) }.onFailure {
                 log(it)
-            }
+            }.isSuccess
             showProgress.postValue(false)
-            close.trigger()
+            if (loggedIn) close.trigger()
         }
     }
 }
