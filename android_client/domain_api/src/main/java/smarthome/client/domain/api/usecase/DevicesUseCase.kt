@@ -1,7 +1,7 @@
 package smarthome.client.domain.api.usecase
 
 import io.reactivex.Observable
-import smarthome.client.domain.api.entity.Device
+import smarthome.client.entity.Device
 
 interface DevicesUseCase {
     suspend fun getDevices(): Observable<MutableList<Device>>

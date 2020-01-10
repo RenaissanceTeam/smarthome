@@ -1,13 +1,11 @@
 package smarthome.client.presentation.devices.controllerdetail.statechanger
 
 
-
-
 object ControllerTypeAdapter {
-
+    
     fun toStateChangerType(type: String): StateChangerType {
         TODO()
-    
+
 //        return when (type) {
 //            ControllerType.ARDUINO_ON_OFF.toString() -> StateChangerType.ONOFF
 //

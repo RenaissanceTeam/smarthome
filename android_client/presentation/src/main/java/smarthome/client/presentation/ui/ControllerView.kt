@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import smarthome.client.domain.api.entity.Controller
+import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
 
 
@@ -13,16 +13,16 @@ class ControllerView(root: ViewGroup) {
     val itemView: View = inflater.inflate(R.layout.controller_item, root, false)
     private val name: TextView = itemView.findViewById(R.id.name)
     private val state: TextView = itemView.findViewById(R.id.state)
-
+    
     private var boundGuid: Long? = null
-
-
+    
+    
     fun bind(controller: Controller) {
         name.text = controller.name
         state.text = controller.state.toString()
         boundGuid = controller.id
     }
-
+    
     fun onClick(listener: (Long?) -> Unit) {
         itemView.setOnClickListener { listener(boundGuid) }
     }

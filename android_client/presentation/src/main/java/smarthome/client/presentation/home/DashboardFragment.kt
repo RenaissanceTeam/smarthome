@@ -13,18 +13,18 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import smarthome.client.domain.api.entity.Controller
-import smarthome.client.domain.api.entity.Device
+import smarthome.client.entity.Controller
+import smarthome.client.entity.Device
 import smarthome.client.presentation.R
 
 
 class DashboardFragment : Fragment() {
     private val viewModel: DashboardViewModel by viewModels()
     private var adapterForDevices: DevicesAdapter? = null
-
+    
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        
         viewModel.devices.observe(this) {
             adapterForDevices?.notifyDataSetChanged()
         }
@@ -37,17 +37,17 @@ class DashboardFragment : Fragment() {
             viewModel.toastShowed()
         }
     }
-
+    
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        
         devices.layoutManager = LinearLayoutManager(view.context)
-
+        
         refresh_layout.setOnRefreshListener { viewModel.requestSmartHomeState() }
         adapterForDevices =
             DevicesAdapter(layoutInflater, viewModel,
@@ -55,21 +55,21 @@ class DashboardFragment : Fragment() {
         devices?.adapter = adapterForDevices
         devices?.addItemDecoration(DividerItemDecoration(context, VERTICAL))
     }
-
+    
     override fun onDestroyView() {
         super.onDestroyView()
         adapterForDevices = null
     }
-
+    
     private fun onDeviceClick(device: Device?) {
         device ?: return
-
+        
         val action =
             DashboardFragmentDirections.actionDashboardFragmentToDeviceDetails(
                 device.id)
         findNavController().navigate(action)
     }
-
+    
     private fun onControllerClick(controller: Controller) {
         val action =
             DashboardFragmentDirections.actionDashboardFragmentToControllerDetails(
