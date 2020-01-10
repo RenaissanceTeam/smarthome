@@ -5,4 +5,5 @@ include ":app",
         ":domain_api",
         ":domain",
         ":scripts",
-        ":scripts_api"
+        ":scripts_api",
+        ":entity"

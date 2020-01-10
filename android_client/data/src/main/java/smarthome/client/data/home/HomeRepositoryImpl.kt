@@ -3,9 +3,9 @@ package smarthome.client.data.home
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import smarthome.client.data.api.home.HomeRepository
-import smarthome.client.domain.api.entity.Controller
-import smarthome.client.domain.api.entity.Device
-import smarthome.client.domain.api.entity.Script
+import smarthome.client.entity.Controller
+import smarthome.client.entity.Device
+import smarthome.client.entity.Script
 
 class HomeRepositoryImpl : HomeRepository {
     override suspend fun getDevices(): Observable<MutableList<Device>> {

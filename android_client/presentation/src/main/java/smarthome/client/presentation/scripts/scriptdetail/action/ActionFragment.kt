@@ -20,44 +20,45 @@ import smarthome.client.presentation.scripts.scriptdetail.ScriptDetailViewModel
 import smarthome.client.presentation.ui.SwipeToDeleteCallback
 
 class ActionFragment : Fragment() {
-
+    
     private var adapter: ActionsAdapter? = null
     private val viewModel: ScriptDetailViewModel by viewModels()
-
+    
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        
         viewModel.actions.observe(this, Observer { adapter?.notifyDataSetChanged() })
         viewModel.isActionOpen.observe(this, Observer { if (!it) activity?.onBackPressed() })
     }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_action, container, false)
     }
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        
         val appBarConfiguration = AppBarConfiguration(findNavController().graph)
         toolbar.setupWithNavController(findNavController(), appBarConfiguration)
-
+        
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setupRecyclerView()
-
+        
         add_button.setOnClickListener { viewModel.onAddActionButtonClicked() }
         save.setOnClickListener { viewModel.onSaveActionsClicked() }
     }
-
+    
     private fun setupRecyclerView() {
         adapter = ActionsAdapter(viewModel)
         actions.layoutManager = LinearLayoutManager(context)
         actions.adapter = adapter
-
+        
         val context = context ?: return
         val swipeHandler = SwipeToDeleteCallback(context) { viewHolder, _ ->
             adapter?.removeAt(viewHolder.adapterPosition)
         }
-
+        
         ItemTouchHelper(swipeHandler).attachToRecyclerView(actions)
     }
 }

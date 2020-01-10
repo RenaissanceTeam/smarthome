@@ -13,14 +13,14 @@ class ConditionViewHolder(view: View,
     private val type = view.findViewById<RadioGroup>(R.id.type_radio_group)
     private var boundPosition: Int = -1
     private var isBinding = false
-
+    
     init {
         type.setOnCheckedChangeListener { group, checkedId ->
             if (isBinding) return@setOnCheckedChangeListener
-
+            
             val button = group.findViewById<RadioButton>(checkedId)
             button ?: return@setOnCheckedChangeListener
-
+            
             onTypeChange(boundPosition, button.tag.toString())
         }
     }
