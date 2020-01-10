@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import smarthome.client.domain.api.entity.Controller
-import smarthome.client.domain.api.entity.Script
 import smarthome.client.domain.api.usecase.ControllersUseCase
 import smarthome.client.domain.api.usecase.DevicesUseCase
+import smarthome.client.entity.Controller
+import smarthome.client.entity.Script
 import smarthome.client.presentation.NEW_SCRIPT_GUID
 import smarthome.client.presentation.scripts.actions.ActionViewWrapper
 import smarthome.client.presentation.scripts.actions.AllActionsProvider
@@ -18,26 +18,26 @@ import smarthome.client.presentation.scripts.conditions.AllConditionsProvider
 class ScriptDetailViewModel(
     private val devicesUseCase: DevicesUseCase,
     private val controllersUseCase: ControllersUseCase
-): ViewModel(), AllConditionsProvider, AllActionsProvider {
+) : ViewModel(), AllConditionsProvider, AllActionsProvider {
     private val _script = MutableLiveData<Script>()
     val script: LiveData<Script>
         get() = _script
-
+    
     val isConditionOpen = MutableLiveData<Boolean>()
     val isActionOpen = MutableLiveData<Boolean>()
     val isScriptOpen = MutableLiveData<Boolean>()
 //    val conditions: LiveData<MutableList<ConditionViewWrapper>> = Transformations.map(script) {
 //        it.conditions.map { condition -> ConditionViewWrapper.wrap(condition, this) }.toMutableList()
 //    }
-
+    
     val actions: LiveData<MutableList<ActionViewWrapper>> = Transformations.map(script) {
-//        it.actions.map { action -> ActionViewWrapper.wrap(action, this) }.toMutableList()
+        //        it.actions.map { action -> ActionViewWrapper.wrap(action, this) }.toMutableList()
         TODO()
     }
-
+    
     private var copyBeforeEditCondition: Script? = null
-
-
+    
+    
     fun setScriptGuid(guid: Long) {
         if (guid == NEW_SCRIPT_GUID) {
             _script.value = Script("")
@@ -45,22 +45,22 @@ class ScriptDetailViewModel(
 //            viewModelScope.launch { _script.value = scriptUseCase.getScript(guid) }
         }
     }
-
+    
     fun scriptNameChange(name: String) {
         val oldScript = _script.value ?: return
 //        _script.value = Script(name, oldScript.conditions, oldScript.actions)
-
+        
         // todo save to firestore
     }
-
+    
     fun onEditConditionClicked() {
         isConditionOpen.value = true
     }
-
+    
     fun onEditActionClicked() {
         isActionOpen.value = true
     }
-
+    
     fun onSaveConditionsClicked() {
 //        val conditions = conditions.value ?: return
 //
@@ -71,8 +71,8 @@ class ScriptDetailViewModel(
 //            isConditionOpen.value = false
 //        }
     }
-
-
+    
+    
     fun onAddActionButtonClicked() {
         val script = script.value
         script ?: return
@@ -80,18 +80,18 @@ class ScriptDetailViewModel(
 //        script.actions.add(ActionViewWrapper.withTag(ACTION_READ_CONTROLLER))
         _script.value = script
     }
-
+    
     fun onSaveActionsClicked() {
         val actions = actions.value ?: return
-
-        Log.d("ScriptDetailVM", "onSaveClicked: ${actions.joinToString() }")
+        
+        Log.d("ScriptDetailVM", "onSaveClicked: ${actions.joinToString()}")
         val allFilled = actions.isNotEmpty() && actions.all { it.isFilled() }
-
+        
         if (allFilled) {
             isActionOpen.value = false
         }
     }
-
+    
     fun changeConditionType(position: Int, tag: String) {
 //        val script = script.value ?: return
 //        val conditionViewWrappers = conditions.value ?: return
@@ -100,7 +100,7 @@ class ScriptDetailViewModel(
 //        script.conditions[position] = ConditionViewWrapper.withTag(tag)
 //        _script.value = script
     }
-
+    
     fun changeActionType(position: Int, tag: String) {
         val script = script.value ?: return
         val actionViewWrappers = actions.value ?: return
@@ -109,11 +109,11 @@ class ScriptDetailViewModel(
 //        script.actions[position] = ActionViewWrapper.withTag(tag)
         _script.value = script
     }
-
+    
     override suspend fun getControllers(): List<Controller> {
         return controllersUseCase.getControllers()
     }
-
+    
     fun onAddConditionButtonClicked() {
 //        val script = script.value
 //        script ?: return
@@ -121,7 +121,7 @@ class ScriptDetailViewModel(
 //        script.conditions.add(ConditionViewWrapper.withTag(CONDITION_CONTROLLER))
 //        _script.value = script
     }
-
+    
     fun removeConditionAt(position: Int) {
         val script = script.value
         script ?: return
@@ -129,10 +129,10 @@ class ScriptDetailViewModel(
 //        script.conditions.removeAt(position)
         _script.value = script
     }
-
+    
     fun onSaveScriptClicked() {
         val script = script.value ?: return
-
+        
         TODO()
 //        viewModelScope.launch {
 ////            if (script.name.isNotEmpty() && script.conditions.isNotEmpty() && script.actions.isNotEmpty()) { // todo move to use case
@@ -142,13 +142,13 @@ class ScriptDetailViewModel(
 //            // todo show not filled fields
 //            }
 //        }
-
+    
     }
-
+    
     fun onCreateScriptDetails() {
         isScriptOpen.value = true
     }
-
+    
     fun removeActionAt(position: Int) {
         val script = script.value
         script ?: return

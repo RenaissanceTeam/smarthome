@@ -14,33 +14,33 @@ class ActionViewHolder(view: View,
     private val type = view.findViewById<RadioGroup>(R.id.type_radio_group)
     private var boundPosition: Int = -1
     private var isBinding = false
-
+    
     init {
         type.setOnCheckedChangeListener { group, checkedId ->
             if (isBinding) return@setOnCheckedChangeListener
-
+            
             val button = group.findViewById<RadioButton>(checkedId)
             button ?: return@setOnCheckedChangeListener
-
+            
             onTypeChange(boundPosition, button.tag.toString())
         }
     }
-
+    
     fun bind(action: ActionViewWrapper, position: Int) {
         isBinding = true
         boundPosition = position
-
+        
         selectRadioButton(action)
         inflateFields(action)
-
+        
         isBinding = false
     }
-
+    
     private fun inflateFields(action: ActionViewWrapper) {
         fieldLayout.removeAllViews()
         fieldLayout.addView(action.getView(fieldLayout))
     }
-
+    
     private fun selectRadioButton(action: ActionViewWrapper) {
         val shouldBeChecked = type.findViewWithTag<RadioButton>(action.getTag())
         if (shouldBeChecked.id != type.checkedRadioButtonId) {

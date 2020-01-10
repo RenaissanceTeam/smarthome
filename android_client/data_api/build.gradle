@@ -7,4 +7,6 @@ dependencies {
     implementation library.kotlin
     implementation library.rxJava
     implementation library.domain_api
+    implementation library.entity
+    implementation groups.room
 }

@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.Disposable
 import org.koin.core.KoinComponent
-import smarthome.client.domain.api.entity.Controller
-import smarthome.client.domain.api.entity.Device
+import smarthome.client.entity.Controller
+import smarthome.client.entity.Device
 
 class AdditionViewModel : ViewModel(), KoinComponent {
     private val _devices = MutableLiveData<MutableList<Device>>()
@@ -18,16 +18,16 @@ class AdditionViewModel : ViewModel(), KoinComponent {
     fun onControllerChanged(controller: Controller) {
         TODO()
     }
-
+    
     override fun onCleared() {
         super.onCleared()
         devicesSubscription?.dispose()
     }
-
+    
     fun acceptDevice(device: Device?) {
         TODO()
     }
-
+    
     fun rejectDevice(device: Device?) {
         TODO()
     }
