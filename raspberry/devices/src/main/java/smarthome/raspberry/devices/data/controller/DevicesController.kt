@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestController
 import smarthome.raspberry.devices.data.DevicesRepository
 import smarthome.raspberry.devices.api.data.dto.DeviceDetails
 import smarthome.raspberry.devices.api.data.dto.GeneralDeviceInfo
+import smarthome.raspberry.devices.api.domain.GetDeviceByIdUseCase
+import smarthome.raspberry.devices.api.domain.GetDevicesUseCase
 import smarthome.raspberry.devices.data.mapper.DeviceToDeviceDetailsMapper
 import smarthome.raspberry.devices.data.mapper.DeviceToGeneralDeviceInfoMapper
 import smarthome.raspberry.util.exceptions.notFound
@@ -14,20 +16,21 @@ import smarthome.raspberry.util.exceptions.notFound
 @RestController
 @RequestMapping("api/")
 class DevicesController(
-        private val devicesRepository: DevicesRepository,
+        private val getDevicesUseCase: GetDevicesUseCase,
         private val deviceGeneralInfoMapper: DeviceToGeneralDeviceInfoMapper,
+        private val getDeviceByIdUseCase: GetDeviceByIdUseCase,
         private val deviceDetailsMapper: DeviceToDeviceDetailsMapper
 
 ) {
 
     @GetMapping("devices")
     fun getAll(): List<GeneralDeviceInfo> {
-        return devicesRepository.findAll().map(deviceGeneralInfoMapper::map)
+        return getDevicesUseCase.execute().map(deviceGeneralInfoMapper::map)
     }
 
     @GetMapping("/devices/{id}")
     fun getDetails(@PathVariable id: Long): DeviceDetails {
-        val device = devicesRepository.findById(id).runCatching { get() }.getOrElse { throw notFound }
+        val device = getDeviceByIdUseCase.runCatching { execute(id) }.getOrElse { throw notFound }
         return deviceDetailsMapper.map(device)
     }
 }
