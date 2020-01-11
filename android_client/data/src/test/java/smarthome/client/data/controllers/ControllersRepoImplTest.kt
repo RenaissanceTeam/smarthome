@@ -31,33 +31,34 @@ class ControllersRepoImplTest {
     
     @Test
     fun `when fetching other device should not emit`() {
-        repo.observe(1).test()
-            .assertValueCount(1)
-            .assertValue { it is EmptyStatus }
+        val result = repo.observe(1).test()
         
         runBlocking { repo.get(2) }
+        result.assertValueCount(1)
+            .assertValue { it is EmptyStatus }
     }
     
     @Test
     fun `when fetching device should emit loading `() {
-        repo.observe(1).test()
-            .assertValueAt(0) { it is EmptyStatus }
-            .assertValueAt(1) { it is LoadingStatus }
-        
+        val result = repo.observe(1).test()
         runBlocking { repo.get(1) }
+    
+        result.assertValueAt(0) { it is EmptyStatus }
+            .assertValueAt(1) { it is LoadingStatus }
     }
     
     @Test
     fun `when fetching controller fails should emit error data status`() {
-        repo.observe(1).test()
-            .assertValueAt(0) { it is EmptyStatus }
-            .assertValueAt(1) { it is LoadingStatus }
-            .assertValueAt(2) { it is ErrorStatus }
-        
         val id = 1L
+        val result = repo.observe(id).test()
+        
         runBlocking {
             whenever(controllersApi.getDetails(id)).then { throw Throwable() }
-            repo.get(id)
+            repo.runCatching { get(id) }
         }
+    
+        result.assertValueAt(0) { it is EmptyStatus }
+            .assertValueAt(1) { it is LoadingStatus }
+            .assertValueAt(2) { it is ErrorStatus }
     }
 }
