@@ -1,4 +1,4 @@
-package smarthome.client.presentation.devices.controllerdetail.statechanger
+package smarthome.client.presentation.controllers.controllerdetail.statechanger
 
 import android.text.Editable
 import android.text.InputType.TYPE_CLASS_NUMBER

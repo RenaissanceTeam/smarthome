@@ -1,4 +1,4 @@
-package smarthome.client.presentation.devices.controllerdetail
+package smarthome.client.presentation.controllers.controllerdetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import smarthome.client.domain.api.usecase.ControllersUseCase
 import smarthome.client.domain.api.usecase.DevicesUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.entity.Device
-import smarthome.client.presentation.devices.controllerdetail.statechanger.StateChangerType
+import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerType
 
 
 class ControllerDetailViewModel(
