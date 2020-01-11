@@ -46,7 +46,7 @@
         tools:text="Some device type" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/devices"
+        android:id="@+id/controllers"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"

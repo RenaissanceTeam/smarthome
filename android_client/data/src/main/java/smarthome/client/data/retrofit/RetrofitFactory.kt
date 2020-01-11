@@ -30,6 +30,10 @@ class RetrofitFactory(
             .also { retrofit = it }
     }
     
+    fun <T> createApi(c: Class<T>): T {
+        return getInstance().create(c)
+    }
+    
     private fun addAuthorizationHeaderInHttpClient() = OkHttpClient.Builder()
         .addInterceptor { chain ->
             val ongoing = chain.request().newBuilder()
