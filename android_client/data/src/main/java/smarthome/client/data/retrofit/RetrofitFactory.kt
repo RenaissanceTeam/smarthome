@@ -4,7 +4,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import smarthome.client.domain.api.auth.usecases.GetCurrentTokenUseCase
-import smarthome.client.util.DATA
+import smarthome.client.util.Data
 
 class RetrofitFactory(
     private val urlHolder: HomeServerUrlHolder,
@@ -38,7 +38,7 @@ class RetrofitFactory(
         .addInterceptor { chain ->
             val ongoing = chain.request().newBuilder()
             val currentToken = getCurrentTokenUseCase.execute()
-            if (currentToken.status == DATA) {
+            if (currentToken is Data) {
                 ongoing.addHeader("Authorization", "Bearer ${currentToken.data}")
             }
             chain.proceed(ongoing.build())
