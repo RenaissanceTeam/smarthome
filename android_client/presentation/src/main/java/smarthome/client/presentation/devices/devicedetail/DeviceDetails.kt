@@ -60,9 +60,11 @@ class DeviceDetails : Fragment() {
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        devices.layoutManager = LinearLayoutManager(view.context)
-        devices.adapter = ControllersAdapter(viewModel)
-        devices.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        lifecycle.addObserver(viewModel)
+        
+//        controllers.layoutManager = LinearLayoutManager(view.context)
+//        controllers.adapter = ControllersAdapter(viewModel)
+//        controllers.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         
         viewModel.setDeviceId(args.deviceGuid)
         
