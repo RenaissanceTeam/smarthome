@@ -7,6 +7,7 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import smarthome.client.data.di.data
 import smarthome.client.domain.di.domain
+import smarthome.client.presentation.di.presentation
 
 class App : MultiDexApplication() {
     override fun onCreate() {
@@ -18,7 +19,8 @@ class App : MultiDexApplication() {
             androidContext(this@App)
             modules(listOf(
                 domain,
-                data
+                data,
+                presentation
             ))
         }
     }
