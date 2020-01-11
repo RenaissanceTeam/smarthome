@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -14,10 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
-import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import smarthome.client.entity.Controller
-import smarthome.client.entity.Device
 import smarthome.client.presentation.R
 
 class DashboardFragment : Fragment() {
@@ -48,21 +44,29 @@ class DashboardFragment : Fragment() {
         refresh_layout.setOnRefreshListener { viewModel.onRefresh() }
         
         devices.layoutManager = LinearLayoutManager(view.context)
-        devices.adapter = FastAdapter.with(itemsAdapter)
+        devices.adapter = FastAdapter.with(itemsAdapter).apply {
+            onClickListener = { view, adapter, item, position ->
+                when (item) {
+                    is ControllerItem -> onControllerClick(item.controller.id)
+                    is DeviceItem -> onDeviceClick(item.device.id)
+                    else -> false
+                }
+            }
+        }
         
         devices.addItemDecoration(DividerItemDecoration(context, VERTICAL))
     }
     
-    private fun onDeviceClick(device: Device?) {
-        device ?: return
-        
-        val action = DashboardFragmentDirections.actionDashboardFragmentToDeviceDetails(device.id)
+    private fun onDeviceClick(deviceId: Long): Boolean {
+        val action = DashboardFragmentDirections.actionDashboardFragmentToDeviceDetails(deviceId)
         findNavController().navigate(action)
+        return true
     }
     
-    private fun onControllerClick(controller: Controller) {
+    private fun onControllerClick(controllerId: Long): Boolean {
         val action =
-            DashboardFragmentDirections.actionDashboardFragmentToControllerDetails(controller.id)
+            DashboardFragmentDirections.actionDashboardFragmentToControllerDetails(controllerId)
         findNavController().navigate(action)
+        return true
     }
 }

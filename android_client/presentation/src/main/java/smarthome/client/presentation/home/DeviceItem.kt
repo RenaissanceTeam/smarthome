@@ -8,7 +8,7 @@ import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.presentation.R
 
 open class DeviceItem(
-    private val device: GeneralDeviceInfo
+    val device: GeneralDeviceInfo
 ): AbstractItem<DeviceItem.ViewHolder>() {
     override val layoutRes = R.layout.device_item
     override val type = DashboardViewTypes.DEVICE.ordinal
