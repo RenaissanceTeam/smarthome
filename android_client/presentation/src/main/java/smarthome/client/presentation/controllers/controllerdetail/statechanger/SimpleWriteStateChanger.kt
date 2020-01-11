@@ -23,10 +23,7 @@ class SimpleWriteStateChanger(container: ViewGroup, listener: (String) -> Unit) 
         }
     }
     
-    override fun invalidateNewState(state: String?, serveState: String?) {
-        if (serveState == "up to date" || serveState == null) button.progress = normalProgress
-        else button.progress = loadingProgress
-        
+    override fun invalidateNewState(state: String) {
+        button.progress = normalProgress
     }
-    
 }

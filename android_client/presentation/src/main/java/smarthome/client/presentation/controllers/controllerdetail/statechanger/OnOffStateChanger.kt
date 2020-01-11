@@ -40,12 +40,10 @@ class OnOffStateChanger(container: ViewGroup, listener: (String) -> Unit) :
     }
     
     
-    override fun invalidateNewState(state: String?, serveState: String?) {
-        currentState = state ?: unknownState
+    override fun invalidateNewState(state: String) {
+        button.progress = normalProgress
+        currentState = state
         changeNormalText()
-        if (serveState == "up to date" || serveState == null) button.progress = normalProgress
-        else button.progress = loadingProgress
-        
     }
     
     private fun changeNormalText() {
