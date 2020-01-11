@@ -1,34 +1,40 @@
 package smarthome.client.presentation.controllers.controllerdetail.statechanger
 
+import android.view.View
 import android.view.ViewGroup
 import com.dd.processbutton.iml.ActionProcessButton
+import kotlinx.android.synthetic.main.state_changer_read.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
+import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
+import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.error
+import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.idle
+import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.inflate
+import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.loading
 
-class ReadStateChanger(container: ViewGroup, listener: () -> Unit) :
-    ControllerStateChanger(container) {
+
+class ReadStateChanger(
+    private val controller: Controller,
+    private val readControllerUseCase: ReadControllerUseCase
+) : ControllerStateChanger {
+    private val uiScope = CoroutineScope(Dispatchers.Main)
     
-    private val idle = 0
-    private val loadingProgress = 50
-    private val completeProgress = 100
-    private val errorProgress = -1
-    
-    override val layout: Int
-        get() = R.layout.state_changer_read
-    
-    private val button: ActionProcessButton = rootView.findViewById(R.id.read)
-    
-    override fun invalidateNewState(state: String) {
-        button.progress = idle
+    override fun inflate(container: ViewGroup) {
+        container.inflate(R.layout.state_changer_read).also { onViewCreated(it) }
     }
     
-    init {
-        button.setMode(ActionProcessButton.Mode.ENDLESS)
-        
-        button.setOnClickListener {
-            listener()
-            button.progress = loadingProgress
+    fun onViewCreated(view: View) {
+        view.read.setMode(ActionProcessButton.Mode.ENDLESS)
+        view.read.setOnClickListener {
+            uiScope.launch {
+                view.read.loading()
+                readControllerUseCase.runCatching { execute(controller.id) }
+                    .onSuccess { view.read.idle() }
+                    .onFailure { view.read.error() }
+            }
         }
-        
     }
-    
 }
