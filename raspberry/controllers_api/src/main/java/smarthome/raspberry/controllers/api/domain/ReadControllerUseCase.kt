@@ -5,5 +5,5 @@ import smarthome.raspberry.entity.Device
 
 
 interface ReadControllerUseCase {
-    suspend fun execute(controller: Controller)
+    fun execute(controller: Controller): String
 }
