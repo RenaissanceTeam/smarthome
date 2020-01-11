@@ -20,7 +20,6 @@ import smarthome.client.entity.Controller
 import smarthome.client.entity.Device
 import smarthome.client.presentation.R
 
-
 class DashboardFragment : Fragment() {
     private val viewModel: DashboardViewModel by viewModels()
     private val itemsAdapter = GenericItemAdapter()
@@ -57,16 +56,13 @@ class DashboardFragment : Fragment() {
     private fun onDeviceClick(device: Device?) {
         device ?: return
         
-        val action =
-            DashboardFragmentDirections.actionDashboardFragmentToDeviceDetails(
-                device.id)
+        val action = DashboardFragmentDirections.actionDashboardFragmentToDeviceDetails(device.id)
         findNavController().navigate(action)
     }
     
     private fun onControllerClick(controller: Controller) {
         val action =
-            DashboardFragmentDirections.actionDashboardFragmentToControllerDetails(
-                controller.id)
+            DashboardFragmentDirections.actionDashboardFragmentToControllerDetails(controller.id)
         findNavController().navigate(action)
     }
 }

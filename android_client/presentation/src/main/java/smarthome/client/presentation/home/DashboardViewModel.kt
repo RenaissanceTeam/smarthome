@@ -23,10 +23,13 @@ class DashboardViewModel : KoinViewModel(), LifecycleObserver {
             allHomeUpdateState.value = true
     
             getGeneralDevicesInfoUseCase.runCatching { execute() }.onSuccess {
-                val items = it.map { device -> DeviceItem(device.name, device.type) }
+                val items = it.flatMap { device ->
+                    listOf(DeviceItem(device)) +
+                        device.controllers.map { controller -> ControllerItem(controller) }
+                }
                 this@DashboardViewModel.items.postValue(items)
             }
-    
+
             allHomeUpdateState.value = false
         }
     }
