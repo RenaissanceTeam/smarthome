@@ -1,4 +1,4 @@
-package smarthome.client.presentation.devices.controllerdetail
+package smarthome.client.presentation.controllers.controllerdetail
 
 import android.graphics.Color
 import android.os.Bundle
@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.fragment_controller_details.state
 import smarthome.client.entity.Controller
 import smarthome.client.entity.Device
 import smarthome.client.presentation.R
-import smarthome.client.presentation.devices.controllerdetail.statechanger.ControllerStateChanger
-import smarthome.client.presentation.devices.controllerdetail.statechanger.StateChangerType
+import smarthome.client.presentation.controllers.controllerdetail.statechanger.ControllerStateChanger
+import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerType
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
 
@@ -27,7 +27,7 @@ class ControllerDetails : Fragment() {
         const val FRAGMENT_TAG = "ControllerDetailsFragment"
     }
     
-    private val viewModel: smarthome.client.presentation.devices.controllerdetail.ControllerDetailViewModel by viewModels()
+    private val viewModel: smarthome.client.presentation.controllers.controllerdetail.ControllerDetailViewModel by viewModels()
     
     private var stateChanger: ControllerStateChanger? = null
     
