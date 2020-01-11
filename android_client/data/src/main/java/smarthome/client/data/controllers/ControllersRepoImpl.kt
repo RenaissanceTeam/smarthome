@@ -17,14 +17,15 @@ class ControllersRepoImpl(
     }
     
     private fun getOrCreateSubject(id: Long): BehaviorSubject<DataStatus<Controller>> {
-        return controllers[id] ?: BehaviorSubject.createDefault(EmptyStatus())
+        return controllers[id]
+            ?: BehaviorSubject.createDefault<DataStatus<Controller>>(EmptyStatus())
+                .also { controllers[id] = it }
     }
     
     override suspend fun get(id: Long): Controller {
         val subject = getOrCreateSubject(id)
         
         subject.onNext(LoadingStatus())
-        // fetching
         return retrofitFactory.createApi(ControllersApi::class.java)
             .runCatching { getDetails(id) }
             .onSuccess { subject.onNext(Data(it)) }
