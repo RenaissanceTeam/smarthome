@@ -1,6 +1,7 @@
 package smarthome.client.presentation.devices.devicedetail
 
 import androidx.lifecycle.*
+import com.mikepenz.fastadapter.GenericItem
 import kotlinx.coroutines.launch
 import org.koin.core.inject
 import smarthome.client.domain.api.devices.usecase.GetDeviceUseCase
@@ -12,6 +13,7 @@ import smarthome.client.presentation.util.NavigationParamLiveData
 
 class DeviceDetailViewModel : KoinViewModel(), LifecycleObserver {
     val device = MutableLiveData<Device>()
+    val controllers = MutableLiveData<List<GenericItem>>()
     val refresh = MutableLiveData<Boolean>()
     val openController = NavigationParamLiveData<Long>()
     private val getDeviceUseCase: GetDeviceUseCase by inject()
@@ -29,7 +31,10 @@ class DeviceDetailViewModel : KoinViewModel(), LifecycleObserver {
     fun onRefresh() {
         viewModelScope.launch {
             refresh.postValue(true)
-            getDeviceUseCase.runCatching { execute(deviceId) }.onSuccess { device.postValue(it) }
+            getDeviceUseCase.runCatching { execute(deviceId) }.onSuccess {
+                device.postValue(it)
+                controllers.postValue(it.controllers.map(::ControllerItem))
+            }
             refresh.postValue(false)
         }
     }
