@@ -1,33 +1,41 @@
 package smarthome.client.presentation.controllers.controllerdetail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import io.reactivex.disposables.Disposable
-import smarthome.client.domain.api.usecase.ControllersUseCase
-import smarthome.client.domain.api.usecase.DevicesUseCase
+import kotlinx.coroutines.launch
+import org.koin.core.inject
+import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
 import smarthome.client.entity.Controller
-import smarthome.client.entity.Device
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerType
+import smarthome.client.presentation.util.KoinViewModel
 
 
-class ControllerDetailViewModel(
-    private val controllersUseCase: ControllersUseCase,
-    private val devicesUseCase: DevicesUseCase
-) : ViewModel() {
-    private val _refresh = MutableLiveData<Boolean>()
-    val refresh: LiveData<Boolean>
-        get() = _refresh
-    
-    private val _controller = MutableLiveData<Controller>()
-    val controller: LiveData<Controller>
-        get() = _controller
-    
-    private val _device = MutableLiveData<Device>()
-    val device: LiveData<Device>
-        get() = _device
+class ControllerDetailViewModel : KoinViewModel(), LifecycleObserver {
+    val refresh = MutableLiveData<Boolean>()
+    val controller = MutableLiveData<Controller>()
+    private var controllerId: Long = 0
+    private val getControllersUseCase: GetControllerUseCase by inject()
     
     private val _stateChangerType = MutableLiveData<StateChangerType>()
+    
+    fun setControllerId(id: Long) {
+        controllerId = id
+    }
+    
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+        onRefresh()
+    }
+    
+    fun onRefresh() {
+        viewModelScope.launch {
+            refresh.postValue(true)
+            getControllersUseCase.runCatching { execute(controllerId) }
+                .onSuccess(controller::postValue)
+            refresh.postValue(false)
+        }
+    }
+    
     val stateChangerType: LiveData<StateChangerType>
         get() = _stateChangerType
     

@@ -7,7 +7,7 @@ import smarthome.client.presentation.R
 class ReadStateChanger(container: ViewGroup, listener: () -> Unit) :
     ControllerStateChanger(container) {
     
-    private val normalProgress = 0
+    private val idle = 0
     private val loadingProgress = 50
     private val completeProgress = 100
     private val errorProgress = -1
@@ -17,9 +17,8 @@ class ReadStateChanger(container: ViewGroup, listener: () -> Unit) :
     
     private val button: ActionProcessButton = rootView.findViewById(R.id.read)
     
-    override fun invalidateNewState(state: String?, serveState: String?) {
-        if (serveState == "up to date" || serveState == null) button.progress = normalProgress
-        else button.progress = loadingProgress
+    override fun invalidateNewState(state: String) {
+        button.progress = idle
     }
     
     init {

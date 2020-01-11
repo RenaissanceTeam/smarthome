@@ -97,11 +97,9 @@ class RGBStateChanger(container: ViewGroup,
         b.progress = (bValue / step).toInt()
     }
     
-    override fun invalidateNewState(state: String?, serveState: String?) {
-        currentState = state ?: unknownState
-        if (serveState == "up to date" || serveState == null) writeButton.progress = normalProgress
-        else writeButton.progress = loadingProgress
-        
+    override fun invalidateNewState(state: String) {
+        currentState = state
+        writeButton.progress = normalProgress
     }
     
 }

@@ -19,6 +19,7 @@ import smarthome.client.presentation.controllers.controllerdetail.statechanger.C
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerType
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
+import smarthome.client.presentation.visible
 
 class ControllerDetails : Fragment() {
     private val args: ControllerDetailsArgs by navArgs()
@@ -35,37 +36,15 @@ class ControllerDetails : Fragment() {
         super.onActivityCreated(savedInstanceState)
         
         
-        viewModel.refresh.observe(this) {
-            progress_bar.visibility = if (it) View.VISIBLE else View.GONE
-        }
-        
-        viewModel.controller.observe(this) {
-            bindController(it)
-            val state = it.state ?: return@observe
-//            stateChanger?.invalidateNewState(state, serveState)
-        }
-        
-        viewModel.device.observe(this, ::bindDevice)
+        viewModel.refresh.observe(this) { progress_bar.visible = it }
+        viewModel.controller.observe(this, ::bindController)
         viewModel.stateChangerType.observe(this, ::invalidateStateChanger)
     }
     
     private fun bindController(controller: Controller) {
-        setControllerName(controller)
-        state.text = controller.state.toString()
-    }
-    
-    private fun setControllerName(controller: Controller) {
-        if (controller.name.isNullOrEmpty()) {
-            controller_name.setTextColor(Color.BLACK) // todo add to style
-            controller_name.text = getString(R.string.empty_name)
-        } else {
-            controller_name.setTextColor(Color.GRAY) // todo add to style
-            controller_name.text = controller.name
-        }
-    }
-    
-    private fun bindDevice(device: Device) {
-        this.device.text = device.name
+        controller_name.text = controller.name
+        controller_type.text = controller.type
+        state.text = controller.state
     }
     
     private fun invalidateStateChanger(changerType: StateChangerType) {

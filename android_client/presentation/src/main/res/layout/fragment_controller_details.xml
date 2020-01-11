@@ -17,25 +17,6 @@
         android:layout_centerInParent="true"
         android:minWidth="200dp">
 
-        <TextView
-            android:id="@+id/device_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/device"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/device"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintBaseline_toBaselineOf="@id/device_label"
-            app:layout_constraintStart_toEndOf="@+id/device_label"
-            tools:text="device1" />
 
         <TextView
             android:id="@+id/controller_name_label"
@@ -45,8 +26,8 @@
             android:fontFamily="sans-serif-light"
             android:labelFor="@id/controller_name"
             android:text="@string/controller_name"
-            app:layout_constraintStart_toStartOf="@id/device_label"
-            app:layout_constraintTop_toBottomOf="@+id/device_label" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/controller_name"
@@ -69,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@id/controller_name_label" />
 
         <TextView
-            android:id="@+id/type"
+            android:id="@+id/controller_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -79,29 +60,6 @@
             app:layout_constraintStart_toEndOf="@id/type_label"
             tools:text="ON_OFF" />
 
-
-        <TextView
-            android:id="@+id/serve_state_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/serve_state"
-            app:layout_constraintStart_toStartOf="@id/type_label"
-            app:layout_constraintTop_toBottomOf="@id/type_label" />
-
-        <TextView
-            android:id="@+id/serve_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintBaseline_toBaselineOf="@id/serve_state_label"
-            app:layout_constraintStart_toEndOf="@id/serve_state_label"
-            tools:text="PENDING" />
-
-
         <TextView
             android:id="@+id/state_label"
             android:layout_width="wrap_content"
@@ -109,8 +67,8 @@
             android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-light"
             android:text="@string/state"
-            app:layout_constraintStart_toStartOf="@id/serve_state_label"
-            app:layout_constraintTop_toBottomOf="@id/serve_state_label" />
+            app:layout_constraintStart_toStartOf="@id/type_label"
+            app:layout_constraintTop_toBottomOf="@id/type_label" />
 
         <TextView
             android:id="@+id/state"
