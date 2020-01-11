@@ -44,6 +44,7 @@ class OnOffStateChanger(
                 writeStateToControllerUseCase.runCatching { execute(controller.id, wantedState) }
                     .onFailure { button.error() }
                     .onSuccess {
+                        currentState = it
                         button.idle()
                         changeNormalText(button)
                     }
