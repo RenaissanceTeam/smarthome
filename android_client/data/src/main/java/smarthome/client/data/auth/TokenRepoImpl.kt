@@ -6,11 +6,14 @@ import smarthome.client.util.DataStatus
 import smarthome.client.util.EMPTY
 
 class TokenRepoImpl : TokenRepo {
-    private val token = BehaviorSubject.createDefault(DataStatus<String>(null, EMPTY))
+    private val default = DataStatus<String>(null, EMPTY)
+    private val token = BehaviorSubject.createDefault(default)
     
     override fun observe() = token
     
     override fun save(token: String) {
         this.token.onNext(DataStatus.from(token))
     }
+    
+    override fun getCurrent(): DataStatus<String> = token.value ?: default
 }

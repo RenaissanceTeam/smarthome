@@ -23,21 +23,17 @@ import smarthome.client.presentation.R
 
 class DashboardFragment : Fragment() {
     private val viewModel: DashboardViewModel by viewModels()
-    private var adapterForDevices: DevicesAdapter? = null
+    private val itemsAdapter = GenericItemAdapter()
     
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         
-        viewModel.devices.observe(this) {
-            adapterForDevices?.notifyDataSetChanged()
+        viewModel.items.observe(this) {
+            itemsAdapter.set(it)
         }
+        
         viewModel.allHomeUpdateState.observe(this) {
             refresh_layout.isRefreshing = it
-        }
-        viewModel.toastMessage.observe(this) {
-            it ?: return@observe
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-            viewModel.toastShowed()
         }
     }
     
@@ -48,27 +44,14 @@ class DashboardFragment : Fragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
-        devices.layoutManager = LinearLayoutManager(view.context)
-        
+        lifecycle.addObserver(viewModel)
+
         refresh_layout.setOnRefreshListener { viewModel.onRefresh() }
         
-//        adapterForDevices = DevicesAdapter(layoutInflater, viewModel, ::onDeviceClick, ::onControllerClick)
-//        devices?.adapter = adapterForDevices
+        devices.layoutManager = LinearLayoutManager(view.context)
+        devices.adapter = FastAdapter.with(itemsAdapter)
         
-        val itemAdapter = GenericItemAdapter()
-        val fastAdapter = FastAdapter.with(itemAdapter)
-
-        devices.adapter = fastAdapter
-
-        itemAdapter.add((1..10).map { DeviceItem("name $it", "same type") })
-        
-        devices?.addItemDecoration(DividerItemDecoration(context, VERTICAL))
-    }
-    
-    override fun onDestroyView() {
-        super.onDestroyView()
-        adapterForDevices = null
+        devices.addItemDecoration(DividerItemDecoration(context, VERTICAL))
     }
     
     private fun onDeviceClick(device: Device?) {
