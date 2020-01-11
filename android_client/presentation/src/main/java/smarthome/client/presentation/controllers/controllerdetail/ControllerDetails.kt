@@ -35,6 +35,7 @@ class ControllerDetails : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         
+        lifecycle.addObserver(viewModel)
         
         viewModel.refresh.observe(this) { progress_bar.visible = it }
         viewModel.controller.observe(this, ::bindController)
@@ -73,6 +74,8 @@ class ControllerDetails : Fragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        viewModel.setControllerId(args.controllerGuid)
         
         name?.setOnClickListener {
             EditTextDialog.create(view.context,

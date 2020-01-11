@@ -5,6 +5,8 @@ import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
 import smarthome.client.domain.api.auth.usecases.*
+import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
+import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.usecase.GetDeviceUseCase
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
@@ -15,6 +17,8 @@ import smarthome.client.domain.api.usecase.CloudMessageUseCase
 import smarthome.client.domain.api.usecase.ControllersUseCase
 import smarthome.client.domain.api.usecase.DevicesUseCase
 import smarthome.client.domain.auth.usecases.*
+import smarthome.client.domain.conrollers.usecases.GetControllerUseCaseImpl
+import smarthome.client.domain.conrollers.usecases.ObserveControllerUseCaseImpl
 import smarthome.client.domain.devices.usecase.GetDeviceUseCaseImpl
 import smarthome.client.domain.devices.usecase.GetGeneralDevicesInfoImpl
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
@@ -40,6 +44,11 @@ val domain = module {
     // devices
     factoryBy<GetGeneralDevicesInfo, GetGeneralDevicesInfoImpl>()
     factoryBy<GetDeviceUseCase, GetDeviceUseCaseImpl>()
+    
+    // controllers
+    factoryBy<ObserveControllerUseCase, ObserveControllerUseCaseImpl>()
+    factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
+    
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
     factoryBy<ControllersUseCase, ControllersUseCaseImpl>()

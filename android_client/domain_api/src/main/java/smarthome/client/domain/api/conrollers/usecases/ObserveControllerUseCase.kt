@@ -5,5 +5,5 @@ import smarthome.client.entity.Controller
 import smarthome.client.util.DataStatus
 
 interface ObserveControllerUseCase {
-    fun execute(): Observable<DataStatus<Controller>>
+    fun execute(id: Long): Observable<DataStatus<Controller>>
 }

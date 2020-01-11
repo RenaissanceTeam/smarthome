@@ -9,7 +9,7 @@ import smarthome.client.util.DataStatus
 class ObserveControllerUseCaseImpl(
     private val repo: ControllersRepo
 ) : ObserveControllerUseCase {
-    override fun execute(): Observable<DataStatus<Controller>> {
-        TODO()
+    override fun execute(id: Long): Observable<DataStatus<Controller>> {
+        return repo.observe(id)
     }
 }
