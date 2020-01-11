@@ -8,7 +8,7 @@ import smarthome.client.domain.api.conrollers.dto.GeneralControllerInfo
 import smarthome.client.presentation.R
 
 open class ControllerItem(
-    private val controller: GeneralControllerInfo
+    val controller: GeneralControllerInfo
 ): AbstractItem<ControllerItem.ViewHolder>() {
     override val layoutRes = R.layout.controller_item
     override val type = DashboardViewTypes.CONTROLLER.ordinal
