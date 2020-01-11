@@ -1,5 +1,5 @@
 package smarthome.client.presentation.home
 
 enum class DashboardViewTypes {
-    DEVICE
+    DEVICE, CONTROLLER
 }
