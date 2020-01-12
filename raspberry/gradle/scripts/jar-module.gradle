@@ -9,6 +9,7 @@ test {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation library.kotlin
 }
 compileKotlin {
     kotlinOptions {
