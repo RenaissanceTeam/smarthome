@@ -6,6 +6,7 @@ import smarthome.raspberry.controllers.api.data.mapper.ControllerToControllerDet
 import smarthome.raspberry.controllers.api.domain.GetControllerByIdUseCase
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
 import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
+import smarthome.raspberry.controllers.data.StateDto
 import smarthome.raspberry.entity.Controller
 import smarthome.raspberry.util.exceptions.notFound
 
@@ -25,13 +26,15 @@ class IotControllersController(
     }
 
     @GetMapping("controllers/{id}/read")
-    fun readState(@PathVariable id: Long): String {
-        return readControllerUseCase.execute(getController(id))
+    fun readState(@PathVariable id: Long): StateDto {
+        val newState = readControllerUseCase.execute(getController(id))
+        return StateDto(newState)
     }
 
     @PostMapping("controllers/{id}/write")
-    fun writeState(@PathVariable id: Long, @RequestBody state: String): String {
-        return writeControllerUseCase.execute(getController(id), state)
+    fun writeState(@PathVariable id: Long, @RequestBody state: StateDto): StateDto {
+        val newState = writeControllerUseCase.execute(getController(id), state.state)
+        return StateDto(newState)
     }
 
     private fun getController(id: Long): Controller {

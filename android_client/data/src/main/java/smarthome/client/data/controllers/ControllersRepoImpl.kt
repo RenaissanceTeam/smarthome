@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.delay
 import smarthome.client.data.api.controllers.ControllersRepo
+import smarthome.client.data.controllers.dto.StateDto
 import smarthome.client.data.retrofit.RetrofitFactory
 import smarthome.client.entity.Controller
 import smarthome.client.util.*
@@ -30,15 +31,15 @@ class ControllersRepoImpl(
         
         emitLoading(controllerId)
         return retrofitFactory.createApi(ControllersApi::class.java)
-            .runCatching { changeState(controllerId, state) }
+            .runCatching { changeState(controllerId, StateDto(state)) }
             .onSuccess {
                 emitData(
                     controllerId,
-                    getLastControllerOrThrow(controllerId).copy(state = it)
+                    getLastControllerOrThrow(controllerId).copy(state = it.state)
                 )
             }
             .onFailure { emitError(controllerId, it) }
-            .getOrThrow()
+            .getOrThrow().state
     }
     
     private fun emitLoading(id: Long) {
@@ -86,11 +87,11 @@ class ControllersRepoImpl(
             .onSuccess {
                 emitData(
                     controllerId,
-                    getLastControllerOrThrow(controllerId).copy(state = it)
+                    getLastControllerOrThrow(controllerId).copy(state = it.state)
                 )
             }
             .onFailure { emitError(controllerId, it) }
-            .getOrThrow()
+            .getOrThrow().state
     }
     
     override suspend fun get(id: Long): Controller {

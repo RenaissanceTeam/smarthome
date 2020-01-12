@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import smarthome.client.data.api.controllers.ControllersRepo
+import smarthome.client.data.controllers.dto.StateDto
 import smarthome.client.data.retrofit.RetrofitFactory
 import smarthome.client.data.util.assertThroughSequence
 import smarthome.client.entity.Controller
@@ -28,7 +29,7 @@ class ControllersRepoImplTest {
                 Controller(1L, 2, "", "", "")
             }
             
-            onBlocking { changeState(1L, "mockedState") }.then { "mockedState" }
+            onBlocking { changeState(1L, StateDto("mockedState")) }.then { StateDto("mockedState") }
         }
         retrofitFactory = mock {
             on { createApi(ControllersApi::class.java) }.then { controllersApi }
@@ -100,7 +101,7 @@ class ControllersRepoImplTest {
             verify(controllersApi).getDetails(id)
             
             repo.setState(id, "mockedState")
-            verify(controllersApi).changeState(id, "mockedState")
+            verify(controllersApi).changeState(id, StateDto("mockedState"))
             verifyNoMoreInteractions(controllersApi)
         }
     }
