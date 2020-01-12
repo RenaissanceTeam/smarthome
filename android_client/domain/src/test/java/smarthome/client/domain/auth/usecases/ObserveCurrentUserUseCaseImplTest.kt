@@ -10,8 +10,8 @@ import smarthome.client.domain.api.auth.usecases.ObserveCurrentUserUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.entity.HomeServer
 import smarthome.client.entity.User
-import smarthome.client.util.DataStatus
-import smarthome.client.util.EMPTY
+import smarthome.client.util.Data
+import smarthome.client.util.EmptyStatus
 
 class ObserveCurrentUserUseCaseImplTest {
     private lateinit var useCase: ObserveCurrentUserUseCase
@@ -27,18 +27,20 @@ class ObserveCurrentUserUseCaseImplTest {
     
     @Test
     fun `when repo returns empty should emit empty`() {
-        whenever(observeActiveHomeServerUseCase.execute()).then { Observable.just(DataStatus.from<HomeServer>(mock {})) }
+        whenever(observeActiveHomeServerUseCase.execute())
+            .then { Observable.just(Data<HomeServer>(mock {})) }
+        
         whenever(userRepo.get()).then { Observable.just(listOf<User>()) }
         
-        useCase.execute().test().assertValue { it.status == EMPTY }
+        useCase.execute().test().assertValue { it is EmptyStatus }
     }
     
     @Test
     fun `when empty active home server should emit empty`() {
-        whenever(observeActiveHomeServerUseCase.execute()).then { Observable.just(DataStatus.from<HomeServer>(null)) }
+        whenever(observeActiveHomeServerUseCase.execute()).then { Observable.just(EmptyStatus<HomeServer>()) }
         whenever(userRepo.get()).then { Observable.just(mock<List<User>>()) }
     
-        useCase.execute().test().assertValue { it.status == EMPTY }
+        useCase.execute().test().assertValue { it is EmptyStatus}
     }
     
     @Test
@@ -52,9 +54,9 @@ class ObserveCurrentUserUseCaseImplTest {
         val user2 = mock<User> { on { serverId }.then { activeServerId } }
         
         val users = listOf(user1, user2)
-        whenever(observeActiveHomeServerUseCase.execute()).then { Observable.just(DataStatus.from(activeServer)) }
+        whenever(observeActiveHomeServerUseCase.execute()).then { Observable.just(Data(activeServer)) }
         whenever(userRepo.get()).then { Observable.just(users) }
         
-        useCase.execute().test().assertValue { it.data == user2 }
+        useCase.execute().test().assertValue { it is Data && it.data == user2 }
     }
 }

@@ -1,19 +1,18 @@
 package smarthome.client.util
 
-data class DataStatus<T>(
-    val data: T?,
-    val status: String
-) {
-    companion object {
+sealed class DataStatus<T> {
+    companion object{
         fun <T> from(value: T?): DataStatus<T> {
             return when (value) {
-                null -> DataStatus(null, EMPTY)
-                else -> DataStatus(value, DATA)
+                null -> EmptyStatus()
+                else -> Data(value)
             }
         }
     }
 }
 
-const val DATA = "DATA"
-const val EMPTY = "EMPTY"
+class Data<T>(val data: T): DataStatus<T>()
+class ErrorStatus<T>(val cause: Throwable): DataStatus<T>()
+class EmptyStatus<T> : DataStatus<T>()
+class LoadingStatus<T> : DataStatus<T>()
 

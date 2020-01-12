@@ -8,10 +8,12 @@ import org.koin.experimental.builder.singleBy
 import smarthome.client.data.AppDatabase
 import smarthome.client.data.api.auth.LoginCommand
 import smarthome.client.data.api.auth.TokenRepo
+import smarthome.client.data.api.controllers.ControllersRepo
 import smarthome.client.data.api.devices.DevicesRepo
 import smarthome.client.data.api.home.HomeRepository
 import smarthome.client.data.auth.LoginCommandImpl
 import smarthome.client.data.auth.TokenRepoImpl
+import smarthome.client.data.controllers.ControllersRepoImpl
 import smarthome.client.data.devices.DevicesRepoImpl
 import smarthome.client.data.home.HomeRepositoryImpl
 import smarthome.client.data.retrofit.HomeServerUrlHolder
@@ -40,4 +42,5 @@ val data = module {
     singleBy<TokenRepo, TokenRepoImpl>()
     
     singleBy<DevicesRepo, DevicesRepoImpl>()
+    singleBy<ControllersRepo, ControllersRepoImpl>()
 }

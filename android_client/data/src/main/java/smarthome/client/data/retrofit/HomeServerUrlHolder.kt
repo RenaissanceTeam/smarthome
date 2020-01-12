@@ -2,7 +2,7 @@ package smarthome.client.data.retrofit
 
 import io.reactivex.subjects.BehaviorSubject
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
-import smarthome.client.util.DATA
+import smarthome.client.util.Data
 
 class HomeServerUrlHolder(
     private val observeActiveHomeServerUseCase: ObserveActiveHomeServerUseCase
@@ -11,8 +11,8 @@ class HomeServerUrlHolder(
     
     private val serverUrl = BehaviorSubject.createDefault(someSafeUrl).apply {
         observeActiveHomeServerUseCase.execute().map {
-            return@map when (it.status) {
-                DATA -> it.data!!.url
+            when (it) {
+                is Data -> it.data.url
                 else -> someSafeUrl
             }
         }.subscribe(this)
