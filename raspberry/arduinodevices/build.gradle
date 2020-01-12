@@ -1,5 +1,5 @@
 apply from: "$rootDir/gradle/scripts/spring-module.gradle"
-bootJar{enabled=false}
+apply plugin: "kotlin-jpa"
 
 dependencies {
     implementation library.kotlin

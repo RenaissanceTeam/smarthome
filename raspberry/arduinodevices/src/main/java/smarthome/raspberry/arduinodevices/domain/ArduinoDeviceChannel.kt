@@ -4,6 +4,7 @@ package smarthome.raspberry.arduinodevices.domain
 import smarthome.raspberry.arduinodevices.data.ArduinoDeviceAddressRepository
 import smarthome.raspberry.arduinodevices.data.ArduinoDeviceApi
 import smarthome.raspberry.arduinodevices.data.ArduinoDeviceApiFactory
+import smarthome.raspberry.arduinodevices.util.index
 import smarthome.raspberry.entity.Controller
 import smarthome.raspberry.entity.DeviceChannel
 
@@ -14,8 +15,7 @@ class ArduinoDeviceChannel(
     override fun canWorkWith(type: String) = type == "arduino"
 
     override fun read(controller: Controller): String {
-        val controllerIndex = controller.device.controllers.indexOf(controller)
-        return getApi(controller).readController(controllerIndex)
+        return getApi(controller).readController(controller.index)
     }
 
     private fun getApi(controller: Controller): ArduinoDeviceApi {
@@ -24,8 +24,7 @@ class ArduinoDeviceChannel(
     }
 
     override fun write(controller: Controller, state: String): String {
-        val controllerIndex = controller.device.controllers.indexOf(controller)
-        return getApi(controller).writeStateToController(controllerIndex, state)
+        return getApi(controller).writeStateToController(controller.index, state)
     }
 }
 

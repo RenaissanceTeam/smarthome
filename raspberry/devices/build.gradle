@@ -1,4 +1,3 @@
-apply plugin: "kotlin-jpa"
 apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 
 dependencies {

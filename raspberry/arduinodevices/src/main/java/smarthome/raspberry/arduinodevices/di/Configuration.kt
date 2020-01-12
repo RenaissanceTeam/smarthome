@@ -13,16 +13,16 @@ import smarthome.raspberry.channel.api.domain.arduinoChannel
 import smarthome.raspberry.entity.DeviceChannel
 
 @Configuration
-class Configuration {
+open class Configuration {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    fun rest(): RestOperations {
+    open fun rest(): RestOperations {
         return RestTemplate()
     }
 
     @Bean(arduinoChannel)
-    fun deviceChannel(addressRepository: ArduinoDeviceAddressRepository,
+    open fun deviceChannel(addressRepository: ArduinoDeviceAddressRepository,
                       arduinoDeviceApiFactory: ArduinoDeviceApiFactory
                       ): DeviceChannel {
         return ArduinoDeviceChannel(addressRepository, arduinoDeviceApiFactory)
