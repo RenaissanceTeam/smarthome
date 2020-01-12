@@ -3,7 +3,7 @@ package smarthome.raspberry.entity
 import javax.persistence.*
 
 @Entity
-data class Device(
+class Device(
     @Id @GeneratedValue
     val id: Long = 0,
     val serialName: String,
@@ -12,5 +12,6 @@ data class Device(
     val type: String,
     
     @OneToMany(mappedBy = "device", cascade = [CascadeType.ALL])
+    @OrderBy("id ASC")
     val controllers: List<Controller>
 )
