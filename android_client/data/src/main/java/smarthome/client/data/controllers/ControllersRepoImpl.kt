@@ -29,17 +29,16 @@ class ControllersRepoImpl(
         }
         
         emitLoading(controllerId)
-        retrofitFactory.createApi(ControllersApi::class.java)
+        return retrofitFactory.createApi(ControllersApi::class.java)
             .runCatching { changeState(controllerId, state) }
             .onSuccess {
-                val lastController = getLastData(controllerId)?.data
-                    ?: throw Throwable("No info about controller when setState")
-                emitData(controllerId, lastController.copy(state = it))
+                emitData(
+                    controllerId,
+                    getLastControllerOrThrow(controllerId).copy(state = it)
+                )
             }
             .onFailure { emitError(controllerId, it) }
             .getOrThrow()
-        
-        return state
     }
     
     private fun emitLoading(id: Long) {
@@ -63,6 +62,10 @@ class ControllersRepoImpl(
     
     private fun noController(id: Long) = getLastData(id) == null
     
+    private fun getLastControllerOrThrow(id: Long): Controller {
+        return getLastData(id)?.data ?: throw Throwable("No info about controller")
+    }
+    
     private fun getLastData(id: Long): Data<Controller>? {
         return when (val value = getOrCreateSubject(id).value) {
             is Data -> value
@@ -73,16 +76,21 @@ class ControllersRepoImpl(
     }
     
     override suspend fun readState(controllerId: Long): String {
-        delay(2000)
-        (0..2).random().takeIf { it == 1 }?.let { throw Throwable("random error") }
-        val newState = "${(10..30).random()} C"
-        getOrCreateSubject(controllerId).apply {
-            val currentValue = value
-            if (currentValue is Data) {
-                onNext(Data(currentValue.data.copy(state = newState)))
-            }
+        if (noController(controllerId)) {
+            get(controllerId)
         }
-        return newState
+    
+        emitLoading(controllerId)
+        return retrofitFactory.createApi(ControllersApi::class.java)
+            .runCatching { readState(controllerId) }
+            .onSuccess {
+                emitData(
+                    controllerId,
+                    getLastControllerOrThrow(controllerId).copy(state = it)
+                )
+            }
+            .onFailure { emitError(controllerId, it) }
+            .getOrThrow()
     }
     
     override suspend fun get(id: Long): Controller {
