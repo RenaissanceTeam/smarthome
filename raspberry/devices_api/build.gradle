@@ -5,4 +5,5 @@ dependencies {
 
     // modules
     implementation library.entity
+    implementation library.controllers_api
 }

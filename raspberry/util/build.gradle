@@ -1,7 +1,8 @@
-apply from: "$rootDir/gradle/scripts/jar-module.gradle"
+apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 
 dependencies {
     implementation groups.koinWithExt
+
     implementation library.kotlin
     implementation library.rxJava
     implementation library.rxKotlin
