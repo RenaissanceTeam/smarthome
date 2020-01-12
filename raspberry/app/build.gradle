@@ -14,9 +14,7 @@ dependencies {
     implementation library.springData
     runtime library.postgres
 
-    implementation groups.koinWithExt
     testImplementation groups.forTest
-    testImplementation library.koin_test
 
     // modules
     implementation library.authentication
