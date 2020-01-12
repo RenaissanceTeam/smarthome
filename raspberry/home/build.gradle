@@ -6,7 +6,6 @@ dependencies {
     implementation library.rxJava
     implementation library.rxKotlin
 
-    implementation groups.koinWithExt
 
     // modules
     implementation library.home_api

@@ -8,7 +8,6 @@ dependencies {
     implementation library.retrofitGson
     implementation library.rxJava
     implementation library.rxKotlin
-    implementation groups.koinWithExt
     implementation library.springData
 
     implementation library.channel_api
