@@ -1,4 +1,4 @@
-package smarthome.client.presentation.devices.controllerdetail.statechanger
+package smarthome.client.presentation.controllers.controllerdetail.statechanger
 
 import android.view.ViewGroup
 import com.dd.processbutton.iml.ActionProcessButton
@@ -40,12 +40,10 @@ class OnOffStateChanger(container: ViewGroup, listener: (String) -> Unit) :
     }
     
     
-    override fun invalidateNewState(state: String?, serveState: String?) {
-        currentState = state ?: unknownState
+    override fun invalidateNewState(state: String) {
+        button.progress = normalProgress
+        currentState = state
         changeNormalText()
-        if (serveState == "up to date" || serveState == null) button.progress = normalProgress
-        else button.progress = loadingProgress
-        
     }
     
     private fun changeNormalText() {

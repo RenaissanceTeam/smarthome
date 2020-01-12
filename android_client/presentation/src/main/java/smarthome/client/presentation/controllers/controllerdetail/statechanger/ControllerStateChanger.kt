@@ -1,4 +1,4 @@
-package smarthome.client.presentation.devices.controllerdetail.statechanger
+package smarthome.client.presentation.controllers.controllerdetail.statechanger
 
 import android.view.View
 import android.view.ViewGroup
@@ -14,5 +14,5 @@ abstract class ControllerStateChanger(container: ViewGroup) {
         rootView = View.inflate(container.context, layout, container)
     }
     
-    abstract fun invalidateNewState(state: String?, serveState: String?)
+    abstract fun invalidateNewState(state: String)
 }

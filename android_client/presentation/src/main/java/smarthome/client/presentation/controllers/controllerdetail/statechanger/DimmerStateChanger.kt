@@ -1,4 +1,4 @@
-package smarthome.client.presentation.devices.controllerdetail.statechanger
+package smarthome.client.presentation.controllers.controllerdetail.statechanger
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -52,7 +52,6 @@ class DimmerStateChanger(container: ViewGroup,
             
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-            
         })
         stateTitle?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -65,13 +64,7 @@ class DimmerStateChanger(container: ViewGroup,
         })
     }
     
-    
-    override fun invalidateNewState(state: String?, serveState: String?) {
-        currentState = state ?: unknownState
-        if (serveState == "up to date" || serveState == null) pressedButton.progress =
-            normalProgress
-        else pressedButton.progress = loadingProgress
-        
+    override fun invalidateNewState(state: String) {
+        currentState = state
     }
-    
 }

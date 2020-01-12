@@ -8,7 +8,10 @@ import org.junit.Test
 import smarthome.client.data.api.homeserver.HomeServerRepo
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.entity.HomeServer
-import smarthome.client.util.EMPTY
+import smarthome.client.util.Data
+import smarthome.client.util.DataStatus
+import smarthome.client.util.EmptyStatus
+
 
 class ObserveActiveHomeServerUseCaseImplTest {
     private lateinit var useCaseActive: ObserveActiveHomeServerUseCase
@@ -24,7 +27,7 @@ class ObserveActiveHomeServerUseCaseImplTest {
     @Test
     fun `when empty list emited should emit empty value`() {
         whenever(repo.get()).then { Observable.just(listOf<HomeServer>()) }
-        useCaseActive.execute().test().assertValue { it.status == EMPTY }
+        useCaseActive.execute().test().assertValue { it is EmptyStatus }
     }
     
     @Test
@@ -38,6 +41,6 @@ class ObserveActiveHomeServerUseCaseImplTest {
         val servers = listOf(notActiveServer, activeServer, notActiveServer, notActiveServer)
         whenever(repo.get()).then { Observable.just(servers) }
         
-        useCaseActive.execute().test().assertValue { it.data == activeServer }
+        useCaseActive.execute().test().assertValue { it is Data && it.data == activeServer }
     }
 }

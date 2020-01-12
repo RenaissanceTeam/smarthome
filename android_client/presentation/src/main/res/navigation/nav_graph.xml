@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/controllerDetails"
-        android:name="smarthome.client.presentation.devices.controllerdetail.ControllerDetails"
+        android:name="smarthome.client.presentation.controllers.controllerdetail.ControllerDetails"
         android:label="ControllerDetails"
         tools:layout="@layout/fragment_controller_details">
         <argument
