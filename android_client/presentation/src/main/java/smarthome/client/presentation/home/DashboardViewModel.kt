@@ -24,8 +24,7 @@ class DashboardViewModel : KoinViewModel(), LifecycleObserver {
     
             getGeneralDevicesInfoUseCase.runCatching { execute() }.onSuccess {
                 val items = it.flatMap { device ->
-                    listOf(DeviceItem(device)) +
-                        device.controllers.map { controller -> ControllerItem(controller) }
+                    listOf(DeviceItem(device)) + device.controllers.map(::ControllerItem)
                 }
                 this@DashboardViewModel.items.postValue(items)
             }
