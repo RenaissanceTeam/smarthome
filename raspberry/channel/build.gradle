@@ -1,8 +1,6 @@
 apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 
 dependencies {
-    implementation groups.koinWithExt
-
     // modules
     implementation library.channel_api
     implementation library.entity

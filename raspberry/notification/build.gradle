@@ -4,7 +4,6 @@ dependencies {
     implementation library.kotlin
     implementation library.retrofit
     implementation library.coroutinesCore
-    implementation groups.koinWithExt
     implementation library.gson
 
     // modules

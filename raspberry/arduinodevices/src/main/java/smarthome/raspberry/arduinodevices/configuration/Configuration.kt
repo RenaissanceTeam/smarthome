@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.di
+package smarthome.raspberry.arduinodevices.configuration
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Bean

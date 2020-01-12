@@ -4,9 +4,6 @@ ext {
     library = [
             rxJava                       : ("io.reactivex.rxjava2:rxjava:$rxjava_version"),
             rxKotlin                     : ("io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"),
-            koin                         : ("org.koin:koin-android:$koin_version"),
-            koin_ext                     : ("org.koin:koin-core-ext:$koin_version"),
-            koin_test                    : ("org.koin:koin-test:$koin_version"),
             coroutinesCore               : ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"),
             coroutinesExtPlayServices    : ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"),
             mockitoCore                  : ("org.mockito:mockito-core:$mockito_version"),
@@ -61,10 +58,6 @@ ext {
                     library.mockitoKotlin,
                     library.googleTruth,
                     library.kotlinTest
-            ],
-            koinWithExt: [
-                    library.koin,
-                    library.koin_ext
             ],
             mockito    : [],
             spring     : [
