@@ -9,7 +9,6 @@ dependencies {
     implementation library.rxJava
     implementation library.jjwt
 
-    implementation groups.koinWithExt
 
     // modules
     implementation library.authentication_api
