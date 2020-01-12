@@ -1,7 +1,6 @@
 apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 
 dependencies {
-
     // modules
     implementation library.channel_api
     implementation library.entity
