@@ -7,7 +7,6 @@ import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.entity.Controller
-import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerType
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.Data
 import smarthome.client.util.ErrorStatus
@@ -20,8 +19,6 @@ class ControllerDetailViewModel : KoinViewModel(), LifecycleObserver {
     private var controllerId: Long = 0
     private val getControllersUseCase: GetControllerUseCase by inject()
     private val observeControllerUseCase: ObserveControllerUseCase by inject()
-    
-    private val _stateChangerType = MutableLiveData<StateChangerType>()
     private val disposable = CompositeDisposable()
     
     fun setControllerId(id: Long) {
@@ -52,10 +49,6 @@ class ControllerDetailViewModel : KoinViewModel(), LifecycleObserver {
             getControllersUseCase.runCatching { execute(controllerId) }
         }
     }
-    
-    val stateChangerType: LiveData<StateChangerType>
-        get() = _stateChangerType
-    
     
     override fun onCleared() {
         super.onCleared()
