@@ -1,11 +1,9 @@
-apply from: "$rootDir/gradle/scripts/jar-module.gradle"
+apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 
 dependencies {
-    implementation library.kotlin
     implementation groups.koinWithExt
 
     // modules
-    
     implementation library.channel_api
     implementation library.entity
 
