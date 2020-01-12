@@ -1,20 +1,10 @@
 package smarthome.raspberry.arduinodevices.data
 
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
-import smarthome.raspberry.arduinodevices.data.dto.ArduinoControllerResponse
-
 interface ArduinoDeviceApi {
+    fun readController(controllerIndex: Int): String
 
-    @GET("service")
-    suspend fun controllerReadRequest(@Query("id") controllerId: Long): ArduinoControllerResponse
-
-    @POST("service")
-    suspend fun controllerWriteRequest(
-            @Query("id") controllerId: Long,
-            @Query("value") value: String): ArduinoControllerResponse
-
+    fun writeStateToController(
+            controllerIndex: Int, value: String): String
 }
 
 
