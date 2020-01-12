@@ -3,7 +3,6 @@ apply plugin: "kotlin-jpa"
 
 dependencies {
     implementation library.kotlin
-    implementation groups.spring
     implementation library.springSecurity
     implementation library.springData
     implementation library.coroutinesCore

@@ -13,15 +13,7 @@ private val domain = module {
     factoryBy<GetChannelForDeviceUseCase, GetChannelForDeviceUseCaseImpl>()
 }
 
-private val data = module {
-    single<ChannelRepository> {
-        ChannelRepositoryImpl(
-            arduinoChannel = get(named(arduinoChannel))
-        )
-    }
-}
 
 val channelModule = listOf(
-        domain,
-        data
+        domain
 )

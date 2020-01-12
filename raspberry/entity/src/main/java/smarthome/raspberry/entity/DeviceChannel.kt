@@ -2,6 +2,6 @@ package smarthome.raspberry.entity
 
 interface DeviceChannel {
     fun canWorkWith(type: String): Boolean
-    suspend fun read()
-    suspend fun write()
+    fun read(controller: Controller): String
+    fun write(controller: Controller, state: String): String
 }

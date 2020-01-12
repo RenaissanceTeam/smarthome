@@ -1,5 +1,5 @@
 apply from: "$rootDir/gradle/scripts/spring-module.gradle"
-bootJar{enabled=false}
+apply plugin: "kotlin-jpa"
 
 dependencies {
     implementation library.kotlin
@@ -9,7 +9,7 @@ dependencies {
     implementation library.rxJava
     implementation library.rxKotlin
     implementation groups.koinWithExt
-    implementation groups.spring
+    implementation library.springData
 
     implementation library.channel_api
     implementation library.controllers_api

@@ -6,6 +6,7 @@ import smarthome.raspberry.devices.api.domain.dto.DeviceDTO
 import smarthome.raspberry.devices.data.DeviceStatusRepository
 import smarthome.raspberry.devices.data.DevicesRepository
 import smarthome.raspberry.devices.domain.mapper.DeviceDtoToDeviceMapper
+import smarthome.raspberry.entity.Device
 import smarthome.raspberry.entity.DeviceStatus
 import smarthome.raspberry.entity.DeviceStatuses
 
@@ -16,16 +17,15 @@ class AddDeviceUseCaseImpl(
     private val deviceStatusRepository: DeviceStatusRepository
 
 ) : AddDeviceUseCase {
-    override fun execute(device: DeviceDTO) {
-        if (devicesRepository.findBySerialName(device.serialName) != null) {
+    override fun execute(deviceDto: DeviceDTO): Device {
+        if (devicesRepository.findBySerialName(deviceDto.serialName) != null) {
             TODO()
         }
-        
-        deviceDtoMapper.map(device).let {
-            devicesRepository.save(it)
+
+        return devicesRepository.save(deviceDtoMapper.map(deviceDto)).also {
             deviceStatusRepository.save(DeviceStatus(
-                device = it,
-                status = DeviceStatuses.PENDING.name
+                    device = it,
+                    status = DeviceStatuses.PENDING.name
             ))
         }
     }
