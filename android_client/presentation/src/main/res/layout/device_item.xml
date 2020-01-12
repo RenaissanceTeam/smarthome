@@ -17,23 +17,12 @@
         tools:text="NAME" />
 
     <TextView
-        android:id="@+id/device_description"
+        android:id="@+id/device_type"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@+id/device_name"
         app:layout_constraintTop_toBottomOf="@+id/device_name"
-        tools:text="DESCRIPTION" />
-
-    <LinearLayout
-        android:id="@+id/devices"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="@+id/device_description"
-        app:layout_constraintTop_toBottomOf="@+id/device_description">
-
-    </LinearLayout>
+        tools:text="ARDUINO UNO" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
