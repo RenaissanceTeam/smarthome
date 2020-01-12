@@ -5,5 +5,5 @@ import smarthome.raspberry.entity.Device
 
 
 interface WriteControllerUseCase {
-    suspend fun execute(device: Device, controller: Controller, state: String)
+    fun execute(controller: Controller, state: String): String
 }

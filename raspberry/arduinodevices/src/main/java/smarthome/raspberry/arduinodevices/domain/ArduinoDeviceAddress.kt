@@ -4,11 +4,11 @@ import smarthome.raspberry.entity.Device
 import javax.persistence.*
 
 @Entity
-data class ArduinoDeviceIp(
+data class ArduinoDeviceAddress(
         @Id @GeneratedValue
         val id: Long = 0,
         @OneToOne
         @JoinColumn
         val device: Device,
-        val ip: String
+        val address: String
 )

@@ -4,13 +4,13 @@ import org.springframework.web.client.RestOperations
 import org.springframework.web.client.getForObject
 import org.springframework.web.client.postForObject
 
-class ArduinoDeviceApiImpl(private val ip: String, private val rest: RestOperations) : ArduinoDeviceApi {
+class ArduinoDeviceApiImpl(private val address: String, private val rest: RestOperations) : ArduinoDeviceApi {
 
     override fun readController(controllerIndex: Int): String {
-        return rest.getForObject("http://$ip/controller/$controllerIndex")
+        return rest.getForObject("http://$address/controller/$controllerIndex")
     }
 
     override fun writeStateToController(controllerIndex: Int, value: String): String {
-        return rest.postForObject("http://$ip/controller/$controllerIndex", value)
+        return rest.postForObject("http://$address/controller/$controllerIndex", value)
     }
 }
