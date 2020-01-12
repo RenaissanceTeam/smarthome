@@ -12,7 +12,8 @@ sealed class DataStatus<T> {
 }
 
 class Data<T>(val data: T): DataStatus<T>()
-class ErrorStatus<T>(val cause: Throwable): DataStatus<T>()
+class ErrorStatus<T>(val cause: Throwable,
+                     val lastData: Data<T>? = null): DataStatus<T>()
 class EmptyStatus<T> : DataStatus<T>()
-class LoadingStatus<T> : DataStatus<T>()
+class LoadingStatus<T>(val lastData: Data<T>? = null) : DataStatus<T>()
 
