@@ -1,6 +1,5 @@
 package smarthome.client.presentation.devices.deviceaddition
 
-import android.animation.LayoutTransition
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
@@ -30,6 +30,16 @@ class AdditionFragment : Fragment() {
         }
         viewModel.refresh.observe(this) {
             refresh_layout.isRefreshing = it
+        }
+        viewModel.openDeviceDetails.onNavigate(this) {
+            val view = view ?: return@onNavigate
+            view.findNavController()
+                .navigate(AdditionFragmentDirections.actionAdditionFragmentToDeviceDetails(it))
+        }
+        viewModel.openControllerDetails.onNavigate(this) {
+            val view = view ?: return@onNavigate
+            view.findNavController()
+                .navigate(AdditionFragmentDirections.actionAdditionFragmentToControllerDetails(it))
         }
     }
     
