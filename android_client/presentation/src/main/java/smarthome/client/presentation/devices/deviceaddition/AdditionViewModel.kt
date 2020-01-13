@@ -1,9 +1,6 @@
 package smarthome.client.presentation.devices.deviceaddition
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.mikepenz.fastadapter.GenericItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -20,8 +17,9 @@ import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.util.log
 
 class AdditionViewModel : KoinViewModel() {
-    val devices = MutableLiveData<List<PendingDevice>>()
-    val refresh = MutableLiveData<Boolean>()
+    val devices = MutableLiveData<List<PendingDevice>>(listOf())
+    val showEmpty = Transformations.map(devices) { it.isEmpty() }
+    val refresh = MutableLiveData<Boolean>(false)
     val openControllerDetails = NavigationParamLiveData<Long>()
     val openDeviceDetails = NavigationParamLiveData<Long>()
     private val getPendingDevicesUseCase: GetPendingDevicesUseCase by inject()
@@ -69,11 +67,11 @@ class AdditionViewModel : KoinViewModel() {
     }
     
     fun onControllerClicked(id: Long) {
-        openControllerDetails.trigger(id)
+        // todo: read controller - need to observe the state in PendingController
     }
     
     fun onControllerLongClicked(id: Long) {
-        // open details
+        openControllerDetails.trigger(id)
     }
     
     fun onAddDeviceClicked() {

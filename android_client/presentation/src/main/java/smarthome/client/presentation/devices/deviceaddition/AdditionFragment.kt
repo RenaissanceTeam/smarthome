@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_device_addition.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.components.ControllerItem
 import smarthome.client.presentation.components.DeviceItem
+import smarthome.client.presentation.visible
 
 class AdditionFragment : Fragment() {
     private var itemsAdapter = GenericItemAdapter()
@@ -27,6 +28,9 @@ class AdditionFragment : Fragment() {
         lifecycle.addObserver(viewModel)
         viewModel.devices.observe(this) {
             itemsAdapter.set(it)
+        }
+        viewModel.showEmpty.observe(this) {
+            empty_message.visible = it
         }
         viewModel.refresh.observe(this) {
             refresh_layout.isRefreshing = it
