@@ -1,18 +1,12 @@
 package smarthome.raspberry.devices.data.controller
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import smarthome.raspberry.devices.data.DevicesRepository
+import org.springframework.web.bind.annotation.*
 import smarthome.raspberry.devices.api.data.dto.DeviceDetails
 import smarthome.raspberry.devices.api.data.dto.GeneralDeviceInfo
-import smarthome.raspberry.devices.api.domain.GetActiveDevicesUseCase
-import smarthome.raspberry.devices.api.domain.GetDeviceByIdUseCase
-import smarthome.raspberry.devices.api.domain.GetDevicesUseCase
-import smarthome.raspberry.devices.api.domain.GetPendingDevicesUseCase
+import smarthome.raspberry.devices.api.domain.*
 import smarthome.raspberry.devices.data.mapper.DeviceToDeviceDetailsMapper
 import smarthome.raspberry.devices.data.mapper.DeviceToGeneralDeviceInfoMapper
+import smarthome.raspberry.entity.Device
 import smarthome.raspberry.util.exceptions.notFound
 
 @RestController
@@ -21,6 +15,8 @@ class DevicesController(
         private val getDevicesUseCase: GetDevicesUseCase,
         private val getPendingDevicesUseCase: GetPendingDevicesUseCase,
         private val getActiveDevicesUseCase: GetActiveDevicesUseCase,
+        private val acceptUseCase: AcceptPendingDeviceUseCase,
+        private val declineUseCase: DeclinePendingDeviceUseCase,
         private val deviceGeneralInfoMapper: DeviceToGeneralDeviceInfoMapper,
         private val getDeviceByIdUseCase: GetDeviceByIdUseCase,
         private val deviceDetailsMapper: DeviceToDeviceDetailsMapper
@@ -45,7 +41,20 @@ class DevicesController(
 
     @GetMapping("/devices/{id}")
     fun getDetails(@PathVariable id: Long): DeviceDetails {
-        val device = getDeviceByIdUseCase.runCatching { execute(id) }.getOrElse { throw notFound }
-        return deviceDetailsMapper.map(device)
+        return deviceDetailsMapper.map(getDeviceById(id))
+    }
+
+    private fun getDeviceById(id: Long): Device {
+        return getDeviceByIdUseCase.runCatching { execute(id) }.getOrElse { throw notFound }
+    }
+
+    @PostMapping("/devices/{id}/accept")
+    fun accept(@PathVariable id: Long) {
+        acceptUseCase.execute(getDeviceById(id))
+    }
+
+    @PostMapping("/devices/{id}/decline")
+    fun decline(@PathVariable id: Long) {
+        declineUseCase.execute(getDeviceById(id))
     }
 }
