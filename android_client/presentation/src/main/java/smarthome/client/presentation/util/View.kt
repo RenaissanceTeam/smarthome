@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 
 fun Fragment.hideSoftKeyboard() {
     val activity = activity ?: return
-    val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
+    val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager
+    activity.currentFocus?.windowToken?.let {
+        inputMethodManager?.hideSoftInputFromWindow(it, 0)
+    }
 }
