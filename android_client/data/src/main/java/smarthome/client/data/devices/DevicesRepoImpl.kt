@@ -21,4 +21,12 @@ class DevicesRepoImpl(
     override suspend fun getPending(): List<GeneralDeviceInfo> {
         return retrofitFactory.createApi(DevicesApi::class.java).getPending()
     }
+    
+    override suspend fun acceptPending(id: Long) {
+        retrofitFactory.createApi(DevicesApi::class.java).accept(id)
+    }
+    
+    override suspend fun declinePending(id: Long) {
+        retrofitFactory.createApi(DevicesApi::class.java).decline(id)
+    }
 }

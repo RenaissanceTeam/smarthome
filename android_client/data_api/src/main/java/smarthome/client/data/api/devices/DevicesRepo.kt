@@ -7,4 +7,6 @@ interface DevicesRepo {
     suspend fun getAdded(): List<GeneralDeviceInfo>
     suspend fun getById(deviceId: Long): Device
     suspend fun getPending(): List<GeneralDeviceInfo>
+    suspend fun acceptPending(id: Long)
+    suspend fun declinePending(id: Long)
 }
