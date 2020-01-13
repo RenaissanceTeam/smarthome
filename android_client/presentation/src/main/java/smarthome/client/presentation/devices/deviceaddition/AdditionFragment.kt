@@ -1,5 +1,6 @@
 package smarthome.client.presentation.devices.deviceaddition
 
+import android.animation.LayoutTransition
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,7 +26,10 @@ class AdditionFragment : Fragment() {
     
         lifecycle.addObserver(viewModel)
         viewModel.devices.observe(this) {
-            TODO()
+            itemsAdapter.set(it)
+        }
+        viewModel.refresh.observe(this) {
+            refresh_layout.isRefreshing = it
         }
     }
     
@@ -40,7 +44,8 @@ class AdditionFragment : Fragment() {
         add_device_fab.setOnClickListener {
             viewModel.onAddDeviceClicked()
         }
-    
+        
+        refresh_layout.setOnRefreshListener(viewModel::onRefresh)
         add_device_recycler.adapter = FastAdapter.with(itemsAdapter).also {
             it.onClickListener = { _, _, item, _ ->
                 when (item) {

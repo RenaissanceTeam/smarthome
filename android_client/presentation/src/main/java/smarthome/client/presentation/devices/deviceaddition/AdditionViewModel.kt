@@ -10,14 +10,13 @@ import org.koin.core.inject
 import smarthome.client.domain.api.devices.usecase.GetPendingDevicesUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.entity.Device
-import smarthome.client.presentation.components.ControllerItem
-import smarthome.client.presentation.components.DeviceItem
+import smarthome.client.presentation.devices.deviceaddition.items.PendingDevice
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.log
 
 class AdditionViewModel : KoinViewModel() {
     val devices = MutableLiveData<List<GenericItem>>()
-    private val refresh = MutableLiveData<Boolean>()
+    val refresh = MutableLiveData<Boolean>()
     private val getPendingDevicesUseCase: GetPendingDevicesUseCase by inject()
     
     
@@ -32,9 +31,7 @@ class AdditionViewModel : KoinViewModel() {
             
             getPendingDevicesUseCase.runCatching { execute() }
                 .onSuccess {
-                    devices.postValue(it.flatMap { device ->
-                        listOf(DeviceItem(device)) + device.controllers.map(::ControllerItem)
-                    })
+                    devices.postValue(it.map { PendingDevice(it, this@AdditionViewModel) })
                 }
                 .onFailure { log(it) }
             
