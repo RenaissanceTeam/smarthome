@@ -5,10 +5,12 @@ import com.mikepenz.fastadapter.GenericItem
 import kotlinx.coroutines.launch
 import org.koin.core.inject
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
+import smarthome.client.presentation.components.ControllerItem
+import smarthome.client.presentation.components.DeviceItem
 import smarthome.client.presentation.util.KoinViewModel
 
 
-class DashboardViewModel : KoinViewModel(), LifecycleObserver {
+class DashboardViewModel : KoinViewModel() {
     private val getGeneralDevicesInfoUseCase: GetGeneralDevicesInfo by inject()
     
     val items = MutableLiveData<List<GenericItem>>()

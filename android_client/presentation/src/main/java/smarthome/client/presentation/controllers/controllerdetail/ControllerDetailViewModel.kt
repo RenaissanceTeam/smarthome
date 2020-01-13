@@ -12,7 +12,7 @@ import smarthome.client.util.ErrorStatus
 import smarthome.client.util.LoadingStatus
 import smarthome.client.util.log
 
-class ControllerDetailViewModel : KoinViewModel(), LifecycleObserver {
+class ControllerDetailViewModel : KoinViewModel() {
     val refresh = MutableLiveData<Boolean>()
     val controller = MutableLiveData<Controller>()
     private var controllerId: Long = 0

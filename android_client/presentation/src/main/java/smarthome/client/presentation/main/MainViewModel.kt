@@ -13,7 +13,7 @@ import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.util.Data
 
-class MainViewModel : KoinViewModel(), LifecycleObserver {
+class MainViewModel : KoinViewModel() {
     private val observeAuthenticationStatusUseCase: ObserveAuthenticationStatusUseCase by inject()
     private val observeActiveHomeServerUseCase: ObserveActiveHomeServerUseCase by inject()
     private val stateMachine: StateMachine by inject()

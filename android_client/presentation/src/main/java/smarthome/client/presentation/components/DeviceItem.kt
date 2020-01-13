@@ -1,4 +1,4 @@
-package smarthome.client.presentation.home
+package smarthome.client.presentation.components
 
 import android.view.View
 import com.mikepenz.fastadapter.FastAdapter
@@ -11,8 +11,9 @@ open class DeviceItem(
     val device: GeneralDeviceInfo
 ): AbstractItem<DeviceItem.ViewHolder>() {
     override val layoutRes = R.layout.device_item
-    override val type = DashboardViewTypes.DEVICE.ordinal
-    override fun getViewHolder(v: View) = ViewHolder(v)
+    override val type = ComponentViewTypes.DEVICE.ordinal
+    override fun getViewHolder(v: View) =
+        ViewHolder(v)
     
     class ViewHolder(private val view: View): FastAdapter.ViewHolder<DeviceItem>(view) {
         override fun bindView(item: DeviceItem, payloads: MutableList<Any>) {

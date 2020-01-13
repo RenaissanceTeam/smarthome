@@ -7,24 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import kotlinx.android.synthetic.main.fragment_device_addition.*
-import smarthome.client.entity.Controller
-import smarthome.client.entity.Device
 import smarthome.client.presentation.R
+import smarthome.client.presentation.components.ControllerItem
+import smarthome.client.presentation.components.DeviceItem
 
-class AdditionFragment : Fragment(), ViewNotifier {
-    private var adapterForDevices: DeviceAdapter? = null
+class AdditionFragment : Fragment() {
+    private var itemsAdapter = GenericItemAdapter()
     private val viewModel: AdditionViewModel by viewModels()
     
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        
-        viewModel.devices.observe(this, Observer {
-            adapterForDevices?.notifyDataSetChanged()
-        })
+    
+        lifecycle.addObserver(viewModel)
+        viewModel.devices.observe(this) {
+            TODO()
+        }
     }
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -36,48 +38,45 @@ class AdditionFragment : Fragment(), ViewNotifier {
         super.onViewCreated(view, savedInstanceState)
         
         add_device_fab.setOnClickListener {
-            startActivityForResult(Intent(context, AddDeviceActivity::class.java),
-                DISCOVER_REQUEST_CODE)
+            viewModel.onAddDeviceClicked()
         }
-        
+    
+        add_device_recycler.adapter = FastAdapter.with(itemsAdapter).also {
+            it.onClickListener = { _, _, item, _ ->
+                when (item) {
+                    is DeviceItem -> viewModel.onDeviceClicked(item.device.id)
+                    is ControllerItem -> viewModel.onControllerClicked(item.controller.id)
+                    else -> {
+                    }
+                }
+                true
+            }
+        }
         add_device_recycler.layoutManager = LinearLayoutManager(view.context)
-        
-        resetAdapter()
-        
-        add_device_recycler.setHasFixedSize(true)
     }
     
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == DISCOVER_REQUEST_CODE) {
-            resetAdapter()
+            TODO()
         }
     }
     
-    private fun onDeviceDetailsClick(device: Device) {
-        val action =
-            AdditionFragmentDirections.actionAdditionFragmentToDeviceDetails(
-                device.id, true)
-        findNavController().navigate(action)
-    }
     
-    private fun onControllerDetailsClick(controller: Controller) {
-        val action =
-            AdditionFragmentDirections.actionAdditionFragmentToControllerDetails(
-                controller.id, true)
-        findNavController().navigate(action)
-    }
+    // navigation
     
-    override fun onItemRemoved(pos: Int) {
-        resetAdapter()
-    }
-    
-    private fun resetAdapter() {
-        adapterForDevices = createDeviceAdapter()
-        add_device_recycler?.adapter = adapterForDevices
-        adapterForDevices?.viewNotifier = this
-    }
-    
-    private fun createDeviceAdapter(): DeviceAdapter {
-        TODO()
-    }
+    //            startActivityForResult(Intent(context, AddDeviceActivity::class.java), DISCOVER_REQUEST_CODE)
+//
+//    private fun onDeviceDetailsClick(device: Device) {
+//        val action =
+//            AdditionFragmentDirections.actionAdditionFragmentToDeviceDetails(
+//                device.id, true)
+//        findNavController().navigate(action)
+//    }
+//
+//    private fun onControllerDetailsClick(controller: Controller) {
+//        val action =
+//            AdditionFragmentDirections.actionAdditionFragmentToControllerDetails(
+//                controller.id, true)
+//        findNavController().navigate(action)
+//    }
 }

@@ -7,11 +7,12 @@ import org.koin.core.inject
 import smarthome.client.domain.api.devices.usecase.GetDeviceUseCase
 import smarthome.client.domain.api.usecase.DevicesUseCase
 import smarthome.client.entity.Device
+import smarthome.client.presentation.components.ControllerItem
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 
 
-class DeviceDetailViewModel : KoinViewModel(), LifecycleObserver {
+class DeviceDetailViewModel : KoinViewModel() {
     val device = MutableLiveData<Device>()
     val controllers = MutableLiveData<List<GenericItem>>()
     val refresh = MutableLiveData<Boolean>()
