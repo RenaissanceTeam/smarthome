@@ -4,7 +4,6 @@ import android.view.View
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.android.synthetic.main.controller_item.view.*
-import smarthome.client.domain.api.conrollers.dto.GeneralControllerInfo
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
 

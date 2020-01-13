@@ -11,7 +11,7 @@ import smarthome.client.presentation.util.KoinViewModel
 
 
 class DashboardViewModel : KoinViewModel() {
-    private val getGeneralDevicesInfoUseCase: GetGeneralDevicesInfo by inject()
+    private val getDevicesUseCase: GetGeneralDevicesInfo by inject()
     
     val items = MutableLiveData<List<GenericItem>>()
     val allHomeUpdateState = MutableLiveData<Boolean>()
@@ -24,7 +24,7 @@ class DashboardViewModel : KoinViewModel() {
         viewModelScope.launch {
             allHomeUpdateState.value = true
     
-            getGeneralDevicesInfoUseCase.runCatching { execute() }.onSuccess {
+            getDevicesUseCase.runCatching { execute() }.onSuccess {
                 val items = it.flatMap { device ->
                     listOf(DeviceItem(device)) + device.controllers.map(::ControllerItem)
                 }

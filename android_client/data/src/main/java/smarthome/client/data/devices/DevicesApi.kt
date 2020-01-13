@@ -7,8 +7,14 @@ import smarthome.client.entity.Device
 
 interface DevicesApi {
     @GET("api/devices")
-    suspend fun getGeneralInfo(): List<GeneralDeviceInfo>
+    suspend fun getAll(): List<GeneralDeviceInfo>
     
     @GET("api/devices/{id}")
     suspend fun getDeviceDetails(@Path("id") id: Long): Device
+    
+    @GET("api/devices/pending")
+    suspend fun getPending(): List<GeneralDeviceInfo>
+    
+    @GET("api/devices/added")
+    suspend fun getAdded(): List<GeneralDeviceInfo>
 }
