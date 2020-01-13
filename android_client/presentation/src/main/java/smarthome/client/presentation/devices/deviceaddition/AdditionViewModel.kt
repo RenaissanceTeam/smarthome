@@ -5,6 +5,7 @@ import com.mikepenz.fastadapter.GenericItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.inject
+import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
 import smarthome.client.domain.api.devices.usecase.AcceptPendingDeviceUseCase
 import smarthome.client.domain.api.devices.usecase.DeclinePendingDeviceUseCase
 import smarthome.client.domain.api.devices.usecase.GetPendingDevicesUseCase
@@ -22,6 +23,7 @@ class AdditionViewModel : KoinViewModel() {
     val refresh = MutableLiveData<Boolean>(false)
     val openControllerDetails = NavigationParamLiveData<Long>()
     val openDeviceDetails = NavigationParamLiveData<Long>()
+    private val readControllerUseCase: ReadControllerUseCase by inject()
     private val getPendingDevicesUseCase: GetPendingDevicesUseCase by inject()
     private val acceptPendingDeviceUseCase: AcceptPendingDeviceUseCase by inject()
     private val declinePendingDeviceUseCase: DeclinePendingDeviceUseCase by inject()
@@ -67,7 +69,7 @@ class AdditionViewModel : KoinViewModel() {
     }
     
     fun onControllerClicked(id: Long) {
-        // todo: read controller - need to observe the state in PendingController
+        viewModelScope.launch { readControllerUseCase.runCatching { execute(id) } }
     }
     
     fun onControllerLongClicked(id: Long) {
