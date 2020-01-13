@@ -21,23 +21,6 @@ class DevicesRepoImpl(
     }
     
     override suspend fun getPending(): List<GeneralDeviceInfo> {
-        return (1..40).map {
-            GeneralDeviceInfo(
-                it.toLong(),
-                "name $it",
-                "arduino",
-                (1..5).map { c ->
-                    Controller(
-                        c.toLong(),
-                        it.toLong(),
-                        "dev $it - name $c",
-                        listOf("dht", "onoff")[(0..1).random()],
-                        "state $c"
-                    )
-                }
-            )
-        }
-        
-        //return retrofitFactory.createApi(DevicesApi::class.java).getPending()
+        return retrofitFactory.createApi(DevicesApi::class.java).getPending()
     }
 }
