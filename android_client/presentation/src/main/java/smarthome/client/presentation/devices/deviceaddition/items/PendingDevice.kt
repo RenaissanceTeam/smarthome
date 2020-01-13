@@ -5,26 +5,18 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
-import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.items.AbstractItem
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.android.synthetic.main.device_card.view.*
+import kotlinx.android.synthetic.main.pending_device_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
-import org.koin.core.inject
-import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.presentation.R
 import smarthome.client.presentation.devices.deviceaddition.AdditionViewModel
-import smarthome.client.presentation.replace
 import smarthome.client.presentation.visible
-import smarthome.client.util.Data
-import smarthome.client.util.ErrorStatus
-import smarthome.client.util.LoadingStatus
 
 open class PendingDevice(
     val device: GeneralDeviceInfo,
@@ -40,7 +32,7 @@ open class PendingDevice(
     private val controllers = ItemAdapter<PendingController>()
         .apply { set(device.controllers.map { PendingController(it.id) }) }
     
-    override val layoutRes = R.layout.device_card
+    override val layoutRes = R.layout.pending_device_item
     override val type = 0
     override fun getViewHolder(v: View) = ViewHolder(v)
     

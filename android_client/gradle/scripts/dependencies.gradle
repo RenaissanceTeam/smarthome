@@ -54,6 +54,8 @@ ext {
             roomRxJava               : ("androidx.room:room-rxjava2:$room_version"),
             fastAdapter              : ("com.mikepenz:fastadapter:${latestFastAdapterRelease}"),
             fastAdapterDiff          : ("com.mikepenz:fastadapter-extensions-diff:${latestFastAdapterRelease}"),
+            lastAdapter              :("com.github.nitrico.lastadapter:lastadapter:2.3.0"),
+            databindingCompiler      :('com.android.databinding:compiler:GRADLE_PLUGIN_VERSION'),
 
             // modules
             presentation             : project(":presentation"),

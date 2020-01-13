@@ -4,13 +4,12 @@ import android.view.View
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.controller_card.view.*
+import kotlinx.android.synthetic.main.pending_controller_item.view.*
 import kotlinx.coroutines.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
-import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
 import smarthome.client.presentation.visible
@@ -20,7 +19,7 @@ class PendingController(val id: Long) : AbstractItem<PendingController.ViewHolde
     private val observeControllerUseCase: ObserveControllerUseCase by inject()
     private val getControllerUseCase: GetControllerUseCase by inject()
     
-    override val layoutRes = R.layout.controller_card
+    override val layoutRes = R.layout.pending_controller_item
     override val type = 0
     override fun getViewHolder(v: View): ViewHolder {
         return ViewHolder(v)
