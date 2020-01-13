@@ -21,8 +21,7 @@ class DevicesRepoImpl(
     }
     
     override suspend fun getPending(): List<GeneralDeviceInfo> {
-        delay(2000)
-        return (1..4).map {
+        return (1..40).map {
             GeneralDeviceInfo(
                 it.toLong(),
                 "name $it",
@@ -31,7 +30,7 @@ class DevicesRepoImpl(
                     Controller(
                         c.toLong(),
                         it.toLong(),
-                        "c name $c",
+                        "dev $it - name $c",
                         listOf("dht", "onoff")[(0..1).random()],
                         "state $c"
                     )
