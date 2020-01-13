@@ -15,6 +15,6 @@ interface DevicesApi {
     @GET("api/devices/pending")
     suspend fun getPending(): List<GeneralDeviceInfo>
     
-    @GET("api/devices/added")
+    @GET("api/devices/active")
     suspend fun getAdded(): List<GeneralDeviceInfo>
 }
