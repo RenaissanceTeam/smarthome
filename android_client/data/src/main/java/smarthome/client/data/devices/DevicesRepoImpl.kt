@@ -1,10 +1,8 @@
 package smarthome.client.data.devices
 
-import kotlinx.coroutines.delay
 import smarthome.client.data.api.devices.DevicesRepo
 import smarthome.client.data.retrofit.RetrofitFactory
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
-import smarthome.client.entity.Controller
 import smarthome.client.entity.Device
 
 class DevicesRepoImpl(
