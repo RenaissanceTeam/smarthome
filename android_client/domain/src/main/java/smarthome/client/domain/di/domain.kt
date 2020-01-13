@@ -8,9 +8,7 @@ import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.WriteStateToControllerUseCase
-import smarthome.client.domain.api.devices.usecase.GetDeviceUseCase
-import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
-import smarthome.client.domain.api.devices.usecase.GetPendingDevicesUseCase
+import smarthome.client.domain.api.devices.usecase.*
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.main.BooleanState
@@ -23,9 +21,7 @@ import smarthome.client.domain.conrollers.usecases.GetControllerUseCaseImpl
 import smarthome.client.domain.conrollers.usecases.ObserveControllerUseCaseImpl
 import smarthome.client.domain.conrollers.usecases.ReadControllerUseCaseImpl
 import smarthome.client.domain.conrollers.usecases.WriteStateToControllerUseCaseImpl
-import smarthome.client.domain.devices.usecase.GetDeviceUseCaseImpl
-import smarthome.client.domain.devices.usecase.GetAddedDevicesInfoImpl
-import smarthome.client.domain.devices.usecase.GetPendingDevicesUseCaseImpl
+import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.main.StateMachineImpl
@@ -50,6 +46,8 @@ val domain = module {
     factoryBy<GetGeneralDevicesInfo, GetAddedDevicesInfoImpl>()
     factoryBy<GetDeviceUseCase, GetDeviceUseCaseImpl>()
     factoryBy<GetPendingDevicesUseCase, GetPendingDevicesUseCaseImpl>()
+    factoryBy<DeclinePendingDeviceUseCase, DeclinePendingDeviceUseCaseImpl>()
+    factoryBy<AcceptPendingDeviceUseCase, AcceptPendingDeviceUseCaseImpl>()
     
     // controllers
     factoryBy<ObserveControllerUseCase, ObserveControllerUseCaseImpl>()

@@ -19,7 +19,7 @@ import smarthome.client.presentation.devices.deviceaddition.AdditionViewModel
 import smarthome.client.presentation.visible
 
 open class PendingDevice(
-    private val device: GeneralDeviceInfo,
+    val device: GeneralDeviceInfo,
     private val viewModel: AdditionViewModel
 ) : AbstractItem<PendingDevice.ViewHolder>() {
     private val defaultExpanded = false
@@ -48,7 +48,7 @@ open class PendingDevice(
     fun onDelete() {
         uiScope.launch {
             deleteInProgress.onNext(true)
-            viewModel.runCatching { rejectDevice(device.id) }
+            viewModel.runCatching { declineDevice(device.id) }
             deleteInProgress.onNext(false)
         }
     }
