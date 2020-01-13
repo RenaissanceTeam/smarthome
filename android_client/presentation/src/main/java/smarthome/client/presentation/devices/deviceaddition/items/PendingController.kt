@@ -3,29 +3,51 @@ package smarthome.client.presentation.devices.deviceaddition.items
 import android.view.View
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.controller_card.view.*
+import kotlinx.coroutines.*
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
+import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
+import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
 import smarthome.client.presentation.visible
-import smarthome.client.util.Data
-import smarthome.client.util.DataStatus
-import smarthome.client.util.ErrorStatus
-import smarthome.client.util.LoadingStatus
+import smarthome.client.util.*
 
-class PendingController(val id: Long, val controller: DataStatus<Controller>) : AbstractItem<PendingController.ViewHolder>() {
+class PendingController(val id: Long) : AbstractItem<PendingController.ViewHolder>(), KoinComponent {
+    private val observeControllerUseCase: ObserveControllerUseCase by inject()
+    private val getControllerUseCase: GetControllerUseCase by inject()
+    
     override val layoutRes = R.layout.controller_card
     override val type = 0
     override fun getViewHolder(v: View): ViewHolder {
         return ViewHolder(v)
     }
     
+    suspend fun fetchController() {
+        getControllerUseCase.execute(id)
+    }
+    
     class ViewHolder(private val view: View): FastAdapter.ViewHolder<PendingController>(view) {
+        private lateinit var disposable: CompositeDisposable
+        private val job = Job()
+        private val uiScope = CoroutineScope(Dispatchers.Main + job)
         override fun bindView(item: PendingController, payloads: MutableList<Any>) {
-            when (item.controller) {
-                is Data -> bindData(item.controller.data)
-                is LoadingStatus -> bindLoading(item.controller)
-                is ErrorStatus -> bindError(item.controller)
-                
+            disposable = CompositeDisposable()
+            disposable.add(
+                item.observeControllerUseCase.execute(item.id)
+                    .doOnNext { if (it is EmptyStatus) uiScope.launch { item.fetchController() }}
+                    .subscribe(::bindDataStatus)
+            )
+        }
+        
+        private fun bindDataStatus(item: DataStatus<Controller>) {
+            when (item) {
+                is Data -> bindData(item.data)
+                is LoadingStatus -> bindLoading(item)
+                is ErrorStatus -> bindError(item)
             }
         }
         
@@ -47,6 +69,9 @@ class PendingController(val id: Long, val controller: DataStatus<Controller>) : 
         }
     
         override fun unbindView(item: PendingController) {
+            disposable.dispose()
+            job.cancel()
+            
             view.name.text = null
             view.state.text = null
             view.type.text = null

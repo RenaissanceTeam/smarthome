@@ -32,15 +32,13 @@ open class PendingDevice(
 ) : AbstractItem<PendingDevice.ViewHolder>(), KoinComponent {
     private val defaultExpanded = false
     private val isExpanded = BehaviorSubject.createDefault(defaultExpanded)
-    private val observeControllerUseCase: ObserveControllerUseCase by inject()
-    
     private val uiScope = CoroutineScope(Dispatchers.Main)
     
     private val acceptInProgress = BehaviorSubject.createDefault(false)
     private val deleteInProgress = BehaviorSubject.createDefault(false)
     
     private val controllers = ItemAdapter<PendingController>()
-        .apply { set(device.controllers.map { PendingController(it.id, Data(it)) }) }
+        .apply { set(device.controllers.map { PendingController(it.id) }) }
     
     override val layoutRes = R.layout.device_card
     override val type = 0
@@ -79,48 +77,11 @@ open class PendingDevice(
         viewModel.onControllerLongClicked(id)
     }
     
-    fun observeControllerChanges(): Disposable {
-        val controllersDispose = CompositeDisposable()
-        device.controllers
-            .map {
-                observeControllerUseCase.execute(it.id).subscribe { changed ->
-                    when (changed) {
-                        is Data -> replaceInCurrent(PendingController(changed.data.id, changed))
-                        is LoadingStatus -> changed.lastData?.let { last ->
-                            val changedItem = PendingController(last.data.id, changed)
-                            replaceInCurrent(changedItem)
-                        }
-                        is ErrorStatus -> changed.lastData?.let { last ->
-                            val changedItem = PendingController(last.data.id, changed)
-                            replaceInCurrent(changedItem)
-                        }
-                    }
-                }
-            }
-            .forEach { controllersDispose.add(it) }
-        return controllersDispose
-    }
-    
-    private fun replaceInCurrent(changedItem: PendingController) {
-        val currentControllers = controllers.adapterItems
-        val newControllers = currentControllers
-            .replace(changedItem) { item ->
-                item.id == changedItem.id
-            }
-        
-        FastAdapterDiffUtil[controllers] = newControllers
-    }
-    
-    
-    
-    
-    
     class ViewHolder(private val view: View) : FastAdapter.ViewHolder<PendingDevice>(view) {
         private lateinit var disposable: CompositeDisposable
         
         override fun bindView(item: PendingDevice, payloads: MutableList<Any>) {
             disposable = CompositeDisposable()
-            disposable.add(item.observeControllerChanges())
             disposable.add(item.isExpanded.subscribe {
                 val rotation = when (it) {
                     true -> 180f
