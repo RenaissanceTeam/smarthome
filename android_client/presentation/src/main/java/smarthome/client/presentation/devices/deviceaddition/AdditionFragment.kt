@@ -15,8 +15,7 @@ import smarthome.client.entity.Controller
 import smarthome.client.entity.Device
 import smarthome.client.presentation.R
 
-class AdditionFragment : Fragment(),
-    ViewNotifier {
+class AdditionFragment : Fragment(), ViewNotifier {
     private var adapterForDevices: DeviceAdapter? = null
     private val viewModel: AdditionViewModel by viewModels()
     
