@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import com.mikepenz.fastadapter.GenericItem
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.inject
 import smarthome.client.domain.api.devices.usecase.GetPendingDevicesUseCase
@@ -12,11 +13,14 @@ import smarthome.client.entity.Controller
 import smarthome.client.entity.Device
 import smarthome.client.presentation.devices.deviceaddition.items.PendingDevice
 import smarthome.client.presentation.util.KoinViewModel
+import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.util.log
 
 class AdditionViewModel : KoinViewModel() {
     val devices = MutableLiveData<List<GenericItem>>()
     val refresh = MutableLiveData<Boolean>()
+    val openControllerDetails = NavigationParamLiveData<Long>()
+    val openDeviceDetails = NavigationParamLiveData<Long>()
     private val getPendingDevicesUseCase: GetPendingDevicesUseCase by inject()
     
     
@@ -38,24 +42,25 @@ class AdditionViewModel : KoinViewModel() {
             refresh.postValue(false)
         }
     }
-    fun onControllerChanged(controller: Controller) {
-        TODO()
+    
+    suspend fun acceptDevice(id: Long) {
+        delay(2000)
     }
     
-    fun acceptDevice(device: Device?) {
-        TODO()
-    }
-    
-    fun rejectDevice(device: Device?) {
-        TODO()
+    suspend fun rejectDevice(id: Long) {
+        delay(2000)
     }
     
     fun onDeviceClicked(id: Long) {
-        TODO()
+        openDeviceDetails.trigger(id)
     }
     
     fun onControllerClicked(id: Long) {
-        TODO()
+        openControllerDetails.trigger(id)
+    }
+    
+    fun onControllerLongClicked(id: Long) {
+        // open details
     }
     
     fun onAddDeviceClicked() {

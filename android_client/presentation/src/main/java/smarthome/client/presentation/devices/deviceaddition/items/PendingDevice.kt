@@ -9,6 +9,9 @@ import com.mikepenz.fastadapter.items.AbstractItem
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.device_card.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
@@ -22,8 +25,10 @@ open class PendingDevice(
     private val defaultExpanded = false
     private val isExpanded = BehaviorSubject.createDefault(defaultExpanded)
     
-    private val acceptVisibility = BehaviorSubject.create<Boolean>()
-    private val deleteVisibility = BehaviorSubject.create<Boolean>()
+    private val uiScope = CoroutineScope(Dispatchers.Main)
+    
+    private val acceptInProgress = BehaviorSubject.createDefault(false)
+    private val deleteInProgress = BehaviorSubject.createDefault(false)
     
     private val controllers = ItemAdapter<PendingController>().apply { set(device.controllers.map(::PendingController)) }
     
@@ -34,31 +39,34 @@ open class PendingDevice(
     fun onExpand() {
         val nextExpanded = (isExpanded.value ?: defaultExpanded).not()
         isExpanded.onNext(nextExpanded)
-        
-//        when (nextExpanded) {
-//            true -> controllers.set()
-//            else -> controllers.clear()
-//        }
     }
     
     fun onDeviceClicked() {
-        // open details
+        viewModel.onDeviceClicked(device.id)
     }
     
     fun onDelete() {
-    
+        uiScope.launch {
+            deleteInProgress.onNext(true)
+            viewModel.runCatching { rejectDevice(device.id) }
+            deleteInProgress.onNext(false)
+        }
     }
     
     fun onAccept() {
-    
+        uiScope.launch {
+            acceptInProgress.onNext(true)
+            viewModel.runCatching { acceptDevice(device.id) }
+            acceptInProgress.onNext(false)
+        }
     }
     
     fun onControllerClicked(controller: Controller) {
-        // read state
+        viewModel.onControllerClicked(controller.id)
     }
     
     fun onLongControllerClicked(controller: Controller) {
-        // open details
+        viewModel.onControllerLongClicked(controller.id)
     }
     
     class ViewHolder(private val view: View) : FastAdapter.ViewHolder<PendingDevice>(view) {
@@ -79,8 +87,8 @@ open class PendingDevice(
             
             view.expand_button.setOnClickListener { item.onExpand() }
             itemView.setOnLongClickListener { item.onDeviceClicked(); true }
-            view.delete.setOnClickListener { item.onDelete() }
-            view.accept_button.setOnClickListener { item.onAccept() }
+            setDeleteAction(item)
+            setAcceptAction(item)
             
             view.name.text = item.device.name
             view.type.text = item.device.type
@@ -96,8 +104,49 @@ open class PendingDevice(
                     true
                 }
             }
+            disposable.add(item.acceptInProgress.subscribe {
+                when (it) {
+                    true -> {
+                        view.accept_button.visibility = View.INVISIBLE
+                        clearDeleteAction()
+                    }
+                    false -> {
+                        view.accept_button.visibility = View.VISIBLE
+                        setDeleteAction(item)
+                    }
+                }
+            })
+            
+              disposable.add(item.deleteInProgress.subscribe {
+                when (it) {
+                    true -> {
+                        view.delete.visibility = View.INVISIBLE
+                        clearAcceptAction()
+                    }
+                    false -> {
+                        view.delete.visibility = View.VISIBLE
+                        setAcceptAction(item)
+                    }
+                }
+            })
         }
-        
+    
+        private fun setAcceptAction(item: PendingDevice) {
+            view.accept_button.setOnClickListener { item.onAccept() }
+        }
+    
+        private fun setDeleteAction(item: PendingDevice) {
+            view.delete.setOnClickListener { item.onDelete() }
+        }
+    
+        private fun clearDeleteAction() {
+            view.delete.setOnClickListener(null)
+        }
+    
+        private fun clearAcceptAction() {
+            view.accept_button.setOnClickListener(null)
+        }
+    
         override fun unbindView(item: PendingDevice) {
             disposable.dispose()
             view.name.text = null
