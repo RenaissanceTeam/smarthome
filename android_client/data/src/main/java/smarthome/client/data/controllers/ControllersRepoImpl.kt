@@ -82,6 +82,7 @@ class ControllersRepoImpl(
         }
     
         emitLoading(controllerId)
+        delay(1000)
         return retrofitFactory.createApi(ControllersApi::class.java)
             .runCatching { readState(controllerId) }
             .onSuccess {
@@ -96,6 +97,7 @@ class ControllersRepoImpl(
     
     override suspend fun get(id: Long): Controller {
         emitLoading(id)
+        delay(1000)
         return retrofitFactory.createApi(ControllersApi::class.java)
             .runCatching { getDetails(id) }
             .onSuccess { emitData(id, it) }
