@@ -3,7 +3,6 @@ package smarthome.client.presentation.main
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import io.reactivex.disposables.CompositeDisposable
 import org.koin.core.inject
 import org.koin.core.qualifier.named
 import smarthome.client.domain.api.auth.usecases.ObserveAuthenticationStatusUseCase
@@ -24,7 +23,6 @@ class MainViewModel : KoinViewModel(), LifecycleObserver {
     val openLogin =  NavigationLiveData()
     val openHomeServerSetup = NavigationLiveData()
     
-    private val toDispose = CompositeDisposable()
     init {
         stateMachine.setOnNeedLogin { openLogin.trigger() }
         stateMachine.setOnNeedHomeServer { openHomeServerSetup.trigger() }
@@ -32,17 +30,12 @@ class MainViewModel : KoinViewModel(), LifecycleObserver {
     
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
-        toDispose.add(observeAuthenticationStatusUseCase.execute().subscribe {
+        disposable.add(observeAuthenticationStatusUseCase.execute().subscribe {
             loginState.set(it)
         })
-        
-        toDispose.addAll(observeActiveHomeServerUseCase.execute().subscribe {
+    
+        disposable.addAll(observeActiveHomeServerUseCase.execute().subscribe {
             homeServerState.set(it is Data)
         })
-    }
-    
-    override fun onCleared() {
-        super.onCleared()
-        toDispose.dispose()
     }
 }
