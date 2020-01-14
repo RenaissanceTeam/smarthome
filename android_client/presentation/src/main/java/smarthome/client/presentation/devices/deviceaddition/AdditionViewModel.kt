@@ -74,7 +74,7 @@ class AdditionViewModel : KoinViewModel() {
                 isExpanded = isExpanded(device.id),
                 acceptInProgress = acceptInProgress[device.id] ?: false,
                 declineInProgress = declineInProgress[device.id] ?: false,
-                controllers = device.controllers.map { it.id }
+                controllers = device.controllers
                     .map {
                         val controller = controllers[it]
                         PendingControllerItemState(
@@ -94,7 +94,7 @@ class AdditionViewModel : KoinViewModel() {
     
     private fun observeCurrentDeviceControllers() {
         devices
-            .flatMap { it.controllers.map { it.id } }
+            .flatMap { it.controllers }
             .also(::removeNonRelevantObservations)
             .map { controllerId ->
                 if (observedControllers.containsKey(controllerId)) return@map

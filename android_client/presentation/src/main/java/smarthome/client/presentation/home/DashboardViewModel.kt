@@ -49,7 +49,7 @@ class DashboardViewModel : KoinViewModel() {
                 }
         
                 activeDevices
-                    .flatMap { device -> device.controllers.map { controller -> controller.id } }
+                    .flatMap { it.controllers }
                     .map { controllerId ->
                         if (controllersObserving.containsKey(controllerId)) return@map
                 
@@ -80,7 +80,7 @@ class DashboardViewModel : KoinViewModel() {
     private fun postItems() {
         val items = devices.flatMap { device ->
             listOf(DeviceItem(device)) + device.controllers.map {
-                ControllerItem(controllers[it.id])
+                ControllerItem(controllers[it])
             }
         }
         this.items.postValue(items)
