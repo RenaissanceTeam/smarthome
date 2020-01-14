@@ -20,7 +20,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -31,25 +31,25 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/type"
+            android:id="@+id/type_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@id/name"
-            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintStart_toStartOf="@id/name_text"
+            app:layout_constraintTop_toBottomOf="@id/name_text"
             tools:text="dht" />
 
         <TextView
-            android:id="@+id/state"
+            android:id="@+id/state_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@id/type"
+            app:layout_constraintStart_toStartOf="@id/type_text"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/type"
+            app:layout_constraintTop_toBottomOf="@+id/type_text"
             tools:text="24 C" />
 
         <ProgressBar

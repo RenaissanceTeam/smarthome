@@ -4,10 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
-import com.airbnb.epoxy.AfterPropsSet
-import com.airbnb.epoxy.CallbackProp
-import com.airbnb.epoxy.ModelProp
-import com.airbnb.epoxy.ModelView
+import androidx.recyclerview.widget.GridLayoutManager
+import com.airbnb.epoxy.*
 import kotlinx.android.synthetic.main.pending_device_item.view.*
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.presentation.R
@@ -25,7 +23,7 @@ class PendingDeviceView @JvmOverloads constructor(
     @ModelProp lateinit var device: GeneralDeviceInfo
     var onExpand: (() -> Unit)? = null @CallbackProp set
     var onDeviceClick: (() -> Unit)? = null @CallbackProp set
-//    @ModelProp lateinit var controllers: PendingControllerModel
+    @ModelProp lateinit var controllers: List<PendingControllerViewModel_>
     
     var isExpanded: Boolean = false @ModelProp set
     
@@ -35,14 +33,16 @@ class PendingDeviceView @JvmOverloads constructor(
     
     @AfterPropsSet
     fun useProps() {
-        rootView.setOnClickListener { onDeviceClick?.invoke() }
+        card.setOnClickListener { onDeviceClick?.invoke() }
         expand_button.setOnClickListener { onExpand?.invoke() }
         
         name.text = device.name
         type.text = device.type
     
         animateExpandButton()
-        controllers.visible = isExpanded
+        controllers_recycler.visible = isExpanded
+        controllers_recycler.setModels(controllers)
+        controllers_recycler.layoutManager = GridLayoutManager(context, 2)
     }
     
     private fun animateExpandButton() {

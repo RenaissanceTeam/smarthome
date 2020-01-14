@@ -22,6 +22,7 @@ class AdditionViewModel : KoinViewModel() {
     
     private val expanded = mutableMapOf<Long, Boolean>()
     private val devices = mutableListOf<GeneralDeviceInfo>()
+    private val refreshingControllers = mutableMapOf<Long, Boolean>()
     private val readControllerUseCase: ReadControllerUseCase by inject()
     private val getPendingDevicesUseCase: GetPendingDevicesUseCase by inject()
     private val acceptPendingDeviceUseCase: AcceptPendingDeviceUseCase by inject()
@@ -56,7 +57,7 @@ class AdditionViewModel : KoinViewModel() {
     
     private fun postPendingDevicesStates() {
         deviceStates.postValue(
-            devices.map { PendingDeviceItemState(it, isExpanded(it.id)) }
+            devices.map { PendingDeviceItemState(it, isExpanded(it.id), refreshingControllers) }
         )
     }
     
