@@ -68,7 +68,7 @@ class DeviceDetails : Fragment() {
         controllers.adapter = FastAdapter.with(itemAdapter).apply {
             onClickListener = { _, _, item, _ ->
                 when (item) {
-                    is ControllerItem -> viewModel.onControllerClick(item.controller.id)
+                    is ControllerItem -> item.controller?.id?.let { viewModel.onControllerClick(it) }
                 }
                 true
             }

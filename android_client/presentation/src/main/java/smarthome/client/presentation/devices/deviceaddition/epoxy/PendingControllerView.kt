@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.pending_controller_item.view.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.inflate
 import smarthome.client.presentation.visible
+import smarthome.client.util.log
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class PendingControllerView @JvmOverloads constructor(
@@ -16,6 +17,7 @@ class PendingControllerView @JvmOverloads constructor(
     defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
     
     init {
+        log("this $this")
         inflate(R.layout.pending_controller_item)
     }
     
@@ -26,10 +28,10 @@ class PendingControllerView @JvmOverloads constructor(
     var onControllerClicked: (() -> Unit)? = null @CallbackProp set
     var onControllerLongClicked: (() -> Unit)? = null @CallbackProp set
     
-    
     @AfterPropsSet
     fun onPropsReady() {
-        name_text.text = name.takeUnless { it.isEmpty() } ?: "Empty name"
+        log("with state($state) is refreshing=$isRefreshing")
+        name_text.text = name
         state_text.text = state
         type_text.text = type
         progress.visible = isRefreshing
