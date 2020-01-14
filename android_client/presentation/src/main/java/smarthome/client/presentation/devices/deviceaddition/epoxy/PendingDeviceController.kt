@@ -1,18 +1,19 @@
 package smarthome.client.presentation.devices.deviceaddition.epoxy
 
 import com.airbnb.epoxy.Typed2EpoxyController
-import com.airbnb.epoxy.TypedEpoxyController
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
+import smarthome.client.presentation.devices.deviceaddition.AdditionViewModel
 
-class PendingDeviceController : TypedEpoxyController<List<GeneralDeviceInfo>>() {
-    private val expandedStates = mutableMapOf<Long, Boolean>()
-    private val defaultExpanded = false
+class PendingDeviceController : Typed2EpoxyController<List<PendingDeviceItemState>, AdditionViewModel>() {
     
-    override fun buildModels(data: List<GeneralDeviceInfo>) {
-        data.forEach {
+    override fun buildModels(devices: List<PendingDeviceItemState>, viewModel: AdditionViewModel) {
+        devices.forEach {
             pendingDeviceView {
-                device(it)
-                expanded(expandedStates[it.id] ?: defaultExpanded)
+                id(it.device.id)
+                device(it.device)
+                expanded(it.isExpanded)
+                onExpand { viewModel.onExpand(it.device.id) }
+                onDeviceClick { viewModel.onDeviceClicked(it.device.id) }
             }
         }
     }
