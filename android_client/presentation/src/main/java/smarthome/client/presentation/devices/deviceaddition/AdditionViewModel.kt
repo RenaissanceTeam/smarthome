@@ -32,6 +32,7 @@ class AdditionViewModel : KoinViewModel() {
     private val acceptInProgress = mutableMapOf<Long, Boolean>()
     private val declineInProgress = mutableMapOf<Long, Boolean>()
     private val observedControllers = mutableMapOf<Long, Disposable>()
+    
     private val observeController: ObserveControllerUseCase by inject()
     private val getControllerUseCase: GetControllerUseCase by inject()
     private val readControllerUseCase: ReadControllerUseCase by inject()
@@ -67,10 +68,6 @@ class AdditionViewModel : KoinViewModel() {
     }
     
     private fun postPendingDevicesStates() {
-        kotlin.runCatching {
-            log("before ${controllers[298L]}")
-        }
-        
         val newState = devices.map { device ->
             PendingDeviceItemState(
                 device = device,
@@ -80,7 +77,6 @@ class AdditionViewModel : KoinViewModel() {
                 controllers = device.controllers.map { it.id }
                     .map {
                         val controller = controllers[it]
-                        if (it == 298L) log ("${controller is LoadingStatus}")
                         PendingControllerItemState(
                             id = it,
                             name = controller?.data?.name.orEmpty(),
@@ -92,10 +88,6 @@ class AdditionViewModel : KoinViewModel() {
             )
         }
         deviceStates.postValue(newState)
-    
-        kotlin.runCatching {
-            log("posted ${newState.get(0)?.controllers?.get(0)} ${controllers[298L]}")
-        }
     }
     
     private fun isExpanded(deviceId: Long) = expanded[deviceId] ?: false

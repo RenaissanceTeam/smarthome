@@ -17,7 +17,6 @@ class PendingControllerView @JvmOverloads constructor(
     defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
     
     init {
-        log("this $this")
         inflate(R.layout.pending_controller_item)
     }
     
@@ -30,7 +29,6 @@ class PendingControllerView @JvmOverloads constructor(
     
     @AfterPropsSet
     fun onPropsReady() {
-        log("with state($state) is refreshing=$isRefreshing")
         name_text.text = name
         state_text.text = state
         type_text.text = type
