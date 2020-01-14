@@ -15,6 +15,7 @@ import smarthome.client.data.auth.LoginCommandImpl
 import smarthome.client.data.auth.TokenRepoImpl
 import smarthome.client.data.controllers.ControllersRepoImpl
 import smarthome.client.data.devices.DevicesRepoImpl
+import smarthome.client.data.devices.mapper.DeviceDetailsToDeviceMapper
 import smarthome.client.data.home.HomeRepositoryImpl
 import smarthome.client.data.retrofit.HomeServerUrlHolder
 import smarthome.client.data.retrofit.RetrofitFactory
@@ -42,5 +43,6 @@ val data = module {
     singleBy<TokenRepo, TokenRepoImpl>()
     
     singleBy<DevicesRepo, DevicesRepoImpl>()
+    factory { DeviceDetailsToDeviceMapper() }
     singleBy<ControllersRepo, ControllersRepoImpl>()
 }
