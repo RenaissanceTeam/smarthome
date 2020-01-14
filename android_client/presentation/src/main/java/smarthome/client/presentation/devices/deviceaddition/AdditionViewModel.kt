@@ -23,6 +23,8 @@ class AdditionViewModel : KoinViewModel() {
     private val expanded = mutableMapOf<Long, Boolean>()
     private val devices = mutableListOf<GeneralDeviceInfo>()
     private val refreshingControllers = mutableMapOf<Long, Boolean>()
+    private val acceptInProgress = mutableMapOf<Long, Boolean>()
+    private val declineInProgress = mutableMapOf<Long, Boolean>()
     private val readControllerUseCase: ReadControllerUseCase by inject()
     private val getPendingDevicesUseCase: GetPendingDevicesUseCase by inject()
     private val acceptPendingDeviceUseCase: AcceptPendingDeviceUseCase by inject()
@@ -32,6 +34,7 @@ class AdditionViewModel : KoinViewModel() {
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
         onRefresh()
+        
     }
     
     fun onRefresh() {
@@ -57,29 +60,54 @@ class AdditionViewModel : KoinViewModel() {
     
     private fun postPendingDevicesStates() {
         deviceStates.postValue(
-            devices.map { PendingDeviceItemState(it, isExpanded(it.id), refreshingControllers) }
+            devices.map {
+                PendingDeviceItemState(
+                    device = it,
+                    isExpanded = isExpanded(it.id),
+                    controllerRefreshing = refreshingControllers,
+                    acceptInProgress = acceptInProgress[it.id] ?: false,
+                    declineInProgress = declineInProgress[it.id] ?: false
+                )
+            }
         )
     }
     
     private fun isExpanded(deviceId: Long) = expanded[deviceId] ?: false
     
-    suspend fun acceptDevice(id: Long) {
-        acceptPendingDeviceUseCase.execute(id)
-        postWithRemovedDevice(id)
+    fun acceptDevice(id: Long) {
+        viewModelScope.launch {
+            acceptInProgress[id] = true
+            postPendingDevicesStates()
+        
+            acceptPendingDeviceUseCase
+                .runCatching { execute(id) }
+                .onSuccess {
+                    devices.remove(devices.find { it.id == id })
+                }
+        
+            acceptInProgress[id] = false
+            postPendingDevicesStates()
+        }
+    
     }
     
-    private fun postWithRemovedDevice(id: Long) {
-//        devices.value?.let {
-//            devices.postValue(it.filter { it.id != id })
-//        }
+    fun declineDevice(id: Long) {
+        viewModelScope.launch {
+            declineInProgress[id] = true
+            postPendingDevicesStates()
+        
+            declinePendingDeviceUseCase
+                .runCatching { execute(id) }
+                .onSuccess {
+                    devices.remove(devices.find { it.id == id })
+                }
+    
+            declineInProgress[id] = false
+            postPendingDevicesStates()
+        }
     }
     
-    suspend fun declineDevice(id: Long) {
-        declinePendingDeviceUseCase.execute(id)
-        postWithRemovedDevice(id)
-    }
-    
-    fun onDeviceClicked(id: Long) {
+    fun onDeviceLongClicked(id: Long) {
         openDeviceDetails.trigger(id)
     }
     
