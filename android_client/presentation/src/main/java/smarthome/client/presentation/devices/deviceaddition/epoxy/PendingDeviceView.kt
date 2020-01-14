@@ -54,7 +54,6 @@ class PendingDeviceView @JvmOverloads constructor(
         
         controllers_recycler.visible = isExpanded
         controllers_recycler.setModels(controllers)
-        controllers_recycler.layoutManager = GridLayoutManager(context, 2)
     }
     
     private fun animateExpandButton() {
