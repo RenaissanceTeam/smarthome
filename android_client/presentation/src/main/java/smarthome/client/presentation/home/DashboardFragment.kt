@@ -49,7 +49,7 @@ class DashboardFragment : Fragment() {
         devices.adapter = FastAdapter.with(itemsAdapter).apply {
             onClickListener = { view, adapter, item, position ->
                 when (item) {
-                    is ControllerItem -> onControllerClick(item.controller.id)
+                    is ControllerItem -> item.controller?.id?.let { onControllerClick(it) } ?: false
                     is DeviceItem -> onDeviceClick(item.device.id)
                     else -> false
                 }
