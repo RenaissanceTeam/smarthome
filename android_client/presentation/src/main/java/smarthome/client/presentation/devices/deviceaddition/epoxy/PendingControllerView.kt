@@ -3,10 +3,7 @@ package smarthome.client.presentation.devices.deviceaddition.epoxy
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import com.airbnb.epoxy.AfterPropsSet
-import com.airbnb.epoxy.ModelProp
-import com.airbnb.epoxy.ModelView
-import com.airbnb.epoxy.TextProp
+import com.airbnb.epoxy.*
 import kotlinx.android.synthetic.main.pending_controller_item.view.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.inflate
@@ -26,6 +23,9 @@ class PendingControllerView @JvmOverloads constructor(
     lateinit var state: CharSequence @TextProp set
     lateinit var type: CharSequence @TextProp set
     var isRefreshing = false @ModelProp set
+    var onControllerClicked: (() -> Unit)? = null @CallbackProp set
+    var onControllerLongClicked: (() -> Unit)? = null @CallbackProp set
+    
     
     @AfterPropsSet
     fun onPropsReady() {
@@ -33,5 +33,7 @@ class PendingControllerView @JvmOverloads constructor(
         state_text.text = state
         type_text.text = type
         progress.visible = isRefreshing
+        card.setOnClickListener { onControllerClicked?.invoke() }
+        card.setOnLongClickListener { onControllerLongClicked?.invoke(); true }
     }
 }

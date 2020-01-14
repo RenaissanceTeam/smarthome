@@ -12,6 +12,15 @@ class PendingDeviceController : Typed2EpoxyController<List<PendingDeviceItemStat
                 id(it.device.id)
                 device(it.device)
                 expanded(it.isExpanded)
+                acceptInProgress(it.acceptInProgress)
+                declineInProgress(it.declineInProgress)
+                
+                onExpand { viewModel.onExpand(it.device.id) }
+                onDeviceLongClicked { viewModel.onDeviceLongClicked(it.device.id) }
+                onAccept { viewModel.acceptDevice(it.device.id) }
+                onDecline { viewModel.declineDevice(it.device.id) }
+                
+                
                 controllers(it.device.controllers.map { controller ->
                     PendingControllerViewModel_().apply {
                         id(controller.id)
@@ -19,11 +28,13 @@ class PendingDeviceController : Typed2EpoxyController<List<PendingDeviceItemStat
                         type(controller.type)
                         state(controller.state)
                         refreshing(it.controllerRefreshing[controller.id] ?: false)
+                        
                         spanSizeOverride { total, _, _ -> total/2 }
+                        
+                        onControllerClicked { viewModel.onControllerClicked(controller.id) }
+                        onControllerLongClicked { viewModel.onControllerLongClicked(controller.id) }
                     }
                 })
-                onExpand { viewModel.onExpand(it.device.id) }
-                onDeviceClick { viewModel.onDeviceClicked(it.device.id) }
             }
         }
     }
