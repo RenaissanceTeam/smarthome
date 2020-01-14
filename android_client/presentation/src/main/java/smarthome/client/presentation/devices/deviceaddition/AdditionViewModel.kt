@@ -1,28 +1,27 @@
 package smarthome.client.presentation.devices.deviceaddition
 
 import androidx.lifecycle.*
-import com.mikepenz.fastadapter.GenericItem
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
+import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.AcceptPendingDeviceUseCase
 import smarthome.client.domain.api.devices.usecase.DeclinePendingDeviceUseCase
 import smarthome.client.domain.api.devices.usecase.GetPendingDevicesUseCase
-import smarthome.client.entity.Controller
-import smarthome.client.entity.Device
-import smarthome.client.presentation.components.DeviceItem
-import smarthome.client.presentation.devices.deviceaddition.items.PendingDevice
+import smarthome.client.presentation.devices.deviceaddition.epoxy.PendingDeviceItemState
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.util.log
 
 class AdditionViewModel : KoinViewModel() {
-    val devices = MutableLiveData<List<PendingDevice>>(listOf())
-    val showEmpty = Transformations.map(devices) { it.isEmpty() }
+    val deviceStates = MutableLiveData<List<PendingDeviceItemState>>(listOf())
+    val showEmpty = Transformations.map(deviceStates) { it.isEmpty() }
     val refresh = MutableLiveData<Boolean>(false)
     val openControllerDetails = NavigationParamLiveData<Long>()
     val openDeviceDetails = NavigationParamLiveData<Long>()
+    
+    private val expanded = mutableMapOf<Long, Boolean>()
+    private val devices = mutableListOf<GeneralDeviceInfo>()
     private val readControllerUseCase: ReadControllerUseCase by inject()
     private val getPendingDevicesUseCase: GetPendingDevicesUseCase by inject()
     private val acceptPendingDeviceUseCase: AcceptPendingDeviceUseCase by inject()
@@ -40,7 +39,9 @@ class AdditionViewModel : KoinViewModel() {
             
             getPendingDevicesUseCase.runCatching { execute() }
                 .onSuccess {
-                    devices.postValue(it.map { PendingDevice(it, this@AdditionViewModel) })
+                    devices.clear()
+                    devices.addAll(it)
+                    postPendingDevicesStates()
                 }
                 .onFailure { log(it) }
             
@@ -48,15 +49,28 @@ class AdditionViewModel : KoinViewModel() {
         }
     }
     
+    fun onExpand(deviceId: Long) {
+        expanded[deviceId] = isExpanded(deviceId).not()
+        postPendingDevicesStates()
+    }
+    
+    private fun postPendingDevicesStates() {
+        deviceStates.postValue(
+            devices.map { PendingDeviceItemState(it, isExpanded(it.id)) }
+        )
+    }
+    
+    private fun isExpanded(deviceId: Long) = expanded[deviceId] ?: false
+    
     suspend fun acceptDevice(id: Long) {
         acceptPendingDeviceUseCase.execute(id)
         postWithRemovedDevice(id)
     }
     
     private fun postWithRemovedDevice(id: Long) {
-        devices.value?.let {
-            devices.postValue(it.filter { it.device.id != id })
-        }
+//        devices.value?.let {
+//            devices.postValue(it.filter { it.id != id })
+//        }
     }
     
     suspend fun declineDevice(id: Long) {
