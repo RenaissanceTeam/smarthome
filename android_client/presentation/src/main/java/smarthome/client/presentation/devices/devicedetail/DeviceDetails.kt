@@ -11,18 +11,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import kotlinx.android.synthetic.main.fragment_device_details.*
 import smarthome.client.entity.Device
 import smarthome.client.presentation.R
-import smarthome.client.presentation.components.ControllerItem
 import smarthome.client.presentation.devices.devicedetail.epoxy.DeviceDetailsController
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
 import smarthome.client.presentation.visible
-import smarthome.client.util.data
-import smarthome.client.util.log
 
 
 class DeviceDetails : Fragment() {

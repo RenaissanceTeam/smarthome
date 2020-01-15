@@ -15,6 +15,7 @@ import smarthome.client.entity.Controller
 import smarthome.client.presentation.devices.deviceaddition.epoxy.PendingControllerItemState
 import smarthome.client.presentation.devices.deviceaddition.epoxy.PendingDeviceItemState
 import smarthome.client.presentation.runInScope
+import smarthome.client.presentation.runInScopeCatchingAny
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.util.*
@@ -161,7 +162,7 @@ class AdditionViewModel : KoinViewModel() {
     }
     
     fun onControllerClicked(id: Long) {
-        viewModelScope.launch { readControllerUseCase.runCatching { execute(id) } }
+        readControllerUseCase.runInScopeCatchingAny(viewModelScope) { execute(id) } 
     }
     
     fun onControllerLongClicked(id: Long) {

@@ -60,18 +60,6 @@ class AdditionFragment : Fragment() {
         
         add_device_recycler.layoutManager = LinearLayoutManager(view.context)
         add_device_recycler.adapter = controller.adapter
-        
-//            FastAdapter.with(itemsAdapter).also {
-//            it.onClickListener = { _, _, item, _ ->
-//                when (item) {
-//                    is DeviceItem -> viewModel.onDeviceClicked(item.device.id)
-//                    is ControllerItem -> viewModel.onControllerClicked(item.controller.id)
-//                    else -> {
-//                    }
-//                }
-//                true
-//            }
-//        }
     }
     
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

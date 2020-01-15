@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_controller_details.*
 import org.koin.android.ext.android.inject
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
+import smarthome.client.presentation.controllers.controllerdetail.statechanger.ControllerStateChanger
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerFactory
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
@@ -21,7 +22,7 @@ class ControllerDetails : Fragment() {
     private val args: ControllerDetailsArgs by navArgs()
     private val viewModel: ControllerDetailViewModel by viewModels()
     private val stateChangerFactory: StateChangerFactory by inject()
-    private var stateChangerInitialized = false
+    private var stateChanger: ControllerStateChanger? = null
     
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -37,9 +38,11 @@ class ControllerDetails : Fragment() {
         controller_type.text = controller.type
         state.text = controller.state
         
-        if (!stateChangerInitialized) {
-            stateChangerFactory.get(controller).inflate(state_changer)
-            stateChangerInitialized = true
+        if (stateChanger == null) {
+            stateChangerFactory
+                .get(controller)
+                .also { stateChanger = it }
+                .inflate(state_changer)
         }
     }
     
@@ -61,5 +64,11 @@ class ControllerDetails : Fragment() {
                 }
             ).show()
         }
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        stateChanger?.onDestroy()
+        stateChanger = null
     }
 }
