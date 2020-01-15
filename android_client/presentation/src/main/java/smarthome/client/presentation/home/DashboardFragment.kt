@@ -17,16 +17,16 @@ import kotlinx.android.synthetic.main.fragment_dashboard.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.components.ControllerItem
 import smarthome.client.presentation.components.DeviceItem
+import smarthome.client.presentation.home.epoxy.DashboardController
 
 class DashboardFragment : Fragment() {
     private val viewModel: DashboardViewModel by viewModels()
-    private val itemsAdapter = GenericItemAdapter()
-    
+    private val itemsController = DashboardController()
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         
         viewModel.items.observe(this) {
-            itemsAdapter.set(it)
+            itemsController.setData(it, viewModel)
         }
         
         viewModel.allHomeUpdateState.observe(this) {
@@ -46,17 +46,7 @@ class DashboardFragment : Fragment() {
         refresh_layout.setOnRefreshListener { viewModel.onRefresh() }
         
         devices.layoutManager = LinearLayoutManager(view.context)
-        devices.adapter = FastAdapter.with(itemsAdapter).apply {
-            onClickListener = { view, adapter, item, position ->
-                when (item) {
-                    is ControllerItem -> item.controller?.id?.let { onControllerClick(it) } ?: false
-                    is DeviceItem -> onDeviceClick(item.device.id)
-                    else -> false
-                }
-            }
-        }
-        
-        devices.addItemDecoration(DividerItemDecoration(context, VERTICAL))
+        devices.adapter = itemsController.adapter
     }
     
     private fun onDeviceClick(deviceId: Long): Boolean {

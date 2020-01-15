@@ -17,15 +17,15 @@ open class ControllerItem(
     
     class ViewHolder(private val view: View): FastAdapter.ViewHolder<ControllerItem>(view) {
         override fun bindView(item: ControllerItem, payloads: MutableList<Any>) {
-            view.name.text = item.controller?.name.orEmpty()
-            view.type.text = item.controller?.type.orEmpty()
-            view.state.text = item.controller?.state.orEmpty()
+            view.controller_name.text = item.controller?.name.orEmpty()
+            view.controller_type.text = item.controller?.type.orEmpty()
+            view.controller_state.text = item.controller?.state.orEmpty()
         }
         
         override fun unbindView(item: ControllerItem) {
-            view.name.text = null
-            view.type.text = null
-            view.state.text = null
+            view.controller_name.text = null
+            view.controller_type.text = null
+            view.controller_state.text = null
         }
     }
 }
