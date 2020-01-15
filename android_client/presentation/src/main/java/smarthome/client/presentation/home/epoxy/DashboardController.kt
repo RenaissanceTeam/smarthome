@@ -13,9 +13,7 @@ class DashboardController : Typed2EpoxyController<List<GeneralDeviceInfo>, Dashb
     
     override fun buildModels(devices: List<GeneralDeviceInfo>, viewModel: DashboardViewModel) {
         if (devices.isEmpty() && viewModel.allHomeUpdateState.value == false) {
-            emptyItemView {
-                id(0)
-            }
+            emptyItemView { id(0) }
         }
         
         devices.forEach { device ->

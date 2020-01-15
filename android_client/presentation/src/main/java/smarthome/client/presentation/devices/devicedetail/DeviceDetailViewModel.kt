@@ -55,6 +55,7 @@ class DeviceDetailViewModel : KoinViewModel() {
             }
     
             refresh.postValue(false)
+            postControllers()
         }
     }
     
