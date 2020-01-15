@@ -8,15 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import smarthome.client.presentation.R
-import smarthome.client.presentation.components.ControllerItem
-import smarthome.client.presentation.components.DeviceItem
 import smarthome.client.presentation.home.epoxy.DashboardController
 
 class DashboardFragment : Fragment() {
@@ -32,6 +26,9 @@ class DashboardFragment : Fragment() {
         viewModel.allHomeUpdateState.observe(this) {
             refresh_layout.isRefreshing = it
         }
+    
+        viewModel.openDeviceDetails.onNavigate(this, ::openDevice)
+        viewModel.openControllerDetails.onNavigate(this, ::openController)
     }
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -49,16 +46,13 @@ class DashboardFragment : Fragment() {
         devices.adapter = itemsController.adapter
     }
     
-    private fun onDeviceClick(deviceId: Long): Boolean {
-        val action = DashboardFragmentDirections.actionDashboardFragmentToDeviceDetails(deviceId)
-        findNavController().navigate(action)
-        return true
+    private fun openDevice(id: Long) {
+        findNavController().navigate(
+            DashboardFragmentDirections.actionDashboardFragmentToDeviceDetails(id))
     }
     
-    private fun onControllerClick(controllerId: Long): Boolean {
-        val action =
-            DashboardFragmentDirections.actionDashboardFragmentToControllerDetails(controllerId)
-        findNavController().navigate(action)
-        return true
+    private fun openController(id: Long) {
+        findNavController().navigate(
+            DashboardFragmentDirections.actionDashboardFragmentToControllerDetails(id))
     }
 }
