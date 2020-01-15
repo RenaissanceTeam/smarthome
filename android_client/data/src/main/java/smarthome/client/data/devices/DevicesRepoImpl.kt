@@ -9,13 +9,24 @@ class DevicesRepoImpl(
     private val retrofitFactory: RetrofitFactory
 ) : DevicesRepo {
     
-    override suspend fun getGeneralInfo(): List<GeneralDeviceInfo> {
-        return retrofitFactory.createApi(DevicesApi::class.java)
-            .getGeneralInfo()
+    override suspend fun getAdded(): List<GeneralDeviceInfo> {
+        return retrofitFactory.createApi(DevicesApi::class.java).getAdded()
     }
     
     override suspend fun getById(deviceId: Long): Device {
         return retrofitFactory.createApi(DevicesApi::class.java)
             .getDeviceDetails(deviceId)
+    }
+    
+    override suspend fun getPending(): List<GeneralDeviceInfo> {
+        return retrofitFactory.createApi(DevicesApi::class.java).getPending()
+    }
+    
+    override suspend fun acceptPending(id: Long) {
+        retrofitFactory.createApi(DevicesApi::class.java).accept(id)
+    }
+    
+    override suspend fun declinePending(id: Long) {
+        retrofitFactory.createApi(DevicesApi::class.java).decline(id)
     }
 }

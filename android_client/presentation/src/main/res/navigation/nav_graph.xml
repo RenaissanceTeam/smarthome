@@ -22,10 +22,6 @@
             app:argType="long"
             android:defaultValue="-1L" />
         <argument
-            android:name="usePending"
-            app:argType="boolean"
-            android:defaultValue="false" />
-        <argument
             android:name="show_tool_bar"
             app:argType="boolean"
             android:defaultValue="true" />
@@ -89,10 +85,6 @@
             android:name="controllerGuid"
             app:argType="long"
             android:defaultValue="-1L" />
-        <argument
-            android:name="usePending"
-            app:argType="boolean"
-            android:defaultValue="false" />
         <argument
             android:name="show_tool_bar"
             app:argType="boolean"

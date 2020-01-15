@@ -2,12 +2,12 @@ package smarthome.client.domain.devices.usecase
 
 import smarthome.client.data.api.devices.DevicesRepo
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
-import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
+import smarthome.client.domain.api.devices.usecase.GetPendingDevicesUseCase
 
-class GetGeneralDevicesInfoImpl(
+class GetPendingDevicesUseCaseImpl(
     private val repo: DevicesRepo
-) : GetGeneralDevicesInfo {
+) : GetPendingDevicesUseCase {
     override suspend fun execute(): List<GeneralDeviceInfo> {
-        return repo.getGeneralInfo()
+        return repo.getPending()
     }
 }

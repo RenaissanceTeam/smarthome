@@ -15,6 +15,8 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import smarthome.client.presentation.R
+import smarthome.client.presentation.components.ControllerItem
+import smarthome.client.presentation.components.DeviceItem
 
 class DashboardFragment : Fragment() {
     private val viewModel: DashboardViewModel by viewModels()

@@ -5,11 +5,13 @@ import com.mikepenz.fastadapter.GenericItem
 import kotlinx.coroutines.launch
 import org.koin.core.inject
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
+import smarthome.client.presentation.components.ControllerItem
+import smarthome.client.presentation.components.DeviceItem
 import smarthome.client.presentation.util.KoinViewModel
 
 
-class DashboardViewModel : KoinViewModel(), LifecycleObserver {
-    private val getGeneralDevicesInfoUseCase: GetGeneralDevicesInfo by inject()
+class DashboardViewModel : KoinViewModel() {
+    private val getDevicesUseCase: GetGeneralDevicesInfo by inject()
     
     val items = MutableLiveData<List<GenericItem>>()
     val allHomeUpdateState = MutableLiveData<Boolean>()
@@ -22,7 +24,7 @@ class DashboardViewModel : KoinViewModel(), LifecycleObserver {
         viewModelScope.launch {
             allHomeUpdateState.value = true
     
-            getGeneralDevicesInfoUseCase.runCatching { execute() }.onSuccess {
+            getDevicesUseCase.runCatching { execute() }.onSuccess {
                 val items = it.flatMap { device ->
                     listOf(DeviceItem(device)) + device.controllers.map(::ControllerItem)
                 }
