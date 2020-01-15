@@ -9,4 +9,5 @@ interface ControllersRepo {
     suspend fun get(id: Long): Controller
     suspend fun setState(controllerId: Long, state: String): String
     suspend fun readState(controllerId: Long): String
+    fun controllerUpdated(controller: Controller)
 }
