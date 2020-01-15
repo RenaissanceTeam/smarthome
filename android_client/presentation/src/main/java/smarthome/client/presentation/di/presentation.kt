@@ -11,8 +11,8 @@ val presentation = module {
     
     // controllers
     factory { StateChangerFactory() }
-    factory(named("dht")) { (controller: Controller) ->
-        ReadStateChanger(controller = controller, readControllerUseCase = get())
+    factory(named("dht")) { (controllerId: Long) ->
+        ReadStateChanger(id = controllerId, readControllerUseCase = get())
     }
     
     factory(named("onoff")) { (controllerId: Long) ->
