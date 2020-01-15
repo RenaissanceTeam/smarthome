@@ -4,10 +4,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import smarthome.client.domain.api.auth.usecases.*
-import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
-import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
-import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
-import smarthome.client.domain.api.conrollers.usecases.WriteStateToControllerUseCase
+import smarthome.client.domain.api.conrollers.usecases.*
 import smarthome.client.domain.api.devices.usecase.*
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
@@ -17,10 +14,7 @@ import smarthome.client.domain.api.usecase.CloudMessageUseCase
 import smarthome.client.domain.api.usecase.ControllersUseCase
 import smarthome.client.domain.api.usecase.DevicesUseCase
 import smarthome.client.domain.auth.usecases.*
-import smarthome.client.domain.conrollers.usecases.GetControllerUseCaseImpl
-import smarthome.client.domain.conrollers.usecases.ObserveControllerUseCaseImpl
-import smarthome.client.domain.conrollers.usecases.ReadControllerUseCaseImpl
-import smarthome.client.domain.conrollers.usecases.WriteStateToControllerUseCaseImpl
+import smarthome.client.domain.conrollers.usecases.*
 import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
@@ -54,6 +48,7 @@ val domain = module {
     factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
     factoryBy<ReadControllerUseCase, ReadControllerUseCaseImpl>()
     factoryBy<WriteStateToControllerUseCase, WriteStateToControllerUseCaseImpl>()
+    factoryBy<PipelineControllerToStorageUseCase, PipelineControllerToStorageUseCaseImpl>()
     
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()

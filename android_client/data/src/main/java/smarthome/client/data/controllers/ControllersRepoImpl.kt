@@ -23,6 +23,10 @@ class ControllersRepoImpl(
                 .also { controllers[id] = it }
     }
     
+    override fun controllerUpdated(controller: Controller) {
+        TODO()
+    }
+    
     override suspend fun setState(controllerId: Long, state: String): String {
         if (noController(controllerId)) {
             get(controllerId)
