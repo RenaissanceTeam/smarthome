@@ -16,8 +16,6 @@ dependencies {
     implementation library.archCoreTest
     testImplementation groups.forTest
     implementation library.recyclerView
-    implementation library.fastAdapter
-    implementation library.fastAdapterDiff
     implementation library.epoxy
     kapt library.epoxyAnnotations
 

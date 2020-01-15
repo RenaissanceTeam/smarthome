@@ -15,10 +15,8 @@ val presentation = module {
         ReadStateChanger(controller = controller, readControllerUseCase = get())
     }
     
-    factory(named("onoff")) { (controller: Controller) ->
-        OnOffStateChanger(controller = controller, writeStateToControllerUseCase = get())
+    factory(named("onoff")) { (controllerId: Long) ->
+        OnOffStateChanger(id = controllerId, writeStateToControllerUseCase = get(), observeControllerUseCase = get())
     }
-    
-    
     
 }

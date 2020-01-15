@@ -7,10 +7,7 @@ import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.util.KoinViewModel
-import smarthome.client.util.Data
-import smarthome.client.util.ErrorStatus
-import smarthome.client.util.LoadingStatus
-import smarthome.client.util.log
+import smarthome.client.util.*
 
 class ControllerDetailViewModel : KoinViewModel() {
     val refresh = MutableLiveData<Boolean>()
@@ -28,8 +25,12 @@ class ControllerDetailViewModel : KoinViewModel() {
                     controller.postValue(it.data)
                     refresh.postValue(false)
                 }
-                is LoadingStatus -> refresh.postValue(true)
+                is LoadingStatus -> {
+                    it.data?.let(controller::postValue)
+                    refresh.postValue(true)
+                }
                 is ErrorStatus -> {
+                    it.data?.let(controller::postValue)
                     refresh.postValue(false)
                     log(it.cause)
                 }

@@ -24,3 +24,8 @@ fun <T> List<T>.replace(newItem: T, predicate: (T) -> Boolean): List<T> {
 inline fun <T, R> T.runInScope(scope: CoroutineScope, crossinline block: suspend T.() -> R): Job {
     return scope.launch { block() }
 }
+
+inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope, crossinline block: suspend T.() -> R): Job {
+    return scope.launch { runCatching { block() } }
+}
+

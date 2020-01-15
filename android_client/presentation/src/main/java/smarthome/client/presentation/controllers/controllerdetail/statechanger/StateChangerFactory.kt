@@ -8,7 +8,7 @@ import smarthome.client.entity.Controller
 
 class StateChangerFactory : KoinComponent {
     fun get(controller: Controller): ControllerStateChanger = runCatching {
-        get<ControllerStateChanger>(named(controller.type), parameters = { parametersOf(controller) })
+        get<ControllerStateChanger>(named(controller.type), parameters = { parametersOf(controller.id) })
     }.getOrElse { throw NoStateChanger(controller.type) }
 }
 

@@ -14,6 +14,7 @@ import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.runInScope
+import smarthome.client.presentation.runInScopeCatchingAny
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.util.DataStatus
@@ -95,6 +96,6 @@ class DashboardViewModel : KoinViewModel() {
     }
     
     fun onControllerLongClick(id: Long) {
-        readControllerUseCase.runInScope(viewModelScope) { execute(id) }
+        readControllerUseCase.runInScopeCatchingAny(viewModelScope) { execute(id) }
     }
 }
