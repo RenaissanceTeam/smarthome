@@ -1,4 +1,4 @@
-package smarthome.client.presentation.devices.devicedetail
+package smarthome.client.presentation.components
 
 import android.view.View
 import com.mikepenz.fastadapter.FastAdapter
@@ -7,14 +7,15 @@ import kotlinx.android.synthetic.main.controller_item.view.*
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
 
-class ControllerItem(
+open class ControllerItem(
     val controller: Controller
-) : AbstractItem<ControllerItem.ViewHolder>() {
+): AbstractItem<ControllerItem.ViewHolder>() {
     override val layoutRes = R.layout.controller_item
-    override val type = ControllerItems.CONTROLLER.ordinal
-    override fun getViewHolder(v: View) = ViewHolder(v)
+    override val type = ComponentViewTypes.CONTROLLER.ordinal
+    override fun getViewHolder(v: View) =
+        ViewHolder(v)
     
-    class ViewHolder(private val view: View) : FastAdapter.ViewHolder<ControllerItem>(view) {
+    class ViewHolder(private val view: View): FastAdapter.ViewHolder<ControllerItem>(view) {
         override fun bindView(item: ControllerItem, payloads: MutableList<Any>) {
             view.name.text = item.controller.name
             view.type.text = item.controller.type

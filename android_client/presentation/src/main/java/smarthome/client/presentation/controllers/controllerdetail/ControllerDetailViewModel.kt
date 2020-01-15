@@ -1,7 +1,6 @@
 package smarthome.client.presentation.controllers.controllerdetail
 
 import androidx.lifecycle.*
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
@@ -13,13 +12,12 @@ import smarthome.client.util.ErrorStatus
 import smarthome.client.util.LoadingStatus
 import smarthome.client.util.log
 
-class ControllerDetailViewModel : KoinViewModel(), LifecycleObserver {
+class ControllerDetailViewModel : KoinViewModel() {
     val refresh = MutableLiveData<Boolean>()
     val controller = MutableLiveData<Controller>()
     private var controllerId: Long = 0
     private val getControllersUseCase: GetControllerUseCase by inject()
     private val observeControllerUseCase: ObserveControllerUseCase by inject()
-    private val disposable = CompositeDisposable()
     
     fun setControllerId(id: Long) {
         controllerId = id
@@ -48,11 +46,6 @@ class ControllerDetailViewModel : KoinViewModel(), LifecycleObserver {
         viewModelScope.launch {
             getControllersUseCase.runCatching { execute(controllerId) }
         }
-    }
-    
-    override fun onCleared() {
-        super.onCleared()
-        disposable.dispose()
     }
     
     fun controllerNameChanged(name: String) {

@@ -3,14 +3,12 @@ package smarthome.client.domain.di
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
-import org.koin.experimental.builder.singleBy
 import smarthome.client.domain.api.auth.usecases.*
 import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.WriteStateToControllerUseCase
-import smarthome.client.domain.api.devices.usecase.GetDeviceUseCase
-import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
+import smarthome.client.domain.api.devices.usecase.*
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.main.BooleanState
@@ -23,8 +21,7 @@ import smarthome.client.domain.conrollers.usecases.GetControllerUseCaseImpl
 import smarthome.client.domain.conrollers.usecases.ObserveControllerUseCaseImpl
 import smarthome.client.domain.conrollers.usecases.ReadControllerUseCaseImpl
 import smarthome.client.domain.conrollers.usecases.WriteStateToControllerUseCaseImpl
-import smarthome.client.domain.devices.usecase.GetDeviceUseCaseImpl
-import smarthome.client.domain.devices.usecase.GetGeneralDevicesInfoImpl
+import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.main.StateMachineImpl
@@ -46,8 +43,11 @@ val domain = module {
     factoryBy<GetCurrentTokenUseCase, GetCurrentTokenUseCaseImpl>()
     
     // devices
-    factoryBy<GetGeneralDevicesInfo, GetGeneralDevicesInfoImpl>()
+    factoryBy<GetGeneralDevicesInfo, GetAddedDevicesInfoImpl>()
     factoryBy<GetDeviceUseCase, GetDeviceUseCaseImpl>()
+    factoryBy<GetPendingDevicesUseCase, GetPendingDevicesUseCaseImpl>()
+    factoryBy<DeclinePendingDeviceUseCase, DeclinePendingDeviceUseCaseImpl>()
+    factoryBy<AcceptPendingDeviceUseCase, AcceptPendingDeviceUseCaseImpl>()
     
     // controllers
     factoryBy<ObserveControllerUseCase, ObserveControllerUseCaseImpl>()

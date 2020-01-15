@@ -1,34 +1,80 @@
 package smarthome.client.presentation.devices.deviceaddition
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import io.reactivex.disposables.Disposable
-import org.koin.core.KoinComponent
+import androidx.lifecycle.*
+import com.mikepenz.fastadapter.GenericItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.koin.core.inject
+import smarthome.client.domain.api.devices.usecase.AcceptPendingDeviceUseCase
+import smarthome.client.domain.api.devices.usecase.DeclinePendingDeviceUseCase
+import smarthome.client.domain.api.devices.usecase.GetPendingDevicesUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.entity.Device
+import smarthome.client.presentation.components.DeviceItem
+import smarthome.client.presentation.devices.deviceaddition.items.PendingDevice
+import smarthome.client.presentation.util.KoinViewModel
+import smarthome.client.presentation.util.NavigationParamLiveData
+import smarthome.client.util.log
 
-class AdditionViewModel : ViewModel(), KoinComponent {
-    private val _devices = MutableLiveData<MutableList<Device>>()
-    private var devicesSubscription: Disposable? = null
-    var viewNotifier: ViewNotifier? = null
-    val devices: LiveData<MutableList<Device>>
-        get() = _devices
+class AdditionViewModel : KoinViewModel() {
+    val devices = MutableLiveData<List<PendingDevice>>(listOf())
+    val showEmpty = Transformations.map(devices) { it.isEmpty() }
+    val refresh = MutableLiveData<Boolean>(false)
+    val openControllerDetails = NavigationParamLiveData<Long>()
+    val openDeviceDetails = NavigationParamLiveData<Long>()
+    private val getPendingDevicesUseCase: GetPendingDevicesUseCase by inject()
+    private val acceptPendingDeviceUseCase: AcceptPendingDeviceUseCase by inject()
+    private val declinePendingDeviceUseCase: DeclinePendingDeviceUseCase by inject()
     
-    fun onControllerChanged(controller: Controller) {
-        TODO()
+    
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+        onRefresh()
     }
     
-    override fun onCleared() {
-        super.onCleared()
-        devicesSubscription?.dispose()
+    fun onRefresh() {
+        viewModelScope.launch {
+            refresh.postValue(true)
+            
+            getPendingDevicesUseCase.runCatching { execute() }
+                .onSuccess {
+                    devices.postValue(it.map { PendingDevice(it, this@AdditionViewModel) })
+                }
+                .onFailure { log(it) }
+            
+            refresh.postValue(false)
+        }
     }
     
-    fun acceptDevice(device: Device?) {
-        TODO()
+    suspend fun acceptDevice(id: Long) {
+        acceptPendingDeviceUseCase.execute(id)
+        postWithRemovedDevice(id)
     }
     
-    fun rejectDevice(device: Device?) {
+    private fun postWithRemovedDevice(id: Long) {
+        devices.value?.let {
+            devices.postValue(it.filter { it.device.id != id })
+        }
+    }
+    
+    suspend fun declineDevice(id: Long) {
+        declinePendingDeviceUseCase.execute(id)
+        postWithRemovedDevice(id)
+    }
+    
+    fun onDeviceClicked(id: Long) {
+        openDeviceDetails.trigger(id)
+    }
+    
+    fun onControllerClicked(id: Long) {
+        // todo: read controller - need to observe the state in PendingController
+    }
+    
+    fun onControllerLongClicked(id: Long) {
+        openControllerDetails.trigger(id)
+    }
+    
+    fun onAddDeviceClicked() {
         TODO()
     }
 }
