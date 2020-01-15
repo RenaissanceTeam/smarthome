@@ -22,8 +22,7 @@ import smarthome.client.util.*
 
 class AdditionViewModel : KoinViewModel() {
     val deviceStates = MutableLiveData<List<PendingDeviceItemState>>(listOf())
-    val showEmpty = Transformations.map(deviceStates) { it.isEmpty() }
-    val refresh = MutableLiveData<Boolean>(false)
+    val refresh = MutableLiveData<Boolean>()
     val openControllerDetails = NavigationParamLiveData<Long>()
     val openDeviceDetails = NavigationParamLiveData<Long>()
     
@@ -103,7 +102,6 @@ class AdditionViewModel : KoinViewModel() {
                 observedControllers[controllerId] = observeController
                     .execute(controllerId)
                     .doOnNext {
-                        log("status $it")
                         if (it is EmptyStatus) getControllerUseCase.runInScope(viewModelScope) {
                             execute(controllerId)
                         }

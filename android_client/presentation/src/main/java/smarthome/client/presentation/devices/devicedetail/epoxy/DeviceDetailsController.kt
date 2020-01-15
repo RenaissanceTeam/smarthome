@@ -14,9 +14,7 @@ class DeviceDetailsController :
     override fun buildModels(controllers: List<DataStatus<Controller>>,
                              viewModel: DeviceDetailViewModel) {
         if (controllers.isEmpty() && viewModel.refresh.value == false) {
-            emptyItemView {
-                id(0)
-            }
+            emptyItemView { id(0) }
         }
         
         controllers.forEach {
