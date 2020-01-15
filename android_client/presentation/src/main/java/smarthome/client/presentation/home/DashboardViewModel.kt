@@ -9,13 +9,13 @@ import kotlinx.coroutines.launch
 import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
+import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
-import smarthome.client.presentation.components.ControllerItem
-import smarthome.client.presentation.components.DeviceItem
 import smarthome.client.presentation.runInScope
 import smarthome.client.presentation.util.KoinViewModel
+import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.util.DataStatus
 import smarthome.client.util.EmptyStatus
 
@@ -24,11 +24,14 @@ class DashboardViewModel : KoinViewModel() {
     private val getDevicesUseCase: GetGeneralDevicesInfo by inject()
     private val observeControllerUseCase: ObserveControllerUseCase by inject()
     private val getControllerUseCase: GetControllerUseCase by inject()
+    private val readControllerUseCase: ReadControllerUseCase by inject()
     
     val items = MutableLiveData<List<GeneralDeviceInfo>>()
     val allHomeUpdateState = MutableLiveData<Boolean>()
     val devices = mutableListOf<GeneralDeviceInfo>()
     val controllers = mutableMapOf<Long, DataStatus<Controller>>()
+    val openControllerDetails = NavigationParamLiveData<Long>()
+    val openDeviceDetails = NavigationParamLiveData<Long>()
     private val controllersObserving = mutableMapOf<Long, Disposable>()
     
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -84,14 +87,14 @@ class DashboardViewModel : KoinViewModel() {
     }
     
     fun onDeviceClicked(id: Long) {
-    
+        openDeviceDetails.trigger(id)
     }
     
     fun onControllerClick(id: Long) {
-    
+        openControllerDetails.trigger(id)
     }
     
     fun onControllerLongClick(id: Long) {
-    
+        readControllerUseCase.runInScope(viewModelScope) { execute(id) }
     }
 }
