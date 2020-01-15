@@ -2,6 +2,8 @@ package smarthome.client.presentation.home.epoxy
 
 import com.airbnb.epoxy.Typed2EpoxyController
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
+import smarthome.client.presentation.components.controllerView
+import smarthome.client.presentation.components.deviceView
 import smarthome.client.presentation.home.DashboardViewModel
 import smarthome.client.util.LoadingStatus
 import smarthome.client.util.data
