@@ -8,11 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.controller_item.*
 import kotlinx.android.synthetic.main.fragment_controller_details.*
-import kotlinx.android.synthetic.main.fragment_controller_details.state
 import org.koin.android.ext.android.inject
-import org.koin.core.get
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerFactory
@@ -55,8 +52,8 @@ class ControllerDetails : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         viewModel.setControllerId(args.controllerGuid)
-        
-        name?.setOnClickListener {
+    
+        controller_name?.setOnClickListener {
             EditTextDialog.create(view.context,
                 DialogParameters("controller name", currentValue = viewModel.controller.value?.name
                     ?: "") {
