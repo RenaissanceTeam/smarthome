@@ -24,7 +24,7 @@ class ControllersRepoImpl(
     }
     
     override fun controllerUpdated(controller: Controller) {
-        TODO()
+        emitData(controller.id, controller)
     }
     
     override suspend fun setState(controllerId: Long, state: String): String {
