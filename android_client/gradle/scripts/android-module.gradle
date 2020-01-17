@@ -1,33 +1,4 @@
-apply from: "$rootDir/gradle/scripts/build-dependency-module.gradle"
-
-android {
-    compileSdkVersion compileSdk_version
-    defaultConfig {
-        minSdkVersion minSdk_version
-        targetSdkVersion targetSdk_version
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-}
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/gradle/scripts/android-config.gradle"

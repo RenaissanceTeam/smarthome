@@ -1,9 +1,6 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
-apply from: "$rootDir/gradle/scripts/android-module.gradle"
 
 kapt {
     correctErrorTypes = true
@@ -18,27 +15,16 @@ dependencies {
     implementation library.recyclerView
     implementation library.epoxy
     kapt library.epoxyAnnotations
-
-
-    // ViewModel and LiveData
     implementation groups.lifecycle
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
-
-    // jetpack
     implementation library.preference
-
     implementation library.coroutinesCore
     implementation library.coroutinesAndroid
     implementation library.rxAndroid
     implementation library.rxJava
-
     implementation library.koin
     implementation library.processButton
     implementation library.ultraPtr
-
-    // ktx
     implementation groups.androidXktx
-
     implementation library.firebaseMessaging
 
     // modules
