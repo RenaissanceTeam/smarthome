@@ -7,6 +7,8 @@ dependencies {
     implementation library.appCompat
     implementation library.kotlin
     implementation library.coreKtx
+    implementation library.entity
+    implementation groups.koinWithExt
 
     testImplementation groups.forTest
 }
