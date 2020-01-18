@@ -4,6 +4,7 @@ import com.airbnb.epoxy.Typed2EpoxyController
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.presentation.components.controllerView
 import smarthome.client.presentation.components.deviceView
+import smarthome.client.presentation.components.emptyItemView
 import smarthome.client.presentation.home.DashboardViewModel
 import smarthome.client.util.LoadingStatus
 import smarthome.client.util.data
@@ -11,6 +12,10 @@ import smarthome.client.util.data
 class DashboardController : Typed2EpoxyController<List<GeneralDeviceInfo>, DashboardViewModel>() {
     
     override fun buildModels(devices: List<GeneralDeviceInfo>, viewModel: DashboardViewModel) {
+        if (devices.isEmpty() && viewModel.allHomeUpdateState.value == false) {
+            emptyItemView { id(0) }
+        }
+        
         devices.forEach { device ->
             deviceView {
                 id(device.id)

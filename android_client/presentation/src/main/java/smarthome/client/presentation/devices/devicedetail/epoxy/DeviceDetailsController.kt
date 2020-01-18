@@ -3,6 +3,7 @@ package smarthome.client.presentation.devices.devicedetail.epoxy
 import com.airbnb.epoxy.Typed2EpoxyController
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.components.controllerView
+import smarthome.client.presentation.components.emptyItemView
 import smarthome.client.presentation.devices.devicedetail.DeviceDetailViewModel
 import smarthome.client.util.DataStatus
 import smarthome.client.util.LoadingStatus
@@ -12,6 +13,10 @@ class DeviceDetailsController :
     Typed2EpoxyController<List<DataStatus<Controller>>, DeviceDetailViewModel>() {
     override fun buildModels(controllers: List<DataStatus<Controller>>,
                              viewModel: DeviceDetailViewModel) {
+        if (controllers.isEmpty() && viewModel.refresh.value == false) {
+            emptyItemView { id(0) }
+        }
+        
         controllers.forEach {
             val id = it.data?.id ?: return@forEach
             
