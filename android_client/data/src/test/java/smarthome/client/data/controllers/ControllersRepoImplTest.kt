@@ -11,6 +11,7 @@ import org.junit.Test
 import smarthome.client.data.api.controllers.ControllersRepo
 import smarthome.client.data.controllers.dto.StateDto
 import smarthome.client.data.retrofit.RetrofitFactory
+import smarthome.client.data.util.assertThrough
 import smarthome.client.data.util.assertThroughSequence
 import smarthome.client.entity.Controller
 import smarthome.client.util.Data
@@ -138,6 +139,16 @@ class ControllersRepoImplTest {
             
             assertThat(result).isEqualTo(stateToChange)
         }
+    }
+    
+    @Test
+    fun `when controllerUpdated is called should emit new Data on observable`() {
+        val id = 1L
+        val observable = repo.observe(id).test()
         
+        val controller = mock<Controller> { on { this.id }.then { id } }
+        repo.controllerUpdated(controller)
+        
+        observable.assertThrough { it is Data && it.data == controller }
     }
 }
