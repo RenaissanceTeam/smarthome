@@ -11,23 +11,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import kotlinx.android.synthetic.main.fragment_device_details.*
 import smarthome.client.entity.Device
 import smarthome.client.presentation.R
-import smarthome.client.presentation.components.ControllerItem
+import smarthome.client.presentation.devices.devicedetail.epoxy.DeviceDetailsController
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
 import smarthome.client.presentation.visible
-import smarthome.client.util.data
-import smarthome.client.util.log
 
 
 class DeviceDetails : Fragment() {
     private val viewModel: DeviceDetailViewModel by viewModels()
     private val args: DeviceDetailsArgs by navArgs()
-    private val itemAdapter = GenericItemAdapter()
+    private val itemsController = DeviceDetailsController()
+    
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -62,19 +59,13 @@ class DeviceDetails : Fragment() {
         viewModel.refresh.observe(this) { progress_bar.visible = it }
         viewModel.device.observe(this, ::bindDevice)
         viewModel.controllersLiveData.observe(this) {
-            itemAdapter.set(it)
+            itemsController.setData(it, viewModel)
         }
+        
         viewModel.openController.onNavigate(this, ::openControllerDetails)
     
         controllers.layoutManager = LinearLayoutManager(view.context)
-        controllers.adapter = FastAdapter.with(itemAdapter).apply {
-            onClickListener = { _, _, item, _ ->
-                when (item) {
-                    is ControllerItem -> item.controller?.id?.let { viewModel.onControllerClick(it) }
-                }
-                true
-            }
-        }
+        controllers.adapter = itemsController.adapter
     
         controllers.addItemDecoration(
             DividerItemDecoration(context, DividerItemDecoration.VERTICAL))

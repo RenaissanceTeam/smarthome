@@ -4,4 +4,5 @@ import android.view.ViewGroup
 
 interface ControllerStateChanger {
     fun inflate(container: ViewGroup)
+    fun onDestroy()
 }

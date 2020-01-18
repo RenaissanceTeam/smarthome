@@ -37,4 +37,7 @@ class ReadStateChanger(
             }
         }
     }
+    
+    override fun onDestroy() {
+    }
 }
