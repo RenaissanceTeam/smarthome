@@ -2,7 +2,6 @@ package smarthome.client.data.controllers
 
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.delay
 import smarthome.client.data.api.controllers.ControllersRepo
 import smarthome.client.data.controllers.dto.StateDto
 import smarthome.client.data.retrofit.RetrofitFactory
@@ -82,7 +81,6 @@ class ControllersRepoImpl(
         }
     
         emitLoading(controllerId)
-        delay(1000)
         return retrofitFactory.createApi(ControllersApi::class.java)
             .runCatching { readState(controllerId) }
             .onSuccess {
@@ -97,7 +95,6 @@ class ControllersRepoImpl(
     
     override suspend fun get(id: Long): Controller {
         emitLoading(id)
-        delay(1000)
         return retrofitFactory.createApi(ControllersApi::class.java)
             .runCatching { getDetails(id) }
             .onSuccess { emitData(id, it) }

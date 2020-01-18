@@ -1,11 +1,18 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply from: "$rootDir/gradle/scripts/android-module.gradle"
+
+android {
+    dataBinding.enabled true
+}
 
 dependencies {
     implementation library.rxJava
     implementation library.kotlin
 
     implementation library.entity
+    implementation library.lastAdapter
+    kapt library.databindingCompiler
 }

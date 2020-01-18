@@ -10,24 +10,21 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import kotlinx.android.synthetic.main.fragment_device_addition.*
 import smarthome.client.presentation.R
-import smarthome.client.presentation.components.ControllerItem
-import smarthome.client.presentation.components.DeviceItem
+import smarthome.client.presentation.devices.deviceaddition.epoxy.PendingDeviceController
 import smarthome.client.presentation.visible
 
 class AdditionFragment : Fragment() {
-    private var itemsAdapter = GenericItemAdapter()
+    val controller = PendingDeviceController()
     private val viewModel: AdditionViewModel by viewModels()
     
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
     
         lifecycle.addObserver(viewModel)
-        viewModel.devices.observe(this) {
-            itemsAdapter.set(it)
+        viewModel.deviceStates.observe(this) {
+            controller.setData(it, viewModel)
         }
         viewModel.showEmpty.observe(this) {
             empty_message.visible = it
@@ -60,18 +57,21 @@ class AdditionFragment : Fragment() {
         }
         
         refresh_layout.setOnRefreshListener(viewModel::onRefresh)
-        add_device_recycler.adapter = FastAdapter.with(itemsAdapter).also {
-            it.onClickListener = { _, _, item, _ ->
-                when (item) {
-                    is DeviceItem -> viewModel.onDeviceClicked(item.device.id)
-                    is ControllerItem -> viewModel.onControllerClicked(item.controller.id)
-                    else -> {
-                    }
-                }
-                true
-            }
-        }
+        
         add_device_recycler.layoutManager = LinearLayoutManager(view.context)
+        add_device_recycler.adapter = controller.adapter
+        
+//            FastAdapter.with(itemsAdapter).also {
+//            it.onClickListener = { _, _, item, _ ->
+//                when (item) {
+//                    is DeviceItem -> viewModel.onDeviceClicked(item.device.id)
+//                    is ControllerItem -> viewModel.onControllerClicked(item.controller.id)
+//                    else -> {
+//                    }
+//                }
+//                true
+//            }
+//        }
     }
     
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -79,23 +79,4 @@ class AdditionFragment : Fragment() {
             TODO()
         }
     }
-    
-    
-    // navigation
-    
-    //            startActivityForResult(Intent(context, AddDeviceActivity::class.java), DISCOVER_REQUEST_CODE)
-//
-//    private fun onDeviceDetailsClick(device: Device) {
-//        val action =
-//            AdditionFragmentDirections.actionAdditionFragmentToDeviceDetails(
-//                device.id, true)
-//        findNavController().navigate(action)
-//    }
-//
-//    private fun onControllerDetailsClick(controller: Controller) {
-//        val action =
-//            AdditionFragmentDirections.actionAdditionFragmentToControllerDetails(
-//                controller.id, true)
-//        findNavController().navigate(action)
-//    }
 }

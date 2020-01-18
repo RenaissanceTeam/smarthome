@@ -8,7 +8,7 @@ import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
 
 open class ControllerItem(
-    val controller: Controller
+    val controller: Controller?
 ): AbstractItem<ControllerItem.ViewHolder>() {
     override val layoutRes = R.layout.controller_item
     override val type = ComponentViewTypes.CONTROLLER.ordinal
@@ -17,9 +17,9 @@ open class ControllerItem(
     
     class ViewHolder(private val view: View): FastAdapter.ViewHolder<ControllerItem>(view) {
         override fun bindView(item: ControllerItem, payloads: MutableList<Any>) {
-            view.name.text = item.controller.name
-            view.type.text = item.controller.type
-            view.state.text = item.controller.state
+            view.name.text = item.controller?.name.orEmpty()
+            view.type.text = item.controller?.type.orEmpty()
+            view.state.text = item.controller?.state.orEmpty()
         }
         
         override fun unbindView(item: ControllerItem) {

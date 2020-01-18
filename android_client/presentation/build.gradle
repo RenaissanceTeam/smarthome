@@ -2,7 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'kotlin-kapt'
 apply from: "$rootDir/gradle/scripts/android-module.gradle"
+
+kapt {
+    correctErrorTypes = true
+}
 
 dependencies {
     implementation library.appCompat
@@ -13,6 +18,9 @@ dependencies {
     implementation library.recyclerView
     implementation library.fastAdapter
     implementation library.fastAdapterDiff
+    implementation library.epoxy
+    kapt library.epoxyAnnotations
+
 
     // ViewModel and LiveData
     implementation groups.lifecycle
