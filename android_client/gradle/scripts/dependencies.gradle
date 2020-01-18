@@ -52,8 +52,6 @@ ext {
             roomKapt                 : ("androidx.room:room-compiler:$room_version"),
             roomExt                  : ("androidx.room:room-ktx:$room_version"),
             roomRxJava               : ("androidx.room:room-rxjava2:$room_version"),
-            fastAdapter              : ("com.mikepenz:fastadapter:${latestFastAdapterRelease}"),
-            fastAdapterDiff          : ("com.mikepenz:fastadapter-extensions-diff:${latestFastAdapterRelease}"),
             lastAdapter              : ("com.github.nitrico.lastadapter:lastadapter:2.3.0"),
             databindingCompiler      : ('com.android.databinding:compiler:GRADLE_PLUGIN_VERSION'),
             epoxy                    : "com.airbnb.android:epoxy:$epoxy_version",
