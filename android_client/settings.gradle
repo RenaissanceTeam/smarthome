@@ -7,3 +7,5 @@ include ":app",
         ":scripts",
         ":scripts_api",
         ":entity"
+include ':navigation_api'
+include ':navigation'

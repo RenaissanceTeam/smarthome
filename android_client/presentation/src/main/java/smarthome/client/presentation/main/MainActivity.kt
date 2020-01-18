@@ -21,8 +21,8 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     
-        viewModel.openHomeServerSetup.onNavigate(this) { navigateToHomeServerSelection() }
-        viewModel.openLogin.onNavigate(this) { navigateToLogin() }
+        viewModel.openHomeServerSetup.onNavigate(this, ::navigateToHomeServerSelection)
+        viewModel.openLogin.onNavigate(this, ::navigateToLogin)
         
         lifecycle.addObserver(viewModel)
         
