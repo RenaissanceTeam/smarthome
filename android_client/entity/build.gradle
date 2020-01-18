@@ -1,12 +1,8 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
 apply from: "$rootDir/gradle/scripts/android-module.gradle"
+apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation library.rxJava
-    implementation library.kotlin
 
     implementation groups.room
     kapt library.roomKapt

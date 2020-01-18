@@ -115,46 +115,6 @@
             android:defaultValue="true" />
     </fragment>
     <fragment
-        android:id="@+id/scriptDetails"
-        android:name="smarthome.client.presentation.scripts.scriptdetail.ScriptDetails"
-        android:label="ScriptDetails"
-        tools:layout="@layout/fragment_script_details" >
-        <action
-            android:id="@+id/action_scriptDetails_to_conditionFragment"
-            app:destination="@id/conditionFragment"
-            app:enterAnim="@anim/enter_from_right"
-            app:exitAnim="@anim/exit_to_left"
-            app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
-        <action
-            android:id="@+id/action_scriptDetails_to_actionFragment"
-            app:destination="@id/actionFragment"
-            app:enterAnim="@anim/enter_from_right"
-            app:exitAnim="@anim/exit_to_left"
-            app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
-        <argument android:name="scriptGuid"
-            app:argType="long"
-            android:defaultValue="-1L" />
-    </fragment>
-    <fragment
-        android:id="@+id/scriptsFragment"
-        android:name="smarthome.client.presentation.scripts.ScriptsFragment"
-        android:label="ScriptsFragment"
-        tools:layout="@layout/fragment_scripts">
-        <argument
-            android:name="show_bottom_bar"
-            app:argType="boolean"
-            android:defaultValue="true" />
-        <action
-            android:id="@+id/action_scriptsFragment_to_scriptDetails"
-            app:destination="@id/scriptDetails"
-            app:enterAnim="@anim/enter_from_right"
-            app:exitAnim="@anim/exit_to_left"
-            app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right" />
-    </fragment>
-    <fragment
         android:id="@+id/settingsFragment"
         android:name="smarthome.client.presentation.settings.SettingsFragment"
         android:label="SettingsFragment"
