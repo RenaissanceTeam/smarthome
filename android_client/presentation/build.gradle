@@ -12,6 +12,7 @@ dependencies {
     testImplementation groups.forTest
     implementation library.recyclerView
     implementation library.fastAdapter
+    implementation library.fastAdapterDiff
 
     // ViewModel and LiveData
     implementation groups.lifecycle

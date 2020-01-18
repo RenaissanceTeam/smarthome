@@ -5,32 +5,40 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
+import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.items.AbstractItem
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.device_card.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
-import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
 import smarthome.client.presentation.devices.deviceaddition.AdditionViewModel
+import smarthome.client.presentation.replace
 import smarthome.client.presentation.visible
+import smarthome.client.util.Data
+import smarthome.client.util.ErrorStatus
+import smarthome.client.util.LoadingStatus
 
 open class PendingDevice(
     val device: GeneralDeviceInfo,
     private val viewModel: AdditionViewModel
-) : AbstractItem<PendingDevice.ViewHolder>() {
+) : AbstractItem<PendingDevice.ViewHolder>(), KoinComponent {
     private val defaultExpanded = false
     private val isExpanded = BehaviorSubject.createDefault(defaultExpanded)
-    
     private val uiScope = CoroutineScope(Dispatchers.Main)
     
     private val acceptInProgress = BehaviorSubject.createDefault(false)
     private val deleteInProgress = BehaviorSubject.createDefault(false)
     
-    private val controllers = ItemAdapter<PendingController>().apply { set(device.controllers.map(::PendingController)) }
+    private val controllers = ItemAdapter<PendingController>()
+        .apply { set(device.controllers.map { PendingController(it.id) }) }
     
     override val layoutRes = R.layout.device_card
     override val type = 0
@@ -61,12 +69,12 @@ open class PendingDevice(
         }
     }
     
-    fun onControllerClicked(controller: Controller) {
-        viewModel.onControllerClicked(controller.id)
+    fun onControllerClicked(id: Long) {
+        viewModel.onControllerClicked(id)
     }
     
-    fun onLongControllerClicked(controller: Controller) {
-        viewModel.onControllerLongClicked(controller.id)
+    fun onLongControllerClicked(id: Long) {
+        viewModel.onControllerLongClicked(id)
     }
     
     class ViewHolder(private val view: View) : FastAdapter.ViewHolder<PendingDevice>(view) {
@@ -96,11 +104,11 @@ open class PendingDevice(
             view.controllers.layoutManager = GridLayoutManager(itemView.context, 2)
             view.controllers.adapter = FastAdapter.with(item.controllers).apply {
                 this.onClickListener = { _, _, controllerItem, _ ->
-                    item.onControllerClicked(controllerItem.controller)
+                    item.onControllerClicked(controllerItem.id)
                     true
                 }
                 this.onLongClickListener = { _, _, controllerItem, _ ->
-                    item.onLongControllerClicked(controllerItem.controller)
+                    item.onLongControllerClicked(controllerItem.id)
                     true
                 }
             }
