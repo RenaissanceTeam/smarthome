@@ -1,67 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:animateLayoutChanges="true"
     android:clickable="true"
     android:focusable="true"
-    android:animateLayoutChanges="true"
+    android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/colorAccentLight"
     app:cardCornerRadius="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:animateLayoutChanges="true"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/white"
-            tools:text="Some controller name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Some controller name" />
 
         <TextView
-            android:id="@+id/type"
+            android:id="@+id/type_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@id/name"
-            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintStart_toStartOf="@id/name_text"
+            app:layout_constraintTop_toBottomOf="@id/name_text"
             tools:text="dht" />
 
         <TextView
-            android:id="@+id/state"
+            android:id="@+id/state_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@id/type"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/type"
+            app:layout_constraintStart_toStartOf="@id/type_text"
+            app:layout_constraintTop_toBottomOf="@+id/type_text"
             tools:text="24 C" />
 
         <ProgressBar
             android:id="@+id/progress"
-            android:visibility="gone"
-            android:progressTint="@color/colorPrimary"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            style="?android:attr/progressBarStyleLarge"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

@@ -1,5 +1,6 @@
 package smarthome.client.data.retrofit
 
+import android.os.SystemClock
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -36,6 +37,7 @@ class RetrofitFactory(
     
     private fun addAuthorizationHeaderInHttpClient() = OkHttpClient.Builder()
         .addInterceptor { chain ->
+            SystemClock.sleep(1000)
             val ongoing = chain.request().newBuilder()
             val currentToken = getCurrentTokenUseCase.execute()
             if (currentToken is Data) {

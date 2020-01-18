@@ -36,5 +36,5 @@ ext {
     constraintLayout_version = "2.0.0-beta3"
     room_version = "2.2.3"
     latestFastAdapterRelease = "4.1.2"
-
+    epoxy_version = "3.9.0"
 }

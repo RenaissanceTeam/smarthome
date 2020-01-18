@@ -20,6 +20,8 @@ import smarthome.client.presentation.components.ControllerItem
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
 import smarthome.client.presentation.visible
+import smarthome.client.util.data
+import smarthome.client.util.log
 
 
 class DeviceDetails : Fragment() {
@@ -59,7 +61,7 @@ class DeviceDetails : Fragment() {
     
         viewModel.refresh.observe(this) { progress_bar.visible = it }
         viewModel.device.observe(this, ::bindDevice)
-        viewModel.controllers.observe(this) {
+        viewModel.controllersLiveData.observe(this) {
             itemAdapter.set(it)
         }
         viewModel.openController.onNavigate(this, ::openControllerDetails)
@@ -68,7 +70,7 @@ class DeviceDetails : Fragment() {
         controllers.adapter = FastAdapter.with(itemAdapter).apply {
             onClickListener = { _, _, item, _ ->
                 when (item) {
-                    is ControllerItem -> viewModel.onControllerClick(item.controller.id)
+                    is ControllerItem -> item.controller?.id?.let { viewModel.onControllerClick(it) }
                 }
                 true
             }

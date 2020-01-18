@@ -5,5 +5,5 @@ data class Device(
     val name: String,
     val description: String,
     val type: String,
-    val controllers: List<Controller>
+    val controllers: List<Long>
 )
