@@ -17,7 +17,7 @@ import smarthome.client.presentation.controllers.controllerdetail.statechanger.e
 
 
 class ReadStateChanger(
-    private val controller: Controller,
+    private val id: Long,
     private val readControllerUseCase: ReadControllerUseCase
 ) : ControllerStateChanger {
     private val uiScope = CoroutineScope(Dispatchers.Main)
@@ -31,7 +31,7 @@ class ReadStateChanger(
         view.read.setOnClickListener {
             uiScope.launch {
                 view.read.loading()
-                readControllerUseCase.runCatching { execute(controller.id) }
+                readControllerUseCase.runCatching { execute(id) }
                     .onSuccess { view.read.idle() }
                     .onFailure { view.read.error() }
             }

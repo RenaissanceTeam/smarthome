@@ -26,9 +26,6 @@ class AdditionFragment : Fragment() {
         viewModel.deviceStates.observe(this) {
             controller.setData(it, viewModel)
         }
-        viewModel.showEmpty.observe(this) {
-            empty_message.visible = it
-        }
         viewModel.refresh.observe(this) {
             refresh_layout.isRefreshing = it
         }
