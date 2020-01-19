@@ -161,4 +161,14 @@
     <action
         android:id="@+id/action_global_loginFragment"
         app:destination="@id/loginFragment" />
+    <fragment
+        android:id="@+id/scriptsFragment"
+        android:name="smarthome.client.presentation.scripts.ScriptsFragment"
+        android:label="ScriptsFragment"
+        tools:layout="@layout/fragment_scripts" >
+        <argument
+            android:name="show_bottom_bar"
+            android:defaultValue="true"
+            app:argType="boolean" />
+    </fragment>
 </navigation>
