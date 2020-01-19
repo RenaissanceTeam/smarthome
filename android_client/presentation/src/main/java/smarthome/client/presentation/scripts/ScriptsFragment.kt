@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_scripts.*
 import smarthome.client.presentation.R
+import smarthome.client.presentation.scripts.epoxy.ScriptsController
 
 class ScriptsFragment : Fragment() {
     
     private val viewModel by viewModels<ScriptsViewModel>()
+    private val itemsController = ScriptsController()
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -23,11 +27,21 @@ class ScriptsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         
         lifecycle.addObserver(viewModel)
+        
+        viewModel.refresh.observe(this) {
+            refresh_layout.isRefreshing = it
+        }
+        
+        viewModel.scripts.observe(this) {
+            itemsController.setData(it, viewModel)
+        }
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        
+        script_items.layoutManager = LinearLayoutManager(context)
+        script_items.adapter = itemsController.adapter
+        refresh_layout.setOnRefreshListener { viewModel.onRefresh() }
     }
 }

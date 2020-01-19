@@ -13,7 +13,7 @@ import smarthome.client.domain.api.conrollers.usecases.WriteStateToControllerUse
 import smarthome.client.presentation.R
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.error
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.idle
-import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.inflate
+import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.loading
 import smarthome.client.presentation.runInScope
 import smarthome.client.util.data
