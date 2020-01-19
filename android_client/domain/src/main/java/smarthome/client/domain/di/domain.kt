@@ -10,18 +10,16 @@ import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCas
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.main.BooleanState
 import smarthome.client.domain.api.main.StateMachine
+import smarthome.client.domain.api.scripts.usecases.FetchScriptsUseCase
 import smarthome.client.domain.api.usecase.CloudMessageUseCase
-import smarthome.client.domain.api.usecase.ControllersUseCase
-import smarthome.client.domain.api.usecase.DevicesUseCase
 import smarthome.client.domain.auth.usecases.*
 import smarthome.client.domain.conrollers.usecases.*
 import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.main.StateMachineImpl
+import smarthome.client.domain.scripts.usecases.FetchScriptsUseCaseImpl
 import smarthome.client.domain.usecases.CloudMessageUseCaseImpl
-import smarthome.client.domain.usecases.ControllersUseCaseImpl
-import smarthome.client.domain.usecases.DevicesUseCaseImpl
 
 val domain = module {
     // homeserver
@@ -50,10 +48,10 @@ val domain = module {
     factoryBy<WriteStateToControllerUseCase, WriteStateToControllerUseCaseImpl>()
     factoryBy<PipelineControllerToStorageUseCase, PipelineControllerToStorageUseCaseImpl>()
     
+    //scripts
+    factoryBy<FetchScriptsUseCase, FetchScriptsUseCaseImpl>()
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
-    factoryBy<ControllersUseCase, ControllersUseCaseImpl>()
-    factoryBy<DevicesUseCase, DevicesUseCaseImpl>()
     
     single(named("login")) {
         BooleanState()
