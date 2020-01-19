@@ -1,9 +1,9 @@
-package smarthome.client.presentation.scripts.epoxy
+package smarthome.client.presentation.scripts.all.epoxy
 
 import com.airbnb.epoxy.Typed2EpoxyController
 import smarthome.client.presentation.components.emptyItemView
-import smarthome.client.presentation.scripts.ScriptsViewModel
-import smarthome.client.presentation.scripts.items.ScriptsItemState
+import smarthome.client.presentation.scripts.all.ScriptsViewModel
+import smarthome.client.presentation.scripts.all.items.ScriptsItemState
 
 class ScriptsController: Typed2EpoxyController<List<ScriptsItemState>, ScriptsViewModel>() {
     override fun buildModels(scripts: List<ScriptsItemState>, viewModel: ScriptsViewModel) {

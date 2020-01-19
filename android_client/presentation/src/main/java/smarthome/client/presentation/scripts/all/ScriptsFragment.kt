@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts
+package smarthome.client.presentation.scripts.all
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_scripts.*
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.epoxy.ScriptsController
+import smarthome.client.presentation.scripts.all.epoxy.ScriptsController
 
 class ScriptsFragment : Fragment() {
     

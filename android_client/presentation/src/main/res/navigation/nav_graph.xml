@@ -163,7 +163,7 @@
         app:destination="@id/loginFragment" />
     <fragment
         android:id="@+id/scriptsFragment"
-        android:name="smarthome.client.presentation.scripts.ScriptsFragment"
+        android:name="smarthome.client.presentation.scripts.all.ScriptsFragment"
         android:label="ScriptsFragment"
         tools:layout="@layout/fragment_scripts" >
         <argument
