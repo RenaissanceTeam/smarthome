@@ -4,8 +4,4 @@ include ":app",
         ":data_api",
         ":domain_api",
         ":domain",
-        ":scripts",
-        ":scripts_api",
         ":entity"
-include ':navigation_api'
-include ':navigation'

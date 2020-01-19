@@ -5,14 +5,12 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
-import androidx.recyclerview.widget.GridLayoutManager
 import com.airbnb.epoxy.*
 import kotlinx.android.synthetic.main.pending_device_item.view.*
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.presentation.R
-import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.inflate
+import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.visible
-
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class PendingDeviceView @JvmOverloads constructor(
@@ -20,6 +18,10 @@ class PendingDeviceView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+    
+    init {
+        inflate(R.layout.pending_device_item)
+    }
     
     @ModelProp lateinit var device: GeneralDeviceInfo
     var onExpand: (() -> Unit)? = null @CallbackProp set
@@ -32,9 +34,6 @@ class PendingDeviceView @JvmOverloads constructor(
     var acceptInProgress: Boolean = false @ModelProp set
     var declineInProgress: Boolean = false @ModelProp set
     
-    init {
-        inflate(R.layout.pending_device_item)
-    }
     
     @AfterPropsSet
     fun useProps() {

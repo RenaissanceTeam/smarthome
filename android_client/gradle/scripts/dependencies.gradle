@@ -64,11 +64,7 @@ ext {
             domain_api               : project(":domain_api"),
             data                     : project(":data"),
             data_api                 : project(":data_api"),
-            scripts                  : project(":scripts"),
-            scripts_api              : project(":scripts_api"),
             entity                   : project(":entity"),
-            navigation               : project(":navigation"),
-            navigation_api           : project(":navigation_api"),
     ]
 
     groups = [
