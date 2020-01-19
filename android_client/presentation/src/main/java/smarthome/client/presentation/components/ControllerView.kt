@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import com.airbnb.epoxy.*
 import kotlinx.android.synthetic.main.controller_item.view.*
 import smarthome.client.presentation.R
-import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.inflate
+import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.visible
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
