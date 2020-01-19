@@ -5,6 +5,7 @@ import smarthome.client.entity.Script
 
 class ScriptDtoToScriptMapper {
     fun map(script: ScriptDto) = Script(
+        id = script.id,
         name = script.name
     )
 }

@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 import com.airbnb.epoxy.ModelView
 import kotlinx.android.synthetic.main.empty_item.view.*
 import smarthome.client.presentation.R
-import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.inflate
+import smarthome.client.presentation.util.inflate
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_MATCH_HEIGHT)
 class EmptyItemView @JvmOverloads constructor(

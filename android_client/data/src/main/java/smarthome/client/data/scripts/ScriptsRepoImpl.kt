@@ -12,7 +12,7 @@ class ScriptsRepoImpl(
     override suspend fun fetch(): List<Script> {
         // todo remove mock when endpoint is ready
         return (1..20).map {
-            Script("script # $it")
+            Script(it.toLong(), "script # $it")
         }
         
         val scriptsDtos = retrofitFactory.createApi(ScriptsApi::class.java)
