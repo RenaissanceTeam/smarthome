@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.items
+package smarthome.client.presentation.scripts.all.items
 
 import smarthome.client.entity.Script
 

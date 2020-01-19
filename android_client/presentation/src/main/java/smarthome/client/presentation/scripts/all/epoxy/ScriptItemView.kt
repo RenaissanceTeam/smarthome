@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.epoxy
+package smarthome.client.presentation.scripts.all.epoxy
 
 import android.content.Context
 import android.util.AttributeSet

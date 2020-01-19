@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts
+package smarthome.client.presentation.scripts.all
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.FetchScriptsUseCase
 import smarthome.client.presentation.runInScope
-import smarthome.client.presentation.scripts.items.ScriptsItemState
+import smarthome.client.presentation.scripts.all.items.ScriptsItemState
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.log
 
