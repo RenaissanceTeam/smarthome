@@ -25,7 +25,10 @@ inline fun <T, R> T.runInScope(scope: CoroutineScope, crossinline block: suspend
     return scope.launch { block() }
 }
 
-inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope, crossinline block: suspend T.() -> R): Job {
-    return scope.launch { runCatching { block() } }
+inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope,
+                                          crossinline onFailure: (Throwable) -> Unit = {},
+                                          crossinline block: suspend T.() -> R
+                                          ): Job {
+    return scope.launch { runCatching { block() }.onFailure(onFailure) }
 }
 
