@@ -10,12 +10,14 @@ import smarthome.client.entity.Script
 import smarthome.client.presentation.runInScope
 import smarthome.client.presentation.scripts.all.items.ScriptsItemState
 import smarthome.client.presentation.util.KoinViewModel
+import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.util.log
 
 class ScriptsViewModel : KoinViewModel() {
 
     val scripts = MutableLiveData<List<ScriptsItemState>>()
     val refresh = MutableLiveData<Boolean>()
+    val openAddition = NavigationLiveData()
     private val fetchScripts: FetchScriptsUseCase by inject()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -37,6 +39,10 @@ class ScriptsViewModel : KoinViewModel() {
 
             refresh.value = false
         }
+    }
+    
+    fun onAddScriptClicked() {
+        openAddition.trigger()
     }
 
     fun notRefreshing(): Boolean {

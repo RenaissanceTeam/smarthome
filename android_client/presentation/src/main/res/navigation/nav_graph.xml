@@ -170,5 +170,23 @@
             android:name="show_bottom_bar"
             android:defaultValue="true"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_scriptsFragment_to_addScriptInfoFragment"
+            app:destination="@id/addScriptInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addScriptInfoFragment"
+        android:name="smarthome.client.presentation.scripts.addition.AddScriptInfoFragment"
+        android:label="AddScriptInfoFragment"
+        tools:layout="@layout/fragment_add_script"
+        >
+        <argument
+            android:name="show_bottom_bar"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="show_tool_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
 </navigation>

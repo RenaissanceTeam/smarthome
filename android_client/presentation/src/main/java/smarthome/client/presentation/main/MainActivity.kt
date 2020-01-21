@@ -29,14 +29,14 @@ class MainActivity : FragmentActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         bottom_navigation.setupWithNavController(navController)
         
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        toolbar.setupWithNavController(navController, appBarConfiguration)
         
         navController.addOnDestinationChangedListener { _, _, args ->
-            bottom_navigation.visible = args?.getBoolean(
-                SHOW_BOTTOM_BAR) ?: false
+            bottom_navigation.visible = args?.getBoolean(SHOW_BOTTOM_BAR) ?: false
             toolbar.visible = args?.getBoolean(SHOW_TOOL_BAR) ?: false
         }
+        
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
     }
     
     private fun navigateToHomeServerSelection() {
