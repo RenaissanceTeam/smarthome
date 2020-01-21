@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import smarthome.client.presentation.R
@@ -23,8 +24,20 @@ class AddControllersToScriptFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         
+        toolbarController.setMenu(R.menu.save) {
+            if (it != R.id.save) return@setMenu
+            
+            viewModel.onSaveClicked()
+        }
+        
+        viewModel.finishFlow.onNavigate(this, ::finishFlow)
+        
         viewModel.scriptToAdd.observe(this) {
             toolbarController.setTitle(it.name)
         }
+    }
+    
+    private fun finishFlow() {
+        findNavController().popBackStack(R.id.addScriptInfoFragment, true)
     }
 }
