@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_scripts.*
 import smarthome.client.presentation.R
@@ -35,6 +36,13 @@ class ScriptsFragment : Fragment() {
         viewModel.scripts.observe(this) {
             itemsController.setData(it, viewModel)
         }
+    
+        viewModel.openAddition.onNavigate(this, ::openAddition)
+    }
+    
+    private fun openAddition() {
+        findNavController().navigate(
+            ScriptsFragmentDirections.actionScriptsFragmentToAddScriptInfoFragment())
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,5 +51,6 @@ class ScriptsFragment : Fragment() {
         script_items.layoutManager = LinearLayoutManager(context)
         script_items.adapter = itemsController.adapter
         refresh_layout.setOnRefreshListener { viewModel.onRefresh() }
+        add_script.setOnClickListener { viewModel.onAddScriptClicked() }
     }
 }
