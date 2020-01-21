@@ -22,6 +22,7 @@ dependencies {
     implementation library.rxAndroid
     implementation library.rxJava
     implementation groups.koinWithExt
+    implementation library.koinViewModel
     implementation library.processButton
     implementation library.ultraPtr
     implementation groups.androidXktx

@@ -2,6 +2,7 @@ package smarthome.client.presentation.di
 
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
+import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
@@ -13,6 +14,7 @@ import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.main.toolbar.ToolbarControllerImpl
 import smarthome.client.presentation.main.toolbar.ToolbarHolder
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
+import smarthome.client.presentation.scripts.addition.AddScriptViewModel
 
 val presentation = module {
     
@@ -31,4 +33,7 @@ val presentation = module {
     single { ToolbarHolder() }
     factoryBy<ToolbarController, ToolbarControllerImpl>()
     factory { (owner: LifecycleOwner, toolbar: Toolbar) -> ToolbarSetter(owner, toolbar, get()) }
+    
+    // scripts
+    viewModel { AddScriptViewModel() }
 }
