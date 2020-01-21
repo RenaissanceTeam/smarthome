@@ -22,6 +22,7 @@ class AddControllersToScriptFragment : Fragment() {
     
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        
         viewModel.scriptToAdd.observe(this) {
             toolbarController.setTitle(it.name)
         }

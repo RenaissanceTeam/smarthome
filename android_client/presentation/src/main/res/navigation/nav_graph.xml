@@ -27,19 +27,6 @@
             android:defaultValue="true" />
     </fragment>
     <fragment
-        android:id="@+id/actionFragment"
-        android:name="smarthome.client.presentation.scripts.scriptdetail.action.ActionFragment"
-        android:label="ActionFragment"
-        tools:layout="@layout/fragment_action" >
-        <action
-            android:id="@+id/action_actionFragment_to_deviceSelectorFragment"
-            app:destination="@id/deviceSelectorFragment"
-            app:enterAnim="@anim/enter_from_right"
-            app:exitAnim="@anim/exit_to_left"
-            app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
-    </fragment>
-    <fragment
         android:id="@+id/additionFragment"
         android:name="smarthome.client.presentation.devices.deviceaddition.AdditionFragment"
         android:label="AdditionFragment"
@@ -62,19 +49,6 @@
             android:name="show_bottom_bar"
             app:argType="boolean"
             android:defaultValue="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/conditionFragment"
-        android:name="smarthome.client.presentation.scripts.scriptdetail.condition.ConditionFragment"
-        android:label="ConditionFragment"
-        tools:layout="@layout/fragment_condition">
-        <action
-            android:id="@+id/action_conditionFragment_to_deviceSelectorFragment"
-            app:destination="@id/deviceSelectorFragment"
-            app:enterAnim="@anim/enter_from_right"
-            app:exitAnim="@anim/exit_to_left"
-            app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
     </fragment>
     <fragment
         android:id="@+id/controllerDetails"
@@ -164,46 +138,53 @@
     <fragment
         android:id="@+id/scriptsFragment"
         android:name="smarthome.client.presentation.scripts.all.ScriptsFragment"
-        android:label="ScriptsFragment"
-        tools:layout="@layout/fragment_scripts" >
+        android:label="@string/empty"
+        tools:layout="@layout/fragment_scripts">
         <argument
             android:name="show_bottom_bar"
             android:defaultValue="true"
             app:argType="boolean" />
         <action
             android:id="@+id/action_scriptsFragment_to_addScriptInfoFragment"
-            app:destination="@id/addScriptInfoFragment" />
+            app:destination="@id/addScriptInfoFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
     </fragment>
     <fragment
         android:id="@+id/addScriptInfoFragment"
         android:name="smarthome.client.presentation.scripts.addition.AddScriptInfoFragment"
-        android:label="AddScriptInfoFragment"
-        tools:layout="@layout/fragment_add_script"
-        >
+        android:label="@string/setup_script"
+        tools:layout="@layout/fragment_add_script">
         <argument
             android:name="show_bottom_bar"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
         <argument
             android:name="show_tool_bar"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_addScriptInfoFragment_to_addControllersToScriptFragment"
-            app:destination="@id/addControllersToScriptFragment" />
+            app:destination="@id/addControllersToScriptFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
     </fragment>
     <fragment
         android:id="@+id/addControllersToScriptFragment"
         android:name="smarthome.client.presentation.scripts.addition.AddControllersToScriptFragment"
-        android:label="AddControllersToScriptFragment"
+        android:label="@string/empty"
         tools:layout="@layout/fragment_add_controllers_to_script">
         <argument
             android:name="show_tool_bar"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
         <argument
             android:name="show_bottom_bar"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
 </navigation>
