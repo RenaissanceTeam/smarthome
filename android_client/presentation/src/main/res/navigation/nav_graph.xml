@@ -188,5 +188,22 @@
             android:name="show_tool_bar"
             app:argType="boolean"
             android:defaultValue="true" />
+        <action
+            android:id="@+id/action_addScriptInfoFragment_to_addControllersToScriptFragment"
+            app:destination="@id/addControllersToScriptFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addControllersToScriptFragment"
+        android:name="smarthome.client.presentation.scripts.addition.AddControllersToScriptFragment"
+        android:label="AddControllersToScriptFragment"
+        tools:layout="@layout/fragment_add_controllers_to_script">
+        <argument
+            android:name="show_tool_bar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+        <argument
+            android:name="show_bottom_bar"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 </navigation>

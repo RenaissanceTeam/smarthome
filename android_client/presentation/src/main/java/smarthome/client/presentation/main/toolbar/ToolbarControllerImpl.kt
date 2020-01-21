@@ -17,5 +17,10 @@ class ToolbarControllerImpl(
         val toolbar = toolbarHolder.toolbar ?: return
         toolbar.menu.clear()
     }
+    
+    override fun setTitle(value: String) {
+        val toolbar = toolbarHolder.toolbar ?: return
+        toolbar.title = value
+    }
 }
 
