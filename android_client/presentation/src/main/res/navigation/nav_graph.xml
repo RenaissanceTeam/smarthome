@@ -175,7 +175,7 @@
     </fragment>
     <fragment
         android:id="@+id/addControllersToScriptFragment"
-        android:name="smarthome.client.presentation.scripts.addition.AddControllersToScriptFragment"
+        android:name="smarthome.client.presentation.scripts.addition.graph.ScriptGraphFragment"
         android:label="@string/empty"
         tools:layout="@layout/fragment_add_controllers_to_script">
         <argument
