@@ -57,6 +57,7 @@ ext {
             epoxy                    : "com.airbnb.android:epoxy:$epoxy_version",
             epoxyAnnotations         : "com.airbnb.android:epoxy-processor:$epoxy_version",
             cicerone                 : "ru.terrakok.cicerone:cicerone:5.0.0",
+            fab                      : 'com.github.clans:fab:1.6.4',
 
             // modules
             presentation             : project(":presentation"),
