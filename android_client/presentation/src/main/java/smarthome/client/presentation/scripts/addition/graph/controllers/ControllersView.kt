@@ -3,7 +3,6 @@ package smarthome.client.presentation.scripts.addition.graph.controllers
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.VelocityTracker
 import android.widget.FrameLayout
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +13,6 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.controllers.epoxy.DevicesController
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
-import smarthome.client.util.log
 
 class ControllersView @JvmOverloads constructor(
     context: Context,
@@ -30,28 +28,32 @@ class ControllersView @JvmOverloads constructor(
     
         devices.layoutManager = LinearLayoutManager(context)
         devices.adapter = itemsController.adapter
-        
-        setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    viewModel.onActionDown(event.rawX, event.x)
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    viewModel.moveTo(event.rawX)
-                }
-                MotionEvent.ACTION_UP -> {
-                    viewModel.onActionUp()
-                }
-                else -> {
-                    false
-                }
-            }
-        }
-        
-        
+    
+        setupTouchListener()
+        onLayoutReady()
+    }
+    
+    private fun onLayoutReady() {
         post {
             viewModel.setWidth(width.toFloat())
             viewModel.onInit()
+        }
+    }
+    
+    private fun setupTouchListener() = setOnTouchListener { _, event ->
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                viewModel.onActionDown(event.rawX, event.x)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                viewModel.moveTo(event.rawX)
+            }
+            MotionEvent.ACTION_UP -> {
+                viewModel.onActionUp()
+            }
+            else -> {
+                false
+            }
         }
     }
     
@@ -60,11 +62,8 @@ class ControllersView @JvmOverloads constructor(
         
         val lifecycle = lifecycleOwner ?: return
         lifecycle.lifecycle.addObserver(viewModel)
-    
-        viewModel.jumpTo.observe(lifecycle) {
-            animate().translationX(it).duration = 0
-        }
-        viewModel.dragging.distinct().observe(lifecycle) {
+        
+        viewModel.jumpTo.distinct().observe(lifecycle) {
             animate().translationX(it).duration = 0
         }
         viewModel.animateTo.observe(lifecycle) {

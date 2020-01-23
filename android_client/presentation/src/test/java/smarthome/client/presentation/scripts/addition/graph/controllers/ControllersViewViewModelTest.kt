@@ -17,7 +17,7 @@ class ControllersViewViewModelTest {
     @Before
     fun setUp() {
         viewModel = ControllersViewViewModel()
-        viewModel.dragging.observeForever { }
+        viewModel.jumpTo.observeForever { }
     }
     
     @Test
@@ -25,7 +25,7 @@ class ControllersViewViewModelTest {
         viewModel.setWidth(100f)
         viewModel.onActionDown(310f, 0f)
         viewModel.moveTo(320f)
-        assertThat(viewModel.dragging.value).isEqualTo(10f)
+        assertThat(viewModel.jumpTo.value).isEqualTo(10f)
     }
     
     @Test
@@ -34,7 +34,7 @@ class ControllersViewViewModelTest {
         viewModel.onActionDown(310f, 0f)
         viewModel.moveTo(309f)
     
-        assertThat(viewModel.dragging.value).isEqualTo(0f)
+        assertThat(viewModel.jumpTo.value).isEqualTo(0f)
     }
     
     @Test
@@ -42,10 +42,10 @@ class ControllersViewViewModelTest {
         viewModel.setWidth(100f)
         viewModel.onActionDown(310f, 0f)
         viewModel.moveTo(200f)
-        assertThat(viewModel.dragging.value).isEqualTo(0f)
+        assertThat(viewModel.jumpTo.value).isEqualTo(0f)
 
         viewModel.moveTo(210f)
-        assertThat(viewModel.dragging.value).isEqualTo(10f)
+        assertThat(viewModel.jumpTo.value).isEqualTo(10f)
     }
     
     @Test
@@ -53,10 +53,10 @@ class ControllersViewViewModelTest {
         viewModel.setWidth(100f)
         viewModel.onActionDown(310f, 0f)
         viewModel.moveTo(450f)
-        assertThat(viewModel.dragging.value).isEqualTo(100f)
+        assertThat(viewModel.jumpTo.value).isEqualTo(100f)
     
         viewModel.moveTo(440f)
-        assertThat(viewModel.dragging.value).isEqualTo(90f)
+        assertThat(viewModel.jumpTo.value).isEqualTo(90f)
     }
     
     @Test
@@ -64,11 +64,11 @@ class ControllersViewViewModelTest {
         viewModel.setWidth(100f)
         viewModel.onActionDown(310f, 0f)
         viewModel.moveTo(320f)
-        assertThat(viewModel.dragging.value).isEqualTo(10f)
+        assertThat(viewModel.jumpTo.value).isEqualTo(10f)
     
         viewModel.onActionDown(310f, 90f)
         viewModel.moveTo(311f)
-        assertThat(viewModel.dragging.value).isEqualTo(10f) // value not changed
+        assertThat(viewModel.jumpTo.value).isEqualTo(10f) // value not changed
     }
     
     @Test
