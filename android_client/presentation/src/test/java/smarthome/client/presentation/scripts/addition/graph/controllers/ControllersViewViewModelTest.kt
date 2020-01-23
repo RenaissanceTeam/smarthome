@@ -2,10 +2,13 @@ package smarthome.client.presentation.scripts.addition.graph.controllers
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 
 class ControllersViewViewModelTest {
     
@@ -16,8 +19,14 @@ class ControllersViewViewModelTest {
     
     @Before
     fun setUp() {
+        startKoin {  }
         viewModel = ControllersViewViewModel()
         viewModel.jumpTo.observeForever { }
+    }
+    
+    @After
+    fun tearDown() {
+        stopKoin()
     }
     
     @Test
