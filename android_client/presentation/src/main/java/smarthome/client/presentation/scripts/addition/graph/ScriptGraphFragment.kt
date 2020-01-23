@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_add_controllers_to_script.*
+import kotlinx.android.synthetic.main.fragment_script_graph.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import smarthome.client.presentation.R
@@ -23,7 +23,7 @@ class ScriptGraphFragment : Fragment() {
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_add_controllers_to_script, container, false)
+        return inflater.inflate(R.layout.fragment_script_graph, container, false)
     }
     
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -44,10 +44,10 @@ class ScriptGraphFragment : Fragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    
+        
         add_controller.setOnClickListener {
-            fab_menu.hideMenu(true)
-            add_controllers.visible = true
+            fab_menu.close(true)
+            add_controllers.open()
         }
     }
     
