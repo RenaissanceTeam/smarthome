@@ -6,9 +6,12 @@ import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.widget.FrameLayout
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.snakydesign.livedataextensions.distinct
+import kotlinx.android.synthetic.main.scripts_controllers_to_add.view.*
 import org.koin.core.KoinComponent
 import smarthome.client.presentation.R
+import smarthome.client.presentation.scripts.addition.graph.controllers.epoxy.DevicesController
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.util.log
@@ -20,10 +23,14 @@ class ControllersView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
     
     private val viewModel = ControllersViewViewModel() // todo scoped inject
+    private val itemsController = DevicesController()
     
     init {
         inflate(R.layout.scripts_controllers_to_add)
     
+        devices.layoutManager = LinearLayoutManager(context)
+        devices.adapter = itemsController.adapter
+        
         setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -40,16 +47,20 @@ class ControllersView @JvmOverloads constructor(
                 }
             }
         }
+        
+        
+        post {
+            viewModel.setWidth(width.toFloat())
+            viewModel.onInit()
+        }
     }
     
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
         
-        log("on layout")
         val lifecycle = lifecycleOwner ?: return
-        
-        viewModel.setWidth(width.toFloat())
-        
+        lifecycle.lifecycle.addObserver(viewModel)
+    
         viewModel.jumpTo.observe(lifecycle) {
             animate().translationX(it).duration = 0
         }
@@ -59,8 +70,9 @@ class ControllersView @JvmOverloads constructor(
         viewModel.animateTo.observe(lifecycle) {
             animate().translationX(it).duration = 300
         }
-        
-        viewModel.onInit()
+        viewModel.devices.observe(lifecycle) {
+            itemsController.setData(it, viewModel)
+        }
     }
     
     fun open() {
