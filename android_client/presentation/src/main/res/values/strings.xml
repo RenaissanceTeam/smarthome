@@ -22,7 +22,8 @@
     <string name="add">add</string>
 
     <string name="alert_notification_channel">alert</string>
+    <string name="empty"/>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+<!--    Scripts-->
+    <string name="setup_script">Setup Script</string>
 </resources>

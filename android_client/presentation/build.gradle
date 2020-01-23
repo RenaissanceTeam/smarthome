@@ -21,7 +21,8 @@ dependencies {
     implementation library.coroutinesAndroid
     implementation library.rxAndroid
     implementation library.rxJava
-    implementation library.koin
+    implementation groups.koinWithExt
+    implementation library.koinViewModel
     implementation library.processButton
     implementation library.ultraPtr
     implementation groups.androidXktx
