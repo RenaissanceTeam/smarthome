@@ -3,9 +3,11 @@ package smarthome.client.presentation.scripts.addition.graph.controllers.epoxy
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.airbnb.epoxy.*
+import com.airbnb.epoxy.AfterPropsSet
+import com.airbnb.epoxy.ModelProp
+import com.airbnb.epoxy.ModelView
+import com.airbnb.epoxy.TextProp
 import kotlinx.android.synthetic.main.scripts_device_group_item.view.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.util.inflate

@@ -11,16 +11,15 @@ import smarthome.client.presentation.runInScopeCatchingAny
 import smarthome.client.presentation.scripts.addition.graph.controllers.epoxy.DeviceItemState
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.DataStatus
-import smarthome.client.util.log
 
 class ControllersViewViewModel : KoinViewModel() {
     
-    val dragging = MutableLiveData<Float>()
-    val animateTo = MutableLiveData<Float>()
     val jumpTo = MutableLiveData<Float>()
+    val animateTo = MutableLiveData<Float>()
     val devices = MutableLiveData<List<DeviceItemState>>()
     val controllers = mutableMapOf<Long, DataStatus<Controller>>()
     
+    private val observingController = mutableMapOf<Long, Boolean>()
     private val getGeneralDeviceInfo: GetGeneralDevicesInfo by inject()
     private val observeController: ObserveControllerUseCase by inject()
     private var currentSlide = 0f
@@ -55,7 +54,7 @@ class ControllersViewViewModel : KoinViewModel() {
         currentSlide = newX
         
         currentRelativeDragProgress = minOf(maxOf(currentRelativeDragProgress + delta, 0f), width)
-        dragging.value = currentRelativeDragProgress
+        jumpTo.value = currentRelativeDragProgress
         return true
     }
     
@@ -86,10 +85,12 @@ class ControllersViewViewModel : KoinViewModel() {
     }
     
     private fun fetchDevices() {
-        log("fetching devices")
         getGeneralDeviceInfo.runInScopeCatchingAny(viewModelScope) {
             val devices = execute()
             devices.flatMap { it.controllers }.forEach { id ->
+                if (observingController[id] == true) return@forEach
+    
+                observingController[id] = true
                 disposable.add(observeController.execute(id).subscribe {
                     controllers[id] = it
                 })

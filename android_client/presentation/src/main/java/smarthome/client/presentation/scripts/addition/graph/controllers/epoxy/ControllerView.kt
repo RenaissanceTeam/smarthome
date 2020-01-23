@@ -27,5 +27,4 @@ class ControllerView @JvmOverloads constructor(
         controller_name.text = name
         controller_state.text = state
     }
-    
  }
