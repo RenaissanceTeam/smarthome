@@ -177,7 +177,7 @@
         android:id="@+id/addControllersToScriptFragment"
         android:name="smarthome.client.presentation.scripts.addition.graph.ScriptGraphFragment"
         android:label="@string/empty"
-        tools:layout="@layout/fragment_add_controllers_to_script">
+        tools:layout="@layout/fragment_script_graph">
         <argument
             android:name="show_tool_bar"
             android:defaultValue="true"

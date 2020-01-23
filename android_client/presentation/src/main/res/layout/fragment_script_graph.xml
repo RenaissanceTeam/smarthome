@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/motion_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/motionscene_script_graph"
+    app:motionDebug="SHOW_ALL"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
+        android:id="@+id/script_graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/gray"
@@ -29,12 +33,11 @@
             android:layout_height="wrap_content"/>
     </com.github.clans.fab.FloatingActionMenu>
 
+
     <smarthome.client.presentation.scripts.addition.graph.controllers.ControllersView
         android:id="@+id/add_controllers"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone"
-        android:layout_width="100dp"
-        android:layout_height="0dp" />
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
