@@ -14,5 +14,6 @@
 
     <color name="reject">#D32F2F</color>
     <color name="accept">#388E3C</color>
+    <color name="black">#000000</color>
 
 </resources>
