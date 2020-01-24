@@ -24,6 +24,7 @@ class ScriptGraphView @JvmOverloads constructor(
         setOnDragListener { v, event ->
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
+                    log("s ${event.localState}")
                     val draggable =
                         event.localState as? GraphDraggable ?: return@setOnDragListener false
                     draggable.onDraggedToGraph()
