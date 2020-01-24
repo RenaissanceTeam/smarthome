@@ -7,14 +7,10 @@
     app:motionDebug="SHOW_ALL"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <smarthome.client.presentation.scripts.addition.graph.ScriptGraphView
         android:id="@+id/script_graph"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray"
-        android:text="STUB"
-        android:textSize="55sp"
-        android:gravity="center" />
+        android:layout_height="match_parent" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fab_menu"

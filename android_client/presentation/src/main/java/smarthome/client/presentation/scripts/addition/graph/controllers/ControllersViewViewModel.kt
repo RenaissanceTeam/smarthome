@@ -7,6 +7,7 @@ import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
+import smarthome.client.presentation.replace
 import smarthome.client.presentation.runInScopeCatchingAny
 import smarthome.client.presentation.scripts.addition.graph.controllers.epoxy.DeviceItemState
 import smarthome.client.presentation.util.KoinViewModel
@@ -20,6 +21,7 @@ class ControllersViewViewModel : KoinViewModel() {
     val controllers = mutableMapOf<Long, DataStatus<Controller>>()
     
     private val observingController = mutableMapOf<Long, Boolean>()
+    private val draggedControllers = mutableMapOf<Long, Boolean>()
     private val getGeneralDeviceInfo: GetGeneralDevicesInfo by inject()
     private val observeController: ObserveControllerUseCase by inject()
     private var currentSlide = 0f
@@ -93,6 +95,7 @@ class ControllersViewViewModel : KoinViewModel() {
                 observingController[id] = true
                 disposable.add(observeController.execute(id).subscribe {
                     controllers[id] = it
+                    triggerDevicesRebuildModels()
                 })
             }
             this@ControllersViewViewModel.devices.value = devices.map(::deviceToDeviceItemState)
@@ -103,7 +106,21 @@ class ControllersViewViewModel : KoinViewModel() {
         return DeviceItemState(device.id, device.name, device.controllers)
     }
     
+    fun onDraggedToGraph(id: Long) {
+        draggedControllers[id] = true
+        triggerDevicesRebuildModels()
+    }
+    
+    fun shouldShow(id: Long): Boolean {
+        return draggedControllers[id]?.not() ?: DEFAULT_SHOW
+    }
+    
+    private fun triggerDevicesRebuildModels() {
+        devices.value = devices.value ?: return
+    }
+    
     companion object {
         const val LEFT_SIDE_PERCENT = 0.3
+        const val DEFAULT_SHOW = true
     }
 }
