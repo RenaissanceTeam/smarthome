@@ -27,6 +27,7 @@ dependencies {
     implementation library.ultraPtr
     implementation groups.androidXktx
     implementation library.firebaseMessaging
+    implementation library.fab
 
     // modules
     implementation library.domain_api
