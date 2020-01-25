@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/motion_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/motionscene_script_graph"
+    app:motionDebug="SHOW_ALL"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/script_graph"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        android:text="STUB"
+        android:textSize="55sp"
+        android:gravity="center" />
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_controller"
+            android:layout_width="wrap_content"
+            app:fab_label="Controllers"
+            android:src="@drawable/ic_lamp"
+            android:layout_height="wrap_content"/>
+    </com.github.clans.fab.FloatingActionMenu>
+
+
+    <smarthome.client.presentation.scripts.addition.graph.controllers.ControllersView
+        android:id="@+id/add_controllers"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

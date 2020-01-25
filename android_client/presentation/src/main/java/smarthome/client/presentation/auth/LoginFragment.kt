@@ -26,6 +26,8 @@ class LoginFragment : Fragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        username.setText("a")
+        password.setText("a")
         
         viewModel.showProgress.observe(this) { progress.visible = it }
         login_button.setOnClickListener {
