@@ -21,6 +21,7 @@ class DevicesController : Typed2EpoxyController<List<DeviceItemState>, Controlle
                     
                     ControllerViewModel_().apply {
                         id(controllerId)
+                        controllerId(controllerId)
                         name(controller.data?.name.orEmpty())
                         state(controller.data?.state.orEmpty())
                         

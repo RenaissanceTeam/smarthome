@@ -21,6 +21,18 @@ fun <T> List<T>.replace(newItem: T, predicate: (T) -> Boolean): List<T> {
     return subList(0, index) + listOf(newItem) + subList(index + 1, size)
 }
 
+fun <T> MutableList<T>.replaceOrAdd(newItem: T, predicate: (T) -> Boolean): List<T> = apply {
+    if (containsThat(predicate)) {
+        replace(newItem, predicate)
+    } else {
+        add(newItem)
+    }
+}
+
+fun <T> List<T>.containsThat(predicate: (T) -> Boolean): Boolean {
+    return find(predicate) != null
+}
+
 inline fun <T, R> T.runInScope(scope: CoroutineScope, crossinline block: suspend T.() -> R): Job {
     return scope.launch { block() }
 }
