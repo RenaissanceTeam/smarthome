@@ -7,13 +7,12 @@ import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.widget.FrameLayout
-import com.airbnb.epoxy.AfterPropsSet
-import com.airbnb.epoxy.CallbackProp
-import com.airbnb.epoxy.ModelView
-import com.airbnb.epoxy.TextProp
+import com.airbnb.epoxy.*
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.presentation.R
+import smarthome.client.presentation.scripts.addition.graph.GraphBlock
 import smarthome.client.presentation.scripts.addition.graph.GraphDraggable
+import smarthome.client.presentation.scripts.addition.graph.Position
 import smarthome.client.presentation.util.CustomDragShadowBuilder
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.visible
@@ -35,6 +34,10 @@ class ControllerView @JvmOverloads constructor(
                 val shadowBuilder = CustomDragShadowBuilder(this@ControllerView, pressEvent)
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                 startDrag(data, shadowBuilder, this@ControllerView, 0)
+                dragTouchPosition =
+                    Position(
+                        pressEvent.x, pressEvent.y)
+                
                 visible = false
             }
         })
@@ -52,22 +55,37 @@ class ControllerView @JvmOverloads constructor(
     
     lateinit var name: CharSequence @TextProp set
     lateinit var state: CharSequence @TextProp set
+    var controllerId: Long = 0 @ModelProp set
     var onDraggedToGraph: (() -> Unit)? = null @CallbackProp set
+    private var dragTouchPosition = DEFAULT_TOUCH_POINT
     
     override fun onDraggedToGraph() {
-        log("to grp")
         onDraggedToGraph?.invoke()
     }
     
     override fun onDragCancelled() {
-        log("canc")
         visible = true
+    }
+    
+    override fun getBlock() = GraphBlock(id = controllerId, type = "controller")
+    
+    override fun moveTo(position: Position) {
+        log("move to $position")
+        x = position.x
+        y = position.y
+        invalidate()
     }
     
     @AfterPropsSet
     fun onPropsReady() {
+        dragTouchPosition = DEFAULT_TOUCH_POINT
         visible = true
         controller_name.text = name
         controller_state.text = state
+    }
+    
+    companion object {
+        private val DEFAULT_TOUCH_POINT =
+            Position(0f, 0f)
     }
  }

@@ -32,7 +32,6 @@ class DeviceView @JvmOverloads constructor(
     @AfterPropsSet
     fun onPropsReady() {
         device_name.text = deviceName
-        log("controllers size = ${controllers.size}")
         controllers_items.setModels(controllers)
     }
  }
