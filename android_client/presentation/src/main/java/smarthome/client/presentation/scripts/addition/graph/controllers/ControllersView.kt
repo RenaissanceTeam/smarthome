@@ -2,6 +2,7 @@ package smarthome.client.presentation.scripts.addition.graph.controllers
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.DragEvent
 import android.view.MotionEvent
 import android.widget.FrameLayout
 import androidx.lifecycle.observe
@@ -10,6 +11,7 @@ import com.snakydesign.livedataextensions.distinct
 import kotlinx.android.synthetic.main.scripts_controllers_to_add.view.*
 import org.koin.core.KoinComponent
 import smarthome.client.presentation.R
+import smarthome.client.presentation.scripts.addition.graph.GraphDraggable
 import smarthome.client.presentation.scripts.addition.graph.controllers.epoxy.DevicesController
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
@@ -72,8 +74,26 @@ class ControllersView @JvmOverloads constructor(
         viewModel.devices.observe(lifecycle) {
             itemsController.setData(it, viewModel)
         }
+        handleDroppedItemsAsCancelledDragAction()
     }
     
+    private fun handleDroppedItemsAsCancelledDragAction() {
+        setOnDragListener { v, event ->
+            when (event.action) {
+                DragEvent.ACTION_DROP -> {
+                    val draggable =
+                        event.localState as? GraphDraggable ?: return@setOnDragListener false
+                    draggable.onDragCancelled()
+                }
+            }
+            true
+        }
+    }
+    
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        setOnDragListener(null)
+    }
     fun open() {
         viewModel.open()
     }

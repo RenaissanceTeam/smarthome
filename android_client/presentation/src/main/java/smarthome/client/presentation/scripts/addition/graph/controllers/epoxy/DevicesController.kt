@@ -17,11 +17,14 @@ class DevicesController : Typed2EpoxyController<List<DeviceItemState>, Controlle
                 deviceName(device.name)
                 controllers(device.controllers.map { controllerId ->
                     val controller = viewModel.controllers[controllerId] ?: return@map null
+                    if (!viewModel.shouldShow(controllerId)) return@map null
                     
                     ControllerViewModel_().apply {
                         id(controllerId)
                         name(controller.data?.name.orEmpty())
                         state(controller.data?.state.orEmpty())
+                        
+                        onDraggedToGraph { viewModel.onDraggedToGraph(controllerId) }
                     }
                 }.filterNotNull())
             }
