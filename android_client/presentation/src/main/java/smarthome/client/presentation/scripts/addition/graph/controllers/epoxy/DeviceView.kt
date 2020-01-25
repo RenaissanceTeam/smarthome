@@ -11,6 +11,7 @@ import com.airbnb.epoxy.TextProp
 import kotlinx.android.synthetic.main.scripts_device_group_item.view.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.util.inflate
+import smarthome.client.util.log
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class DeviceView @JvmOverloads constructor(
@@ -31,6 +32,7 @@ class DeviceView @JvmOverloads constructor(
     @AfterPropsSet
     fun onPropsReady() {
         device_name.text = deviceName
+        log("controllers size = ${controllers.size}")
         controllers_items.setModels(controllers)
     }
  }
