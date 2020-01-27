@@ -6,6 +6,7 @@ import smarthome.client.presentation.util.KoinViewModel
 class ScriptGraphViewModel : KoinViewModel() {
     
     val blocks = MutableLiveData<MutableMap<GraphBlockIdentifier, GraphBlock>>(mutableMapOf())
+    val hiddenBlocks = MutableLiveData<MutableMap<GraphBlockIdentifier, Boolean>>()
     
     fun onDropped(info: DragOperationInfo, dropPosition: Position) {
         val identifier = info.blockId
@@ -16,5 +17,21 @@ class ScriptGraphViewModel : KoinViewModel() {
         
         current[identifier] = blockOnNewPosition
         blocks.value = current
+    }
+    
+    fun onDragStarted(id: GraphBlockIdentifier, dragTouch: Position): DragOperationInfo {
+        (hiddenBlocks.value ?: mutableMapOf())[id] = true
+        
+        triggerDevicesRebuildModels()
+        return DragOperationInfo("controllersHub", dragTouch, "controller",
+            ControllerGraphBlockIdentifier(id)) { droppedTo ->
+            when (droppedTo) {
+                "controllersHub" -> {
+                    onDragCancelled(id)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }
