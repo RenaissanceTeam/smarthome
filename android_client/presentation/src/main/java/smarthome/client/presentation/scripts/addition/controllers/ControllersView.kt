@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph.controllers
+package smarthome.client.presentation.scripts.addition.controllers
 
 import android.content.Context
 import android.util.AttributeSet
@@ -12,7 +12,8 @@ import kotlinx.android.synthetic.main.scripts_controllers_to_add.view.*
 import org.koin.core.KoinComponent
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.GraphDraggable
-import smarthome.client.presentation.scripts.addition.graph.controllers.epoxy.DevicesController
+import smarthome.client.presentation.scripts.addition.controllers.epoxy.DevicesController
+import smarthome.client.presentation.scripts.addition.graph.DragOperationInfo
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 
@@ -81,9 +82,10 @@ class ControllersView @JvmOverloads constructor(
         setOnDragListener { v, event ->
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
-                    val draggable =
-                        event.localState as? GraphDraggable ?: return@setOnDragListener false
-                    draggable.onDragCancelled()
+                    
+                    val dragInfo =
+                        event.localState as? DragOperationInfo ?: return@setOnDragListener false
+                    dragInfo.onDropTo("controllersHub")
                 }
             }
             true

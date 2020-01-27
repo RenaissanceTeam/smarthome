@@ -1,11 +1,9 @@
-package smarthome.client.presentation.scripts.addition.graph.controllers
+package smarthome.client.presentation.scripts.addition.controllers
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -16,7 +14,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
-import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 
 class ControllersViewViewModelTest {

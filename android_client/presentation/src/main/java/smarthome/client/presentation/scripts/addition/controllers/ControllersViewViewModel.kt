@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph.controllers
+package smarthome.client.presentation.scripts.addition.controllers
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -7,9 +7,11 @@ import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
-import smarthome.client.presentation.replace
 import smarthome.client.presentation.runInScopeCatchingAny
-import smarthome.client.presentation.scripts.addition.graph.controllers.epoxy.DeviceItemState
+import smarthome.client.presentation.scripts.addition.controllers.epoxy.DeviceItemState
+import smarthome.client.presentation.scripts.addition.graph.ControllerGraphBlockIdentifier
+import smarthome.client.presentation.scripts.addition.graph.DragOperationInfo
+import smarthome.client.presentation.scripts.addition.graph.Position
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.DataStatus
 
@@ -21,7 +23,7 @@ class ControllersViewViewModel : KoinViewModel() {
     val controllers = mutableMapOf<Long, DataStatus<Controller>>()
     
     private val observingController = mutableMapOf<Long, Boolean>()
-    private val draggedControllers = mutableMapOf<Long, Boolean>()
+    private val hiddenControllers = mutableMapOf<Long, Boolean>()
     private val getGeneralDeviceInfo: GetGeneralDevicesInfo by inject()
     private val observeController: ObserveControllerUseCase by inject()
     private var currentSlide = 0f
@@ -106,13 +108,28 @@ class ControllersViewViewModel : KoinViewModel() {
         return DeviceItemState(device.id, device.name, device.controllers)
     }
     
-    fun onDraggedToGraph(id: Long) {
-        draggedControllers[id] = true
+    fun onDragStarted(id: Long, dragTouch: Position): DragOperationInfo {
+        hiddenControllers[id] = true
+        triggerDevicesRebuildModels()
+        return DragOperationInfo("controllersHub", dragTouch, "controller",
+            ControllerGraphBlockIdentifier(id)) { droppedTo ->
+            when (droppedTo) {
+                "controllersHub" -> {
+                    onDragCancelled(id)
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+    
+    private fun onDragCancelled(id: Long) {
+        hiddenControllers[id] = false
         triggerDevicesRebuildModels()
     }
     
     fun shouldShow(id: Long): Boolean {
-        return draggedControllers[id]?.not() ?: DEFAULT_SHOW
+        return hiddenControllers[id]?.not() ?: DEFAULT_SHOW
     }
     
     private fun triggerDevicesRebuildModels() {
