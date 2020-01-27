@@ -22,7 +22,7 @@ class ScriptGraphView @JvmOverloads constructor(
         inflate(R.layout.scripts_graph)
     }
     
-    private var blockViews = mutableMapOf<Long, GraphDraggable>()
+    private var blockViews = mutableMapOf<GraphBlockIdentifier, GraphDraggable>()
     private val viewModel = ScriptGraphViewModel()
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
     
@@ -34,7 +34,7 @@ class ScriptGraphView @JvmOverloads constructor(
         val lifecycle = lifecycleOwner ?: return
         
         viewModel.blocks.observe(lifecycle) { blocks ->
-            blocks.forEach { block ->
+            blocks.values.forEach { block ->
                 var blockView = blockViews[block.id]
                 
                 if (blockView == null) {
@@ -52,11 +52,10 @@ class ScriptGraphView @JvmOverloads constructor(
         setOnDragListener { v, event ->
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
-                    val draggable =
-                        event.localState as? GraphDraggable ?: return@setOnDragListener false
-                
-                    draggable.onDraggedToGraph()
-                    viewModel.onDropped(draggable, Position(event.x, event.y)) // todo add shift with draggable.touchPosition
+                    val dragInfo =
+                        event.localState as? DragOperationInfo ?: return@setOnDragListener false
+                    dragInfo.onDropTo("graph")
+                    viewModel.onDropped(dragInfo, Position(event.x, event.y))
                 }
             }
             true
