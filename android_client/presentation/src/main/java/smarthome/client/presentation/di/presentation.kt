@@ -5,9 +5,8 @@ import androidx.lifecycle.LifecycleOwner
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import org.koin.experimental.builder.factory
 import org.koin.experimental.builder.factoryBy
-import smarthome.client.entity.Controller
+import org.koin.experimental.builder.singleBy
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.OnOffStateChanger
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.ReadStateChanger
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerFactory
@@ -20,6 +19,8 @@ import smarthome.client.presentation.scripts.addition.graph.ControllerBlockFacto
 import smarthome.client.presentation.scripts.addition.graph.GraphBlockFactory
 import smarthome.client.presentation.scripts.addition.graph.GraphBlockFactoryResolver
 import smarthome.client.presentation.scripts.addition.graph.GraphBlockFactoryResolverImpl
+import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
+import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBusImpl
 
 val presentation = module {
     
@@ -41,6 +42,7 @@ val presentation = module {
     
     // scripts
     viewModel { AddScriptViewModel() }
+    singleBy<GraphEventBus, GraphEventBusImpl>()
     factoryBy<GraphBlockFactoryResolver, GraphBlockFactoryResolverImpl>()
     factory<GraphBlockFactory>(named("controller")) { ControllerBlockFactoryImpl() }
 }
