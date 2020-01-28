@@ -35,17 +35,21 @@ class ScriptGraphView @JvmOverloads constructor(
         
         viewModel.blocks.observe(lifecycle) { blocks ->
             blocks.values.forEach { block ->
-                var blockView = blockViews[block.id]
-                
-                if (blockView == null) {
-                    val viewFactory = graphBlockFactoryResolver.resolve(block) ?: return@forEach
-                    blockView = viewFactory.inflate(graph, block)
-                    blockViews[block.id] = blockView
-                }
-                
-                blockView.moveTo(block.position)
+                getOrInflateBlockView(block).moveTo(block.position)
             }
         }
+    }
+    
+    private fun getOrInflateBlockView(block: GraphBlock): GraphDraggable {
+        var blockView = blockViews[block.id]
+        
+        if (blockView == null) {
+            val viewFactory = graphBlockFactoryResolver.resolve(block)
+            blockView = viewFactory.inflate(graph, block)
+            blockViews[block.id] = blockView
+        }
+        
+        return blockView
     }
     
     private fun handleDroppingBlocksOntoGraph() {
