@@ -25,7 +25,7 @@ class ScriptGraphView @JvmOverloads constructor(
         inflate(R.layout.scripts_graph)
     }
     
-    private var blockViews = mutableMapOf<GraphBlockIdentifier, GraphDraggable>()
+    private var blockViews = mutableMapOf<GraphBlockIdentifier, GraphBlockView>()
     private val viewModel = ScriptGraphViewModel()
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
     
@@ -38,12 +38,12 @@ class ScriptGraphView @JvmOverloads constructor(
         
         viewModel.blocks.observe(lifecycle) { blocks ->
             blocks.values.forEach { block ->
-                getOrInflateBlockView(block).moveTo(block.position)
+                getOrInflateBlockView(block).setData(block)
             }
         }
     }
     
-    private fun getOrInflateBlockView(block: GraphBlock): GraphDraggable {
+    private fun getOrInflateBlockView(block: GraphBlock): GraphBlockView {
         var blockView = blockViews[block.id]
         
         if (blockView == null) {
