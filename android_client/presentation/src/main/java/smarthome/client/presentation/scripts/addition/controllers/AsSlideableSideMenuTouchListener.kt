@@ -35,7 +35,7 @@ class AsSlideableSideMenuTouchListener : View.OnTouchListener {
     }
     
     fun onActionDown(at: Float, x: Float): Boolean {
-        if (x / width > ControllersViewViewModel.LEFT_SIDE_PERCENT) {
+        if (x / width > ControllersHubViewModel.LEFT_SIDE_PERCENT) {
             waitingForMove = false
             return false
         }

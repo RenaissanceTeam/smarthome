@@ -17,7 +17,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDra
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.DataStatus
 
-class ControllersViewViewModel : KoinViewModel() {
+class ControllersHubViewModel : KoinViewModel() {
     
     val devices = MutableLiveData<List<DeviceItemState>>()
     val controllers = mutableMapOf<Long, DataStatus<Controller>>()
@@ -34,18 +34,31 @@ class ControllersViewViewModel : KoinViewModel() {
         disposable.add(graphEventBus.observe()
             .filter {
                 it is ControllerDragEvent
-                    && (it.dragInfo.from == CONTROLLERS_HUB || it.dragInfo.to == CONTROLLERS_HUB)
+                    && (isFromHub(it) || isToHub(it))
             }
-            .subscribe {
-                val info = (it as? ControllerDragEvent) ?: return@subscribe
-    
-                when (it.dragInfo.status) {
-                    DRAG_START -> hideController(info.id)
+            .map { it as ControllerDragEvent }
+            .subscribe { event ->
+                when (event.dragInfo.status) {
+                    DRAG_START -> if (isFromHub(event)) hideController(event.id)
+                    DRAG_DROP -> if (isToHub(event)) handleDroppedController(event.id)
 //                    is EndControllerDrag -> {
 //                        // add this block to controllers (and start observing)
 //                    }
                 }
             })
+    }
+    
+    private fun isFromHub(event: ControllerDragEvent): Boolean {
+        return event.dragInfo.from == CONTROLLERS_HUB
+    }
+    
+    private fun isToHub(event: ControllerDragEvent): Boolean {
+        return event.dragInfo.to == CONTROLLERS_HUB
+    }
+    
+    private fun handleDroppedController(id: Long) {
+        hiddenControllers[id] = false
+        startObservingController(id)
     }
     
     fun onDropped(drag: GraphDragEvent) {
@@ -74,17 +87,19 @@ class ControllersViewViewModel : KoinViewModel() {
     private fun fetchDevices() {
         getGeneralDeviceInfo.runInScopeCatchingAny(viewModelScope) {
             val devices = execute()
-            devices.flatMap { it.controllers }.forEach { id ->
-                if (observingController[id] == true) return@forEach
-    
-                observingController[id] = true
-                disposable.add(observeController.execute(id).subscribe {
-                    controllers[id] = it
-                    triggerDevicesRebuildModels()
-                })
-            }
-            this@ControllersViewViewModel.devices.value = devices.map(::deviceToDeviceItemState)
+            devices.flatMap { it.controllers }.forEach(::startObservingController)
+            this@ControllersHubViewModel.devices.value = devices.map(::deviceToDeviceItemState)
         }
+    }
+    
+    private fun startObservingController(id: Long) {
+        if (observingController[id] == true) return
+    
+        observingController[id] = true
+        disposable.add(observeController.execute(id).subscribe {
+            controllers[id] = it
+            triggerDevicesRebuildModels()
+        })
     }
     
     private fun deviceToDeviceItemState(device: GeneralDeviceInfo): DeviceItemState {

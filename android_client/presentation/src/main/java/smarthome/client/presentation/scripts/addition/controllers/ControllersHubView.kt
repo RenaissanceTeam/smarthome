@@ -12,18 +12,17 @@ import kotlinx.android.synthetic.main.scripts_controllers_to_add.view.*
 import org.koin.core.KoinComponent
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DevicesController
-import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 
-class ControllersView @JvmOverloads constructor(
+class ControllersHubView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
     
-    private val viewModel = ControllersViewViewModel() // todo scoped inject
+    private val viewModel = ControllersHubViewModel() // todo scoped inject
     private val itemsController = DevicesController()
     private var onOpenMenuCallback: () -> Unit = {}
     

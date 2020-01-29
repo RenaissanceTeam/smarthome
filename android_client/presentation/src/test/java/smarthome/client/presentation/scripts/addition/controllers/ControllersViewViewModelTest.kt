@@ -2,10 +2,8 @@ package smarthome.client.presentation.scripts.addition.controllers
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.setMain
@@ -19,19 +17,21 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
+import smarthome.client.entity.Controller
 import smarthome.client.presentation.scripts.addition.graph.*
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
 import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
+import smarthome.client.util.DataStatus
 
 class ControllersViewViewModelTest {
     
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
     
-    private lateinit var viewModel: ControllersViewViewModel
+    private lateinit var viewModel: ControllersHubViewModel
     private lateinit var getDevicesUseCase: GetGeneralDevicesInfo
     private lateinit var observeControllerUseCase: ObserveControllerUseCase
     private lateinit var eventBus: GraphEventBus
@@ -42,7 +42,8 @@ class ControllersViewViewModelTest {
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
         getDevicesUseCase = mock { }
-        observeControllerUseCase = mock { }
+        observeControllerUseCase =
+            mock { on { execute(any()) }.then { Observable.empty<DataStatus<Controller>>() } }
         events = PublishSubject.create()
         eventBus = mock { on { observe() }.then { events } }
     
@@ -53,7 +54,7 @@ class ControllersViewViewModelTest {
                 single { eventBus }
             })
         }
-        viewModel = ControllersViewViewModel()
+        viewModel = ControllersHubViewModel()
     }
     
     @After
@@ -133,5 +134,43 @@ class ControllersViewViewModelTest {
         verify(otherDragEvent).copyWithDragInfo(argThat { this.status == DRAG_CANCEL
             && this.to == CONTROLLERS_HUB})
         verify(eventBus).addEvent(copiedEvent)
+    }
+    
+    @Test
+    fun `when controller is dropped to hub it should be observed`() {
+        val id = 123L
+        
+        events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
+            status = DRAG_DROP,
+            from = "ANYWHERE",
+            to = CONTROLLERS_HUB,
+            dragTouch = position1_1
+        )))
+        
+        verify(observeControllerUseCase).execute(id)
+    }
+    
+    @Test
+    fun `when controller is already observed and dropped to hub should be no calls to observe UC`() {
+        val id = 123L
+        
+        
+        events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
+            status = DRAG_DROP,
+            from = "ANYWHERE",
+            to = CONTROLLERS_HUB,
+            dragTouch = position1_1
+        )))
+        
+        verify(observeControllerUseCase).execute(id)
+        
+        events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
+            status = DRAG_DROP,
+            from = CONTROLLERS_HUB,
+            to = CONTROLLERS_HUB,
+            dragTouch = position1_1
+        )))
+        
+        verifyNoMoreInteractions(observeControllerUseCase)
     }
 }
