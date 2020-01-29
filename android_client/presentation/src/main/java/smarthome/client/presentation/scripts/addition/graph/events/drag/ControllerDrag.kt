@@ -1,4 +1,3 @@
 package smarthome.client.presentation.scripts.addition.graph.events.drag
 
-class EndDrag: DragEvent() {
-}
+class ControllerDrag(info: DragOperationInfo): DragEvent(info)

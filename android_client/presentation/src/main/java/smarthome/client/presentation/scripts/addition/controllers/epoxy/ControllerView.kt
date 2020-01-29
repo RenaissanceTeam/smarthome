@@ -10,13 +10,10 @@ import android.widget.FrameLayout
 import com.airbnb.epoxy.*
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.addition.graph.DragOperationInfo
-import smarthome.client.presentation.scripts.addition.graph.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.events.drag.DragOperationInfo
 import smarthome.client.presentation.scripts.addition.graph.Position
 import smarthome.client.presentation.util.CustomDragShadowBuilder
 import smarthome.client.presentation.util.inflate
-import smarthome.client.presentation.visible
-import smarthome.client.util.log
 
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)

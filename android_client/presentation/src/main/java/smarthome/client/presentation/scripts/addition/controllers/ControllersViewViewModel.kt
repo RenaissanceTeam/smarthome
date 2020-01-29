@@ -9,12 +9,14 @@ import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.runInScopeCatchingAny
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DeviceItemState
-import smarthome.client.presentation.scripts.addition.graph.ControllerGraphBlockIdentifier
-import smarthome.client.presentation.scripts.addition.graph.DragOperationInfo
+import smarthome.client.presentation.scripts.addition.graph.CONTROLLERS_HUB
+import smarthome.client.presentation.scripts.addition.graph.DRAG_START
+import smarthome.client.presentation.scripts.addition.graph.events.drag.DragOperationInfo
 import smarthome.client.presentation.scripts.addition.graph.Position
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
-import smarthome.client.presentation.scripts.addition.graph.events.drag.EndDrag
-import smarthome.client.presentation.scripts.addition.graph.events.drag.StartDrag
+import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDrag
+import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragOperationInfo
+import smarthome.client.presentation.scripts.addition.graph.events.drag.DragEvent
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.DataStatus
 
@@ -33,24 +35,33 @@ class ControllersViewViewModel : KoinViewModel() {
     
     init {
         disposable.add(graphEventBus.observe()
-            .filter {
-                true
-                // it is drag event and it is related to controllers hub
+            .filter { it is DragEvent
+                && it.info is ControllerDragOperationInfo
+                && (it.info.from == CONTROLLERS_HUB || it.info.to == CONTROLLERS_HUB)
             }
             .subscribe {
-                when (it) {
-                    is StartDrag -> {
-                        // hide dragged view
-                    }
-                    is EndDrag -> {
-                        // add this block to controllers (and start observing)
-                    }
+                val info = (it as? DragEvent)?.info as? ControllerDragOperationInfo ?: return@subscribe
+    
+                when (it.info.status) {
+                    DRAG_START -> hideController(info.id)
+//                    is EndControllerDrag -> {
+//                        // add this block to controllers (and start observing)
+//                    }
                 }
             })
     }
     
+    fun onDropped(dragInfo: DragOperationInfo) {
+    
+    }
+    
     fun open() {
         onFirstShow
+    }
+    
+    private fun hideController(id: Long) {
+        hiddenControllers[id] = true
+        triggerDevicesRebuildModels()
     }
     
     private fun fetchDevices() {
@@ -74,23 +85,17 @@ class ControllersViewViewModel : KoinViewModel() {
     }
     
     fun onDragStarted(id: Long, dragTouch: Position): DragOperationInfo {
-        hiddenControllers[id] = true
-        triggerDevicesRebuildModels()
-        return DragOperationInfo("controllersHub", dragTouch, "controller",
-            ControllerGraphBlockIdentifier(id)) { droppedTo ->
-            when (droppedTo) {
-                "controllersHub" -> {
-                    onDragCancelled(id)
-                    true
-                }
-                else -> false
-            }
-        }
-    }
-    
-    private fun onDragCancelled(id: Long) {
-        hiddenControllers[id] = false
-        triggerDevicesRebuildModels()
+//        return DragOperationInfo("controllersHub", dragTouch, "controller",
+//            ControllerGraphBlockIdentifier(id)) { droppedTo ->
+//            when (droppedTo) {
+//                "controllersHub" -> {
+//                    onDragCancelled(id)
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
+        TODO()
     }
     
     fun shouldShow(id: Long): Boolean {
