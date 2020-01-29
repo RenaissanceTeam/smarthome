@@ -3,13 +3,11 @@ package smarthome.client.presentation.scripts.addition.graph.views
 import android.content.ClipData
 import android.content.Context
 import android.util.AttributeSet
-import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.widget.FrameLayout
-import com.airbnb.epoxy.ModelView
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.addition.graph.DragOperationInfo
+import smarthome.client.presentation.scripts.addition.graph.events.drag.DragOperationInfo
 import smarthome.client.presentation.scripts.addition.graph.GraphDraggable
 import smarthome.client.presentation.scripts.addition.graph.Position
 import smarthome.client.presentation.util.CustomDragShadowBuilder
