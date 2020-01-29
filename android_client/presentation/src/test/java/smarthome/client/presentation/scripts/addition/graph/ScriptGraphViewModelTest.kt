@@ -1,10 +1,8 @@
 package smarthome.client.presentation.scripts.addition.graph
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.*
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +20,11 @@ import smarthome.client.entity.Controller
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
+import smarthome.client.presentation.scripts.addition.graph.views.state.ControllerBlock
+import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlockResolver
 import smarthome.client.util.DataStatus
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class ScriptGraphViewModelTest {
     @get:Rule
@@ -33,7 +35,7 @@ class ScriptGraphViewModelTest {
     private lateinit var events: PublishSubject<GraphEvent>
     private val position1_1 = Position(1f, 1f)
     private lateinit var viewModel: ScriptGraphViewModel
-    
+    private lateinit var blockResolver: GraphBlockResolver
     
     @Before
     fun setUp() {
@@ -42,11 +44,12 @@ class ScriptGraphViewModelTest {
             mock { on { execute(any()) }.then { Observable.empty<DataStatus<Controller>>() } }
         events = PublishSubject.create()
         eventBus = mock { on { observe() }.then { events } }
-    
+        blockResolver = mock { }
         startKoin {
             modules(module {
                 single { observeControllerUseCase }
                 single { eventBus }
+                single { blockResolver }
             })
         }
         
@@ -92,11 +95,34 @@ class ScriptGraphViewModelTest {
     }
     
     @Test
-    fun `when drop controller from hub should add create view for it`() {
+    fun `when drop controller from hub should resolve block for it and emit`() {
         val id = 123L
-//        events.onNext(ControllerDragEvent(id = id, dragInfo = CommonDragInfo(
-//            status =
-//        )))
+        val blockId = ControllerGraphBlockIdentifier(id)
+        val dropEvent = ControllerDragEvent(id = id, dragInfo = CommonDragInfo(
+            status = DRAG_DROP,
+            to = GRAPH,
+            from = CONTROLLERS_HUB,
+            position = position1_1
+        ))
+        whenever(blockResolver.resolveIdentifier(dropEvent)).then { blockId }
+        val controllerBlock = mock<ControllerBlock> {
+            on { this.id }.then { blockId }
+            on { position }.then { position1_1 }
+        }
+        whenever(controllerBlock.copyWithPosition(any())).then { controllerBlock }
+        whenever(blockResolver.createBlock(dropEvent)).then { controllerBlock }
+
+        events.onNext(dropEvent)
+        
+        val blocks = viewModel.blocks.value
+        assertNotNull(blocks)
+        
+        val addedBlock = blocks[blockId]
+        assertNotNull(addedBlock)
+        
+        assertTrue(addedBlock is ControllerBlock)
+        assertThat(addedBlock.id).isEqualTo(blockId)
+        assertThat(addedBlock.position).isEqualTo(position1_1)
     }
     
     
