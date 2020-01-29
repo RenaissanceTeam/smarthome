@@ -9,11 +9,9 @@ import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.runInScopeCatchingAny
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DeviceItemState
-import smarthome.client.presentation.scripts.addition.graph.*
+import smarthome.client.presentation.scripts.addition.graph.Position
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
-import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
-import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
-import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
+import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.DataStatus
 
@@ -41,9 +39,6 @@ class ControllersHubViewModel : KoinViewModel() {
                 when (event.dragInfo.status) {
                     DRAG_START -> if (isFromHub(event)) hideController(event.id)
                     DRAG_DROP -> if (isToHub(event)) handleDroppedController(event.id)
-//                    is EndControllerDrag -> {
-//                        // add this block to controllers (and start observing)
-//                    }
                 }
             })
     }
@@ -106,18 +101,15 @@ class ControllersHubViewModel : KoinViewModel() {
         return DeviceItemState(device.id, device.name, device.controllers)
     }
     
-    fun onDragStarted(id: Long, dragTouch: Position): CommonDragInfo {
-//        return DragOperationInfo("controllersHub", dragTouch, "controller",
-//            ControllerGraphBlockIdentifier(id)) { droppedTo ->
-//            when (droppedTo) {
-//                "controllersHub" -> {
-//                    onDragCancelled(id)
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
-        TODO()
+    fun onDragStarted(id: Long, dragTouch: Position): ControllerDragEvent {
+        return ControllerDragEvent(
+            id = id,
+            dragInfo = CommonDragInfo(
+                status = DRAG_START,
+                dragTouch = dragTouch,
+                from = CONTROLLERS_HUB
+            )
+        ).also(graphEventBus::addEvent)
     }
     
     fun shouldShow(id: Long): Boolean {

@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph
+package smarthome.client.presentation.scripts.addition.graph.events.drag
 
 const val CONTROLLERS_HUB = "CONTROLLERS_HUB"
 const val DRAG_START = "DRAG_START"

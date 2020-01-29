@@ -1,5 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph
 
+import android.view.DragEvent
 import androidx.lifecycle.MutableLiveData
 import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
 import smarthome.client.presentation.util.KoinViewModel
@@ -9,7 +10,7 @@ class ScriptGraphViewModel : KoinViewModel() {
     val blocks = MutableLiveData<MutableMap<GraphBlockIdentifier, GraphBlock>>(mutableMapOf())
 //    val hiddenBlocks = MutableLiveData<MutableMap<GraphBlockIdentifier, Boolean>>()
     
-    fun onDropped(info: CommonDragInfo, dropPosition: Position) {
+    fun onDropped(info: DragEvent, dropPosition: Position) {
 //        val identifier = info.blockId
 //        val current = blocks.value ?: mutableMapOf()
 //

@@ -21,9 +21,7 @@ import smarthome.client.entity.Controller
 import smarthome.client.presentation.scripts.addition.graph.*
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
-import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
-import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
-import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
+import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.util.DataStatus
 
 class ControllersViewViewModelTest {
@@ -132,7 +130,8 @@ class ControllersViewViewModelTest {
         viewModel.onDropped(otherDragEvent)
         
         verify(otherDragEvent).copyWithDragInfo(argThat { this.status == DRAG_CANCEL
-            && this.to == CONTROLLERS_HUB})
+            && this.to == CONTROLLERS_HUB
+        })
         verify(eventBus).addEvent(copiedEvent)
     }
     
@@ -172,5 +171,19 @@ class ControllersViewViewModelTest {
         )))
         
         verifyNoMoreInteractions(observeControllerUseCase)
+    }
+    
+    @Test
+    fun `when drag started should add to event bus`() {
+        val id = 123L
+        viewModel.onDragStarted(id, position1_1)
+        
+        verify(eventBus).addEvent(argThat {
+            this is ControllerDragEvent
+                && this.id == id
+                && this.dragInfo.status == DRAG_START
+                && this.dragInfo.from == CONTROLLERS_HUB
+                && this.dragInfo.dragTouch == position1_1
+        })
     }
 }
