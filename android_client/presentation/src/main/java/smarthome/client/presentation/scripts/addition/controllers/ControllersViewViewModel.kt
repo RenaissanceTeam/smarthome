@@ -12,6 +12,9 @@ import smarthome.client.presentation.scripts.addition.controllers.epoxy.DeviceIt
 import smarthome.client.presentation.scripts.addition.graph.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.scripts.addition.graph.DragOperationInfo
 import smarthome.client.presentation.scripts.addition.graph.Position
+import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
+import smarthome.client.presentation.scripts.addition.graph.events.drag.EndDrag
+import smarthome.client.presentation.scripts.addition.graph.events.drag.StartDrag
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.DataStatus
 
@@ -26,12 +29,31 @@ class ControllersViewViewModel : KoinViewModel() {
     private val hiddenControllers = mutableMapOf<Long, Boolean>()
     private val getGeneralDeviceInfo: GetGeneralDevicesInfo by inject()
     private val observeController: ObserveControllerUseCase by inject()
+    private val graphEventBus: GraphEventBus by inject()
     private var currentSlide = 0f
     private var startSlide = 0f
     private var currentRelativeDragProgress = 0f
     private var width = 0f
     private var waitingForMove = false
     private val onFirstShow by lazy { fetchDevices() }
+    
+    init {
+        disposable.add(graphEventBus.observe()
+            .filter {
+                true
+                // it is drag event and it is related to controllers hub
+            }
+            .subscribe {
+                when (it) {
+                    is StartDrag -> {
+                        // hide dragged view
+                    }
+                    is EndDrag -> {
+                        // add this block to controllers (and start observing)
+                    }
+                }
+            })
+    }
     
     fun open() {
         animateTo.value = 0f
