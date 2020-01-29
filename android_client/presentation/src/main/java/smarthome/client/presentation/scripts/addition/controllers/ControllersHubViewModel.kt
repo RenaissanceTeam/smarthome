@@ -32,23 +32,15 @@ class ControllersHubViewModel : KoinViewModel() {
         disposable.add(graphEventBus.observe()
             .filter {
                 it is ControllerDragEvent
-                    && (isFromHub(it) || isToHub(it))
+                    && (it.isFromOrTo(CONTROLLERS_HUB))
             }
             .map { it as ControllerDragEvent }
             .subscribe { event ->
                 when (event.dragInfo.status) {
-                    DRAG_START -> if (isFromHub(event)) hideController(event.id)
-                    DRAG_DROP -> if (isToHub(event)) handleDroppedController(event.id)
+                    DRAG_START -> if (event.isFrom(CONTROLLERS_HUB)) hideController(event.id)
+                    DRAG_DROP -> if (event.isTo(CONTROLLERS_HUB)) handleDroppedController(event.id)
                 }
             })
-    }
-    
-    private fun isFromHub(event: ControllerDragEvent): Boolean {
-        return event.dragInfo.from == CONTROLLERS_HUB
-    }
-    
-    private fun isToHub(event: ControllerDragEvent): Boolean {
-        return event.dragInfo.to == CONTROLLERS_HUB
     }
     
     private fun handleDroppedController(id: Long) {

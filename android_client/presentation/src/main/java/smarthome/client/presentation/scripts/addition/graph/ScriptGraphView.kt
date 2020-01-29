@@ -9,8 +9,9 @@ import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
+import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.views.factory.GraphBlockFactoryResolver
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 
