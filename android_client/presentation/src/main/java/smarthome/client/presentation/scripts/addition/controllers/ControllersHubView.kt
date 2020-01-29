@@ -68,9 +68,9 @@ class ControllersHubView @JvmOverloads constructor(
         setOnDragListener { v, event ->
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
-                    val dragInfo = event.localState as? GraphDragEvent ?: return@setOnDragListener false
+                    val dragEvent = event.localState as? GraphDragEvent ?: return@setOnDragListener false
                     
-                    viewModel.onDropped(dragInfo)
+                    viewModel.onDropped(dragEvent)
                 }
             }
             true
