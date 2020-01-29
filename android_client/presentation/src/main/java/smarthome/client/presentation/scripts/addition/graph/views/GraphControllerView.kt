@@ -7,7 +7,7 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.widget.FrameLayout
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DragOperationInfo
+import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
 import smarthome.client.presentation.scripts.addition.graph.GraphDraggable
 import smarthome.client.presentation.scripts.addition.graph.Position
 import smarthome.client.presentation.util.CustomDragShadowBuilder
@@ -18,7 +18,7 @@ class GraphControllerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), GraphDraggable {
-    lateinit var onDragStarted: (Position) -> DragOperationInfo
+    lateinit var onDragStarted: (Position) -> CommonDragInfo
     
     init {
         inflate(R.layout.scripts_controller_item)

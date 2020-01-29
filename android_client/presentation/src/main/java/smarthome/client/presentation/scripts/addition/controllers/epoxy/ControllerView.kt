@@ -10,7 +10,7 @@ import android.widget.FrameLayout
 import com.airbnb.epoxy.*
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DragOperationInfo
+import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
 import smarthome.client.presentation.scripts.addition.graph.Position
 import smarthome.client.presentation.util.CustomDragShadowBuilder
 import smarthome.client.presentation.util.inflate
@@ -51,7 +51,7 @@ class ControllerView @JvmOverloads constructor(
     lateinit var name: CharSequence @TextProp set
     lateinit var state: CharSequence @TextProp set
     
-    var onDragStarted: ((Position) -> DragOperationInfo)? = null @CallbackProp set
+    var onDragStarted: ((Position) -> CommonDragInfo)? = null @CallbackProp set
 
     @AfterPropsSet
     fun onPropsReady() {

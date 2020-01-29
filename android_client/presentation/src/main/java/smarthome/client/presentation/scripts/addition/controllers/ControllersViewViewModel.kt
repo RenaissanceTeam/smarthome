@@ -9,14 +9,11 @@ import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.runInScopeCatchingAny
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DeviceItemState
-import smarthome.client.presentation.scripts.addition.graph.CONTROLLERS_HUB
-import smarthome.client.presentation.scripts.addition.graph.DRAG_START
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DragOperationInfo
-import smarthome.client.presentation.scripts.addition.graph.Position
+import smarthome.client.presentation.scripts.addition.graph.*
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
-import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDrag
-import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragOperationInfo
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DragEvent
+import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
+import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
+import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.DataStatus
 
@@ -35,14 +32,14 @@ class ControllersViewViewModel : KoinViewModel() {
     
     init {
         disposable.add(graphEventBus.observe()
-            .filter { it is DragEvent
-                && it.info is ControllerDragOperationInfo
-                && (it.info.from == CONTROLLERS_HUB || it.info.to == CONTROLLERS_HUB)
+            .filter {
+                it is ControllerDragEvent
+                    && (it.dragInfo.from == CONTROLLERS_HUB || it.dragInfo.to == CONTROLLERS_HUB)
             }
             .subscribe {
-                val info = (it as? DragEvent)?.info as? ControllerDragOperationInfo ?: return@subscribe
+                val info = (it as? ControllerDragEvent) ?: return@subscribe
     
-                when (it.info.status) {
+                when (it.dragInfo.status) {
                     DRAG_START -> hideController(info.id)
 //                    is EndControllerDrag -> {
 //                        // add this block to controllers (and start observing)
@@ -51,8 +48,18 @@ class ControllersViewViewModel : KoinViewModel() {
             })
     }
     
-    fun onDropped(dragInfo: DragOperationInfo) {
+    fun onDropped(drag: GraphDragEvent) {
+        if (drag is ControllerDragEvent) {
+            val dropInfo = drag.dragInfo.copy(to = CONTROLLERS_HUB, status = DRAG_DROP)
+            val dropEvent = drag.copy(dragInfo = dropInfo)
+            
+            graphEventBus.addEvent(dropEvent)
+        } else {
+            val cancelInfo = drag.dragInfo.copy(to = CONTROLLERS_HUB, status = DRAG_CANCEL)
+            val cancelEvent = drag.copyWithDragInfo(cancelInfo)
     
+            graphEventBus.addEvent(cancelEvent)
+        }
     }
     
     fun open() {
@@ -84,7 +91,7 @@ class ControllersViewViewModel : KoinViewModel() {
         return DeviceItemState(device.id, device.name, device.controllers)
     }
     
-    fun onDragStarted(id: Long, dragTouch: Position): DragOperationInfo {
+    fun onDragStarted(id: Long, dragTouch: Position): CommonDragInfo {
 //        return DragOperationInfo("controllersHub", dragTouch, "controller",
 //            ControllerGraphBlockIdentifier(id)) { droppedTo ->
 //            when (droppedTo) {
