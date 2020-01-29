@@ -12,7 +12,8 @@ import kotlinx.android.synthetic.main.scripts_controllers_to_add.view.*
 import org.koin.core.KoinComponent
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DevicesController
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DragOperationInfo
+import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
+import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 
@@ -68,10 +69,7 @@ class ControllersView @JvmOverloads constructor(
         setOnDragListener { v, event ->
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
-                    
-                    val dragInfo =
-                        event.localState as? DragOperationInfo
-                            ?: return@setOnDragListener false
+                    val dragInfo = event.localState as? GraphDragEvent ?: return@setOnDragListener false
                     viewModel.onDropped(dragInfo)
                 }
             }

@@ -2,6 +2,7 @@ package smarthome.client.presentation.scripts.addition.controllers
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -18,16 +19,12 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
-import smarthome.client.presentation.scripts.addition.graph.CONTROLLERS_HUB
-import smarthome.client.presentation.scripts.addition.graph.DRAG_DROP
-import smarthome.client.presentation.scripts.addition.graph.DRAG_START
-import smarthome.client.presentation.scripts.addition.graph.Position
+import smarthome.client.presentation.scripts.addition.graph.*
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
-import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragOperationInfo
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DragEvent
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DragOperationInfo
-import smarthome.client.presentation.scripts.addition.graph.events.drag.UNKNOWN
+import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
+import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
+import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 
 class ControllersViewViewModelTest {
     
@@ -69,28 +66,17 @@ class ControllersViewViewModelTest {
         val id = 1L
         
         assertThat(viewModel.shouldShow(id)).isEqualTo(true)
-        
-        events.onNext(DragEvent(info = ControllerDragOperationInfo(
+    
+        events.onNext(ControllerDragEvent(
             id = id,
-            status = DRAG_START,
-            from = CONTROLLERS_HUB,
-            dragTouch = position1_1
-        )))
+            dragInfo = CommonDragInfo(
+                status = DRAG_START,
+                from = CONTROLLERS_HUB,
+                dragTouch = position1_1
+            ))
+        )
         
         assertThat(viewModel.shouldShow(id)).isEqualTo(false)
-    }
-    
-    @Test
-    fun `should not accept types other than controller`() {
-        assertThat(viewModel.shouldShow(1)).isEqualTo(true)
-        
-        events.onNext(DragEvent(info = DragOperationInfo(
-            status = DRAG_START,
-            from = CONTROLLERS_HUB,
-            dragTouch = position1_1
-        )))
-        
-        assertThat(viewModel.shouldShow(1)).isEqualTo(true)
     }
     
     @Test
@@ -98,41 +84,54 @@ class ControllersViewViewModelTest {
         val id = 1L
         
         assertThat(viewModel.shouldShow(id)).isEqualTo(true)
-        events.onNext(DragEvent(ControllerDragOperationInfo(id = id,
-            status = DRAG_START,
-            from = UNKNOWN,
-            to = UNKNOWN,
-            dragTouch = position1_1
-        )))
-        
+        events.onNext(ControllerDragEvent(
+            id = id,
+            dragInfo = CommonDragInfo(
+                status = DRAG_START,
+                from = UNKNOWN,
+                to = UNKNOWN,
+                dragTouch = position1_1
+            ))
+        )
+    
         assertThat(viewModel.shouldShow(id)).isEqualTo(true)
     }
     
     @Test
     fun `when drop controller should push drop event to event bus with updated status and destination`() {
         val id = 1L
-        val info = ControllerDragOperationInfo(id = id, from = CONTROLLERS_HUB,
-            status = DRAG_START, dragTouch = position1_1)
+        val info = ControllerDragEvent(
+            id = id,
+            dragInfo = CommonDragInfo(
+                status = DRAG_START,
+                from = CONTROLLERS_HUB,
+                dragTouch = position1_1
+            )
+        )
+        
         viewModel.onDropped(info)
     
-        
-        verify(eventBus).addEvent(argThat { this is DragEvent
-            && this.info is ControllerDragOperationInfo
-            && this.info.to == CONTROLLERS_HUB
-            && this.info.status == DRAG_DROP
+    
+        verify(eventBus).addEvent(argThat {
+            this is ControllerDragEvent
+                && this.dragInfo.to == CONTROLLERS_HUB
+                && this.dragInfo.status == DRAG_DROP
         })
     }
     
     @Test
     fun `when drop other type should push cancel drop event to event bus`() {
-    
+        val copiedEvent = mock<GraphDragEvent>()
+        val otherDragEvent = mock<GraphDragEvent> {
+            on { dragInfo }.then { CommonDragInfo(from = CONTROLLERS_HUB,
+                status = DRAG_START, dragTouch = position1_1) }
+            on { copyWithDragInfo(any()) }.then { copiedEvent }
+        }
+        
+        viewModel.onDropped(otherDragEvent)
+        
+        verify(otherDragEvent).copyWithDragInfo(argThat { this.status == DRAG_CANCEL
+            && this.to == CONTROLLERS_HUB})
+        verify(eventBus).addEvent(copiedEvent)
     }
-    
-//    @Test
-//    fun `when controller is dragged to graph should update map of dragged controllers`() {
-//        viewModel.onDraggedToGraph(2)
-//
-//        assertThat(viewModel.shouldShow(2)).isEqualTo(false)
-//        assertThat(viewModel.shouldShow(1)).isEqualTo(true)
-//    }
 }
