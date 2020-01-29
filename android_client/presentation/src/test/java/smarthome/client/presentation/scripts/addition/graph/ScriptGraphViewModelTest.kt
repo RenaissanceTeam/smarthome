@@ -126,9 +126,44 @@ class ScriptGraphViewModelTest {
     }
     
     
-    
     @Test
     fun `when start drag on graph should hide dragged block`() {
     
     }
+    
+    @Test
+    fun `when drag from graph and drop to graph should emit block with new position`() {
+    
+    }
+    
+    @Test
+    fun `when drag drop from graph should remove block`() {
+    
+    }
+    
+    @Test
+    fun `when save should serialize block types, ids and positions`() {
+    
+    }
+    
+    @Test
+    fun `when long click on block should start process of creating dependency`() {
+    
+    }
+    
+    @Test
+    fun `when end creating dependency on graph then should cancel`() {
+    
+    }
+    
+    @Test
+    fun `when end creating dependency on other block should start setup of dependency`() {
+    
+    }
+    
+    @Test
+    fun `when remove block with dependency should remove associated dependencies`() {
+    
+    }
+    
 }
