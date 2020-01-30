@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -35,6 +36,10 @@ class GraphControllerView @JvmOverloads constructor(
     
     init {
         inflate(R.layout.scripts_controller_item)
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT)
+        
         
         setOnTouchListener { _, event ->
             if (event.action != MotionEvent.ACTION_DOWN) return@setOnTouchListener false
