@@ -30,5 +30,15 @@
             app:layout_constraintStart_toStartOf="@id/controller_name"
             app:layout_constraintTop_toBottomOf="@id/controller_name"
             tools:text="ON" />
+
+        <ProgressBar
+            android:id="@+id/controller_progress"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"/> 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -46,6 +46,7 @@ class ControllersHubViewModel : KoinViewModel() {
     private fun handleDroppedController(id: Long) {
         hiddenControllers[id] = false
         startObservingController(id)
+        triggerDevicesRebuildModels()
     }
     
     fun onDropped(drag: GraphDragEvent) {
