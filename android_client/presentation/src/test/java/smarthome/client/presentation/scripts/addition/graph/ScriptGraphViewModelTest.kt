@@ -21,6 +21,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.scripts.addition.graph.views.state.ControllerBlock
+import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlock
 import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlockResolver
 import smarthome.client.util.DataStatus
 import kotlin.test.assertNotNull
@@ -36,7 +37,8 @@ class ScriptGraphViewModelTest {
     private val position1_1 = Position(1f, 1f)
     private lateinit var viewModel: ScriptGraphViewModel
     private lateinit var blockResolver: GraphBlockResolver
-    
+    private val controllerId = 123332L
+    private val blockId = ControllerGraphBlockIdentifier(controllerId)
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -64,16 +66,12 @@ class ScriptGraphViewModelTest {
     
     @Test
     fun `when call to drop should emit drop event for event bus`() {
-        val id = 12L
-        val event = ControllerDragEvent(id, CommonDragInfo(
-            status = DRAG_START,
-            from = CONTROLLERS_HUB,
-            dragTouch = position1_1
-        ))
+        val event = createControllerDragEvent(status = DRAG_START, from = CONTROLLERS_HUB)
         viewModel.onDropped(event, position1_1)
+        
         verify(eventBus).addEvent(argThat {
             this is ControllerDragEvent
-                && this.id == id
+                && this.id == controllerId
                 && this.dragInfo.to == GRAPH
                 && this.dragInfo.status == DRAG_DROP
         })
@@ -81,12 +79,9 @@ class ScriptGraphViewModelTest {
     
     @Test
     fun `when drop block should calculate position as drop position minus touch position`() {
-        val id = 12L
-        val event = ControllerDragEvent(id, CommonDragInfo(
-            status = DRAG_START,
-            from = CONTROLLERS_HUB,
-            dragTouch = position1_1
-        ))
+    
+        val event = createControllerDragEvent(status = DRAG_START, from = CONTROLLERS_HUB)
+        
         viewModel.onDropped(event, position1_1)
         verify(eventBus).addEvent(argThat {
             this is ControllerDragEvent
@@ -96,39 +91,71 @@ class ScriptGraphViewModelTest {
     
     @Test
     fun `when drop controller from hub should resolve block for it and emit`() {
-        val id = 123L
-        val blockId = ControllerGraphBlockIdentifier(id)
-        val dropEvent = ControllerDragEvent(id = id, dragInfo = CommonDragInfo(
-            status = DRAG_DROP,
-            to = GRAPH,
-            from = CONTROLLERS_HUB,
-            position = position1_1
-        ))
-        whenever(blockResolver.resolveIdentifier(dropEvent)).then { blockId }
-        val controllerBlock = mock<ControllerBlock> {
-            on { this.id }.then { blockId }
-            on { position }.then { position1_1 }
-        }
-        whenever(controllerBlock.copyWithPosition(any())).then { controllerBlock }
-        whenever(blockResolver.createBlock(dropEvent)).then { controllerBlock }
-
+        val dropEvent =
+            createControllerDragEvent(status = DRAG_DROP, to = GRAPH, from = CONTROLLERS_HUB)
+    
+        setupResolveIdentifier(dropEvent)
+        val block = setupMockingControllerBlock()
+        setupResolveBlock(dropEvent, block)
+        
         events.onNext(dropEvent)
         
-        val blocks = viewModel.blocks.value
-        assertNotNull(blocks)
-        
-        val addedBlock = blocks[blockId]
-        assertNotNull(addedBlock)
+        val addedBlock = assertHasBlockValue()
         
         assertTrue(addedBlock is ControllerBlock)
         assertThat(addedBlock.id).isEqualTo(blockId)
         assertThat(addedBlock.position).isEqualTo(position1_1)
     }
     
+    private fun createControllerDragEvent(id: Long = controllerId, status: String,
+                                          from: String = UNKNOWN,
+                                          to: String = UNKNOWN,
+                                          touchPosition: Position = position1_1,
+                                          position: Position = position1_1): ControllerDragEvent {
+        return ControllerDragEvent(id, CommonDragInfo(status, from, to, touchPosition, position))
+    }
+    
+    private fun setupResolveIdentifier(event: GraphDragEvent, id: GraphBlockIdentifier = blockId) {
+        whenever(blockResolver.resolveIdentifier(event)).then { id }
+    }
+    
+    private fun setupMockingControllerBlock(id: GraphBlockIdentifier = blockId,
+                                            position: Position = position1_1): ControllerBlock {
+        val controllerBlock = mock<ControllerBlock> {
+            on { this.id }.then { id }
+            on { this.position }.then { position }
+        }
+        whenever(controllerBlock.copyWithInfo(any(), any())).then { controllerBlock }
+        
+        return controllerBlock
+    }
+    
+    private fun setupResolveBlock(event: GraphDragEvent, block: GraphBlock) {
+        whenever(blockResolver.createBlock(event)).then { block }
+    }
+    
+    private fun assertHasBlockValue(id: GraphBlockIdentifier = blockId): GraphBlock {
+        val blocks = viewModel.blocks.value
+        assertNotNull(blocks)
+    
+        val addedBlock = blocks[id]
+        assertNotNull(addedBlock)
+        
+        return addedBlock
+    }
     
     @Test
     fun `when start drag on graph should hide dragged block`() {
-    
+        val dragEvent = createControllerDragEvent(status = DRAG_START, from = GRAPH)
+        val block = setupMockingControllerBlock()
+        setupResolveIdentifier(dragEvent)
+        setupResolveBlock(dragEvent, block)
+        
+        events.onNext(dragEvent)
+        
+        val draggedBlock = assertHasBlockValue()
+        assertTrue(draggedBlock is ControllerBlock)
+        assertTrue(!draggedBlock.visible)
     }
     
     @Test

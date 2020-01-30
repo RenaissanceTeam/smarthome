@@ -5,10 +5,11 @@ import smarthome.client.presentation.scripts.addition.graph.Position
 
 data class ControllerBlock(
     override val id: ControllerGraphBlockIdentifier,
-    override val position: Position
+    override val position: Position,
+    override val visible: Boolean = true
 ): GraphBlock {
     
-    override fun copyWithPosition(position: Position): ControllerBlock {
-        return copy(position = position)
+    override fun copyWithInfo(position: Position, visible: Boolean): GraphBlock {
+        return copy(position = position, visible = visible)
     }
 }
