@@ -40,7 +40,13 @@ class ScriptGraphView @JvmOverloads constructor(
             blocks.values.forEach { block ->
                 getOrInflateBlockView(block).setData(block)
             }
+    
+            retainOnlyPostedBlocks(blocks)
         }
+    }
+    
+    private fun retainOnlyPostedBlocks(blocks: MutableMap<GraphBlockIdentifier, GraphBlock>) {
+        (blockViews.keys - blocks.keys).forEach { blockViews.remove(it) }
     }
     
     private fun getOrInflateBlockView(block: GraphBlock): GraphBlockView {
