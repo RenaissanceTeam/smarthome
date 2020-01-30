@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.DragEvent
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.snakydesign.livedataextensions.distinct
@@ -49,7 +50,7 @@ class ControllersHubView @JvmOverloads constructor(
     
     private fun setupSlideableMenu(lifecycle: LifecycleOwner) {
         setupSlideableMenu(this) {
-            jumpTo.distinct().observe(lifecycle) { animate().translationX(it).duration = 0 }
+            jumpTo.distinctUntilChanged().observe(lifecycle) { animate().translationX(it).duration = 0 }
             animateTo.observe(lifecycle) { animate().translationX(it).duration = 300 }
         
             onLayoutReady(this)
