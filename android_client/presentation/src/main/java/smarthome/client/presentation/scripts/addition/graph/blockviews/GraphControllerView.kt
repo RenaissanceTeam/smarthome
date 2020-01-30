@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph.views
+package smarthome.client.presentation.scripts.addition.graph.blockviews
 
 import android.content.ClipData
 import android.content.Context
@@ -12,10 +12,9 @@ import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.addition.graph.GraphBlockView
-import smarthome.client.presentation.scripts.addition.graph.Position
-import smarthome.client.presentation.scripts.addition.graph.views.state.ControllerBlock
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlock
+import smarthome.client.presentation.util.Position
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.ControllerBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
 import smarthome.client.presentation.util.CustomDragShadowBuilder
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
@@ -25,7 +24,8 @@ class GraphControllerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), GraphBlockView {
+) : FrameLayout(context, attrs, defStyleAttr),
+    GraphBlockView {
     private val viewModel = GraphControllerViewModel()
     
     init {
@@ -37,7 +37,8 @@ class GraphControllerView @JvmOverloads constructor(
         
         setOnTouchListener { _, event ->
             if (event.action != MotionEvent.ACTION_DOWN) return@setOnTouchListener false
-            val info = viewModel.onDragStarted(Position(event.x, event.y)) ?: return@setOnTouchListener false
+            val info = viewModel.onDragStarted(
+                Position(event.x, event.y)) ?: return@setOnTouchListener false
 
             val data = ClipData.newPlainText("sad", "asdf")
             val shadowBuilder = CustomDragShadowBuilder(this@GraphControllerView, event)

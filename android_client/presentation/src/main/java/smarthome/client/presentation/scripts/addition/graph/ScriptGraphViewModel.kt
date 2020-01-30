@@ -7,9 +7,11 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_DRO
 import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_START
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlock
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlockResolver
+import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
 import smarthome.client.presentation.util.KoinViewModel
+import smarthome.client.presentation.util.Position
 
 class ScriptGraphViewModel : KoinViewModel() {
     

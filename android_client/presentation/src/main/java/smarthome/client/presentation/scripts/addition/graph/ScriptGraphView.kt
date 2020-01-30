@@ -10,8 +10,11 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlock
-import smarthome.client.presentation.scripts.addition.graph.views.factory.GraphBlockFactoryResolver
+import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
+import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.GraphBlockFactoryResolver
+import smarthome.client.presentation.util.Position
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 
@@ -66,7 +69,9 @@ class ScriptGraphView @JvmOverloads constructor(
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
                     val dragInfo = event.localState as? GraphDragEvent ?: return@setOnDragListener false
-                    viewModel.onDropped(dragInfo, Position(event.x, event.y))
+                    viewModel.onDropped(dragInfo,
+                        Position(event.x,
+                            event.y))
                 }
             }
             true

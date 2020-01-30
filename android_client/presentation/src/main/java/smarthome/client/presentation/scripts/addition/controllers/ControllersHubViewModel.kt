@@ -9,7 +9,7 @@ import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.runInScopeCatchingAny
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DeviceItemState
-import smarthome.client.presentation.scripts.addition.graph.Position
+import smarthome.client.presentation.util.Position
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.util.KoinViewModel

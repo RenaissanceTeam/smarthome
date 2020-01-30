@@ -1,3 +1,0 @@
-package smarthome.client.presentation.scripts.addition.graph
-
-interface GraphBlockIdentifier

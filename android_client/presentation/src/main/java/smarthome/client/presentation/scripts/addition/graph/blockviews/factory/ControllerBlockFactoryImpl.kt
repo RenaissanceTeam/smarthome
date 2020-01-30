@@ -1,10 +1,10 @@
-package smarthome.client.presentation.scripts.addition.graph.views.factory
+package smarthome.client.presentation.scripts.addition.graph.blockviews.factory
 
 import android.view.ViewGroup
-import smarthome.client.presentation.scripts.addition.graph.GraphBlockView
-import smarthome.client.presentation.scripts.addition.graph.views.GraphControllerView
-import smarthome.client.presentation.scripts.addition.graph.views.state.ControllerBlock
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
+import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphControllerView
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.ControllerBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
 
 class ControllerBlockFactoryImpl : GraphBlockFactory {
     override fun inflate(into: ViewGroup, block: GraphBlock): GraphBlockView {

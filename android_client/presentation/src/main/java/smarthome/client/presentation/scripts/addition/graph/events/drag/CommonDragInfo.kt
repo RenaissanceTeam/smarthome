@@ -1,7 +1,7 @@
 package smarthome.client.presentation.scripts.addition.graph.events.drag
 
-import smarthome.client.presentation.scripts.addition.graph.Position
-import smarthome.client.presentation.scripts.addition.graph.emptyPosition
+import smarthome.client.presentation.util.Position
+import smarthome.client.presentation.util.emptyPosition
 
 data class CommonDragInfo(
     val status: String,
