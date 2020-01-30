@@ -14,7 +14,7 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 import smarthome.client.presentation.R
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.AddScriptViewModel
-import smarthome.client.presentation.visible
+import smarthome.client.presentation.scripts.addition.graph.ScriptGraphViewModel
 
 class ScriptGraphFragment : Fragment() {
     private val addScriptViewModel: AddScriptViewModel by sharedViewModel()

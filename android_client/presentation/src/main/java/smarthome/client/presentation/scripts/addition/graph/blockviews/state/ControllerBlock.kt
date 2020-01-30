@@ -1,7 +1,7 @@
-package smarthome.client.presentation.scripts.addition.graph.views.state
+package smarthome.client.presentation.scripts.addition.graph.blockviews.state
 
-import smarthome.client.presentation.scripts.addition.graph.ControllerGraphBlockIdentifier
-import smarthome.client.presentation.scripts.addition.graph.Position
+import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
+import smarthome.client.presentation.util.Position
 
 data class ControllerBlock(
     override val id: ControllerGraphBlockIdentifier,

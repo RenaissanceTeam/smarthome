@@ -20,9 +20,12 @@ import smarthome.client.entity.Controller
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
-import smarthome.client.presentation.scripts.addition.graph.views.state.ControllerBlock
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlock
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlockResolver
+import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
+import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.ControllerBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
+import smarthome.client.presentation.util.Position
 import smarthome.client.util.DataStatus
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -40,7 +43,9 @@ class ScriptGraphViewModelTest {
     private lateinit var viewModel: ScriptGraphViewModel
     private lateinit var blockResolver: GraphBlockResolver
     private val controllerId = 123332L
-    private val blockId = ControllerGraphBlockIdentifier(controllerId)
+    private val blockId =
+        ControllerGraphBlockIdentifier(
+            controllerId)
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -87,7 +92,8 @@ class ScriptGraphViewModelTest {
         viewModel.onDropped(event, position1_1)
         verify(eventBus).addEvent(argThat {
             this is ControllerDragEvent
-                && this.dragInfo.position == Position(0f, 0f)
+                && this.dragInfo.position == Position(
+                0f, 0f)
         })
     }
     
@@ -169,7 +175,7 @@ class ScriptGraphViewModelTest {
         assertTrue(draggedBlock is ControllerBlock && !draggedBlock.visible)
     
         // drop
-        val droppedAt = Position(12f,22f)
+        val droppedAt = Position(12f, 22f)
         val dropEvent = createControllerDragEvent(status = DRAG_DROP, to = GRAPH, from = GRAPH, position = droppedAt)
     
         setupResolveIdentifier(dropEvent)

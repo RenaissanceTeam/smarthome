@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph
+package smarthome.client.presentation.scripts.addition.graph.identifier
 
 class ControllerGraphBlockIdentifier(val id: Long) :
     GraphBlockIdentifier {

@@ -17,9 +17,9 @@ import smarthome.client.presentation.main.toolbar.ToolbarSetter
 import smarthome.client.presentation.scripts.addition.AddScriptViewModel
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBusImpl
-import smarthome.client.presentation.scripts.addition.graph.views.factory.*
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlockResolver
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlockResolverImpl
+import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.*
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolverImpl
 
 val presentation = module {
     

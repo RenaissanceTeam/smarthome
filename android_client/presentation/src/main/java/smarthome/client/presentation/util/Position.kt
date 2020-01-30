@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph
+package smarthome.client.presentation.util
 
 data class Position(val x: Float, val y: Float) {
     
@@ -7,4 +7,4 @@ data class Position(val x: Float, val y: Float) {
     }
 }
 
-val emptyPosition = Position(-1f,-1f)
+val emptyPosition = Position(-1f, -1f)

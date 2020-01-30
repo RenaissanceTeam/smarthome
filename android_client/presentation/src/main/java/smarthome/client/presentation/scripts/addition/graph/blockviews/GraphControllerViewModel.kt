@@ -1,16 +1,16 @@
-package smarthome.client.presentation.scripts.addition.graph.views
+package smarthome.client.presentation.scripts.addition.graph.blockviews
 
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.entity.Controller
-import smarthome.client.presentation.scripts.addition.graph.Position
+import smarthome.client.presentation.util.Position
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
 import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_START
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
-import smarthome.client.presentation.scripts.addition.graph.views.state.ControllerBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.ControllerBlock
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.LoadingStatus
 import smarthome.client.util.data

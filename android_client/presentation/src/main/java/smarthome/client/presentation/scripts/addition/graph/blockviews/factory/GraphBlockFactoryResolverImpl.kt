@@ -1,10 +1,10 @@
-package smarthome.client.presentation.scripts.addition.graph.views.factory
+package smarthome.client.presentation.scripts.addition.graph.blockviews.factory
 
 import org.koin.core.KoinComponent
 import org.koin.core.get
 import org.koin.core.qualifier.named
-import smarthome.client.presentation.scripts.addition.graph.views.state.ControllerBlock
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.ControllerBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
 
 class GraphBlockFactoryResolverImpl : GraphBlockFactoryResolver, KoinComponent {
     override fun resolve(block: GraphBlock): GraphBlockFactory {

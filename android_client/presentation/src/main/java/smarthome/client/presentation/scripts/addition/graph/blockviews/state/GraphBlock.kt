@@ -1,7 +1,7 @@
-package smarthome.client.presentation.scripts.addition.graph.views.state
+package smarthome.client.presentation.scripts.addition.graph.blockviews.state
 
-import smarthome.client.presentation.scripts.addition.graph.GraphBlockIdentifier
-import smarthome.client.presentation.scripts.addition.graph.Position
+import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
+import smarthome.client.presentation.util.Position
 
 interface GraphBlock {
     val id: GraphBlockIdentifier
