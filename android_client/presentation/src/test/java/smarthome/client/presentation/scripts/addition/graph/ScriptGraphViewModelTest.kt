@@ -26,6 +26,7 @@ import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlo
 import smarthome.client.util.DataStatus
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ScriptGraphViewModelTest {
@@ -183,7 +184,18 @@ class ScriptGraphViewModelTest {
     
     @Test
     fun `when drag drop from graph should remove block`() {
+        val block = setupMockingControllerBlock()
+        val dropEvent = createControllerDragEvent(status = DRAG_DROP, to = CONTROLLERS_HUB, from = GRAPH)
     
+        setupResolveIdentifier(dropEvent)
+        setupResolveBlock(dropEvent, block)
+    
+        events.onNext(dropEvent)
+    
+        val blocks = viewModel.blocks.value
+        assertNotNull(blocks)
+        
+        assertNull(blocks[blockId])
     }
     
     @Test

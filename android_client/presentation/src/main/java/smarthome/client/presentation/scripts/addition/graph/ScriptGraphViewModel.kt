@@ -30,11 +30,21 @@ class ScriptGraphViewModel : KoinViewModel() {
         when (event.dragInfo.status) {
             DRAG_DROP -> {
                 if (event.isTo(GRAPH)) handleDropToGraph(event)
+                if (event.isFrom(GRAPH) && !event.isTo(GRAPH)) handleBlockRemove(event)
             }
             DRAG_START -> {
                 if (event.isFrom(GRAPH)) handleDragStartFromGraph(event)
             }
         }
+    }
+    
+    private fun handleBlockRemove(event: GraphDragEvent) {
+        val blockBeforeEvent = getBlockForEvent(event)
+    
+        val current = getCurrentBlocks()
+        current.remove(blockBeforeEvent.id)
+    
+        blocks.value = current
     }
     
     private fun handleDropToGraph(event: GraphDragEvent) {
