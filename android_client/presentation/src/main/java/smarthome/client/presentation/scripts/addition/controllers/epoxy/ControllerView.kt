@@ -30,12 +30,13 @@ class ControllerView @JvmOverloads constructor(
         inflate(R.layout.scripts_controller_item)
         val detector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onLongPress(pressEvent: MotionEvent) {
-                val info = onDragStarted?.invoke(
-                    Position(pressEvent.x,
-                        pressEvent.y))
+                val info = onDragStarted?.invoke(Position(pressEvent.x, pressEvent.y))
 
                 val data = ClipData.newPlainText("sad", "asdf")
-                val shadowBuilder = CustomDragShadowBuilder(this@ControllerView, pressEvent)
+                val shadowBuilder = CustomDragShadowBuilder(this@ControllerView,
+                    pressEvent.x.toInt(),
+                    pressEvent.y.toInt()
+                )
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                 startDrag(data, shadowBuilder, info, 0)
                 

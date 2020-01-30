@@ -16,4 +16,5 @@
     <color name="accept">#388E3C</color>
     <color name="black">#000000</color>
 
+    <color name="graphBlockColor">#FFECB3</color>
 </resources>
