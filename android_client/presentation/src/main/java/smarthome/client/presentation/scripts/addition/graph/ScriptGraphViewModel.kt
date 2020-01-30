@@ -29,7 +29,7 @@ class ScriptGraphViewModel : KoinViewModel() {
         
         when (event.dragInfo.status) {
             DRAG_DROP -> {
-                if (!event.isFrom(GRAPH) && event.isTo(GRAPH)) handleDropToGraph(event)
+                if (event.isTo(GRAPH)) handleDropToGraph(event)
             }
             DRAG_START -> {
                 if (event.isFrom(GRAPH)) handleDragStartFromGraph(event)
@@ -39,9 +39,12 @@ class ScriptGraphViewModel : KoinViewModel() {
     
     private fun handleDropToGraph(event: GraphDragEvent) {
         val blockBeforeEvent = getBlockForEvent(event)
-        val blockOnNewPosition = blockBeforeEvent.copyWithInfo(position = event.dragInfo.position)
+        val droppedBlock = blockBeforeEvent.copyWithInfo(
+            position = event.dragInfo.position,
+            visible = true
+        )
         
-        emitWithBlock(blockOnNewPosition)
+        emitWithBlock(droppedBlock)
     }
     
     private fun handleDragStartFromGraph(event: GraphDragEvent) {

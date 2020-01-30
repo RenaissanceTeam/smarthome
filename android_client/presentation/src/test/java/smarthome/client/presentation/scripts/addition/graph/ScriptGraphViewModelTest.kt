@@ -24,6 +24,7 @@ import smarthome.client.presentation.scripts.addition.graph.views.state.Controll
 import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlock
 import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlockResolver
 import smarthome.client.util.DataStatus
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -119,15 +120,9 @@ class ScriptGraphViewModelTest {
         whenever(blockResolver.resolveIdentifier(event)).then { id }
     }
     
-    private fun setupMockingControllerBlock(id: GraphBlockIdentifier = blockId,
+    private fun setupMockingControllerBlock(id: ControllerGraphBlockIdentifier = blockId,
                                             position: Position = position1_1): ControllerBlock {
-        val controllerBlock = mock<ControllerBlock> {
-            on { this.id }.then { id }
-            on { this.position }.then { position }
-        }
-        whenever(controllerBlock.copyWithInfo(any(), any())).then { controllerBlock }
-        
-        return controllerBlock
+        return ControllerBlock(id, position)
     }
     
     private fun setupResolveBlock(event: GraphDragEvent, block: GraphBlock) {
@@ -160,7 +155,30 @@ class ScriptGraphViewModelTest {
     
     @Test
     fun `when drag from graph and drop to graph should emit block with new position`() {
+        val block = setupMockingControllerBlock()
+
+        val dragEvent = createControllerDragEvent(status = DRAG_START, from = GRAPH)
+        
+        setupResolveIdentifier(dragEvent)
+        setupResolveBlock(dragEvent, block)
+        
+        events.onNext(dragEvent)
+        
+        val draggedBlock = assertHasBlockValue()
+        assertTrue(draggedBlock is ControllerBlock && !draggedBlock.visible)
     
+        // drop
+        val droppedAt = Position(12f,22f)
+        val dropEvent = createControllerDragEvent(status = DRAG_DROP, to = GRAPH, from = GRAPH, position = droppedAt)
+    
+        setupResolveIdentifier(dropEvent)
+        setupResolveBlock(dropEvent, block)
+    
+        events.onNext(dropEvent)
+    
+        val droppedBlock = assertHasBlockValue()
+        assertTrue(droppedBlock is ControllerBlock && droppedBlock.visible)
+        assertEquals(droppedAt, droppedBlock.position)
     }
     
     @Test
