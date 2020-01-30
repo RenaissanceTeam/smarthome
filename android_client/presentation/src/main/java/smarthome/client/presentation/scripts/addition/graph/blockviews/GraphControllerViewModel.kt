@@ -19,6 +19,7 @@ import kotlin.properties.Delegates
 class GraphControllerViewModel: KoinViewModel() {
     
     val visible = MutableLiveData<Boolean>()
+    val dragVisible = MutableLiveData<Boolean>(true)
     val position =
         MutableLiveData<Position>()
     val loading = MutableLiveData<Boolean>()

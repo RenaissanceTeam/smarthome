@@ -1,6 +1,5 @@
 package smarthome.client.presentation.scripts.addition.graph.blockviews
 
-import android.content.ClipData
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -12,13 +11,14 @@ import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
-import smarthome.client.presentation.util.Position
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.ControllerBlock
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
 import smarthome.client.presentation.util.CustomDragShadowBuilder
+import smarthome.client.presentation.util.Position
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.presentation.visible
+import smarthome.client.util.log
 
 class GraphControllerView @JvmOverloads constructor(
     context: Context,
@@ -33,17 +33,25 @@ class GraphControllerView @JvmOverloads constructor(
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)
-        
-        
-        setOnTouchListener { _, event ->
-            if (event.action != MotionEvent.ACTION_DOWN) return@setOnTouchListener false
-            val info = viewModel.onDragStarted(
-                Position(event.x, event.y)) ?: return@setOnTouchListener false
-
-            val data = ClipData.newPlainText("sad", "asdf")
-            val shadowBuilder = CustomDragShadowBuilder(this@GraphControllerView, event)
     
-            startDrag(data, shadowBuilder, info, 0)
+        setOnLongClickListener {
+            log("on long")
+            true
+        }
+    
+        drag_handle.setOnTouchListener { _, event ->
+            if (event.action != MotionEvent.ACTION_DOWN) return@setOnTouchListener false
+            
+            val touchX = (drag_handle.x + event.x).toInt()
+            val touchY = (drag_handle.y + event.y).toInt()
+            
+            val info = viewModel
+                .onDragStarted(Position(touchX.toFloat(), touchY.toFloat())) ?: return@setOnTouchListener false
+        
+          
+            val shadowBuilder = CustomDragShadowBuilder(this@GraphControllerView, touchX, touchY)
+        
+            startDrag(null, shadowBuilder, info, 0)
         }
     }
     
@@ -60,6 +68,7 @@ class GraphControllerView @JvmOverloads constructor(
         viewModel.position.distinctUntilChanged().observe(lifecycleOwner, ::moveTo)
         viewModel.data.observe(lifecycleOwner, ::bind)
         viewModel.loading.distinctUntilChanged().observe(lifecycleOwner, ::changeProgress)
+        viewModel.dragVisible.observe(lifecycleOwner) { drag_handle.visible = it }
     }
     
     override fun setData(block: GraphBlock) {
