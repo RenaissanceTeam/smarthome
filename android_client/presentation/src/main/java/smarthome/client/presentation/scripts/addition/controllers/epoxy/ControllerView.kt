@@ -39,7 +39,6 @@ class ControllerView @JvmOverloads constructor(
                 )
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                 startDrag(data, shadowBuilder, info, 0)
-                
             }
         })
         setOnTouchListener { _, event ->

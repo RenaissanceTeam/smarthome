@@ -35,13 +35,9 @@ class GraphControllerViewModel: KoinViewModel() {
     
     
     fun onNewBlockData(block: ControllerBlock) {
-        // todo on first init observe controller
-    
         id = block.id.id
         visible.value = block.visible
         position.value = block.position
-        
-        // add live data for state
     }
     
     private fun observeController(id: Long) {

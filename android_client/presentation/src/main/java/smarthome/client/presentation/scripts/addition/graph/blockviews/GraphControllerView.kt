@@ -2,6 +2,8 @@ package smarthome.client.presentation.scripts.addition.graph.blockviews
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -33,25 +35,44 @@ class GraphControllerView @JvmOverloads constructor(
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)
+        
+        handleStartCreatingDependency()
+        handleStartDragging()
+    }
     
-        setOnLongClickListener {
-            log("on long")
-            true
-        }
-    
+    private fun handleStartDragging() {
         drag_handle.setOnTouchListener { _, event ->
             if (event.action != MotionEvent.ACTION_DOWN) return@setOnTouchListener false
-            
+        
             val touchX = (drag_handle.x + event.x).toInt()
             val touchY = (drag_handle.y + event.y).toInt()
-            
-            val info = viewModel
-                .onDragStarted(Position(touchX.toFloat(), touchY.toFloat())) ?: return@setOnTouchListener false
         
-          
+            val info = viewModel
+                .onDragStarted(Position(touchX.toFloat(), touchY.toFloat()))
+                ?: return@setOnTouchListener false
+        
+        
             val shadowBuilder = CustomDragShadowBuilder(this@GraphControllerView, touchX, touchY)
         
             startDrag(null, shadowBuilder, info, 0)
+        }
+    }
+    
+    private fun handleStartCreatingDependency() {
+        val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onLongPress(e: MotionEvent) {
+                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            }
+        })
+        setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+        
+            when (event.action) {
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_MOVE,
+                MotionEvent.ACTION_DOWN -> true
+                else -> false
+            }
         }
     }
     
