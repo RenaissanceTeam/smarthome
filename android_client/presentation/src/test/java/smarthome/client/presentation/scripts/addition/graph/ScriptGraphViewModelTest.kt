@@ -23,6 +23,7 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.state.Gra
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
+import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
@@ -218,6 +219,7 @@ class ScriptGraphViewModelTest {
         ))
         
         val dependency = assertHasDependency()
+        assertEquals(blockId, dependency.startBlock)
         assertEquals(position1_1, dependency.endPosition)
     }
     
@@ -233,7 +235,15 @@ class ScriptGraphViewModelTest {
     
     @Test
     fun `when dependency move should update dependencies with new position`() {
+        events.onNext(DependencyEvent(
+            id = dependencyId,
+            startId = blockId,
+            status = DEPENDENCY_MOVE,
+            rawEndPosition = Position(22f, 22f)
+        ))
     
+        val dependency = assertHasDependency()
+        assertEquals(Position(22f, 22f), dependency.endPosition)
     }
     
     
