@@ -5,6 +5,7 @@ import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBloc
 import smarthome.client.presentation.util.Position
 
 data class DependencyEvent(
+    val id: String,
     val status: String,
     val startId: GraphBlockIdentifier?,
     val endId: GraphBlockIdentifier? = null,

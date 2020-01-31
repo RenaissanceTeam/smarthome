@@ -17,14 +17,17 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.entity.Controller
+import smarthome.client.presentation.scripts.addition.graph.blockviews.controller.ControllerBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
+import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
+import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.ControllerBlock
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
 import smarthome.client.presentation.util.Position
 import smarthome.client.util.DataStatus
 import kotlin.test.assertEquals
@@ -43,9 +46,9 @@ class ScriptGraphViewModelTest {
     private lateinit var viewModel: ScriptGraphViewModel
     private lateinit var blockResolver: GraphBlockResolver
     private val controllerId = 123332L
-    private val blockId =
-        ControllerGraphBlockIdentifier(
-            controllerId)
+    private val blockId = ControllerGraphBlockIdentifier(controllerId)
+    private val dependencyId = "someId"
+    
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -129,7 +132,8 @@ class ScriptGraphViewModelTest {
     
     private fun setupMockingControllerBlock(id: ControllerGraphBlockIdentifier = blockId,
                                             position: Position = position1_1): ControllerBlock {
-        return ControllerBlock(id, position)
+        return ControllerBlock(
+            id, position)
     }
     
     private fun setupResolveBlock(event: GraphDragEvent, block: GraphBlock) {
@@ -205,12 +209,36 @@ class ScriptGraphViewModelTest {
     }
     
     @Test
-    fun `when save should serialize block types, ids and positions`() {
+    fun `when create dependency should update dependencies with added item`() {
+        events.onNext(DependencyEvent(
+            id = dependencyId,
+            startId = blockId,
+            status = DEPENDENCY_START,
+            rawEndPosition = position1_1
+        ))
+        
+        val dependency = assertHasDependency()
+        assertEquals(position1_1, dependency.endPosition)
+    }
     
+    private fun assertHasDependency(id: String = dependencyId): DependencyState {
+        val dependencies = viewModel.dependencies.value
+        assertNotNull(dependencies)
+        
+        val dependency = dependencies[id]
+        assertNotNull(dependency)
+        
+        return dependency
     }
     
     @Test
-    fun `when long click on block should start process of creating dependency`() {
+    fun `when dependency move should update dependencies with new position`() {
+    
+    }
+    
+    
+    @Test
+    fun `when save should serialize block types, ids and positions`() {
     
     }
     

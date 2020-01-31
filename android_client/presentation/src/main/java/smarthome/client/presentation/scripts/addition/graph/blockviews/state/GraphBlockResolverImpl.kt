@@ -1,5 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph.blockviews.state
 
+import smarthome.client.presentation.scripts.addition.graph.blockviews.controller.ControllerBlock
 import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
 import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent

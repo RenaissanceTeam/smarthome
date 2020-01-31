@@ -3,7 +3,7 @@ package smarthome.client.presentation.scripts.addition.graph.blockviews.factory
 import android.view.ViewGroup
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.addition.graph.blockviews.controller.GraphControllerView
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.ControllerBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.controller.ControllerBlock
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
 
 class ControllerBlockFactoryImpl : GraphBlockFactory {

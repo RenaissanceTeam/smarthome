@@ -12,6 +12,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.dependency.De
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
 import smarthome.client.presentation.util.LongPressGestureDetectorListener
 import smarthome.client.presentation.util.Position
+import java.util.*
 
 fun setupLongPressToStartDependency(
     id: GraphBlockIdentifier,
@@ -41,6 +42,7 @@ class LongPressToStartDependencyTouchListener(
     private val eventPublisher: EventPublisher
 ) : View.OnTouchListener {
     private var isDependencyMoving = false
+    private var movingDependencyId: String? = null
     
     init {
         blockView.setOnTouchListener(this)
@@ -48,18 +50,23 @@ class LongPressToStartDependencyTouchListener(
         longPressListener.onLongPressListener { event ->
             blockView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
     
-            isDependencyMoving = true
-            sendStartDependencyEvent(event)
+            startDependency(event)
             true
         }
     }
     
-    private fun sendStartDependencyEvent(event: MotionEvent) {
+    private fun startDependency(event: MotionEvent) {
+        isDependencyMoving = true
         eventPublisher.publish(DependencyEvent(
+            id = getMovingDependencyId(),
             status = DEPENDENCY_START,
             startId = id,
             rawEndPosition = Position(event.rawX, event.rawY)
         ))
+    }
+    
+    private fun getMovingDependencyId(): String {
+        return movingDependencyId ?: UUID.randomUUID().toString().also { movingDependencyId = it }
     }
     
     override fun onTouch(v: View, event: MotionEvent): Boolean {
@@ -77,6 +84,7 @@ class LongPressToStartDependencyTouchListener(
         if (!isDependencyMoving) return false
         
         eventPublisher.publish(DependencyEvent(
+            id = getMovingDependencyId(),
             status = DEPENDENCY_MOVE,
             startId = id,
             rawEndPosition = Position(event.rawX, event.rawY)
@@ -89,12 +97,14 @@ class LongPressToStartDependencyTouchListener(
         if (!isDependencyMoving) return false
     
         eventPublisher.publish(DependencyEvent(
+            id = getMovingDependencyId(),
             status = DEPENDENCY_END,
             startId = id,
             rawEndPosition = Position(event.rawX, event.rawY)
         ))
         
         isDependencyMoving = false
+        movingDependencyId = null
         return true
     }
 }

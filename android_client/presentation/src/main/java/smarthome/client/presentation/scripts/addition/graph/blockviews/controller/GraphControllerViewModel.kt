@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.entity.Controller
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.ControllerBlock
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
