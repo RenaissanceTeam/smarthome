@@ -6,4 +6,4 @@ import smarthome.client.presentation.util.Position
 data class DependencyState(val id: String,
                            val startBlock: GraphBlockIdentifier? = null,
                            val endBlock: GraphBlockIdentifier? = null,
-                           val endPosition: Position? = null)
+                           val rawEndPosition: Position? = null)

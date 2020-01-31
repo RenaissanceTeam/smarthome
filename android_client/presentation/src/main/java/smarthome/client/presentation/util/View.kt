@@ -32,3 +32,5 @@ val View.lifecycleOwner: LifecycleOwner? get() {
     
     return null
 }
+
+val View.center: Position get() = Position(width / 2f, height / 2f)

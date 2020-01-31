@@ -30,7 +30,10 @@ class GraphControllerViewModel: KoinViewModel(), EventPublisher {
     private val eventBus: GraphEventBus by inject()
     private val observeController: ObserveControllerUseCase by inject()
     private var id by Delegates.observable<Long?>(null) { _, oldId, newId ->
-        if (oldId != newId && newId != null) observeController(newId)
+        if (oldId != newId && newId != null) {
+            observeController(newId)
+            blockId.value = ControllerGraphBlockIdentifier(newId)
+        }
     }
     
     override fun publish(e: GraphEvent) = eventBus.addEvent(e)

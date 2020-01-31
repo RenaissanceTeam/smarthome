@@ -220,7 +220,7 @@ class ScriptGraphViewModelTest {
         
         val dependency = assertHasDependency()
         assertEquals(blockId, dependency.startBlock)
-        assertEquals(position1_1, dependency.endPosition)
+        assertEquals(position1_1, dependency.rawEndPosition)
     }
     
     private fun assertHasDependency(id: String = dependencyId): DependencyState {
@@ -243,7 +243,7 @@ class ScriptGraphViewModelTest {
         ))
     
         val dependency = assertHasDependency()
-        assertEquals(Position(22f, 22f), dependency.endPosition)
+        assertEquals(Position(22f, 22f), dependency.rawEndPosition)
     }
     
     
