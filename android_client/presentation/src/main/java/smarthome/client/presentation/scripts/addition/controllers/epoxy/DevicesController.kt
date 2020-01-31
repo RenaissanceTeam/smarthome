@@ -1,13 +1,13 @@
-package smarthome.client.presentation.scripts.addition.graph.controllers.epoxy
+package smarthome.client.presentation.scripts.addition.controllers.epoxy
 
 import com.airbnb.epoxy.Typed2EpoxyController
 import smarthome.client.presentation.components.emptyItemView
-import smarthome.client.presentation.scripts.addition.graph.controllers.ControllersViewViewModel
+import smarthome.client.presentation.scripts.addition.controllers.ControllersHubViewModel
 import smarthome.client.util.data
 
-class DevicesController : Typed2EpoxyController<List<DeviceItemState>, ControllersViewViewModel>() {
+class DevicesController : Typed2EpoxyController<List<DeviceItemState>, ControllersHubViewModel>() {
     
-    override fun buildModels(devices: List<DeviceItemState>, viewModel: ControllersViewViewModel) {
+    override fun buildModels(devices: List<DeviceItemState>, viewModel: ControllersHubViewModel) {
         if (devices.isEmpty()) emptyItemView { id(0) }
         
         devices.forEach { device ->
@@ -21,10 +21,13 @@ class DevicesController : Typed2EpoxyController<List<DeviceItemState>, Controlle
                     
                     ControllerViewModel_().apply {
                         id(controllerId)
+                        
                         name(controller.data?.name.orEmpty())
                         state(controller.data?.state.orEmpty())
-                        
-                        onDraggedToGraph { viewModel.onDraggedToGraph(controllerId) }
+    
+                        onDragStarted { touchPosition ->
+                            viewModel.onDragStarted(controllerId, touchPosition)
+                        }
                     }
                 }.filterNotNull())
             }

@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph.controllers.epoxy
+package smarthome.client.presentation.scripts.addition.controllers.epoxy
 
 import android.content.ClipData
 import android.content.Context
@@ -13,11 +13,10 @@ import com.airbnb.epoxy.ModelView
 import com.airbnb.epoxy.TextProp
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.addition.graph.GraphDraggable
+import smarthome.client.presentation.scripts.addition.graph.Position
+import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.CustomDragShadowBuilder
 import smarthome.client.presentation.util.inflate
-import smarthome.client.presentation.visible
-import smarthome.client.util.log
 
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
@@ -25,17 +24,19 @@ class ControllerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), GraphDraggable {
+) : FrameLayout(context, attrs, defStyleAttr) {
     
     init {
         inflate(R.layout.scripts_controller_item)
         val detector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onLongPress(pressEvent: MotionEvent) {
+                val info = onDragStarted?.invoke(Position(pressEvent.x, pressEvent.y))
+
                 val data = ClipData.newPlainText("sad", "asdf")
                 val shadowBuilder = CustomDragShadowBuilder(this@ControllerView, pressEvent)
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                startDrag(data, shadowBuilder, this@ControllerView, 0)
-                visible = false
+                startDrag(data, shadowBuilder, info, 0)
+                
             }
         })
         setOnTouchListener { _, event ->
@@ -49,24 +50,14 @@ class ControllerView @JvmOverloads constructor(
             }
         }
     }
-    
+
     lateinit var name: CharSequence @TextProp set
     lateinit var state: CharSequence @TextProp set
-    var onDraggedToGraph: (() -> Unit)? = null @CallbackProp set
     
-    override fun onDraggedToGraph() {
-        log("to grp")
-        onDraggedToGraph?.invoke()
-    }
-    
-    override fun onDragCancelled() {
-        log("canc")
-        visible = true
-    }
-    
+    var onDragStarted: ((Position) -> GraphDragEvent)? = null @CallbackProp set
+
     @AfterPropsSet
     fun onPropsReady() {
-        visible = true
         controller_name.text = name
         controller_state.text = state
     }
