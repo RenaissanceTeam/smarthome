@@ -5,6 +5,8 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
+import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_END
+import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
@@ -38,13 +40,15 @@ class LongPressToStartDependencyTouchListener(
     private val detector: GestureDetector,
     private val eventPublisher: EventPublisher
 ) : View.OnTouchListener {
-    
+    private var isDependencyMoving = false
     
     init {
         blockView.setOnTouchListener(this)
         
         longPressListener.onLongPressListener { event ->
             blockView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+    
+            isDependencyMoving = true
             sendStartDependencyEvent(event)
             true
         }
@@ -62,10 +66,35 @@ class LongPressToStartDependencyTouchListener(
         detector.onTouchEvent(event)
         
         return when (event.action) {
-            MotionEvent.ACTION_UP,
-            MotionEvent.ACTION_MOVE,
+            MotionEvent.ACTION_UP -> endMoving(event)
+            MotionEvent.ACTION_MOVE -> moveDependency(event)
             MotionEvent.ACTION_DOWN -> true
             else -> false
         }
+    }
+    
+    private fun moveDependency(event: MotionEvent): Boolean {
+        if (!isDependencyMoving) return false
+        
+        eventPublisher.publish(DependencyEvent(
+            status = DEPENDENCY_MOVE,
+            startId = id,
+            rawEndPosition = Position(event.rawX, event.rawY)
+        ))
+        
+        return true
+    }
+    
+    private fun endMoving(event: MotionEvent): Boolean {
+        if (!isDependencyMoving) return false
+    
+        eventPublisher.publish(DependencyEvent(
+            status = DEPENDENCY_END,
+            startId = id,
+            rawEndPosition = Position(event.rawX, event.rawY)
+        ))
+        
+        isDependencyMoving = false
+        return true
     }
 }
