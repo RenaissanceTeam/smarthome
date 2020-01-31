@@ -28,7 +28,10 @@ class ScriptGraphViewModel : KoinViewModel() {
             getCurrentBlocks = ::getCurrentBlocks
         )
         
-        val dependencyEventsHandler = DependencyEventsHandler()
+        val dependencyEventsHandler = DependencyEventsHandler(
+            emitDependencies = { dependencies.value = it },
+            getCurrentDependencies = ::getCurrentDependencies
+        )
         
         disposable.add(eventBus.observe()
             .subscribe {
@@ -39,6 +42,10 @@ class ScriptGraphViewModel : KoinViewModel() {
     
     private fun getCurrentBlocks(): MutableMap<GraphBlockIdentifier, GraphBlock> {
         return blocks.value ?: mutableMapOf()
+    }
+    
+    private fun getCurrentDependencies(): MutableMap<String, DependencyState> {
+        return dependencies.value ?: mutableMapOf()
     }
     
     private fun getBlockForEvent(event: GraphDragEvent): GraphBlock {
