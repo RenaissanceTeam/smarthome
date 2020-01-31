@@ -1,0 +1,49 @@
+apply plugin: 'org.springframework.boot'
+apply from: "$rootDir/gradle/scripts/spring-module.gradle"
+
+bootJar {
+    enabled = true
+}
+
+springBoot {
+    mainClassName = 'smarthome.raspberry.AppKt'
+}
+
+dependencies {
+    implementation library.kotlin
+    implementation library.kotlinReflection
+    implementation library.jacksonKotlin
+    implementation groups.spring
+    implementation library.springSecurity
+    implementation library.springData
+    runtime library.postgres
+
+    testImplementation groups.forTest
+
+    // modules
+    implementation library.authentication
+    implementation library.authentication_api
+
+    implementation library.channel
+    implementation library.channel_api
+
+    implementation library.controllers
+    implementation library.controllers_api
+
+    implementation library.devices
+    implementation library.devices_api
+
+    implementation library.home
+    implementation library.home_api
+
+
+    implementation library.notification
+    implementation library.notification_api
+
+    implementation library.scripts
+    implementation library.scripts_api
+
+    implementation library.util
+
+    implementation library.arduinoDevices
+}

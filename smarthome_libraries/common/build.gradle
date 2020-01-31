@@ -1,0 +1,10 @@
+apply from: "$rootDir/gradle/scripts/jar-module.gradle"
+
+dependencies {
+    implementation library.gson
+    implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
+    implementation library.kotlin
+    implementation library.rxJava
+
+    testImplementation groups.forTest
+}

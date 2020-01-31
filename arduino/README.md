@@ -1,11 +1,4 @@
 ## What you'll need:
-### Download from library manager (Tools > Manage Libraries)
-* Mqtt (https://github.com/256dpi/arduino-mqtt)
-* PubSubClient (https://github.com/knolleary/pubsubclient)
-
-### Docs
-* [Pubsub docs](https://pubsubclient.knolleary.net/api.html)
-
 ### Hardware
 * Esp8266
 * <b>Separate power supply 3.3v for esp8266</b>
@@ -14,7 +7,7 @@
 
 ![Esp8266 pins](res/esp8266_pins.jpg)
 
-## Connect
+### Connect
 ![Connect](https://habrastorage.org/files/7c2/cd9/0fe/7c2cd90fee074f1cbebc751561ac6649.PNG)
 ```
 Vcc -> 3.3V
@@ -26,10 +19,23 @@ GND -> GND
 Tx -> Tx (with arduino as Tx is realy Rx)
 Rx -> Rx (with arduino as Rx is realy Tx)
 ```
+
+### Setup
++ Add `user_properties.h` in `arduino/main` folder
++ Define the wifi ssid and password like this:
+```
+#define WIFI_SSID "wifi name"
+#define PASSWORD "wifi password"
+```
++ modify `arduino/configuration.h` to suit your need
++ change `DEVICE_NAME` if you're creating a firmware for new unique device
+
+
+
+### How to flash AiThinker firmware v 1.1.1 
 ***
 <b>All steps are correct on Windows, Linux is failing for no reason</b>
 ***
-### First, I've flashed AiThinker firmware v 1.1.1 
 + RST to 3.3V 
 + GPIO_0 to GND
 + To go into flash mode hold reset button and unplug-plug the esp module.
@@ -39,13 +45,12 @@ Rx -> Rx (with arduino as Rx is realy Tx)
 + Set baud to 115200 and check AT commands. 
 `AT` should return `OK` , `AT+GMR` should return current firmware version
 
-### Change baud rate of esp to 9600
++ Change baud rate of esp to 9600
 `AT+UART_DEF=9600,8,1,0,0` Should receive `OK`
 
-### Final check
++ Final check
 Change baud rate of serial monitor to 9600 and type `AT`. Should receive `OK`.
-
-That is it, esp module is ready to be connected with Arduino
+#### That is it, esp module is ready to be connected with Arduino
 
 ## Very useful 
 * https://esp8266.ru/esp8266-podkluchenie-obnovlenie-proshivki/

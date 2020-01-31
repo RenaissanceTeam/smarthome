@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">authentication</string>
+    <string name="sign_out">Sign out</string>
+    <string name="delete_all">Delete all data</string>
+    <string name="disconnect_confirmation">Are you sure you want to delete the data associated with this account?</string>
+    <string name="signed_out">Signed out</string>
+    <string name="google_sign_in_title_text">Sign in with Google</string>
+    <string name="google_signed_in_title_text">Your account</string>
+    <string name="loading">Loading</string>
+    <string name="google_status_fmt">Current e-mail: %s</string>
+
+    <string name="settings_auth">Account</string>
+
+</resources>
