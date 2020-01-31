@@ -30,7 +30,7 @@
     </com.github.clans.fab.FloatingActionMenu>
 
 
-    <smarthome.client.presentation.scripts.addition.graph.controllers.ControllersView
+    <smarthome.client.presentation.scripts.addition.controllers.ControllersHubView
         android:id="@+id/add_controllers"
         android:layout_height="match_parent"
         android:layout_width="0dp"
