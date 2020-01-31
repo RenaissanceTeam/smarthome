@@ -44,8 +44,7 @@ class GraphControllerView @JvmOverloads constructor(
             val touchX = (drag_handle.x + event.x).toInt()
             val touchY = (drag_handle.y + event.y).toInt()
         
-            val info = viewModel
-                .onDragStarted(Position(touchX.toFloat(), touchY.toFloat()))
+            val info = viewModel.onDragStarted(Position(touchX.toFloat(), touchY.toFloat()))
                 ?: return@setOnTouchListener false
         
         

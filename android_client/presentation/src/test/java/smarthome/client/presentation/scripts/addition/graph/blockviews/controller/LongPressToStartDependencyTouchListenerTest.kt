@@ -3,15 +3,14 @@ package smarthome.client.presentation.scripts.addition.graph.blockviews.controll
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
+import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_END
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
@@ -77,7 +76,7 @@ class LongPressToStartDependencyTouchListenerTest {
     fun `when move after start drag should post move event`() {
         gestureDetectorDetectsLongPress(createPressEvent(1f, 2f))
         
-        val moveEvent = createMoveEvent(11f, 22f)
+        val moveEvent = createMotionEvent(MotionEvent.ACTION_MOVE, 11f, 22f)
         
         listener.onTouch(view, moveEvent)
         
@@ -90,9 +89,9 @@ class LongPressToStartDependencyTouchListenerTest {
         })
     }
     
-    private fun createMoveEvent(x: Float, y: Float): MotionEvent {
+    private fun createMotionEvent(status: Int, x: Float, y: Float): MotionEvent {
         return mock {
-            on { action }.then { MotionEvent.ACTION_MOVE }
+            on { action }.then { status }
             on { rawX }.then { x }
             on { rawY }.then { y }
         }
@@ -100,13 +99,49 @@ class LongPressToStartDependencyTouchListenerTest {
     
     @Test
     fun `when move without start drag should ignore`() {
+        val moveEvent = createMotionEvent(MotionEvent.ACTION_MOVE, 11f, 22f)
     
+        listener.onTouch(view, moveEvent)
+        
+        verifyNoMoreInteractions(eventPublisher)
     }
     
+    @Test
+    fun `when drop without starting dependency should ignore`() {
+        val dropEvent = createMotionEvent(MotionEvent.ACTION_UP, 11f, 22f)
+        listener.onTouch(view, dropEvent)
+    
+        verifyNoMoreInteractions(eventPublisher)
+    }
     
     @Test
     fun `when cancel drag should emit end event`() {
+        gestureDetectorDetectsLongPress(createPressEvent(1f, 2f))
+        verify(eventPublisher).publish(any())
+        
+        val dropEvent = createMotionEvent(MotionEvent.ACTION_UP, 11f, 22f)
+        listener.onTouch(view, dropEvent)
+        
+        verify(eventPublisher).publish(argThat {
+            this is DependencyEvent
+                && this.status == DEPENDENCY_END
+                && this.rawEndPosition.x == 11f
+                && this.rawEndPosition.y == 22f
+        })
+    }
     
+    @Test
+    fun `when move after drop should ignore`() {
+        gestureDetectorDetectsLongPress(createPressEvent(1f, 2f))
+        val dropEvent = createMotionEvent(MotionEvent.ACTION_UP, 11f, 22f)
+        listener.onTouch(view, dropEvent)
+        verify(eventPublisher, times(2)).publish(any())
+        
+        
+        val moveEvent = createMotionEvent(MotionEvent.ACTION_MOVE, 11f, 22f)
+        listener.onTouch(view, moveEvent)
+        
+        verifyNoMoreInteractions(eventPublisher)
     }
     
     @Test
