@@ -14,10 +14,7 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
 import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
-import smarthome.client.presentation.util.CustomDragShadowBuilder
-import smarthome.client.presentation.util.Position
-import smarthome.client.presentation.util.inflate
-import smarthome.client.presentation.util.lifecycleOwner
+import smarthome.client.presentation.util.*
 import smarthome.client.presentation.visible
 
 class GraphControllerView @JvmOverloads constructor(
@@ -26,6 +23,8 @@ class GraphControllerView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), GraphBlockView {
     private val viewModel = GraphControllerViewModel()
+    
+    override val centerPosition: Position get() = (viewModel.position.value ?: emptyPosition) + center
     
     init {
         inflate(R.layout.scripts_controller_item)

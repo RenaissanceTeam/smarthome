@@ -4,19 +4,23 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.DragEvent
 import android.widget.FrameLayout
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.presentation.R
+import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyArrowView
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
+import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.GraphBlockFactoryResolver
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
-import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
-import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.GraphBlockFactoryResolver
 import smarthome.client.presentation.util.Position
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
+import smarthome.client.presentation.util.toPosition
 
 class ScriptGraphView @JvmOverloads constructor(
     context: Context,
@@ -29,6 +33,7 @@ class ScriptGraphView @JvmOverloads constructor(
     }
     
     private var blockViews = mutableMapOf<GraphBlockIdentifier, GraphBlockView>()
+    private var dependencyViews = mutableMapOf<String, DependencyArrowView>()
     private val viewModel = ScriptGraphViewModel()
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
     
@@ -36,16 +41,21 @@ class ScriptGraphView @JvmOverloads constructor(
         super.onAttachedToWindow()
     
         handleDroppingBlocksOntoGraph()
-        
-        val lifecycle = lifecycleOwner ?: return
-        
-        viewModel.blocks.observe(lifecycle) { blocks ->
-            blocks.values.forEach { block ->
-                getOrInflateBlockView(block).setData(block)
-            }
+        lifecycleOwner?.let(::observeViewModel)
+    }
     
-            retainOnlyPostedBlocks(blocks)
+    private fun observeViewModel(lifecycleOwner: LifecycleOwner) {
+        lifecycleOwner.lifecycle.addObserver(viewModel)
+        
+        viewModel.blocks.observe(lifecycleOwner, this::bindBlocks)
+        viewModel.dependencies.observe(lifecycleOwner, this::bindDependencies)
+    }
+    
+    private fun bindBlocks(blocks: MutableMap<GraphBlockIdentifier, GraphBlock>) {
+        blocks.values.forEach { block ->
+            getOrInflateBlockView(block).setData(block)
         }
+        retainOnlyPostedBlocks(blocks)
     }
     
     private fun retainOnlyPostedBlocks(blocks: MutableMap<GraphBlockIdentifier, GraphBlock>) {
@@ -64,14 +74,34 @@ class ScriptGraphView @JvmOverloads constructor(
         return blockView
     }
     
+    
+    private fun bindDependencies(dependencies: MutableMap<String, DependencyState>) {
+        dependencies.values.forEach { dependency ->
+            val view = getOrInflateDependency(dependency.id)
+            
+            val startBlock = dependency.startBlock?.let { blockViews[it] }
+            startBlock?.centerPosition?.let(view::setStart)
+            
+            dependency.rawEndPosition?.let { endPosition ->
+                
+                val graphPosition = IntArray(2).also { getLocationOnScreen(it) }.toPosition()
+                
+                view.setEnd(endPosition - graphPosition)
+            }
+        }
+    }
+    
+    private fun getOrInflateDependency(id: String): DependencyArrowView {
+        return dependencyViews[id]
+            ?: DependencyArrowView(context).also(this::addView).also { dependencyViews[id] = it }
+    }
+    
     private fun handleDroppingBlocksOntoGraph() {
         setOnDragListener { v, event ->
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
                     val dragInfo = event.localState as? GraphDragEvent ?: return@setOnDragListener false
-                    viewModel.onDropped(dragInfo,
-                        Position(event.x,
-                            event.y))
+                    viewModel.onDropped(dragInfo, Position(event.x, event.y))
                 }
             }
             true

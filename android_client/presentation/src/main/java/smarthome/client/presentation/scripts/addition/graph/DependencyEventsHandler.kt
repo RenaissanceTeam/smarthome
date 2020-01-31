@@ -21,7 +21,7 @@ class DependencyEventsHandler(
         
         val newDependencyState = DependencyState(id = event.id,
             startBlock = event.startId,
-            endPosition = event.rawEndPosition)
+            rawEndPosition = event.rawEndPosition)
         
         dependencies[event.id] = newDependencyState
         emitDependencies(dependencies)
@@ -31,7 +31,7 @@ class DependencyEventsHandler(
         val dependencies = getCurrentDependencies()
     
         val newDependencyState = getOrCreateDependency(event.id)
-            .copy(endPosition = event.rawEndPosition)
+            .copy(rawEndPosition = event.rawEndPosition)
         
         dependencies[event.id] = newDependencyState
         emitDependencies(dependencies)

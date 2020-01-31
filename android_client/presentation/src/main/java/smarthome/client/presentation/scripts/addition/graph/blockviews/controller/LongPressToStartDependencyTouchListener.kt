@@ -12,6 +12,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.dependency.De
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
 import smarthome.client.presentation.util.LongPressGestureDetectorListener
 import smarthome.client.presentation.util.Position
+import smarthome.client.util.log
 import java.util.*
 
 fun setupLongPressToStartDependency(
@@ -45,6 +46,7 @@ class LongPressToStartDependencyTouchListener(
     private var movingDependencyId: String? = null
     
     init {
+    
         blockView.setOnTouchListener(this)
         
         longPressListener.onLongPressListener { event ->
@@ -71,7 +73,6 @@ class LongPressToStartDependencyTouchListener(
     
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         detector.onTouchEvent(event)
-        
         return when (event.action) {
             MotionEvent.ACTION_UP -> endMoving(event)
             MotionEvent.ACTION_MOVE -> moveDependency(event)
@@ -82,7 +83,7 @@ class LongPressToStartDependencyTouchListener(
     
     private fun moveDependency(event: MotionEvent): Boolean {
         if (!isDependencyMoving) return false
-        
+
         eventPublisher.publish(DependencyEvent(
             id = getMovingDependencyId(),
             status = DEPENDENCY_MOVE,
