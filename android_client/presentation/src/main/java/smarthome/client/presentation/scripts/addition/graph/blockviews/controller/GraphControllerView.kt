@@ -1,9 +1,7 @@
-package smarthome.client.presentation.scripts.addition.graph.blockviews
+package smarthome.client.presentation.scripts.addition.graph.blockviews.controller
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.GestureDetector
-import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -13,21 +11,21 @@ import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
+import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.ControllerBlock
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.util.CustomDragShadowBuilder
 import smarthome.client.presentation.util.Position
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.presentation.visible
-import smarthome.client.util.log
 
 class GraphControllerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr),
-    GraphBlockView {
+) : FrameLayout(context, attrs, defStyleAttr), GraphBlockView {
     private val viewModel = GraphControllerViewModel()
     
     init {
@@ -35,8 +33,7 @@ class GraphControllerView @JvmOverloads constructor(
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)
-        
-        handleStartCreatingDependency()
+    
         handleStartDragging()
     }
     
@@ -58,24 +55,6 @@ class GraphControllerView @JvmOverloads constructor(
         }
     }
     
-    private fun handleStartCreatingDependency() {
-        val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onLongPress(e: MotionEvent) {
-                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            }
-        })
-        setOnTouchListener { _, event ->
-            gestureDetector.onTouchEvent(event)
-        
-            when (event.action) {
-                MotionEvent.ACTION_UP,
-                MotionEvent.ACTION_MOVE,
-                MotionEvent.ACTION_DOWN -> true
-                else -> false
-            }
-        }
-    }
-    
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         
@@ -90,6 +69,15 @@ class GraphControllerView @JvmOverloads constructor(
         viewModel.data.observe(lifecycleOwner, ::bind)
         viewModel.loading.distinctUntilChanged().observe(lifecycleOwner, ::changeProgress)
         viewModel.dragVisible.observe(lifecycleOwner) { drag_handle.visible = it }
+        viewModel.blockId.distinctUntilChanged().observe(lifecycleOwner, ::onBlockChanged)
+    }
+    
+    private fun onBlockChanged(newId: ControllerGraphBlockIdentifier) {
+        setupLongPressToStartDependency(
+            id = newId,
+            view = this,
+            eventPublisher = viewModel
+        ) {}
     }
     
     override fun setData(block: GraphBlock) {
