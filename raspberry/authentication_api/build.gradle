@@ -1,0 +1,6 @@
+apply from: "$rootDir/gradle/scripts/jar-module.gradle"
+
+dependencies {
+    implementation library.kotlin
+    implementation library.rxJava
+}

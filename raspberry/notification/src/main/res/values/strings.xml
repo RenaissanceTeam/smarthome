@@ -1,0 +1,6 @@
+<resources>
+    <string name="fcm_sender_url">https://us-central1-smarthome-d2238.cloudfunctions.net/</string>
+    <string name="app_name">notification</string>
+    <string name="alert_trigger">Alert has been triggered</string>
+    <string name="alert_body">New state is %s. Device is %s</string>
+</resources>

@@ -1,0 +1,6 @@
+apply from: "$rootDir/gradle/scripts/spring-module.gradle"
+apply plugin: "kotlin-jpa"
+
+dependencies {
+    implementation library.springData
+}

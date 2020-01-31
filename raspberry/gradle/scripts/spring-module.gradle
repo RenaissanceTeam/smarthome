@@ -1,0 +1,7 @@
+apply plugin: 'io.spring.dependency-management'
+apply from: "$rootDir/gradle/scripts/jar-module.gradle"
+apply plugin: "kotlin-jpa"
+
+dependencies {
+    implementation groups.spring
+}

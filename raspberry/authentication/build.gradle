@@ -1,0 +1,17 @@
+apply from: "$rootDir/gradle/scripts/spring-module.gradle"
+
+dependencies {
+    implementation library.kotlin
+    implementation library.springSecurity
+    implementation library.springData
+    implementation library.coroutinesCore
+    implementation library.rxJava
+    implementation library.jjwt
+
+    // modules
+    implementation library.authentication_api
+    implementation library.home_api
+    implementation library.util
+
+    testImplementation groups.forTest
+}

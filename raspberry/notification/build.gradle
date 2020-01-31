@@ -1,0 +1,17 @@
+apply from: "$rootDir/gradle/scripts/jar-module.gradle"
+
+dependencies {
+    implementation library.kotlin
+    implementation library.retrofit
+    implementation library.coroutinesCore
+    implementation library.gson
+
+    // modules
+    implementation library.notification_api
+    
+    implementation library.util
+    implementation library.devices_api
+    implementation library.entity
+
+    testImplementation groups.forTest
+}

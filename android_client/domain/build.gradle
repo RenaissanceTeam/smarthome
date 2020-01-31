@@ -1,0 +1,15 @@
+apply from: "$rootDir/gradle/scripts/android-module.gradle"
+
+dependencies {
+    implementation library.rxJava
+    implementation library.rxKotlin
+    implementation groups.koinWithExt
+    implementation groups.forTest
+    implementation library.coroutinesCore
+
+    // modules
+    implementation library.data_api
+    implementation library.domain_api
+    implementation library.entity
+
+}
