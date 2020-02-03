@@ -2,6 +2,7 @@ package smarthome.client.presentation
 
 import android.view.MotionEvent
 import android.view.View
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -48,3 +49,7 @@ inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope,
 val MotionEvent.position get() = Position(x, y)
 
 val MotionEvent.rawPosition get() = Position(rawX, rawY)
+
+fun <T> MutableLiveData<T>.triggerRebuild() {
+    this.value = value
+}

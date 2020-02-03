@@ -13,6 +13,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_DRO
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
+import smarthome.client.presentation.triggerRebuild
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.presentation.util.Position
@@ -28,7 +29,10 @@ class ScriptGraphViewModel : KoinViewModel() {
     
     init {
         val dragBlockHandler = DragBlockHandler(
-            emitBlocks = { blocks.value = it },
+            emitBlocks = {
+                blocks.value = it
+                dependencies.triggerRebuild()
+            },
             getBlockForEvent = ::getBlockForEvent,
             getCurrentBlocks = ::getCurrentBlocks
         )
@@ -118,10 +122,22 @@ class ScriptGraphViewModel : KoinViewModel() {
     
     fun addDependency(id: String, from: GraphBlockIdentifier, to: GraphBlockIdentifier) {
         setDependencyCreationToDefault()
+        emitMovedDependencyWithSetEndBlock(id, to)
+        hideBorderOnToBlock(to)
+    }
     
+    private fun hideBorderOnToBlock(to: GraphBlockIdentifier) {
+        val blocks = getCurrentBlocks()
+        val toBlock = blocks[to] ?: return
+        blocks[to] = toBlock.copyWithInfo(border = toBlock.border.copy(isVisible = false))
+        this.blocks.value = blocks
+    }
+    
+    private fun emitMovedDependencyWithSetEndBlock(id: String,
+                                                   to: GraphBlockIdentifier) {
         val dependencies = getCurrentDependencies()
         val movingDependency = dependencies[id] ?: return
-            
+        
         val finishedDependency = movingDependency.copy(endBlock = to, rawEndPosition = null)
         dependencies[id] = finishedDependency
         this.dependencies.value = dependencies

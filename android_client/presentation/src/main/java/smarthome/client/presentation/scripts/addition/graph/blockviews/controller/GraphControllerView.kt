@@ -42,7 +42,7 @@ class GraphControllerView @JvmOverloads constructor(
     private fun handleStartDragging() {
         drag_handle.setOnTouchListener { _, event ->
             if (event.action != MotionEvent.ACTION_DOWN) return@setOnTouchListener false
-        
+
             val touchX = (drag_handle.x + event.x).toInt()
             val touchY = (drag_handle.y + event.y).toInt()
         

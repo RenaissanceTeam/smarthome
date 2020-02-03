@@ -3,6 +3,7 @@ package smarthome.client.presentation.scripts.addition.graph
 import android.content.Context
 import android.util.AttributeSet
 import android.view.DragEvent
+import android.view.View
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.observe
@@ -75,10 +76,11 @@ class ScriptGraphView @JvmOverloads constructor(
     }
     
     private fun bindBlocks(blocks: MutableMap<GraphBlockIdentifier, GraphBlock>) {
+        retainOnlyPostedBlocks(blocks)
+
         blocks.values.forEach { block ->
             getOrInflateBlockView(block).setData(block)
         }
-        retainOnlyPostedBlocks(blocks)
     }
     
     private fun findBlockOnDependencyTip(
@@ -92,7 +94,15 @@ class ScriptGraphView @JvmOverloads constructor(
     }
     
     private fun retainOnlyPostedBlocks(blocks: MutableMap<GraphBlockIdentifier, GraphBlock>) {
-        (blockViews.keys - blocks.keys).forEach { blockViews.remove(it) }
+        (blockViews.keys - blocks.keys).forEach {
+            (blockViews.remove(it) as? View)?.let(this::removeView)
+        }
+    }
+    
+    private fun retainOnlyPostedDependencies(dependencies: MutableMap<String, DependencyState>) {
+        (dependencyViews.keys - dependencies.keys).forEach {
+            (dependencyViews.remove(it) as? View)?.let(this::removeView)
+        }
     }
     
     private fun getOrInflateBlockView(block: GraphBlock): GraphBlockView {
@@ -108,6 +118,8 @@ class ScriptGraphView @JvmOverloads constructor(
     }
     
     private fun bindDependencies(dependencies: MutableMap<String, DependencyState>) {
+        retainOnlyPostedDependencies(dependencies)
+        
         dependencies.values.forEach { dependency ->
             val view = getOrInflateDependency(dependency.id)
             
