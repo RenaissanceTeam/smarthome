@@ -32,10 +32,7 @@ import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBloc
 import smarthome.client.presentation.util.NavigationEvent
 import smarthome.client.presentation.util.Position
 import smarthome.client.util.DataStatus
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class ScriptGraphViewModelTest {
     @get:Rule
@@ -295,25 +292,44 @@ class ScriptGraphViewModelTest {
     @Test
     fun `when end creating dependency on other block should start setup of dependency`() {
         addBlock()
-        
-        events.onNext(DependencyEvent(
-            id = dependencyId,
-            startId = otherBlockId,
-            status = DEPENDENCY_START,
-            rawEndPosition = position1_1
-        ))
-        
+        emitStartDependencyFromOther()
+        emitMoveDependencyFromOther()
+    
+        viewModel.addDependency(dependencyId, otherBlockId, blockId)
+        val dependency = assertHasDependency()
+        assertEquals(otherBlockId, dependency.startBlock)
+        assertEquals(blockId, dependency.endBlock)
+    }
+    
+    private fun emitMoveDependencyFromOther() {
         events.onNext(DependencyEvent(
             id = dependencyId,
             startId = otherBlockId,
             status = DEPENDENCY_MOVE,
             rawEndPosition = Position(22f, 22f)
         ))
+    }
     
+    private fun emitStartDependencyFromOther() {
+        events.onNext(DependencyEvent(
+            id = dependencyId,
+            startId = otherBlockId,
+            status = DEPENDENCY_START,
+            rawEndPosition = position1_1
+        ))
+    }
+    
+    @Test
+    fun `when add dependency should hide border on the added block`() {
+        addBlock()
+        emitStartDependencyFromOther()
+        emitMoveDependencyFromOther()
+        
+        viewModel.dependencyTipOnBlock(otherBlockId, blockId)
+        assertTrue(assertHasBlockValue(blockId).border.isVisible)
+        
         viewModel.addDependency(dependencyId, otherBlockId, blockId)
-        val dependency = assertHasDependency()
-        assertEquals(otherBlockId, dependency.startBlock)
-        assertEquals(blockId, dependency.endBlock)
+        assertFalse(assertHasBlockValue(blockId).border.isVisible)
     }
     
     @Test
