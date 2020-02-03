@@ -13,20 +13,15 @@ class DragBlockHandler(
     private val emitBlocks: (MutableMap<GraphBlockIdentifier, GraphBlock>) -> Unit
 ) {
     fun handle(event: GraphDragEvent) {
-        if (!event.isFromOrTo(
-                GRAPH)) return
+        if (!event.isFromOrTo(GRAPH)) return
         
         when (event.dragInfo.status) {
             DRAG_DROP -> {
-                if (event.isTo(
-                        GRAPH)) handleDropToGraph(event)
-                if (event.isFrom(
-                        GRAPH) && !event.isTo(
-                        GRAPH)) handleBlockRemove(event)
+                if (event.isTo(GRAPH)) handleDropToGraph(event)
+                if (event.isFrom(GRAPH) && !event.isTo(GRAPH)) handleBlockRemove(event)
             }
             DRAG_START -> {
-                if (event.isFrom(
-                        GRAPH)) handleDragStartFromGraph(event)
+                if (event.isFrom(GRAPH)) handleDragStartFromGraph(event)
             }
         }
     }

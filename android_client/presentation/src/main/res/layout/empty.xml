@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.view.View
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:visibility="gone"
+    android:layout_width="1dp"
+    android:layout_height="1dp">
+</android.view.View>
