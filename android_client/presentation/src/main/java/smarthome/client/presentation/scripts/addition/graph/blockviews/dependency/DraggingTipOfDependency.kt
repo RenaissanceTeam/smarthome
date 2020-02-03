@@ -3,6 +3,7 @@ package smarthome.client.presentation.scripts.addition.graph.blockviews.dependen
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.airbnb.epoxy.ModelView
 import smarthome.client.presentation.R
@@ -19,16 +20,21 @@ class DraggingTipOfDependency @JvmOverloads constructor(
     
     init {
         inflate(R.layout.empty)
-        
-        setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_MOVE -> {
-                    log("moved tip to ${event.position}")
-                    
-                    true
-                }
-                else -> false
-            }
-        }
+    
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT)
+
+//
+//        setOnTouchListener { v, event ->
+//            when (event.action) {
+//                MotionEvent.ACTION_MOVE -> {
+//                    log("moved tip to ${event.position}")
+//
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
     }
 }

@@ -33,4 +33,5 @@ ext {
     gson_version = "2.8.5"
     supportLibrary_version = "28.0.0"
     constraintLayout_version = "2.0.0-beta3"
+    spring_version = "2.2.3.RELEASE"
 }
