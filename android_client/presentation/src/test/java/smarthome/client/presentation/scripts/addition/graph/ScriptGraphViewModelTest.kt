@@ -29,6 +29,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.dependency.De
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
+import smarthome.client.presentation.util.NavigationEvent
 import smarthome.client.presentation.util.Position
 import smarthome.client.util.DataStatus
 import kotlin.test.assertEquals
@@ -274,13 +275,45 @@ class ScriptGraphViewModelTest {
     }
     
     @Test
-    fun `when end creating dependency on graph then should cancel`() {
+    fun `when end creating dependency on graph then should cancel and remove dependency`() {
+        addBlock()
+        events.onNext(DependencyEvent(
+            id = dependencyId,
+            startId = blockId,
+            status = DEPENDENCY_MOVE,
+            rawEndPosition = Position(22f, 22f)
+        ))
     
+        viewModel.cancelCreatingDependency(dependencyId)
+        val dependencies = viewModel.dependencies.value
+        assertNotNull(dependencies)
+    
+        val dependency = dependencies[dependencyId]
+        assertNull(dependency)
     }
     
     @Test
     fun `when end creating dependency on other block should start setup of dependency`() {
+        addBlock()
+        
+        events.onNext(DependencyEvent(
+            id = dependencyId,
+            startId = otherBlockId,
+            status = DEPENDENCY_START,
+            rawEndPosition = position1_1
+        ))
+        
+        events.onNext(DependencyEvent(
+            id = dependencyId,
+            startId = otherBlockId,
+            status = DEPENDENCY_MOVE,
+            rawEndPosition = Position(22f, 22f)
+        ))
     
+        viewModel.addDependency(dependencyId, otherBlockId, blockId)
+        val dependency = assertHasDependency()
+        assertEquals(otherBlockId, dependency.startBlock)
+        assertEquals(blockId, dependency.endBlock)
     }
     
     @Test

@@ -14,6 +14,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
 import smarthome.client.presentation.util.KoinViewModel
+import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.presentation.util.Position
 
 class ScriptGraphViewModel : KoinViewModel() {
@@ -23,6 +24,7 @@ class ScriptGraphViewModel : KoinViewModel() {
     val blocks = MutableLiveData<MutableMap<GraphBlockIdentifier, GraphBlock>>(mutableMapOf())
     val dependencies = MutableLiveData<MutableMap<String, DependencyState>>(mutableMapOf())
     val movingDependencyTip = MutableLiveData<MovingDependencyTipStatus>()
+    val setupDependency = NavigationParamLiveData<DependencyState>()
     
     init {
         val dragBlockHandler = DragBlockHandler(
@@ -34,7 +36,8 @@ class ScriptGraphViewModel : KoinViewModel() {
         val dependencyEventsHandler = DependencyEventsHandler(
             emitDependencies = { dependencies.value = it },
             getCurrentDependencies = ::getCurrentDependencies,
-            emitTipStatus = { movingDependencyTip.value = it }
+            emitTipStatus = { movingDependencyTip.value = it },
+            getCurrentTipStatus = ::getCurrentTipStatus
         )
         
         disposable.add(eventBus.observe()
@@ -50,6 +53,10 @@ class ScriptGraphViewModel : KoinViewModel() {
     
     private fun getCurrentDependencies(): MutableMap<String, DependencyState> {
         return dependencies.value ?: mutableMapOf()
+    }
+    
+    private fun getCurrentTipStatus(): MovingDependencyTipStatus {
+        return movingDependencyTip.value ?: MovingDependencyTipStatus()
     }
     
     private fun getBlockForEvent(event: GraphDragEvent): GraphBlock {
@@ -98,6 +105,30 @@ class ScriptGraphViewModel : KoinViewModel() {
             blocks[id] = blocks[id]!!.copyWithInfo(border = BorderStatus(isVisible = false))
         }
         return blocks
+    }
+    
+    fun cancelCreatingDependency(id: String) {
+        setDependencyCreationToDefault()
+        
+        val dependencies = getCurrentDependencies()
+        dependencies.remove(id)
+        
+        this.dependencies.value = dependencies
+    }
+    
+    fun addDependency(id: String, from: GraphBlockIdentifier, to: GraphBlockIdentifier) {
+        setDependencyCreationToDefault()
+    
+        val dependencies = getCurrentDependencies()
+        val movingDependency = dependencies[id] ?: return
+            
+        val finishedDependency = movingDependency.copy(endBlock = to, rawEndPosition = null)
+        dependencies[id] = finishedDependency
+        this.dependencies.value = dependencies
+    }
+    
+    private fun setDependencyCreationToDefault() {
+        movingDependencyTip.value = MovingDependencyTipStatus()
     }
 }
 
