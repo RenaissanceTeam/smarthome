@@ -11,8 +11,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
-import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyArrowView
-import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.*
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.GraphBlockFactoryResolver
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
@@ -49,8 +48,29 @@ class ScriptGraphView @JvmOverloads constructor(
         
         viewModel.blocks.observe(lifecycleOwner, this::bindBlocks)
         viewModel.dependencies.observe(lifecycleOwner, this::bindDependencies)
-        viewModel.movingDependencyTip.observe(lifecycleOwner) { status ->
-            if (status.isMoving) findBlockOnDependencyTip(status.from, status.rawPosition)
+        viewModel.movingDependencyTip.observe(lifecycleOwner) { tip ->
+            when (tip.status) {
+                IDLE -> {
+                }
+                MOVING -> {
+                    val movedTo = findBlockOnDependencyTip(tip.rawPosition)
+                
+                    when (movedTo == null) {
+                        false -> viewModel.dependencyTipOnBlock(tip.from, movedTo.key)
+                        true -> viewModel.dependencyTipNotOnAnyBlock()
+                    }
+                }
+                DROPPED -> {
+                    val droppedTo = findBlockOnDependencyTip(tip.rawPosition)
+                
+                    when (droppedTo == null) {
+                        false -> tip.dependencyId?.let {
+                            viewModel.addDependency(it, tip.from, droppedTo.key)
+                        }
+                        true -> tip.dependencyId?.let { viewModel.cancelCreatingDependency(it) }
+                    }
+                }
+            }
         }
     }
     
@@ -61,17 +81,13 @@ class ScriptGraphView @JvmOverloads constructor(
         retainOnlyPostedBlocks(blocks)
     }
     
-    private fun findBlockOnDependencyTip(from: GraphBlockIdentifier, rawPosition: Position) {
-        val block = blockViews.asIterable().find { entry ->
+    private fun findBlockOnDependencyTip(
+        rawPosition: Position): Map.Entry<GraphBlockIdentifier, GraphBlockView>? {
+        return blockViews.asIterable().find { entry ->
             val block = entry.value
             
             val tipPosition = convertRawToRelativePosition(rawPosition)
             block.contains(tipPosition)
-        }
-        
-        when (block == null) {
-            true -> viewModel.dependencyTipNotOnAnyBlock()
-            false -> viewModel.dependencyTipOnBlock(from, block.key)
         }
     }
     
@@ -98,8 +114,14 @@ class ScriptGraphView @JvmOverloads constructor(
             val startBlock = dependency.startBlock?.let { blockViews[it] }
             startBlock?.centerPosition?.let(view::setStart)
             
-            dependency.rawEndPosition?.let { endPosition ->
-                view.setEnd(convertRawToRelativePosition(endPosition))
+            val endBlock = dependency.endBlock?.let { blockViews[it] }
+            when (endBlock != null) {
+                true -> endBlock.centerPosition.let(view::setEnd)
+                false -> {
+                    dependency.rawEndPosition?.let { endPosition ->
+                        view.setEnd(convertRawToRelativePosition(endPosition))
+                    }
+                }
             }
         }
     }
