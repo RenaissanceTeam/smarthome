@@ -1,8 +1,12 @@
+apply plugin: 'org.springframework.boot'
 apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 
 bootJar {
-    baseName = 'smarthome-homeserver'
-    version =  '0.1.0'
+    enabled = true
+}
+
+springBoot {
+    mainClassName = 'smarthome.raspberry.AppKt'
 }
 
 dependencies {

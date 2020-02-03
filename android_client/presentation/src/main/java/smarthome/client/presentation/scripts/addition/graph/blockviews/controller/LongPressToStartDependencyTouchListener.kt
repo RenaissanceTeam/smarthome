@@ -45,6 +45,7 @@ class LongPressToStartDependencyTouchListener(
 ) : View.OnTouchListener {
     private var isDependencyMoving = false
     private var movingDependencyId: String? = null
+    var onStartDependency: (event: DependencyEvent) -> Unit = {}
     
     init {
     
@@ -60,8 +61,7 @@ class LongPressToStartDependencyTouchListener(
     
     private fun startDependency(event: MotionEvent) {
         isDependencyMoving = true
-    
-        val tip = DraggingTipOfDependency(blockView.context)
+
         val startEvent = DependencyEvent(
             id = getMovingDependencyId(),
             status = DEPENDENCY_START,
@@ -69,7 +69,7 @@ class LongPressToStartDependencyTouchListener(
             rawEndPosition = Position(event.rawX, event.rawY)
         )
         
-        tip.startDrag(null, View.DragShadowBuilder(tip), startEvent, 0)
+        onStartDependency(startEvent)
         eventPublisher.publish(startEvent)
     }
     

@@ -3,6 +3,7 @@ package smarthome.client.presentation.scripts.addition.graph.blockviews.controll
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
@@ -12,6 +13,7 @@ import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DraggingTipOfDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
 import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.util.*
@@ -74,7 +76,7 @@ class GraphControllerView @JvmOverloads constructor(
             id = newId,
             view = this,
             eventPublisher = viewModel
-        ) {}
+        ) { }
     }
     
     override fun setData(block: GraphBlock) {

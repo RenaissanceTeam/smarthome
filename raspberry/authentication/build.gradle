@@ -1,5 +1,4 @@
 apply from: "$rootDir/gradle/scripts/spring-module.gradle"
-apply plugin: "kotlin-jpa"
 
 dependencies {
     implementation library.kotlin
@@ -9,12 +8,10 @@ dependencies {
     implementation library.rxJava
     implementation library.jjwt
 
-
     // modules
     implementation library.authentication_api
     implementation library.home_api
     implementation library.util
-    
 
     testImplementation groups.forTest
 }
