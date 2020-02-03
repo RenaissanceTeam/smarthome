@@ -49,6 +49,9 @@ class ScriptGraphView @JvmOverloads constructor(
         
         viewModel.blocks.observe(lifecycleOwner, this::bindBlocks)
         viewModel.dependencies.observe(lifecycleOwner, this::bindDependencies)
+        viewModel.movingDependencyTip.observe(lifecycleOwner) { status ->
+            if (status.isMoving) findBlockOnDependencyTip(status.from, status.rawPosition)
+        }
     }
     
     private fun bindBlocks(blocks: MutableMap<GraphBlockIdentifier, GraphBlock>) {
@@ -56,6 +59,20 @@ class ScriptGraphView @JvmOverloads constructor(
             getOrInflateBlockView(block).setData(block)
         }
         retainOnlyPostedBlocks(blocks)
+    }
+    
+    private fun findBlockOnDependencyTip(from: GraphBlockIdentifier, rawPosition: Position) {
+        val block = blockViews.asIterable().find { entry ->
+            val block = entry.value
+            
+            val tipPosition = convertRawToRelativePosition(rawPosition)
+            block.contains(tipPosition)
+        }
+        
+        when (block == null) {
+            true -> viewModel.dependencyTipNotOnAnyBlock()
+            false -> viewModel.dependencyTipOnBlock(from, block.key)
+        }
     }
     
     private fun retainOnlyPostedBlocks(blocks: MutableMap<GraphBlockIdentifier, GraphBlock>) {
@@ -74,7 +91,6 @@ class ScriptGraphView @JvmOverloads constructor(
         return blockView
     }
     
-    
     private fun bindDependencies(dependencies: MutableMap<String, DependencyState>) {
         dependencies.values.forEach { dependency ->
             val view = getOrInflateDependency(dependency.id)
@@ -83,12 +99,15 @@ class ScriptGraphView @JvmOverloads constructor(
             startBlock?.centerPosition?.let(view::setStart)
             
             dependency.rawEndPosition?.let { endPosition ->
-                
-                val graphPosition = IntArray(2).also { getLocationOnScreen(it) }.toPosition()
-                
-                view.setEnd(endPosition - graphPosition)
+                view.setEnd(convertRawToRelativePosition(endPosition))
             }
         }
+    }
+    
+    private fun convertRawToRelativePosition(raw: Position): Position {
+        val graphPosition = IntArray(2).also { getLocationOnScreen(it) }.toPosition()
+        
+        return raw - graphPosition
     }
     
     private fun getOrInflateDependency(id: String): DependencyArrowView {
@@ -97,7 +116,7 @@ class ScriptGraphView @JvmOverloads constructor(
     }
     
     private fun handleDroppingBlocksOntoGraph() {
-        setOnDragListener { v, event ->
+        setOnDragListener { _, event ->
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
                     val dragInfo = event.localState as? GraphDragEvent ?: return@setOnDragListener false

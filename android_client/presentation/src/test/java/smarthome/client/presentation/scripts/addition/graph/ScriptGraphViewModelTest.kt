@@ -47,7 +47,9 @@ class ScriptGraphViewModelTest {
     private lateinit var viewModel: ScriptGraphViewModel
     private lateinit var blockResolver: GraphBlockResolver
     private val controllerId = 123332L
+    private val otherControllerId = 1232L
     private val blockId = ControllerGraphBlockIdentifier(controllerId)
+    private val otherBlockId = ControllerGraphBlockIdentifier(otherControllerId)
     private val dependencyId = "someId"
     
     @Before
@@ -246,6 +248,25 @@ class ScriptGraphViewModelTest {
         assertEquals(Position(22f, 22f), dependency.rawEndPosition)
     }
     
+    @Test
+    fun `when dependency tip on some block should emit`() {
+        addBlock()
+        viewModel.dependencyTipOnBlock(from = otherBlockId, to = blockId)
+        
+        val block = assertHasBlockValue(blockId)
+        assertTrue(block.border.isVisible)
+    }
+    
+    private fun addBlock() {
+        val dropEvent =
+            createControllerDragEvent(status = DRAG_DROP, to = GRAPH, from = CONTROLLERS_HUB)
+    
+        setupResolveIdentifier(dropEvent)
+        val block = setupMockingControllerBlock()
+        setupResolveBlock(dropEvent, block)
+    
+        events.onNext(dropEvent)
+    }
     
     @Test
     fun `when save should serialize block types, ids and positions`() {
@@ -266,5 +287,4 @@ class ScriptGraphViewModelTest {
     fun `when remove block with dependency should remove associated dependencies`() {
     
     }
-    
 }
