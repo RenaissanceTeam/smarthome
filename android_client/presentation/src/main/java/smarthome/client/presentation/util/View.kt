@@ -34,3 +34,15 @@ val View.lifecycleOwner: LifecycleOwner? get() {
 }
 
 val View.center: Position get() = Position(width / 2f, height / 2f)
+
+fun View.isXInside(toTest: Float): Boolean {
+    return toTest >= x && toTest <= (x + width)
+}
+
+fun View.isYInside(toTest: Float): Boolean {
+    return toTest >= y && toTest <= (y + height)
+}
+
+fun View.isPositionInside(position: Position): Boolean {
+    return isXInside(position.x) && isYInside(position.y)
+}

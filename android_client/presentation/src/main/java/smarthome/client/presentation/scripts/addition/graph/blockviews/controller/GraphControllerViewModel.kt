@@ -1,9 +1,12 @@
 package smarthome.client.presentation.scripts.addition.graph.blockviews.controller
 
+import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.entity.Controller
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
@@ -18,6 +21,7 @@ import smarthome.client.util.LoadingStatus
 import smarthome.client.util.data
 import kotlin.properties.Delegates
 
+
 class GraphControllerViewModel: KoinViewModel(), EventPublisher {
     
     val visible = MutableLiveData<Boolean>()
@@ -25,6 +29,7 @@ class GraphControllerViewModel: KoinViewModel(), EventPublisher {
     val position = MutableLiveData<Position>()
     val loading = MutableLiveData<Boolean>()
     val data = MutableLiveData<Controller>()
+    val border = MutableLiveData<BorderStatus>()
     val blockId = MutableLiveData<ControllerGraphBlockIdentifier>()
     
     private val eventBus: GraphEventBus by inject()
@@ -42,6 +47,7 @@ class GraphControllerViewModel: KoinViewModel(), EventPublisher {
         id = block.id.id
         visible.value = block.visible
         position.value = block.position
+        border.value = block.border
     }
     
     private fun observeController(id: Long) {

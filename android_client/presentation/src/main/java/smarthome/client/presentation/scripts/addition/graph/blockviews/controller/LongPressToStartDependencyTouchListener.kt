@@ -4,7 +4,6 @@ import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
-import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DraggingTipOfDependency
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_END
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
@@ -13,7 +12,6 @@ import smarthome.client.presentation.scripts.addition.graph.events.dependency.De
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
 import smarthome.client.presentation.util.LongPressGestureDetectorListener
 import smarthome.client.presentation.util.Position
-import smarthome.client.util.log
 import java.util.*
 
 fun setupLongPressToStartDependency(

@@ -3,6 +3,8 @@ package smarthome.client.presentation.scripts.addition.graph
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependencyTipStatus
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
@@ -20,6 +22,7 @@ class ScriptGraphViewModel : KoinViewModel() {
     private val blockResolver: GraphBlockResolver by inject()
     val blocks = MutableLiveData<MutableMap<GraphBlockIdentifier, GraphBlock>>(mutableMapOf())
     val dependencies = MutableLiveData<MutableMap<String, DependencyState>>(mutableMapOf())
+    val movingDependencyTip = MutableLiveData<MovingDependencyTipStatus>()
     
     init {
         val dragBlockHandler = DragBlockHandler(
@@ -30,7 +33,8 @@ class ScriptGraphViewModel : KoinViewModel() {
         
         val dependencyEventsHandler = DependencyEventsHandler(
             emitDependencies = { dependencies.value = it },
-            getCurrentDependencies = ::getCurrentDependencies
+            getCurrentDependencies = ::getCurrentDependencies,
+            emitTipStatus = { movingDependencyTip.value = it }
         )
         
         disposable.add(eventBus.observe()
@@ -64,6 +68,36 @@ class ScriptGraphViewModel : KoinViewModel() {
         val dropEvent = event.copyWithDragInfo(droppedInfo)
         
         eventBus.addEvent(dropEvent)
+    }
+    
+    fun dependencyTipOnBlock(from: GraphBlockIdentifier, to: GraphBlockIdentifier) {
+        val blocks = blocksWithHiddenBorders()
+        val block = blocks[to] ?: return
+        
+        blocks[to] = block.copyWithInfo(
+            border = BorderStatus(
+                isVisible = true,
+                isFailure = resolveIsImpossibleDependency(from, to)
+            )
+        )
+        this.blocks.value = blocks
+    }
+    
+    private fun resolveIsImpossibleDependency(from: GraphBlockIdentifier,
+                                              to: GraphBlockIdentifier): Boolean {
+        return false
+    }
+    
+    fun dependencyTipNotOnAnyBlock() {
+        this.blocks.value = blocksWithHiddenBorders()
+    }
+    
+    private fun blocksWithHiddenBorders(): MutableMap<GraphBlockIdentifier, GraphBlock> {
+        val blocks = getCurrentBlocks()
+        blocks.keys.forEach { id ->
+            blocks[id] = blocks[id]!!.copyWithInfo(border = BorderStatus(isVisible = false))
+        }
+        return blocks
     }
 }
 
