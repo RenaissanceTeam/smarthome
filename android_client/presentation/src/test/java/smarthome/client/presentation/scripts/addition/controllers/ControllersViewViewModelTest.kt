@@ -21,6 +21,7 @@ import smarthome.client.entity.Controller
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
+import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.util.Position
 import smarthome.client.util.DataStatus
 
@@ -69,6 +70,7 @@ class ControllersViewViewModelTest {
         events.onNext(ControllerDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
+                id = ControllerGraphBlockIdentifier(id),
                 status = DRAG_START,
                 from = CONTROLLERS_HUB,
                 dragTouch = position1_1
@@ -86,6 +88,7 @@ class ControllersViewViewModelTest {
         events.onNext(ControllerDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
+                id = ControllerGraphBlockIdentifier(id),
                 status = DRAG_START,
                 from = UNKNOWN,
                 to = UNKNOWN,
@@ -102,6 +105,7 @@ class ControllersViewViewModelTest {
         val info = ControllerDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
+                id = ControllerGraphBlockIdentifier(id),
                 status = DRAG_START,
                 from = CONTROLLERS_HUB,
                 dragTouch = position1_1
@@ -119,27 +123,11 @@ class ControllersViewViewModelTest {
     }
     
     @Test
-    fun `when drop other type should push cancel drop event to event bus`() {
-        val copiedEvent = mock<GraphDragEvent>()
-        val otherDragEvent = mock<GraphDragEvent> {
-            on { dragInfo }.then { CommonDragInfo(from = CONTROLLERS_HUB,
-                status = DRAG_START, dragTouch = position1_1) }
-            on { copyWithDragInfo(any()) }.then { copiedEvent }
-        }
-        
-        viewModel.onDropped(otherDragEvent)
-        
-        verify(otherDragEvent).copyWithDragInfo(argThat { this.status == DRAG_CANCEL
-            && this.to == CONTROLLERS_HUB
-        })
-        verify(eventBus).addEvent(copiedEvent)
-    }
-    
-    @Test
     fun `when controller is dropped to hub it should be observed`() {
         val id = 123L
         
         events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
+            id = ControllerGraphBlockIdentifier(id),
             status = DRAG_DROP,
             from = "ANYWHERE",
             to = CONTROLLERS_HUB,
@@ -155,6 +143,7 @@ class ControllersViewViewModelTest {
         
         
         events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
+            id = ControllerGraphBlockIdentifier(id),
             status = DRAG_DROP,
             from = "ANYWHERE",
             to = CONTROLLERS_HUB,
@@ -164,6 +153,7 @@ class ControllersViewViewModelTest {
         verify(observeControllerUseCase).execute(id)
         
         events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
+            id = ControllerGraphBlockIdentifier(id),
             status = DRAG_DROP,
             from = CONTROLLERS_HUB,
             to = CONTROLLERS_HUB,

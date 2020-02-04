@@ -151,13 +151,20 @@ class ScriptGraphView @JvmOverloads constructor(
     
     private fun handleDroppingBlocksOntoGraph() {
         setOnDragListener { _, event ->
+            val dragInfo = event.localState as? GraphDragEvent ?: return@setOnDragListener false
+            
             when (event.action) {
-                DragEvent.ACTION_DROP -> {
-                    val dragInfo = event.localState as? GraphDragEvent ?: return@setOnDragListener false
-                    viewModel.onDropped(dragInfo, Position(event.x, event.y))
+                DragEvent.ACTION_DRAG_STARTED -> true
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    if (!event.result) viewModel.onCanceled(dragInfo)
+                    true
                 }
+                DragEvent.ACTION_DROP -> {
+                    viewModel.onDropped(dragInfo, Position(event.x, event.y))
+                    true
+                }
+                else -> false
             }
-            true
         }
     }
     

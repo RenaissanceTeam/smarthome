@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
+import android.view.DragEvent
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -16,6 +17,7 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
 import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.util.*
 import smarthome.client.presentation.visible

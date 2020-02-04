@@ -9,9 +9,7 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.state.Gra
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_DROP
-import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
-import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
+import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
 import smarthome.client.presentation.triggerRebuild
 import smarthome.client.presentation.util.KoinViewModel
@@ -33,7 +31,6 @@ class ScriptGraphViewModel : KoinViewModel() {
                 blocks.value = it
                 dependencies.triggerRebuild()
             },
-            getBlockForEvent = ::getBlockForEvent,
             getCurrentBlocks = ::getCurrentBlocks
         )
         
@@ -63,13 +60,6 @@ class ScriptGraphViewModel : KoinViewModel() {
         return movingDependencyTip.value ?: MovingDependencyTipStatus()
     }
     
-    private fun getBlockForEvent(event: GraphDragEvent): GraphBlock {
-        val current = getCurrentBlocks()
-        val identifier = blockResolver.resolveIdentifier(event)
-        
-        return current[identifier] ?: blockResolver.createBlock(event)
-    }
-    
     fun onDropped(event: GraphDragEvent, dropPosition: Position) {
         val droppedInfo = event.dragInfo.copy(
             status = DRAG_DROP,
@@ -79,6 +69,16 @@ class ScriptGraphViewModel : KoinViewModel() {
         val dropEvent = event.copyWithDragInfo(droppedInfo)
         
         eventBus.addEvent(dropEvent)
+    }
+    
+    fun onCanceled(event: GraphDragEvent) {
+        val cancelledInfo = event.dragInfo.copy(
+            status = DRAG_CANCEL,
+            to = GRAPH
+        )
+        val cancelEvent = event.copyWithDragInfo(cancelledInfo)
+    
+        eventBus.addEvent(cancelEvent)
     }
     
     fun dependencyTipOnBlock(from: GraphBlockIdentifier, to: GraphBlockIdentifier) {

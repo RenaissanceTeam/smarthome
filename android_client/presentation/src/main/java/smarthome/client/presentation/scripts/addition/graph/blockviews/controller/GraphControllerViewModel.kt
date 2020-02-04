@@ -1,7 +1,5 @@
 package smarthome.client.presentation.scripts.addition.graph.blockviews.controller
 
-import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
@@ -63,6 +61,7 @@ class GraphControllerViewModel: KoinViewModel(), EventPublisher {
             ControllerDragEvent(
                 id = id,
                 dragInfo = CommonDragInfo(
+                    id = ControllerGraphBlockIdentifier(id),
                     status = DRAG_START,
                     dragTouch = dragTouch,
                     from = GRAPH
