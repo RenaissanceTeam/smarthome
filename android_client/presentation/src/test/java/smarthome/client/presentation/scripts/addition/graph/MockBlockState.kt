@@ -1,20 +1,20 @@
-package smarthome.client.presentation.scripts.addition.graph.blockviews.controller
+package smarthome.client.presentation.scripts.addition.graph
 
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
-import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.util.Position
 
-data class ControllerBlock(
-    override val id: ControllerGraphBlockIdentifier,
+data class MockBlockState(
+    override val id: MockBlockId,
     override val position: Position,
     override val visible: Boolean = true,
     override val border: BorderStatus = BorderStatus()
-) : GraphBlock {
+) : BlockState {
     
     override fun copyWithInfo(position: Position, visible: Boolean,
-                              border: BorderStatus): GraphBlock {
+                              border: BorderStatus): BlockState {
         return copy(position = position, visible = visible,
             border = border)
     }
+    
 }

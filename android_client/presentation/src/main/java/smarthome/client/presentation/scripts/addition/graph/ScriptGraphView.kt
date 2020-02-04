@@ -14,13 +14,13 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.*
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.GraphBlockFactoryResolver
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
 import smarthome.client.presentation.util.Position
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
-import smarthome.client.presentation.util.toPosition
+import smarthome.client.entity.script.toPosition
 
 class ScriptGraphView @JvmOverloads constructor(
     context: Context,
@@ -75,7 +75,7 @@ class ScriptGraphView @JvmOverloads constructor(
         }
     }
     
-    private fun bindBlocks(blocks: MutableMap<GraphBlockIdentifier, GraphBlock>) {
+    private fun bindBlocks(blocks: MutableMap<GraphBlockIdentifier, BlockState>) {
         retainOnlyPostedBlocks(blocks)
 
         blocks.values.forEach { block ->
@@ -93,7 +93,7 @@ class ScriptGraphView @JvmOverloads constructor(
         }
     }
     
-    private fun retainOnlyPostedBlocks(blocks: MutableMap<GraphBlockIdentifier, GraphBlock>) {
+    private fun retainOnlyPostedBlocks(blocks: MutableMap<GraphBlockIdentifier, BlockState>) {
         (blockViews.keys - blocks.keys).forEach {
             (blockViews.remove(it) as? View)?.let(this::removeView)
         }
@@ -105,13 +105,13 @@ class ScriptGraphView @JvmOverloads constructor(
         }
     }
     
-    private fun getOrInflateBlockView(block: GraphBlock): GraphBlockView {
-        var blockView = blockViews[block.id]
+    private fun getOrInflateBlockView(blockState: BlockState): GraphBlockView {
+        var blockView = blockViews[blockState.id]
         
         if (blockView == null) {
-            val viewFactory = graphBlockFactoryResolver.resolve(block)
-            blockView = viewFactory.inflate(graph, block)
-            blockViews[block.id] = blockView
+            val viewFactory = graphBlockFactoryResolver.resolve(blockState)
+            blockView = viewFactory.inflate(graph, blockState)
+            blockViews[blockState.id] = blockView
         }
         
         return blockView

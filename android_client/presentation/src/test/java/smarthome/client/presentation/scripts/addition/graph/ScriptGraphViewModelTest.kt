@@ -16,8 +16,10 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.entity.Controller
+import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.Position
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
@@ -25,8 +27,6 @@ import smarthome.client.presentation.scripts.addition.graph.events.dependency.DE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
-import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
-import smarthome.client.presentation.util.Position
 import smarthome.client.util.DataStatus
 import kotlin.test.*
 
@@ -37,7 +37,7 @@ class ScriptGraphViewModelTest {
     private lateinit var observeControllerUseCase: ObserveControllerUseCase
     private lateinit var eventBus: GraphEventBus
     private lateinit var events: PublishSubject<GraphEvent>
-    private val position1_1 = Position(1f, 1f)
+    private val position1_1 = Position(1, 1)
     private lateinit var viewModel: ScriptGraphViewModel
     private lateinit var blockResolver: GraphBlockResolver
     private val blockId = MockBlockId()
@@ -89,13 +89,12 @@ class ScriptGraphViewModelTest {
         viewModel.onDropped(event, position1_1)
         verify(eventBus).addEvent(argThat {
             this is MockDragEvent
-                && this.dragInfo.position == Position(
-                0f, 0f)
+                && this.dragInfo.position == Position(0, 0)
         })
     }
     
     private fun createDragEvent(
-        id: GraphBlockIdentifier = blockId,
+        id: BlockId = blockId,
         status: String,
         from: String = UNKNOWN,
         to: String = UNKNOWN,
@@ -104,24 +103,24 @@ class ScriptGraphViewModelTest {
         return MockDragEvent(CommonDragInfo(id, status, from, to, touchPosition, position))
     }
     
-    private fun setupResolveIdentifier(event: GraphDragEvent, id: GraphBlockIdentifier = blockId) {
+    private fun setupResolveIdentifier(event: GraphDragEvent, id: BlockId = blockId) {
         whenever(blockResolver.resolveIdentifier(event)).then { id }
     }
     
     private fun setupMockingBlock(id: MockBlockId = blockId,
-                                            position: Position = position1_1): MockGraphBlock {
-        return MockGraphBlock(id, position)
+                                            position: Position = position1_1): MockBlockState {
+        return MockBlockState(id, position)
     }
     
-    private fun setupResolveBlock(event: GraphDragEvent, block: GraphBlock) {
-        whenever(blockResolver.createBlock(event)).then { block }
+    private fun setupResolveBlock(event: GraphDragEvent, blockState: BlockState) {
+        whenever(blockResolver.createBlock(event)).then { blockState }
     }
     
-    private fun assertHasBlockValue(id: GraphBlockIdentifier = blockId): GraphBlock {
+    private fun assertHasBlockValue(id: BlockId = blockId): BlockState {
         val blocks = viewModel.blocks.value
         assertNotNull(blocks)
     
-        val addedBlock = blocks[id]
+        val addedBlock = blocks.find { it.block.id == id }
         assertNotNull(addedBlock)
         
         return addedBlock
@@ -162,7 +161,7 @@ class ScriptGraphViewModelTest {
             id = dependencyId,
             startId = blockId,
             status = DEPENDENCY_MOVE,
-            rawEndPosition = Position(22f, 22f)
+            rawEndPosition = Position(22, 22)
         ))
     
         viewModel.cancelCreatingDependency(dependencyId)
@@ -190,7 +189,7 @@ class ScriptGraphViewModelTest {
             id = dependencyId,
             startId = otherBlockId,
             status = DEPENDENCY_MOVE,
-            rawEndPosition = Position(22f, 22f)
+            rawEndPosition = Position(22, 22)
         ))
     }
     

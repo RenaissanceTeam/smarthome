@@ -15,11 +15,12 @@ import smarthome.client.presentation.main.toolbar.ToolbarControllerImpl
 import smarthome.client.presentation.main.toolbar.ToolbarHolder
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
 import smarthome.client.presentation.scripts.addition.AddScriptViewModel
-import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
-import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBusImpl
+import smarthome.client.presentation.scripts.addition.graph.*
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.*
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolverImpl
+import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
+import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBusImpl
 
 val presentation = module {
     
@@ -44,5 +45,11 @@ val presentation = module {
     singleBy<GraphEventBus, GraphEventBusImpl>()
     factoryBy<GraphBlockFactoryResolver, GraphBlockFactoryResolverImpl>()
     factoryBy<GraphBlockResolver, GraphBlockResolverImpl>()
+    factory { BlockToNewGraphBlockStateMapper() }
+    factoryBy<DragBlockEventsHandler, DragBlockEventsHandlerImpl>()
+    factoryBy<DependencyEventsHandler, DependencyEventsHandlerImpl>()
+    factory { AddBlockHelper(get()) }
+    factory { AddGraphBlockStateHelper() }
+    
     factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactoryImpl() }
 }

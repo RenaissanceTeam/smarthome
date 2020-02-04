@@ -5,5 +5,5 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDra
 
 interface GraphBlockResolver {
     fun resolveIdentifier(event: GraphDragEvent): GraphBlockIdentifier
-    fun createBlock(event: GraphDragEvent): GraphBlock
+    fun createBlock(event: GraphDragEvent): BlockState
 }

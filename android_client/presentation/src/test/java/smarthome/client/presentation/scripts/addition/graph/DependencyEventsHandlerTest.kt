@@ -5,14 +5,13 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
+import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.Position
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependencyTipStatus
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
-import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
-import smarthome.client.presentation.util.Position
-import kotlin.test.assertEquals
 
 class DependencyEventsHandlerTest {
     
@@ -21,7 +20,7 @@ class DependencyEventsHandlerTest {
     private lateinit var getCurrentDependencies: () -> MutableMap<String, DependencyState>
     private lateinit var emitTipStatus: (MovingDependencyTipStatus) -> Unit
     private lateinit var getCurrentTipStatus: () -> MovingDependencyTipStatus
-    private val position1_1 = Position(1f, 1f)
+    private val position1_1 = Position(1, 1)
     private val blockId = MockBlockId()
     private val dependencyId = "deip"
     private lateinit var mockDependency: DependencyState
@@ -38,7 +37,7 @@ class DependencyEventsHandlerTest {
         }
         emitTipStatus = mock {}
         getCurrentTipStatus = mock {}
-        handler = DependencyEventsHandler(
+        handler = DependencyEventsHandlerImpl(
             emitDependencies = emitDependencies,
             getCurrentTipStatus = getCurrentTipStatus,
             emitTipStatus = emitTipStatus,
@@ -47,8 +46,8 @@ class DependencyEventsHandlerTest {
     }
     
     private fun createDependencyState(id: String = dependencyId,
-                                      startBlock: GraphBlockIdentifier? = null,
-                                      endBlock: GraphBlockIdentifier? = null,
+                                      startBlock: BlockId? = null,
+                                      endBlock: BlockId? = null,
                                       rawEndPosition: Position? = null): DependencyState {
         return DependencyState(id, startBlock, endBlock, rawEndPosition)
     }
@@ -56,8 +55,8 @@ class DependencyEventsHandlerTest {
     private fun createDependencyEvent(
         id: String = dependencyId,
         status: String = DEPENDENCY_START,
-        startId: GraphBlockIdentifier,
-        endId: GraphBlockIdentifier? = null,
+        startId: BlockId,
+        endId: BlockId? = null,
         rawEndPosition: Position = position1_1
     ): DependencyEvent {
         return DependencyEvent(id, status, startId, endId, rawEndPosition)
@@ -85,7 +84,7 @@ class DependencyEventsHandlerTest {
     
     @Test
     fun `when dependency move should update dependencies with new position`() {
-        val rawEndPosition = Position(22f, 22f)
+        val rawEndPosition = Position(22, 22)
         
         handler.handle(createDependencyEvent(
             startId = blockId,

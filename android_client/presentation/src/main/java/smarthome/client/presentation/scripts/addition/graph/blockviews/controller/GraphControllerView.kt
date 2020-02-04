@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
-import android.view.DragEvent
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -13,15 +12,16 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.entity.Controller
+import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.emptyPosition
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
-import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.util.*
 import smarthome.client.presentation.visible
-import smarthome.client.util.log
 
 class GraphControllerView @JvmOverloads constructor(
     context: Context,
@@ -48,7 +48,7 @@ class GraphControllerView @JvmOverloads constructor(
             val touchX = (drag_handle.x + event.x).toInt()
             val touchY = (drag_handle.y + event.y).toInt()
         
-            val info = viewModel.onDragStarted(Position(touchX.toFloat(), touchY.toFloat()))
+            val info = viewModel.onDragStarted(Position(touchX, touchY))
                 ?: return@setOnTouchListener false
         
         
@@ -109,7 +109,7 @@ class GraphControllerView @JvmOverloads constructor(
         controller_item_content.background = border
     }
     
-    private fun onBlockChanged(newId: ControllerGraphBlockIdentifier) {
+    private fun onBlockChanged(newId: BlockId) {
         setupLongPressToStartDependency(
             id = newId,
             view = this,
@@ -117,10 +117,10 @@ class GraphControllerView @JvmOverloads constructor(
         ) { }
     }
     
-    override fun setData(block: GraphBlock) {
-        if (block !is ControllerBlock) return
+    override fun setData(blockState: BlockState) {
+        if (blockState !is ControllerBlockState) return
         
-        viewModel.onNewBlockData(block)
+        viewModel.onNewBlockData(blockState)
     }
     
     private fun bind(controller: Controller) {
@@ -133,8 +133,8 @@ class GraphControllerView @JvmOverloads constructor(
     }
     
     private fun moveTo(position: Position) {
-        x = position.x
-        y = position.y
+        x = position.x.toFloat()
+        y = position.y.toFloat()
         
         invalidate()
     }
