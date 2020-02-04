@@ -72,7 +72,11 @@ class LongPressToStartDependencyTouchListener(
     }
     
     private fun getMovingDependencyId(): String {
-        return movingDependencyId ?: UUID.randomUUID().toString().also { movingDependencyId = it }
+        return movingDependencyId ?: createNewDependencyId().also { movingDependencyId = it }
+    }
+    
+    private fun createNewDependencyId(): String {
+        return UUID.randomUUID().toString()
     }
     
     override fun onTouch(v: View, event: MotionEvent): Boolean {
