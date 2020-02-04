@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import smarthome.client.presentation.util.Position
+import smarthome.client.entity.script.Position
 
 var View.visible
     get() = visibility == View.VISIBLE
@@ -23,11 +23,25 @@ fun <T> List<T>.replace(newItem: T, predicate: (T) -> Boolean): List<T> {
     return subList(0, index) + listOf(newItem) + subList(index + 1, size)
 }
 
-fun <T> MutableList<T>.replaceOrAdd(newItem: T, predicate: (T) -> Boolean): List<T> = apply {
-    if (containsThat(predicate)) {
-        replace(newItem, predicate)
+fun <T> List<T>.findAndModify(predicate: (T) -> Boolean, modify: (T) -> T): List<T> {
+    val found = find(predicate) ?: return this
+    val modified = modify(found)
+    
+    return replace(modified, predicate)
+}
+
+fun <T> List<T>.withRemoved(predicate: (T) -> Boolean): List<T> {
+    val toRemove = find(predicate)
+    val index = indexOf(toRemove)
+    
+    return subList(0, index) + subList(index + 1, size)
+}
+
+fun <T> List<T>.withReplacedOrAdded(item: T, predicate: (T) -> Boolean): List<T> {
+    return if (containsThat(predicate)) {
+        replace(item, predicate)
     } else {
-        add(newItem)
+        this + item
     }
 }
 
@@ -46,9 +60,9 @@ inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope,
     return scope.launch { runCatching { block() }.onFailure(onFailure) }
 }
 
-val MotionEvent.position get() = Position(x, y)
+val MotionEvent.position get() = Position(x.toInt(), y.toInt())
 
-val MotionEvent.rawPosition get() = Position(rawX, rawY)
+val MotionEvent.rawPosition get() = Position(rawX.toInt(), rawY.toInt())
 
 fun <T> MutableLiveData<T>.triggerRebuild() {
     this.value = value

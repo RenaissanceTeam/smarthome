@@ -1,6 +1,5 @@
 package smarthome.client.presentation.scripts.addition.graph
 
-import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
+import smarthome.client.entity.script.BlockId
 
-class MockBlockId :
-    GraphBlockIdentifier
+class MockBlockId : BlockId

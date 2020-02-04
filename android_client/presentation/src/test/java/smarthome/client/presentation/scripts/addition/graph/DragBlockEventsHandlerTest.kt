@@ -5,33 +5,54 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
+import smarthome.client.domain.api.scripts.usecases.AddBlockToScriptGraphUseCase
+import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
+import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.Position
+import smarthome.client.presentation.containsThat
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
-import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
-import smarthome.client.presentation.util.Position
 
-class DragBlockHandlerTest {
-    private lateinit var handler: DragBlockHandler
-    private lateinit var getCurrentBlocks: () -> MutableMap<GraphBlockIdentifier, GraphBlock>
-    private lateinit var getBlockForEvent: (GraphDragEvent) -> GraphBlock?
-    private lateinit var emitBlocks: (MutableMap<GraphBlockIdentifier, GraphBlock>) -> Unit
-    private val position1_1 = Position(1f, 1f)
-    private lateinit var block: MockGraphBlock
+class DragBlockEventsHandlerTest {
+    private lateinit var handler: DragBlockEventsHandler
+    private lateinit var getCurrentBlocks: () -> List<BlockState>
+    private lateinit var getBlockStateForEvent: (GraphDragEvent) -> BlockState?
+    private lateinit var emitBlocks: (List<BlockState>) -> Unit
+    private lateinit var moveBlockUseCase: MoveBlockUseCase
+    private lateinit var removeBlockUseCase: RemoveBlockUseCase
+    private lateinit var addBlockToScriptGraphUseCase: AddBlockToScriptGraphUseCase
+    private lateinit var addBlockHelper: AddBlockHelper
+    
+    
+    private val position1_1 = Position(1, 1)
+    private lateinit var block: MockBlockState
     private val blockId = MockBlockId()
-    private lateinit var currentBlocks: MutableMap<GraphBlockIdentifier, GraphBlock>
+    private lateinit var currentBlocks: List<BlockState>
     
     @Before
     fun setUp() {
         emitBlocks = mock {}
+        moveBlockUseCase = mock {}
+        removeBlockUseCase = mock {}
+        addBlockToScriptGraphUseCase = mock {}
+        addBlockHelper = mock {}
         block = setupMockingBlock()
-        currentBlocks = mutableMapOf(blockId to block)
+        currentBlocks = listOf(block)
         getCurrentBlocks = mock {
             on { invoke() }.then { currentBlocks }
         }
-        handler = DragBlockHandler(getCurrentBlocks, emitBlocks)
+        handler = DragBlockEventsHandlerImpl(
+            getCurrentBlocks,
+            emitBlocks,
+            moveBlockUseCase,
+            removeBlockUseCase,
+            addBlockToScriptGraphUseCase,
+            addBlockHelper
+        )
     }
     
-    private fun createDragEvent(id: GraphBlockIdentifier = blockId,
+    private fun createDragEvent(id: BlockId = blockId,
                                 status: String,
                                 from: String = UNKNOWN,
                                 to: String = UNKNOWN,
@@ -41,14 +62,14 @@ class DragBlockHandlerTest {
     }
     
     private fun setupMockingBlock(id: MockBlockId = blockId,
-                                  position: Position = position1_1): MockGraphBlock {
-        return MockGraphBlock(id, position)
+                                  position: Position = position1_1): MockBlockState {
+        return MockBlockState(id, position)
     }
     
-    private fun verifyEmitBlock(id: GraphBlockIdentifier = blockId,
-                                predicate: (GraphBlock) -> Boolean) {
+    private fun verifyEmitBlock(id: BlockId = blockId,
+                                predicate: (BlockState) -> Boolean) {
         verify(emitBlocks).invoke(argThat {
-            val block = this[id] ?: return@argThat false
+            val block = find { it.block.id == id } ?: return@argThat false
             predicate(block)
         })
     }
@@ -60,7 +81,7 @@ class DragBlockHandlerTest {
         
         handler.handle(dragEvent)
         verifyEmitBlock {
-            it is MockGraphBlock && !it.visible
+            it is MockBlockState && !it.visible
         }
     }
     
@@ -74,7 +95,7 @@ class DragBlockHandlerTest {
         handler.handle(dropEvent)
         
         verifyEmitBlock { draggedBlock ->
-            draggedBlock is MockGraphBlock
+            draggedBlock is MockBlockState
                 && draggedBlock.id == blockId
                 && draggedBlock.position == position1_1
         }
@@ -85,13 +106,13 @@ class DragBlockHandlerTest {
         val dragEvent = createDragEvent(status = DRAG_CANCEL, from = GRAPH)
         
         handler.handle(dragEvent)
-        
-        verifyEmitBlock { it is MockGraphBlock && it.visible }
+    
+        verifyEmitBlock { it is MockBlockState && it.visible }
     }
     
     @Test
     fun `when drag from graph and drop to graph should emit block with new position`() {
-        val droppedAt = Position(12f, 22f)
+        val droppedAt = Position(12, 22)
         val dropEvent =
             createDragEvent(status = DRAG_DROP, to = GRAPH, from = GRAPH, position = droppedAt)
         
@@ -99,7 +120,7 @@ class DragBlockHandlerTest {
         handler.handle(dropEvent)
         
         verifyEmitBlock {
-            it.visible && it.position == droppedAt
+            it.visible && it.block.position == droppedAt
         }
     }
     
@@ -108,8 +129,8 @@ class DragBlockHandlerTest {
         val dropEvent = createDragEvent(status = DRAG_DROP, to = CONTROLLERS_HUB, from = GRAPH)
         
         handler.handle(dropEvent)
-        
-        verify(emitBlocks).invoke(argThat { blockId !in this })
+    
+        verify(emitBlocks).invoke(argThat { !containsThat { it.block.id == blockId } })
     }
     
 }

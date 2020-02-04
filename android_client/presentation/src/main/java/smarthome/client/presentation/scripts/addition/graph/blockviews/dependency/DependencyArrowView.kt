@@ -6,9 +6,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import smarthome.client.entity.script.Position
 import smarthome.client.presentation.R
-import smarthome.client.presentation.util.Position
-import smarthome.client.presentation.util.emptyPosition
+import smarthome.client.entity.script.emptyPosition
 import kotlin.properties.Delegates
 
 
@@ -50,7 +50,13 @@ class DependencyArrowView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         
-        canvas.drawLine(startPosition.x, startPosition.y, endPosition.x, endPosition.y, paint)
+        canvas.drawLine(
+            startPosition.x.toFloat(),
+            startPosition.y.toFloat(),
+            endPosition.x.toFloat(),
+            endPosition.y.toFloat(),
+            paint
+        )
     }
 }
 

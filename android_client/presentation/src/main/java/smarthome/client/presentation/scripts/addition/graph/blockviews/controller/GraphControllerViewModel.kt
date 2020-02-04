@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.entity.Controller
+import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.controller.ControllerBlockId
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
@@ -14,7 +16,6 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_STA
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
 import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.util.KoinViewModel
-import smarthome.client.presentation.util.Position
 import smarthome.client.util.LoadingStatus
 import smarthome.client.util.data
 import kotlin.properties.Delegates
@@ -28,24 +29,24 @@ class GraphControllerViewModel: KoinViewModel(), EventPublisher {
     val loading = MutableLiveData<Boolean>()
     val data = MutableLiveData<Controller>()
     val border = MutableLiveData<BorderStatus>()
-    val blockId = MutableLiveData<ControllerGraphBlockIdentifier>()
+    val blockId = MutableLiveData<ControllerBlockId>()
     
     private val eventBus: GraphEventBus by inject()
     private val observeController: ObserveControllerUseCase by inject()
     private var id by Delegates.observable<Long?>(null) { _, oldId, newId ->
         if (oldId != newId && newId != null) {
             observeController(newId)
-            blockId.value = ControllerGraphBlockIdentifier(newId)
+            blockId.value = ControllerBlockId(newId)
         }
     }
     
     override fun publish(e: GraphEvent) = eventBus.addEvent(e)
     
-    fun onNewBlockData(block: ControllerBlock) {
-        id = block.id.id
-        visible.value = block.visible
-        position.value = block.position
-        border.value = block.border
+    fun onNewBlockData(blockState: ControllerBlockState) {
+        id = blockState.block.id.id
+        visible.value = blockState.visible
+        position.value = blockState.block.position
+        border.value = blockState.border
     }
     
     private fun observeController(id: Long) {
@@ -61,7 +62,7 @@ class GraphControllerViewModel: KoinViewModel(), EventPublisher {
             ControllerDragEvent(
                 id = id,
                 dragInfo = CommonDragInfo(
-                    id = ControllerGraphBlockIdentifier(id),
+                    id = ControllerBlockId(id),
                     status = DRAG_START,
                     dragTouch = dragTouch,
                     from = GRAPH

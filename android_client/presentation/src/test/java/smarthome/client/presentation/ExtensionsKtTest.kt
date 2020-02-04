@@ -2,6 +2,7 @@ package smarthome.client.presentation
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import kotlin.test.assertTrue
 
 class ExtensionsKtTest {
     
@@ -15,5 +16,14 @@ class ExtensionsKtTest {
     fun `replace last item`() {
         val before = listOf(1, 2, 3)
         assertThat(before.replace(2) { it == 3 }).isEqualTo(listOf(1,2,2))
+    }
+    
+    @Test
+    fun `withRemoved should return list that's size is less by one and missing removed item`() {
+        val before = listOf(1, 2, 3)
+        val after = before.withRemoved { it == 2 }
+        assertTrue {
+            after == listOf(1, 3)
+        }
     }
 }

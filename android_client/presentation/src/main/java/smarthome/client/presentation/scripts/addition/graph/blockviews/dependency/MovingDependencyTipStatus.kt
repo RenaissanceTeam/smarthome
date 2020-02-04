@@ -1,14 +1,13 @@
 package smarthome.client.presentation.scripts.addition.graph.blockviews.dependency
 
-import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
-import smarthome.client.presentation.scripts.addition.graph.identifier.UnknownIdentifier
-import smarthome.client.presentation.util.Position
-import smarthome.client.presentation.util.emptyPosition
+import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.emptyPosition
 
 data class MovingDependencyTipStatus(
     val dependencyId: String? = null,
     val status: String = IDLE,
-    val from: GraphBlockIdentifier = UnknownIdentifier,
+    val from: BlockId? = null,
     val rawPosition: Position = emptyPosition
 )
 

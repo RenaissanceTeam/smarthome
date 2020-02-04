@@ -4,18 +4,19 @@ import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
+import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.Position
+import smarthome.client.presentation.rawPosition
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_END
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
-import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
 import smarthome.client.presentation.util.LongPressGestureDetectorListener
-import smarthome.client.presentation.util.Position
 import java.util.*
 
 fun setupLongPressToStartDependency(
-    id: GraphBlockIdentifier,
+    id: BlockId,
     view: View,
     eventPublisher: EventPublisher,
     block: LongPressToStartDependencyTouchListener.() -> Unit
@@ -35,7 +36,7 @@ fun setupLongPressToStartDependency(
 }
 
 class LongPressToStartDependencyTouchListener(
-    private val id: GraphBlockIdentifier,
+    private val id: BlockId,
     private val blockView: View,
     private val longPressListener: LongPressGestureDetectorListener,
     private val detector: GestureDetector,
@@ -64,7 +65,7 @@ class LongPressToStartDependencyTouchListener(
             id = getMovingDependencyId(),
             status = DEPENDENCY_START,
             startId = id,
-            rawEndPosition = Position(event.rawX, event.rawY)
+            rawEndPosition = event.rawPosition
         )
         
         onStartDependency(startEvent)
@@ -96,7 +97,7 @@ class LongPressToStartDependencyTouchListener(
             id = getMovingDependencyId(),
             status = DEPENDENCY_MOVE,
             startId = id,
-            rawEndPosition = Position(event.rawX, event.rawY)
+            rawEndPosition = event.rawPosition
         ))
         
         return true
@@ -109,7 +110,7 @@ class LongPressToStartDependencyTouchListener(
             id = getMovingDependencyId(),
             status = DEPENDENCY_END,
             startId = id,
-            rawEndPosition = Position(event.rawX, event.rawY)
+            rawEndPosition = event.rawPosition
         ))
         
         isDependencyMoving = false

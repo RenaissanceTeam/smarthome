@@ -18,11 +18,11 @@ import org.koin.dsl.module
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
+import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.controller.ControllerBlockId
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
-import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
-import smarthome.client.presentation.util.Position
 import smarthome.client.util.DataStatus
 
 class ControllersViewViewModelTest {
@@ -35,7 +35,7 @@ class ControllersViewViewModelTest {
     private lateinit var observeControllerUseCase: ObserveControllerUseCase
     private lateinit var eventBus: GraphEventBus
     private lateinit var events: PublishSubject<GraphEvent>
-    private val position1_1 = Position(1f, 1f)
+    private val position1_1 = Position(1, 1)
     
     @Before
     fun setUp() {
@@ -70,7 +70,7 @@ class ControllersViewViewModelTest {
         events.onNext(ControllerDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
-                id = ControllerGraphBlockIdentifier(id),
+                id = ControllerBlockId(id),
                 status = DRAG_START,
                 from = CONTROLLERS_HUB,
                 dragTouch = position1_1
@@ -88,7 +88,7 @@ class ControllersViewViewModelTest {
         events.onNext(ControllerDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
-                id = ControllerGraphBlockIdentifier(id),
+                id = ControllerBlockId(id),
                 status = DRAG_START,
                 from = UNKNOWN,
                 to = UNKNOWN,
@@ -105,7 +105,7 @@ class ControllersViewViewModelTest {
         val info = ControllerDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
-                id = ControllerGraphBlockIdentifier(id),
+                id = ControllerBlockId(id),
                 status = DRAG_START,
                 from = CONTROLLERS_HUB,
                 dragTouch = position1_1
@@ -127,7 +127,7 @@ class ControllersViewViewModelTest {
         val id = 123L
         
         events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
-            id = ControllerGraphBlockIdentifier(id),
+            id = ControllerBlockId(id),
             status = DRAG_DROP,
             from = "ANYWHERE",
             to = CONTROLLERS_HUB,
@@ -143,7 +143,7 @@ class ControllersViewViewModelTest {
         
         
         events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
-            id = ControllerGraphBlockIdentifier(id),
+            id = ControllerBlockId(id),
             status = DRAG_DROP,
             from = "ANYWHERE",
             to = CONTROLLERS_HUB,
@@ -153,7 +153,7 @@ class ControllersViewViewModelTest {
         verify(observeControllerUseCase).execute(id)
         
         events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
-            id = ControllerGraphBlockIdentifier(id),
+            id = ControllerBlockId(id),
             status = DRAG_DROP,
             from = CONTROLLERS_HUB,
             to = CONTROLLERS_HUB,

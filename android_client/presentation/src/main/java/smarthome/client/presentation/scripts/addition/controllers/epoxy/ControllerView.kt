@@ -11,11 +11,12 @@ import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelView
 import com.airbnb.epoxy.TextProp
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
+import smarthome.client.entity.script.Position
 import smarthome.client.presentation.R
+import smarthome.client.presentation.position
 import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.CustomDragShadowBuilder
-import smarthome.client.presentation.util.Position
 import smarthome.client.presentation.util.inflate
 
 
@@ -30,7 +31,7 @@ class ControllerView @JvmOverloads constructor(
         inflate(R.layout.scripts_controller_item)
         val detector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onLongPress(pressEvent: MotionEvent) {
-                val info = onDragStarted?.invoke(Position(pressEvent.x, pressEvent.y))
+                val info = onDragStarted?.invoke(pressEvent.position)
 
                 val shadowBuilder = CustomDragShadowBuilder(this@ControllerView,
                     pressEvent.x.toInt(),
