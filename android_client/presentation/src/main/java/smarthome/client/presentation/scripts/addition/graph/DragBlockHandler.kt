@@ -1,15 +1,11 @@
 package smarthome.client.presentation.scripts.addition.graph
 
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlock
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_DROP
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_START
-import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
-import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
+import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.scripts.addition.graph.identifier.GraphBlockIdentifier
 
 class DragBlockHandler(
     private val getCurrentBlocks: () -> MutableMap<GraphBlockIdentifier, GraphBlock>,
-    private val getBlockForEvent: (GraphDragEvent) -> GraphBlock,
     private val emitBlocks: (MutableMap<GraphBlockIdentifier, GraphBlock>) -> Unit
 ) {
     fun handle(event: GraphDragEvent) {
@@ -23,11 +19,20 @@ class DragBlockHandler(
             DRAG_START -> {
                 if (event.isFrom(GRAPH)) handleDragStartFromGraph(event)
             }
+            DRAG_CANCEL -> {
+                if (event.isFrom(GRAPH)) makeBlockVisible(event)
+            }
         }
     }
     
+    private fun makeBlockVisible(event: GraphDragEvent) {
+        val block = getBlockForEvent(event) ?: return
+        
+        emitWithBlock(block.copyWithInfo(visible = true))
+    }
+    
     private fun handleBlockRemove(event: GraphDragEvent) {
-        val blockBeforeEvent = getBlockForEvent(event)
+        val blockBeforeEvent = getBlockForEvent(event) ?: return
         
         val current = getCurrentBlocks()
         current.remove(blockBeforeEvent.id)
@@ -36,7 +41,7 @@ class DragBlockHandler(
     }
     
     private fun handleDropToGraph(event: GraphDragEvent) {
-        val blockBeforeEvent = getBlockForEvent(event)
+        val blockBeforeEvent = getBlockForEvent(event) ?: return
         val droppedBlock = blockBeforeEvent.copyWithInfo(
             position = event.dragInfo.position,
             visible = true
@@ -46,10 +51,14 @@ class DragBlockHandler(
     }
     
     private fun handleDragStartFromGraph(event: GraphDragEvent) {
-        val blockBeforeEvent = getBlockForEvent(event)
+        val blockBeforeEvent = getBlockForEvent(event) ?: return
         val hiddenBlock = blockBeforeEvent.copyWithInfo(visible = false)
         
         emitWithBlock(hiddenBlock)
+    }
+    
+    private fun getBlockForEvent(event: GraphDragEvent): GraphBlock? {
+        return getCurrentBlocks()[event.dragInfo.id]
     }
     
     private fun emitWithBlock(block: GraphBlock) {
