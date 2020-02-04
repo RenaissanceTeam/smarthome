@@ -1,7 +1,7 @@
 package smarthome.client.presentation.scripts.addition
 
 import androidx.lifecycle.MutableLiveData
-import smarthome.client.entity.Script
+import smarthome.client.entity.script.Script
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 
