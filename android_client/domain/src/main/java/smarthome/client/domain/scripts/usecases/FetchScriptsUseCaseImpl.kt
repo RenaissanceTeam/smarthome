@@ -2,7 +2,7 @@ package smarthome.client.domain.scripts.usecases
 
 import smarthome.client.data.api.scripts.ScriptsRepo
 import smarthome.client.domain.api.scripts.usecases.FetchScriptsUseCase
-import smarthome.client.entity.Script
+import smarthome.client.entity.script.Script
 
 class FetchScriptsUseCaseImpl(
     private val scriptsRepo: ScriptsRepo

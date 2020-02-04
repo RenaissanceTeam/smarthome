@@ -6,7 +6,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.FetchScriptsUseCase
-import smarthome.client.entity.Script
+import smarthome.client.entity.script.Script
 import smarthome.client.presentation.runInScope
 import smarthome.client.presentation.scripts.all.items.ScriptsItemState
 import smarthome.client.presentation.util.KoinViewModel

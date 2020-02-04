@@ -1,4 +1,4 @@
-package smarthome.client.entity
+package smarthome.client.entity.script
 
 data class Script(
     val id: Long = 0,
