@@ -1,12 +1,9 @@
-package smarthome.client.presentation
+package smarthome.client.util
 
-import android.view.MotionEvent
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import smarthome.client.entity.script.Position
 
 var View.visible
     get() = visibility == View.VISIBLE
@@ -60,10 +57,3 @@ inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope,
     return scope.launch { runCatching { block() }.onFailure(onFailure) }
 }
 
-val MotionEvent.position get() = Position(x.toInt(), y.toInt())
-
-val MotionEvent.rawPosition get() = Position(rawX.toInt(), rawY.toInt())
-
-fun <T> MutableLiveData<T>.triggerRebuild() {
-    this.value = value
-}

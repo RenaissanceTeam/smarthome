@@ -6,15 +6,13 @@ import android.view.MotionEvent
 import android.view.View
 import smarthome.client.entity.script.BlockId
 import smarthome.client.entity.script.DependencyId
-import smarthome.client.entity.script.Position
-import smarthome.client.presentation.rawPosition
+import smarthome.client.presentation.util.rawPosition
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_END
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
 import smarthome.client.presentation.util.LongPressGestureDetectorListener
-import java.util.*
 
 fun setupLongPressToStartDependency(
     id: BlockId,

@@ -1,7 +1,10 @@
-package smarthome.client.presentation
+package smarthome.client.util
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import smarthome.client.util.findAndModify
+import smarthome.client.util.replace
+import smarthome.client.util.withRemoved
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

@@ -20,7 +20,7 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBloc
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.util.*
-import smarthome.client.presentation.visible
+import smarthome.client.util.visible
 
 class GraphControllerView @JvmOverloads constructor(
     context: Context,

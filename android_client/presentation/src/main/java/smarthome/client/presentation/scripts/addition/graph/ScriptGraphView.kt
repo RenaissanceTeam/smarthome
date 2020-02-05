@@ -22,7 +22,7 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.state.Blo
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
-import smarthome.client.presentation.visible
+import smarthome.client.util.visible
 
 class ScriptGraphView @JvmOverloads constructor(
     context: Context,

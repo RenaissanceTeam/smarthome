@@ -1,5 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph
 
+import androidx.lifecycle.MutableLiveData
 import smarthome.client.domain.api.scripts.usecases.AddBlockToScriptGraphUseCase
 import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
@@ -7,11 +8,10 @@ import smarthome.client.entity.script.Block
 import smarthome.client.entity.script.BlockId
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
-import smarthome.client.presentation.withReplacedOrAdded
+import smarthome.client.util.withReplacedOrAdded
 
 class DragBlockEventsHandlerImpl(
-    private val getCurrentBlocks: () -> List<BlockState>,
-    private val emitBlocks: (List<BlockState>) -> Unit,
+    private val blocks: MutableLiveData<List<BlockState>>,
     private val moveBlockUseCase: MoveBlockUseCase,
     private val removeBlockUseCase: RemoveBlockUseCase,
     private val addBlockToScriptGraphUseCase: AddBlockToScriptGraphUseCase,
@@ -76,14 +76,14 @@ class DragBlockEventsHandlerImpl(
     }
     
     private fun getBlockState(id: BlockId): BlockState? {
-        return getCurrentBlocks().find { it.block.id == id }
+        return blocks.value?.find { it.block.id == id }
     }
     
     private fun emitWithBlock(blockState: BlockState) {
-        val current = getCurrentBlocks()
+        val current = blocks.value.orEmpty()
         val id = blockState.block.id
         
-        emitBlocks(current.withReplacedOrAdded(blockState) { it.block.id == id })
+        blocks.value = current.withReplacedOrAdded(blockState) { it.block.id == id }
     }
     
     private fun BlockState.copyOfHidden(): BlockState {

@@ -4,5 +4,5 @@ import io.reactivex.Observable
 import smarthome.client.entity.script.Block
 
 interface ObserveBlocksUseCase {
-    fun execute(): Observable<List<Block>>
+    fun execute(scriptId: Long): Observable<List<Block>>
 }

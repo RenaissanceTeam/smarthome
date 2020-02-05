@@ -8,6 +8,6 @@ class RemoveBlockUseCaseImpl(
     private val repo: ScriptGraphRepo
 ) : RemoveBlockUseCase {
     override fun execute(scriptId: Long, blockId: BlockId) {
-        repo.remove(scriptId, blockId)
+        repo.removeBlock(scriptId, blockId)
     }
 }

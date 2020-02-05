@@ -2,13 +2,13 @@ package smarthome.client.presentation.scripts.addition.graph
 
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
+import org.koin.core.parameter.parametersOf
 import smarthome.client.domain.api.scripts.usecases.CheckIfDependencyPossibleUseCase
 import smarthome.client.domain.api.scripts.usecases.ObserveBlocksUseCase
 import smarthome.client.domain.api.scripts.usecases.ObserveDependenciesUseCase
 import smarthome.client.entity.script.BlockId
 import smarthome.client.entity.script.DependencyId
 import smarthome.client.entity.script.Position
-import smarthome.client.presentation.findAndModify
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.IDLE
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
@@ -22,6 +22,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
+import smarthome.client.util.findAndModify
 
 class ScriptGraphViewModel : KoinViewModel() {
     
@@ -31,10 +32,14 @@ class ScriptGraphViewModel : KoinViewModel() {
     private val checkIfDependencyPossible: CheckIfDependencyPossibleUseCase by inject()
     private val blockToNewGraphBlockMapper: BlockToNewGraphBlockStateMapper by inject()
     private val dependencyToDependencyStateMapper: DependencyToDependencyStateMapper by inject()
-    private val dragBlockHandler: DragBlockEventsHandler by inject()
-    private val dependencyEventsHandler: DependencyEventsHandler by inject()
+    private val dragBlockHandler: DragBlockEventsHandler by inject {
+        parametersOf(blocks)
+    }
+    private val dependencyEventsHandler: DependencyEventsHandler by inject {
+        parametersOf(movingDependency)
+    }
     
-    
+    val scriptId = 1L // TODO
     val movingDependency = MutableLiveData<MovingDependency>()
     val blocks = MutableLiveData<List<BlockState>>()
     val dependencies = MutableLiveData<List<DependencyState>>()
@@ -47,7 +52,7 @@ class ScriptGraphViewModel : KoinViewModel() {
                 if (it is DependencyEvent) dependencyEventsHandler.handle(it)
         })
     
-        disposable.add(observeBlocksUseCase.execute().subscribe { newBlocks ->
+        disposable.add(observeBlocksUseCase.execute(scriptId).subscribe { newBlocks ->
             val currentBlocks = blocks.value.orEmpty()
         
             blocks.value = newBlocks.map { newBlock ->
@@ -57,7 +62,7 @@ class ScriptGraphViewModel : KoinViewModel() {
             }
         })
     
-        disposable.add(observeDependenciesUseCase.execute().subscribe { dependencies ->
+        disposable.add(observeDependenciesUseCase.execute(scriptId).subscribe { dependencies ->
             val currentDependencies = this.dependencies.value.orEmpty()
         
             this.dependencies.value = dependencies.map { dependency ->
@@ -66,10 +71,6 @@ class ScriptGraphViewModel : KoinViewModel() {
                     ?: dependencyToDependencyStateMapper.map(dependency)
             }
         })
-    }
-    
-    private fun getCurrentDependencies(): List<DependencyState> {
-        return dependencies.value.orEmpty()
     }
     
     fun onDropped(event: GraphDragEvent, dropPosition: Position) {
@@ -101,7 +102,7 @@ class ScriptGraphViewModel : KoinViewModel() {
             block.copyWithInfo(
                 border = BorderStatus(
                     isVisible = true,
-                    isFailure = checkIfDependencyPossible.execute(from, to)
+                    isFailure = checkIfDependencyPossible.execute(scriptId, from, to)
                 )
             )
         }

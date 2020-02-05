@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_device_addition.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.devices.deviceaddition.epoxy.PendingDeviceController
-import smarthome.client.presentation.visible
 
 class AdditionFragment : Fragment() {
     val controller = PendingDeviceController()
