@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DROPPED
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MOVING
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.STARTED
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_END
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
@@ -24,7 +25,7 @@ class DependencyEventsHandlerImpl(
     private fun onStartDependency(event: DependencyEvent) {
         movingDependency.value = MovingDependency(
             id = event.id,
-            status = MOVING,
+            status = STARTED,
             startBlock = event.startId,
             rawEndPosition = event.rawEndPosition)
     }

@@ -36,7 +36,7 @@ class ScriptGraphView @JvmOverloads constructor(
     
     private var blockViews = mutableMapOf<BlockId, GraphBlockView>()
     private var dependencyViews = mutableMapOf<DependencyId, DependencyArrowView>()
-    private var movingDependencyView = DependencyArrowView(context)
+    private var movingDependencyView = DependencyArrowView(context).also(::addView)
     private val viewModel = ScriptGraphViewModel()
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
     
@@ -57,14 +57,32 @@ class ScriptGraphView @JvmOverloads constructor(
                 IDLE -> {
                     movingDependencyView.visible = false
                 }
-                MOVING -> {
+                STARTED -> {
                     movingDependencyView.visible = true
+                    setStartToCenterOfBlock(movingDependencyView, dependency.startBlock)
+                    setMovingDependencyEnd(dependency)
+                }
+                MOVING -> {
                     highlightBlockOnDependencyTip(dependency)
+                    setMovingDependencyEnd(dependency)
                 }
                 DROPPED -> {
                     addOrCancelDependency(dependency)
                 }
             }
+        }
+    }
+    
+    private fun setMovingDependencyEnd(dependency: MovingDependency) {
+        dependency.rawEndPosition
+            ?.let(::convertRawToRelativePosition)
+            ?.let(movingDependencyView::setEnd)
+    }
+    
+    private fun setStartToCenterOfBlock(view: DependencyArrowView?, startBlock: BlockId?) {
+        startBlock?.let { startId ->
+            val start = blockViews[startId] ?: return@let
+            view?.setStart(start.centerPosition)
         }
     }
     
@@ -146,8 +164,7 @@ class ScriptGraphView @JvmOverloads constructor(
         dependencies.forEach { state ->
             val view = getOrInflateDependency(state.dependency.id)
             
-            val startBlock = blockViews[state.dependency.startBlock]
-            startBlock?.centerPosition?.let(view::setStart)
+            setStartToCenterOfBlock(view, state.dependency.startBlock)
             
             val endBlock = blockViews[state.dependency.endBlock]
             endBlock?.centerPosition?.let(view::setEnd)
