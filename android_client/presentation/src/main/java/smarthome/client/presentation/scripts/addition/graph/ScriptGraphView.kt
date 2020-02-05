@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.DependencyId
 import smarthome.client.entity.script.Position
 import smarthome.client.entity.script.toPosition
 import smarthome.client.presentation.R
@@ -21,6 +22,7 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.state.Blo
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
+import smarthome.client.presentation.visible
 
 class ScriptGraphView @JvmOverloads constructor(
     context: Context,
@@ -33,7 +35,8 @@ class ScriptGraphView @JvmOverloads constructor(
     }
     
     private var blockViews = mutableMapOf<BlockId, GraphBlockView>()
-    private var dependencyViews = mutableMapOf<String, DependencyArrowView>()
+    private var dependencyViews = mutableMapOf<DependencyId, DependencyArrowView>()
+    private var movingDependencyView = DependencyArrowView(context)
     private val viewModel = ScriptGraphViewModel()
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
     
@@ -49,28 +52,48 @@ class ScriptGraphView @JvmOverloads constructor(
         
         viewModel.blocks.observe(lifecycleOwner, this::bindBlocks)
         viewModel.dependencies.observe(lifecycleOwner, this::bindDependencies)
-        viewModel.movingDependencyTip.observe(lifecycleOwner) { tip ->
-            when (tip.status) {
+        viewModel.movingDependency.observe(lifecycleOwner) { dependency ->
+            when (dependency.status) {
                 IDLE -> {
+                    movingDependencyView.visible = false
                 }
                 MOVING -> {
-                    val movedTo = findBlockOnDependencyTip(tip.rawPosition)
-                
-                    when (movedTo == null) {
-                        false -> tip.from?.let { viewModel.dependencyTipOnBlock(it, movedTo.key) }
-                        true -> viewModel.dependencyTipNotOnAnyBlock()
-                    }
+                    movingDependencyView.visible = true
+                    highlightBlockOnDependencyTip(dependency)
                 }
                 DROPPED -> {
-                    val droppedTo = findBlockOnDependencyTip(tip.rawPosition)
-                    if (tip.dependencyId == null) return@observe
-                    when (droppedTo == null) {
-                        false -> if (tip.from != null) {
-                            viewModel.addDependency(tip.dependencyId, tip.from, droppedTo.key)
-                        }
-                        true -> viewModel.cancelCreatingDependency(tip.dependencyId)
-                    }
+                    addOrCancelDependency(dependency)
                 }
+            }
+        }
+    }
+    
+    private fun addOrCancelDependency(dependency: MovingDependency) {
+        if (dependency.rawEndPosition == null
+            || dependency.id == null
+            || dependency.startBlock == null) return
+        
+        val droppedTo = findBlockOnDependencyTip(dependency.rawEndPosition)
+        
+        when (droppedTo == null) {
+            true -> viewModel.cancelCreatingDependency()
+            false -> viewModel.addDependency(
+                dependency.id,
+                dependency.startBlock,
+                droppedTo.key
+            )
+        }
+    }
+    
+    private fun highlightBlockOnDependencyTip(dependency: MovingDependency) {
+        if (dependency.rawEndPosition == null) return
+        
+        val movedTo = findBlockOnDependencyTip(dependency.rawEndPosition)
+        
+        when (movedTo == null) {
+            true -> viewModel.dependencyTipNotOnAnyBlock()
+            false -> dependency.startBlock?.let {
+                viewModel.dependencyTipOnBlock(it, movedTo.key)
             }
         }
     }
@@ -99,8 +122,8 @@ class ScriptGraphView @JvmOverloads constructor(
         }
     }
     
-    private fun retainOnlyPostedDependencies(dependencies: MutableMap<String, DependencyState>) {
-        (dependencyViews.keys - dependencies.keys).forEach {
+    private fun retainOnlyPostedDependencies(dependencies: List<DependencyState>) {
+        (dependencyViews.keys - dependencies.map { it.dependency.id }).forEach {
             (dependencyViews.remove(it) as? View)?.let(this::removeView)
         }
     }
@@ -117,24 +140,17 @@ class ScriptGraphView @JvmOverloads constructor(
         return blockView
     }
     
-    private fun bindDependencies(dependencies: MutableMap<String, DependencyState>) {
+    private fun bindDependencies(dependencies: List<DependencyState>) {
         retainOnlyPostedDependencies(dependencies)
         
-        dependencies.values.forEach { dependency ->
-            val view = getOrInflateDependency(dependency.id)
+        dependencies.forEach { state ->
+            val view = getOrInflateDependency(state.dependency.id)
             
-            val startBlock = dependency.startBlock?.let { blockViews[it] }
+            val startBlock = blockViews[state.dependency.startBlock]
             startBlock?.centerPosition?.let(view::setStart)
             
-            val endBlock = dependency.endBlock?.let { blockViews[it] }
-            when (endBlock != null) {
-                true -> endBlock.centerPosition.let(view::setEnd)
-                false -> {
-                    dependency.rawEndPosition?.let { endPosition ->
-                        view.setEnd(convertRawToRelativePosition(endPosition))
-                    }
-                }
-            }
+            val endBlock = blockViews[state.dependency.endBlock]
+            endBlock?.centerPosition?.let(view::setEnd)
         }
     }
     
@@ -144,7 +160,7 @@ class ScriptGraphView @JvmOverloads constructor(
         return raw - graphPosition
     }
     
-    private fun getOrInflateDependency(id: String): DependencyArrowView {
+    private fun getOrInflateDependency(id: DependencyId): DependencyArrowView {
         return dependencyViews[id]
             ?: DependencyArrowView(context).also(this::addView).also { dependencyViews[id] = it }
     }

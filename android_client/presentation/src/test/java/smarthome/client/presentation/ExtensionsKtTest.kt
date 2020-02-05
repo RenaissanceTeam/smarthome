@@ -2,6 +2,7 @@ package smarthome.client.presentation
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class ExtensionsKtTest {
@@ -25,5 +26,15 @@ class ExtensionsKtTest {
         assertTrue {
             after == listOf(1, 3)
         }
+    }
+    
+    @Test
+    fun `find and modify should return new list with replaced value`() {
+        val before = listOf(1, 2, 3)
+        val after = before.findAndModify({ it == 1 }) {
+            it + 1
+        }
+        
+        assertEquals(listOf(2, 2, 3), after)
     }
 }

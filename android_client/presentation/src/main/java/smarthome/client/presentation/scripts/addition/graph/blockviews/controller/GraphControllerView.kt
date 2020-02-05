@@ -19,7 +19,6 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
-import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.util.*
 import smarthome.client.presentation.visible
 
