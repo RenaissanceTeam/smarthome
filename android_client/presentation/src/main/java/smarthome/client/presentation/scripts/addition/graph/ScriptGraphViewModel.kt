@@ -102,7 +102,7 @@ class ScriptGraphViewModel : KoinViewModel() {
             block.copyWithInfo(
                 border = BorderStatus(
                     isVisible = true,
-                    isFailure = checkIfDependencyPossible.execute(scriptId, from, to)
+                    isFailure = !checkIfDependencyPossible.execute(scriptId, from, to)
                 )
             )
         }

@@ -11,10 +11,7 @@ import smarthome.client.entity.script.BlockId
 import smarthome.client.entity.script.DependencyId
 import smarthome.client.entity.script.Position
 import smarthome.client.entity.script.emptyPosition
-import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
-import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.IDLE
-import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MOVING
-import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.*
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
@@ -58,13 +55,13 @@ class DependencyEventsHandlerTest {
     }
     
     @Test
-    fun `when create dependency should emit new moving dependency with status MOVING`() {
+    fun `when create dependency should emit new moving dependency with status STARTED`() {
         val event = createDependencyEvent(startId = blockId, status = DEPENDENCY_START)
         
         handler.handle(event)
     
         verify(dependencyLiveData).value = argThat {
-            this.status == MOVING
+            this.status == STARTED
                 && this.startBlock == blockId
                 && this.rawEndPosition == position1_1
         }
