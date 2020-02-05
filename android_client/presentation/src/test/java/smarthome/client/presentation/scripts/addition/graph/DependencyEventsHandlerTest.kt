@@ -1,5 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph
 
+import androidx.lifecycle.MutableLiveData
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -21,8 +22,6 @@ import smarthome.client.presentation.scripts.addition.graph.events.dependency.De
 class DependencyEventsHandlerTest {
     
     private lateinit var handler: DependencyEventsHandler
-    private lateinit var emitMovingDependency: (MovingDependency) -> Unit
-    private lateinit var getCurrentMovingDependency: () -> MovingDependency
     private val position1_1 = Position(1, 1)
     private val blockId = MockBlockId()
     private val otherBlockId = MockBlockId()
@@ -30,14 +29,14 @@ class DependencyEventsHandlerTest {
     private val dependencyId = MockDependencyId()
     private val dependency = MockDependency(dependencyId, blockId, otherBlockId)
     private val dependencyState = DependencyState(dependency)
+    private lateinit var dependencyLiveData: MutableLiveData<MovingDependency>
     
     @Before
     fun setUp() {
-        emitMovingDependency = mock {}
-        getCurrentMovingDependency = mock {}
+        
+        dependencyLiveData = mock {}
         handler = DependencyEventsHandlerImpl(
-            getCurrentMovingDependency = getCurrentMovingDependency,
-            emitMovingDependency = emitMovingDependency
+            dependencyLiveData
         )
     }
     
@@ -64,18 +63,18 @@ class DependencyEventsHandlerTest {
         
         handler.handle(event)
     
-        verify(emitMovingDependency).invoke(argThat {
+        verify(dependencyLiveData).value = argThat {
             this.status == MOVING
                 && this.startBlock == blockId
                 && this.rawEndPosition == position1_1
-        })
+        }
     }
     
     @Test
     fun `when dependency move should update moving dependency with new position`() {
         val rawEndPosition = Position(22, 22)
     
-        whenever(getCurrentMovingDependency.invoke()).then {
+        whenever(dependencyLiveData.value).then {
             createMovingDependency(
                 startBlock = blockId,
                 status = IDLE,
@@ -89,11 +88,11 @@ class DependencyEventsHandlerTest {
             rawEndPosition = rawEndPosition
         ))
     
-        verify(emitMovingDependency).invoke(argThat {
+        verify(dependencyLiveData).value = argThat {
             this.status == MOVING
                 && this.startBlock == blockId
                 && this.rawEndPosition == rawEndPosition
-        })
+        }
     }
     
     

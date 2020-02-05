@@ -16,6 +16,6 @@ class MoveBlockUseCaseImpl(
         
         val movedBlock = block.copyWithPosition(newPosition)
         
-        return repo.replaceBlock(movedBlock)
+        return repo.replaceBlock(scriptId, movedBlock)
     }
 }

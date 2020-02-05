@@ -1,5 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph
 
+import androidx.lifecycle.MutableLiveData
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DROPPED
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MOVING
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
@@ -9,8 +10,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.dependency.DE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
 
 class DependencyEventsHandlerImpl(
-    val emitMovingDependency: (MovingDependency) -> Unit,
-    val getCurrentMovingDependency: () -> MovingDependency?
+    val movingDependency: MutableLiveData<MovingDependency>
 ) : DependencyEventsHandler {
     
     override fun handle(event: DependencyEvent) {
@@ -22,29 +22,28 @@ class DependencyEventsHandlerImpl(
     }
     
     private fun onStartDependency(event: DependencyEvent) {
-        emitMovingDependency(MovingDependency(
+        movingDependency.value = MovingDependency(
             id = event.id,
             status = MOVING,
             startBlock = event.startId,
-            rawEndPosition = event.rawEndPosition))
+            rawEndPosition = event.rawEndPosition)
     }
     
     private fun onEndDependency(event: DependencyEvent) {
-        getCurrentMovingDependency()?.apply {
-            emitMovingDependency(copy(
+        movingDependency.value?.apply {
+            movingDependency.value = copy(
                 status = DROPPED,
                 rawEndPosition = event.rawEndPosition
-            ))
+            )
         }
     }
     
     private fun moveDependency(event: DependencyEvent) {
-        getCurrentMovingDependency()?.apply {
-            emitMovingDependency(copy(
+        movingDependency.value?.apply {
+            movingDependency.value = copy(
                 status = MOVING,
                 rawEndPosition = event.rawEndPosition
-
-            ))
+            )
         }
     }
 }

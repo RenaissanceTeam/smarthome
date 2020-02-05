@@ -1,5 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph
 
+import androidx.lifecycle.MutableLiveData
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
@@ -9,21 +10,19 @@ import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
 import smarthome.client.entity.script.Block
 import smarthome.client.entity.script.BlockId
 import smarthome.client.entity.script.Position
-import smarthome.client.presentation.containsThat
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 
 class DragBlockEventsHandlerTest {
     private lateinit var handler: DragBlockEventsHandler
-    private lateinit var getCurrentBlocks: () -> List<BlockState>
     private lateinit var getBlockStateForEvent: (GraphDragEvent) -> BlockState?
-    private lateinit var emitBlocks: (List<BlockState>) -> Unit
     private lateinit var moveBlockUseCase: MoveBlockUseCase
     private lateinit var removeBlockUseCase: RemoveBlockUseCase
     private lateinit var addBlockToScriptGraphUseCase: AddBlockToScriptGraphUseCase
     private lateinit var addBlockHelper: AddBlockHelper
     private lateinit var addGraphBlockStateHelper: AddGraphBlockStateHelper
     private lateinit var block: Block
+    private lateinit var blocksLiveData: MutableLiveData<List<BlockState>>
     
     private val position1_1 = Position(1, 1)
     private lateinit var blockState: MockBlockState
@@ -32,7 +31,6 @@ class DragBlockEventsHandlerTest {
     
     @Before
     fun setUp() {
-        emitBlocks = mock {}
         block = MockBlock(blockId, position1_1)
         blockState = MockBlockState(block)
         moveBlockUseCase = mock {
@@ -47,13 +45,12 @@ class DragBlockEventsHandlerTest {
     
     
         currentBlocks = listOf(blockState)
-        getCurrentBlocks = mock {
-            on { invoke() }.then { currentBlocks }
+        blocksLiveData = mock {
+            on { value }.then { currentBlocks }
         }
     
         handler = DragBlockEventsHandlerImpl(
-            getCurrentBlocks,
-            emitBlocks,
+            blocksLiveData,
             moveBlockUseCase,
             removeBlockUseCase,
             addBlockToScriptGraphUseCase,
@@ -73,10 +70,10 @@ class DragBlockEventsHandlerTest {
     
     private fun verifyEmitBlock(id: BlockId = blockId,
                                 predicate: (BlockState) -> Boolean) {
-        verify(emitBlocks).invoke(argThat {
+        verify(blocksLiveData).value = argThat {
             val block = find { it.block.id == id } ?: return@argThat false
             predicate(block)
-        })
+        }
     }
     
     

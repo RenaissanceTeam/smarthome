@@ -14,8 +14,8 @@ import smarthome.client.domain.api.devices.usecase.GetPendingDevicesUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.devices.deviceaddition.epoxy.PendingControllerItemState
 import smarthome.client.presentation.devices.deviceaddition.epoxy.PendingDeviceItemState
-import smarthome.client.presentation.runInScope
-import smarthome.client.presentation.runInScopeCatchingAny
+import smarthome.client.util.runInScope
+import smarthome.client.util.runInScopeCatchingAny
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.util.*

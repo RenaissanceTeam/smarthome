@@ -9,6 +9,6 @@ class AddBlockToScriptGraphUseCaseImpl(
 ) : AddBlockToScriptGraphUseCase {
     
     override fun execute(scriptId: Long, block: Block) {
-        repo.add(scriptId, block)
+        repo.addBlock(scriptId, block)
     }
 }

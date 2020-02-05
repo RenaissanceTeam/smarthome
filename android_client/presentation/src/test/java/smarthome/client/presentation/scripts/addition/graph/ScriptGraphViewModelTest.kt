@@ -69,17 +69,17 @@ class ScriptGraphViewModelTest {
         observeControllerUseCase =
             mock { on { execute(any()) }.then { Observable.empty<DataStatus<Controller>>() } }
         observeBlocksUseCase = mock {
-            on { execute() }.then { blocksObservable }
+            on { execute(any()) }.then { blocksObservable }
         }
         observeDependenciesUseCase = mock {
-            on { execute() }.then { dependenciesObservable }
+            on { execute(any()) }.then { dependenciesObservable }
         }
         events = PublishSubject.create()
         eventBus = mock { on { observe() }.then { events } }
         dragBlockEventsHandler = mock {}
         dependencyEventsHandler = mock {}
         checkIfDependencyPossibleUseCase = mock {
-            on { execute(any(), any()) }.then { true }
+            on { execute(any(), any(), any()) }.then { true }
         }
         blockToNewGraphBlockStateMapper = mock {
             on { map(any()) }.then { blockState }
