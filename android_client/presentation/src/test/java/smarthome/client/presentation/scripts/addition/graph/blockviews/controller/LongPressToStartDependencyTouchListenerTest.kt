@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.*
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
+import smarthome.client.entity.script.controller.ControllerBlockId
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
@@ -26,7 +27,7 @@ class LongPressToStartDependencyTouchListenerTest {
     private lateinit var eventBus: GraphEventBus
     private lateinit var eventPublisher: EventPublisher
     private lateinit var longPressListener: LongPressGestureDetectorListener
-    private val blockId = ControllerGraphBlockIdentifier(1L)
+    private val blockId = ControllerBlockId(1L)
     
     @Before
     fun setUp() {
@@ -56,8 +57,8 @@ class LongPressToStartDependencyTouchListenerTest {
             this is DependencyEvent
                 && this.startId == blockId
                 && this.status == DEPENDENCY_START
-                && this.rawEndPosition.x == 1f
-                && this.rawEndPosition.y == 2f
+                && this.rawEndPosition.x == 1
+                && this.rawEndPosition.y == 2
         })
     }
     
@@ -84,8 +85,8 @@ class LongPressToStartDependencyTouchListenerTest {
             this is DependencyEvent
                 && this.startId == blockId
                 && this.status == DEPENDENCY_MOVE
-                && this.rawEndPosition.x == 11f
-                && this.rawEndPosition.y == 22f
+                && this.rawEndPosition.x == 11
+                && this.rawEndPosition.y == 22
         })
     }
     
@@ -125,8 +126,8 @@ class LongPressToStartDependencyTouchListenerTest {
         verify(eventPublisher).publish(argThat {
             this is DependencyEvent
                 && this.status == DEPENDENCY_END
-                && this.rawEndPosition.x == 11f
-                && this.rawEndPosition.y == 22f
+                && this.rawEndPosition.x == 11
+                && this.rawEndPosition.y == 22
         })
     }
     

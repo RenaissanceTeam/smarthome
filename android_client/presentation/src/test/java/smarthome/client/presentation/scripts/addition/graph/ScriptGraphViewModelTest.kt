@@ -103,19 +103,6 @@ class ScriptGraphViewModelTest {
         return MockDragEvent(CommonDragInfo(id, status, from, to, touchPosition, position))
     }
     
-    private fun setupResolveIdentifier(event: GraphDragEvent, id: BlockId = blockId) {
-        whenever(blockResolver.resolveIdentifier(event)).then { id }
-    }
-    
-    private fun setupMockingBlock(id: MockBlockId = blockId,
-                                            position: Position = position1_1): MockBlockState {
-        return MockBlockState(id, position)
-    }
-    
-    private fun setupResolveBlock(event: GraphDragEvent, blockState: BlockState) {
-        whenever(blockResolver.createBlock(event)).then { blockState }
-    }
-    
     private fun assertHasBlockValue(id: BlockId = blockId): BlockState {
         val blocks = viewModel.blocks.value
         assertNotNull(blocks)
