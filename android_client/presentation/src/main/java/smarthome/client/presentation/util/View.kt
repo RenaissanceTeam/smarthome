@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import smarthome.client.entity.script.Position
 
 fun Fragment.hideSoftKeyboard() {
     val activity = activity ?: return
@@ -33,13 +34,13 @@ val View.lifecycleOwner: LifecycleOwner? get() {
     return null
 }
 
-val View.center: Position get() = Position(width / 2f, height / 2f)
+val View.center: Position get() = Position(width / 2, height / 2)
 
-fun View.isXInside(toTest: Float): Boolean {
+fun View.isXInside(toTest: Int): Boolean {
     return toTest >= x && toTest <= (x + width)
 }
 
-fun View.isYInside(toTest: Float): Boolean {
+fun View.isYInside(toTest: Int): Boolean {
     return toTest >= y && toTest <= (y + height)
 }
 
