@@ -15,12 +15,18 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
+import smarthome.client.domain.api.scripts.usecases.CheckIfDependencyPossibleUseCase
+import smarthome.client.domain.api.scripts.usecases.ObserveBlocksUseCase
+import smarthome.client.domain.api.scripts.usecases.ObserveDependenciesUseCase
 import smarthome.client.entity.Controller
+import smarthome.client.entity.script.Block
 import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.Dependency
 import smarthome.client.entity.script.Position
-import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.IDLE
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MOVING
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
-import smarthome.client.presentation.scripts.addition.graph.blockviews.state.GraphBlockResolver
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
@@ -39,24 +45,55 @@ class ScriptGraphViewModelTest {
     private lateinit var events: PublishSubject<GraphEvent>
     private val position1_1 = Position(1, 1)
     private lateinit var viewModel: ScriptGraphViewModel
-    private lateinit var blockResolver: GraphBlockResolver
+    private lateinit var observeBlocksUseCase: ObserveBlocksUseCase
+    private lateinit var observeDependenciesUseCase: ObserveDependenciesUseCase
+    private lateinit var dragBlockEventsHandler: DragBlockEventsHandler
+    private lateinit var dependencyEventsHandler: DependencyEventsHandler
+    private lateinit var checkIfDependencyPossibleUseCase: CheckIfDependencyPossibleUseCase
+    private lateinit var blockToNewGraphBlockStateMapper: BlockToNewGraphBlockStateMapper
+    private lateinit var blocksObservable: PublishSubject<List<Block>>
+    private lateinit var dependenciesObservable: PublishSubject<List<Dependency>>
     private val blockId = MockBlockId()
     private val otherBlockId = MockBlockId()
-    private val dependencyId = "someId"
+    private val block = MockBlock(blockId, position1_1)
+    private val otherBlock = MockBlock(otherBlockId, position1_1)
+    private val blockState = MockBlockState(block)
+    private val otherBlockState = MockBlockState(otherBlock)
+    private val dependencyId = MockDependencyId()
     
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
+        blocksObservable = PublishSubject.create()
+        dependenciesObservable = PublishSubject.create()
         observeControllerUseCase =
             mock { on { execute(any()) }.then { Observable.empty<DataStatus<Controller>>() } }
+        observeBlocksUseCase = mock {
+            on { execute() }.then { blocksObservable }
+        }
+        observeDependenciesUseCase = mock {
+            on { execute() }.then { dependenciesObservable }
+        }
         events = PublishSubject.create()
         eventBus = mock { on { observe() }.then { events } }
-        blockResolver = mock { }
+        dragBlockEventsHandler = mock {}
+        dependencyEventsHandler = mock {}
+        checkIfDependencyPossibleUseCase = mock {
+            on { execute(any(), any()) }.then { true }
+        }
+        blockToNewGraphBlockStateMapper = mock {
+            on { map(any()) }.then { blockState }
+        }
         startKoin {
             modules(module {
                 single { observeControllerUseCase }
                 single { eventBus }
-                single { blockResolver }
+                single { observeBlocksUseCase }
+                single { dragBlockEventsHandler }
+                single { dependencyEventsHandler }
+                single { blockToNewGraphBlockStateMapper }
+                single { checkIfDependencyPossibleUseCase }
+                single { observeDependenciesUseCase }
             })
         }
         
@@ -113,18 +150,8 @@ class ScriptGraphViewModelTest {
         return addedBlock
     }
     
-    private fun assertHasDependency(id: String = dependencyId): DependencyState {
-        val dependencies = viewModel.dependencies.value
-        assertNotNull(dependencies)
-        
-        val dependency = dependencies[id]
-        assertNotNull(dependency)
-        
-        return dependency
-    }
-    
     @Test
-    fun `when dependency tip on some block should emit`() {
+    fun `when dependency tip on some block should emit with visible border`() {
         addBlock()
         viewModel.dependencyTipOnBlock(from = otherBlockId, to = blockId)
         
@@ -133,7 +160,11 @@ class ScriptGraphViewModelTest {
     }
     
     private fun addBlock() {
-        events.onNext(createDragEvent(status = DRAG_DROP, to = GRAPH, from = CONTROLLERS_HUB))
+        blocksObservable.onNext(listOf(block))
+    }
+    
+    private fun addTwoBlocks() {
+        blocksObservable.onNext(listOf(block, otherBlock))
     }
     
     @Test
@@ -142,33 +173,26 @@ class ScriptGraphViewModelTest {
     }
     
     @Test
-    fun `when end creating dependency on graph then should cancel and remove dependency`() {
-        addBlock()
-        events.onNext(DependencyEvent(
-            id = dependencyId,
-            startId = blockId,
-            status = DEPENDENCY_MOVE,
-            rawEndPosition = Position(22, 22)
-        ))
-    
-        viewModel.cancelCreatingDependency(dependencyId)
-        val dependencies = viewModel.dependencies.value
-        assertNotNull(dependencies)
-    
-        val dependency = dependencies[dependencyId]
-        assertNull(dependency)
+    fun `when end creating dependency on graph then should emit idle moving dependency`() {
+        viewModel.movingDependency.value = MovingDependency(
+            MockDependencyId(),
+            otherBlockId,
+            MOVING,
+            position1_1
+        )
+        
+        viewModel.cancelCreatingDependency()
+        
+        val dependency = viewModel.movingDependency.value
+        assertNotNull(dependency)
+        assertTrue { dependency.status == IDLE }
     }
     
     @Test
     fun `when end creating dependency on other block should start setup of dependency`() {
-        addBlock()
-        emitStartDependencyFromOther()
-        emitMoveDependencyFromOther()
-    
         viewModel.addDependency(dependencyId, otherBlockId, blockId)
-        val dependency = assertHasDependency()
-        assertEquals(otherBlockId, dependency.startBlock)
-        assertEquals(blockId, dependency.endBlock)
+        
+        // todo check that started setup flow with two ids
     }
     
     private fun emitMoveDependencyFromOther() {

@@ -3,12 +3,17 @@ package smarthome.client.presentation.scripts.addition.graph
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.DependencyId
 import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.emptyPosition
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
-import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependencyTipStatus
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.IDLE
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MOVING
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
@@ -16,44 +21,35 @@ import smarthome.client.presentation.scripts.addition.graph.events.dependency.De
 class DependencyEventsHandlerTest {
     
     private lateinit var handler: DependencyEventsHandler
-    private lateinit var emitDependencies: (MutableMap<String, DependencyState>) -> Unit
-    private lateinit var getCurrentDependencies: () -> MutableMap<String, DependencyState>
-    private lateinit var emitTipStatus: (MovingDependencyTipStatus) -> Unit
-    private lateinit var getCurrentTipStatus: () -> MovingDependencyTipStatus
+    private lateinit var emitMovingDependency: (MovingDependency) -> Unit
+    private lateinit var getCurrentMovingDependency: () -> MovingDependency
     private val position1_1 = Position(1, 1)
     private val blockId = MockBlockId()
-    private val dependencyId = "deip"
-    private lateinit var mockDependency: DependencyState
-    private lateinit var currentDeps: MutableMap<String, DependencyState>
+    private val otherBlockId = MockBlockId()
     
+    private val dependencyId = MockDependencyId()
+    private val dependency = MockDependency(dependencyId, blockId, otherBlockId)
+    private val dependencyState = DependencyState(dependency)
     
     @Before
     fun setUp() {
-        emitDependencies = mock {}
-        mockDependency = createDependencyState()
-        currentDeps = mutableMapOf(dependencyId to mockDependency)
-        getCurrentDependencies = mock {
-            on { invoke() }.then { currentDeps }
-        }
-        emitTipStatus = mock {}
-        getCurrentTipStatus = mock {}
+        emitMovingDependency = mock {}
+        getCurrentMovingDependency = mock {}
         handler = DependencyEventsHandlerImpl(
-            emitDependencies = emitDependencies,
-            getCurrentTipStatus = getCurrentTipStatus,
-            emitTipStatus = emitTipStatus,
-            getCurrentDependencies = getCurrentDependencies
+            getCurrentMovingDependency = getCurrentMovingDependency,
+            emitMovingDependency = emitMovingDependency
         )
     }
     
-    private fun createDependencyState(id: String = dependencyId,
-                                      startBlock: BlockId? = null,
-                                      endBlock: BlockId? = null,
-                                      rawEndPosition: Position? = null): DependencyState {
-        return DependencyState(id, startBlock, endBlock, rawEndPosition)
+    private fun createMovingDependency(id: DependencyId = dependencyId,
+                                       startBlock: BlockId? = blockId,
+                                       status: String = IDLE,
+                                       rawEndPosition: Position? = null): MovingDependency {
+        return MovingDependency(id, startBlock, status, rawEndPosition)
     }
     
     private fun createDependencyEvent(
-        id: String = dependencyId,
+        id: DependencyId = dependencyId,
         status: String = DEPENDENCY_START,
         startId: BlockId,
         endId: BlockId? = null,
@@ -62,39 +58,42 @@ class DependencyEventsHandlerTest {
         return DependencyEvent(id, status, startId, endId, rawEndPosition)
     }
     
-    private fun verifyEmitDependency(id: String = dependencyId,
-                                     predicate: (DependencyState) -> Boolean) {
-        verify(emitDependencies).invoke(argThat {
-            val state = getCurrentDependencies()[id] ?: return@argThat false
-            
-            predicate(state)
+    @Test
+    fun `when create dependency should emit new moving dependency with status MOVING`() {
+        val event = createDependencyEvent(startId = blockId, status = DEPENDENCY_START)
+        
+        handler.handle(event)
+    
+        verify(emitMovingDependency).invoke(argThat {
+            this.status == MOVING
+                && this.startBlock == blockId
+                && this.rawEndPosition == position1_1
         })
     }
     
     @Test
-    fun `when create dependency should update dependencies with added item`() {
-        val event = createDependencyEvent(startId = blockId, status = DEPENDENCY_START)
-        
-        handler.handle(event)
-        
-        verifyEmitDependency {
-            it.startBlock == blockId && it.rawEndPosition == position1_1
-        }
-    }
-    
-    @Test
-    fun `when dependency move should update dependencies with new position`() {
+    fun `when dependency move should update moving dependency with new position`() {
         val rawEndPosition = Position(22, 22)
+    
+        whenever(getCurrentMovingDependency.invoke()).then {
+            createMovingDependency(
+                startBlock = blockId,
+                status = IDLE,
+                rawEndPosition = emptyPosition
+            )
+        }
         
         handler.handle(createDependencyEvent(
             startId = blockId,
             status = DEPENDENCY_MOVE,
             rawEndPosition = rawEndPosition
         ))
-        
-        verifyEmitDependency {
-            it.rawEndPosition == rawEndPosition
-        }
+    
+        verify(emitMovingDependency).invoke(argThat {
+            this.status == MOVING
+                && this.startBlock == blockId
+                && this.rawEndPosition == rawEndPosition
+        })
     }
     
     

@@ -5,6 +5,7 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.DependencyId
 import smarthome.client.entity.script.Position
 import smarthome.client.presentation.rawPosition
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
@@ -43,7 +44,7 @@ class LongPressToStartDependencyTouchListener(
     private val eventPublisher: EventPublisher
 ) : View.OnTouchListener {
     private var isDependencyMoving = false
-    private var movingDependencyId: String? = null
+    private var movingDependencyId: DependencyId? = null
     var onStartDependency: (event: DependencyEvent) -> Unit = {}
     
     init {
@@ -72,12 +73,12 @@ class LongPressToStartDependencyTouchListener(
         eventPublisher.publish(startEvent)
     }
     
-    private fun getMovingDependencyId(): String {
+    private fun getMovingDependencyId(): DependencyId {
         return movingDependencyId ?: createNewDependencyId().also { movingDependencyId = it }
     }
     
-    private fun createNewDependencyId(): String {
-        return UUID.randomUUID().toString()
+    private fun createNewDependencyId(): DependencyId {
+        return object : DependencyId {}
     }
     
     override fun onTouch(v: View, event: MotionEvent): Boolean {

@@ -14,7 +14,6 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDr
 import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_START
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
-import smarthome.client.presentation.scripts.addition.graph.identifier.ControllerGraphBlockIdentifier
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.LoadingStatus
 import smarthome.client.util.data
