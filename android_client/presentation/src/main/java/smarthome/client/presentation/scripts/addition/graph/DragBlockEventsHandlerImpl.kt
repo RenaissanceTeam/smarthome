@@ -3,6 +3,8 @@ package smarthome.client.presentation.scripts.addition.graph
 import smarthome.client.domain.api.scripts.usecases.AddBlockToScriptGraphUseCase
 import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
+import smarthome.client.entity.script.Block
+import smarthome.client.entity.script.BlockId
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.withReplacedOrAdded
@@ -19,16 +21,15 @@ class DragBlockEventsHandlerImpl(
     val scriptId: Long = 1L // TODO
     
     override fun handle(event: GraphDragEvent) {
-        if (!event.isFromOrTo(
-                GRAPH)) return
+        if (!event.isFromOrTo(GRAPH)) return
         
         when (event.dragInfo.status) {
             DRAG_DROP -> {
-                if (event.isTo(GRAPH)) handleDropToGraph(event)
-                if (event.isFrom(GRAPH) && !event.isTo(GRAPH)) handleBlockRemove(event)
+                if (event.isTo(GRAPH)) addOrMoveBlock(event)
+                if (event.isFrom(GRAPH) && !event.isTo(GRAPH)) removeBlock(event)
             }
             DRAG_START -> {
-                if (event.isFrom(GRAPH)) handleDragStartFromGraph(event)
+                if (event.isFrom(GRAPH)) hideDraggedBlock(event)
             }
             DRAG_CANCEL -> {
                 if (event.isFrom(GRAPH)) makeBlockVisible(event)
@@ -37,43 +38,45 @@ class DragBlockEventsHandlerImpl(
     }
     
     private fun makeBlockVisible(event: GraphDragEvent) {
-        val block = getBlockForEvent(event) ?: return
+        val block = getBlockState(event.dragInfo.id) ?: return
         
-        emitWithBlock(block.copyWithInfo(visible = true))
+        emitWithBlock(block.copyOfVisible())
     }
     
-    private fun handleBlockRemove(event: GraphDragEvent) {
-        val blockBeforeEvent = getBlockForEvent(event) ?: return
+    private fun removeBlock(event: GraphDragEvent) {
+        val blockBeforeEvent = getBlockState(event.dragInfo.id) ?: return
         
         removeBlockUseCase.execute(scriptId, blockBeforeEvent.block.id)
     }
     
-    private fun handleDropToGraph(event: GraphDragEvent) {
-        val newPosition = event.dragInfo.position
-        
+    private fun addOrMoveBlock(event: GraphDragEvent) {
         val block = when (event.isFrom(GRAPH)) {
-            true -> moveBlockUseCase.execute(scriptId, event.dragInfo.id, newPosition)
-            false -> addBlockHelper.resolveAddingFromEvent(scriptId, event, newPosition)
+            true -> moveBlockUseCase.execute(scriptId, event.dragInfo.id, event.dragInfo.position)
+            false -> addBlockHelper.resolveAddingFromEvent(scriptId, event)
         }
-        val blockBeforeEvent = getBlockForEvent(event)
-            ?: addGraphBlockStateHelper.createBlockState(block)
-    
-        val droppedBlock = blockBeforeEvent.copyWithInfo(
-            block = block,
-            visible = true
+        
+        emitWithBlock(
+            getOrCreateBlockState(event)
+                .copyWithDomain(block)
+                .copyOfVisible()
         )
-        
-        emitWithBlock(droppedBlock)
     }
     
-    private fun handleDragStartFromGraph(event: GraphDragEvent) {
-        val blockBeforeEvent = getBlockForEvent(event) ?: return
+    private fun hideDraggedBlock(event: GraphDragEvent) {
+        val blockBeforeEvent = getBlockState(event.dragInfo.id) ?: return
         
-        emitWithBlock(blockBeforeEvent.copyWithInfo(visible = false))
+        emitWithBlock(blockBeforeEvent.copyOfHidden())
     }
     
-    private fun getBlockForEvent(event: GraphDragEvent): BlockState? {
-        return getCurrentBlocks().find { it.block.id == event.dragInfo.id }
+    private fun getOrCreateBlockState(event: GraphDragEvent): BlockState {
+        return getBlockState(event.dragInfo.id)
+            ?: addGraphBlockStateHelper.createBlockState(
+                block = addBlockHelper.resolveAddingFromEvent(scriptId, event)
+            )
+    }
+    
+    private fun getBlockState(id: BlockId): BlockState? {
+        return getCurrentBlocks().find { it.block.id == id }
     }
     
     private fun emitWithBlock(blockState: BlockState) {
@@ -81,5 +84,17 @@ class DragBlockEventsHandlerImpl(
         val id = blockState.block.id
         
         emitBlocks(current.withReplacedOrAdded(blockState) { it.block.id == id })
+    }
+    
+    private fun BlockState.copyOfHidden(): BlockState {
+        return copyWithInfo(visible = false)
+    }
+    
+    private fun BlockState.copyOfVisible(): BlockState {
+        return copyWithInfo(visible = true)
+    }
+    
+    private fun BlockState.copyWithDomain(block: Block): BlockState {
+        return copyWithInfo(block = block)
     }
 }

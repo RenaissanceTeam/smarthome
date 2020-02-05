@@ -1,13 +1,12 @@
 package smarthome.client.presentation.scripts.addition.graph
 
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 import smarthome.client.domain.api.scripts.usecases.AddBlockToScriptGraphUseCase
 import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
+import smarthome.client.entity.script.Block
 import smarthome.client.entity.script.BlockId
 import smarthome.client.entity.script.Position
 import smarthome.client.presentation.containsThat
@@ -23,32 +22,43 @@ class DragBlockEventsHandlerTest {
     private lateinit var removeBlockUseCase: RemoveBlockUseCase
     private lateinit var addBlockToScriptGraphUseCase: AddBlockToScriptGraphUseCase
     private lateinit var addBlockHelper: AddBlockHelper
-    
+    private lateinit var addGraphBlockStateHelper: AddGraphBlockStateHelper
+    private lateinit var block: Block
     
     private val position1_1 = Position(1, 1)
-    private lateinit var block: MockBlockState
+    private lateinit var blockState: MockBlockState
     private val blockId = MockBlockId()
     private lateinit var currentBlocks: List<BlockState>
     
     @Before
     fun setUp() {
         emitBlocks = mock {}
-        moveBlockUseCase = mock {}
+        block = MockBlock(blockId, position1_1)
+        blockState = MockBlockState(block)
+        moveBlockUseCase = mock {
+            on { execute(any(), any(), any()) }.then { block }
+        }
         removeBlockUseCase = mock {}
+        addGraphBlockStateHelper = mock {}
         addBlockToScriptGraphUseCase = mock {}
-        addBlockHelper = mock {}
-        block = setupMockingBlock()
-        currentBlocks = listOf(block)
+        addBlockHelper = mock {
+            on { resolveAddingFromEvent(any(), any()) }.then { block }
+        }
+    
+    
+        currentBlocks = listOf(blockState)
         getCurrentBlocks = mock {
             on { invoke() }.then { currentBlocks }
         }
+    
         handler = DragBlockEventsHandlerImpl(
             getCurrentBlocks,
             emitBlocks,
             moveBlockUseCase,
             removeBlockUseCase,
             addBlockToScriptGraphUseCase,
-            addBlockHelper
+            addBlockHelper,
+            addGraphBlockStateHelper
         )
     }
     
@@ -59,11 +69,6 @@ class DragBlockEventsHandlerTest {
                                 touchPosition: Position = position1_1,
                                 position: Position = position1_1): MockDragEvent {
         return MockDragEvent(CommonDragInfo(id, status, from, to, touchPosition, position))
-    }
-    
-    private fun setupMockingBlock(id: MockBlockId = blockId,
-                                  position: Position = position1_1): MockBlockState {
-        return MockBlockState(id, position)
     }
     
     private fun verifyEmitBlock(id: BlockId = blockId,
@@ -85,19 +90,32 @@ class DragBlockEventsHandlerTest {
         }
     }
     
+    @Test
+    fun `when drop controller from hub should call add helper`() {
+        val dropEvent =
+            createDragEvent(status = DRAG_DROP, to = GRAPH, from = CONTROLLERS_HUB)
+    
+    
+        handler.handle(dropEvent)
+    
+        verify(addBlockHelper).resolveAddingFromEvent(any(), eq(dropEvent))
+    }
     
     @Test
     fun `when drop controller from hub should add block and emit`() {
         val dropEvent =
             createDragEvent(status = DRAG_DROP, to = GRAPH, from = CONTROLLERS_HUB)
         
+        whenever(addBlockHelper.resolveAddingFromEvent(any(), eq(dropEvent))).then {
+            block.copyWithPosition(dropEvent.dragInfo.position)
+        }
         
         handler.handle(dropEvent)
         
         verifyEmitBlock { draggedBlock ->
             draggedBlock is MockBlockState
-                && draggedBlock.id == blockId
-                && draggedBlock.position == position1_1
+                && draggedBlock.block.id == blockId
+                && draggedBlock.block.position == position1_1
         }
     }
     
@@ -111,11 +129,24 @@ class DragBlockEventsHandlerTest {
     }
     
     @Test
-    fun `when drag from graph and drop to graph should emit block with new position`() {
+    fun `when drag n drop inside graph should call moveBlockUseCase`() {
         val droppedAt = Position(12, 22)
         val dropEvent =
             createDragEvent(status = DRAG_DROP, to = GRAPH, from = GRAPH, position = droppedAt)
         
+        handler.handle(dropEvent)
+        
+        verify(moveBlockUseCase).execute(any(), eq(blockId), eq(droppedAt))
+    }
+    @Test
+    fun `when drag from graph and drop to graph should emit block with new position`() {
+        val droppedAt = Position(12, 22)
+        val dropEvent =
+            createDragEvent(status = DRAG_DROP, to = GRAPH, from = GRAPH, position = droppedAt)
+    
+        whenever(moveBlockUseCase.execute(any(), any(), eq(droppedAt))).then {
+            block.copyWithPosition(droppedAt)
+        }
         
         handler.handle(dropEvent)
         
@@ -125,12 +156,12 @@ class DragBlockEventsHandlerTest {
     }
     
     @Test
-    fun `when drag drop from graph should remove block`() {
+    fun `when drag drop from graph should call remove block usecase`() {
         val dropEvent = createDragEvent(status = DRAG_DROP, to = CONTROLLERS_HUB, from = GRAPH)
         
         handler.handle(dropEvent)
     
-        verify(emitBlocks).invoke(argThat { !containsThat { it.block.id == blockId } })
+        verify(removeBlockUseCase).execute(any(), eq(blockId))
     }
     
 }

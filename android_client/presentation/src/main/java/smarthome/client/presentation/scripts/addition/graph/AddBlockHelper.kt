@@ -9,9 +9,9 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDra
 class AddBlockHelper(
     private val addControllerBlockUseCase: AddControllerBlockUseCase
 ) {
-    fun resolveAddingFromEvent(scriptId: Long, event: GraphDragEvent, position: Position): Block {
+    fun resolveAddingFromEvent(scriptId: Long, event: GraphDragEvent): Block {
         return when (event) {
-            is ControllerDragEvent -> addControllerBlockUseCase.execute(scriptId, event.id, position)
+            is ControllerDragEvent -> addControllerBlockUseCase.execute(scriptId, event.id, event.dragInfo.position)
             else -> throw IllegalArgumentException("can't resolve how to add block for event $event")
         }
     }
