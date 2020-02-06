@@ -3,7 +3,6 @@ package smarthome.client.presentation.scripts.addition.graph.blockviews.dependen
 import smarthome.client.entity.script.BlockId
 import smarthome.client.entity.script.DependencyId
 import smarthome.client.entity.script.Position
-import smarthome.client.entity.script.emptyPosition
 
 data class MovingDependency(
     val id: DependencyId? = null,
@@ -11,8 +10,3 @@ data class MovingDependency(
     val status: String = IDLE,
     val rawEndPosition: Position? = null
 )
-
-const val IDLE = "MovingDependency_IDLE"
-const val STARTED = "MovingDependency_STARTED"
-const val MOVING = "MovingDependency_MOVING"
-const val DROPPED = "MovingDependency_DROPPED"
