@@ -14,12 +14,16 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.dependenc
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DependencyEventsHandler
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlockEventsHandler
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_CANCEL
 import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_DROP
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
+import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
+import smarthome.client.presentation.scripts.addition.graph.mapper.DependencyToDependencyStateMapper
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.util.findAndModify

@@ -27,12 +27,15 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.dependenc
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MOVING
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DependencyEventsHandler
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlockEventsHandler
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
+import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.util.DataStatus
 import kotlin.test.*
 

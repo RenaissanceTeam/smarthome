@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph
+package smarthome.client.presentation.scripts.addition.graph.eventhandler
 
 import androidx.lifecycle.MutableLiveData
 import smarthome.client.domain.api.scripts.usecases.AddBlockToScriptGraphUseCase
@@ -6,6 +6,8 @@ import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
 import smarthome.client.entity.script.Block
 import smarthome.client.entity.script.BlockId
+import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
+import smarthome.client.presentation.scripts.addition.graph.helper.AddGraphBlockStateHelper
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.util.withReplacedOrAdded
