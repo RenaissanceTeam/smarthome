@@ -32,6 +32,12 @@ class ExtensionsKtTest {
     }
     
     @Test
+    fun `when remove from list of size 1 should return empty list`() {
+        val before = listOf(1)
+        assertTrue { before.withRemoved { it == 1 }.isEmpty() }
+    }
+    
+    @Test
     fun `find and modify should return new list with replaced value`() {
         val before = listOf(1, 2, 3)
         val after = before.findAndModify({ it == 1 }) {

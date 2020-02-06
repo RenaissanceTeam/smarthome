@@ -5,7 +5,8 @@ import smarthome.client.entity.script.Script
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 
-class AddScriptViewModel : KoinViewModel() {
+class SetupScriptViewModel : KoinViewModel() {
+    val scriptId: Long = 1L // TODO
     val scriptToAdd = MutableLiveData<Script>()
     val navigateToAddingController = NavigationLiveData()
     val finishFlow = NavigationLiveData()

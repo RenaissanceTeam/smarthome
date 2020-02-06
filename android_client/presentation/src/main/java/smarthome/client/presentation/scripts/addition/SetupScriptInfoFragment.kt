@@ -12,8 +12,8 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 import smarthome.client.presentation.R
 import smarthome.client.presentation.main.toolbar.ToolbarController
 
-class AddScriptInfoFragment : Fragment() {
-    private val viewModel: AddScriptViewModel by sharedViewModel()
+class SetupScriptInfoFragment : Fragment() {
+    private val viewModel: SetupScriptViewModel by sharedViewModel()
     private val toolbarController: ToolbarController by inject()
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +37,7 @@ class AddScriptInfoFragment : Fragment() {
     
     private fun goToAddingControllers() {
         findNavController().navigate(
-            AddScriptInfoFragmentDirections.actionAddScriptInfoFragmentToAddControllersToScriptFragment())
+            SetupScriptInfoFragmentDirections.actionAddScriptInfoFragmentToAddControllersToScriptFragment())
     }
 }
 

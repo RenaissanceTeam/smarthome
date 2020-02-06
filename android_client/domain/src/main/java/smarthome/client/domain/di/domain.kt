@@ -58,6 +58,7 @@ val domain = module {
     factoryBy<ObserveDependenciesUseCase, ObserveDependenciesUseCaseImpl>()
     factoryBy<CheckIfDependencyPossibleUseCase, CheckIfDependencyPossibleUseCaseImpl>()
     factoryBy<AddControllerBlockUseCase, AddControllerBlockUseCaseImpl>()
+    factoryBy<RemoveDependencyUseCase, RemoveDependencyUseCaseImpl>()
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
     

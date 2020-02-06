@@ -154,7 +154,7 @@
     </fragment>
     <fragment
         android:id="@+id/addScriptInfoFragment"
-        android:name="smarthome.client.presentation.scripts.addition.AddScriptInfoFragment"
+        android:name="smarthome.client.presentation.scripts.addition.SetupScriptInfoFragment"
         android:label="@string/setup_script"
         tools:layout="@layout/fragment_add_script">
         <argument
@@ -208,6 +208,11 @@
 
         <argument
             android:name="show_bottom_bar"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
+        <argument
+            android:name="is_new"
             android:defaultValue="false"
             app:argType="boolean" />
 
