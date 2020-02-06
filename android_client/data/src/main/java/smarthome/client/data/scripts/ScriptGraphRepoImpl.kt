@@ -6,6 +6,7 @@ import smarthome.client.data.api.scripts.ScriptGraphRepo
 import smarthome.client.entity.script.Block
 import smarthome.client.entity.script.BlockId
 import smarthome.client.entity.script.Dependency
+import smarthome.client.entity.script.DependencyId
 import smarthome.client.util.findAndModify
 import smarthome.client.util.withRemoved
 
@@ -45,5 +46,9 @@ class ScriptGraphRepoImpl : ScriptGraphRepo {
     
     override fun observeBlocks(scriptId: Long): Observable<List<Block>> {
         return blocks
+    }
+    
+    override fun removeDependency(scriptId: Long, dependencyId: DependencyId) {
+        dependencies.onNext(dependencies.value.orEmpty().withRemoved { it.id == dependencyId })
     }
 }

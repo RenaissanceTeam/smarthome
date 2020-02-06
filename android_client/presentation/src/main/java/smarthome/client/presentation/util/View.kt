@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import smarthome.client.entity.script.Position
 
 fun Fragment.hideSoftKeyboard() {
@@ -47,3 +49,5 @@ fun View.isYInside(toTest: Int): Boolean {
 fun View.isPositionInside(position: Position): Boolean {
     return isXInside(position.x) && isYInside(position.y)
 }
+
+val View.viewScope: CoroutineScope get() = GlobalScope

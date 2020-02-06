@@ -14,10 +14,10 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 import smarthome.client.entity.script.DependencyId
 import smarthome.client.presentation.R
 import smarthome.client.presentation.main.toolbar.ToolbarController
-import smarthome.client.presentation.scripts.addition.AddScriptViewModel
+import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 
 class ScriptGraphFragment : Fragment() {
-    private val addScriptViewModel: AddScriptViewModel by sharedViewModel()
+    private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
     private val viewModel: ScriptGraphViewModel by viewModels()
     private val toolbarController: ToolbarController by inject()
     
@@ -32,12 +32,12 @@ class ScriptGraphFragment : Fragment() {
         toolbarController.setMenu(R.menu.save) {
             if (it != R.id.save) return@setMenu
             
-            addScriptViewModel.onSaveClicked()
+            setupScriptViewModel.onSaveClicked()
         }
         
-        addScriptViewModel.finishFlow.onNavigate(this, ::finishFlow)
+        setupScriptViewModel.finishFlow.onNavigate(this, ::finishFlow)
         
-        addScriptViewModel.scriptToAdd.observe(this) {
+        setupScriptViewModel.scriptToAdd.observe(this) {
             toolbarController.setTitle(it.name)
         }
     
@@ -59,6 +59,6 @@ class ScriptGraphFragment : Fragment() {
     
     private fun setupDependency(id: DependencyId) {
         findNavController().navigate(ScriptGraphFragmentDirections
-            .actionAddControllersToScriptFragmentToSetupDependencyFragment(dependencyId = id))
+            .actionAddControllersToScriptFragmentToSetupDependencyFragment(dependencyId = id, isNew = true))
     }
 }

@@ -15,7 +15,7 @@ import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.main.toolbar.ToolbarControllerImpl
 import smarthome.client.presentation.main.toolbar.ToolbarHolder
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
-import smarthome.client.presentation.scripts.addition.AddScriptViewModel
+import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.*
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
@@ -49,7 +49,7 @@ val presentation = module {
     factory { (owner: LifecycleOwner, toolbar: Toolbar) -> ToolbarSetter(owner, toolbar, get()) }
     
     // scripts
-    viewModel { AddScriptViewModel() }
+    viewModel { SetupScriptViewModel() }
     singleBy<GraphEventBus, GraphEventBusImpl>()
     factoryBy<GraphBlockFactoryResolver, GraphBlockFactoryResolverImpl>()
     factory { BlockToNewGraphBlockStateMapper() }
