@@ -11,14 +11,14 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_script_graph.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import smarthome.client.entity.script.DependencyId
 import smarthome.client.presentation.R
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.AddScriptViewModel
-import smarthome.client.presentation.scripts.addition.graph.ScriptGraphViewModel
 
 class ScriptGraphFragment : Fragment() {
     private val addScriptViewModel: AddScriptViewModel by sharedViewModel()
-    private val graphViewModel: ScriptGraphViewModel by viewModels()
+    private val viewModel: ScriptGraphViewModel by viewModels()
     private val toolbarController: ToolbarController by inject()
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +40,8 @@ class ScriptGraphFragment : Fragment() {
         addScriptViewModel.scriptToAdd.observe(this) {
             toolbarController.setTitle(it.name)
         }
+    
+        viewModel.setupDependency.onNavigate(this, ::setupDependency)
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,5 +55,10 @@ class ScriptGraphFragment : Fragment() {
     
     private fun finishFlow() {
         findNavController().popBackStack(R.id.addScriptInfoFragment, true)
+    }
+    
+    private fun setupDependency(id: DependencyId) {
+        findNavController().navigate(ScriptGraphFragmentDirections
+            .actionAddControllersToScriptFragmentToSetupDependencyFragment(dependencyId = id))
     }
 }
