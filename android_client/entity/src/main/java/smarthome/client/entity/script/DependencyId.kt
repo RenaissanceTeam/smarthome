@@ -1,3 +1,5 @@
 package smarthome.client.entity.script
 
-interface DependencyId
+import android.os.Parcelable
+
+interface DependencyId : Parcelable

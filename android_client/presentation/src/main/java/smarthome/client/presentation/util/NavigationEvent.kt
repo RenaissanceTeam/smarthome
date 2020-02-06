@@ -1,6 +1,6 @@
 package smarthome.client.presentation.util
 
-class NavigationEvent<T>(private val param: T) {
+class NavigationEvent<T>(val param: T) {
     private var consumed = false
     
     fun consume(block: NavigationEvent<T>.(T) -> Unit) {
