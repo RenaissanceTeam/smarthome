@@ -12,7 +12,7 @@ class ArduinoControllerBlockResolver: ControllerBlockResolver {
     }
     
     override fun resolve(controller: Controller, position: Position): Block? {
-        return ControllerBlock(controller.id, controller.type, position)
+        return ArduinoControllerBlock(controller.id, controller.type, position)
     }
     
     companion object {
