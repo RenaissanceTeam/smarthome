@@ -18,6 +18,7 @@ import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.main.StateMachineImpl
+import smarthome.client.domain.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.domain.scripts.usecases.*
 import smarthome.client.domain.usecases.CloudMessageUseCaseImpl
 
@@ -59,6 +60,11 @@ val domain = module {
     factoryBy<CheckIfDependencyPossibleUseCase, CheckIfDependencyPossibleUseCaseImpl>()
     factoryBy<AddControllerBlockUseCase, AddControllerBlockUseCaseImpl>()
     factoryBy<RemoveDependencyUseCase, RemoveDependencyUseCaseImpl>()
+    factoryBy<FetchDependencyDetailsUseCase, FetchDependencyDetailsUseCaseImpl>()
+    factoryBy<ObserveDependencyDetailsUseCase, ObserveDependencyDetailsUseCaseImpl>()
+    factoryBy<CreateEmptyConditionsForBlockUseCase, CreateEmptyConditionsForBlockUseCaseImpl>()
+    factory { ConditionFromBlockResolver() }
+    factoryBy<GetDependencyUseCase, GetDependencyUseCaseImpl>()
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
     

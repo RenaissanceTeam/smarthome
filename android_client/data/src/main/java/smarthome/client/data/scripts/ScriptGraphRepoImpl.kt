@@ -23,6 +23,10 @@ class ScriptGraphRepoImpl : ScriptGraphRepo {
         return blocks.value.orEmpty()
     }
     
+    override fun getBlock(scriptId: Long, blockId: BlockId): Block? {
+        return getBlocks(scriptId).find { it.id == blockId }
+    }
+    
     override fun replaceBlock(scriptId: Long, block: Block): Block {
         blocks.onNext(
             blocks.value
@@ -38,6 +42,10 @@ class ScriptGraphRepoImpl : ScriptGraphRepo {
     
     override fun addDependency(scriptId: Long, dependency: Dependency) {
         dependencies.onNext(dependencies.value.orEmpty() + dependency)
+    }
+    
+    override fun getDependency(scriptId: Long, dependencyId: DependencyId): Dependency? {
+        return dependencies.value.orEmpty().find { it.id == dependencyId }
     }
     
     override fun observeDependencies(scriptId: Long): Observable<List<Dependency>> {
