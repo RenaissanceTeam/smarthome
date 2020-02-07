@@ -6,7 +6,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.inject
 import smarthome.client.domain.api.auth.usecases.LoginUseCase
 import smarthome.client.presentation.util.KoinViewModel
-import smarthome.client.presentation.util.NavigationEvent
 import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.util.log
 

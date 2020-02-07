@@ -1,4 +1,4 @@
-package smarthome.client.entity.script
+package smarthome.client.entity.script.dependency
 
 import android.os.Parcelable
 

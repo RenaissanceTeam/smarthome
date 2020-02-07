@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_script_graph.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import smarthome.client.entity.script.DependencyId
+import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.R
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel

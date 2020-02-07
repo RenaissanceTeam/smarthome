@@ -1,8 +1,8 @@
 package smarthome.client.presentation.scripts.addition.graph.events.dependency
 
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.DependencyId
-import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.entity.script.dependency.DependencyId
+import smarthome.client.util.Position
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 
 data class DependencyEvent(

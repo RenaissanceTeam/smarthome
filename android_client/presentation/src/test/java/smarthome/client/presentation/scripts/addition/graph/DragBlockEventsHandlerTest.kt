@@ -7,9 +7,9 @@ import org.junit.Test
 import smarthome.client.domain.api.scripts.usecases.AddBlockToScriptGraphUseCase
 import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
-import smarthome.client.entity.script.Block
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.block.Block
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.util.Position
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlockEventsHandler
 import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlockEventsHandlerImpl

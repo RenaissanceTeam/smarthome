@@ -1,4 +1,4 @@
-package smarthome.client.entity.script
+package smarthome.client.util
 
 data class Position(val x: Int, val y: Int) {
     operator fun minus(position: Position): Position {

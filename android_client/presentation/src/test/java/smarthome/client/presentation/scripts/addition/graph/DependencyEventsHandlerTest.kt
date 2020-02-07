@@ -7,16 +7,17 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.DependencyId
-import smarthome.client.entity.script.Position
-import smarthome.client.entity.script.emptyPosition
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.entity.script.dependency.Dependency
+import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.*
 import smarthome.client.presentation.scripts.addition.graph.eventhandler.DependencyEventsHandler
 import smarthome.client.presentation.scripts.addition.graph.eventhandler.DependencyEventsHandlerImpl
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
+import smarthome.client.util.Position
+import smarthome.client.util.emptyPosition
 
 class DependencyEventsHandlerTest {
     
@@ -26,7 +27,7 @@ class DependencyEventsHandlerTest {
     private val otherBlockId = MockBlockId()
     
     private val dependencyId = MockDependencyId()
-    private val dependency = MockDependency(dependencyId, blockId, otherBlockId)
+    private val dependency = Dependency(dependencyId, blockId, otherBlockId)
     private val dependencyState = DependencyState(dependency)
     private lateinit var dependencyLiveData: MutableLiveData<MovingDependency>
     

@@ -3,10 +3,10 @@ package smarthome.client.data.scripts
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import smarthome.client.data.api.scripts.ScriptGraphRepo
-import smarthome.client.entity.script.Block
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.Dependency
-import smarthome.client.entity.script.DependencyId
+import smarthome.client.entity.script.block.Block
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.entity.script.dependency.Dependency
+import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.util.findAndModify
 import smarthome.client.util.withRemoved
 

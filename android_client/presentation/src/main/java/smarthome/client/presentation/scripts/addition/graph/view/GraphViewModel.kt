@@ -7,10 +7,10 @@ import smarthome.client.domain.api.scripts.usecases.AddDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.CheckIfDependencyPossibleUseCase
 import smarthome.client.domain.api.scripts.usecases.ObserveBlocksUseCase
 import smarthome.client.domain.api.scripts.usecases.ObserveDependenciesUseCase
-import smarthome.client.entity.script.BlockDependency
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.DependencyId
-import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.entity.script.dependency.DependencyId
+import smarthome.client.util.Position
+import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.IDLE
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
@@ -134,7 +134,7 @@ class GraphViewModel : KoinViewModel() {
         setMovingDependencyToIdle()
         hideBorderOnBlock(to)
         
-        addDependencyUseCase.execute(scriptId, BlockDependency(id, from, to))
+        addDependencyUseCase.execute(scriptId, Dependency(id, from, to))
         eventBus.addEvent(OpenSetupDependency(id))
     }
     
