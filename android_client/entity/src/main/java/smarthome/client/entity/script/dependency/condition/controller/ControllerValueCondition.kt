@@ -5,6 +5,6 @@ import smarthome.client.entity.script.dependency.DependencyId
 data class ControllerValueCondition(
     override val controllerId: Long,
     override val dependencyId: DependencyId,
-    val value: String,
-    val sign: String
+    val value: String? = null,
+    val sign: String? = null
 ): ControllerCondition
