@@ -47,7 +47,7 @@ class ControllersRepoImplTest {
     fun `when fetching other device should not emit`() {
         val result = repo.observe(1).test()
         
-        runBlocking { repo.get(2) }
+        runBlocking { repo.fetch(2) }
         result.assertValueCount(1)
             .assertValue { it is EmptyStatus }
     }
@@ -55,7 +55,7 @@ class ControllersRepoImplTest {
     @Test
     fun `when fetching device should emit loading `() {
         val result = repo.observe(1).test()
-        runBlocking { repo.get(1) }
+        runBlocking { repo.fetch(1) }
     
         result.assertValueAt(0) { it is EmptyStatus }
             .assertValueAt(1) { it is LoadingStatus }
@@ -68,7 +68,7 @@ class ControllersRepoImplTest {
         
         runBlocking {
             whenever(controllersApi.getDetails(id)).then { throw Throwable() }
-            repo.runCatching { get(id) }
+            repo.runCatching { fetch(id) }
         }
     
         result.assertValueAt(0) { it is EmptyStatus }
@@ -96,7 +96,7 @@ class ControllersRepoImplTest {
         val observable = repo.observe(id).test()
         
         runBlocking {
-            repo.get(id)
+            repo.fetch(id)
             observable
                 .assertValueAt(2) { it is Data }
             verify(controllersApi).getDetails(id)
@@ -113,7 +113,7 @@ class ControllersRepoImplTest {
         val observable = repo.observe(id).test()
         
         runBlocking {
-            repo.get(id)
+            repo.fetch(id)
             observable.assertValueAt(2) { it is Data }
             verify(controllersApi).getDetails(id)
             

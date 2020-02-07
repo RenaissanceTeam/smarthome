@@ -15,7 +15,7 @@ import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlo
 import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlockEventsHandlerImpl
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
-import smarthome.client.presentation.scripts.addition.graph.helper.AddGraphBlockStateHelper
+import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
 
 class DragBlockEventsHandlerTest {
     private lateinit var handler: DragBlockEventsHandler
@@ -24,7 +24,7 @@ class DragBlockEventsHandlerTest {
     private lateinit var removeBlockUseCase: RemoveBlockUseCase
     private lateinit var addBlockToScriptGraphUseCase: AddBlockToScriptGraphUseCase
     private lateinit var addBlockHelper: AddBlockHelper
-    private lateinit var addGraphBlockStateHelper: AddGraphBlockStateHelper
+    private lateinit var blockToStateMapper: BlockToNewGraphBlockStateMapper
     private lateinit var block: Block
     private lateinit var blocksLiveData: MutableLiveData<List<BlockState>>
     
@@ -41,7 +41,7 @@ class DragBlockEventsHandlerTest {
             on { execute(any(), any(), any()) }.then { block }
         }
         removeBlockUseCase = mock {}
-        addGraphBlockStateHelper = mock {}
+        blockToStateMapper = mock {}
         addBlockToScriptGraphUseCase = mock {}
         addBlockHelper = mock {
             on { resolveAddingFromEvent(any(), any()) }.then { block }
@@ -58,9 +58,8 @@ class DragBlockEventsHandlerTest {
                 blocksLiveData,
                 moveBlockUseCase,
                 removeBlockUseCase,
-                addBlockToScriptGraphUseCase,
                 addBlockHelper,
-                addGraphBlockStateHelper
+                blockToStateMapper
             )
     }
     
