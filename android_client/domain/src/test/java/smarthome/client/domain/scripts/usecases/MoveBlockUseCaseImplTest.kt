@@ -8,7 +8,7 @@ import org.junit.Before
 import org.junit.Test
 import smarthome.client.data.api.scripts.ScriptGraphRepo
 import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
-import smarthome.client.entity.script.Position
+import smarthome.client.util.Position
 import smarthome.client.entity.script.controller.ControllerBlock
 import smarthome.client.entity.script.controller.ControllerBlockId
 

@@ -2,7 +2,7 @@ package smarthome.client.presentation.util
 
 import android.view.MotionEvent
 import androidx.lifecycle.MutableLiveData
-import smarthome.client.entity.script.Position
+import smarthome.client.util.Position
 
 val MotionEvent.position get() = Position(
     x.toInt(), y.toInt())

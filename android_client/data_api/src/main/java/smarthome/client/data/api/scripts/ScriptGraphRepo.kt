@@ -1,10 +1,10 @@
 package smarthome.client.data.api.scripts
 
 import io.reactivex.Observable
-import smarthome.client.entity.script.Block
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.Dependency
-import smarthome.client.entity.script.DependencyId
+import smarthome.client.entity.script.block.Block
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.entity.script.dependency.Dependency
+import smarthome.client.entity.script.dependency.DependencyId
 
 interface ScriptGraphRepo {
     fun addBlock(scriptId: Long, block: Block): Block

@@ -18,7 +18,7 @@ import org.koin.dsl.module
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
-import smarthome.client.entity.script.Position
+import smarthome.client.util.Position
 import smarthome.client.entity.script.controller.ControllerBlockId
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus

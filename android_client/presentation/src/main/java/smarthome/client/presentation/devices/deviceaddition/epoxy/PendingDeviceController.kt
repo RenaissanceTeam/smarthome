@@ -1,12 +1,8 @@
 package smarthome.client.presentation.devices.deviceaddition.epoxy
 
 import com.airbnb.epoxy.Typed2EpoxyController
-import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.presentation.components.emptyItemView
 import smarthome.client.presentation.devices.deviceaddition.AdditionViewModel
-import smarthome.client.util.LoadingStatus
-import smarthome.client.util.data
-import smarthome.client.util.log
 
 class PendingDeviceController : Typed2EpoxyController<List<PendingDeviceItemState>, AdditionViewModel>() {
     

@@ -2,7 +2,7 @@ package smarthome.client.presentation.scripts.addition.dependency
 
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.RemoveDependencyUseCase
-import smarthome.client.entity.script.DependencyId
+import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData

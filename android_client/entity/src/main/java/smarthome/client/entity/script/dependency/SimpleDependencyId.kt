@@ -1,7 +1,7 @@
-package smarthome.client.presentation.scripts.addition.graph
+package smarthome.client.entity.script.dependency
 
 import kotlinx.android.parcel.Parcelize
 import smarthome.client.entity.script.dependency.DependencyId
 
 @Parcelize
-class MockDependencyId: DependencyId
+class SimpleDependencyId : DependencyId

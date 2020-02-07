@@ -2,9 +2,9 @@ package smarthome.client.domain.scripts.usecases
 
 import smarthome.client.data.api.scripts.ScriptGraphRepo
 import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
-import smarthome.client.entity.script.Block
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.block.Block
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.util.Position
 
 class MoveBlockUseCaseImpl(
     private val repo: ScriptGraphRepo

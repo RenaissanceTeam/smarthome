@@ -6,9 +6,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import smarthome.client.entity.script.Position
+import smarthome.client.util.Position
 import smarthome.client.presentation.R
-import smarthome.client.entity.script.emptyPosition
+import smarthome.client.util.emptyPosition
 import kotlin.properties.Delegates
 
 
