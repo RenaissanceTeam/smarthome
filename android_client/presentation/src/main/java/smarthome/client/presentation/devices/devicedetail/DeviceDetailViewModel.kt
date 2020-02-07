@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import org.koin.core.inject
-import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
+import smarthome.client.domain.api.conrollers.usecases.FetchControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
 import smarthome.client.domain.api.devices.usecase.GetDeviceUseCase
@@ -29,7 +29,7 @@ class DeviceDetailViewModel : KoinViewModel() {
     val openController = NavigationParamLiveData<Long>()
     
     private val getDeviceUseCase: GetDeviceUseCase by inject()
-    private val getControllersUseCase: GetControllerUseCase by inject()
+    private val fetchControllersUseCase: FetchControllerUseCase by inject()
     private val observeControllerUseCase: ObserveControllerUseCase by inject()
     private val readControllerUseCase: ReadControllerUseCase by inject()
     private val observedControllers = mutableMapOf<Long, Disposable>()
@@ -66,7 +66,7 @@ class DeviceDetailViewModel : KoinViewModel() {
             observedControllers[id] = observeControllerUseCase.execute(id)
                 .doOnNext {
                     if (it is EmptyStatus) {
-                        getControllersUseCase.runInScope(viewModelScope) {
+                        fetchControllersUseCase.runInScope(viewModelScope) {
                             execute(id)
                         }
                     }

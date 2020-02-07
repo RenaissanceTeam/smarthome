@@ -29,7 +29,7 @@ class ControllersRepoImpl(
     
     override suspend fun setState(controllerId: Long, state: String): String {
         if (noController(controllerId)) {
-            get(controllerId)
+            fetch(controllerId)
         }
         
         emitLoading(controllerId)
@@ -81,7 +81,7 @@ class ControllersRepoImpl(
     
     override suspend fun readState(controllerId: Long): String {
         if (noController(controllerId)) {
-            get(controllerId)
+            fetch(controllerId)
         }
     
         emitLoading(controllerId)
@@ -97,7 +97,11 @@ class ControllersRepoImpl(
             .getOrThrow().state
     }
     
-    override suspend fun get(id: Long): Controller {
+    override fun get(id: Long): Controller? {
+        return controllers[id]?.value?.data
+    }
+    
+    override suspend fun fetch(id: Long): Controller {
         emitLoading(id)
         return retrofitFactory.createApi(ControllersApi::class.java)
             .runCatching { getDetails(id) }

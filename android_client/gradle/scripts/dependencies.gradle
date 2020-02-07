@@ -68,6 +68,7 @@ ext {
             data_api                 : project(":data_api"),
             entity                   : project(":entity"),
             util                     : project(":util"),
+            arduino_plugin           : project(":arduino_plugin"),
     ]
 
     groups = [

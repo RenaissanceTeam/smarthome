@@ -52,8 +52,6 @@ class SetupDependencyViewModel: KoinViewModel() {
             
             allConditions.value = conditions
         }
-        
-        
     }
     
     fun setFlowViewModel(setupScriptViewModel: SetupScriptViewModel) {

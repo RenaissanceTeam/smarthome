@@ -18,7 +18,6 @@ import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.main.StateMachineImpl
-import smarthome.client.domain.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.domain.scripts.usecases.*
 import smarthome.client.domain.usecases.CloudMessageUseCaseImpl
 
@@ -44,10 +43,11 @@ val domain = module {
     
     // controllers
     factoryBy<ObserveControllerUseCase, ObserveControllerUseCaseImpl>()
-    factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
+    factoryBy<FetchControllerUseCase, FetchControllerUseCaseImpl>()
     factoryBy<ReadControllerUseCase, ReadControllerUseCaseImpl>()
     factoryBy<WriteStateToControllerUseCase, WriteStateToControllerUseCaseImpl>()
     factoryBy<PipelineControllerToStorageUseCase, PipelineControllerToStorageUseCaseImpl>()
+    factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
     
     //scripts
     factoryBy<FetchScriptsUseCase, FetchScriptsUseCaseImpl>()
@@ -63,7 +63,6 @@ val domain = module {
     factoryBy<FetchDependencyDetailsUseCase, FetchDependencyDetailsUseCaseImpl>()
     factoryBy<ObserveDependencyDetailsUseCase, ObserveDependencyDetailsUseCaseImpl>()
     factoryBy<CreateEmptyConditionsForBlockUseCase, CreateEmptyConditionsForBlockUseCaseImpl>()
-    factory { ConditionFromBlockResolver() }
     factoryBy<GetDependencyUseCase, GetDependencyUseCaseImpl>()
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()

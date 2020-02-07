@@ -1,24 +1,22 @@
 package smarthome.client.presentation.scripts.addition.graph.eventhandler
 
 import androidx.lifecycle.MutableLiveData
-import smarthome.client.domain.api.scripts.usecases.AddBlockToScriptGraphUseCase
 import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.block.BlockId
 import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
-import smarthome.client.presentation.scripts.addition.graph.helper.AddGraphBlockStateHelper
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
+import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.util.withReplacedOrAdded
 
 class DragBlockEventsHandlerImpl(
     private val blocks: MutableLiveData<List<BlockState>>,
     private val moveBlockUseCase: MoveBlockUseCase,
     private val removeBlockUseCase: RemoveBlockUseCase,
-    private val addBlockToScriptGraphUseCase: AddBlockToScriptGraphUseCase,
     private val addBlockHelper: AddBlockHelper,
-    private val addGraphBlockStateHelper: AddGraphBlockStateHelper
+    private val blockToNewGraphBlockStateMapper: BlockToNewGraphBlockStateMapper
 ): DragBlockEventsHandler {
     val scriptId: Long = 1L // TODO
     
@@ -72,7 +70,7 @@ class DragBlockEventsHandlerImpl(
     
     private fun getOrCreateBlockState(event: GraphDragEvent): BlockState {
         return getBlockState(event.dragInfo.id)
-            ?: addGraphBlockStateHelper.createBlockState(
+            ?: blockToNewGraphBlockStateMapper.map(
                 block = addBlockHelper.resolveAddingFromEvent(scriptId, event)
             )
     }
