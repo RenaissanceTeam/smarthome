@@ -4,4 +4,5 @@ include ":app",
         ":data_api",
         ":domain_api",
         ":domain",
-        ":entity"
+        ":entity",
+        ":util"

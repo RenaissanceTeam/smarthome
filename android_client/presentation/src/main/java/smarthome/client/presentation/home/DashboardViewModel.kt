@@ -13,8 +13,8 @@ import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
-import smarthome.client.presentation.runInScope
-import smarthome.client.presentation.runInScopeCatchingAny
+import smarthome.client.util.runInScope
+import smarthome.client.util.runInScopeCatchingAny
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.util.DataStatus

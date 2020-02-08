@@ -7,7 +7,7 @@ import com.airbnb.epoxy.*
 import kotlinx.android.synthetic.main.pending_controller_item.view.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.util.inflate
-import smarthome.client.presentation.visible
+import smarthome.client.util.visible
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class PendingControllerView @JvmOverloads constructor(

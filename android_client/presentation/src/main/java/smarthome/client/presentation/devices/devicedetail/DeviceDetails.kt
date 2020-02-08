@@ -17,7 +17,7 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.devices.devicedetail.epoxy.DeviceDetailsController
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
-import smarthome.client.presentation.visible
+import smarthome.client.util.visible
 
 
 class DeviceDetails : Fragment() {

@@ -16,7 +16,7 @@ import smarthome.client.presentation.controllers.controllerdetail.statechanger.C
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerFactory
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
-import smarthome.client.presentation.visible
+import smarthome.client.util.visible
 
 class ControllerDetails : Fragment() {
     private val args: ControllerDetailsArgs by navArgs()

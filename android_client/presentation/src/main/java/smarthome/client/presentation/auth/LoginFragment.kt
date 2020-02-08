@@ -10,9 +10,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_login.*
 import smarthome.client.presentation.R
-import smarthome.client.presentation.visible
-import android.app.Activity
-import android.view.inputmethod.InputMethodManager
+import smarthome.client.util.visible
 import smarthome.client.presentation.util.hideSoftKeyboard
 
 

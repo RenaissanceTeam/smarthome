@@ -2,85 +2,75 @@ package smarthome.client.presentation.scripts.addition.graph
 
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
+import org.koin.core.parameter.parametersOf
+import smarthome.client.domain.api.scripts.usecases.CheckIfDependencyPossibleUseCase
+import smarthome.client.domain.api.scripts.usecases.ObserveBlocksUseCase
+import smarthome.client.domain.api.scripts.usecases.ObserveDependenciesUseCase
+import smarthome.client.entity.script.BlockId
+import smarthome.client.entity.script.DependencyId
+import smarthome.client.entity.script.Position
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.IDLE
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
+import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
+import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_CANCEL
 import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_DROP
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_START
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlock
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlockResolver
 import smarthome.client.presentation.util.KoinViewModel
+import smarthome.client.presentation.util.NavigationParamLiveData
+import smarthome.client.util.findAndModify
 
 class ScriptGraphViewModel : KoinViewModel() {
     
     private val eventBus: GraphEventBus by inject()
-    private val blockResolver: GraphBlockResolver by inject()
-    val blocks = MutableLiveData<MutableMap<GraphBlockIdentifier, GraphBlock>>(mutableMapOf())
+    private val observeBlocksUseCase: ObserveBlocksUseCase by inject()
+    private val observeDependenciesUseCase: ObserveDependenciesUseCase by inject()
+    private val checkIfDependencyPossible: CheckIfDependencyPossibleUseCase by inject()
+    private val blockToNewGraphBlockMapper: BlockToNewGraphBlockStateMapper by inject()
+    private val dependencyToDependencyStateMapper: DependencyToDependencyStateMapper by inject()
+    private val dragBlockHandler: DragBlockEventsHandler by inject {
+        parametersOf(blocks)
+    }
+    private val dependencyEventsHandler: DependencyEventsHandler by inject {
+        parametersOf(movingDependency)
+    }
+    
+    val scriptId = 1L // TODO
+    val movingDependency = MutableLiveData<MovingDependency>()
+    val blocks = MutableLiveData<List<BlockState>>()
+    val dependencies = MutableLiveData<List<DependencyState>>()
+    val setupDependency = NavigationParamLiveData<DependencyState>()
     
     init {
         disposable.add(eventBus.observe()
             .subscribe {
-                if (it is GraphDragEvent) handleDragEvent(it)
+                if (it is GraphDragEvent) dragBlockHandler.handle(it)
+                if (it is DependencyEvent) dependencyEventsHandler.handle(it)
         })
-    }
     
-    private fun handleDragEvent(event: GraphDragEvent) {
-        if (!event.isFromOrTo(GRAPH)) return
+        disposable.add(observeBlocksUseCase.execute(scriptId).subscribe { newBlocks ->
+            val currentBlocks = blocks.value.orEmpty()
         
-        when (event.dragInfo.status) {
-            DRAG_DROP -> {
-                if (event.isTo(GRAPH)) handleDropToGraph(event)
-                if (event.isFrom(GRAPH) && !event.isTo(GRAPH)) handleBlockRemove(event)
+            blocks.value = newBlocks.map { newBlock ->
+                currentBlocks.find { it.block == newBlock }
+                    ?.copyWithInfo(block = newBlock)
+                    ?: blockToNewGraphBlockMapper.map(newBlock)
             }
-            DRAG_START -> {
-                if (event.isFrom(GRAPH)) handleDragStartFromGraph(event)
+        })
+    
+        disposable.add(observeDependenciesUseCase.execute(scriptId).subscribe { dependencies ->
+            val currentDependencies = this.dependencies.value.orEmpty()
+        
+            this.dependencies.value = dependencies.map { dependency ->
+                currentDependencies.find { it.dependency.id == dependency.id }
+                    ?.copy(dependency = dependency)
+                    ?: dependencyToDependencyStateMapper.map(dependency)
             }
-        }
-    }
-    
-    private fun handleBlockRemove(event: GraphDragEvent) {
-        val blockBeforeEvent = getBlockForEvent(event)
-    
-        val current = getCurrentBlocks()
-        current.remove(blockBeforeEvent.id)
-    
-        blocks.value = current
-    }
-    
-    private fun handleDropToGraph(event: GraphDragEvent) {
-        val blockBeforeEvent = getBlockForEvent(event)
-        val droppedBlock = blockBeforeEvent.copyWithInfo(
-            position = event.dragInfo.position,
-            visible = true
-        )
-        
-        emitWithBlock(droppedBlock)
-    }
-    
-    private fun handleDragStartFromGraph(event: GraphDragEvent) {
-        val blockBeforeEvent = getBlockForEvent(event)
-        val hiddenBlock = blockBeforeEvent.copyWithInfo(visible = false)
-        
-        emitWithBlock(hiddenBlock)
-    }
-    
-    private fun getCurrentBlocks(): MutableMap<GraphBlockIdentifier, GraphBlock> {
-        return blocks.value ?: mutableMapOf()
-    }
-    
-    private fun getBlockForEvent(event: GraphDragEvent): GraphBlock {
-        val current = getCurrentBlocks()
-        val identifier = blockResolver.resolveIdentifier(event)
-        
-        return current[identifier] ?: blockResolver.createBlock(event)
-    }
-    
-    private fun emitWithBlock(block: GraphBlock) {
-        val current = getCurrentBlocks()
-        val id = block.id
-        current[id] = block
-        
-        blocks.value = current
+        })
     }
     
     fun onDropped(event: GraphDragEvent, dropPosition: Position) {
@@ -93,4 +83,64 @@ class ScriptGraphViewModel : KoinViewModel() {
         
         eventBus.addEvent(dropEvent)
     }
+    
+    fun onCanceled(event: GraphDragEvent) {
+        val cancelledInfo = event.dragInfo.copy(
+            status = DRAG_CANCEL,
+            to = GRAPH
+        )
+        val cancelEvent = event.copyWithDragInfo(cancelledInfo)
+    
+        eventBus.addEvent(cancelEvent)
+    }
+    
+    fun dependencyTipOnBlock(from: BlockId, to: BlockId) {
+        val blocks = blocksWithHiddenBorders()
+        val block = blocks.find { it.block.id == to } ?: return
+    
+        this.blocks.value = blocks.findAndModify({ it.block.id == to }) {
+            block.copyWithInfo(
+                border = BorderStatus(
+                    isVisible = true,
+                    isFailure = !checkIfDependencyPossible.execute(scriptId, from, to)
+                )
+            )
+        }
+    }
+    
+    fun dependencyTipNotOnAnyBlock() {
+        this.blocks.value = blocksWithHiddenBorders()
+    }
+    
+    private fun blocksWithHiddenBorders(): List<BlockState> {
+        val blocks = this.blocks.value.orEmpty()
+        return blocks.map {
+            it.copyWithInfo(border = BorderStatus(isVisible = false))
+        }
+    }
+    
+    fun cancelCreatingDependency() {
+        setMovingDependencyToIdle()
+    }
+    
+    fun addDependency(id: DependencyId, from: BlockId, to: BlockId) {
+        setMovingDependencyToIdle()
+        hideBorderOnBlock(to)
+        
+        // todo start setup dependency flow
+    }
+    
+    private fun hideBorderOnBlock(to: BlockId) {
+        val blocks = this.blocks.value.orEmpty()
+        this.blocks.value = blocks.findAndModify({ it.block.id == to }) {
+            val border = it.border
+            it.copyWithInfo(border = border.copy(isVisible = false))
+        }
+    }
+    
+    private fun setMovingDependencyToIdle() {
+        val current = movingDependency.value ?: return
+        movingDependency.value = current.copy(status = IDLE)
+    }
 }
+
