@@ -67,6 +67,7 @@ ext {
             data                     : project(":data"),
             data_api                 : project(":data_api"),
             entity                   : project(":entity"),
+            util                     : project(":util"),
     ]
 
     groups = [

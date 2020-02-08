@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.scripts_controllers_to_add.view.*
 import org.koin.core.KoinComponent
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DevicesController
+import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
@@ -66,15 +67,17 @@ class ControllersHubView @JvmOverloads constructor(
     }
     
     private fun handleDroppedItemsAsCancelledDragAction() {
-        setOnDragListener { v, event ->
+        setOnDragListener { _, event ->
+            val dragInfo = event.localState as? ControllerDragEvent ?: return@setOnDragListener false
+            
             when (event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> true
                 DragEvent.ACTION_DROP -> {
-                    val dragEvent = event.localState as? GraphDragEvent ?: return@setOnDragListener false
-                    
-                    viewModel.onDropped(dragEvent)
+                    viewModel.onDropped(dragInfo)
+                    true
                 }
+                else -> false
             }
-            true
         }
     }
     

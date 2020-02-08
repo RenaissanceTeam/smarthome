@@ -16,7 +16,7 @@ import smarthome.client.presentation.SHOW_BOTTOM_BAR
 import smarthome.client.presentation.SHOW_TOOL_BAR
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
-import smarthome.client.presentation.visible
+import smarthome.client.util.visible
 
 
 class MainActivity : FragmentActivity() {

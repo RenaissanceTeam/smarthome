@@ -3,7 +3,7 @@ package smarthome.client.data.scripts
 import smarthome.client.data.api.scripts.ScriptsRepo
 import smarthome.client.data.retrofit.RetrofitFactory
 import smarthome.client.data.scripts.mapper.ScriptDtoToScriptMapper
-import smarthome.client.entity.Script
+import smarthome.client.entity.script.Script
 
 class ScriptsRepoImpl(
     private val retrofitFactory: RetrofitFactory,

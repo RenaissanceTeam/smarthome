@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.view.View
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/black"
+    android:layout_width="0dp"
+    android:layout_height="0dp">
+
+</android.view.View>

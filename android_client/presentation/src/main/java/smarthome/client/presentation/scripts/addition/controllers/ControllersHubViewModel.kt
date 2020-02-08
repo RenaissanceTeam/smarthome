@@ -7,9 +7,10 @@ import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
-import smarthome.client.presentation.runInScopeCatchingAny
+import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.controller.ControllerBlockId
+import smarthome.client.util.runInScopeCatchingAny
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DeviceItemState
-import smarthome.client.presentation.scripts.addition.graph.Position
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.util.KoinViewModel
@@ -49,18 +50,11 @@ class ControllersHubViewModel : KoinViewModel() {
         triggerDevicesRebuildModels()
     }
     
-    fun onDropped(drag: GraphDragEvent) {
-        if (drag is ControllerDragEvent) {
-            val dropInfo = drag.dragInfo.copy(to = CONTROLLERS_HUB, status = DRAG_DROP)
-            val dropEvent = drag.copy(dragInfo = dropInfo)
-            
-            graphEventBus.addEvent(dropEvent)
-        } else {
-            val cancelInfo = drag.dragInfo.copy(to = CONTROLLERS_HUB, status = DRAG_CANCEL)
-            val cancelEvent = drag.copyWithDragInfo(cancelInfo)
-    
-            graphEventBus.addEvent(cancelEvent)
-        }
+    fun onDropped(drag: ControllerDragEvent) {
+        val dropInfo = drag.dragInfo.copy(to = CONTROLLERS_HUB, status = DRAG_DROP)
+        val dropEvent = drag.copy(dragInfo = dropInfo)
+        
+        graphEventBus.addEvent(dropEvent)
     }
     
     fun open() {
@@ -98,6 +92,7 @@ class ControllersHubViewModel : KoinViewModel() {
         return ControllerDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
+                id = ControllerBlockId(id),
                 status = DRAG_START,
                 dragTouch = dragTouch,
                 from = CONTROLLERS_HUB

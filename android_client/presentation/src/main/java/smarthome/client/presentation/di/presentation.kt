@@ -2,6 +2,7 @@ package smarthome.client.presentation.di
 
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -15,11 +16,12 @@ import smarthome.client.presentation.main.toolbar.ToolbarControllerImpl
 import smarthome.client.presentation.main.toolbar.ToolbarHolder
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
 import smarthome.client.presentation.scripts.addition.AddScriptViewModel
+import smarthome.client.presentation.scripts.addition.graph.*
+import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
+import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.*
+import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBusImpl
-import smarthome.client.presentation.scripts.addition.graph.views.factory.*
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlockResolver
-import smarthome.client.presentation.scripts.addition.graph.views.state.GraphBlockResolverImpl
 
 val presentation = module {
     
@@ -43,6 +45,24 @@ val presentation = module {
     viewModel { AddScriptViewModel() }
     singleBy<GraphEventBus, GraphEventBusImpl>()
     factoryBy<GraphBlockFactoryResolver, GraphBlockFactoryResolverImpl>()
-    factoryBy<GraphBlockResolver, GraphBlockResolverImpl>()
+    factory { BlockToNewGraphBlockStateMapper() }
+    factory { DependencyToDependencyStateMapper() }
+    factory<DragBlockEventsHandler> { (blocks: MutableLiveData<List<BlockState>>) ->
+        DragBlockEventsHandlerImpl(
+            blocks = blocks,
+            addBlockHelper = get(),
+            addBlockToScriptGraphUseCase = get(),
+            addGraphBlockStateHelper = get(),
+            moveBlockUseCase = get(),
+            removeBlockUseCase = get()
+        )
+    }
+    
+    factory<DependencyEventsHandler> { (movingDependency: MutableLiveData<MovingDependency>) ->
+        DependencyEventsHandlerImpl(movingDependency = movingDependency)
+    }
+    factory { AddBlockHelper(get()) }
+    factory { AddGraphBlockStateHelper() }
+    
     factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactoryImpl() }
 }

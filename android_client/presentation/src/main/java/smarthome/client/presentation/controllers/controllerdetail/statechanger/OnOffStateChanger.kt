@@ -2,7 +2,6 @@ package smarthome.client.presentation.controllers.controllerdetail.statechanger
 
 import android.view.View
 import android.view.ViewGroup
-import com.dd.processbutton.iml.ActionProcessButton
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.state_changer_onoff.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +14,7 @@ import smarthome.client.presentation.controllers.controllerdetail.statechanger.e
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.idle
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.loading
-import smarthome.client.presentation.runInScope
+import smarthome.client.util.runInScope
 import smarthome.client.util.data
 
 private const val on = "on"

@@ -1,6 +1,5 @@
 package smarthome.client.presentation.scripts.addition.controllers.epoxy
 
-import android.content.ClipData
 import android.content.Context
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -12,9 +11,10 @@ import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelView
 import com.airbnb.epoxy.TextProp
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
+import smarthome.client.entity.script.Position
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.addition.graph.Position
-import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
+import smarthome.client.presentation.util.position
+import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
 import smarthome.client.presentation.util.CustomDragShadowBuilder
 import smarthome.client.presentation.util.inflate
 
@@ -30,13 +30,14 @@ class ControllerView @JvmOverloads constructor(
         inflate(R.layout.scripts_controller_item)
         val detector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onLongPress(pressEvent: MotionEvent) {
-                val info = onDragStarted?.invoke(Position(pressEvent.x, pressEvent.y))
+                val info = onDragStarted?.invoke(pressEvent.position)
 
-                val data = ClipData.newPlainText("sad", "asdf")
-                val shadowBuilder = CustomDragShadowBuilder(this@ControllerView, pressEvent)
+                val shadowBuilder = CustomDragShadowBuilder(this@ControllerView,
+                    pressEvent.x.toInt(),
+                    pressEvent.y.toInt()
+                )
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                startDrag(data, shadowBuilder, info, 0)
-                
+                startDrag(null, shadowBuilder, info, 0)
             }
         })
         setOnTouchListener { _, event ->
@@ -54,7 +55,7 @@ class ControllerView @JvmOverloads constructor(
     lateinit var name: CharSequence @TextProp set
     lateinit var state: CharSequence @TextProp set
     
-    var onDragStarted: ((Position) -> GraphDragEvent)? = null @CallbackProp set
+    var onDragStarted: ((Position) -> ControllerDragEvent)? = null @CallbackProp set
 
     @AfterPropsSet
     fun onPropsReady() {
