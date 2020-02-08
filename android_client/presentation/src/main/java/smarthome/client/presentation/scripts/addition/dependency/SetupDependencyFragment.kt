@@ -1,6 +1,7 @@
 package smarthome.client.presentation.scripts.addition.dependency
 
 import android.os.Bundle
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import org.koin.android.ext.android.inject
@@ -10,6 +11,7 @@ import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.util.confirmAction
+import smarthome.client.util.log
 
 class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDependencyViewModel::class) {
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
@@ -38,6 +40,10 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
                 }
                 viewModel.takeIf { confirmed }?.onCancel()
             }
+        }
+        
+        viewModel.allConditions.observe(this ) {
+            log("conditions: ${it.joinToString(", ")}")
         }
         
         viewModel.close.onNavigate(this) {
