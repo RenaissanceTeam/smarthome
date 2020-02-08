@@ -50,29 +50,16 @@ class DragBlockEventsHandlerImpl(
     }
     
     private fun addOrMoveBlock(event: GraphDragEvent) {
-        val block = when (event.isFrom(GRAPH)) {
+        when (event.isFrom(GRAPH)) {
             true -> moveBlockUseCase.execute(scriptId, event.dragInfo.id, event.dragInfo.position)
             false -> addBlockHelper.resolveAddingFromEvent(scriptId, event)
         }
-        
-        emitWithBlock(
-            getOrCreateBlockState(event)
-                .copyWithDomain(block)
-                .copyOfVisible()
-        )
     }
     
     private fun hideDraggedBlock(event: GraphDragEvent) {
         val blockBeforeEvent = getBlockState(event.dragInfo.id) ?: return
         
         emitWithBlock(blockBeforeEvent.copyOfHidden())
-    }
-    
-    private fun getOrCreateBlockState(event: GraphDragEvent): BlockState {
-        return getBlockState(event.dragInfo.id)
-            ?: blockToNewGraphBlockStateMapper.map(
-                block = addBlockHelper.resolveAddingFromEvent(scriptId, event)
-            )
     }
     
     private fun getBlockState(id: BlockId): BlockState? {
