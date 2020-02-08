@@ -1,5 +1,9 @@
 package smarthome.client.entity.script.dependency.condition.controller
 
-const val more = ">"
-const val less = "<"
-const val equal = "="
+class ValueSigns {
+    companion object {
+        const val more = ">"
+        const val less = "<"
+        const val equal = "="
+    }
+}

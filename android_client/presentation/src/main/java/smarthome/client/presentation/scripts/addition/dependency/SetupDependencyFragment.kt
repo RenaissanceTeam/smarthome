@@ -10,13 +10,16 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
+import smarthome.client.presentation.scripts.resolver.ConditionViewResolver
 import smarthome.client.presentation.util.confirmAction
-import smarthome.client.util.log
+import java.util.concurrent.locks.Condition
 
 class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDependencyViewModel::class) {
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
     private val toolbarController: ToolbarController by inject()
+    private val conditionViewResolver: ConditionViewResolver by inject()
     private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
+    private val conditionViews = mutableListOf<ConditionView>()
     
     override fun getLayout() = R.layout.scripts_setup_dependency
     
@@ -42,8 +45,8 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
             }
         }
         
-        viewModel.allConditions.observe(this ) {
-            log("conditions: ${it.joinToString(", ")}")
+        viewModel.allConditions.observe(this ) { conditions ->
+            conditionViews.forEach {  }
         }
         
         viewModel.close.onNavigate(this) {

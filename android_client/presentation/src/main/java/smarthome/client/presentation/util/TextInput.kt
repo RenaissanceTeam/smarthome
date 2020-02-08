@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import androidx.core.widget.addTextChangedListener
 import kotlinx.android.synthetic.main.text_input.view.*
 import smarthome.client.presentation.R
 
@@ -30,4 +31,10 @@ class TextInput @JvmOverloads constructor(
     var text: String
         get() = input_field.text.toString()
         set(value) = input_field.setText(value)
+    
+    fun setOnTextChanged(listener: (String) -> Unit) {
+        input_field.addTextChangedListener {
+            listener(it?.toString().orEmpty())
+        }
+    }
 }
