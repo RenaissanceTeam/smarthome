@@ -6,6 +6,7 @@ import smarthome.client.arduino.entity.ArduinoConditionFromBlockResolver
 import smarthome.client.arduino.entity.block.ArduinoControllerBlockResolver
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.ControllerBlockResolver
+import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 
 val plugingate = module {
     factory<ConditionFromBlockResolver> {
@@ -20,4 +21,12 @@ val plugingate = module {
             get(named<ArduinoControllerBlockResolver>())
         ))
     }
+    
+    factory<ConditionModelResolver> {
+        ConditionModelResolverImpl(listOf(
+            get(named<ArduinoControllerBlockResolver>())
+        ))
+    }
+    
+    
 }
