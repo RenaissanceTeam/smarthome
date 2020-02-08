@@ -4,9 +4,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import smarthome.client.arduino.entity.ArduinoConditionFromBlockResolver
 import smarthome.client.arduino.entity.block.ArduinoControllerBlockResolver
+import smarthome.client.arduino.presentation.conditionview.ArduinoConditionViewResolver
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.ControllerBlockResolver
-import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
+import smarthome.client.presentation.scripts.resolver.ConditionViewResolver
 
 val plugingate = module {
     factory<ConditionFromBlockResolver> {
@@ -22,9 +23,9 @@ val plugingate = module {
         ))
     }
     
-    factory<ConditionModelResolver> {
-        ConditionModelResolverImpl(listOf(
-            get(named<ArduinoControllerBlockResolver>())
+    factory<ConditionViewResolver> {
+        ConditionViewResolverImpl(listOf(
+            get(named<ArduinoConditionViewResolver>())
         ))
     }
     

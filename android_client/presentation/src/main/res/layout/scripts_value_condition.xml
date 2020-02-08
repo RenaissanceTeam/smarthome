@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/title_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -19,8 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Value to check"
-        app:layout_constraintStart_toStartOf="@id/title"
-        app:layout_constraintTop_toBottomOf="@id/title" />
+        app:layout_constraintStart_toStartOf="@id/title_value"
+        app:layout_constraintTop_toBottomOf="@id/title_value" />
 
     <RadioGroup
         android:id="@+id/signs"

@@ -1,6 +1,8 @@
 package smarthome.client.arduino.entity
 
 import smarthome.client.arduino.entity.block.ArduinoControllerBlock
+import smarthome.client.arduino.entity.condition.HumidityCondition
+import smarthome.client.arduino.entity.condition.TemperatureCondition
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.dependency.DependencyId
