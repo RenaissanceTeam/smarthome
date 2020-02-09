@@ -16,10 +16,11 @@
 
     <smarthome.client.presentation.util.TextInput
         android:id="@+id/value_input"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Value to check"
         app:layout_constraintStart_toStartOf="@id/title_value"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_value" />
 
     <RadioGroup

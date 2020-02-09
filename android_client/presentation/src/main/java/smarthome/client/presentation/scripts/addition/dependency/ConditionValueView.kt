@@ -39,6 +39,5 @@ open class ConditionValueView @JvmOverloads constructor(
     
     fun setOnValueChanged(listener: (String) -> Unit) {
         value_input.setOnTextChanged(listener)
-        
     }
 }

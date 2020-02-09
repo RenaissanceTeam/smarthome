@@ -1,7 +1,6 @@
 package smarthome.client.presentation.scripts.addition.dependency
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.*
 import smarthome.client.entity.script.dependency.DependencyId
@@ -9,7 +8,6 @@ import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
-import smarthome.client.util.runInScopeCatchingAny
 
 class SetupDependencyViewModel: KoinViewModel() {
     private val scriptId: Long = 1L // todo
@@ -21,9 +19,9 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val createEmptyConditions: CreateEmptyConditionsForBlockUseCase by inject()
     private val fetchDependencyDetails: FetchDependencyDetailsUseCase by inject()
     
-    val allConditions = MutableLiveData<List<Condition>>()
-    val selectedCondition = MutableLiveData<Int>()
+    private lateinit var emptyConditionsForDependency: List<Condition>
     val close = NavigationLiveData()
+    val containers = MutableLiveData<List<ConditionContainerState>>()
     
     var isNew: Boolean = false
         private set
@@ -43,18 +41,31 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     fun setDependencyId(id: DependencyId) {
         dependencyId = id
+        
+        initializeEmptyConditions()
+        initializeConditionContainers()
+    }
+    private fun initializeEmptyConditions() {
+        val dependency = getDependencyUseCase.execute(scriptId, dependencyId)
+        val conditions = createEmptyConditions.execute(scriptId, dependencyId,
+            dependency.startBlock)
     
+        emptyConditionsForDependency = conditions
+    }
     
-        getDependencyUseCase.runInScopeCatchingAny(viewModelScope) {
-            val dependency = execute(scriptId, dependencyId)
-            val conditions = createEmptyConditions.execute(scriptId, dependencyId,
-                dependency.startBlock)
-            
-            allConditions.value = conditions
-        }
+    private fun initializeConditionContainers() {
+        containers.value = containers.value.orEmpty() + ConditionContainerState()
     }
     
     fun setFlowViewModel(setupScriptViewModel: SetupScriptViewModel) {
         this.setupScriptViewModel = setupScriptViewModel
+    }
+    
+    fun getEmptyConditions(): List<Condition> {
+        return emptyConditionsForDependency
+    }
+    
+    companion object {
+        const val minimumConditions = 1
     }
 }

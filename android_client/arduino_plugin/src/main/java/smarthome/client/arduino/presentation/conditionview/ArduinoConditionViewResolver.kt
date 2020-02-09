@@ -19,6 +19,7 @@ class ArduinoConditionViewResolver : ConditionViewResolver {
     override fun resolve(context: Context, condition: Condition): ConditionView? {
         return when (condition) {
             is HumidityCondition -> HumidityConditionView(context)
+            is TemperatureCondition -> TemperatureConditionView(context)
             else -> null
         }
     }
