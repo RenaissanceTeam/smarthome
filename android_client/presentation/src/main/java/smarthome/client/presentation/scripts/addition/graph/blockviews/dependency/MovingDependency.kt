@@ -1,8 +1,8 @@
 package smarthome.client.presentation.scripts.addition.graph.blockviews.dependency
 
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.DependencyId
-import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.entity.script.dependency.DependencyId
+import smarthome.client.util.Position
 
 data class MovingDependency(
     val id: DependencyId? = null,

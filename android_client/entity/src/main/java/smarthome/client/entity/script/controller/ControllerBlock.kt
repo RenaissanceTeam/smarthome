@@ -1,7 +1,7 @@
 package smarthome.client.entity.script.controller
 
-import smarthome.client.entity.script.Block
-import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.block.Block
+import smarthome.client.util.Position
 
 data class ControllerBlock(
     val controllerId: Long,

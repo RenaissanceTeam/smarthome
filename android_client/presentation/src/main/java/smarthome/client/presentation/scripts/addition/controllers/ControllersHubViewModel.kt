@@ -7,7 +7,7 @@ import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
-import smarthome.client.entity.script.Position
+import smarthome.client.util.Position
 import smarthome.client.entity.script.controller.ControllerBlockId
 import smarthome.client.util.runInScopeCatchingAny
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DeviceItemState

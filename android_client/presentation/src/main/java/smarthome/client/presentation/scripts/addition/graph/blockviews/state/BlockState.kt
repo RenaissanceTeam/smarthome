@@ -1,6 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph.blockviews.state
 
-import smarthome.client.entity.script.Block
+import smarthome.client.entity.script.block.Block
 
 interface BlockState {
     val block: Block

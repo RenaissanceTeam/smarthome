@@ -1,6 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph
 
-import smarthome.client.entity.script.Block
+import smarthome.client.entity.script.block.Block
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
 

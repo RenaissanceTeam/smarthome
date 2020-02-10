@@ -1,6 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph.blockviews
 
-import smarthome.client.entity.script.Position
+import smarthome.client.util.Position
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 
 interface GraphBlockView {
