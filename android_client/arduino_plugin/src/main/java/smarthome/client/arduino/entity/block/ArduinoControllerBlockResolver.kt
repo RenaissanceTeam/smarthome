@@ -1,5 +1,7 @@
 package smarthome.client.arduino.entity.block
 
+import smarthome.client.arduino.entity.dht
+import smarthome.client.arduino.entity.onoff
 import smarthome.client.domain.api.scripts.resolver.ControllerBlockResolver
 import smarthome.client.entity.Controller
 import smarthome.client.entity.script.block.Block
@@ -16,8 +18,6 @@ class ArduinoControllerBlockResolver: ControllerBlockResolver {
     }
     
     companion object {
-        private const val dht = "dht"
-        private const val onoff = "onoff"
         private val possibleTypes = listOf(dht, onoff)
     }
 }

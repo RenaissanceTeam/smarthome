@@ -2,7 +2,7 @@ package smarthome.client.arduino.presentation.conditionview
 
 import android.content.Context
 import android.util.AttributeSet
-import smarthome.client.presentation.scripts.addition.dependency.ConditionValueView
+import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionValueView
 
 class HumidityConditionView @JvmOverloads constructor(
     context: Context,
