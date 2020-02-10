@@ -53,7 +53,9 @@ class DeviceDetails : Fragment() {
         findNavController().navigate(action)
     }
     
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+    
         lifecycle.addObserver(viewModel)
     
         viewModel.refresh.observe(this) { progress_bar.visible = it }
@@ -61,16 +63,17 @@ class DeviceDetails : Fragment() {
         viewModel.controllersLiveData.observe(this) {
             itemsController.setData(it, viewModel)
         }
-        
-        viewModel.openController.onNavigate(this, ::openControllerDetails)
     
+        viewModel.openController.onNavigate(this, ::openControllerDetails)
+        viewModel.setDeviceId(args.deviceGuid)
+    }
+    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         controllers.layoutManager = LinearLayoutManager(view.context)
         controllers.adapter = itemsController.adapter
     
         controllers.addItemDecoration(
             DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-    
-        viewModel.setDeviceId(args.deviceGuid)
     
         device_name.setOnClickListener {
             EditTextDialog.create(view.context,
@@ -89,6 +92,5 @@ class DeviceDetails : Fragment() {
                 }
             ).show()
         }
-    
     }
 }

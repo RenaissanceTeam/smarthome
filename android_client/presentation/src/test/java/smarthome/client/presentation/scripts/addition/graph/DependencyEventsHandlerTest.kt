@@ -12,6 +12,8 @@ import smarthome.client.entity.script.DependencyId
 import smarthome.client.entity.script.Position
 import smarthome.client.entity.script.emptyPosition
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.*
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DependencyEventsHandler
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DependencyEventsHandlerImpl
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent

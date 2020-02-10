@@ -29,7 +29,7 @@ fun <T> List<T>.findAndModify(predicate: (T) -> Boolean, modify: (T) -> T): List
 
 fun <T> List<T>.withRemoved(predicate: (T) -> Boolean): List<T> {
     val toRemove = find(predicate)
-    val index = indexOf(toRemove)
+    val index = indexOf(toRemove).takeIf { it != -1 } ?: return this
     
     return subList(0, index) + subList(index + 1, size)
 }

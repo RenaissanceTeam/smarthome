@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph
+package smarthome.client.presentation.scripts.addition.graph.eventhandler
 
 import androidx.lifecycle.MutableLiveData
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DROPPED

@@ -7,7 +7,7 @@
     app:motionDebug="SHOW_ALL"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <smarthome.client.presentation.scripts.addition.graph.ScriptGraphView
+    <smarthome.client.presentation.scripts.addition.graph.view.GraphView
         android:id="@+id/script_graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

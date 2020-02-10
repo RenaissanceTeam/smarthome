@@ -154,7 +154,7 @@
     </fragment>
     <fragment
         android:id="@+id/addScriptInfoFragment"
-        android:name="smarthome.client.presentation.scripts.addition.AddScriptInfoFragment"
+        android:name="smarthome.client.presentation.scripts.addition.SetupScriptInfoFragment"
         android:label="@string/setup_script"
         tools:layout="@layout/fragment_add_script">
         <argument
@@ -186,5 +186,39 @@
             android:name="show_bottom_bar"
             android:defaultValue="false"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_addControllersToScriptFragment_to_setupDependencyFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"
+            app:destination="@id/setupDependencyFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/setupDependencyFragment"
+        android:name="smarthome.client.presentation.scripts.addition.dependency.SetupDependencyFragment"
+        android:label="@string/empty"
+        tools:layout="@layout/scripts_setup_dependency">
+
+        <argument
+            android:name="show_tool_bar"
+            android:defaultValue="true"
+            app:argType="boolean" />
+
+        <argument
+            android:name="show_bottom_bar"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
+        <argument
+            android:name="is_new"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
+        <argument
+            android:name="dependency_id"
+            app:argType="smarthome.client.entity.script.DependencyId" />
+
     </fragment>
 </navigation>

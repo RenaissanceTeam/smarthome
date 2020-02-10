@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph
+package smarthome.client.presentation.scripts.addition.graph.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -24,7 +24,7 @@ import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.util.visible
 
-class ScriptGraphView @JvmOverloads constructor(
+class GraphView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -37,7 +37,7 @@ class ScriptGraphView @JvmOverloads constructor(
     private var blockViews = mutableMapOf<BlockId, GraphBlockView>()
     private var dependencyViews = mutableMapOf<DependencyId, DependencyArrowView>()
     private var movingDependencyView = DependencyArrowView(context).also(::addView)
-    private val viewModel = ScriptGraphViewModel()
+    private val viewModel = GraphViewModel()
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
     
     override fun onAttachedToWindow() {
@@ -81,7 +81,7 @@ class ScriptGraphView @JvmOverloads constructor(
     
     private fun setStartToCenterOfBlock(view: DependencyArrowView?, startBlock: BlockId?) {
         startBlock?.let { startId ->
-            val start = blockViews[startId] ?: return@let
+            val start = runCatching { getOrInflateBlockView(startId) }.getOrElse { return@let }
             view?.setStart(start.centerPosition)
         }
     }
@@ -158,6 +158,15 @@ class ScriptGraphView @JvmOverloads constructor(
         return blockView
     }
     
+    private fun getOrInflateBlockView(blockId: BlockId): GraphBlockView {
+        return blockViews[blockId]
+            ?: {
+                val state = viewModel.getBlockState(blockId)
+                    ?: throw IllegalArgumentException("can't get block state for id = $blockId")
+                getOrInflateBlockView(state)
+            }.invoke()
+    }
+    
     private fun bindDependencies(dependencies: List<DependencyState>) {
         retainOnlyPostedDependencies(dependencies)
         
@@ -165,10 +174,13 @@ class ScriptGraphView @JvmOverloads constructor(
             val view = getOrInflateDependency(state.dependency.id)
             
             setStartToCenterOfBlock(view, state.dependency.startBlock)
-            
-            val endBlock = blockViews[state.dependency.endBlock]
-            endBlock?.centerPosition?.let(view::setEnd)
+            setEndToCenterOfBlock(view, state.dependency.endBlock)
         }
+    }
+    
+    private fun setEndToCenterOfBlock(view: DependencyArrowView, id: BlockId) {
+        val endBlock = runCatching { getOrInflateBlockView(id) }.getOrElse { return }
+        endBlock.centerPosition.let(view::setEnd)
     }
     
     private fun convertRawToRelativePosition(raw: Position): Position {

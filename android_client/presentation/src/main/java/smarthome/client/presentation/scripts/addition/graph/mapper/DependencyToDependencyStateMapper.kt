@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph
+package smarthome.client.presentation.scripts.addition.graph.mapper
 
 import smarthome.client.entity.script.Dependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
