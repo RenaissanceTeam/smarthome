@@ -57,3 +57,16 @@ inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope,
     return scope.launch { runCatching { block() }.onFailure(onFailure) }
 }
 
+fun View.show() {
+    visibility = View.VISIBLE
+}
+
+fun View.gone() {
+    visibility = View.GONE
+}
+
+fun View.invisible() {
+    visibility = View.INVISIBLE
+}
+
+
