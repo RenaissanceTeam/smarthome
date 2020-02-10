@@ -2,7 +2,7 @@ package smarthome.client.plugingate
 
 import android.content.Context
 import smarthome.client.entity.script.dependency.condition.Condition
-import smarthome.client.presentation.scripts.addition.dependency.ConditionView
+import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionView
 import smarthome.client.presentation.scripts.resolver.ConditionViewResolver
 
 class ConditionViewResolverImpl(private val resolvers: List<ConditionViewResolver>) : ConditionViewResolver {

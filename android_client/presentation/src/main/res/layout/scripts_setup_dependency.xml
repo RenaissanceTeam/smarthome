@@ -20,25 +20,43 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintHeight_percent="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/conditions_label" />
 
     <View
         android:id="@+id/divider"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_margin="4dp"
         android:background="#B2A8A8"
-        app:layout_constraintBottom_toBottomOf="@id/conditions_container" />
-    <TextView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/action_viewgroup"
+        app:layout_constraintTop_toBottomOf="@id/conditions_container" />
+
+    <RelativeLayout
+        android:id="@+id/action_viewgroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#3e3e"
-        android:gravity="center"
-        android:text="Action"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider" />
+        app:layout_constraintTop_toBottomOf="@id/divider" >
+        <TextView
+            android:layout_marginStart="8dp"
+            android:layout_alignParentTop="true"
+            android:id="@+id/action_label"
+            android:text="Action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:layout_margin="8dp"
+            android:id="@+id/action_container"
+            android:layout_below="@id/action_label"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
