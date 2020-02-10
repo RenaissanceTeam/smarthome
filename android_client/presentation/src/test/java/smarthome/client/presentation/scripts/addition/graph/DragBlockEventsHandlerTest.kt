@@ -11,7 +11,11 @@ import smarthome.client.entity.script.Block
 import smarthome.client.entity.script.BlockId
 import smarthome.client.entity.script.Position
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlockEventsHandler
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlockEventsHandlerImpl
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
+import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
+import smarthome.client.presentation.scripts.addition.graph.helper.AddGraphBlockStateHelper
 
 class DragBlockEventsHandlerTest {
     private lateinit var handler: DragBlockEventsHandler
@@ -49,14 +53,15 @@ class DragBlockEventsHandlerTest {
             on { value }.then { currentBlocks }
         }
     
-        handler = DragBlockEventsHandlerImpl(
-            blocksLiveData,
-            moveBlockUseCase,
-            removeBlockUseCase,
-            addBlockToScriptGraphUseCase,
-            addBlockHelper,
-            addGraphBlockStateHelper
-        )
+        handler =
+            DragBlockEventsHandlerImpl(
+                blocksLiveData,
+                moveBlockUseCase,
+                removeBlockUseCase,
+                addBlockToScriptGraphUseCase,
+                addBlockHelper,
+                addGraphBlockStateHelper
+            )
     }
     
     private fun createDragEvent(id: BlockId = blockId,

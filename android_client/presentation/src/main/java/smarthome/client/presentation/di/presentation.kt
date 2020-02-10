@@ -15,13 +15,20 @@ import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.main.toolbar.ToolbarControllerImpl
 import smarthome.client.presentation.main.toolbar.ToolbarHolder
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
-import smarthome.client.presentation.scripts.addition.AddScriptViewModel
-import smarthome.client.presentation.scripts.addition.graph.*
+import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.*
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DependencyEventsHandler
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DependencyEventsHandlerImpl
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlockEventsHandler
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlockEventsHandlerImpl
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBusImpl
+import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
+import smarthome.client.presentation.scripts.addition.graph.helper.AddGraphBlockStateHelper
+import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
+import smarthome.client.presentation.scripts.addition.graph.mapper.DependencyToDependencyStateMapper
 
 val presentation = module {
     
@@ -42,7 +49,7 @@ val presentation = module {
     factory { (owner: LifecycleOwner, toolbar: Toolbar) -> ToolbarSetter(owner, toolbar, get()) }
     
     // scripts
-    viewModel { AddScriptViewModel() }
+    viewModel { SetupScriptViewModel() }
     singleBy<GraphEventBus, GraphEventBusImpl>()
     factoryBy<GraphBlockFactoryResolver, GraphBlockFactoryResolverImpl>()
     factory { BlockToNewGraphBlockStateMapper() }

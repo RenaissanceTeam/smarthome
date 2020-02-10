@@ -15,6 +15,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
+import smarthome.client.domain.api.scripts.usecases.AddDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.CheckIfDependencyPossibleUseCase
 import smarthome.client.domain.api.scripts.usecases.ObserveBlocksUseCase
 import smarthome.client.domain.api.scripts.usecases.ObserveDependenciesUseCase
@@ -27,16 +28,21 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.dependenc
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MOVING
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DependencyEventsHandler
+import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlockEventsHandler
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
+import smarthome.client.presentation.scripts.addition.graph.events.navigation.OpenSetupDependency
+import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
+import smarthome.client.presentation.scripts.addition.graph.view.GraphViewModel
 import smarthome.client.util.DataStatus
 import kotlin.test.*
 
-class ScriptGraphViewModelTest {
+class GraphViewModelTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
     
@@ -44,12 +50,13 @@ class ScriptGraphViewModelTest {
     private lateinit var eventBus: GraphEventBus
     private lateinit var events: PublishSubject<GraphEvent>
     private val position1_1 = Position(1, 1)
-    private lateinit var viewModel: ScriptGraphViewModel
+    private lateinit var viewModel: GraphViewModel
     private lateinit var observeBlocksUseCase: ObserveBlocksUseCase
     private lateinit var observeDependenciesUseCase: ObserveDependenciesUseCase
     private lateinit var dragBlockEventsHandler: DragBlockEventsHandler
     private lateinit var dependencyEventsHandler: DependencyEventsHandler
     private lateinit var checkIfDependencyPossibleUseCase: CheckIfDependencyPossibleUseCase
+    private lateinit var addDependencyUseCase: AddDependencyUseCase
     private lateinit var blockToNewGraphBlockStateMapper: BlockToNewGraphBlockStateMapper
     private lateinit var blocksObservable: PublishSubject<List<Block>>
     private lateinit var dependenciesObservable: PublishSubject<List<Dependency>>
@@ -60,7 +67,7 @@ class ScriptGraphViewModelTest {
     private val blockState = MockBlockState(block)
     private val otherBlockState = MockBlockState(otherBlock)
     private val dependencyId = MockDependencyId()
-    
+    private val scriptId: Long = 1L // todo
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -77,6 +84,7 @@ class ScriptGraphViewModelTest {
         events = PublishSubject.create()
         eventBus = mock { on { observe() }.then { events } }
         dragBlockEventsHandler = mock {}
+        addDependencyUseCase = mock {}
         dependencyEventsHandler = mock {}
         checkIfDependencyPossibleUseCase = mock {
             on { execute(any(), any(), any()) }.then { true }
@@ -94,10 +102,11 @@ class ScriptGraphViewModelTest {
                 single { blockToNewGraphBlockStateMapper }
                 single { checkIfDependencyPossibleUseCase }
                 single { observeDependenciesUseCase }
+                single { addDependencyUseCase }
             })
         }
         
-        viewModel = ScriptGraphViewModel()
+        viewModel = GraphViewModel()
     }
     
     
@@ -168,11 +177,6 @@ class ScriptGraphViewModelTest {
     }
     
     @Test
-    fun `when save should serialize block types, ids and positions`() {
-    
-    }
-    
-    @Test
     fun `when end creating dependency on graph then should emit idle moving dependency`() {
         viewModel.movingDependency.value = MovingDependency(
             MockDependencyId(),
@@ -189,10 +193,27 @@ class ScriptGraphViewModelTest {
     }
     
     @Test
-    fun `when end creating dependency on other block should start setup of dependency`() {
+    fun `when end creating dependency on other block should emit on eventbus`() {
         viewModel.addDependency(dependencyId, otherBlockId, blockId)
-        
-        // todo check that started setup flow with two ids
+    
+        verify(eventBus).addEvent(argThat {
+            this is OpenSetupDependency && this.id == dependencyId
+        })
+    }
+    
+    @Test
+    fun `when add dependency should call add dependency use case`() {
+        viewModel.addDependency(dependencyId, otherBlockId, blockId)
+    
+    
+        verify(addDependencyUseCase).execute(
+            eq(scriptId),
+            argThat {
+                this.id == dependencyId
+                    && this.startBlock == otherBlockId
+                    && this.endBlock == blockId
+            }
+        )
     }
     
     private fun emitMoveDependencyFromOther() {

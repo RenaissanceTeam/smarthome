@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph
+package smarthome.client.presentation.scripts.addition.graph.helper
 
 import smarthome.client.domain.api.scripts.usecases.AddControllerBlockUseCase
 import smarthome.client.entity.script.Block
