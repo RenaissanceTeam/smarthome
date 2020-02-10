@@ -68,7 +68,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     private fun initializeEmptyAction() {
         val dependency = getDependencyUseCase.execute(scriptId, dependencyId)
         val action = createEmptyAction.execute(scriptId, dependencyId,
-            dependency.startBlock)
+            dependency.endBlock)
     
         emptyActionForDependency = action
     }

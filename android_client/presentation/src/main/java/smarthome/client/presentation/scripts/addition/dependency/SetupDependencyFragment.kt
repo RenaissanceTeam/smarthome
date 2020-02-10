@@ -15,6 +15,7 @@ import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.dependency.action.ActionView
 import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionContainerState
 import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionViewContainer
+import smarthome.client.presentation.scripts.resolver.ActionViewResolver
 import smarthome.client.presentation.util.confirmAction
 
 class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDependencyViewModel::class) {
@@ -22,7 +23,8 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     private val toolbarController: ToolbarController by inject()
     private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
     private val containerViews = mutableMapOf<ConditionContainerState, ConditionViewContainer>()
-    private val actionView: ActionView? = null
+    private var actionView: ActionView? = null
+    private val actionViewResolver: ActionViewResolver by inject()
     
     override fun getLayout() = R.layout.scripts_setup_dependency
     
@@ -57,8 +59,13 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
             containers.forEach(::inflateContainerIfNeeded)
         }
     
-        viewModel.action.observe(this) { action ->
-            actionView?.let {  }
+        viewModel.action.observe(this) { state ->
+            (actionView as? View)?.let { action_container.removeView(it) }
+    
+            context?.let {
+                actionView = actionViewResolver.resolve(it, state.emptyAction)
+                (actionView as? View)?.let(action_container::addView)
+            }
         }
     }
     
