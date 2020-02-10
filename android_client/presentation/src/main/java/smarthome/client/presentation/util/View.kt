@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
-import smarthome.client.entity.script.Position
+import smarthome.client.util.Position
 
 fun Fragment.hideSoftKeyboard() {
     val activity = activity ?: return

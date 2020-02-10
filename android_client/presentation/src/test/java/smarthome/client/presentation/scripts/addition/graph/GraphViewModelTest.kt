@@ -20,10 +20,10 @@ import smarthome.client.domain.api.scripts.usecases.CheckIfDependencyPossibleUse
 import smarthome.client.domain.api.scripts.usecases.ObserveBlocksUseCase
 import smarthome.client.domain.api.scripts.usecases.ObserveDependenciesUseCase
 import smarthome.client.entity.Controller
-import smarthome.client.entity.script.Block
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.Dependency
-import smarthome.client.entity.script.Position
+import smarthome.client.entity.script.block.Block
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.entity.script.dependency.Dependency
+import smarthome.client.util.Position
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.IDLE
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MOVING
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency

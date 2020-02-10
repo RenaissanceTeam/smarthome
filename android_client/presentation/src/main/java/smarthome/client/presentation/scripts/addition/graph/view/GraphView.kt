@@ -10,10 +10,10 @@ import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.DependencyId
-import smarthome.client.entity.script.Position
-import smarthome.client.entity.script.toPosition
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.entity.script.dependency.DependencyId
+import smarthome.client.util.Position
+import smarthome.client.util.toPosition
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.*

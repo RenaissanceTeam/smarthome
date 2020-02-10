@@ -1,7 +1,7 @@
 package smarthome.client.presentation.scripts.addition.graph
 
 import org.koin.core.inject
-import smarthome.client.entity.script.DependencyId
+import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.navigation.NavigationEvent
 import smarthome.client.presentation.scripts.addition.graph.events.navigation.OpenSetupDependency

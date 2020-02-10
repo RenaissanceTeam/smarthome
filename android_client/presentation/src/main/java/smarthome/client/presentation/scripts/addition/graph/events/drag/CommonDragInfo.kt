@@ -1,8 +1,8 @@
 package smarthome.client.presentation.scripts.addition.graph.events.drag
 
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.Position
-import smarthome.client.entity.script.emptyPosition
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.util.Position
+import smarthome.client.util.emptyPosition
 
 data class CommonDragInfo(
     val id: BlockId,

@@ -1,4 +1,6 @@
-package smarthome.client.entity.script
+package smarthome.client.entity.script.block
+
+import smarthome.client.util.Position
 
 interface Block {
     val id: BlockId

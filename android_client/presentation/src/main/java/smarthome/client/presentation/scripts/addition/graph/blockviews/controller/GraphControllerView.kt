@@ -12,9 +12,9 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.entity.Controller
-import smarthome.client.entity.script.BlockId
-import smarthome.client.entity.script.Position
-import smarthome.client.entity.script.emptyPosition
+import smarthome.client.entity.script.block.BlockId
+import smarthome.client.util.Position
+import smarthome.client.util.emptyPosition
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
