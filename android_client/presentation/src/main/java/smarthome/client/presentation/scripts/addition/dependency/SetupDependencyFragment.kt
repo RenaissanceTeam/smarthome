@@ -19,7 +19,6 @@ import smarthome.client.presentation.scripts.addition.dependency.condition.Condi
 import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionViewContainer
 import smarthome.client.presentation.scripts.resolver.ActionViewResolver
 import smarthome.client.presentation.util.confirmAction
-import smarthome.client.util.log
 
 class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDependencyViewModel::class) {
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
@@ -27,6 +26,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
     private val containerViews = mutableMapOf<ConditionContainerState, ConditionViewContainer>()
     private var actionView: ActionView? = null
+    private lateinit var  conditionsAdapter: ConditionContainersAdapter
     private val actionViewResolver: ActionViewResolver by inject()
     
     override fun getLayout() = R.layout.scripts_setup_dependency
@@ -58,8 +58,8 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         }
     
         viewModel.conditions.observe(this) { containers ->
-            retainOnlyPostedConditionContainers(containers)
-            containers.forEach(::inflateContainerIfNeeded)
+            conditionsAdapter.clear()
+            conditionsAdapter.addAll(containers)
         }
     
         viewModel.action.observe(this) { state ->
@@ -71,6 +71,9 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
                 (actionView as? View)?.let(action_container::addView)
             }
         }
+        
+        conditionsAdapter = ConditionContainersAdapter(context!!)
+        conditions_container.adapter = conditionsAdapter
     }
     
     private fun getConditions(): List<Condition> {

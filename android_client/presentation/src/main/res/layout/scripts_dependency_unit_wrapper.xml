@@ -4,6 +4,11 @@
     android:id="@+id/unit_wrapper"
     android:layout_width="100dp"
     android:layout_height="100dp"
-    app:cardBackgroundColor="@color/gray">
-
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:paddingEnd="12dp"
+    android:paddingStart="12dp"
+    app:cardCornerRadius="16dp"
+    app:contentPadding="8dp"
+    app:cardBackgroundColor="#E8E8E8">
 </androidx.cardview.widget.CardView>
