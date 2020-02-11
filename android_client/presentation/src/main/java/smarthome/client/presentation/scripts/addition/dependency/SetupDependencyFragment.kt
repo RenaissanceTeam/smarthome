@@ -66,6 +66,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     
             context?.let {
                 actionView = actionViewResolver.resolve(it, state.emptyAction)
+                actionView?.setAction(state.emptyAction)
                 (actionView as? View)?.let(action_container::addView)
             }
         }

@@ -21,7 +21,7 @@ class UpdateDependencyDetailsUseCaseImpl(
         
         when (val details = repo.getByDependency(dependency)) {
             null -> addDependencyDetails(dependency, conditions, action)
-            else -> repo.update(details)
+            else -> repo.save(details)
         }
     }
     

@@ -53,6 +53,7 @@ class ConditionViewContainer @JvmOverloads constructor(
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             return viewResolver.resolve(context, conditions[position])
                 ?.also { items.add(it) }
+                ?.also { it.setCondition(conditions[position]) }
                 ?.let { it as View? }
                 ?.also(container::addView)
                 ?: Object()

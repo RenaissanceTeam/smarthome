@@ -8,6 +8,6 @@ class AddDependencyDetailsUseCaseImpl(
     private val repo: DependencyDetailsRepo
 ) : AddDependencyDetailsUseCase {
     override fun execute(details: DependencyDetails) {
-        repo.add(details)
+        repo.save(details)
     }
 }
