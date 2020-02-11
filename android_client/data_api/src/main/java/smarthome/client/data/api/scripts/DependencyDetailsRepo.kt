@@ -5,6 +5,5 @@ import smarthome.client.entity.script.dependency.DependencyDetails
 
 interface DependencyDetailsRepo {
     fun getByDependency(dependency: Dependency): DependencyDetails?
-    fun add(details: DependencyDetails)
-    fun update(details: DependencyDetails)
+    fun save(details: DependencyDetails)
 }

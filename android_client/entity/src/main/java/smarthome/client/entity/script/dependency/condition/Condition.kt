@@ -5,6 +5,4 @@ import smarthome.client.entity.script.dependency.DependencyUnit
 
 interface Condition: DependencyUnit {
     val dependencyId: DependencyId
-    
-    
 }
