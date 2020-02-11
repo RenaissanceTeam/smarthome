@@ -10,6 +10,7 @@ import smarthome.client.entity.script.dependency.condition.controller.ValueSigns
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionView
 import smarthome.client.presentation.util.inflate
+import smarthome.client.presentation.util.wrapHeight
 
 open class ControllerConditionValueView @JvmOverloads constructor(
     context: Context,
@@ -20,6 +21,7 @@ open class ControllerConditionValueView @JvmOverloads constructor(
     
     init {
         inflate(R.layout.scripts_value_condition)
+        wrapHeight()
         
         setOnSignChanged { newSign ->
             val beforeChange = condition ?: return@setOnSignChanged

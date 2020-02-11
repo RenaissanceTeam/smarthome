@@ -51,3 +51,10 @@ fun View.isPositionInside(position: Position): Boolean {
 }
 
 val View.viewScope: CoroutineScope get() = GlobalScope
+
+fun View.wrapHeight() {
+    layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT
+    )
+}

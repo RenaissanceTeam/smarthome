@@ -19,6 +19,7 @@ import smarthome.client.presentation.scripts.addition.dependency.condition.Condi
 import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionViewContainer
 import smarthome.client.presentation.scripts.resolver.ActionViewResolver
 import smarthome.client.presentation.util.confirmAction
+import smarthome.client.util.log
 
 class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDependencyViewModel::class) {
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
@@ -88,11 +89,10 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     
     private fun inflateContainerIfNeeded(container: ConditionContainerState) {
         if (containerViews.containsKey(container)) return
-        
         context?.let { context ->
             ConditionViewContainer(context)
                 .also(conditions_container::addView)
-                .also { it.setItems(container.emptyConditions) }
+                .also { it.setItems(container.conditions) }
                 .also { containerViews[container] = it }
         }
     }
