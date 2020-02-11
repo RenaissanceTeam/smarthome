@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.scripts_value_condition.view.*
+import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.entity.script.dependency.condition.controller.ValueSigns
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionView
@@ -25,6 +26,10 @@ open class ConditionValueView @JvmOverloads constructor(
         set(value) {
             title_value.text = value
         }
+    
+    override fun getCondition(): Condition {
+    
+    }
     
     fun setOnSignChanged(listener: (String) -> Unit) {
         signs.setOnCheckedChangeListener { group, checkedId ->
