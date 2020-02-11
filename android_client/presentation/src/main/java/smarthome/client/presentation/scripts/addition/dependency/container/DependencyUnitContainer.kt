@@ -9,7 +9,6 @@ import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.scripts_dependency_unit_wrapper.view.*
 import org.koin.core.KoinComponent
 import smarthome.client.presentation.R
-import smarthome.client.presentation.util.inflate
 
 
 abstract class DependencyUnitContainer <ITEM, ITEMVIEW> @JvmOverloads constructor(
@@ -67,18 +66,16 @@ abstract class DependencyUnitContainer <ITEM, ITEMVIEW> @JvmOverloads constructo
         }
         
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            return inflateItem(context, items[position])
-                ?.also { itemviews.add(it) }
-                ?.let { it as View? }
-                ?.also { dependencyUnitView ->
-//                    container.inflate(R.layout.scripts_dependency_unit_wrapper)
-//                    val wrapper = View.inflate(context, R.layout.scripts_dependency_unit_wrapper, null)
-//                    container.addView(wrapper)
-//                    wrapper.unit_wrapper.addView(dependencyUnitView)
-//                    wrapper.requestLayout()
-                    container.addView(dependencyUnitView)
-                }
-                ?: Object()
+            val item = inflateItem(context, items[position]) ?: return Object()
+    
+            itemviews.add(item)
+            val itemView = item as? View
+    
+            val wrapper = View.inflate(context, R.layout.scripts_dependency_unit_wrapper, null)
+            wrapper.unit_wrapper.addView(itemView)
+            container.addView(wrapper)
+    
+            return wrapper
         }
         
         override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {

@@ -26,7 +26,7 @@
         android:overScrollMode="always"
         app:layout_constraintTop_toBottomOf="@id/conditions_label">
 
-        <LinearLayout
+        <ListView
             android:id="@+id/conditions_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
