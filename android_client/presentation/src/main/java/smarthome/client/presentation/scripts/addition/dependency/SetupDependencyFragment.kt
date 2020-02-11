@@ -76,7 +76,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         return containerViews.keys
             .map { key ->
                 val view = containerViews[key]!!
-                view.getSelectedCondition()
+                view.getSelectedItemView()?.getCondition()
             }
             .filterNotNull()
             .toList()
@@ -92,7 +92,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         context?.let { context ->
             ConditionViewContainer(context)
                 .also(conditions_container::addView)
-                .also { it.setConditions(container.emptyConditions) }
+                .also { it.setItems(container.emptyConditions) }
                 .also { containerViews[container] = it }
         }
     }
