@@ -55,7 +55,16 @@ class SetupDependencyViewModel: KoinViewModel() {
         val dependency = getDependencyUseCase.execute(scriptId, dependencyId)
         
         initializeEmptyConditions(dependency.startBlock)
-        conditions.value = listOf(ConditionContainerState(emptyConditionsForDependency))
+        conditions.value = listOf(
+            ConditionContainerState(emptyConditionsForDependency),
+            ConditionContainerState(emptyConditionsForDependency),
+            ConditionContainerState(emptyConditionsForDependency),
+            ConditionContainerState(emptyConditionsForDependency),
+            ConditionContainerState(emptyConditionsForDependency),
+            ConditionContainerState(emptyConditionsForDependency),
+            ConditionContainerState(emptyConditionsForDependency),
+            ConditionContainerState(emptyConditionsForDependency)
+        )
     
         initializeEmptyAction(dependency.endBlock)
         action.value = ActionViewState(emptyActionForDependency)

@@ -4,39 +4,56 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.viewpager.widget.PagerAdapter
-import kotlinx.android.synthetic.main.scripts_dependency_unit_container.view.*
+import androidx.viewpager.widget.ViewPager
+import kotlinx.android.synthetic.main.scripts_dependency_unit_wrapper.view.*
 import org.koin.core.KoinComponent
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionView
 import smarthome.client.presentation.util.inflate
+
 
 abstract class DependencyUnitContainer <ITEM, ITEMVIEW> @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
+    attrs: AttributeSet? = null
+) : ViewPager(context, attrs), KoinComponent {
     
     private val items: MutableList<ITEM> = mutableListOf()
     
-    private val adapter = Adapter()
+    private val unitsAdapter = Adapter()
     
     init {
-        inflate(R.layout.scripts_dependency_unit_container)
-        units_pager.adapter = adapter
+        adapter = unitsAdapter
     }
     
     fun setItems(items: List<ITEM>) {
         this.items.clear()
         this.items.addAll(items)
-        units_pager.adapter?.notifyDataSetChanged()
+        unitsAdapter.notifyDataSetChanged()
     }
     
     abstract fun inflateItem(context: Context, item: ITEM): ITEMVIEW?
     
     fun getSelectedItemView(): ITEMVIEW? {
-        return adapter.getItemView(units_pager.currentItem)
+        return unitsAdapter.getItemView(currentItem)
+    }
+    
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        // copy pasted because wrap content doesn't work with viewpager height
+        // https://stackoverflow.com/questions/8394681/android-i-am-unable-to-have-viewpager-wrap-content
+        
+        var heightMeasureSpec = heightMeasureSpec
+        var height = 0
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            child.measure(widthMeasureSpec,
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+            val h = child.measuredHeight
+            if (h > height) height = h
+        }
+        if (height != 0) {
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
     
     inner class Adapter : PagerAdapter() {
@@ -53,7 +70,14 @@ abstract class DependencyUnitContainer <ITEM, ITEMVIEW> @JvmOverloads constructo
             return inflateItem(context, items[position])
                 ?.also { itemviews.add(it) }
                 ?.let { it as View? }
-                ?.also(container::addView)
+                ?.also { dependencyUnitView ->
+//                    container.inflate(R.layout.scripts_dependency_unit_wrapper)
+//                    val wrapper = View.inflate(context, R.layout.scripts_dependency_unit_wrapper, null)
+//                    container.addView(wrapper)
+//                    wrapper.unit_wrapper.addView(dependencyUnitView)
+//                    wrapper.requestLayout()
+                    container.addView(dependencyUnitView)
+                }
                 ?: Object()
         }
         

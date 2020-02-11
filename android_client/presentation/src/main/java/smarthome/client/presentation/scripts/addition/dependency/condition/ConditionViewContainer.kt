@@ -12,7 +12,7 @@ class ConditionViewContainer @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : DependencyUnitContainer<Condition, ConditionView>(context, attrs, defStyleAttr), KoinComponent {
+) : DependencyUnitContainer<Condition, ConditionView>(context, attrs), KoinComponent {
     
     private val viewResolver: ConditionViewResolver by inject()
     

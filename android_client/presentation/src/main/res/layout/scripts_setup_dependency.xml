@@ -14,15 +14,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/conditions_container"
+    <ScrollView
+        android:id="@+id/conditions_scrollable"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/conditions_label" />
+        android:fillViewport="true"
+        android:orientation="vertical"
+        android:overScrollMode="always"
+        app:layout_constraintTop_toBottomOf="@id/conditions_label">
+
+        <LinearLayout
+            android:id="@+id/conditions_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#7A91ABFA"
+            android:orientation="vertical" />
+
+    </ScrollView>
+
 
     <View
         android:id="@+id/divider"
@@ -33,7 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/action_viewgroup"
-        app:layout_constraintTop_toBottomOf="@id/conditions_container" />
+        app:layout_constraintTop_toBottomOf="@id/conditions_scrollable" />
 
     <RelativeLayout
         android:id="@+id/action_viewgroup"
