@@ -17,8 +17,11 @@ import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.dependency.action.ActionView
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerModelsHolder
+import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainerState
+import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainersController
 import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainersController
 import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerState
+import smarthome.client.presentation.scripts.resolver.ActionModelResolver
 import smarthome.client.presentation.scripts.resolver.ActionViewResolver
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.util.confirmAction
@@ -29,8 +32,10 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
     private var actionView: ActionView? = null
     private val conditionsController = ConditionContainersController()
+    private val actionsController = ActionContainersController()
     private val actionViewResolver: ActionViewResolver by inject()
     private val conditionModelResolver: ConditionModelResolver by inject()
+    private val actionModelResolver: ActionModelResolver by inject()
     
     override fun getLayout() = R.layout.scripts_setup_dependency
     
@@ -62,18 +67,10 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     
         viewModel.conditions.observe(this, ::bindConditions)
     
-        viewModel.action.observe(this) { state ->
-            (actionView as? View)?.let { action_container.removeView(it) }
-    
-            context?.let {
-                actionView = actionViewResolver.resolve(it, state.emptyAction)
-                actionView?.setAction(state.emptyAction)
-                (actionView as? View)?.let(action_container::addView)
-            }
-        }
+        viewModel.action.observe(this, ::bindActions)
         
-        conditions_recycler.layoutManager = LinearLayoutManager(context)
         conditions_recycler.adapter = conditionsController.adapter
+        actions_recycler.adapter = actionsController.adapter
     }
     
     private fun bindConditions(states: List<ConditionContainerState>) {
@@ -81,6 +78,15 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
             ContainerModelsHolder(
                 containerState.id,
                 containerState.conditions.map(conditionModelResolver::resolve)
+            )
+        })
+    }
+    
+    private fun bindActions(states: List<ActionContainerState>) {
+        actionsController.setData(states.map { containerState ->
+            ContainerModelsHolder(
+                containerState.id,
+                containerState.actions.map(actionModelResolver::resolve)
             )
         })
     }
