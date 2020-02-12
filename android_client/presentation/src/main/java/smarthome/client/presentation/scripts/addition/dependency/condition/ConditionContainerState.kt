@@ -1,6 +1,6 @@
 package smarthome.client.presentation.scripts.addition.dependency.condition
 
-import smarthome.client.entity.script.dependency.condition.Condition
+import com.airbnb.epoxy.EpoxyModel
 
 
-class ConditionContainerState(val conditions: List<Condition>)
+data class ConditionContainerState(val index: Int, val conditions: List<EpoxyModel<*>>)

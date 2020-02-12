@@ -1,11 +1,11 @@
 package smarthome.client.presentation.scripts.resolver
 
 import android.content.Context
+import com.airbnb.epoxy.EpoxyModel
 import smarthome.client.entity.script.dependency.condition.Condition
-import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionView
 
-interface ConditionViewResolver {
+interface ConditionModelResolver {
     fun canResolve(condition: Condition): Boolean
     
-    fun resolve(context: Context, condition: Condition): ConditionView?
+    fun resolve(condition: Condition): EpoxyModel<*>
 }

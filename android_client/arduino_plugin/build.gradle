@@ -1,8 +1,10 @@
 apply from: "$rootDir/gradle/scripts/android-module.gradle"
+apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation library.rxJava
     implementation library.epoxy
+    kapt library.epoxyAnnotations
 
     implementation groups.koinWithExt
     implementation library.domain_api
