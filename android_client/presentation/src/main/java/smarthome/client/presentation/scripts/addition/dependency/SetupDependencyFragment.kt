@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.scripts_setup_dependency.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -16,7 +17,7 @@ import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.dependency.action.ActionView
 import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionContainerState
-import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionViewContainer
+import smarthome.client.presentation.scripts.addition.dependency.container.ConditionContainersController
 import smarthome.client.presentation.scripts.resolver.ActionViewResolver
 import smarthome.client.presentation.util.confirmAction
 
@@ -24,9 +25,8 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
     private val toolbarController: ToolbarController by inject()
     private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
-    private val containerViews = mutableMapOf<ConditionContainerState, ConditionViewContainer>()
     private var actionView: ActionView? = null
-    private lateinit var  conditionsAdapter: ConditionContainersAdapter
+    private val conditionsController = ConditionContainersController()
     private val actionViewResolver: ActionViewResolver by inject()
     
     override fun getLayout() = R.layout.scripts_setup_dependency
@@ -57,10 +57,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
             findNavController().popBackStack()
         }
     
-        viewModel.conditions.observe(this) { containers ->
-            conditionsAdapter.clear()
-            conditionsAdapter.addAll(containers)
-        }
+        viewModel.conditions.observe(this, conditionsController::setData)
     
         viewModel.action.observe(this) { state ->
             (actionView as? View)?.let { action_container.removeView(it) }
@@ -72,39 +69,23 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
             }
         }
         
-        conditionsAdapter = ConditionContainersAdapter(context!!)
-        conditions_container.adapter = conditionsAdapter
+        conditions_recycler.layoutManager = LinearLayoutManager(context)
+        conditions_recycler.adapter = conditionsController.adapter
     }
     
     private fun getConditions(): List<Condition> {
-        return containerViews.keys
-            .map { key ->
-                val view = containerViews[key]!!
-                view.getSelectedItemView()?.getCondition()
-            }
-            .filterNotNull()
-            .toList()
+        TODO()
+//        return containerViews.keys
+//            .map { key ->
+//                val view = containerViews[key]!!
+//                view.getSelectedItemView()?.getCondition()
+//            }
+//            .filterNotNull()
+//            .toList()
     }
     
     private fun getAction(): Action? {
         return actionView?.getAction()
-    }
-    
-    private fun inflateContainerIfNeeded(container: ConditionContainerState) {
-        if (containerViews.containsKey(container)) return
-        context?.let { context ->
-            ConditionViewContainer(context)
-                .also(conditions_container::addView)
-                .also { it.setItems(container.conditions) }
-                .also { containerViews[container] = it }
-        }
-    }
-    
-    private fun retainOnlyPostedConditionContainers(states: List<ConditionContainerState>) {
-        (containerViews.keys - states).forEach {
-            conditions_container.removeView(containerViews[it])
-            containerViews.remove(it)
-        }
     }
 }
 

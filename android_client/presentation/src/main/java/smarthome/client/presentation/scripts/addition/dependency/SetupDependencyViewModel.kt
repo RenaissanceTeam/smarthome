@@ -10,6 +10,7 @@ import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.dependency.action.ActionViewState
 import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionContainerState
+import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 
@@ -22,6 +23,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val createEmptyConditions: CreateEmptyConditionsForBlockUseCase by inject()
     private val createEmptyAction: CreateEmptyActionForBlockUseCase by inject()
     private val updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase by inject()
+    private val conditionModelsResolver: ConditionModelResolver by inject()
     
     private lateinit var emptyConditionsForDependency: List<Condition>
     private lateinit var emptyActionForDependency: Action
@@ -53,17 +55,10 @@ class SetupDependencyViewModel: KoinViewModel() {
     fun setDependencyId(id: DependencyId) {
         dependencyId = id
         val dependency = getDependencyUseCase.execute(scriptId, dependencyId)
-        
         initializeEmptyConditions(dependency.startBlock)
         conditions.value = listOf(
-            ConditionContainerState(emptyConditionsForDependency),
-            ConditionContainerState(emptyConditionsForDependency),
-            ConditionContainerState(emptyConditionsForDependency),
-            ConditionContainerState(emptyConditionsForDependency),
-            ConditionContainerState(emptyConditionsForDependency),
-            ConditionContainerState(emptyConditionsForDependency),
-            ConditionContainerState(emptyConditionsForDependency),
-            ConditionContainerState(emptyConditionsForDependency)
+            ConditionContainerState(1, emptyConditionsForDependency.map(conditionModelsResolver::resolve)),
+            ConditionContainerState(2, emptyConditionsForDependency.map(conditionModelsResolver::resolve))
         )
     
         initializeEmptyAction(dependency.endBlock)
