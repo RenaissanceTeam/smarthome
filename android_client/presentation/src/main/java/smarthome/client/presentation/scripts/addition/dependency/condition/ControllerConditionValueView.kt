@@ -2,12 +2,15 @@ package smarthome.client.presentation.scripts.addition.dependency.condition
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.scripts_value_condition.view.*
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.entity.script.dependency.condition.controller.ControllerValueCondition
 import smarthome.client.entity.script.dependency.condition.controller.ValueSigns
 import smarthome.client.presentation.R
+import smarthome.client.presentation.scripts.addition.dependency.DependencyUnitView
 import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionView
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.wrapHeight
@@ -16,18 +19,19 @@ open class ControllerConditionValueView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), ConditionView {
+) : DependencyUnitView(context, attrs, defStyleAttr), ConditionView {
     private var condition: ControllerValueCondition? = null
     
-    init {
-        inflate(R.layout.scripts_value_condition)
-        wrapHeight()
-        
+    override fun onCreateView(viewGroup: ViewGroup) {
+        viewGroup.inflate(R.layout.scripts_value_condition)
+    }
+    
+    override fun onViewCreated(view: View) {
         setOnSignChanged { newSign ->
             val beforeChange = condition ?: return@setOnSignChanged
             condition = beforeChange.withSign(newSign)
         }
-        
+    
         setOnValueChanged { newValue ->
             val beforeChange = condition ?: return@setOnValueChanged
             condition = beforeChange.withValue(newValue)
