@@ -1,5 +1,8 @@
 package smarthome.client.presentation.scripts.addition.dependency.container.action
 
-import com.airbnb.epoxy.EpoxyModel
+import smarthome.client.entity.script.dependency.action.Action
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
 
-data class ActionContainerState(val index: Int, val actions: List<EpoxyModel<*>>)
+data class ActionContainerState(val id: ContainerId,
+                                val actions: List<Action>,
+                                val selected: Int)

@@ -5,12 +5,13 @@ import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.*
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
+import smarthome.client.entity.script.dependency.DependencyDetails
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
-import smarthome.client.presentation.scripts.addition.dependency.action.ActionViewState
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
+import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainerState
 import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerState
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.util.KoinViewModel
@@ -33,7 +34,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     val close = NavigationLiveData()
     val conditions = MutableLiveData<List<ConditionContainerState>>()
-    val action = MutableLiveData<ActionViewState>()
+    val action = MutableLiveData<List<ActionContainerState>>()
     
     var isNew: Boolean = false
         private set
@@ -59,7 +60,12 @@ class SetupDependencyViewModel: KoinViewModel() {
         dependencyId = id
     
         val dependencyDetails = startSetupDependencyUseCase.execute(scriptId, dependencyId)
-        
+    
+        initConditions(dependencyDetails)
+        initActions(dependencyDetails)
+    }
+    
+    private fun initConditions(dependencyDetails: DependencyDetails) {
         val emptyConditions = createEmptyConditions.execute(scriptId,
             dependencyDetails.dependency.startBlock)
     
@@ -72,7 +78,26 @@ class SetupDependencyViewModel: KoinViewModel() {
     
             ConditionContainerState(ContainerId(), allConditionInContainer, selectedIndex)
         }
+        
         conditions.value = newStates
+    }
+    
+    // todo add tests then refactor out copy paste
+    private fun initActions(dependencyDetails: DependencyDetails) {
+        val emptyActions = createEmptyAction.execute(scriptId,
+            dependencyDetails.dependency.endBlock)
+        
+        val newStates = dependencyDetails.actions.map { action ->
+            val allActionsInContainer = emptyActions.findAndModify(
+                predicate = { it.data::class == action.data::class },
+                modify = { action }
+            )
+            val selectedIndex = allActionsInContainer.indexOf(action)
+            
+            ActionContainerState(ContainerId(), allActionsInContainer, selectedIndex)
+        }
+        
+        action.value = newStates
     }
     
     fun setFlowViewModel(setupScriptViewModel: SetupScriptViewModel) {

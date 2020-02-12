@@ -12,3 +12,4 @@ class ConditionModelResolverImpl(private val resolvers: List<ConditionModelResol
             ?: throw IllegalStateException("No resolvers found that can resolve $condition")
     }
 }
+

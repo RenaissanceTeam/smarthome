@@ -3,6 +3,7 @@ package smarthome.client.arduino.presentation.action
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import com.airbnb.epoxy.ModelView
 import kotlinx.android.synthetic.main.onoff_action_view.view.*
 import smarthome.client.arduino.entity.action.OnOffActionData
 import smarthome.client.arduino.entity.action.getStateFromBoolean
@@ -13,6 +14,7 @@ import smarthome.client.presentation.util.inflate
 import smarthome.client.util.invisible
 import smarthome.client.util.show
 
+@ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class OnOffActionView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

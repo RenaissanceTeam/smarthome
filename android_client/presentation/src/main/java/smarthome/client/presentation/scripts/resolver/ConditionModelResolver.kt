@@ -1,6 +1,5 @@
 package smarthome.client.presentation.scripts.resolver
 
-import android.content.Context
 import com.airbnb.epoxy.EpoxyModel
 import smarthome.client.entity.script.dependency.condition.Condition
 
