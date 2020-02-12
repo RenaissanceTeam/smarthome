@@ -4,38 +4,35 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.scripts_value_condition.view.*
 import smarthome.client.entity.script.dependency.condition.Condition
-import smarthome.client.entity.script.dependency.condition.controller.ControllerValueCondition
+import smarthome.client.entity.script.dependency.condition.controller.ControllerValueConditionData
 import smarthome.client.entity.script.dependency.condition.controller.ValueSigns
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.dependency.DependencyUnitView
-import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionView
 import smarthome.client.presentation.util.inflate
-import smarthome.client.presentation.util.wrapHeight
 
 open class ControllerConditionValueView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : DependencyUnitView(context, attrs, defStyleAttr), ConditionView {
-    private var condition: ControllerValueCondition? = null
+    private var condition: Condition? = null
     
     override fun onCreateView(viewGroup: ViewGroup) {
         viewGroup.inflate(R.layout.scripts_value_condition)
     }
     
     override fun onViewCreated(view: View) {
-        setOnSignChanged { newSign ->
-            val beforeChange = condition ?: return@setOnSignChanged
-            condition = beforeChange.withSign(newSign)
-        }
-    
-        setOnValueChanged { newValue ->
-            val beforeChange = condition ?: return@setOnValueChanged
-            condition = beforeChange.withValue(newValue)
-        }
+//        setOnSignChanged { newSign ->
+//            val beforeChange = condition ?: return@setOnSignChanged
+//            condition = beforeChange.withSign(newSign)
+//        }
+//
+//        setOnValueChanged { newValue ->
+//            val beforeChange = condition ?: return@setOnValueChanged
+//            condition = beforeChange.withValue(newValue)
+//        }
     }
     
     var title: CharSequence
@@ -45,7 +42,7 @@ open class ControllerConditionValueView @JvmOverloads constructor(
         }
     
     override fun setCondition(condition: Condition) {
-        if (condition !is ControllerValueCondition) return
+        if (condition.data !is ControllerValueConditionData) return
         this.condition = condition
     }
     

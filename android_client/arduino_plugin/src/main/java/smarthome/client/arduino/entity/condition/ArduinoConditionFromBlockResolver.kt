@@ -18,8 +18,8 @@ class ArduinoConditionFromBlockResolver : ConditionFromBlockResolver {
         
         return when (block.type) {
             dht -> listOf(
-                TemperatureCondition(block.controllerId, dependencyId),
-                HumidityCondition(block.controllerId, dependencyId)
+                TemperatureConditionData(block.controllerId, dependencyId),
+                HumidityConditionData(block.controllerId, dependencyId)
             )
             else -> emptyList()
         }
