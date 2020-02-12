@@ -22,5 +22,5 @@ abstract class DependencyUnitView @JvmOverloads constructor(
     }
     
     abstract fun onCreateView(viewGroup: ViewGroup)
-    abstract fun onViewCreated(view: View)
+    open fun onViewCreated(view: View) {}
 }

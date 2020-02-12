@@ -1,28 +1,22 @@
 package smarthome.client.presentation.scripts.addition.dependency
 
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.scripts_setup_dependency.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import smarthome.client.entity.script.dependency.action.Action
-import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.R
 import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
-import smarthome.client.presentation.scripts.addition.dependency.action.ActionView
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerModelsHolder
 import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainerState
 import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainersController
-import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainersController
 import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerState
+import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainersController
 import smarthome.client.presentation.scripts.resolver.ActionModelResolver
-import smarthome.client.presentation.scripts.resolver.ActionViewResolver
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.util.confirmAction
 
@@ -30,10 +24,8 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
     private val toolbarController: ToolbarController by inject()
     private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
-    private var actionView: ActionView? = null
     private val conditionsController = ConditionContainersController()
     private val actionsController = ActionContainersController()
-    private val actionViewResolver: ActionViewResolver by inject()
     private val conditionModelResolver: ConditionModelResolver by inject()
     private val actionModelResolver: ActionModelResolver by inject()
     
@@ -48,8 +40,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         
         toolbarController.setMenu(R.menu.save) { id ->
             if (id != R.id.save) return@setMenu
-        
-            viewModel.onSave(getConditions(), getAction())
+            TODO()
         }
     
         toolbarController.setNavigationIcon(R.drawable.ic_close) {
@@ -89,21 +80,6 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
                 containerState.actions.map(actionModelResolver::resolve)
             )
         })
-    }
-    
-    private fun getConditions(): List<Condition> {
-        TODO()
-//        return containerViews.keys
-//            .map { key ->
-//                val view = containerViews[key]!!
-//                view.getSelectedItemView()?.getCondition()
-//            }
-//            .filterNotNull()
-//            .toList()
-    }
-    
-    private fun getAction(): Action? {
-        return actionView?.getAction()
     }
 }
 

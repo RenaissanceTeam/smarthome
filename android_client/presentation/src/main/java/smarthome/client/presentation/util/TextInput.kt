@@ -2,6 +2,7 @@ package smarthome.client.presentation.util
 
 import android.content.Context
 import android.text.InputType.TYPE_CLASS_TEXT
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.core.widget.addTextChangedListener
@@ -13,6 +14,7 @@ class TextInput @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+    private var listener: TextWatcher? = null
     
     init {
         inflate(R.layout.text_input)
@@ -33,8 +35,12 @@ class TextInput @JvmOverloads constructor(
         set(value) = input_field.setText(value)
     
     fun setOnTextChanged(listener: (String) -> Unit) {
-        input_field.addTextChangedListener {
+        this.listener = input_field.addTextChangedListener {
             listener(it?.toString().orEmpty())
         }
+    }
+    
+    fun removeTextChangedListeners() {
+        input_field.removeTextChangedListener(listener)
     }
 }

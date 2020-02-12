@@ -72,7 +72,7 @@ class SetupDependencyViewModelTest {
         updateDependencyDetailsUseCase = mock {}
         conditionModelsResolver = mock {}
         getSetupDependencyUseCase = mock {
-            on { execute(any(), any()) }.then { dependencyDetails }
+            on { execute() }.then { dependencyDetails }
         }
         
         startKoin {

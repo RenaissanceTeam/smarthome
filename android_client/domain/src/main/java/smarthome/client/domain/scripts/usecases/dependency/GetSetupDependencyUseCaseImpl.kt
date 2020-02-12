@@ -8,7 +8,7 @@ import smarthome.client.entity.script.dependency.DependencyId
 class GetSetupDependencyUseCaseImpl(
     private val setupDependencyRepo: SetupDependencyRepo
 ) : GetSetupDependencyUseCase {
-    override fun execute(scriptId: Long, dependencyId: DependencyId): DependencyDetails {
-        return setupDependencyRepo.get(scriptId, dependencyId)
+    override fun execute(): DependencyDetails {
+        return setupDependencyRepo.get()
     }
 }
