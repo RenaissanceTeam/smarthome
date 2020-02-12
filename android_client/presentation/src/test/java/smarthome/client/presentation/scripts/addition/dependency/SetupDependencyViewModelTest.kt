@@ -14,8 +14,10 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.GetDependencyDetailsUseCase
 import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyDetails
 import smarthome.client.entity.script.dependency.condition.Condition
@@ -37,6 +39,8 @@ class SetupDependencyViewModelTest {
     private lateinit var updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase
     private lateinit var conditionModelsResolver: ConditionModelResolver
     private lateinit var getSetupDependencyUseCase: GetSetupDependencyUseCase
+    private lateinit var getDependencyDetailsUseCase: GetDependencyDetailsUseCase
+    private lateinit var startSetupDependencyUseCase: StartSetupDependencyUseCase
     
     private val dependencyId = MockDependencyId()
     private val startBlock = MockBlockId()
@@ -58,9 +62,13 @@ class SetupDependencyViewModelTest {
     @Before
     fun setUp() {
         createEmptyConditions = mock {
-            on { execute(any(), any(), any()) }.then { listOf(condition_A, condition_B) }
+            on { execute(any(), any()) }.then { listOf(condition_A, condition_B) }
         }
         createEmptyAction = mock {}
+        startSetupDependencyUseCase = mock {}
+        getDependencyDetailsUseCase = mock {
+            on { execute(any(), any()) }.then { dependencyDetails }
+        }
         updateDependencyDetailsUseCase = mock {}
         conditionModelsResolver = mock {}
         getSetupDependencyUseCase = mock {
@@ -74,6 +82,8 @@ class SetupDependencyViewModelTest {
                 single { updateDependencyDetailsUseCase }
                 single { conditionModelsResolver }
                 single { getSetupDependencyUseCase }
+                single { getDependencyDetailsUseCase }
+                single { startSetupDependencyUseCase }
             })
         }
         
@@ -105,10 +115,10 @@ class SetupDependencyViewModelTest {
     
     @Test
     fun `size of container units should equal size of empty conditions`() {
-        whenever(createEmptyConditions.execute(any(), any(), any()))
+        whenever(createEmptyConditions.execute(any(), any()))
             .then { listOf(condition_A, condition_B) }
-        
-        whenever(getSetupDependencyUseCase.execute(any(), any())).then {
+    
+        whenever(getDependencyDetailsUseCase.execute(any(), any())).then {
             dependencyDetails.copy(conditions = listOf(condition_B))
         }
         
@@ -122,10 +132,10 @@ class SetupDependencyViewModelTest {
     fun `each container state should have empty units with one replaced item from details`() {
         val domainData = MockConditionData_B()
         val domainCondition = Condition(SimpleDependencyUnitId(), domainData)
-        whenever(createEmptyConditions.execute(any(), any(), any()))
+        whenever(createEmptyConditions.execute(any(), any()))
             .then { listOf(condition_A, condition_B) }
-        
-        whenever(getSetupDependencyUseCase.execute(any(), any())).then {
+    
+        whenever(getDependencyDetailsUseCase.execute(any(), any())).then {
             dependencyDetails.copy(conditions = listOf(domainCondition))
         }
         
@@ -140,10 +150,10 @@ class SetupDependencyViewModelTest {
     
     @Test
     fun `each container should have valid selected item which is domain unit in empty units list`() {
-        whenever(createEmptyConditions.execute(any(), any(), any()))
+        whenever(createEmptyConditions.execute(any(), any()))
             .then { listOf(condition_A, condition_B) }
-        
-        whenever(getSetupDependencyUseCase.execute(any(), any())).then {
+    
+        whenever(getDependencyDetailsUseCase.execute(any(), any())).then {
             dependencyDetails.copy(conditions = listOf(condition_B))
         }
         

@@ -5,6 +5,6 @@ import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.action.Action
 
 interface ActionFromBlockResolver {
-    fun resolve(dependencyId: DependencyId, block: Block): Action?
+    fun resolve(block: Block): List<Action>
     fun canResolve(block: Block): Boolean
 }

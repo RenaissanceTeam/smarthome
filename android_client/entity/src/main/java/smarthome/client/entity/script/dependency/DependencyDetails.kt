@@ -5,6 +5,6 @@ import smarthome.client.entity.script.dependency.condition.Condition
 
 data class DependencyDetails(
     val dependency: Dependency,
-    val conditions: List<Condition>,
-    val actions: List<Action>
+    val conditions: List<Condition> = emptyList(),
+    val actions: List<Action> = emptyList()
 )

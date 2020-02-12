@@ -10,7 +10,7 @@ class ConditionFromBlockResolverImpl(
 ): ConditionFromBlockResolver {
     
     override fun resolve(block: Block): List<Condition> {
-        return resolvers.find { it.canResolve(block) }?.resolve(block) ?: emptyList()
+        return resolvers.find { it.canResolve(block) }?.resolve(block).orEmpty()
     }
     
     override fun canResolve(block: Block) = false
