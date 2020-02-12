@@ -7,15 +7,14 @@ import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForBloc
 import smarthome.client.domain.api.scripts.usecases.RemoveDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
 import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
-import smarthome.client.entity.script.dependency.condition.DependencyUnitId
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.dependency.action.ActionViewState
-import smarthome.client.presentation.scripts.addition.dependency.container.condition.ContainerState
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
+import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerState
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
@@ -31,14 +30,13 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val createEmptyAction: CreateEmptyActionForBlockUseCase by inject()
     private val updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase by inject()
     private val conditionModelsResolver: ConditionModelResolver by inject()
-    private val observeSetupDependencyUseCase: ObserveSetupDependencyUseCase by inject()
     private val getSetupDependencyUseCase: GetSetupDependencyUseCase by inject()
     
     private lateinit var emptyConditionsForDependency: List<Condition>
     private lateinit var emptyActionForDependency: Action
     
     val close = NavigationLiveData()
-    val conditions = MutableLiveData<List<ContainerState>>()
+    val conditions = MutableLiveData<List<ConditionContainerState>>()
     val action = MutableLiveData<ActionViewState>()
     
     var isNew: Boolean = false
@@ -65,43 +63,24 @@ class SetupDependencyViewModel: KoinViewModel() {
         dependencyId = id
     
         val dependencyDetails = getSetupDependencyUseCase.execute(scriptId, dependencyId)
-        val emptyConditions = createEmptyConditions.execute(scriptId, dependencyId, dependencyDetails.dependency.startBlock)
+        val emptyConditions = createEmptyConditions.execute(scriptId,
+            dependencyDetails.dependency.startBlock)
     
         val newStates = dependencyDetails.conditions.map { condition ->
-            val allConditionInContainer = emptyConditions.findAndModify({ it.data::class == condition.data::class }) { condition }
+            val allConditionInContainer = emptyConditions.findAndModify(
+                predicate = { it.data::class == condition.data::class },
+                modify = { condition }
+            )
             val selectedIndex = allConditionInContainer.indexOf(condition)
-        
-            findConditionContainerState(condition.id)
-                ?.copy(conditions = allConditionInContainer, selected = selectedIndex)
-                ?: ContainerState(condition.id, allConditionInContainer, selectedIndex)
+    
+            ConditionContainerState(ContainerId(), allConditionInContainer, selectedIndex)
         }
         conditions.value = newStates
     }
-
-//        conditions.value = listOf(
-//            ConditionContainerState(1, emptyConditionsForDependency.map(conditionModelsResolver::resolve)),
-//            ConditionContainerState(2, emptyConditionsForDependency.map(conditionModelsResolver::resolve))
-//        )
-//
-//        initializeEmptyAction(dependency.endBlock)
-//        action.value = ActionViewState(emptyActionForDependency)
     
-    
-    private fun findConditionContainerState(id: DependencyUnitId): ContainerState? {
-        return conditions.value?.let { containers ->
-            containers.find { it.id == id }
-        }
-    }
-    
-    private fun copyConditionsWith(conditions: List<Condition>): List<ContainerState> {
+    private fun copyConditionsWith(conditions: List<Condition>): List<ConditionContainerState> {
         this.conditions.value
         TODO()
-    }
-    
-    private fun initializeEmptyConditions(startBlock: BlockId) {
-        val conditions = createEmptyConditions.execute(scriptId, dependencyId, startBlock)
-    
-        emptyConditionsForDependency = conditions
     }
     
     private fun initializeEmptyAction(endBlock: BlockId) {

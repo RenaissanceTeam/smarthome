@@ -9,8 +9,8 @@ class ConditionFromBlockResolverImpl(
     private val resolvers: List<ConditionFromBlockResolver>
 ): ConditionFromBlockResolver {
     
-    override fun resolve(dependencyId: DependencyId, block: Block): List<Condition> {
-        return resolvers.find { it.canResolve(block) }?.resolve(dependencyId, block) ?: emptyList()
+    override fun resolve(block: Block): List<Condition> {
+        return resolvers.find { it.canResolve(block) }?.resolve(block) ?: emptyList()
     }
     
     override fun canResolve(block: Block) = false

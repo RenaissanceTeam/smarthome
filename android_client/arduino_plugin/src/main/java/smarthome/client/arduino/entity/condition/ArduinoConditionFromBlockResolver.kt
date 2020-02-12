@@ -6,6 +6,7 @@ import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.condition.Condition
+import smarthome.client.entity.script.dependency.condition.SimpleDependencyUnitId
 
 class ArduinoConditionFromBlockResolver : ConditionFromBlockResolver {
     
@@ -13,15 +14,17 @@ class ArduinoConditionFromBlockResolver : ConditionFromBlockResolver {
         return block is ArduinoControllerBlock
     }
     
-    override fun resolve(dependencyId: DependencyId, block: Block): List<Condition> {
+    override fun resolve(block: Block): List<Condition> {
         if (block !is ArduinoControllerBlock) return emptyList()
         
-        return when (block.type) {
+        val data = when (block.type) {
             dht -> listOf(
-                TemperatureConditionData(block.controllerId, dependencyId),
-                HumidityConditionData(block.controllerId, dependencyId)
+                TemperatureConditionData(block.controllerId),
+                HumidityConditionData(block.controllerId)
             )
             else -> emptyList()
         }
+        
+        return data.map { Condition(SimpleDependencyUnitId(), it) }
     }
 }

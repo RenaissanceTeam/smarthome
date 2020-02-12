@@ -16,7 +16,6 @@ import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForBlockUse
 import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyDetails
 import smarthome.client.entity.script.dependency.condition.Condition
@@ -37,7 +36,6 @@ class SetupDependencyViewModelTest {
     private lateinit var createEmptyAction: CreateEmptyActionForBlockUseCase
     private lateinit var updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase
     private lateinit var conditionModelsResolver: ConditionModelResolver
-    private lateinit var observeSetupDependencyUseCase: ObserveSetupDependencyUseCase
     private lateinit var getSetupDependencyUseCase: GetSetupDependencyUseCase
     
     private val dependencyId = MockDependencyId()
@@ -65,7 +63,6 @@ class SetupDependencyViewModelTest {
         createEmptyAction = mock {}
         updateDependencyDetailsUseCase = mock {}
         conditionModelsResolver = mock {}
-        observeSetupDependencyUseCase = mock {}
         getSetupDependencyUseCase = mock {
             on { execute(any(), any()) }.then { dependencyDetails }
         }
@@ -76,7 +73,6 @@ class SetupDependencyViewModelTest {
                 single { createEmptyAction }
                 single { updateDependencyDetailsUseCase }
                 single { conditionModelsResolver }
-                single { observeSetupDependencyUseCase }
                 single { getSetupDependencyUseCase }
             })
         }
