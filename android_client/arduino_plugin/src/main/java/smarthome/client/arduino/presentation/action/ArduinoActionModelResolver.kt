@@ -15,8 +15,11 @@ class ArduinoActionModelResolver : ActionModelResolver {
     }
     
     override fun resolve(action: Action): EpoxyModel<*> {
-        return when (action.data) {
-            is OnOffActionData -> OnOffActionViewModel_().id("onoff")
+        return when (val data = action.data) {
+            is OnOffActionData -> OnOffActionViewModel_().apply {
+                id("onoff")
+                state(data.value)
+            }
             else -> throw IllegalArgumentException("can't resolve $action")
         }
     }

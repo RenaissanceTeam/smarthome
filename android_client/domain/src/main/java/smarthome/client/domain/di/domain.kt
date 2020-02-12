@@ -11,6 +11,7 @@ import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUs
 import smarthome.client.domain.api.main.BooleanState
 import smarthome.client.domain.api.main.StateMachine
 import smarthome.client.domain.api.scripts.usecases.*
+import smarthome.client.domain.api.scripts.usecases.dependency.ChangeSetupDependencyConditionUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
 import smarthome.client.domain.api.usecase.CloudMessageUseCase
@@ -21,6 +22,7 @@ import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImp
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.main.StateMachineImpl
 import smarthome.client.domain.scripts.usecases.*
+import smarthome.client.domain.scripts.usecases.dependency.ChangeSetupDependencyConditionUseCaseImpl
 import smarthome.client.domain.scripts.usecases.dependency.GetSetupDependencyUseCaseImpl
 import smarthome.client.domain.scripts.usecases.dependency.StartSetupDependencyUseCaseImpl
 import smarthome.client.domain.usecases.CloudMessageUseCaseImpl
@@ -74,6 +76,8 @@ val domain = module {
     factoryBy<UpdateDependencyDetailsUseCase, UpdateDependencyDetailsUseCaseImpl>()
     factoryBy<GetSetupDependencyUseCase, GetSetupDependencyUseCaseImpl>()
     factoryBy<StartSetupDependencyUseCase, StartSetupDependencyUseCaseImpl>()
+    factoryBy<ChangeSetupDependencyConditionUseCase, ChangeSetupDependencyConditionUseCaseImpl>()
+    
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
     

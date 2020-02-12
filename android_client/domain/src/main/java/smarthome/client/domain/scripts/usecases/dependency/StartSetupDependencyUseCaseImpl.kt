@@ -17,10 +17,11 @@ class StartSetupDependencyUseCaseImpl(
     private val getDependencyDetailsUseCase: GetDependencyDetailsUseCase
 ) : StartSetupDependencyUseCase {
     override fun execute(scriptId: Long, dependencyId: DependencyId): DependencyDetails {
+        repo.setScript(scriptId)
         return getDependencyDetailsUseCase.execute(scriptId, dependencyId)
             .let { details -> addConditionsIfEmpty(details, scriptId) }
             .let { details -> addActionsIfEmpty(details, scriptId) }
-            .apply { repo.set(scriptId, this) }
+            .apply { repo.set(this) }
     }
     
     private fun addConditionsIfEmpty(details: DependencyDetails, scriptId: Long): DependencyDetails {

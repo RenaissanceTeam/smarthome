@@ -2,14 +2,17 @@ package smarthome.client.arduino.presentation.action
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.airbnb.epoxy.AfterPropsSet
+import com.airbnb.epoxy.CallbackProp
+import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
 import kotlinx.android.synthetic.main.onoff_action_view.view.*
-import smarthome.client.arduino.entity.action.OnOffActionData
-import smarthome.client.arduino.entity.action.getStateFromBoolean
+import smarthome.client.arduino.entity.action.off
+import smarthome.client.arduino.entity.action.on
 import smarthome.client.arduino_plugin.R
-import smarthome.client.entity.script.dependency.action.Action
-import smarthome.client.presentation.scripts.addition.dependency.action.ActionView
+import smarthome.client.presentation.scripts.addition.dependency.DependencyUnitView
 import smarthome.client.presentation.util.inflate
 import smarthome.client.util.invisible
 import smarthome.client.util.show
@@ -19,35 +22,37 @@ class OnOffActionView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), ActionView {
-    private var action: Action? = null
-    init {
-        inflate(R.layout.onoff_action_view)
-        
-        onoff_switch.setOnCheckedChangeListener { _, isChecked ->
-//            action?.let {
-//                action = it.copy(value = getStateFromBoolean(isChecked))
-//            }
-//
-//            when (isChecked) {
-//                true -> {
-//                    turn_on.show()
-//                    turn_off.invisible()
-//                }
-//                false -> {
-//                    turn_on.invisible()
-//                    turn_off.show()
-//                }
-//            }
-            // todo
+) : DependencyUnitView(context, attrs, defStyleAttr) {
+    
+    override fun onCreateView(viewGroup: ViewGroup) {
+        viewGroup.inflate(R.layout.onoff_action_view)
+    }
+    
+    @ModelProp
+    lateinit var state: String
+    var onChangeState: ((String) -> Unit)? = null @CallbackProp set
+    
+    @AfterPropsSet
+    fun onPropsReady() {
+        when (state) {
+            on -> {
+                onoff_switch.isChecked = true
+                turnOnLabels()
+            }
+            off -> {
+                onoff_switch.isChecked = false
+                turnOffLabels()
+            }
         }
     }
     
-    override fun setAction(action: Action) {
-        if (action.data is OnOffActionData) this.action = action
+    private fun turnOnLabels() {
+        turn_on.show()
+        turn_off.invisible()
     }
     
-    override fun getAction(): Action {
-        return action ?: throw IllegalStateException("No action has been set for $this")
+    private fun turnOffLabels() {
+        turn_on.invisible()
+        turn_off.show()
     }
 }
