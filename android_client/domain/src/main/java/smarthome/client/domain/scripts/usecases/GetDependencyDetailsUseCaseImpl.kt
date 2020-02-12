@@ -10,8 +10,9 @@ class GetDependencyDetailsUseCaseImpl(
     private val getDependencyUseCase: GetDependencyUseCase,
     private val repo: DependencyDetailsRepo
 ) : GetDependencyDetailsUseCase {
-    override fun execute(scriptId: Long, dependencyId: DependencyId): DependencyDetails? {
+    override fun execute(scriptId: Long, dependencyId: DependencyId): DependencyDetails {
         val dependency = getDependencyUseCase.execute(scriptId, dependencyId)
         return repo.getByDependency(dependency)
+            ?: throw IllegalArgumentException("No details for id $dependencyId")
     }
 }
