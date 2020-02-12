@@ -16,8 +16,7 @@ import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.dependency.action.ActionView
-import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionContainerState
-import smarthome.client.presentation.scripts.addition.dependency.container.ConditionContainersController
+import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainersController
 import smarthome.client.presentation.scripts.resolver.ActionViewResolver
 import smarthome.client.presentation.util.confirmAction
 
