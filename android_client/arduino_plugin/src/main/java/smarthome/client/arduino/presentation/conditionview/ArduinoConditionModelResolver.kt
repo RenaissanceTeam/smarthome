@@ -8,7 +8,7 @@ import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 
 class ArduinoConditionModelResolver : ConditionModelResolver {
     override fun canResolve(condition: Condition): Boolean {
-        return when (condition) {
+        return when (condition.data) {
             is HumidityConditionData,
             is TemperatureConditionData -> true
             else -> false
@@ -16,7 +16,7 @@ class ArduinoConditionModelResolver : ConditionModelResolver {
     }
     
     override fun resolve(condition: Condition): EpoxyModel<*> {
-        return when (condition) {
+        return when (condition.data) {
             is HumidityConditionData -> HumidityConditionViewModel_().id("humidity")
             is TemperatureConditionData -> TemperatureConditionViewModel_().id("temperature")
             else -> throw IllegalArgumentException("can't resolve $condition")

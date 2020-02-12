@@ -16,8 +16,11 @@ import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.dependency.action.ActionView
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainerModelsHolder
 import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainersController
+import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerState
 import smarthome.client.presentation.scripts.resolver.ActionViewResolver
+import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.util.confirmAction
 
 class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDependencyViewModel::class) {
@@ -27,6 +30,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     private var actionView: ActionView? = null
     private val conditionsController = ConditionContainersController()
     private val actionViewResolver: ActionViewResolver by inject()
+    private val conditionModelResolver: ConditionModelResolver by inject()
     
     override fun getLayout() = R.layout.scripts_setup_dependency
     
@@ -56,7 +60,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
             findNavController().popBackStack()
         }
     
-        viewModel.conditions.observe(this, conditionsController::setData)
+        viewModel.conditions.observe(this, ::bindConditions)
     
         viewModel.action.observe(this) { state ->
             (actionView as? View)?.let { action_container.removeView(it) }
@@ -70,6 +74,15 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         
         conditions_recycler.layoutManager = LinearLayoutManager(context)
         conditions_recycler.adapter = conditionsController.adapter
+    }
+    
+    private fun bindConditions(states: List<ConditionContainerState>) {
+        conditionsController.setData(states.map { containerState ->
+            ContainerModelsHolder(
+                containerState.id,
+                containerState.conditions.map(conditionModelResolver::resolve)
+            )
+        })
     }
     
     private fun getConditions(): List<Condition> {
