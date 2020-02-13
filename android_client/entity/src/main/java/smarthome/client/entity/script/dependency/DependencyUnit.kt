@@ -1,3 +1,8 @@
 package smarthome.client.entity.script.dependency
 
-interface DependencyUnit 
+import smarthome.client.entity.script.dependency.condition.DependencyUnitId
+
+interface DependencyUnit {
+    val id: DependencyUnitId
+    val data: DependencyUnitData
+}

@@ -1,3 +1,5 @@
 package smarthome.client.entity.script.dependency.condition
 
-interface ConditionData
+import smarthome.client.entity.script.dependency.DependencyUnitData
+
+interface ConditionData: DependencyUnitData

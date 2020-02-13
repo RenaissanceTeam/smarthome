@@ -1,8 +1,9 @@
 package smarthome.client.entity.script.dependency.action
 
 import smarthome.client.entity.script.dependency.DependencyUnit
+import smarthome.client.entity.script.dependency.condition.DependencyUnitId
 
 data class Action(
-    val id: ActionId,
-    val data: ActionData
+    override val id: DependencyUnitId,
+    override val data: ActionData
 ): DependencyUnit
