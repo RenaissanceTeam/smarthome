@@ -1,9 +1,8 @@
 package smarthome.client.presentation.scripts.addition.dependency
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
+import io.reactivex.subjects.PublishSubject
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -17,12 +16,15 @@ import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForBloc
 import smarthome.client.domain.api.scripts.usecases.GetDependencyDetailsUseCase
 import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyDetails
+import smarthome.client.entity.script.dependency.action.Action
+import smarthome.client.entity.script.dependency.action.SimpleActionId
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.entity.script.dependency.condition.SimpleDependencyUnitId
-import smarthome.client.presentation.scripts.addition.dependency.mock.MockAction
+import smarthome.client.presentation.scripts.addition.dependency.mock.MockActionData
 import smarthome.client.presentation.scripts.addition.dependency.mock.MockConditionData_A
 import smarthome.client.presentation.scripts.addition.dependency.mock.MockConditionData_B
 import smarthome.client.presentation.scripts.addition.graph.MockBlockId
@@ -41,6 +43,8 @@ class SetupDependencyViewModelTest {
     private lateinit var getSetupDependencyUseCase: GetSetupDependencyUseCase
     private lateinit var getDependencyDetailsUseCase: GetDependencyDetailsUseCase
     private lateinit var startSetupDependencyUseCase: StartSetupDependencyUseCase
+    private lateinit var observeSetupDependencyUseCase: ObserveSetupDependencyUseCase
+    private lateinit var observedSetupDependency: PublishSubject<DependencyDetails>
     
     private val dependencyId = MockDependencyId()
     private val startBlock = MockBlockId()
@@ -49,7 +53,9 @@ class SetupDependencyViewModelTest {
     private val conditionData = MockConditionData_A()
     private val conditionId = SimpleDependencyUnitId()
     private val condition = Condition(conditionId, conditionData)
-    private val action = MockAction(dependencyId)
+    private val actionData = MockActionData()
+    private val actionId = SimpleActionId()
+    private val action = Action(actionId, actionData)
     private val dependencyDetails = DependencyDetails(dependency, listOf(condition), listOf(action))
     private val conditionData_A = MockConditionData_A()
     private val conditionData_B = MockConditionData_B()
@@ -65,12 +71,18 @@ class SetupDependencyViewModelTest {
             on { execute(any(), any()) }.then { listOf(condition_A, condition_B) }
         }
         createEmptyAction = mock {}
-        startSetupDependencyUseCase = mock {}
+        startSetupDependencyUseCase = mock {
+            on { execute(any(), any()) }.then { dependencyDetails }
+        }
         getDependencyDetailsUseCase = mock {
             on { execute(any(), any()) }.then { dependencyDetails }
         }
         updateDependencyDetailsUseCase = mock {}
         conditionModelsResolver = mock {}
+        observedSetupDependency = PublishSubject.create()
+        observeSetupDependencyUseCase = mock {
+            on { execute() }.then { observedSetupDependency }
+        }
         getSetupDependencyUseCase = mock {
             on { execute() }.then { dependencyDetails }
         }
@@ -84,6 +96,7 @@ class SetupDependencyViewModelTest {
                 single { getSetupDependencyUseCase }
                 single { getDependencyDetailsUseCase }
                 single { startSetupDependencyUseCase }
+                single { observeSetupDependencyUseCase }
             })
         }
         
@@ -135,7 +148,7 @@ class SetupDependencyViewModelTest {
         whenever(createEmptyConditions.execute(any(), any()))
             .then { listOf(condition_A, condition_B) }
     
-        whenever(getDependencyDetailsUseCase.execute(any(), any())).then {
+        whenever(startSetupDependencyUseCase.execute(any(), any())).then {
             dependencyDetails.copy(conditions = listOf(domainCondition))
         }
         
@@ -153,7 +166,7 @@ class SetupDependencyViewModelTest {
         whenever(createEmptyConditions.execute(any(), any()))
             .then { listOf(condition_A, condition_B) }
     
-        whenever(getDependencyDetailsUseCase.execute(any(), any())).then {
+        whenever(startSetupDependencyUseCase.execute(any(), any())).then {
             dependencyDetails.copy(conditions = listOf(condition_B))
         }
         
@@ -164,5 +177,11 @@ class SetupDependencyViewModelTest {
             
             selectedInFirstContainer == 1
         }
+    }
+    
+    @Test
+    fun `when set dependency should start setup`() {
+        viewModel.setDependencyId(dependencyId)
+        verify(startSetupDependencyUseCase).execute(any(), eq(dependencyId))
     }
 }
