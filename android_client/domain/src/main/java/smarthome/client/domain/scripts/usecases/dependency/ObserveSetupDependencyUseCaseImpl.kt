@@ -9,6 +9,6 @@ class ObserveSetupDependencyUseCaseImpl(
     private val repo: SetupDependencyRepo
 ) : ObserveSetupDependencyUseCase {
     override fun execute(): Observable<DependencyDetails> {
-        return repo.observe().distinct()
+        return repo.observe().distinctUntilChanged()
     }
 }

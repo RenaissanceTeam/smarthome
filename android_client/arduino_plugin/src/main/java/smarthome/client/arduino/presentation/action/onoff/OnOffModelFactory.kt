@@ -4,6 +4,7 @@ import com.airbnb.epoxy.EpoxyModel
 import smarthome.client.arduino.entity.action.OnOffActionData
 import smarthome.client.domain.api.scripts.usecases.dependency.ChangeSetupDependencyActionUseCase
 import smarthome.client.entity.script.dependency.action.Action
+import smarthome.client.util.log
 
 class OnOffModelFactory(
     private val changeSetupDependencyActionUseCase: ChangeSetupDependencyActionUseCase
@@ -11,6 +12,7 @@ class OnOffModelFactory(
     fun create(action: Action): EpoxyModel<*> {
         val data = action.data as? OnOffActionData
             ?: throw IllegalStateException("can't create onoff action model with action $action")
+        log("create onoff model $action")
         return OnOffActionViewModel_().apply {
             id("onoff")
             state(data.value)

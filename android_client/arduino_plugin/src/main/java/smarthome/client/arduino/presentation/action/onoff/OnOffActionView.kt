@@ -34,18 +34,20 @@ class OnOffActionView @JvmOverloads constructor(
     @AfterPropsSet
     fun onPropsReady() {
         onoff_switch.setOnCheckedChangeListener { _, isChecked ->
-            onChangeState?.invoke(booleanToState(isChecked))
+            val newState = booleanToState(isChecked)
+            bindStateLabels(newState)
+            
+            onChangeState?.invoke(newState)
         }
-        
+    
+        onoff_switch.isChecked = state == on
+        bindStateLabels(state)
+    }
+    
+    private fun bindStateLabels(state: String) {
         when (state) {
-            on -> {
-                onoff_switch.isChecked = true
-                turnOnLabels()
-            }
-            off -> {
-                onoff_switch.isChecked = false
-                turnOffLabels()
-            }
+            on -> turnOnLabels()
+            off -> turnOffLabels()
         }
     }
     

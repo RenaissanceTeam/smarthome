@@ -5,7 +5,7 @@ import smarthome.client.arduino.entity.onoff
 import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.dependency.action.Action
-import smarthome.client.entity.script.dependency.action.SimpleActionId
+import smarthome.client.entity.script.dependency.condition.SimpleDependencyUnitId
 
 class ArduinoActionFromBlockResolver: ActionFromBlockResolver {
     
@@ -17,7 +17,7 @@ class ArduinoActionFromBlockResolver: ActionFromBlockResolver {
             else -> emptyList()
         }
         
-        return data.map { Action(SimpleActionId(), it) }
+        return data.map { Action(SimpleDependencyUnitId(), it) }
     }
     
     override fun canResolve(block: Block) = block is ArduinoControllerBlock

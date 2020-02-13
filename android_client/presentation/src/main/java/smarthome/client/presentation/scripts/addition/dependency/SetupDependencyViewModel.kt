@@ -2,8 +2,10 @@ package smarthome.client.presentation.scripts.addition.dependency
 
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
-import smarthome.client.domain.api.scripts.usecases.*
-import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.RemoveDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
 import smarthome.client.entity.script.dependency.Dependency
@@ -18,11 +20,11 @@ import smarthome.client.presentation.scripts.addition.dependency.container.Conta
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerState
 import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainerData
 import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerData
-import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.util.containsThat
 import smarthome.client.util.findAndModify
+import smarthome.client.util.log
 import smarthome.client.util.withInserted
 
 class SetupDependencyViewModel: KoinViewModel() {
@@ -34,10 +36,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val createEmptyConditions: CreateEmptyConditionsForBlockUseCase by inject()
     private val createEmptyActions: CreateEmptyActionForBlockUseCase by inject()
     private val updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase by inject()
-    private val conditionModelsResolver: ConditionModelResolver by inject()
-    private val getSetupDependencyUseCase: GetSetupDependencyUseCase by inject()
     private val observeSetupDependencyUseCase: ObserveSetupDependencyUseCase by inject()
-    private val getDependencyDetailsUseCase: GetDependencyDetailsUseCase by inject()
     private val startSetupDependencyUseCase: StartSetupDependencyUseCase by inject()
     
     val close = NavigationLiveData()
@@ -68,32 +67,35 @@ class SetupDependencyViewModel: KoinViewModel() {
         dependencyId = id
         
         disposable.add(
-            observeSetupDependencyUseCase.execute().subscribe(this::bindDependencyDetails)
+            observeSetupDependencyUseCase.execute()
+                .subscribe(this::synchronizeContainers)
         )
-        startSetupDependencyUseCase.execute(scriptId, dependencyId)
+        val dependency = startSetupDependencyUseCase.execute(scriptId, dependencyId)
+    
+        actionContainers.value = bindUnitsToContainers(
+            dependency.actions,
+            actionContainers.value.orEmpty()
+        )
+    
+        conditionContainers.value = bindUnitsToContainers(
+            dependency.conditions,
+            conditionContainers.value.orEmpty()
+        )
     }
 
-    private fun bindDependencyDetails(details: DependencyDetails) {
+    private fun synchronizeContainers(details: DependencyDetails) {
+        log("bind dependency details $details")
+    
         conditionContainers.value = createContainersIfNoneExisted(
             conditionContainers.value.orEmpty(),
             details.conditions,
             details
         )
-    
+        
         actionContainers.value = createContainersIfNoneExisted(
             actionContainers.value.orEmpty(),
             details.actions,
             details
-        )
-    
-        conditionContainers.value = bindUnitsToContainers(
-            details.conditions,
-            conditionContainers.value.orEmpty()
-        )
-    
-        actionContainers.value = bindUnitsToContainers(
-            details.actions,
-            actionContainers.value.orEmpty()
         )
     }
     
@@ -111,7 +113,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     private fun replaceUnitInContainerData(unit: DependencyUnit, data: ContainerData): ContainerData {
         val currentUnits = data.units
         val replacedUnits = currentUnits.findAndModify(
-            predicate = { stored: DependencyUnit -> stored.id == unit.id },
+            predicate = { stored: DependencyUnit -> stored.id == unit.id && stored.data != unit.data },
             modify = { unit }
         )
         return data.copyWithUnits(replacedUnits)
