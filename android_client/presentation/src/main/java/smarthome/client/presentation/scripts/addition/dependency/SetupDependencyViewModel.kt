@@ -13,12 +13,11 @@ import smarthome.client.entity.script.dependency.DependencyUnit
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainerData
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerState
 import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainerData
-import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainerState
 import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerData
-import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerState
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
@@ -43,7 +42,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     val close = NavigationLiveData()
     val conditionContainers = MutableLiveData<List<ContainerState>>()
-    val actionContainers = MutableLiveData<List<ActionContainerState>>()
+    val actionContainers = MutableLiveData<List<ContainerState>>()
     
     var isNew: Boolean = false
         private set
@@ -67,15 +66,11 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     fun setDependencyId(id: DependencyId) {
         dependencyId = id
-    
-        val dependencyDetails = startSetupDependencyUseCase.execute(scriptId, dependencyId)
         
-        initConditions(dependencyDetails)
-        initActions(dependencyDetails)
-    
         disposable.add(
             observeSetupDependencyUseCase.execute().subscribe(this::bindDependencyDetails)
         )
+        startSetupDependencyUseCase.execute(scriptId, dependencyId)
     }
 
     private fun bindDependencyDetails(details: DependencyDetails) {
@@ -85,24 +80,41 @@ class SetupDependencyViewModel: KoinViewModel() {
             details
         )
     
-        conditionContainers.value = details.conditions
-            .map { condition ->
-                val containerWithCondition = conditionContainers.value.orEmpty()
-                    .find { container ->
-                        container.conditions.map { it.id }.contains(condition.id)
-                    } ?: throw Throwable("No container with condition, but it should've been added")
-            
-                val modified = containerWithCondition.conditions.findAndModify(
-                    predicate = { it.data::class == condition.data::class },
-                    modify = { condition }
-                )
-                val selectedIndex = modified.indexOf(condition)
-            
-                containerWithCondition.copy(conditions = modified, selected = selectedIndex)
-            }
+        actionContainers.value = createContainersIfNoneExisted(
+            actionContainers.value.orEmpty(),
+            details.actions,
+            details
+        )
     
-        actionContainers.value = details.actions
-            .also { }
+        conditionContainers.value = bindUnitsToContainers(
+            details.conditions,
+            conditionContainers.value.orEmpty()
+        )
+    
+        actionContainers.value = bindUnitsToContainers(
+            details.actions,
+            actionContainers.value.orEmpty()
+        )
+    }
+    
+    private fun bindUnitsToContainers(units: List<DependencyUnit>,
+                                      containers: List<ContainerState>): List<ContainerState> {
+        return units.mapIndexed { index, dependencyUnit ->
+            val container = containers[index]
+            val newData = replaceUnitInContainerData(dependencyUnit, container.data)
+            
+            val selectedIndex = newData.units.indexOf(dependencyUnit)
+            container.copy(data = newData, selected = selectedIndex)
+        }
+    }
+    
+    private fun replaceUnitInContainerData(unit: DependencyUnit, data: ContainerData): ContainerData {
+        val currentUnits = data.units
+        val replacedUnits = currentUnits.findAndModify(
+            predicate = { stored: DependencyUnit -> stored.id == unit.id },
+            modify = { unit }
+        )
+        return data.copyWithUnits(replacedUnits)
     }
     
     private fun createContainersIfNoneExisted(containers: List<ContainerState>,
@@ -110,59 +122,45 @@ class SetupDependencyViewModel: KoinViewModel() {
                                               details: DependencyDetails): List<ContainerState> {
         var allContainers = containers
         units.forEachIndexed { i, unit ->
-            if (checkIfContainerHasDependencyData(i, containers, details)) return@forEachIndexed
-            allContainers = allContainers.withInserted(i, createNewContainerForUnit(unit, details.dependency, getReplaceEmptyPredicateForUnit(unit)))
+            if (checkIfContainerHasUnit(i, containers, unit)) return@forEachIndexed
+            allContainers = allContainers.withInserted(i, createNewContainerForUnit(unit, details.dependency,
+                containerDataFactory = this::createContainerData,
+                replaceEmptyPredicate = { it.data::class == unit.data::class }
+            ))
         }
         return allContainers
     }
     
-    private fun getReplaceEmptyPredicateForUnit(unit: DependencyUnit): (DependencyUnit) -> Boolean {
-        return when (unit) {
-            is Action -> { empty: Action -> empty.data::class == unit.data::class }
-            is Condition -> { empty: Condition -> empty.data::class == unit.data::class }
-            else -> { _ -> false }
+    private fun createContainerData(units: List<DependencyUnit>): ContainerData {
+        return when (units.firstOrNull()) {
+            is Action -> ActionContainerData(units.map { it as Action })
+            is Condition -> ConditionContainerData(units.map { it as Condition })
+            else -> throw IllegalStateException(
+                "Can't create container data with units ${units.joinToString(", ")}"
+            )
         }
     }
     
-    private fun checkIfContainerHasDependencyData(index: Int,
-                                                  containers: List<ContainerState>,
-                                                  details: DependencyDetails): Boolean {
+    private fun checkIfContainerHasUnit(index: Int,
+                                        containers: List<ContainerState>,
+                                        unit: DependencyUnit): Boolean {
         val containerData = containers.runCatching { get(index).data }.getOrElse { return false }
-        return when (containerData) {
-            is ConditionContainerData -> {
-                containerData.conditions.containsThat { it.id == details.conditions[index].id }
-            }
-            is ActionContainerData -> {
-                containerData.actions.containsThat { it.id == details.actions[index].id }
-            }
-            else -> throw IllegalArgumentException("Unknown type of container data $containerData")
-        }
-    }
-    
-    private fun addNewActionContainersIfNeeded(actions: List<Action>, details: DependencyDetails) {
-        var containers = conditionContainers.value.orEmpty()
-        actions.forEachIndexed { index, action ->
-            containers.runCatching {
-                get(index).conditions.containsThat { it.id == action.id }
-            }.onFailure {
-                containers = containers.withInserted(index, createNewContainer(details.dependency, action))
-            }
-        }
-        conditionContainers.value = containers
+        return containerData.units.containsThat { it.id == unit.id }
     }
     
     private fun createNewContainerForUnit(unit: DependencyUnit, dependency: Dependency,
-                                          replaceEmptyPredicate: (DependencyUnit) -> Boolean): ContainerState {
+                                          replaceEmptyPredicate: (DependencyUnit) -> Boolean,
+                                          containerDataFactory: (List<DependencyUnit>) -> ContainerData): ContainerState {
         val emptyUnits = createEmptyUnitsForContainer(unit, dependency)
         
         val filledUnits = emptyUnits.findAndModify(
-            predicate = { emptyUnit -> emptyUnit.data::class == condition.data::class },
+            predicate = replaceEmptyPredicate,
             modify = { unit }
         )
         val selectedIndex = filledUnits.indexOf(unit)
-        
-        
-        return ContainerState(ContainerId(), ConditionContainerData(filledUnits), selectedIndex)
+    
+    
+        return ContainerState(ContainerId(), containerDataFactory(filledUnits), selectedIndex)
     }
     
     private fun createEmptyUnitsForContainer(unit: DependencyUnit,
@@ -171,47 +169,6 @@ class SetupDependencyViewModel: KoinViewModel() {
             is Action -> createEmptyActions.execute(scriptId, dependency.endBlock)
             is Condition -> createEmptyConditions.execute(scriptId, dependency.startBlock)
             else -> throw IllegalArgumentException("Cannot create empty units for $unit")
-        }
-    }
-    
-    fun createNewActionsContainer(dependency: Dependency, action: Action) {
-        val emptyActions = createEmptyActions.execute(scriptId, dependency.endBlock)
-        
-        val containerUnits = emptyActions.findAndModify(
-            predicate = { it.data::class == action.data::class },
-            modify = { action }
-        )
-        val selectedIndex = containerUnits.indexOf(action)
-    }
-    
-    private fun initConditions(dependencyDetails: DependencyDetails) {
-        val emptyConditions = createEmptyConditions.execute(scriptId,
-            dependencyDetails.dependency.startBlock)
-    
-        conditionContainers.value = dependencyDetails.conditions.map { condition ->
-            val containerUnits = emptyConditions.findAndModify(
-                predicate = { it.data::class == condition.data::class },
-                modify = { condition }
-            )
-            val selectedIndex = containerUnits.indexOf(condition)
-            
-            ConditionContainerState(ContainerId(), containerUnits, selectedIndex)
-        }
-    }
-    
-    // todo add tests then refactor out copy paste
-    private fun initActions(dependencyDetails: DependencyDetails) {
-        val emptyActions = createEmptyActions.execute(scriptId,
-            dependencyDetails.dependency.endBlock)
-    
-        actionContainers.value = dependencyDetails.actions.map { action ->
-            val allActionsInContainer = emptyActions.findAndModify(
-                predicate = { it.data::class == action.data::class },
-                modify = { action }
-            )
-            val selectedIndex = allActionsInContainer.indexOf(action)
-            
-            ActionContainerState(ContainerId(), allActionsInContainer, selectedIndex)
         }
     }
     

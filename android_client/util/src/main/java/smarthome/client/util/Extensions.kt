@@ -1,6 +1,8 @@
 package smarthome.client.util
 
 import android.view.View
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
