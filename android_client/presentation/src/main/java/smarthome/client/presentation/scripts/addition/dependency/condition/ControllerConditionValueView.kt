@@ -12,6 +12,7 @@ import smarthome.client.entity.script.dependency.condition.controller.ValueSigns
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.dependency.DependencyUnitView
 import smarthome.client.presentation.util.inflate
+import smarthome.client.util.log
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class ControllerConditionValueView @JvmOverloads constructor(
@@ -34,6 +35,7 @@ class ControllerConditionValueView @JvmOverloads constructor(
     
     @AfterPropsSet
     fun onPropsReady() {
+        
         listenToSignChanges()
         listenToValueChanges()
     
@@ -43,7 +45,7 @@ class ControllerConditionValueView @JvmOverloads constructor(
     }
     
     private fun bindTitleText() {
-        title_value.text = title.orEmpty()
+        if (title != title_value.text) title_value.text = title.orEmpty()
     }
     
     private fun bindSign() {
@@ -52,12 +54,13 @@ class ControllerConditionValueView @JvmOverloads constructor(
             return
         }
         
-        signs.check(when (sign) {
+        val toCheck = when (sign) {
             ValueSigns.less -> R.id.less
             ValueSigns.more -> R.id.more
             ValueSigns.equal -> R.id.equal
             else -> -1
-        })
+        }
+        if (toCheck != signs.checkedRadioButtonId) signs.check(toCheck)
     }
     
     private fun bindValueText() {

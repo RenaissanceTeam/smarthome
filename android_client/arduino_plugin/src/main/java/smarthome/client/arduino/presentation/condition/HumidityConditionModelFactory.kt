@@ -5,6 +5,7 @@ import smarthome.client.arduino.entity.condition.HumidityConditionData
 import smarthome.client.domain.api.scripts.usecases.dependency.ChangeSetupDependencyConditionUseCase
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.scripts.addition.dependency.condition.ControllerConditionValueViewModel_
+import smarthome.client.util.log
 
 class HumidityConditionModelFactory(
     private val changeSetupDependencyConditionUseCase: ChangeSetupDependencyConditionUseCase

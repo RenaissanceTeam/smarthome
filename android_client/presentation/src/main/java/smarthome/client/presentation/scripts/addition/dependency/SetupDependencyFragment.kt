@@ -20,6 +20,7 @@ import smarthome.client.presentation.scripts.addition.dependency.container.condi
 import smarthome.client.presentation.scripts.resolver.ActionModelResolver
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.util.confirmAction
+import smarthome.client.util.log
 
 class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDependencyViewModel::class) {
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
@@ -58,7 +59,6 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         }
     
         viewModel.conditionContainers.observe(this, ::bindConditions)
-    
         viewModel.actionContainers.observe(this, ::bindActions)
         
         conditions_recycler.adapter = conditionsController.adapter

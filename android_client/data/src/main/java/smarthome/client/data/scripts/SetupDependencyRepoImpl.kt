@@ -21,7 +21,6 @@ class SetupDependencyRepoImpl : SetupDependencyRepo {
     override fun set(dependencyDetails: DependencyDetails) {
         this.dependency = dependencyDetails
         dependencyObservable.onNext(dependencyDetails)
-        log("set $dependencyDetails")
     }
     
     override fun setScript(scriptId: Long) {
