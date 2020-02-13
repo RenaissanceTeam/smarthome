@@ -26,7 +26,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val removeDependency: RemoveDependencyUseCase by inject()
     
     private val createEmptyConditions: CreateEmptyConditionsForBlockUseCase by inject()
-    private val createEmptyAction: CreateEmptyActionForBlockUseCase by inject()
+    private val createEmptyActions: CreateEmptyActionForBlockUseCase by inject()
     private val updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase by inject()
     private val conditionModelsResolver: ConditionModelResolver by inject()
     private val getSetupDependencyUseCase: GetSetupDependencyUseCase by inject()
@@ -70,35 +70,42 @@ class SetupDependencyViewModel: KoinViewModel() {
         
         })
     }
-    
+
     private fun bindDependencyDetails(details: DependencyDetails) {
-        val currentStates = conditions.value.orEmpty()
-        val newStates = details.conditions.map { condition ->
-            val allConditionInContainer = currentStates.findAndModify(
-                predicate = { it.data::class == condition.data::class },
-                modify = { condition }
-            )
-            val selectedIndex = allConditionInContainer.indexOf(condition)
-        
-            
-        }
+    
+//        val currentStates = conditions.value.orEmpty()
+//        val newStates = details.conditions.map { condition ->
+//            val allConditionInContainer = currentStates.findAndModify(
+//                predicate = { it.data::class == condition.data::class },
+//                modify = { condition }
+//            )
+//            val selectedIndex = allConditionInContainer.indexOf(condition)
+//
+//
+//        }
     }
     
     private fun initConditions(dependencyDetails: DependencyDetails) {
         val emptyConditions = createEmptyConditions.execute(scriptId,
             dependencyDetails.dependency.startBlock)
-        
-        conditions.value = dependencyDetails.conditions.map {
-            ConditionContainerState(ContainerId(), emptyConditions, 0)
+    
+        conditions.value = dependencyDetails.conditions.map { condition ->
+            val containerUnits = emptyConditions.findAndModify(
+                predicate = { it.data::class == condition.data::class },
+                modify = { condition }
+            )
+            val selectedIndex = containerUnits.indexOf(condition)
+            
+            ConditionContainerState(ContainerId(), containerUnits, selectedIndex)
         }
     }
     
     // todo add tests then refactor out copy paste
     private fun initActions(dependencyDetails: DependencyDetails) {
-        val emptyActions = createEmptyAction.execute(scriptId,
+        val emptyActions = createEmptyActions.execute(scriptId,
             dependencyDetails.dependency.endBlock)
-        
-        val newStates = dependencyDetails.actions.map { action ->
+    
+        action.value = dependencyDetails.actions.map { action ->
             val allActionsInContainer = emptyActions.findAndModify(
                 predicate = { it.data::class == action.data::class },
                 modify = { action }
@@ -107,8 +114,6 @@ class SetupDependencyViewModel: KoinViewModel() {
             
             ActionContainerState(ContainerId(), allActionsInContainer, selectedIndex)
         }
-        
-        action.value = newStates
     }
     
     fun setFlowViewModel(setupScriptViewModel: SetupScriptViewModel) {
