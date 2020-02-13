@@ -56,9 +56,9 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
             findNavController().popBackStack()
         }
     
-        viewModel.conditions.observe(this, ::bindConditions)
+        viewModel.conditionContainers.observe(this, ::bindConditions)
     
-        viewModel.action.observe(this, ::bindActions)
+        viewModel.actionContainers.observe(this, ::bindActions)
         
         conditions_recycler.adapter = conditionsController.adapter
         actions_recycler.adapter = actionsController.adapter
