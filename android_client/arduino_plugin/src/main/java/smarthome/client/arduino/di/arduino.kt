@@ -6,6 +6,7 @@ import smarthome.client.arduino.entity.action.ArduinoActionFromBlockResolver
 import smarthome.client.arduino.entity.block.ArduinoControllerBlockResolver
 import smarthome.client.arduino.entity.condition.ArduinoConditionFromBlockResolver
 import smarthome.client.arduino.presentation.action.ArduinoActionModelResolver
+import smarthome.client.arduino.presentation.action.onoff.OnOffModelFactory
 import smarthome.client.arduino.presentation.condition.ArduinoConditionModelResolver
 import smarthome.client.arduino.presentation.condition.HumidityConditionModelFactory
 import smarthome.client.arduino.presentation.condition.TemperatureConditionModelFactory
@@ -21,9 +22,10 @@ val arduino = module {
     factory<ControllerBlockResolver>(named<ArduinoControllerBlockResolver>()) { ArduinoControllerBlockResolver() }
     factory<ConditionModelResolver>(named<ArduinoConditionModelResolver>()) { ArduinoConditionModelResolver(get(), get()) }
     factory<ActionFromBlockResolver>(named<ArduinoActionFromBlockResolver>()) { ArduinoActionFromBlockResolver() }
-    factory<ActionModelResolver>(named<ArduinoActionModelResolver>()) { ArduinoActionModelResolver() }
+    factory<ActionModelResolver>(named<ArduinoActionModelResolver>()) { ArduinoActionModelResolver(get()) }
     
     // internal
     factory { HumidityConditionModelFactory(get()) }
     factory { TemperatureConditionModelFactory(get()) }
+    factory { OnOffModelFactory(get()) }
 }

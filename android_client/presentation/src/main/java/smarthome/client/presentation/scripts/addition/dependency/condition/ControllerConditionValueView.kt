@@ -36,10 +36,14 @@ class ControllerConditionValueView @JvmOverloads constructor(
     fun onPropsReady() {
         listenToSignChanges()
         listenToValueChanges()
-        
+    
+        bindTitleText()
         bindValueText()
         bindSign()
-        
+    }
+    
+    private fun bindTitleText() {
+        title_value.text = title.orEmpty()
     }
     
     private fun bindSign() {
@@ -57,7 +61,7 @@ class ControllerConditionValueView @JvmOverloads constructor(
     }
     
     private fun bindValueText() {
-        value_input.text = title.orEmpty()
+        value_input.text = value.orEmpty()
     }
     
     private fun listenToValueChanges() {

@@ -1,9 +1,8 @@
-package smarthome.client.arduino.presentation.action
+package smarthome.client.arduino.presentation.action.onoff
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import com.airbnb.epoxy.AfterPropsSet
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelProp
@@ -34,6 +33,10 @@ class OnOffActionView @JvmOverloads constructor(
     
     @AfterPropsSet
     fun onPropsReady() {
+        onoff_switch.setOnCheckedChangeListener { _, isChecked ->
+            onChangeState?.invoke(booleanToState(isChecked))
+        }
+        
         when (state) {
             on -> {
                 onoff_switch.isChecked = true
@@ -54,5 +57,12 @@ class OnOffActionView @JvmOverloads constructor(
     private fun turnOffLabels() {
         turn_on.invisible()
         turn_off.show()
+    }
+    
+    private fun booleanToState(bool: Boolean): String {
+        return when (bool) {
+            true -> on
+            else -> off
+        }
     }
 }

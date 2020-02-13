@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.*
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
 import smarthome.client.entity.script.dependency.DependencyDetails
 import smarthome.client.entity.script.dependency.DependencyId
@@ -29,6 +30,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase by inject()
     private val conditionModelsResolver: ConditionModelResolver by inject()
     private val getSetupDependencyUseCase: GetSetupDependencyUseCase by inject()
+    private val observeSetupDependencyUseCase: ObserveSetupDependencyUseCase by inject()
     private val getDependencyDetailsUseCase: GetDependencyDetailsUseCase by inject()
     private val startSetupDependencyUseCase: StartSetupDependencyUseCase by inject()
     
@@ -60,26 +62,35 @@ class SetupDependencyViewModel: KoinViewModel() {
         dependencyId = id
     
         val dependencyDetails = startSetupDependencyUseCase.execute(scriptId, dependencyId)
-    
+        
         initConditions(dependencyDetails)
         initActions(dependencyDetails)
+    
+        disposable.add(observeSetupDependencyUseCase.execute().subscribe {
+        
+        })
+    }
+    
+    private fun bindDependencyDetails(details: DependencyDetails) {
+        val currentStates = conditions.value.orEmpty()
+        val newStates = details.conditions.map { condition ->
+            val allConditionInContainer = currentStates.findAndModify(
+                predicate = { it.data::class == condition.data::class },
+                modify = { condition }
+            )
+            val selectedIndex = allConditionInContainer.indexOf(condition)
+        
+            
+        }
     }
     
     private fun initConditions(dependencyDetails: DependencyDetails) {
         val emptyConditions = createEmptyConditions.execute(scriptId,
             dependencyDetails.dependency.startBlock)
-    
-        val newStates = dependencyDetails.conditions.map { condition ->
-            val allConditionInContainer = emptyConditions.findAndModify(
-                predicate = { it.data::class == condition.data::class },
-                modify = { condition }
-            )
-            val selectedIndex = allConditionInContainer.indexOf(condition)
-    
-            ConditionContainerState(ContainerId(), allConditionInContainer, selectedIndex)
-        }
         
-        conditions.value = newStates
+        conditions.value = dependencyDetails.conditions.map {
+            ConditionContainerState(ContainerId(), emptyConditions, 0)
+        }
     }
     
     // todo add tests then refactor out copy paste
