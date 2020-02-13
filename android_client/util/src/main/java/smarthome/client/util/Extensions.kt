@@ -42,6 +42,11 @@ fun <T> List<T>.withReplacedOrAdded(item: T, predicate: (T) -> Boolean): List<T>
     }
 }
 
+fun <T> List<T>.withInserted(index: Int, item: T): List<T> {
+    return subList(0, index) + item + subList(index, size)
+}
+
+
 fun <T> List<T>.containsThat(predicate: (T) -> Boolean): Boolean {
     return find(predicate) != null
 }

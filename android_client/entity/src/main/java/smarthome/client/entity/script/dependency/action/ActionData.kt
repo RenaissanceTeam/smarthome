@@ -1,3 +1,5 @@
 package smarthome.client.entity.script.dependency.action
 
-interface ActionData
+import smarthome.client.entity.script.dependency.DependencyUnitData
+
+interface ActionData: DependencyUnitData

@@ -46,4 +46,13 @@ class ExtensionsKtTest {
         
         assertEquals(listOf(2, 2, 3), after)
     }
+    
+    @Test
+    fun `insert into list`() {
+        val before = listOf(1, 2, 3)
+        val after = before.withInserted(index = 1, item = 9)
+        
+        assertEquals(4, after.size)
+        assertEquals(9, after[1])
+    }
 }

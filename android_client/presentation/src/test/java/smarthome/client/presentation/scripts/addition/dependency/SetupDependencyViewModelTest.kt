@@ -30,6 +30,9 @@ import smarthome.client.presentation.scripts.addition.dependency.mock.MockCondit
 import smarthome.client.presentation.scripts.addition.graph.MockBlockId
 import smarthome.client.presentation.scripts.addition.graph.MockDependencyId
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
+import smarthome.client.util.containsThat
+import smarthome.client.util.findAndModify
+import smarthome.client.util.withRemoved
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -113,7 +116,7 @@ class SetupDependencyViewModelTest {
         viewModel.setDependencyId(dependencyId)
         
         assertTrue {
-            viewModel.conditions.value != null
+            viewModel.conditionContainers.value != null
         }
     }
     
@@ -122,7 +125,7 @@ class SetupDependencyViewModelTest {
         viewModel.setDependencyId(dependencyId)
         
         assertTrue {
-            viewModel.conditions.value!!.size == dependencyDetails.conditions.size
+            viewModel.conditionContainers.value!!.size == dependencyDetails.conditions.size
         }
     }
     
@@ -130,14 +133,10 @@ class SetupDependencyViewModelTest {
     fun `size of container units should equal size of empty conditions`() {
         whenever(createEmptyConditions.execute(any(), any()))
             .then { listOf(condition_A, condition_B) }
-    
-        whenever(getDependencyDetailsUseCase.execute(any(), any())).then {
-            dependencyDetails.copy(conditions = listOf(condition_B))
-        }
         
         viewModel.setDependencyId(dependencyId)
-        
-        val firstContainer = viewModel.conditions.value!!.first()
+    
+        val firstContainer = viewModel.conditionContainers.value!!.first()
         assertEquals(2, firstContainer.conditions.size)
     }
     
@@ -155,7 +154,7 @@ class SetupDependencyViewModelTest {
         viewModel.setDependencyId(dependencyId)
         
         assertTrue {
-            val firstContainer = viewModel.conditions.value!!.first()
+            val firstContainer = viewModel.conditionContainers.value!!.first()
             firstContainer.conditions[0].data == conditionData_A
                 && firstContainer.conditions[1].data == domainData
         }
@@ -172,7 +171,7 @@ class SetupDependencyViewModelTest {
         
         viewModel.setDependencyId(dependencyId)
         assertTrue {
-            val firstContainer = viewModel.conditions.value!!.first()
+            val firstContainer = viewModel.conditionContainers.value!!.first()
             val selectedInFirstContainer = firstContainer.selected
             
             selectedInFirstContainer == 1
@@ -183,5 +182,97 @@ class SetupDependencyViewModelTest {
     fun `when set dependency should start setup`() {
         viewModel.setDependencyId(dependencyId)
         verify(startSetupDependencyUseCase).execute(any(), eq(dependencyId))
+    }
+    
+    @Test
+    fun `when emit observed setup dependency should update conditions`() {
+        val domainData = MockConditionData_B()
+        val domainConditionId = SimpleDependencyUnitId()
+        val domainCondition = Condition(domainConditionId, domainData)
+        val currentDependency = setupContainerWithOneEmptyAndOneDomainConditions(domainCondition)
+        
+        val newData = MockConditionData_B()
+        val newCondition = Condition(domainConditionId, newData)
+        val newConditions = currentDependency.conditions.findAndModify(
+            predicate = { it.id == domainConditionId },
+            modify = { newCondition }
+        )
+        val newDetails = currentDependency.copy(conditions = newConditions)
+        observedSetupDependency.onNext(newDetails)
+        
+        assertTrue {
+            val containers = viewModel.conditionContainers.value!!
+            val shouldHaveChanged = containers.first().conditions[1]
+            shouldHaveChanged.id == domainConditionId &&
+                shouldHaveChanged.data == newData
+        }
+    }
+    
+    private fun setupContainerWithOneEmptyAndOneDomainConditions(domainCondition: Condition): DependencyDetails {
+        val dependency = dependencyDetails.copy(conditions = listOf(domainCondition))
+        whenever(createEmptyConditions.execute(any(), any()))
+            .then { listOf(condition_A, condition_B) }
+        
+        whenever(startSetupDependencyUseCase.execute(any(), any())).then {
+            dependency
+        }
+        viewModel.setDependencyId(dependencyId)
+        assertTrue {
+            val containers = viewModel.conditionContainers.value!!
+            containers.size == 1
+                && containers.first().conditions.size == 2
+                && containers.first().conditions[1] == domainCondition
+        }
+        
+        return dependency
+    }
+    
+    @Test
+    fun `when emit setup dependency with new added condition should add container with empty conditions`() {
+        val currentDependency = setupContainerWithOneEmptyAndOneDomainConditions(condition_B)
+        
+        val newData = MockConditionData_B()
+        val newConditionId = SimpleDependencyUnitId()
+        val newCondition = Condition(newConditionId, newData)
+        
+        addContainerForCondition(currentDependency, newCondition)
+        
+        assertTrue {
+            val containers = viewModel.conditionContainers.value!!
+            val newContainer = containers[1]
+            newContainer.conditions.containsThat {
+                it.id == newConditionId && it.data == newData
+            }
+        }
+    }
+    
+    private fun addContainerForCondition(currentDependency: DependencyDetails, condition: Condition) {
+        val newConditions = currentDependency.conditions + condition
+        val newDetails = currentDependency.copy(conditions = newConditions)
+        observedSetupDependency.onNext(newDetails)
+    }
+    
+    
+    @Test
+    fun `when emit setup dependency without previously added unit should remove container`() {
+        val currentDependency = setupContainerWithOneEmptyAndOneDomainConditions(condition_B)
+        
+        val newData = MockConditionData_B()
+        val newConditionId = SimpleDependencyUnitId()
+        val newCondition = Condition(newConditionId, newData)
+        
+        addContainerForCondition(currentDependency, newCondition)
+        assertTrue {
+            viewModel.conditionContainers.value!!.size == 2
+        }
+        val newConditions = currentDependency.conditions.withRemoved { it == newCondition }
+        val newDetails = currentDependency.copy(conditions = newConditions)
+        
+        observedSetupDependency.onNext(newDetails)
+        
+        assertTrue {
+            val containers = viewModel.conditionContainers.value!!
+            containers.size == 1
+        }
     }
 }
