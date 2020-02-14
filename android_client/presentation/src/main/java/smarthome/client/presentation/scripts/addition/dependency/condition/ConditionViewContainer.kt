@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.dependency
+package smarthome.client.presentation.scripts.addition.dependency.condition
 
 import android.content.Context
 import android.util.AttributeSet

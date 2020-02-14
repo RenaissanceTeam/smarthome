@@ -1,6 +1,7 @@
 package smarthome.client.presentation.scripts.addition.dependency
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -11,15 +12,19 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
-import smarthome.client.presentation.scripts.resolver.ConditionViewResolver
+import smarthome.client.presentation.scripts.addition.dependency.action.ActionView
+import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionContainerState
+import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionViewContainer
+import smarthome.client.presentation.scripts.resolver.ActionViewResolver
 import smarthome.client.presentation.util.confirmAction
 
 class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDependencyViewModel::class) {
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
     private val toolbarController: ToolbarController by inject()
-    private val conditionViewResolver: ConditionViewResolver by inject()
     private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
     private val containerViews = mutableMapOf<ConditionContainerState, ConditionViewContainer>()
+    private var actionView: ActionView? = null
+    private val actionViewResolver: ActionViewResolver by inject()
     
     override fun getLayout() = R.layout.scripts_setup_dependency
     
@@ -49,9 +54,18 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
             findNavController().popBackStack()
         }
     
-        viewModel.containers.observe(this) { containers ->
+        viewModel.conditions.observe(this) { containers ->
             retainOnlyPostedConditionContainers(containers)
             containers.forEach(::inflateContainerIfNeeded)
+        }
+    
+        viewModel.action.observe(this) { state ->
+            (actionView as? View)?.let { action_container.removeView(it) }
+    
+            context?.let {
+                actionView = actionViewResolver.resolve(it, state.emptyAction)
+                (actionView as? View)?.let(action_container::addView)
+            }
         }
     }
     
@@ -61,7 +75,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         context?.let { context ->
             ConditionViewContainer(context)
                 .also(conditions_container::addView)
-                .also { it.setConditions(viewModel.getEmptyConditions()) }
+                .also { it.setConditions(container.emptyConditions) }
                 .also { containerViews[container] = it }
         }
     }
