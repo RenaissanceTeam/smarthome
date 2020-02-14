@@ -7,7 +7,7 @@ import smarthome.client.entity.Controller
 class GetControllerUseCaseImpl(
     private val repo: ControllersRepo
 ) : GetControllerUseCase {
-    override suspend fun execute(id: Long): Controller {
-        return repo.get(id)
+    override fun execute(id: Long): Controller {
+        return repo.get(id) ?: throw IllegalArgumentException("No controller with id $id found")
     }
 }

@@ -3,7 +3,6 @@ package smarthome.client.domain.main
 import smarthome.client.domain.api.main.Need
 import smarthome.client.domain.api.main.State
 import smarthome.client.domain.api.main.StateMachine
-import smarthome.client.util.log
 
 class StateMachineImpl(
     private val loginState: State<Boolean>,

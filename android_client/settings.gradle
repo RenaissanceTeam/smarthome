@@ -6,3 +6,4 @@ include ":app",
         ":domain",
         ":entity",
         ":util"
+include ':arduino_plugin'
