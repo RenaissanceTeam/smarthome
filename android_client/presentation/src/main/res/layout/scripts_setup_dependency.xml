@@ -14,15 +14,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/conditions_container"
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/conditions_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/conditions_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/conditions_label" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <View
         android:id="@+id/divider"
@@ -33,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/action_viewgroup"
-        app:layout_constraintTop_toBottomOf="@id/conditions_container" />
+        app:layout_constraintTop_toBottomOf="@id/conditions_recycler" />
 
     <RelativeLayout
         android:id="@+id/action_viewgroup"
@@ -52,11 +51,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <FrameLayout
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:id="@+id/actions_recycler"
             android:layout_margin="8dp"
-            android:id="@+id/action_container"
-            android:layout_below="@id/action_label"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_below="@id/action_label"
+            />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

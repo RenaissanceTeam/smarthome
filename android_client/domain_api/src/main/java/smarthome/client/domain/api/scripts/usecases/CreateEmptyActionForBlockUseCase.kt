@@ -5,5 +5,5 @@ import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.action.Action
 
 interface CreateEmptyActionForBlockUseCase {
-    fun execute(scriptId: Long, dependencyId: DependencyId, blockId: BlockId): Action
+    fun execute(scriptId: Long, blockId: BlockId): List<Action>
 }

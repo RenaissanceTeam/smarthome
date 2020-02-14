@@ -2,64 +2,85 @@ package smarthome.client.presentation.scripts.addition.dependency.condition
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.FrameLayout
+import android.view.ViewGroup
+import com.airbnb.epoxy.AfterPropsSet
+import com.airbnb.epoxy.CallbackProp
+import com.airbnb.epoxy.ModelProp
+import com.airbnb.epoxy.ModelView
 import kotlinx.android.synthetic.main.scripts_value_condition.view.*
-import smarthome.client.entity.script.dependency.condition.Condition
-import smarthome.client.entity.script.dependency.condition.controller.ControllerValueCondition
 import smarthome.client.entity.script.dependency.condition.controller.ValueSigns
 import smarthome.client.presentation.R
-import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionView
+import smarthome.client.presentation.scripts.addition.dependency.DependencyUnitView
 import smarthome.client.presentation.util.inflate
+import smarthome.client.util.log
 
-open class ControllerConditionValueView @JvmOverloads constructor(
+@ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
+class ControllerConditionValueView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), ConditionView {
-    private var condition: ControllerValueCondition? = null
+) : DependencyUnitView(context, attrs, defStyleAttr) {
     
-    init {
-        inflate(R.layout.scripts_value_condition)
+    override fun onCreateView(viewGroup: ViewGroup) {
+        viewGroup.inflate(R.layout.scripts_value_condition)
+    }
+    
+    var title: String? = null @ModelProp set
+    var sign: String? = null @ModelProp set
+    var value: String? = null @ModelProp set
+    
+    
+    var onSignChanged: ((String) -> Unit)? = null @CallbackProp set
+    var onValueChanged: ((String) -> Unit)? = null @CallbackProp set
+    
+    @AfterPropsSet
+    fun onPropsReady() {
         
-        setOnSignChanged { newSign ->
-            val beforeChange = condition ?: return@setOnSignChanged
-            condition = beforeChange.withSign(newSign)
+        listenToSignChanges()
+        listenToValueChanges()
+    
+        bindTitleText()
+        bindValueText()
+        bindSign()
+    }
+    
+    private fun bindTitleText() {
+        if (title != title_value.text) title_value.text = title.orEmpty()
+    }
+    
+    private fun bindSign() {
+        if (sign == null) {
+            signs.clearCheck()
+            return
         }
         
-        setOnValueChanged { newValue ->
-            val beforeChange = condition ?: return@setOnValueChanged
-            condition = beforeChange.withValue(newValue)
+        val toCheck = when (sign) {
+            ValueSigns.less -> R.id.less
+            ValueSigns.more -> R.id.more
+            ValueSigns.equal -> R.id.equal
+            else -> -1
         }
+        if (toCheck != signs.checkedRadioButtonId) signs.check(toCheck)
     }
     
-    var title: CharSequence
-        get() = title_value.text.toString()
-        set(value) {
-            title_value.text = value
-        }
-    
-    override fun setCondition(condition: Condition) {
-        if (condition !is ControllerValueCondition) return
-        this.condition = condition
+    private fun bindValueText() {
+        value_input.text = value.orEmpty()
     }
     
-    override fun getCondition(): Condition {
-        return condition ?: throw IllegalStateException("No condition has been set for $this")
+    private fun listenToValueChanges() {
+        value_input.removeTextChangedListeners()
+        value_input.setOnTextChanged { onValueChanged?.invoke(it) }
     }
     
-    private fun setOnSignChanged(listener: (String) -> Unit) {
-        signs.setOnCheckedChangeListener { group, checkedId ->
+    private fun listenToSignChanges() {
+        signs.setOnCheckedChangeListener { _, checkedId ->
             val checkedSign = when (checkedId) {
                 R.id.less -> ValueSigns.less
                 R.id.more -> ValueSigns.more
                 R.id.equal -> ValueSigns.equal
                 else -> return@setOnCheckedChangeListener
             }
-            listener(checkedSign)
+            onSignChanged?.invoke(checkedSign)
         }
-    }
-    
-    private fun setOnValueChanged(listener: (String) -> Unit) {
-        value_input.setOnTextChanged(listener)
     }
 }

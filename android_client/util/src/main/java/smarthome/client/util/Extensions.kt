@@ -1,6 +1,8 @@
 package smarthome.client.util
 
 import android.view.View
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -41,6 +43,11 @@ fun <T> List<T>.withReplacedOrAdded(item: T, predicate: (T) -> Boolean): List<T>
         this + item
     }
 }
+
+fun <T> List<T>.withInserted(index: Int, item: T): List<T> {
+    return subList(0, index) + item + subList(index, size)
+}
+
 
 fun <T> List<T>.containsThat(predicate: (T) -> Boolean): Boolean {
     return find(predicate) != null

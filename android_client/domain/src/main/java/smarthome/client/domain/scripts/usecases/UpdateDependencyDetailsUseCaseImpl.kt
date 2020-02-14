@@ -17,21 +17,20 @@ class UpdateDependencyDetailsUseCaseImpl(
     private val repo: DependencyDetailsRepo
 ) : UpdateDependencyDetailsUseCase {
     override fun execute(scriptId: Long, dependencyId: DependencyId, conditions: List<Condition>, action: Action) {
-        val dependency = getDependencyUseCase.execute(scriptId, dependencyId)
-        
-        when (val details = repo.getByDependency(dependency)) {
-            null -> addDependencyDetails(dependency, conditions, action)
-            else -> repo.save(details)
-        }
+//        val dependency = getDependencyUseCase.execute(scriptId, dependencyId)
+//
+//        when (val details = repo.getByDependency(dependency)) {
+//            null -> addDependencyDetails(dependency, conditions, action)
+//            else -> repo.save(details)
+//        }
+        TODO()
     }
     
-    private fun addDependencyDetails(dependency: Dependency, conditions: List<Condition>,
-                                     action: Action) {
-        val condition = DependencyCondition(
-            dependencyId = dependency.id,
-            units = conditions
-        )
-        val details = DependencyDetails(dependency, condition, action)
-        addDependencyDetailsUseCase.execute(details)
-    }
+//    private fun addDependencyDetails(dependency: Dependency,
+//                                     conditions: List<Condition>,
+//                                     action: Action) {
+//
+//        val details = DependencyDetails(dependency, conditions, action)
+//        addDependencyDetailsUseCase.execute(details)
+//    }
 }

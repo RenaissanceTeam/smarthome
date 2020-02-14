@@ -1,8 +1,8 @@
 package smarthome.client.entity.script.dependency.condition
 
-import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.DependencyUnit
 
-interface Condition: DependencyUnit {
-    val dependencyId: DependencyId
-}
+data class Condition(
+    override val id: DependencyUnitId,
+    override val data: ConditionData
+) : DependencyUnit
