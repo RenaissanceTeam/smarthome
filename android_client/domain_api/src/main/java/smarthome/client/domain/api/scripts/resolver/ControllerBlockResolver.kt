@@ -6,6 +6,5 @@ import smarthome.client.util.Position
 
 interface ControllerBlockResolver {
     fun canResolve(controller: Controller): Boolean
-    
     fun resolve(controller: Controller, position: Position): Block?
 }
