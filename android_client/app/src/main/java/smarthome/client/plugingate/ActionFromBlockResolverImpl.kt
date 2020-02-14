@@ -8,8 +8,9 @@ import smarthome.client.entity.script.dependency.action.Action
 class ActionFromBlockResolverImpl(
     private val resolvers: List<ActionFromBlockResolver>
 ) : ActionFromBlockResolver {
-    override fun resolve(dependencyId: DependencyId, block: Block): Action? {
-        return resolvers.find { it.canResolve(block) }?.resolve(dependencyId, block)
+    
+    override fun resolve(block: Block): List<Action> {
+        return resolvers.find { it.canResolve(block) }?.resolve(block).orEmpty()
     }
     
     override fun canResolve(block: Block) = false

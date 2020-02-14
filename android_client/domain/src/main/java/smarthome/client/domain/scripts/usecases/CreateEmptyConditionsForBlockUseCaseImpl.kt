@@ -11,10 +11,9 @@ class CreateEmptyConditionsForBlockUseCaseImpl(
     private val graphRepo: ScriptGraphRepo,
     private val conditionFromBlock: ConditionFromBlockResolver
 ) : CreateEmptyConditionsForBlockUseCase {
-    override fun execute(scriptId: Long, dependencyId: DependencyId,
-                         blockId: BlockId): List<Condition> {
+    override fun execute(scriptId: Long, blockId: BlockId): List<Condition> {
         val block = graphRepo.getBlock(scriptId, blockId) ?: return emptyList()
-        return conditionFromBlock.resolve(dependencyId, block)
+        return conditionFromBlock.resolve(block)
     }
 }
 

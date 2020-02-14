@@ -1,10 +1,10 @@
 package smarthome.client.entity.script.dependency
 
 import smarthome.client.entity.script.dependency.action.Action
-import smarthome.client.entity.script.dependency.condition.DependencyCondition
+import smarthome.client.entity.script.dependency.condition.Condition
 
 data class DependencyDetails(
     val dependency: Dependency,
-    val condition: DependencyCondition,
-    val action: Action
+    val conditions: List<Condition> = emptyList(),
+    val actions: List<Action> = emptyList()
 )

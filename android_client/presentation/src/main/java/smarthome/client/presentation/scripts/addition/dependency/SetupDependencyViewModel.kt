@@ -2,33 +2,46 @@ package smarthome.client.presentation.scripts.addition.dependency
 
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
-import smarthome.client.domain.api.scripts.usecases.*
-import smarthome.client.entity.script.block.BlockId
+import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.RemoveDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
+import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
+import smarthome.client.entity.script.dependency.Dependency
+import smarthome.client.entity.script.dependency.DependencyDetails
 import smarthome.client.entity.script.dependency.DependencyId
+import smarthome.client.entity.script.dependency.DependencyUnit
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
-import smarthome.client.presentation.scripts.addition.dependency.action.ActionViewState
-import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionContainerState
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainerData
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainerState
+import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainerData
+import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerData
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
+import smarthome.client.util.containsThat
+import smarthome.client.util.findAndModify
+import smarthome.client.util.log
+import smarthome.client.util.withInserted
 
 class SetupDependencyViewModel: KoinViewModel() {
     private val scriptId: Long = 1L // todo
     private lateinit var dependencyId: DependencyId
     private lateinit var setupScriptViewModel: SetupScriptViewModel
     private val removeDependency: RemoveDependencyUseCase by inject()
-    private val getDependencyUseCase: GetDependencyUseCase by inject()
-    private val createEmptyConditions: CreateEmptyConditionsForBlockUseCase by inject()
-    private val createEmptyAction: CreateEmptyActionForBlockUseCase by inject()
-    private val updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase by inject()
     
-    private lateinit var emptyConditionsForDependency: List<Condition>
-    private lateinit var emptyActionForDependency: Action
+    private val createEmptyConditions: CreateEmptyConditionsForBlockUseCase by inject()
+    private val createEmptyActions: CreateEmptyActionForBlockUseCase by inject()
+    private val updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase by inject()
+    private val observeSetupDependencyUseCase: ObserveSetupDependencyUseCase by inject()
+    private val startSetupDependencyUseCase: StartSetupDependencyUseCase by inject()
     
     val close = NavigationLiveData()
-    val conditions = MutableLiveData<List<ConditionContainerState>>()
-    val action = MutableLiveData<ActionViewState>()
+    val conditionContainers = MutableLiveData<List<ContainerState>>()
+    val actionContainers = MutableLiveData<List<ContainerState>>()
     
     var isNew: Boolean = false
         private set
@@ -52,32 +65,116 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     fun setDependencyId(id: DependencyId) {
         dependencyId = id
-        val dependency = getDependencyUseCase.execute(scriptId, dependencyId)
         
-        initializeEmptyConditions(dependency.startBlock)
-        conditions.value = listOf(ConditionContainerState(emptyConditionsForDependency))
+        disposable.add(
+            observeSetupDependencyUseCase.execute()
+                .subscribe(this::synchronizeContainers)
+        )
+        val dependency = startSetupDependencyUseCase.execute(scriptId, dependencyId)
     
-        initializeEmptyAction(dependency.endBlock)
-        action.value = ActionViewState(emptyActionForDependency)
+        actionContainers.value = bindUnitsToContainers(
+            dependency.actions,
+            actionContainers.value.orEmpty()
+        )
+    
+        conditionContainers.value = bindUnitsToContainers(
+            dependency.conditions,
+            conditionContainers.value.orEmpty()
+        )
+    }
+
+    private fun synchronizeContainers(details: DependencyDetails) {
+        log("bind dependency details $details")
+    
+        conditionContainers.value = createContainersIfNoneExisted(
+            conditionContainers.value.orEmpty(),
+            details.conditions,
+            details
+        )
+        
+        actionContainers.value = createContainersIfNoneExisted(
+            actionContainers.value.orEmpty(),
+            details.actions,
+            details
+        )
     }
     
-    private fun initializeEmptyConditions(startBlock: BlockId) {
-        val conditions = createEmptyConditions.execute(scriptId, dependencyId, startBlock)
-    
-        emptyConditionsForDependency = conditions
+    private fun bindUnitsToContainers(units: List<DependencyUnit>,
+                                      containers: List<ContainerState>): List<ContainerState> {
+        return units.mapIndexed { index, dependencyUnit ->
+            val container = containers[index]
+            val newData = replaceUnitInContainerData(dependencyUnit, container.data)
+            
+            val selectedIndex = newData.units.indexOf(dependencyUnit)
+            container.copy(data = newData, selected = selectedIndex)
+        }
     }
     
-    private fun initializeEmptyAction(endBlock: BlockId) {
-        val action = createEmptyAction.execute(scriptId, dependencyId, endBlock)
+    private fun replaceUnitInContainerData(unit: DependencyUnit, data: ContainerData): ContainerData {
+        val currentUnits = data.units
+        val replacedUnits = currentUnits.findAndModify(
+            predicate = { stored: DependencyUnit -> stored.id == unit.id && stored.data != unit.data },
+            modify = { unit }
+        )
+        return data.copyWithUnits(replacedUnits)
+    }
     
-        emptyActionForDependency = action
+    private fun createContainersIfNoneExisted(containers: List<ContainerState>,
+                                              units: List<DependencyUnit>,
+                                              details: DependencyDetails): List<ContainerState> {
+        var allContainers = containers
+        units.forEachIndexed { i, unit ->
+            if (checkIfContainerHasUnit(i, containers, unit)) return@forEachIndexed
+            allContainers = allContainers.withInserted(i, createNewContainerForUnit(unit, details.dependency,
+                containerDataFactory = this::createContainerData,
+                replaceEmptyPredicate = { it.data::class == unit.data::class }
+            ))
+        }
+        return allContainers
+    }
+    
+    private fun createContainerData(units: List<DependencyUnit>): ContainerData {
+        return when (units.firstOrNull()) {
+            is Action -> ActionContainerData(units.map { it as Action })
+            is Condition -> ConditionContainerData(units.map { it as Condition })
+            else -> throw IllegalStateException(
+                "Can't create container data with units ${units.joinToString(", ")}"
+            )
+        }
+    }
+    
+    private fun checkIfContainerHasUnit(index: Int,
+                                        containers: List<ContainerState>,
+                                        unit: DependencyUnit): Boolean {
+        val containerData = containers.runCatching { get(index).data }.getOrElse { return false }
+        return containerData.units.containsThat { it.id == unit.id }
+    }
+    
+    private fun createNewContainerForUnit(unit: DependencyUnit, dependency: Dependency,
+                                          replaceEmptyPredicate: (DependencyUnit) -> Boolean,
+                                          containerDataFactory: (List<DependencyUnit>) -> ContainerData): ContainerState {
+        val emptyUnits = createEmptyUnitsForContainer(unit, dependency)
+        
+        val filledUnits = emptyUnits.findAndModify(
+            predicate = replaceEmptyPredicate,
+            modify = { unit }
+        )
+        val selectedIndex = filledUnits.indexOf(unit)
+    
+    
+        return ContainerState(ContainerId(), containerDataFactory(filledUnits), selectedIndex)
+    }
+    
+    private fun createEmptyUnitsForContainer(unit: DependencyUnit,
+                                             dependency: Dependency): List<DependencyUnit> {
+        return when (unit) {
+            is Action -> createEmptyActions.execute(scriptId, dependency.endBlock)
+            is Condition -> createEmptyConditions.execute(scriptId, dependency.startBlock)
+            else -> throw IllegalArgumentException("Cannot create empty units for $unit")
+        }
     }
     
     fun setFlowViewModel(setupScriptViewModel: SetupScriptViewModel) {
         this.setupScriptViewModel = setupScriptViewModel
-    }
-    
-    companion object {
-        const val minimumConditions = 1
     }
 }
