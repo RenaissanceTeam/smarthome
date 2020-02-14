@@ -2,10 +2,8 @@ package smarthome.client.presentation.scripts.addition.dependency
 
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
-import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForBlockUseCase
-import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForBlockUseCase
-import smarthome.client.domain.api.scripts.usecases.RemoveDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
+import smarthome.client.domain.api.scripts.usecases.*
+import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
 import smarthome.client.entity.script.dependency.Dependency
@@ -14,6 +12,7 @@ import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.DependencyUnit
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
+import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerData
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
@@ -22,10 +21,7 @@ import smarthome.client.presentation.scripts.addition.dependency.container.actio
 import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerData
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
-import smarthome.client.util.containsThat
-import smarthome.client.util.findAndModify
-import smarthome.client.util.log
-import smarthome.client.util.withInserted
+import smarthome.client.util.*
 
 class SetupDependencyViewModel: KoinViewModel() {
     private val scriptId: Long = 1L // todo
@@ -38,6 +34,9 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase by inject()
     private val observeSetupDependencyUseCase: ObserveSetupDependencyUseCase by inject()
     private val startSetupDependencyUseCase: StartSetupDependencyUseCase by inject()
+    private val getSetupDependencyUseCase: GetSetupDependencyUseCase by inject()
+    private val toolbarController: ToolbarController by inject()
+    private val getBlockNameUseCase: GetBlockNameUseCase by inject()
     
     val close = NavigationLiveData()
     val conditionContainers = MutableLiveData<List<ContainerState>>()
@@ -71,18 +70,31 @@ class SetupDependencyViewModel: KoinViewModel() {
                 .subscribe(this::synchronizeContainers)
         )
         val dependency = startSetupDependencyUseCase.execute(scriptId, dependencyId)
+        initializeContainers(dependency)
     
+        toolbarController.setTitle(getTitleForToolbar())
+    }
+    
+    private fun getTitleForToolbar(): String {
+        val details = getSetupDependencyUseCase.execute()
+        val fromName = getBlockNameUseCase.execute(scriptId, details.dependency.startBlock)
+        val toName = getBlockNameUseCase.execute(scriptId, details.dependency.endBlock)
+        
+        return fromName.truncate(10) + " -> " + toName.truncate(10)
+    }
+    
+    private fun initializeContainers(dependency: DependencyDetails) {
         actionContainers.value = bindUnitsToContainers(
             dependency.actions,
             actionContainers.value.orEmpty()
         )
-    
+        
         conditionContainers.value = bindUnitsToContainers(
             dependency.conditions,
             conditionContainers.value.orEmpty()
         )
     }
-
+    
     private fun synchronizeContainers(details: DependencyDetails) {
         log("bind dependency details $details")
     
