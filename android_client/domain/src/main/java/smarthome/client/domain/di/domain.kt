@@ -43,10 +43,11 @@ val domain = module {
     
     // controllers
     factoryBy<ObserveControllerUseCase, ObserveControllerUseCaseImpl>()
-    factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
+    factoryBy<FetchControllerUseCase, FetchControllerUseCaseImpl>()
     factoryBy<ReadControllerUseCase, ReadControllerUseCaseImpl>()
     factoryBy<WriteStateToControllerUseCase, WriteStateToControllerUseCaseImpl>()
     factoryBy<PipelineControllerToStorageUseCase, PipelineControllerToStorageUseCaseImpl>()
+    factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
     
     //scripts
     factoryBy<FetchScriptsUseCase, FetchScriptsUseCaseImpl>()
@@ -59,6 +60,10 @@ val domain = module {
     factoryBy<CheckIfDependencyPossibleUseCase, CheckIfDependencyPossibleUseCaseImpl>()
     factoryBy<AddControllerBlockUseCase, AddControllerBlockUseCaseImpl>()
     factoryBy<RemoveDependencyUseCase, RemoveDependencyUseCaseImpl>()
+    factoryBy<FetchDependencyDetailsUseCase, FetchDependencyDetailsUseCaseImpl>()
+    factoryBy<ObserveDependencyDetailsUseCase, ObserveDependencyDetailsUseCaseImpl>()
+    factoryBy<CreateEmptyConditionsForBlockUseCase, CreateEmptyConditionsForBlockUseCaseImpl>()
+    factoryBy<GetDependencyUseCase, GetDependencyUseCaseImpl>()
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
     

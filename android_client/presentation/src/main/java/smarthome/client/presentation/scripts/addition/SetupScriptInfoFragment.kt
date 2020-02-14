@@ -27,8 +27,8 @@ class SetupScriptInfoFragment : Fragment() {
         toolbarController.setMenu(R.menu.next) {
             if (it != R.id.next) return@setMenu
             viewModel.onNextFromScriptInfoClicked(
-                script_name.text.toString(),
-                script_description.text.toString()
+                script_name.text,
+                script_description.text
             )
         }
     

@@ -26,4 +26,7 @@
 
 <!--    Scripts-->
     <string name="setup_script">Setup Script</string>
+    <string name="less_sign"><![CDATA[<]]></string>
+    <string name="equal_sign">=</string>
+    <string name="more_sign"><![CDATA[>]]></string>
 </resources>

@@ -1,24 +1,22 @@
 package smarthome.client.presentation.scripts.addition.graph.eventhandler
 
 import androidx.lifecycle.MutableLiveData
-import smarthome.client.domain.api.scripts.usecases.AddBlockToScriptGraphUseCase
 import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.block.BlockId
 import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
-import smarthome.client.presentation.scripts.addition.graph.helper.AddGraphBlockStateHelper
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
+import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.util.withReplacedOrAdded
 
 class DragBlockEventsHandlerImpl(
     private val blocks: MutableLiveData<List<BlockState>>,
     private val moveBlockUseCase: MoveBlockUseCase,
     private val removeBlockUseCase: RemoveBlockUseCase,
-    private val addBlockToScriptGraphUseCase: AddBlockToScriptGraphUseCase,
     private val addBlockHelper: AddBlockHelper,
-    private val addGraphBlockStateHelper: AddGraphBlockStateHelper
+    private val blockToNewGraphBlockStateMapper: BlockToNewGraphBlockStateMapper
 ): DragBlockEventsHandler {
     val scriptId: Long = 1L // TODO
     
@@ -52,29 +50,16 @@ class DragBlockEventsHandlerImpl(
     }
     
     private fun addOrMoveBlock(event: GraphDragEvent) {
-        val block = when (event.isFrom(GRAPH)) {
+        when (event.isFrom(GRAPH)) {
             true -> moveBlockUseCase.execute(scriptId, event.dragInfo.id, event.dragInfo.position)
             false -> addBlockHelper.resolveAddingFromEvent(scriptId, event)
         }
-        
-        emitWithBlock(
-            getOrCreateBlockState(event)
-                .copyWithDomain(block)
-                .copyOfVisible()
-        )
     }
     
     private fun hideDraggedBlock(event: GraphDragEvent) {
         val blockBeforeEvent = getBlockState(event.dragInfo.id) ?: return
         
         emitWithBlock(blockBeforeEvent.copyOfHidden())
-    }
-    
-    private fun getOrCreateBlockState(event: GraphDragEvent): BlockState {
-        return getBlockState(event.dragInfo.id)
-            ?: addGraphBlockStateHelper.createBlockState(
-                block = addBlockHelper.resolveAddingFromEvent(scriptId, event)
-            )
     }
     
     private fun getBlockState(id: BlockId): BlockState? {

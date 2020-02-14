@@ -26,7 +26,6 @@ import smarthome.client.presentation.scripts.addition.graph.eventhandler.DragBlo
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBusImpl
 import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
-import smarthome.client.presentation.scripts.addition.graph.helper.AddGraphBlockStateHelper
 import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.presentation.scripts.addition.graph.mapper.DependencyToDependencyStateMapper
 
@@ -58,8 +57,7 @@ val presentation = module {
         DragBlockEventsHandlerImpl(
             blocks = blocks,
             addBlockHelper = get(),
-            addBlockToScriptGraphUseCase = get(),
-            addGraphBlockStateHelper = get(),
+            blockToNewGraphBlockStateMapper = get(),
             moveBlockUseCase = get(),
             removeBlockUseCase = get()
         )
@@ -69,7 +67,6 @@ val presentation = module {
         DependencyEventsHandlerImpl(movingDependency = movingDependency)
     }
     factory { AddBlockHelper(get()) }
-    factory { AddGraphBlockStateHelper() }
     
     factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactoryImpl() }
 }

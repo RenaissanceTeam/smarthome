@@ -12,7 +12,9 @@ interface ScriptGraphRepo {
     fun replaceBlock(scriptId: Long, block: Block): Block
     fun removeBlock(scriptId: Long, blockId: BlockId)
     fun addDependency(scriptId: Long, dependency: Dependency)
+    fun getDependency(scriptId: Long, dependencyId: DependencyId): Dependency?
     fun observeDependencies(scriptId: Long): Observable<List<Dependency>>
     fun observeBlocks(scriptId: Long): Observable<List<Block>>
     fun removeDependency(scriptId: Long, dependencyId: DependencyId)
+    fun getBlock(scriptId: Long, blockId: BlockId): Block?
 }

@@ -3,7 +3,7 @@ package smarthome.client.presentation.controllers.controllerdetail
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import org.koin.core.inject
-import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
+import smarthome.client.domain.api.conrollers.usecases.FetchControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.presentation.util.KoinViewModel
@@ -13,7 +13,7 @@ class ControllerDetailViewModel : KoinViewModel() {
     val refresh = MutableLiveData<Boolean>()
     val controller = MutableLiveData<Controller>()
     private var controllerId: Long = 0
-    private val getControllersUseCase: GetControllerUseCase by inject()
+    private val fetchControllersUseCase: FetchControllerUseCase by inject()
     private val observeControllerUseCase: ObserveControllerUseCase by inject()
     
     fun setControllerId(id: Long) {
@@ -45,7 +45,7 @@ class ControllerDetailViewModel : KoinViewModel() {
     
     fun onRefresh() {
         viewModelScope.launch {
-            getControllersUseCase.runCatching { execute(controllerId) }
+            fetchControllersUseCase.runCatching { execute(controllerId) }
         }
     }
     
