@@ -8,6 +8,8 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.scripts_setup_dependency.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import smarthome.client.entity.script.dependency.action.Action
+import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.R
 import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
@@ -38,7 +40,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         toolbarController.setMenu(R.menu.save) { id ->
             if (id != R.id.save) return@setMenu
         
-            viewModel.onSave()
+            viewModel.onSave(getConditions(), getAction())
         }
     
         toolbarController.setNavigationIcon(R.drawable.ic_close) {
@@ -64,9 +66,24 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     
             context?.let {
                 actionView = actionViewResolver.resolve(it, state.emptyAction)
+                actionView?.setAction(state.emptyAction)
                 (actionView as? View)?.let(action_container::addView)
             }
         }
+    }
+    
+    private fun getConditions(): List<Condition> {
+        return containerViews.keys
+            .map { key ->
+                val view = containerViews[key]!!
+                view.getSelectedCondition()
+            }
+            .filterNotNull()
+            .toList()
+    }
+    
+    private fun getAction(): Action? {
+        return actionView?.getAction()
     }
     
     private fun inflateContainerIfNeeded(container: ConditionContainerState) {
