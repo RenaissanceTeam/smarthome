@@ -22,10 +22,11 @@ class ConditionViewContainer @JvmOverloads constructor(
     
     private val viewResolver: ConditionViewResolver by inject()
     private val conditions = mutableListOf<Condition>()
+    private val adapter = Adapter()
     
     init {
         inflate(R.layout.scripts_condition_container)
-        conditions_pager.adapter = Adapter()
+        conditions_pager.adapter = adapter
     }
     
     fun setConditions(conditions: List<Condition>) {
@@ -34,7 +35,13 @@ class ConditionViewContainer @JvmOverloads constructor(
         conditions_pager.adapter?.notifyDataSetChanged()
     }
     
+    fun getSelectedCondition(): Condition? {
+        val conditionView = adapter.getConditionView(conditions_pager.currentItem)
+        return conditionView?.getCondition()
+    }
+    
     inner class Adapter : PagerAdapter() {
+        private val items = mutableListOf<ConditionView>()
         override fun isViewFromObject(view: View, obj: Any): Boolean {
             return view == obj
         }
@@ -44,13 +51,21 @@ class ConditionViewContainer @JvmOverloads constructor(
         }
         
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            return (viewResolver.resolve(context, conditions[position]) as? View)
+            return viewResolver.resolve(context, conditions[position])
+                ?.also { items.add(it) }
+                ?.also { it.setCondition(conditions[position]) }
+                ?.let { it as View? }
                 ?.also(container::addView)
                 ?: Object()
         }
         
         override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
             container.removeViewAt(position)
+            items.removeAt(position)
+        }
+    
+        fun getConditionView(position: Int): ConditionView? {
+            return items[position]
         }
     }
 }

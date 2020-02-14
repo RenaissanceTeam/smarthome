@@ -2,11 +2,10 @@ package smarthome.client.arduino.entity.condition
 
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.condition.controller.ControllerCondition
+import smarthome.client.entity.script.dependency.condition.controller.ControllerValueCondition
 
-data class HumidityCondition(
-    override val controllerId: Long,
-    override val dependencyId: DependencyId,
-    val humidity: String? = null,
-    val sign: String? = null
-): ControllerCondition
+class HumidityCondition(
+    controllerId: Long,
+    dependencyId: DependencyId
+): ControllerValueCondition(controllerId, dependencyId)
 

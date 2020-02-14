@@ -4,21 +4,33 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.scripts_value_condition.view.*
+import smarthome.client.entity.script.dependency.condition.Condition
+import smarthome.client.entity.script.dependency.condition.controller.ControllerValueCondition
 import smarthome.client.entity.script.dependency.condition.controller.ValueSigns
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionView
 import smarthome.client.presentation.util.inflate
 
-open class ConditionValueView @JvmOverloads constructor(
+open class ControllerConditionValueView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), ConditionView {
+    private var condition: ControllerValueCondition? = null
     
     init {
         inflate(R.layout.scripts_value_condition)
+        
+        setOnSignChanged { newSign ->
+            val beforeChange = condition ?: return@setOnSignChanged
+            condition = beforeChange.withSign(newSign)
+        }
+        
+        setOnValueChanged { newValue ->
+            val beforeChange = condition ?: return@setOnValueChanged
+            condition = beforeChange.withValue(newValue)
+        }
     }
-    
     
     var title: CharSequence
         get() = title_value.text.toString()
@@ -26,7 +38,16 @@ open class ConditionValueView @JvmOverloads constructor(
             title_value.text = value
         }
     
-    fun setOnSignChanged(listener: (String) -> Unit) {
+    override fun setCondition(condition: Condition) {
+        if (condition !is ControllerValueCondition) return
+        this.condition = condition
+    }
+    
+    override fun getCondition(): Condition {
+        return condition ?: throw IllegalStateException("No condition has been set for $this")
+    }
+    
+    private fun setOnSignChanged(listener: (String) -> Unit) {
         signs.setOnCheckedChangeListener { group, checkedId ->
             val checkedSign = when (checkedId) {
                 R.id.less -> ValueSigns.less
@@ -38,7 +59,7 @@ open class ConditionValueView @JvmOverloads constructor(
         }
     }
     
-    fun setOnValueChanged(listener: (String) -> Unit) {
+    private fun setOnValueChanged(listener: (String) -> Unit) {
         value_input.setOnTextChanged(listener)
     }
 }
