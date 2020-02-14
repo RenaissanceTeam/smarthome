@@ -1,8 +1,8 @@
-package smarthome.client.arduino.entity
+package smarthome.client.arduino.entity.block
 
-import smarthome.client.arduino.entity.block.ArduinoControllerBlock
 import smarthome.client.arduino.entity.condition.HumidityCondition
 import smarthome.client.arduino.entity.condition.TemperatureCondition
+import smarthome.client.arduino.entity.dht
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.dependency.DependencyId
@@ -18,7 +18,10 @@ class ArduinoConditionFromBlockResolver : ConditionFromBlockResolver {
         if (block !is ArduinoControllerBlock) return emptyList()
         
         return when (block.type) {
-            "dht" -> listOf(TemperatureCondition(block.controllerId, dependencyId), HumidityCondition(block.controllerId, dependencyId))
+            dht -> listOf(
+                TemperatureCondition(block.controllerId, dependencyId),
+                HumidityCondition(block.controllerId, dependencyId)
+            )
             else -> emptyList()
         }
     }

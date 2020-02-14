@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.dependency
+package smarthome.client.presentation.scripts.addition.dependency.condition
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,6 +6,7 @@ import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.scripts_value_condition.view.*
 import smarthome.client.entity.script.dependency.condition.controller.ValueSigns
 import smarthome.client.presentation.R
+import smarthome.client.presentation.scripts.addition.dependency.condition.ConditionView
 import smarthome.client.presentation.util.inflate
 
 open class ConditionValueView @JvmOverloads constructor(
