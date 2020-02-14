@@ -75,6 +75,8 @@ val domain = module {
     factoryBy<ChangeSetupDependencyConditionUseCase, ChangeSetupDependencyConditionUseCaseImpl>()
     factoryBy<ChangeSetupDependencyActionUseCase, ChangeSetupDependencyActionUseCaseImpl>()
     factoryBy<ObserveSetupDependencyUseCase, ObserveSetupDependencyUseCaseImpl>()
+    factoryBy<GetBlockNameUseCase, GetBlockNameUseCaseImpl>()
+    factoryBy<GetBlockUseCase, GetBlockUseCaseImpl>()
     
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
