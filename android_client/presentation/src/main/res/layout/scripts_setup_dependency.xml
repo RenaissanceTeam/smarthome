@@ -8,11 +8,20 @@
         android:id="@+id/conditions_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:textSize="16sp"
         android:text="Conditions"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        app:layout_constraintBaseline_toBaselineOf="@id/conditions_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_more"
+        android:id="@+id/conditions_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/conditions_recycler"

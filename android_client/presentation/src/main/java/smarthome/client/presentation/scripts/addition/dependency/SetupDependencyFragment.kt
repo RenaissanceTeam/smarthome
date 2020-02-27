@@ -1,6 +1,7 @@
 package smarthome.client.presentation.scripts.addition.dependency
 
 import android.os.Bundle
+import android.widget.PopupMenu
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -63,6 +64,10 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         
         conditions_recycler.adapter = conditionsController.adapter
         actions_recycler.adapter = actionsController.adapter
+        conditions_options.setOnClickListener { PopupMenu(context, it).apply {
+            inflate(R.menu.conditions_options)
+            show()
+        } }
     }
     
     private fun bindConditions(states: List<ContainerState>) {

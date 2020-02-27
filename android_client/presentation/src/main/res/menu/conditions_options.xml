@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/options_add"
+        android:icon="@drawable/add"
+        android:title="Add" />
+    <item
+        android:id="@+id/options_select"
+        android:icon="@drawable/list"
+        android:title="Select" />
+</menu>

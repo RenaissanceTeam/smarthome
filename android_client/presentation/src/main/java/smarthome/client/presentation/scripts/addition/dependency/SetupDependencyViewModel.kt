@@ -96,8 +96,6 @@ class SetupDependencyViewModel: KoinViewModel() {
     }
     
     private fun synchronizeContainers(details: DependencyDetails) {
-        log("bind dependency details $details")
-    
         conditionContainers.value = createContainersIfNoneExisted(
             conditionContainers.value.orEmpty(),
             details.conditions,
