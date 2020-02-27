@@ -64,10 +64,24 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         
         conditions_recycler.adapter = conditionsController.adapter
         actions_recycler.adapter = actionsController.adapter
-        conditions_options.setOnClickListener { PopupMenu(context, it).apply {
-            inflate(R.menu.conditions_options)
-            show()
-        } }
+        setupPopupMenuForConditions()
+    }
+    
+    private fun setupPopupMenuForConditions() {
+        conditions_options.setOnClickListener {
+            PopupMenu(context, it).apply {
+                inflate(R.menu.conditions_options)
+                show()
+                
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.options_add -> viewModel.addConditionsContainer()
+                        R.id.options_select -> viewModel.startSelectingConditions()
+                    }
+                    true
+                }
+            }
+        }
     }
     
     private fun bindConditions(states: List<ContainerState>) {

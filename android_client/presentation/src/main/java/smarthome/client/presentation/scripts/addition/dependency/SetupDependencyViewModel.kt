@@ -3,6 +3,7 @@ package smarthome.client.presentation.scripts.addition.dependency
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.*
+import smarthome.client.domain.api.scripts.usecases.dependency.AddConditionToSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
@@ -21,7 +22,10 @@ import smarthome.client.presentation.scripts.addition.dependency.container.actio
 import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerData
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
-import smarthome.client.util.*
+import smarthome.client.util.containsThat
+import smarthome.client.util.findAndModify
+import smarthome.client.util.truncate
+import smarthome.client.util.withInserted
 
 class SetupDependencyViewModel: KoinViewModel() {
     private val scriptId: Long = 1L // todo
@@ -37,6 +41,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val getSetupDependencyUseCase: GetSetupDependencyUseCase by inject()
     private val toolbarController: ToolbarController by inject()
     private val getBlockNameUseCase: GetBlockNameUseCase by inject()
+    private val addConditionToSetupDependencyUseCase: AddConditionToSetupDependencyUseCase by inject()
     
     val close = NavigationLiveData()
     val conditionContainers = MutableLiveData<List<ContainerState>>()
@@ -186,5 +191,13 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     fun setFlowViewModel(setupScriptViewModel: SetupScriptViewModel) {
         this.setupScriptViewModel = setupScriptViewModel
+    }
+    
+    fun addConditionsContainer() {
+        addConditionToSetupDependencyUseCase.execute()
+    }
+    
+    fun startSelectingConditions() {
+    
     }
 }

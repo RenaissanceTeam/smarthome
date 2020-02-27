@@ -31,14 +31,12 @@ class StartSetupDependencyUseCaseImpl(
         }
     }
     
-    
     private fun addActionsIfEmpty(details: DependencyDetails, scriptId: Long): DependencyDetails {
         return when (details.actions.isEmpty()) {
             true -> withFirstEmptyAction(scriptId, details)
             false -> details
         }
     }
-    
     
     private fun withFirstEmptyCondition(scriptId: Long, details: DependencyDetails): DependencyDetails {
         val allConditions = createEmptyConditionsForBlockUseCase
@@ -50,7 +48,6 @@ class StartSetupDependencyUseCaseImpl(
             }
         return details.copy(conditions = listOf(allConditions.first()))
     }
-    
     
     private fun withFirstEmptyAction(scriptId: Long, details: DependencyDetails): DependencyDetails {
         val allActions = createEmptyActionForBlockUseCase
