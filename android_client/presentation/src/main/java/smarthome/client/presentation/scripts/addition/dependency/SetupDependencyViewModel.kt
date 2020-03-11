@@ -71,12 +71,9 @@ class SetupDependencyViewModel: KoinViewModel() {
         dependencyId = id
         
         disposable.add(
-            observeSetupDependencyUseCase.execute()
-                .subscribe(this::synchronizeContainers)
+            observeSetupDependencyUseCase.execute().subscribe(this::synchronizeContainers)
         )
-        val dependency = startSetupDependencyUseCase.execute(scriptId, dependencyId)
-        initializeContainers(dependency)
-    
+        startSetupDependencyUseCase.execute(scriptId, dependencyId)
         toolbarController.setTitle(getTitleForToolbar())
     }
     
@@ -86,18 +83,6 @@ class SetupDependencyViewModel: KoinViewModel() {
         val toName = getBlockNameUseCase.execute(scriptId, details.dependency.endBlock)
         
         return fromName.truncate(10) + " -> " + toName.truncate(10)
-    }
-    
-    private fun initializeContainers(dependency: DependencyDetails) {
-        actionContainers.value = bindUnitsToContainers(
-            dependency.actions,
-            actionContainers.value.orEmpty()
-        )
-        
-        conditionContainers.value = bindUnitsToContainers(
-            dependency.conditions,
-            conditionContainers.value.orEmpty()
-        )
     }
     
     private fun synchronizeContainers(details: DependencyDetails) {
@@ -112,26 +97,6 @@ class SetupDependencyViewModel: KoinViewModel() {
             details.actions,
             details
         )
-    }
-    
-    private fun bindUnitsToContainers(units: List<DependencyUnit>,
-                                      containers: List<ContainerState>): List<ContainerState> {
-        return units.mapIndexed { index, dependencyUnit ->
-            val container = containers[index]
-            val newData = replaceUnitInContainerData(dependencyUnit, container.data)
-            
-            val selectedIndex = newData.units.indexOf(dependencyUnit)
-            container.copy(data = newData, selected = selectedIndex)
-        }
-    }
-    
-    private fun replaceUnitInContainerData(unit: DependencyUnit, data: ContainerData): ContainerData {
-        val currentUnits = data.units
-        val replacedUnits = currentUnits.findAndModify(
-            predicate = { stored: DependencyUnit -> stored.id == unit.id && stored.data != unit.data },
-            modify = { unit }
-        )
-        return data.copyWithUnits(replacedUnits)
     }
     
     private fun createContainersIfNoneExisted(containers: List<ContainerState>,
