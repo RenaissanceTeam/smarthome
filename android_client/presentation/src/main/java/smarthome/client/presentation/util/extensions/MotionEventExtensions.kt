@@ -1,4 +1,4 @@
-package smarthome.client.presentation.util
+package smarthome.client.presentation.util.extensions
 
 import android.view.MotionEvent
 import androidx.lifecycle.MutableLiveData

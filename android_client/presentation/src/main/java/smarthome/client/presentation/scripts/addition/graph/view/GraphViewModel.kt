@@ -28,7 +28,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.navigation.Op
 import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.presentation.scripts.addition.graph.mapper.DependencyToDependencyStateMapper
 import smarthome.client.presentation.util.KoinViewModel
-import smarthome.client.presentation.util.triggerRebuild
+import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.util.findAndModify
 
 class GraphViewModel : KoinViewModel() {

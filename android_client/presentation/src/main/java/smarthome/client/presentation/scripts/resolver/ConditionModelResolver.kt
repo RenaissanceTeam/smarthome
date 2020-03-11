@@ -1,7 +1,6 @@
 package smarthome.client.presentation.scripts.resolver
 
-import com.airbnb.epoxy.EpoxyModel
-import smarthome.client.domain.api.scripts.resolver.Resolver
 import smarthome.client.entity.script.dependency.condition.Condition
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainerModelResolver
 
-interface ConditionModelResolver: Resolver<Condition, EpoxyModel<*>>
+interface ConditionModelResolver : ContainerModelResolver<Condition>

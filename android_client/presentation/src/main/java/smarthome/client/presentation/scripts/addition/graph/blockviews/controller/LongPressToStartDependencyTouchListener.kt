@@ -7,7 +7,7 @@ import android.view.View
 import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.SimpleDependencyId
-import smarthome.client.presentation.util.rawPosition
+import smarthome.client.presentation.util.extensions.rawPosition
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_END
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE

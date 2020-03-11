@@ -6,6 +6,7 @@ class ToolbarControllerImpl(
     
     override fun setMenu(menuResource: Int, onMenuItemClick: (Int) -> Unit) {
         val toolbar = toolbarHolder.toolbar ?: return
+        clearMenu()
         toolbar.inflateMenu(menuResource)
         toolbar.setOnMenuItemClickListener {
             onMenuItemClick(it.itemId)

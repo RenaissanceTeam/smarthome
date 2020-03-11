@@ -182,7 +182,7 @@ class SetupDependencyViewModelTest {
         viewModel.setDependencyId(dependencyId)
         assertTrue {
             val firstContainer = viewModel.conditionContainers.value!!.first()
-            val selectedInFirstContainer = firstContainer.selected
+            val selectedInFirstContainer = firstContainer.selectedUnitIndex
             
             selectedInFirstContainer == 1
         }

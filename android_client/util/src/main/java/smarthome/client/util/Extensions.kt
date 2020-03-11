@@ -53,6 +53,10 @@ fun <T> List<T>.containsThat(predicate: (T) -> Boolean): Boolean {
     return find(predicate) != null
 }
 
+fun <T> List<T>.containsAny(list: List<T>): Boolean {
+    return intersect(list).isNotEmpty()
+}
+
 inline fun <T, R> T.runInScope(scope: CoroutineScope, crossinline block: suspend T.() -> R): Job {
     return scope.launch { block() }
 }

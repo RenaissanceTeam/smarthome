@@ -1,7 +1,11 @@
 package smarthome.client.presentation.scripts.addition.dependency.container
 
-data class ContainerState(
+import smarthome.client.entity.script.dependency.DependencyUnit
+
+data class ContainerState<out T : DependencyUnit>(
     val id: ContainerId,
-    val data: ContainerData,
-    val selected: Int
+    val data: List<T>,
+    val selectedUnitIndex: Int,
+    val selectionMode: Boolean = false,
+    val isSelected: Boolean = false
 )

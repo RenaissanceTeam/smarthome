@@ -2,30 +2,27 @@ package smarthome.client.presentation.scripts.addition.dependency
 
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
-import smarthome.client.domain.api.scripts.usecases.*
+import org.koin.core.qualifier.named
+import smarthome.client.domain.api.scripts.usecases.GetBlockNameUseCase
+import smarthome.client.domain.api.scripts.usecases.RemoveDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.AddConditionToSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
-import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyDetails
 import smarthome.client.entity.script.dependency.DependencyId
-import smarthome.client.entity.script.dependency.DependencyUnit
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
-import smarthome.client.presentation.main.toolbar.ToolbarController
+import smarthome.client.presentation.ACTION_CONTAINER_VIEWMODEL
+import smarthome.client.presentation.CONDITION_CONTAINER_VIEWMODEL
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
-import smarthome.client.presentation.scripts.addition.dependency.container.ContainerData
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
-import smarthome.client.presentation.scripts.addition.dependency.container.ContainerState
-import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainerData
-import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainerData
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
-import smarthome.client.util.containsThat
-import smarthome.client.util.findAndModify
+import smarthome.client.presentation.util.extensions.updateWith
+import smarthome.client.util.log
 import smarthome.client.util.truncate
-import smarthome.client.util.withInserted
 
 class SetupDependencyViewModel: KoinViewModel() {
     private val scriptId: Long = 1L // todo
@@ -33,19 +30,22 @@ class SetupDependencyViewModel: KoinViewModel() {
     private lateinit var setupScriptViewModel: SetupScriptViewModel
     private val removeDependency: RemoveDependencyUseCase by inject()
     
-    private val createEmptyConditions: CreateEmptyConditionsForBlockUseCase by inject()
-    private val createEmptyActions: CreateEmptyActionForBlockUseCase by inject()
     private val updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase by inject()
     private val observeSetupDependencyUseCase: ObserveSetupDependencyUseCase by inject()
     private val startSetupDependencyUseCase: StartSetupDependencyUseCase by inject()
     private val getSetupDependencyUseCase: GetSetupDependencyUseCase by inject()
-    private val toolbarController: ToolbarController by inject()
     private val getBlockNameUseCase: GetBlockNameUseCase by inject()
     private val addConditionToSetupDependencyUseCase: AddConditionToSetupDependencyUseCase by inject()
     
     val close = NavigationLiveData()
-    val conditionContainers = MutableLiveData<List<ContainerState>>()
-    val actionContainers = MutableLiveData<List<ContainerState>>()
+    
+    private val conditionsViewModel: ContainersViewModel<Condition> by inject(named(CONDITION_CONTAINER_VIEWMODEL))
+    private val actionsViewModel: ContainersViewModel<Action> by inject(named(ACTION_CONTAINER_VIEWMODEL))
+    
+    val conditionContainers = conditionsViewModel.containers
+    val actionContainers = actionsViewModel.containers
+    val toolbarTitle = MutableLiveData<String>()
+    val selectionMode = MutableLiveData(DEFAULT_SELECTION_MODE)
     
     var isNew: Boolean = false
         private set
@@ -74,84 +74,19 @@ class SetupDependencyViewModel: KoinViewModel() {
             observeSetupDependencyUseCase.execute().subscribe(this::synchronizeContainers)
         )
         startSetupDependencyUseCase.execute(scriptId, dependencyId)
-        toolbarController.setTitle(getTitleForToolbar())
     }
     
-    private fun getTitleForToolbar(): String {
+    private fun updateSetupToolbarTitle() {
         val details = getSetupDependencyUseCase.execute()
         val fromName = getBlockNameUseCase.execute(scriptId, details.dependency.startBlock)
         val toName = getBlockNameUseCase.execute(scriptId, details.dependency.endBlock)
         
-        return fromName.truncate(10) + " -> " + toName.truncate(10)
+        toolbarTitle.value = fromName.truncate(10) + " -> " + toName.truncate(10)
     }
     
     private fun synchronizeContainers(details: DependencyDetails) {
-        conditionContainers.value = createContainersIfNoneExisted(
-            conditionContainers.value.orEmpty(),
-            details.conditions,
-            details
-        )
-        
-        actionContainers.value = createContainersIfNoneExisted(
-            actionContainers.value.orEmpty(),
-            details.actions,
-            details
-        )
-    }
-    
-    private fun createContainersIfNoneExisted(containers: List<ContainerState>,
-                                              units: List<DependencyUnit>,
-                                              details: DependencyDetails): List<ContainerState> {
-        var allContainers = containers
-        units.forEachIndexed { i, unit ->
-            if (checkIfContainerHasUnit(i, containers, unit)) return@forEachIndexed
-            allContainers = allContainers.withInserted(i, createNewContainerForUnit(unit, details.dependency,
-                containerDataFactory = this::createContainerData,
-                replaceEmptyPredicate = { it.data::class == unit.data::class }
-            ))
-        }
-        return allContainers
-    }
-    
-    private fun createContainerData(units: List<DependencyUnit>): ContainerData {
-        return when (units.firstOrNull()) {
-            is Action -> ActionContainerData(units.map { it as Action })
-            is Condition -> ConditionContainerData(units.map { it as Condition })
-            else -> throw IllegalStateException(
-                "Can't create container data with units ${units.joinToString(", ")}"
-            )
-        }
-    }
-    
-    private fun checkIfContainerHasUnit(index: Int,
-                                        containers: List<ContainerState>,
-                                        unit: DependencyUnit): Boolean {
-        val containerData = containers.runCatching { get(index).data }.getOrElse { return false }
-        return containerData.units.containsThat { it.id == unit.id }
-    }
-    
-    private fun createNewContainerForUnit(unit: DependencyUnit, dependency: Dependency,
-                                          replaceEmptyPredicate: (DependencyUnit) -> Boolean,
-                                          containerDataFactory: (List<DependencyUnit>) -> ContainerData): ContainerState {
-        val emptyUnits = createEmptyUnitsForContainer(unit, dependency)
-        
-        val filledUnits = emptyUnits.findAndModify(
-            predicate = replaceEmptyPredicate,
-            modify = { unit }
-        )
-        val selectedIndex = filledUnits.indexOf(unit)
-    
-    
-        return ContainerState(ContainerId(), containerDataFactory(filledUnits), selectedIndex)
-    }
-    
-    private fun createEmptyUnitsForContainer(unit: DependencyUnit,
-                                             dependency: Dependency): List<DependencyUnit> {
-        return when (unit) {
-            is Action -> createEmptyActions.execute(scriptId, dependency.endBlock)
-            is Condition -> createEmptyConditions.execute(scriptId, dependency.startBlock)
-            else -> throw IllegalArgumentException("Cannot create empty units for $unit")
-        }
+        conditionsViewModel.setData(details.conditions, details)
+        actionsViewModel.setData(details.actions, details)
     }
     
     fun setFlowViewModel(setupScriptViewModel: SetupScriptViewModel) {
@@ -162,7 +97,53 @@ class SetupDependencyViewModel: KoinViewModel() {
         addConditionToSetupDependencyUseCase.execute()
     }
     
-    fun startSelectingConditions() {
+    fun onSelectionModeClick() {
+        setSelection(selectionMode.value?.not() ?: DEFAULT_SELECTION_MODE)
+    }
     
+    private fun setSelection(mode: Boolean) {
+        selectionMode.updateWith { mode }
+        
+        conditionContainers.updateWith { conditions ->
+            conditions.orEmpty().map { condition ->
+                condition.copy(
+                    isSelected = if (mode) condition.isSelected else false,
+                    selectionMode = mode
+                )
+            }
+        }
+        
+        when (mode) {
+            false -> updateSetupToolbarTitle()
+            true -> updateSelectionToolbarTitle()
+        }
+    }
+    
+    fun onSelect(id: ContainerId, isSelected: Boolean) {
+        conditionsViewModel.onSelect(id, isSelected)
+        
+        updateSelectionToolbarTitle()
+        if (getSelectedConditionsCount() == 0) cancelSelection()
+    }
+    
+    private fun updateSelectionToolbarTitle() {
+        val selectedCount = getSelectedConditionsCount()
+        val allCount = conditionContainers.value.orEmpty().size
+        
+        toolbarTitle.value = "Selected: $selectedCount of $allCount."
+    }
+    
+    private fun getSelectedConditionsCount(): Int = conditionContainers.value.orEmpty().count { it.isSelected }
+    
+    fun cancelSelection() {
+        setSelection(false)
+    }
+    
+    fun onDeleteSelected() {
+        log("delete")
+    }
+    
+    companion object {
+        private val DEFAULT_SELECTION_MODE = false
     }
 }

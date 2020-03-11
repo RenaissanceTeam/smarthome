@@ -9,17 +9,17 @@ import smarthome.client.presentation.scripts.resolver.ActionModelResolver
 class ArduinoActionModelResolver(
     private val onOffModelFactory: OnOffModelFactory
 ) : ActionModelResolver {
-    override fun canResolve(action: Action): Boolean {
-        return when (action.data) {
+    override fun canResolve(item: Action): Boolean {
+        return when (item.data) {
             is OnOffActionData -> true
             else -> false
         }
     }
     
-    override fun resolve(action: Action): EpoxyModel<*> {
-        return when (action.data) {
-            is OnOffActionData -> onOffModelFactory.create(action)
-            else -> throw IllegalArgumentException("can't resolve $action")
+    override fun resolve(item: Action): EpoxyModel<*> {
+        return when (item.data) {
+            is OnOffActionData -> onOffModelFactory.create(item)
+            else -> throw IllegalArgumentException("can't resolve $item")
         }
     }
 }

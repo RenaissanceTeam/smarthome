@@ -8,29 +8,25 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.scripts_setup_dependency.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.core.qualifier.named
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
+import smarthome.client.presentation.ACTION_CONTAINER_CONTROLLER
+import smarthome.client.presentation.CONDITION_CONTAINER_CONTROLLER
 import smarthome.client.presentation.R
 import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
-import smarthome.client.presentation.scripts.addition.dependency.container.ContainerModelsHolder
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerState
-import smarthome.client.presentation.scripts.addition.dependency.container.action.ActionContainersController
-import smarthome.client.presentation.scripts.addition.dependency.container.condition.ConditionContainersController
-import smarthome.client.presentation.scripts.resolver.ActionModelResolver
-import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainersController
 import smarthome.client.presentation.util.confirmAction
-import smarthome.client.util.log
 
 class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDependencyViewModel::class) {
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
     private val toolbarController: ToolbarController by inject()
     private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
-    private val conditionsController = ConditionContainersController()
-    private val actionsController = ActionContainersController()
-    private val conditionModelResolver: ConditionModelResolver by inject()
-    private val actionModelResolver: ActionModelResolver by inject()
+    private val conditionsController: ContainersController<Condition> by inject(named(CONDITION_CONTAINER_CONTROLLER))
+    private val actionsController: ContainersController<Action> by inject(named(ACTION_CONTAINER_CONTROLLER))
     
     override fun getLayout() = R.layout.scripts_setup_dependency
     
@@ -41,19 +37,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         viewModel.setDependencyId(navArgs.dependencyId)
         viewModel.setFlowViewModel(setupScriptViewModel)
         
-        toolbarController.setMenu(R.menu.save) { id ->
-            if (id != R.id.save) return@setMenu
-            TODO()
-        }
-    
-        toolbarController.setNavigationIcon(R.drawable.ic_close) {
-            launchInViewScope {
-                val confirmed = confirmAction(context) {
-                    title = "Close without saving?"
-                }
-                viewModel.takeIf { confirmed }?.onCancel()
-            }
-        }
+        
         
         viewModel.close.onNavigate(this) {
             findNavController().popBackStack()
@@ -61,6 +45,8 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     
         viewModel.conditionContainers.observe(this, ::bindConditions)
         viewModel.actionContainers.observe(this, ::bindActions)
+        viewModel.selectionMode.observe(this, ::bindSelectMode)
+        viewModel.toolbarTitle.observe(this, ::bindToolbarTitle)
         
         conditions_recycler.adapter = conditionsController.adapter
         actions_recycler.adapter = actionsController.adapter
@@ -76,7 +62,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
                 setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.options_add -> viewModel.addConditionsContainer()
-                        R.id.options_select -> viewModel.startSelectingConditions()
+                        R.id.options_select -> viewModel.onSelectionModeClick()
                     }
                     true
                 }
@@ -84,26 +70,62 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         }
     }
     
-    private fun bindConditions(states: List<ContainerState>) {
-        conditionsController.setData(states.map { containerState ->
-            ContainerModelsHolder(
-                containerState.id,
-                containerState.data.units
-                    .map { it as Condition }
-                    .map(conditionModelResolver::resolve)
-            )
-        })
+    private fun bindConditions(states: List<ContainerState<Condition>>) {
+        conditionsController.setData(states, viewModel)
     }
     
-    private fun bindActions(states: List<ContainerState>) {
-        actionsController.setData(states.map { containerState ->
-            ContainerModelsHolder(
-                containerState.id,
-                containerState.data.units
-                    .map { it as Action }
-                    .map(actionModelResolver::resolve)
-            )
-        })
+    private fun bindActions(states: List<ContainerState<Action>>) {
+        actionsController.setData(states, viewModel)
+    }
+    
+    private fun bindSelectMode(selectMode: Boolean) {
+        when (selectMode) {
+            true -> {
+                setCancelSelectionNavigationIcon()
+                inflateToolbarDeleteMenu()
+            }
+            false -> {
+                inflateToolbarSaveMenu()
+                setCloseNavigationIcon()
+            }
+        }
+    
+       
+    }
+    
+    private fun setCloseNavigationIcon() {
+        toolbarController.setNavigationIcon(R.drawable.ic_close) {
+            launchInViewScope {
+                val confirmed = confirmAction(context) {
+                    title = "Close without saving?"
+                }
+                viewModel.takeIf { confirmed }?.onCancel()
+            }
+        }
+    }
+    
+    private fun inflateToolbarSaveMenu() {
+        toolbarController.setMenu(R.menu.save) { id ->
+            if (id != R.id.save) return@setMenu
+            TODO()
+        }
+    }
+    
+    private fun inflateToolbarDeleteMenu() {
+        toolbarController.setMenu(R.menu.delete) { id ->
+            if (id != R.id.delete) return@setMenu
+            viewModel.onDeleteSelected()
+        }
+    }
+    
+    private fun setCancelSelectionNavigationIcon() {
+        toolbarController.setNavigationIcon(R.drawable.ic_close) {
+            viewModel.cancelSelection()
+        }
+    }
+    
+    private fun bindToolbarTitle(title: String) {
+        toolbarController.setTitle(title)
     }
 }
 

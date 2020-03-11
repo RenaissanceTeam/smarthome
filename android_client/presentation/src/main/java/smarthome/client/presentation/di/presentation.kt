@@ -8,6 +8,12 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
+import smarthome.client.entity.script.dependency.action.Action
+import smarthome.client.entity.script.dependency.condition.Condition
+import smarthome.client.presentation.ACTION_CONTAINER_CONTROLLER
+import smarthome.client.presentation.ACTION_CONTAINER_VIEWMODEL
+import smarthome.client.presentation.CONDITION_CONTAINER_CONTROLLER
+import smarthome.client.presentation.CONDITION_CONTAINER_VIEWMODEL
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.OnOffStateChanger
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.ReadStateChanger
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerFactory
@@ -16,6 +22,8 @@ import smarthome.client.presentation.main.toolbar.ToolbarControllerImpl
 import smarthome.client.presentation.main.toolbar.ToolbarHolder
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
+import smarthome.client.presentation.scripts.addition.dependency.ContainersViewModel
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainersController
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.*
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
@@ -28,6 +36,8 @@ import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
 import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.presentation.scripts.addition.graph.mapper.DependencyToDependencyStateMapper
+import smarthome.client.presentation.scripts.resolver.ActionModelResolver
+import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 
 val presentation = module {
     
@@ -67,6 +77,12 @@ val presentation = module {
         DependencyEventsHandlerImpl(movingDependency = movingDependency)
     }
     factory { AddBlockHelper(get()) }
+    factory(named(CONDITION_CONTAINER_CONTROLLER)) { ContainersController(get<ConditionModelResolver>()) }
+    factory(named(ACTION_CONTAINER_CONTROLLER)) { ContainersController(get<ActionModelResolver>()) }
+    factory(named(CONDITION_CONTAINER_VIEWMODEL)) { ContainersViewModel<Condition>() }
+    factory(named(ACTION_CONTAINER_VIEWMODEL)) { ContainersViewModel<Action>() }
+    
+    
     
     factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactoryImpl() }
 }
