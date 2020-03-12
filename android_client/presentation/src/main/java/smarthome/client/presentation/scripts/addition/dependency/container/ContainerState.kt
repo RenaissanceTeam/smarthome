@@ -4,8 +4,8 @@ import smarthome.client.entity.script.dependency.DependencyUnit
 
 data class ContainerState<out T : DependencyUnit>(
     val id: ContainerId,
-    val data: List<T>,
-    val selectedUnitIndex: Int,
+    val allData: List<T>,
+    val currentData: T,
     val selectionMode: Boolean = false,
     val isSelected: Boolean = false
 )

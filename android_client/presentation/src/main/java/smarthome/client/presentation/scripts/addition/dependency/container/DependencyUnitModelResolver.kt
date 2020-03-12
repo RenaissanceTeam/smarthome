@@ -4,4 +4,4 @@ import com.airbnb.epoxy.EpoxyModel
 import smarthome.client.domain.api.scripts.resolver.Resolver
 import smarthome.client.entity.script.dependency.DependencyUnit
 
-interface ContainerModelResolver<T: DependencyUnit>: Resolver<T, EpoxyModel<*>>
+interface DependencyUnitModelResolver<T: DependencyUnit>: Resolver<T, EpoxyModel<*>>

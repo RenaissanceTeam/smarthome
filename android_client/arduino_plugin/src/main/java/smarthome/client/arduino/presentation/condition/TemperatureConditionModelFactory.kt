@@ -14,7 +14,7 @@ class TemperatureConditionModelFactory(
             ?: throw IllegalStateException("creating temperature condition model with wrong condition $condition")
         
         return ControllerConditionValueViewModel_().apply {
-            id("temperature")
+            id(condition.id.hashCode())
             title("Temperature")
             sign(data.sign)
             value(data.value)

@@ -36,11 +36,11 @@ class OnOffActionView @JvmOverloads constructor(
         onoff_switch.setOnCheckedChangeListener { _, isChecked ->
             val newState = booleanToState(isChecked)
             bindStateLabels(newState)
-            
+    
             onChangeState?.invoke(newState)
         }
     
-        onoff_switch.isChecked = state == on
+        if (!onoff_switch.hasFocus()) onoff_switch.isChecked = state == on
         bindStateLabels(state)
     }
     

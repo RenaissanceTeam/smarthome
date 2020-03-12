@@ -6,10 +6,7 @@ import org.koin.core.qualifier.named
 import smarthome.client.domain.api.scripts.usecases.GetBlockNameUseCase
 import smarthome.client.domain.api.scripts.usecases.RemoveDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
-import smarthome.client.domain.api.scripts.usecases.dependency.AddConditionToSetupDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.dependency.*
 import smarthome.client.entity.script.dependency.DependencyDetails
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.action.Action
@@ -21,7 +18,6 @@ import smarthome.client.presentation.scripts.addition.dependency.container.Conta
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.presentation.util.extensions.updateWith
-import smarthome.client.util.log
 import smarthome.client.util.truncate
 
 class SetupDependencyViewModel: KoinViewModel() {
@@ -36,6 +32,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val getSetupDependencyUseCase: GetSetupDependencyUseCase by inject()
     private val getBlockNameUseCase: GetBlockNameUseCase by inject()
     private val addConditionToSetupDependencyUseCase: AddConditionToSetupDependencyUseCase by inject()
+    private val removeConditionsFromSetupDependencyUseCase: RemoveConditionsFromSetupDependencyUseCase by inject()
     
     val close = NavigationLiveData()
     
@@ -69,11 +66,11 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     fun setDependencyId(id: DependencyId) {
         dependencyId = id
+        startSetupDependencyUseCase.execute(scriptId, dependencyId)
         
         disposable.add(
-            observeSetupDependencyUseCase.execute().subscribe(this::synchronizeContainers)
+            observeSetupDependencyUseCase.execute().subscribe(this::onSetupDependencyUpdated)
         )
-        startSetupDependencyUseCase.execute(scriptId, dependencyId)
     }
     
     private fun updateSetupToolbarTitle() {
@@ -84,7 +81,7 @@ class SetupDependencyViewModel: KoinViewModel() {
         toolbarTitle.value = fromName.truncate(10) + " -> " + toName.truncate(10)
     }
     
-    private fun synchronizeContainers(details: DependencyDetails) {
+    private fun onSetupDependencyUpdated(details: DependencyDetails) {
         conditionsViewModel.setData(details.conditions, details)
         actionsViewModel.setData(details.actions, details)
     }
@@ -140,7 +137,13 @@ class SetupDependencyViewModel: KoinViewModel() {
     }
     
     fun onDeleteSelected() {
-        log("delete")
+        val selectedConditions = conditionContainers.value.orEmpty()
+            .filter { it.isSelected }
+            .map { it.currentData.id }
+            .toTypedArray()
+    
+        removeConditionsFromSetupDependencyUseCase.execute(*selectedConditions)
+        cancelSelection()
     }
     
     companion object {

@@ -35,13 +35,14 @@ class ControllerConditionValueView @JvmOverloads constructor(
     
     @AfterPropsSet
     fun onPropsReady() {
-        
-        listenToSignChanges()
-        listenToValueChanges()
+        value_input.removeTextChangedListeners()
     
         bindTitleText()
         bindValueText()
         bindSign()
+        
+        listenToSignChanges()
+        listenToValueChanges()
     }
     
     private fun bindTitleText() {
@@ -68,7 +69,6 @@ class ControllerConditionValueView @JvmOverloads constructor(
     }
     
     private fun listenToValueChanges() {
-        value_input.removeTextChangedListeners()
         value_input.setOnTextChanged { onValueChanged?.invoke(it) }
     }
     

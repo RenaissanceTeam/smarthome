@@ -11,7 +11,6 @@ class ChangeSetupDependencyConditionUseCaseImpl(
 ) : ChangeSetupDependencyConditionUseCase {
     
     override fun execute(condition: Condition) {
-        log("change condition $condition")
         val details = repo.get()
         val changedConditions = details.conditions.findAndModify(
             predicate = { it.id == condition.id },

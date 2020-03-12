@@ -1,6 +1,6 @@
 package smarthome.client.presentation.scripts.resolver
 
 import smarthome.client.entity.script.dependency.action.Action
-import smarthome.client.presentation.scripts.addition.dependency.container.ContainerModelResolver
+import smarthome.client.presentation.scripts.addition.dependency.container.DependencyUnitModelResolver
 
-interface ActionModelResolver : ContainerModelResolver<Action>
+interface ActionModelResolver : DependencyUnitModelResolver<Action>

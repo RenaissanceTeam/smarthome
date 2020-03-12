@@ -12,9 +12,8 @@ class OnOffModelFactory(
     fun create(action: Action): EpoxyModel<*> {
         val data = action.data as? OnOffActionData
             ?: throw IllegalStateException("can't create onoff action model with action $action")
-        log("create onoff model $action")
         return OnOffActionViewModel_().apply {
-            id("onoff")
+            id(action.id.hashCode())
             state(data.value)
             onChangeState {
                 copyActionWith(action, data.copy(value = it))

@@ -24,10 +24,11 @@ class ContainersViewModel<T : DependencyUnit> : KoinComponent {
     val containers = MutableLiveData<List<ContainerState<T>>>()
     
     fun setData(data: List<T>, details: DependencyDetails) {
-        val currentContainers = containers.value.orEmpty()
-        val withAddedContainers = createContainersIfNoneExisted(currentContainers, data, details)
-        val withRemovedContainers = retainOnlyDataContainers(withAddedContainers, data)
-        containers.value = withRemovedContainers
+        containers.updateWith { currentContainers ->
+            currentContainers.orEmpty()
+                .let { retainOnlyDataContainers(it, data) }
+                .let { createContainersIfNoneExisted(it, data, details) }
+        }
     }
     
     private fun createContainersIfNoneExisted(containers: List<ContainerState<T>>,
@@ -51,14 +52,14 @@ class ContainersViewModel<T : DependencyUnit> : KoinComponent {
         val dataUnitIds = data.map { it.id }
         
         return containers.filter { container ->
-            container.data.map { it.id }.containsAny(dataUnitIds)
+            container.allData.map { it.id }.containsAny(dataUnitIds)
         }
     }
     
     private fun checkIfContainerHasUnit(index: Int,
                                         containers: List<ContainerState<*>>,
                                         unit: DependencyUnit): Boolean {
-        val containerData = containers.runCatching { get(index).data }.getOrElse { return false }
+        val containerData = containers.runCatching { get(index).allData }.getOrElse { return false }
         return containerData.containsThat { it.id == unit.id }
     }
     
@@ -70,9 +71,12 @@ class ContainersViewModel<T : DependencyUnit> : KoinComponent {
             predicate = replaceEmptyPredicate,
             modify = { unit }
         )
-        val selectedIndex = filledUnits.indexOf(unit)
-        
-        return ContainerState(ContainerId(), filledUnits, selectedIndex)
+    
+        return ContainerState(
+            id = ContainerId(),
+            allData = filledUnits,
+            currentData = unit
+        )
     }
     
     private fun createEmptyUnitsForContainer(unit: T, dependency: Dependency): List<T> {

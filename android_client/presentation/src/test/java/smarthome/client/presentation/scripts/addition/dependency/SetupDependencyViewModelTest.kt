@@ -29,7 +29,6 @@ import smarthome.client.presentation.scripts.addition.dependency.mock.MockCondit
 import smarthome.client.presentation.scripts.addition.graph.MockBlockId
 import smarthome.client.presentation.scripts.addition.graph.MockDependencyId
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
-import smarthome.client.util.containsThat
 import smarthome.client.util.findAndModify
 import smarthome.client.util.trampoline
 import smarthome.client.util.withRemoved
@@ -143,7 +142,7 @@ class SetupDependencyViewModelTest {
         viewModel.setDependencyId(dependencyId)
     
         val firstContainer = viewModel.conditionContainers.value!!.first()
-        assertEquals(2, firstContainer.data.units.size)
+        assertEquals(2, firstContainer.allData.units.size)
     }
     
     @Test
@@ -163,8 +162,8 @@ class SetupDependencyViewModelTest {
         
         assertTrue {
             val firstContainer = viewModel.conditionContainers.value!!.first()
-            firstContainer.data.units[0].data == conditionData_A
-                && firstContainer.data.units[1].data == domainData
+            firstContainer.allData.units[0].data == conditionData_A
+                && firstContainer.allData.units[1].data == domainData
         }
     }
     
@@ -212,7 +211,7 @@ class SetupDependencyViewModelTest {
         
         assertTrue {
             val containers = viewModel.conditionContainers.value!!
-            val shouldHaveChanged = containers.first().data.units[1]
+            val shouldHaveChanged = containers.first().allData.units[1]
             shouldHaveChanged.id == domainConditionId &&
                 shouldHaveChanged.data == newData
         }
@@ -231,8 +230,8 @@ class SetupDependencyViewModelTest {
         assertTrue {
             val containers = viewModel.conditionContainers.value!!
             containers.size == 1
-                && containers.first().data.units.size == 2
-                && containers.first().data.units[1] == domainCondition
+                && containers.first().allData.units.size == 2
+                && containers.first().allData.units[1] == domainCondition
         }
         
         return dependency
@@ -251,7 +250,7 @@ class SetupDependencyViewModelTest {
         assertTrue {
             val containers = viewModel.conditionContainers.value!!
             val newContainer = containers[1]
-            newContainer.data.units.containsThat {
+            newContainer.allData.units.containsThat {
                 it.id == newConditionId && it.data == newData
             }
         }

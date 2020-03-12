@@ -15,7 +15,7 @@ class HumidityConditionModelFactory(
             ?: throw IllegalStateException("creating humidity condition model with wrong condition $condition")
         
         return ControllerConditionValueViewModel_().apply {
-            id("humidity")
+            id(condition.id.hashCode())
             title("Humidity")
             sign(data.sign)
             value(data.value)
