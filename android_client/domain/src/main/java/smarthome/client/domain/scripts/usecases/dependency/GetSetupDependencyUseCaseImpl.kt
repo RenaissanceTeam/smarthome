@@ -2,13 +2,12 @@ package smarthome.client.domain.scripts.usecases.dependency
 
 import smarthome.client.data.api.scripts.SetupDependencyRepo
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
-import smarthome.client.entity.script.dependency.DependencyDetails
-import smarthome.client.entity.script.dependency.DependencyId
+import smarthome.client.entity.script.dependency.Dependency
 
 class GetSetupDependencyUseCaseImpl(
     private val setupDependencyRepo: SetupDependencyRepo
 ) : GetSetupDependencyUseCase {
-    override fun execute(): DependencyDetails {
+    override fun execute(): Dependency {
         return setupDependencyRepo.get()
     }
 }

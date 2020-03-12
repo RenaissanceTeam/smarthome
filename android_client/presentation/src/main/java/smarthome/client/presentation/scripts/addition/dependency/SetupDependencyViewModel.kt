@@ -5,9 +5,8 @@ import org.koin.core.inject
 import org.koin.core.qualifier.named
 import smarthome.client.domain.api.scripts.usecases.GetBlockNameUseCase
 import smarthome.client.domain.api.scripts.usecases.RemoveDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.*
-import smarthome.client.entity.script.dependency.DependencyDetails
+import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
@@ -26,7 +25,6 @@ class SetupDependencyViewModel: KoinViewModel() {
     private lateinit var setupScriptViewModel: SetupScriptViewModel
     private val removeDependency: RemoveDependencyUseCase by inject()
     
-    private val updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase by inject()
     private val observeSetupDependencyUseCase: ObserveSetupDependencyUseCase by inject()
     private val startSetupDependencyUseCase: StartSetupDependencyUseCase by inject()
     private val getSetupDependencyUseCase: GetSetupDependencyUseCase by inject()
@@ -48,11 +46,7 @@ class SetupDependencyViewModel: KoinViewModel() {
         private set
     
     fun onSave(conditions: List<Condition>, action: Action?) {
-        if (conditions.isEmpty() || action == null) return
-        
-        updateDependencyDetailsUseCase
-            .runCatching { execute(scriptId, dependencyId, conditions, action) }
-            .onSuccess { close.trigger() }
+    
     }
     
     fun onCancel() {
@@ -74,16 +68,16 @@ class SetupDependencyViewModel: KoinViewModel() {
     }
     
     private fun updateSetupToolbarTitle() {
-        val details = getSetupDependencyUseCase.execute()
-        val fromName = getBlockNameUseCase.execute(scriptId, details.dependency.startBlock)
-        val toName = getBlockNameUseCase.execute(scriptId, details.dependency.endBlock)
+        val dependency = getSetupDependencyUseCase.execute()
+        val fromName = getBlockNameUseCase.execute(scriptId, dependency.startBlock)
+        val toName = getBlockNameUseCase.execute(scriptId, dependency.endBlock)
         
         toolbarTitle.value = fromName.truncate(10) + " -> " + toName.truncate(10)
     }
     
-    private fun onSetupDependencyUpdated(details: DependencyDetails) {
-        conditionsViewModel.setData(details.conditions, details)
-        actionsViewModel.setData(details.actions, details)
+    private fun onSetupDependencyUpdated(dependency: Dependency) {
+        conditionsViewModel.setData(dependency.conditions, dependency)
+        actionsViewModel.setData(dependency.actions, dependency)
     }
     
     fun setFlowViewModel(setupScriptViewModel: SetupScriptViewModel) {

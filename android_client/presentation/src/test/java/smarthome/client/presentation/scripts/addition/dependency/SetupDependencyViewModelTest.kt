@@ -13,13 +13,11 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForBlockUseCase
-import smarthome.client.domain.api.scripts.usecases.GetDependencyDetailsUseCase
-import smarthome.client.domain.api.scripts.usecases.UpdateDependencyDetailsUseCase
+import smarthome.client.domain.api.scripts.usecases.GetDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
 import smarthome.client.entity.script.dependency.Dependency
-import smarthome.client.entity.script.dependency.DependencyDetails
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.entity.script.dependency.condition.SimpleDependencyUnitId
@@ -29,6 +27,7 @@ import smarthome.client.presentation.scripts.addition.dependency.mock.MockCondit
 import smarthome.client.presentation.scripts.addition.graph.MockBlockId
 import smarthome.client.presentation.scripts.addition.graph.MockDependencyId
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
+import smarthome.client.util.containsThat
 import smarthome.client.util.findAndModify
 import smarthome.client.util.trampoline
 import smarthome.client.util.withRemoved
@@ -36,33 +35,30 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class SetupDependencyViewModelTest {
-    
     private lateinit var viewModel: SetupDependencyViewModel
     private lateinit var createEmptyConditions: CreateEmptyConditionsForBlockUseCase
     private lateinit var createEmptyAction: CreateEmptyActionForBlockUseCase
-    private lateinit var updateDependencyDetailsUseCase: UpdateDependencyDetailsUseCase
     private lateinit var conditionModelsResolver: ConditionModelResolver
     private lateinit var getSetupDependencyUseCase: GetSetupDependencyUseCase
-    private lateinit var getDependencyDetailsUseCase: GetDependencyDetailsUseCase
+    private lateinit var getDependencyUseCase: GetDependencyUseCase
     private lateinit var startSetupDependencyUseCase: StartSetupDependencyUseCase
     private lateinit var observeSetupDependencyUseCase: ObserveSetupDependencyUseCase
-    private lateinit var observedSetupDependency: PublishSubject<DependencyDetails>
+    private lateinit var observedSetupDependency: PublishSubject<Dependency>
     
     private val dependencyId = MockDependencyId()
     private val startBlock = MockBlockId()
     private val endBlock = MockBlockId()
-    private val dependency = Dependency(dependencyId, startBlock, endBlock)
     private val conditionData = MockConditionData_A()
     private val conditionId = SimpleDependencyUnitId()
     private val condition = Condition(conditionId, conditionData)
     private val actionData = MockActionData()
     private val actionId = SimpleDependencyUnitId()
     private val action = Action(actionId, actionData)
-    private val dependencyDetails = DependencyDetails(dependency, listOf(condition), listOf(action))
     private val conditionData_A = MockConditionData_A()
     private val conditionData_B = MockConditionData_B()
     private val condition_A = Condition(SimpleDependencyUnitId(), conditionData_A)
     private val condition_B = Condition(SimpleDependencyUnitId(), conditionData_B)
+    private val dependency = Dependency(dependencyId, startBlock, endBlock, listOf(condition), listOf(action))
     
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
@@ -78,31 +74,29 @@ class SetupDependencyViewModelTest {
         }
         startSetupDependencyUseCase = mock {
             on { execute(any(), any()) }.then {
-                observedSetupDependency.onNext(dependencyDetails)
-                dependencyDetails
+                observedSetupDependency.onNext(dependency)
+                dependency
             }
         }
-        getDependencyDetailsUseCase = mock {
-            on { execute(any(), any()) }.then { dependencyDetails }
+        getDependencyUseCase = mock {
+            on { execute(any(), any()) }.then { dependency }
         }
-        updateDependencyDetailsUseCase = mock {}
         conditionModelsResolver = mock {}
         observedSetupDependency = PublishSubject.create()
         observeSetupDependencyUseCase = mock {
             on { execute() }.then { observedSetupDependency }
         }
         getSetupDependencyUseCase = mock {
-            on { execute() }.then { dependencyDetails }
+            on { execute() }.then { dependency }
         }
         
         startKoin {
             modules(module {
                 single { createEmptyConditions }
                 single { createEmptyAction }
-                single { updateDependencyDetailsUseCase }
                 single { conditionModelsResolver }
                 single { getSetupDependencyUseCase }
-                single { getDependencyDetailsUseCase }
+                single { getDependencyUseCase }
                 single { startSetupDependencyUseCase }
                 single { observeSetupDependencyUseCase }
             })
@@ -130,7 +124,7 @@ class SetupDependencyViewModelTest {
         viewModel.setDependencyId(dependencyId)
         
         assertTrue {
-            viewModel.conditionContainers.value!!.size == dependencyDetails.conditions.size
+            viewModel.conditionContainers.value!!.size == dependency.conditions.size
         }
     }
     
@@ -142,7 +136,7 @@ class SetupDependencyViewModelTest {
         viewModel.setDependencyId(dependencyId)
     
         val firstContainer = viewModel.conditionContainers.value!!.first()
-        assertEquals(2, firstContainer.allData.units.size)
+        assertEquals(2, firstContainer.allData.size)
     }
     
     @Test
@@ -153,7 +147,7 @@ class SetupDependencyViewModelTest {
             .then { listOf(condition_A, condition_B) }
     
         whenever(startSetupDependencyUseCase.execute(any(), any())).then {
-            val details = dependencyDetails.copy(conditions = listOf(domainCondition))
+            val details = dependency.copy(conditions = listOf(domainCondition))
             observedSetupDependency.onNext(details)
             details
         }
@@ -162,8 +156,8 @@ class SetupDependencyViewModelTest {
         
         assertTrue {
             val firstContainer = viewModel.conditionContainers.value!!.first()
-            firstContainer.allData.units[0].data == conditionData_A
-                && firstContainer.allData.units[1].data == domainData
+            firstContainer.allData[0].data == conditionData_A
+                && firstContainer.allData[1].data == domainData
         }
     }
     
@@ -173,7 +167,7 @@ class SetupDependencyViewModelTest {
             .then { listOf(condition_A, condition_B) }
     
         whenever(startSetupDependencyUseCase.execute(any(), any())).then {
-            val details = dependencyDetails.copy(conditions = listOf(condition_B))
+            val details = dependency.copy(conditions = listOf(condition_B))
             observedSetupDependency.onNext(details)
             details
         }
@@ -181,9 +175,9 @@ class SetupDependencyViewModelTest {
         viewModel.setDependencyId(dependencyId)
         assertTrue {
             val firstContainer = viewModel.conditionContainers.value!!.first()
-            val selectedInFirstContainer = firstContainer.selectedUnitIndex
-            
-            selectedInFirstContainer == 1
+            val selectedInFirstContainer = firstContainer.currentData
+    
+            selectedInFirstContainer == condition_B
         }
     }
     
@@ -211,14 +205,14 @@ class SetupDependencyViewModelTest {
         
         assertTrue {
             val containers = viewModel.conditionContainers.value!!
-            val shouldHaveChanged = containers.first().allData.units[1]
+            val shouldHaveChanged = containers.first().allData[1]
             shouldHaveChanged.id == domainConditionId &&
                 shouldHaveChanged.data == newData
         }
     }
     
-    private fun setupContainerWithOneEmptyAndOneDomainConditions(domainCondition: Condition): DependencyDetails {
-        val dependency = dependencyDetails.copy(conditions = listOf(domainCondition))
+    private fun setupContainerWithOneEmptyAndOneDomainConditions(domainCondition: Condition): Dependency {
+        val dependency = dependency.copy(conditions = listOf(domainCondition))
         whenever(createEmptyConditions.execute(any(), any()))
             .then { listOf(condition_A, condition_B) }
         
@@ -230,8 +224,8 @@ class SetupDependencyViewModelTest {
         assertTrue {
             val containers = viewModel.conditionContainers.value!!
             containers.size == 1
-                && containers.first().allData.units.size == 2
-                && containers.first().allData.units[1] == domainCondition
+                && containers.first().allData.size == 2
+                && containers.first().allData[1] == domainCondition
         }
         
         return dependency
@@ -250,13 +244,13 @@ class SetupDependencyViewModelTest {
         assertTrue {
             val containers = viewModel.conditionContainers.value!!
             val newContainer = containers[1]
-            newContainer.allData.units.containsThat {
+            newContainer.allData.containsThat {
                 it.id == newConditionId && it.data == newData
             }
         }
     }
     
-    private fun addContainerForCondition(currentDependency: DependencyDetails, condition: Condition) {
+    private fun addContainerForCondition(currentDependency: Dependency, condition: Condition) {
         val newConditions = currentDependency.conditions + condition
         val newDetails = currentDependency.copy(conditions = newConditions)
         observedSetupDependency.onNext(newDetails)

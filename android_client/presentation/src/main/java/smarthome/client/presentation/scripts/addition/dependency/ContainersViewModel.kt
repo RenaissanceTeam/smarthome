@@ -6,7 +6,6 @@ import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForBlockUseCase
 import smarthome.client.entity.script.dependency.Dependency
-import smarthome.client.entity.script.dependency.DependencyDetails
 import smarthome.client.entity.script.dependency.DependencyUnit
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
@@ -23,23 +22,23 @@ class ContainersViewModel<T : DependencyUnit> : KoinComponent {
     private val createEmptyActions: CreateEmptyActionForBlockUseCase by inject()
     val containers = MutableLiveData<List<ContainerState<T>>>()
     
-    fun setData(data: List<T>, details: DependencyDetails) {
+    fun setData(data: List<T>, dependency: Dependency) {
         containers.updateWith { currentContainers ->
             currentContainers.orEmpty()
                 .let { retainOnlyDataContainers(it, data) }
-                .let { createContainersIfNoneExisted(it, data, details) }
+                .let { createContainersIfNoneExisted(it, data, dependency) }
         }
     }
     
     private fun createContainersIfNoneExisted(containers: List<ContainerState<T>>,
                                               data: List<T>,
-                                              details: DependencyDetails): List<ContainerState<T>> {
+                                              dependency: Dependency): List<ContainerState<T>> {
         val allContainers = containers.toMutableList()
         
         data.forEachIndexed { i, unit ->
             if (checkIfContainerHasUnit(i, allContainers, unit)) return@forEachIndexed
-            
-            val newContainer = createNewContainerForUnit(unit, details.dependency,
+    
+            val newContainer = createNewContainerForUnit(unit, dependency,
                 replaceEmptyPredicate = { it.data::class == unit.data::class }
             )
             allContainers.add(i, newContainer)

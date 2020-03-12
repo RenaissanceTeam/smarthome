@@ -10,7 +10,6 @@ import smarthome.client.data.api.auth.LoginCommand
 import smarthome.client.data.api.auth.TokenRepo
 import smarthome.client.data.api.controllers.ControllersRepo
 import smarthome.client.data.api.devices.DevicesRepo
-import smarthome.client.data.api.scripts.DependencyDetailsRepo
 import smarthome.client.data.api.scripts.ScriptGraphRepo
 import smarthome.client.data.api.scripts.ScriptsRepo
 import smarthome.client.data.api.scripts.SetupDependencyRepo
@@ -22,7 +21,6 @@ import smarthome.client.data.devices.mapper.DeviceDetailsToDeviceMapper
 import smarthome.client.data.devices.mapper.GeneralDeviceAndControllersInfoToGeneralDeviceInfoMapper
 import smarthome.client.data.retrofit.HomeServerUrlHolder
 import smarthome.client.data.retrofit.RetrofitFactory
-import smarthome.client.data.scripts.DependencyDetailsRepoImpl
 import smarthome.client.data.scripts.ScriptGraphRepoImpl
 import smarthome.client.data.scripts.ScriptsRepoImpl
 import smarthome.client.data.scripts.SetupDependencyRepoImpl
@@ -57,7 +55,6 @@ val data = module {
     //scripts
     singleBy<ScriptsRepo, ScriptsRepoImpl>()
     singleBy<ScriptGraphRepo, ScriptGraphRepoImpl>()
-    singleBy<DependencyDetailsRepo, DependencyDetailsRepoImpl>()
     singleBy<SetupDependencyRepo, SetupDependencyRepoImpl>()
     factory { ScriptDtoToScriptMapper() }
 }

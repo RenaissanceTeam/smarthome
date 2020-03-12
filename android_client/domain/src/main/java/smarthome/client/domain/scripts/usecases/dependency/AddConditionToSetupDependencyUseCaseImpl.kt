@@ -16,7 +16,7 @@ class AddConditionToSetupDependencyUseCaseImpl(
         repo.set(dependency.copy(
             conditions = dependency.conditions + getEmptyConditionsForBlockUseCase.execute(
                 scriptId = repo.getScriptId(),
-                blockId = dependency.dependency.startBlock
+                blockId = dependency.startBlock
             ).first()
         ))
     }

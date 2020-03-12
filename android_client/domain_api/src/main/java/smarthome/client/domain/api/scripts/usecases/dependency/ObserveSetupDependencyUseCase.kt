@@ -1,9 +1,8 @@
 package smarthome.client.domain.api.scripts.usecases.dependency
 
 import io.reactivex.Observable
-import smarthome.client.entity.script.dependency.DependencyDetails
-import smarthome.client.util.DataStatus
+import smarthome.client.entity.script.dependency.Dependency
 
 interface ObserveSetupDependencyUseCase {
-    fun execute(): Observable<DependencyDetails>
+    fun execute(): Observable<Dependency>
 }

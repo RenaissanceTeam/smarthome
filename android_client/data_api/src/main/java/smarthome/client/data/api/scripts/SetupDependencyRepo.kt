@@ -1,13 +1,12 @@
 package smarthome.client.data.api.scripts
 
 import io.reactivex.Observable
-import smarthome.client.entity.script.dependency.DependencyDetails
-import smarthome.client.entity.script.dependency.DependencyId
+import smarthome.client.entity.script.dependency.Dependency
 
 interface SetupDependencyRepo {
-    fun get(): DependencyDetails
-    fun set(dependencyDetails: DependencyDetails)
+    fun get(): Dependency
+    fun set(dependency: Dependency)
     fun setScript(scriptId: Long)
     fun getScriptId(): Long
-    fun observe(): Observable<DependencyDetails>
+    fun observe(): Observable<Dependency>
 }

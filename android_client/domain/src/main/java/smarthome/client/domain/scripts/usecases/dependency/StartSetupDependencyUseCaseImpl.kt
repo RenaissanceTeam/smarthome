@@ -5,58 +5,58 @@ import smarthome.client.domain.api.scripts.exceptions.NoActionsForBlock
 import smarthome.client.domain.api.scripts.exceptions.NoConditionsForBlock
 import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForBlockUseCase
-import smarthome.client.domain.api.scripts.usecases.GetDependencyDetailsUseCase
+import smarthome.client.domain.api.scripts.usecases.GetDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
-import smarthome.client.entity.script.dependency.DependencyDetails
+import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyId
 
 class StartSetupDependencyUseCaseImpl(
     private val repo: SetupDependencyRepo,
     private val createEmptyConditionsForBlockUseCase: CreateEmptyConditionsForBlockUseCase,
     private val createEmptyActionForBlockUseCase: CreateEmptyActionForBlockUseCase,
-    private val getDependencyDetailsUseCase: GetDependencyDetailsUseCase
+    private val getDependencyUseCase: GetDependencyUseCase
 ) : StartSetupDependencyUseCase {
-    override fun execute(scriptId: Long, dependencyId: DependencyId): DependencyDetails {
+    override fun execute(scriptId: Long, dependencyId: DependencyId): Dependency {
         repo.setScript(scriptId)
-        return getDependencyDetailsUseCase.execute(scriptId, dependencyId)
-            .let { details -> addConditionsIfEmpty(details, scriptId) }
-            .let { details -> addActionsIfEmpty(details, scriptId) }
+        return getDependencyUseCase.execute(scriptId, dependencyId)
+            .let { dependency -> addConditionsIfEmpty(dependency, scriptId) }
+            .let { dependency -> addActionsIfEmpty(dependency, scriptId) }
             .apply { repo.set(this) }
     }
     
-    private fun addConditionsIfEmpty(details: DependencyDetails, scriptId: Long): DependencyDetails {
-        return when (details.conditions.isEmpty()) {
-            true -> withFirstEmptyCondition(scriptId, details)
-            false -> details
+    private fun addConditionsIfEmpty(dependency: Dependency, scriptId: Long): Dependency {
+        return when (dependency.conditions.isEmpty()) {
+            true -> withFirstEmptyCondition(scriptId, dependency)
+            false -> dependency
         }
     }
     
-    private fun addActionsIfEmpty(details: DependencyDetails, scriptId: Long): DependencyDetails {
-        return when (details.actions.isEmpty()) {
-            true -> withFirstEmptyAction(scriptId, details)
-            false -> details
+    private fun addActionsIfEmpty(dependency: Dependency, scriptId: Long): Dependency {
+        return when (dependency.actions.isEmpty()) {
+            true -> withFirstEmptyAction(scriptId, dependency)
+            false -> dependency
         }
     }
     
-    private fun withFirstEmptyCondition(scriptId: Long, details: DependencyDetails): DependencyDetails {
+    private fun withFirstEmptyCondition(scriptId: Long, dependency: Dependency): Dependency {
         val allConditions = createEmptyConditionsForBlockUseCase
-            .execute(scriptId, details.dependency.startBlock)
+            .execute(scriptId, dependency.startBlock)
             .also {
                 if (it.isEmpty()) {
-                    throw NoConditionsForBlock(details.dependency.startBlock, "Can't start setup.")
+                    throw NoConditionsForBlock(dependency.startBlock, "Can't start setup.")
                 }
             }
-        return details.copy(conditions = listOf(allConditions.first()))
+        return dependency.copy(conditions = listOf(allConditions.first()))
     }
     
-    private fun withFirstEmptyAction(scriptId: Long, details: DependencyDetails): DependencyDetails {
+    private fun withFirstEmptyAction(scriptId: Long, dependency: Dependency): Dependency {
         val allActions = createEmptyActionForBlockUseCase
-            .execute(scriptId, details.dependency.endBlock)
+            .execute(scriptId, dependency.endBlock)
             .also {
                 if (it.isEmpty()) {
-                    throw NoActionsForBlock(details.dependency.endBlock, "Can't start setup.")
+                    throw NoActionsForBlock(dependency.endBlock, "Can't start setup.")
                 }
             }
-        return details.copy(actions = listOf(allActions.first()))
+        return dependency.copy(actions = listOf(allActions.first()))
     }
 }
