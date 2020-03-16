@@ -8,6 +8,7 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.scripts_setup_dependency.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
@@ -25,8 +26,10 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
     private val toolbarController: ToolbarController by inject()
     private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
-    private val conditionsController: ContainersController<Condition> by inject(named(CONDITION_CONTAINER_CONTROLLER))
-    private val actionsController: ContainersController<Action> by inject(named(ACTION_CONTAINER_CONTROLLER))
+    private val conditionsController: ContainersController<Condition>
+        by inject(named(CONDITION_CONTAINER_CONTROLLER)) { parametersOf(viewModel::onConditionScrolled) }
+    private val actionsController: ContainersController<Action>
+        by inject(named(ACTION_CONTAINER_CONTROLLER)) { parametersOf(viewModel::onActionScrolled) }
     
     override fun getLayout() = R.layout.scripts_setup_dependency
     

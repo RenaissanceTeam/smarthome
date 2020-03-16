@@ -1,8 +1,6 @@
 package smarthome.client.util
 
 import android.view.View
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -17,10 +15,21 @@ var View.visible
 }
 
 fun <T> List<T>.replace(newItem: T, predicate: (T) -> Boolean): List<T> {
-    val toRemove = find(predicate)
-    val index = indexOf(toRemove)
+    return replaceAt(indexOf(find(predicate)), newItem)
+}
+
+fun <T> List<T>.replaceAt(index: Int, newItem: T): List<T> {
     return subList(0, index) + listOf(newItem) + subList(index + 1, size)
 }
+
+fun <T> MutableList<T>.filterRemove(predicate: (T) -> Boolean) {
+    val each = iterator()
+    
+    while (each.hasNext()) {
+        if (predicate(each.next())) each.remove()
+    }
+}
+
 
 fun <T> List<T>.findAndModify(predicate: (T) -> Boolean, modify: (T) -> T): List<T> {
     val found = find(predicate) ?: return this
@@ -55,6 +64,10 @@ fun <T> List<T>.containsThat(predicate: (T) -> Boolean): Boolean {
 
 fun <T> List<T>.containsAny(list: List<T>): Boolean {
     return intersect(list).isNotEmpty()
+}
+
+fun <T> List<T>.containsNone(list: List<T>): Boolean {
+    return intersect(list).isEmpty()
 }
 
 inline fun <T, R> T.runInScope(scope: CoroutineScope, crossinline block: suspend T.() -> R): Job {

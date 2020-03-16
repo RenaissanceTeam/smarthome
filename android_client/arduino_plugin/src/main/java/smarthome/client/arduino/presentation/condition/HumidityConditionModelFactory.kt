@@ -5,7 +5,6 @@ import smarthome.client.arduino.entity.condition.HumidityConditionData
 import smarthome.client.domain.api.scripts.usecases.dependency.ChangeSetupDependencyConditionUseCase
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.scripts.addition.dependency.condition.ControllerConditionValueViewModel_
-import smarthome.client.util.log
 
 class HumidityConditionModelFactory(
     private val changeSetupDependencyConditionUseCase: ChangeSetupDependencyConditionUseCase
@@ -19,18 +18,17 @@ class HumidityConditionModelFactory(
             title("Humidity")
             sign(data.sign)
             value(data.value)
-            
-            onSignChanged {
-                copyConditionWith(condition, data.copy(sign = it))
+            onSignChanged { newSign ->
+                changeSetupDependencyConditionUseCase.execute(condition.id) {
+                    it.copy(data = (it.data as HumidityConditionData).copy(sign = newSign))
+                }
             }
-            
-            onValueChanged {
-                copyConditionWith(condition, data.copy(value = it))
+    
+            onValueChanged { newValue ->
+                changeSetupDependencyConditionUseCase.execute(condition.id) {
+                    it.copy(data = (it.data as HumidityConditionData).copy(value = newValue))
+                }
             }
         }
-    }
-    
-    private fun copyConditionWith(condition: Condition, data: HumidityConditionData) {
-        changeSetupDependencyConditionUseCase.execute(condition.copy(data = data))
     }
 }

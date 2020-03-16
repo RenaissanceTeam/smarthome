@@ -5,7 +5,8 @@ import smarthome.client.entity.script.dependency.DependencyUnit
 import smarthome.client.presentation.scripts.addition.dependency.SetupDependencyViewModel
 
 class ContainersController<T : DependencyUnit>(
-    private val modelResolver: DependencyUnitModelResolver<T>
+    private val modelResolver: DependencyUnitModelResolver<T>,
+    private val onScrolled: (ContainerId, T) -> Unit
 ) : Typed2EpoxyController<List<ContainerState<T>>, SetupDependencyViewModel>() {
     
     override fun buildModels(data: List<ContainerState<T>>, viewModel: SetupDependencyViewModel) {
@@ -16,6 +17,7 @@ class ContainersController<T : DependencyUnit>(
                 selectionMode(state.selectionMode)
                 select(state.isSelected)
                 onSelect { viewModel.onSelect(state.id, it) }
+                onScrolled { onScrolled(state.id, state.allData[it]) }
             }
         }
     }

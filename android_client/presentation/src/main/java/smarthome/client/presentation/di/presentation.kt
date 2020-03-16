@@ -8,6 +8,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
+import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForDependencyUseCase
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.ACTION_CONTAINER_CONTROLLER
@@ -23,6 +25,7 @@ import smarthome.client.presentation.main.toolbar.ToolbarHolder
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.dependency.ContainersViewModel
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainersController
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.*
@@ -77,12 +80,14 @@ val presentation = module {
         DependencyEventsHandlerImpl(movingDependency = movingDependency)
     }
     factory { AddBlockHelper(get()) }
-    factory(named(CONDITION_CONTAINER_CONTROLLER)) { ContainersController(get<ConditionModelResolver>()) }
-    factory(named(ACTION_CONTAINER_CONTROLLER)) { ContainersController(get<ActionModelResolver>()) }
-    factory(named(CONDITION_CONTAINER_VIEWMODEL)) { ContainersViewModel<Condition>() }
-    factory(named(ACTION_CONTAINER_VIEWMODEL)) { ContainersViewModel<Action>() }
-    
-    
+    factory(named(CONDITION_CONTAINER_CONTROLLER)) { (onScroll: (ContainerId, Condition) -> Unit) ->
+        ContainersController(get<ConditionModelResolver>(), onScroll)
+    }
+    factory(named(ACTION_CONTAINER_CONTROLLER)) { (onScroll: (ContainerId, Action) -> Unit) ->
+        ContainersController(get<ActionModelResolver>(), onScroll)
+    }
+    factory(named(CONDITION_CONTAINER_VIEWMODEL)) { ContainersViewModel(get<CreateEmptyConditionsForDependencyUseCase>()::execute) }
+    factory(named(ACTION_CONTAINER_VIEWMODEL)) { ContainersViewModel(get<CreateEmptyActionForDependencyUseCase>()::execute) }
     
     factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactoryImpl() }
 }

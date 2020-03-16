@@ -4,7 +4,6 @@ import com.airbnb.epoxy.EpoxyModel
 import smarthome.client.arduino.entity.action.OnOffActionData
 import smarthome.client.domain.api.scripts.usecases.dependency.ChangeSetupDependencyActionUseCase
 import smarthome.client.entity.script.dependency.action.Action
-import smarthome.client.util.log
 
 class OnOffModelFactory(
     private val changeSetupDependencyActionUseCase: ChangeSetupDependencyActionUseCase
@@ -15,13 +14,11 @@ class OnOffModelFactory(
         return OnOffActionViewModel_().apply {
             id(action.id.hashCode())
             state(data.value)
-            onChangeState {
-                copyActionWith(action, data.copy(value = it))
+            onChangeState { newValue ->
+                changeSetupDependencyActionUseCase.execute(action.id) {
+                    it.copy(data = (it.data as OnOffActionData).copy(value = newValue))
+                }
             }
         }
-    }
-    
-    private fun copyActionWith(action: Action, data: OnOffActionData) {
-        changeSetupDependencyActionUseCase.execute(action.copy(data = data))
     }
 }

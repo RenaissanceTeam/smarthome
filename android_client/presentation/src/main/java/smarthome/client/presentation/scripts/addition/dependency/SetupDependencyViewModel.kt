@@ -14,9 +14,11 @@ import smarthome.client.presentation.ACTION_CONTAINER_VIEWMODEL
 import smarthome.client.presentation.CONDITION_CONTAINER_VIEWMODEL
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
+import smarthome.client.presentation.scripts.addition.dependency.container.ContainerState
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.presentation.util.extensions.updateWith
+import smarthome.client.util.replaceAt
 import smarthome.client.util.truncate
 
 class SetupDependencyViewModel: KoinViewModel() {
@@ -31,14 +33,15 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val getBlockNameUseCase: GetBlockNameUseCase by inject()
     private val addConditionToSetupDependencyUseCase: AddConditionToSetupDependencyUseCase by inject()
     private val removeConditionsFromSetupDependencyUseCase: RemoveConditionsFromSetupDependencyUseCase by inject()
+    private val updateSetupDependencyUseCase: UpdateSetupDependencyUseCase by inject()
     
     val close = NavigationLiveData()
     
     private val conditionsViewModel: ContainersViewModel<Condition> by inject(named(CONDITION_CONTAINER_VIEWMODEL))
     private val actionsViewModel: ContainersViewModel<Action> by inject(named(ACTION_CONTAINER_VIEWMODEL))
     
-    val conditionContainers = conditionsViewModel.containers
-    val actionContainers = actionsViewModel.containers
+    val conditionContainers = conditionsViewModel.containersLiveData
+    val actionContainers = actionsViewModel.containersLiveData
     val toolbarTitle = MutableLiveData<String>()
     val selectionMode = MutableLiveData(DEFAULT_SELECTION_MODE)
     
@@ -94,11 +97,11 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     private fun setSelection(mode: Boolean) {
         selectionMode.updateWith { mode }
-        
-        conditionContainers.updateWith { conditions ->
-            conditions.orEmpty().map { condition ->
-                condition.copy(
-                    isSelected = if (mode) condition.isSelected else false,
+    
+        conditionContainers.updateWith { containers ->
+            containers.orEmpty().map { container ->
+                container.copy(
+                    isSelected = if (mode) container.isSelected else false,
                     selectionMode = mode
                 )
             }
@@ -138,6 +141,25 @@ class SetupDependencyViewModel: KoinViewModel() {
     
         removeConditionsFromSetupDependencyUseCase.execute(*selectedConditions)
         cancelSelection()
+    }
+    
+    fun onConditionScrolled(containerId: ContainerId, condition: Condition) {
+        val position = indexOfContainer(conditionContainers.value, containerId)
+        val setupDependency = getSetupDependencyUseCase.execute()
+        val updatedConditions = setupDependency.conditions.replaceAt(position, condition)
+        updateSetupDependencyUseCase.execute(setupDependency.copy(conditions = updatedConditions))
+    }
+    
+    fun onActionScrolled(containerId: ContainerId, action: Action) {
+        val position = indexOfContainer(actionContainers.value, containerId)
+        val setupDependency = getSetupDependencyUseCase.execute()
+        val updatedActions = setupDependency.actions.replaceAt(position, action)
+        updateSetupDependencyUseCase.execute(setupDependency.copy(actions = updatedActions))
+    }
+    
+    private fun indexOfContainer(containers: List<ContainerState<*>>?,
+                                 containerId: ContainerId): Int {
+        return containers.orEmpty().indexOfFirst { it.id == containerId }
     }
     
     companion object {

@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import smarthome.client.data.api.scripts.SetupDependencyRepo
 import smarthome.client.entity.script.dependency.Dependency
+import smarthome.client.util.log
 
 class SetupDependencyRepoImpl : SetupDependencyRepo {
     private var dependency: Dependency? = null

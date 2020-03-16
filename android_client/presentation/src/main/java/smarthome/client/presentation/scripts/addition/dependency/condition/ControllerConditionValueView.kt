@@ -35,8 +35,9 @@ class ControllerConditionValueView @JvmOverloads constructor(
     
     @AfterPropsSet
     fun onPropsReady() {
+        signs.setOnCheckedChangeListener(null)
         value_input.removeTextChangedListeners()
-    
+
         bindTitleText()
         bindValueText()
         bindSign()
@@ -46,7 +47,7 @@ class ControllerConditionValueView @JvmOverloads constructor(
     }
     
     private fun bindTitleText() {
-        if (title != title_value.text) title_value.text = title.orEmpty()
+        if (title != title_value.text) title_value.text = "${title.orEmpty()} focus=${hasFocus()}, $sign, $value"
     }
     
     private fun bindSign() {
@@ -65,6 +66,8 @@ class ControllerConditionValueView @JvmOverloads constructor(
     }
     
     private fun bindValueText() {
+        if (hasFocus()) return
+        
         value_input.text = value.orEmpty()
     }
     
