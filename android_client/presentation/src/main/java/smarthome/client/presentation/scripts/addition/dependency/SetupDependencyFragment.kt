@@ -110,7 +110,7 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     private fun inflateToolbarSaveMenu() {
         toolbarController.setMenu(R.menu.save) { id ->
             if (id != R.id.save) return@setMenu
-            TODO()
+            viewModel.onSave()
         }
     }
     

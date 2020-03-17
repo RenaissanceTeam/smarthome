@@ -8,6 +8,7 @@ import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.util.findAndModify
+import smarthome.client.util.onNextModified
 import smarthome.client.util.withRemoved
 
 class ScriptGraphRepoImpl : ScriptGraphRepo {
@@ -15,7 +16,7 @@ class ScriptGraphRepoImpl : ScriptGraphRepo {
     private val dependencies = BehaviorSubject.create<List<Dependency>>()
     
     override fun addBlock(scriptId: Long, block: Block): Block {
-        blocks.onNext(blocks.value.orEmpty() + block)
+        blocks.onNextModified { it + block }
         return block
     }
     
@@ -28,20 +29,24 @@ class ScriptGraphRepoImpl : ScriptGraphRepo {
     }
     
     override fun replaceBlock(scriptId: Long, block: Block): Block {
-        blocks.onNext(
-            blocks.value
-                .orEmpty()
-                .findAndModify({ it.id == block.id }, { block })
-        )
+        blocks.onNextModified { current ->
+            current.findAndModify({ it.id == block.id }, { block })
+        }
         return block
     }
     
     override fun removeBlock(scriptId: Long, blockId: BlockId) {
-        blocks.onNext(blocks.value.orEmpty().withRemoved { it.id == blockId })
+        blocks.onNextModified { it.withRemoved { it.id == blockId } }
     }
     
     override fun addDependency(scriptId: Long, dependency: Dependency) {
-        dependencies.onNext(dependencies.value.orEmpty() + dependency)
+        dependencies.onNextModified { it + dependency }
+    }
+    
+    override fun updateDependency(scriptId: Long, dependency: Dependency) {
+        dependencies.onNextModified { current ->
+            current.findAndModify({ it.id == dependency.id }, { dependency })
+        }
     }
     
     override fun getDependency(scriptId: Long, dependencyId: DependencyId): Dependency? {
@@ -57,6 +62,6 @@ class ScriptGraphRepoImpl : ScriptGraphRepo {
     }
     
     override fun removeDependency(scriptId: Long, dependencyId: DependencyId) {
-        dependencies.onNext(dependencies.value.orEmpty().withRemoved { it.id == dependencyId })
+        dependencies.onNextModified { it.withRemoved { it.id == dependencyId } }
     }
 }

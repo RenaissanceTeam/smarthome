@@ -1,6 +1,7 @@
 package smarthome.client.util
 
 import android.view.View
+import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -85,6 +86,10 @@ inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope,
                                           crossinline block: suspend T.() -> R
                                           ): Job {
     return scope.launch { runCatching { block() }.onFailure(onFailure) }
+}
+
+fun <T> BehaviorSubject<List<T>>.onNextModified(modify: (List<T>) -> List<T>) {
+    onNext(modify(value.orEmpty()))
 }
 
 fun View.show() {

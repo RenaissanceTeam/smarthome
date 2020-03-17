@@ -65,7 +65,6 @@ val domain = module {
     factoryBy<CreateEmptyConditionsForDependencyUseCase, CreateEmptyConditionsForDependencyUseCaseImpl>()
     factoryBy<GetDependencyUseCase, GetDependencyUseCaseImpl>()
     factoryBy<CreateEmptyActionForDependencyUseCase, CreateEmptyActionForDependencyUseCaseImpl>()
-    factoryBy<UpdateDependencyDetailsUseCase, UpdateDependencyDetailsUseCaseImpl>()
     factoryBy<GetSetupDependencyUseCase, GetSetupDependencyUseCaseImpl>()
     factoryBy<StartSetupDependencyUseCase, StartSetupDependencyUseCaseImpl>()
     factoryBy<ChangeSetupDependencyConditionUseCase, ChangeSetupDependencyConditionUseCaseImpl>()
@@ -76,6 +75,7 @@ val domain = module {
     factoryBy<AddConditionToSetupDependencyUseCase, AddConditionToSetupDependencyUseCaseImpl>()
     factoryBy<RemoveConditionsFromSetupDependencyUseCase, RemoveConditionsFromSetupDependencyUseCaseImpl>()
     factoryBy<UpdateSetupDependencyUseCase, UpdateSetupDependencyUseCaseImpl>()
+    factoryBy<SaveSetupDependencyUseCase, SaveSetupDependencyUseCaseImpl>()
     
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()

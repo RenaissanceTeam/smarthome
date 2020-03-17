@@ -34,6 +34,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val addConditionToSetupDependencyUseCase: AddConditionToSetupDependencyUseCase by inject()
     private val removeConditionsFromSetupDependencyUseCase: RemoveConditionsFromSetupDependencyUseCase by inject()
     private val updateSetupDependencyUseCase: UpdateSetupDependencyUseCase by inject()
+    private val saveSetupDependencyUseCase: SaveSetupDependencyUseCase by inject()
     
     val close = NavigationLiveData()
     
@@ -48,12 +49,13 @@ class SetupDependencyViewModel: KoinViewModel() {
     var isNew: Boolean = false
         private set
     
-    fun onSave(conditions: List<Condition>, action: Action?) {
-    
+    fun onSave() {
+        saveSetupDependencyUseCase.execute()
+        close.trigger()
     }
     
     fun onCancel() {
-        removeDependency.execute(setupScriptViewModel.scriptId, dependencyId)
+        if (isNew) removeDependency.execute(scriptId, dependencyId)
         close.trigger()
     }
     
