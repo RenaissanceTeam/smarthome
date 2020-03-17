@@ -97,15 +97,8 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     private fun setSelection(mode: Boolean) {
         selectionMode.updateWith { mode }
-    
-        conditionContainers.updateWith { containers ->
-            containers.orEmpty().map { container ->
-                container.copy(
-                    isSelected = if (mode) container.isSelected else false,
-                    selectionMode = mode
-                )
-            }
-        }
+        
+        conditionsViewModel.setSelectionMode(mode)
         
         when (mode) {
             false -> updateSetupToolbarTitle()
@@ -146,14 +139,16 @@ class SetupDependencyViewModel: KoinViewModel() {
     fun onConditionScrolled(containerId: ContainerId, condition: Condition) {
         val position = indexOfContainer(conditionContainers.value, containerId)
         val setupDependency = getSetupDependencyUseCase.execute()
-        val updatedConditions = setupDependency.conditions.replaceAt(position, condition)
+        val nowSelected = conditionsViewModel.getUnit(containerId, condition.id) ?: return
+        val updatedConditions = setupDependency.conditions.replaceAt(position, nowSelected)
         updateSetupDependencyUseCase.execute(setupDependency.copy(conditions = updatedConditions))
     }
     
     fun onActionScrolled(containerId: ContainerId, action: Action) {
         val position = indexOfContainer(actionContainers.value, containerId)
         val setupDependency = getSetupDependencyUseCase.execute()
-        val updatedActions = setupDependency.actions.replaceAt(position, action)
+        val nowSelected = actionsViewModel.getUnit(containerId, action.id) ?: return
+        val updatedActions = setupDependency.actions.replaceAt(position, nowSelected)
         updateSetupDependencyUseCase.execute(setupDependency.copy(actions = updatedActions))
     }
     

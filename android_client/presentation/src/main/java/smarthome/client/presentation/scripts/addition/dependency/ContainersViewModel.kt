@@ -2,15 +2,13 @@ package smarthome.client.presentation.scripts.addition.dependency
 
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.KoinComponent
-import org.koin.core.inject
-import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyUnit
+import smarthome.client.entity.script.dependency.condition.DependencyUnitId
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerState
 import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.containsThat
-import smarthome.client.util.findAndModify
 
 class ContainersViewModel<T : DependencyUnit>(
     emptyUnitsCreator: (Long, Dependency) -> List<T>
@@ -27,14 +25,21 @@ class ContainersViewModel<T : DependencyUnit>(
     
     fun onSelect(id: ContainerId, isSelected: Boolean) {
         containersLiveData.updateWith {
-            it.orEmpty().findAndModify(
-                { it.id == id },
-                { it.copy(isSelected = isSelected) }
-            )
+            containersState.apply { select(id, isSelected) }.asList()
         }
     }
     
     fun contains(id: ContainerId): Boolean {
         return containersState.asList().containsThat { it.id == id }
+    }
+    
+    fun getUnit(containerId: ContainerId, unitId: DependencyUnitId): T? {
+        return containersState.asList().find { it.id == containerId }?.allData?.find { it.id == unitId }
+    }
+    
+    fun setSelectionMode(mode: Boolean) {
+        containersLiveData.updateWith {
+            containersState.apply { selectionMode(mode) }.asList()
+        }
     }
 }

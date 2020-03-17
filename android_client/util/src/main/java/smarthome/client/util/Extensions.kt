@@ -38,6 +38,12 @@ fun <T> List<T>.findAndModify(predicate: (T) -> Boolean, modify: (T) -> T): List
     return replace(modified, predicate)
 }
 
+fun <T> MutableList<T>.findAndReplace(predicate: (T) -> Boolean, replaceWith: (T) -> T) {
+    val position = indexOf(find(predicate))
+    val before = this[position]
+    this[position] = replaceWith(before)
+}
+
 fun <T> List<T>.withRemoved(predicate: (T) -> Boolean): List<T> {
     val toRemove = find(predicate)
     val index = indexOf(toRemove).takeIf { it != -1 } ?: return this

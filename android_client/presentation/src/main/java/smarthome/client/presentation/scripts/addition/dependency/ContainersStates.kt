@@ -69,4 +69,23 @@ class ContainersStates<T : DependencyUnit>(
             currentData = unit
         )
     }
+    
+    fun select(id: ContainerId, selected: Boolean) {
+        states.findAndReplace(
+            { it.id == id },
+            { it.copy(isSelected = selected) }
+        )
+    }
+    
+    fun selectionMode(mode: Boolean) {
+        states.map { container ->
+            container.copy(
+                isSelected = if (mode) container.isSelected else false,
+                selectionMode = mode
+            )
+        }.apply {
+            states.clear()
+            states.addAll(this)
+        }
+    }
 }
