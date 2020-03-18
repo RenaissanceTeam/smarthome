@@ -8,13 +8,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.snakydesign.livedataextensions.distinct
 import kotlinx.android.synthetic.main.scripts_controllers_to_add.view.*
+import org.koin.android.scope.currentScope
+import org.koin.android.scope.lifecycleScope
 import org.koin.core.KoinComponent
+import org.koin.core.scope.Scope
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DevicesController
 import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
-import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 
@@ -24,10 +25,11 @@ class ControllersHubView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
     
-    private val viewModel = ControllersHubViewModel() // todo scoped inject
+    lateinit var scope: Scope
+    
+    private val viewModel by lazy { scope.get<ControllersHubViewModel>() }
     private val itemsController = DevicesController()
     private var onOpenMenuCallback: () -> Unit = {}
-    
     
     init {
         inflate(R.layout.scripts_controllers_to_add)
@@ -41,7 +43,7 @@ class ControllersHubView @JvmOverloads constructor(
         
         lifecycleOwner?.let { lifecycleOwner ->
             lifecycleOwner.lifecycle.addObserver(viewModel)
-            
+    
             setupSlideableMenu(lifecycleOwner)
     
             viewModel.devices.observe(lifecycleOwner) { itemsController.setData(it, viewModel) }

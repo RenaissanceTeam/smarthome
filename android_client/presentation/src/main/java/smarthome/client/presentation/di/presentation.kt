@@ -24,9 +24,11 @@ import smarthome.client.presentation.main.toolbar.ToolbarControllerImpl
 import smarthome.client.presentation.main.toolbar.ToolbarHolder
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
+import smarthome.client.presentation.scripts.addition.controllers.ControllersHubViewModel
 import smarthome.client.presentation.scripts.addition.dependency.ContainersViewModel
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainersController
+import smarthome.client.presentation.scripts.addition.graph.ScriptGraphFragment
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.*
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
@@ -90,4 +92,8 @@ val presentation = module {
     factory(named(ACTION_CONTAINER_VIEWMODEL)) { ContainersViewModel(get<CreateEmptyActionForDependencyUseCase>()::execute) }
     
     factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactoryImpl() }
+    
+    scope<ScriptGraphFragment> {
+        scoped { ControllersHubViewModel() }
+    }
 }

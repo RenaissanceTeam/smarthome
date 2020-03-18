@@ -15,6 +15,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.DataStatus
+import smarthome.client.util.log
 
 class ControllersHubViewModel : KoinViewModel() {
     
@@ -67,6 +68,7 @@ class ControllersHubViewModel : KoinViewModel() {
     }
     
     private fun fetchDevices() {
+        log("fetch devices $this")
         getGeneralDeviceInfo.runInScopeCatchingAny(viewModelScope) {
             val devices = execute()
             devices.flatMap { it.controllers }.forEach(::startObservingController)
@@ -100,9 +102,7 @@ class ControllersHubViewModel : KoinViewModel() {
         ).also(graphEventBus::addEvent)
     }
     
-    fun shouldShow(id: Long): Boolean {
-        return hiddenControllers[id]?.not() ?: DEFAULT_SHOW
-    }
+    fun shouldShow(id: Long) = hiddenControllers[id]?.not() ?: DEFAULT_SHOW
     
     private fun triggerDevicesRebuildModels() {
         devices.value = devices.value ?: return

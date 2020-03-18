@@ -40,8 +40,6 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         viewModel.setDependencyId(navArgs.dependencyId)
         viewModel.setFlowViewModel(setupScriptViewModel)
         
-        
-        
         viewModel.close.onNavigate(this) {
             findNavController().popBackStack()
         }

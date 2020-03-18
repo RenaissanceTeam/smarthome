@@ -9,7 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_script_graph.*
+import kotlinx.android.synthetic.main.fragment_script_graph.view.*
 import org.koin.android.ext.android.inject
+import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.R
@@ -23,7 +25,9 @@ class ScriptGraphFragment : Fragment() {
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_script_graph, container, false)
+        return inflater.inflate(R.layout.fragment_script_graph, container, false).apply {
+            this.add_controllers.scope = lifecycleScope
+        }
     }
     
     override fun onActivityCreated(savedInstanceState: Bundle?) {
