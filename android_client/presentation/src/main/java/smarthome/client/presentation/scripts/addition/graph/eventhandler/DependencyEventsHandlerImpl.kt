@@ -9,7 +9,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.dependency.DE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
-import smarthome.client.util.log
+import smarthome.client.presentation.util.extensions.updateWith
 
 class DependencyEventsHandlerImpl(
     val movingDependency: MutableLiveData<MovingDependency>
@@ -32,20 +32,15 @@ class DependencyEventsHandlerImpl(
     }
     
     private fun onEndDependency(event: DependencyEvent) {
-        movingDependency.value?.apply {
-            movingDependency.value = copy(
-                status = DROPPED,
-                rawEndPosition = event.rawEndPosition
-            )
+        movingDependency.updateWith {
+            it?.copy(status = DROPPED, rawEndPosition = event.rawEndPosition)
         }
+    
     }
     
     private fun moveDependency(event: DependencyEvent) {
-        movingDependency.value?.apply {
-            movingDependency.value = copy(
-                status = MOVING,
-                rawEndPosition = event.rawEndPosition
-            )
+        movingDependency.updateWith {
+            it?.copy(status = MOVING, rawEndPosition = event.rawEndPosition)
         }
     }
 }

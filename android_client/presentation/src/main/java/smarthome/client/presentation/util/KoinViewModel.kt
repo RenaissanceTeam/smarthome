@@ -11,7 +11,6 @@ abstract class KoinViewModel : ViewModel(), KoinComponent, LifecycleObserver {
     
     override fun onCleared() {
         super.onCleared()
-        log("on clear $this")
         disposable.dispose()
     }
 }

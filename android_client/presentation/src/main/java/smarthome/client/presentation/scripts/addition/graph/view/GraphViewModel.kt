@@ -1,6 +1,8 @@
 package smarthome.client.presentation.scripts.addition.graph.view
 
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.OnLifecycleEvent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 import smarthome.client.domain.api.scripts.usecases.AddDependencyUseCase
@@ -31,7 +33,6 @@ import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.Position
 import smarthome.client.util.findAndModify
-import smarthome.client.util.log
 
 class GraphViewModel : KoinViewModel() {
     private val eventBus: GraphEventBus by inject()
@@ -41,12 +42,8 @@ class GraphViewModel : KoinViewModel() {
     private val blockToNewGraphBlockMapper: BlockToNewGraphBlockStateMapper by inject()
     private val dependencyToDependencyStateMapper: DependencyToDependencyStateMapper by inject()
     private val addDependencyUseCase: AddDependencyUseCase by inject()
-    private val dragBlockHandler: DragBlockEventsHandler by inject {
-        parametersOf(blocks)
-    }
-    private val dependencyEventsHandler: DependencyEventsHandler by inject {
-        parametersOf(movingDependency)
-    }
+    private val dragBlockHandler: DragBlockEventsHandler by inject { parametersOf(blocks) }
+    private val dependencyEventsHandler: DependencyEventsHandler by inject { parametersOf(movingDependency) }
     
     val scriptId = 1L // TODO
     val movingDependency = MutableLiveData<MovingDependency>()
@@ -54,7 +51,6 @@ class GraphViewModel : KoinViewModel() {
     val dependencies = MutableLiveData<List<DependencyState>>(emptyList())
     
     init {
-        log("create graph vm")
         disposable.add(eventBus.observe()
             .subscribe {
                 if (it is GraphDragEvent) dragBlockHandler.handle(it)

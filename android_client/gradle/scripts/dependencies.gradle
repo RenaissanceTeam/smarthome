@@ -61,6 +61,7 @@ ext {
             fab                      : 'com.github.clans:fab:1.6.4',
             logger                   : 'com.orhanobut:logger:2.2.0',
             pp                       : "com.tylerthrailkill.helpers:pretty-print:2.0.2",
+            rxView                   : 'com.jakewharton.rxbinding3:rxbinding:3.1.0',
 
             // modules
             presentation             : project(":presentation"),

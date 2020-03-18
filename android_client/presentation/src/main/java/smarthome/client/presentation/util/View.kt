@@ -2,14 +2,19 @@ package smarthome.client.presentation.util
 
 import android.app.Activity
 import android.content.ContextWrapper
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import com.jakewharton.rxbinding3.view.touches
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import smarthome.client.util.Position
+import smarthome.client.util.log
 
 fun Fragment.hideSoftKeyboard() {
     val activity = activity ?: return
@@ -47,7 +52,12 @@ fun View.isYInside(toTest: Int): Boolean {
 }
 
 fun View.isPositionInside(position: Position): Boolean {
-    return isXInside(position.x) && isYInside(position.y)
+    return (isXInside(position.x) && isYInside(position.y)).apply {
+        if (this) {
+//            log("pos $position is inside. x=$x, y=$y, wi=$width, he=$height")
+            //pos Position(x=490, y=1411) is inside. x=205.0, y=1249.0, wi=710, he=310
+        }
+    }
 }
 
 val View.viewScope: CoroutineScope get() = GlobalScope

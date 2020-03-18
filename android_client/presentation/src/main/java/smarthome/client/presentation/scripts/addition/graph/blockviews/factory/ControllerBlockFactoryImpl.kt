@@ -11,8 +11,6 @@ class ControllerBlockFactoryImpl : GraphBlockFactory {
         if (blockState !is ControllerBlockState) throw IllegalStateException(
             "Block factory resolved incorrectly! Block for controller factory is $blockState")
         
-        return GraphControllerView(into.context).apply {
-            into.addView(this)
-        }
+        return GraphControllerView(into.context).apply { into.addView(this) }
     }
 }

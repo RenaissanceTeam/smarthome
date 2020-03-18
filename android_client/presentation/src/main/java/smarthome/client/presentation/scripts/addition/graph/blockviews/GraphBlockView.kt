@@ -82,26 +82,14 @@ abstract class GraphBlockView @JvmOverloads constructor(
     
     private fun bindBorderStatus(borderStatus: BorderStatus) {
         if (!borderStatus.isVisible) {
-            hideBorder()
+            showBorder(Color.TRANSPARENT)
             return
         }
         
         when (borderStatus.isFailure) {
-            true -> showRedBorder()
-            false -> showGreenBorder()
+            true -> showBorder(Color.RED)
+            false -> showBorder(Color.GREEN)
         }
-    }
-    
-    private fun hideBorder() {
-        showBorder(Color.TRANSPARENT)
-    }
-    
-    private fun showGreenBorder() {
-        showBorder(Color.GREEN)
-    }
-    
-    private fun showRedBorder() {
-        showBorder(Color.RED)
     }
     
     private fun showBorder(color: Int) {
@@ -116,7 +104,7 @@ abstract class GraphBlockView @JvmOverloads constructor(
             id = newId,
             view = this,
             eventPublisher = baseViewModel
-        ) { }
+        )
     }
     
     fun setData(blockState: BlockState) {
@@ -125,7 +113,6 @@ abstract class GraphBlockView @JvmOverloads constructor(
     }
     
     abstract fun onData(state: BlockState)
-    
     
     private fun changeProgress(isLoading: Boolean) {
         progress.visible = isLoading
@@ -136,6 +123,5 @@ abstract class GraphBlockView @JvmOverloads constructor(
         y = position.y.toFloat()
         
         debug_item.text = "$x, $y, width=$width, height=$height"
-        invalidate()
     }
 }

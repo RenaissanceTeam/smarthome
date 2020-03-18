@@ -23,6 +23,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDra
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.util.Position
+import smarthome.client.util.log
 import smarthome.client.util.toPosition
 import smarthome.client.util.visible
 
@@ -53,7 +54,7 @@ class GraphView @JvmOverloads constructor(
     private fun observeViewModel(lifecycleOwner: LifecycleOwner) {
         lifecycleOwner.lifecycle.addObserver(viewModel)
     
-        viewModel.blocks.distinctUntilChanged().observe(lifecycleOwner, this::bindBlocks)
+        viewModel.blocks.observe(lifecycleOwner, this::bindBlocks)
         viewModel.dependencies.observe(lifecycleOwner, this::bindDependencies)
         viewModel.movingDependency.observe(lifecycleOwner) { dependency ->
             when (dependency.status) {
@@ -62,12 +63,12 @@ class GraphView @JvmOverloads constructor(
                 }
                 STARTED -> {
                     movingDependencyView.visible = true
-                    setStartToCenterOfBlock(movingDependencyView, dependency.startBlock)
                     setMovingDependencyEnd(dependency)
+                    setStartToCenterOfBlock(movingDependencyView, dependency.startBlock)
                 }
                 MOVING -> {
-                    highlightBlockOnDependencyTip(dependency)
                     setMovingDependencyEnd(dependency)
+                    highlightBlockOnDependencyTip(dependency)
                 }
                 DROPPED -> {
                     addOrCancelDependency(dependency)
@@ -110,6 +111,7 @@ class GraphView @JvmOverloads constructor(
         if (dependency.rawEndPosition == null) return
         
         val movedTo = findBlockOnDependencyTip(dependency.rawEndPosition)
+        //log("tip on $movedTo on ${dependency.rawEndPosition}")
         
         when (movedTo == null) {
             true -> viewModel.dependencyTipNotOnAnyBlock()
@@ -138,13 +140,13 @@ class GraphView @JvmOverloads constructor(
     
     private fun retainOnlyPostedBlocks(blocks: List<BlockState>) {
         (blockViews.keys - blocks.map { it.block.id }).forEach {
-            (blockViews.remove(it) as? View)?.let(this::removeView)
+            (blockViews.remove(it)).let(this::removeView)
         }
     }
     
     private fun retainOnlyPostedDependencies(dependencies: List<DependencyState>) {
         (dependencyViews.keys - dependencies.map { it.dependency.id }).forEach {
-            (dependencyViews.remove(it) as? View)?.let(this::removeView)
+            (dependencyViews.remove(it)).let(this::removeView)
         }
     }
     

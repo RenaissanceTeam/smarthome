@@ -5,7 +5,6 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply from: "$rootDir/gradle/scripts/google-services-setup.gradle"
 apply from: "$rootDir/gradle/scripts/android-config.gradle"
 
-preBuild.dependsOn copyClientJson
 
 dependencies {
     implementation library.multidex
