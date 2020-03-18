@@ -135,6 +135,7 @@ class GraphControllerView @JvmOverloads constructor(
         x = position.x.toFloat()
         y = position.y.toFloat()
         
+        debug_item.text = "$x, $y, width=$width, height=$height"
         invalidate()
     }
 }

@@ -22,6 +22,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDra
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.util.Position
+import smarthome.client.util.log
 import smarthome.client.util.toPosition
 import smarthome.client.util.visible
 
@@ -132,6 +133,10 @@ class GraphView @JvmOverloads constructor(
             
             val tipPosition = convertRawToRelativePosition(rawPosition)
             block.contains(tipPosition)
+        }.also {
+            if (it != null) {
+                log("tip on ${it.key}")
+            }
         }
     }
     

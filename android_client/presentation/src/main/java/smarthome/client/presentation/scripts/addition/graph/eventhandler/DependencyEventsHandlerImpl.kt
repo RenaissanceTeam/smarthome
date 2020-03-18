@@ -9,6 +9,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.dependency.DE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_MOVE
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DEPENDENCY_START
 import smarthome.client.presentation.scripts.addition.graph.events.dependency.DependencyEvent
+import smarthome.client.util.log
 
 class DependencyEventsHandlerImpl(
     val movingDependency: MutableLiveData<MovingDependency>

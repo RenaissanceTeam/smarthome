@@ -8,6 +8,7 @@ import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.util.findAndModify
+import smarthome.client.util.log
 import smarthome.client.util.onNextModified
 import smarthome.client.util.withRemoved
 

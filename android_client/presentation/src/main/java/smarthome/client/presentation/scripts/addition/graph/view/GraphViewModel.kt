@@ -130,6 +130,7 @@ class GraphViewModel : KoinViewModel() {
     
     fun cancelCreatingDependency() {
         setMovingDependencyToIdle()
+        dependencyTipNotOnAnyBlock()
     }
     
     fun addDependency(id: DependencyId, from: BlockId, to: BlockId) {
