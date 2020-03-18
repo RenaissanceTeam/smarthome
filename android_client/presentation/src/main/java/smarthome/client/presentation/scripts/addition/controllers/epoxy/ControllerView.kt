@@ -10,11 +10,12 @@ import com.airbnb.epoxy.AfterPropsSet
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelView
 import com.airbnb.epoxy.TextProp
+import kotlinx.android.synthetic.main.scripts_block_item.view.*
 import kotlinx.android.synthetic.main.scripts_controller_item.view.*
 import smarthome.client.util.Position
 import smarthome.client.presentation.R
 import smarthome.client.presentation.util.extensions.position
-import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
+import smarthome.client.presentation.scripts.addition.graph.events.drag.BlockDragEvent
 import smarthome.client.presentation.util.CustomDragShadowBuilder
 import smarthome.client.presentation.util.inflate
 
@@ -27,7 +28,9 @@ class ControllerView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
     
     init {
-        inflate(R.layout.scripts_controller_item)
+        inflate(R.layout.scripts_block_item)
+        block_content.inflate(R.layout.scripts_controller_item)
+        
         val detector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onLongPress(pressEvent: MotionEvent) {
                 val info = onDragStarted?.invoke(pressEvent.position)
@@ -55,7 +58,7 @@ class ControllerView @JvmOverloads constructor(
     lateinit var name: CharSequence @TextProp set
     lateinit var state: CharSequence @TextProp set
     
-    var onDragStarted: ((Position) -> ControllerDragEvent)? = null @CallbackProp set
+    var onDragStarted: ((Position) -> BlockDragEvent)? = null @CallbackProp set
 
     @AfterPropsSet
     fun onPropsReady() {

@@ -1,4 +1,4 @@
-package smarthome.client.presentation.scripts.addition.graph.blockviews.controller
+package smarthome.client.presentation.scripts.addition.graph.blockviews
 
 import android.view.GestureDetector
 import android.view.HapticFeedbackConstants

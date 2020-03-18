@@ -67,7 +67,7 @@ class ControllersViewViewModelTest {
         
         assertThat(viewModel.shouldShow(id)).isEqualTo(true)
     
-        events.onNext(ControllerDragEvent(
+        events.onNext(BlockDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
                 id = ControllerBlockId(id),
@@ -85,7 +85,7 @@ class ControllersViewViewModelTest {
         val id = 1L
         
         assertThat(viewModel.shouldShow(id)).isEqualTo(true)
-        events.onNext(ControllerDragEvent(
+        events.onNext(BlockDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
                 id = ControllerBlockId(id),
@@ -102,7 +102,7 @@ class ControllersViewViewModelTest {
     @Test
     fun `when drop controller should push drop event to event bus with updated status and destination`() {
         val id = 1L
-        val info = ControllerDragEvent(
+        val info = BlockDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
                 id = ControllerBlockId(id),
@@ -116,7 +116,7 @@ class ControllersViewViewModelTest {
     
     
         verify(eventBus).addEvent(argThat {
-            this is ControllerDragEvent
+            this is BlockDragEvent
                 && this.dragInfo.to == CONTROLLERS_HUB
                 && this.dragInfo.status == DRAG_DROP
         })
@@ -126,7 +126,7 @@ class ControllersViewViewModelTest {
     fun `when controller is dropped to hub it should be observed`() {
         val id = 123L
         
-        events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
+        events.onNext(BlockDragEvent(id, dragInfo = CommonDragInfo(
             id = ControllerBlockId(id),
             status = DRAG_DROP,
             from = "ANYWHERE",
@@ -142,7 +142,7 @@ class ControllersViewViewModelTest {
         val id = 123L
         
         
-        events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
+        events.onNext(BlockDragEvent(id, dragInfo = CommonDragInfo(
             id = ControllerBlockId(id),
             status = DRAG_DROP,
             from = "ANYWHERE",
@@ -152,7 +152,7 @@ class ControllersViewViewModelTest {
         
         verify(observeControllerUseCase).execute(id)
         
-        events.onNext(ControllerDragEvent(id, dragInfo = CommonDragInfo(
+        events.onNext(BlockDragEvent(id, dragInfo = CommonDragInfo(
             id = ControllerBlockId(id),
             status = DRAG_DROP,
             from = CONTROLLERS_HUB,
@@ -169,7 +169,7 @@ class ControllersViewViewModelTest {
         viewModel.onDragStarted(id, position1_1)
         
         verify(eventBus).addEvent(argThat {
-            this is ControllerDragEvent
+            this is BlockDragEvent
                 && this.id == id
                 && this.dragInfo.status == DRAG_START
                 && this.dragInfo.from == CONTROLLERS_HUB

@@ -9,13 +9,11 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.scripts_controllers_to_add.view.*
-import org.koin.android.scope.currentScope
-import org.koin.android.scope.lifecycleScope
 import org.koin.core.KoinComponent
 import org.koin.core.scope.Scope
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DevicesController
-import smarthome.client.presentation.scripts.addition.graph.events.drag.ControllerDragEvent
+import smarthome.client.presentation.scripts.addition.graph.events.drag.BlockDragEvent
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 
@@ -70,7 +68,7 @@ class ControllersHubView @JvmOverloads constructor(
     
     private fun handleDroppedItemsAsCancelledDragAction() {
         setOnDragListener { _, event ->
-            val dragInfo = event.localState as? ControllerDragEvent ?: return@setOnDragListener false
+            val dragInfo = event.localState as? BlockDragEvent ?: return@setOnDragListener false
             
             when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> true

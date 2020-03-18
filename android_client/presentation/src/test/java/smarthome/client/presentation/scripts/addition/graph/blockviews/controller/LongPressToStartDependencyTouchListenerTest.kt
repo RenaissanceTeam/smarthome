@@ -8,6 +8,7 @@ import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import smarthome.client.entity.script.controller.ControllerBlockId
+import smarthome.client.presentation.scripts.addition.graph.blockviews.LongPressToStartDependencyTouchListener
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
