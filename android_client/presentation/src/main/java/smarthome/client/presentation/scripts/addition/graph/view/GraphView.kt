@@ -20,6 +20,7 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.dependenc
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.GraphBlockFactoryResolver
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
+import smarthome.client.presentation.util.DraggableHost
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.util.Position
@@ -31,7 +32,7 @@ class GraphView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
+) : FrameLayout(context, attrs, defStyleAttr), KoinComponent, DraggableHost {
     
     init {
         inflate(R.layout.scripts_graph)

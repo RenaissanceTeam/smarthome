@@ -25,7 +25,7 @@ abstract class GraphBlockView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr), Draggable {
     protected val baseViewModel = GraphBlockViewModel()
     val centerPosition: Position get() = (baseViewModel.position.value ?: emptyPosition) + center
     
@@ -42,20 +42,31 @@ abstract class GraphBlockView @JvmOverloads constructor(
     
     private fun handleStartDragging() {
         drag_handle.setOnTouchListener { _, event ->
-            if (event.action != MotionEvent.ACTION_DOWN) return@setOnTouchListener false
+            when (event.action) {
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_DOWN -> true
+                MotionEvent.ACTION_MOVE -> {
+                    val touchX = (drag_handle.x + event.x).toInt()
+                    val touchY = (drag_handle.y + event.y).toInt()
+                    baseViewModel.move(Position(touchX, touchY))
+                    true
+                }
+                else -> false
+            }
             
-            val touchX = (drag_handle.x + event.x).toInt()
-            val touchY = (drag_handle.y + event.y).toInt()
             
-            val info = baseViewModel.onDragStarted(Position(touchX, touchY))
-                ?: return@setOnTouchListener false
-            
-            
-            val shadowBuilder = CustomDragShadowBuilder(this@GraphBlockView, touchX, touchY)
-            
-            startDrag(null, shadowBuilder, info, 0)
+//            if (event.action != MotionEvent.ACTION_DOWN) return@setOnTouchListener false
+//
+//            val touchX = (drag_handle.x + event.x).toInt()
+//            val touchY = (drag_handle.y + event.y).toInt()
+//
+//            val info = baseViewModel.onDragStarted(Position(touchX, touchY))
+//                ?: return@setOnTouchListener false
+//
+//            true
         }
     }
+    
     
     fun contains(position: Position) = isPositionInside(position)
     

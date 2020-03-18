@@ -8,10 +8,7 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.state.Bor
 import smarthome.client.presentation.scripts.addition.graph.events.EventPublisher
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEvent
 import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
-import smarthome.client.presentation.scripts.addition.graph.events.drag.BlockDragEvent
-import smarthome.client.presentation.scripts.addition.graph.events.drag.CommonDragInfo
-import smarthome.client.presentation.scripts.addition.graph.events.drag.DRAG_START
-import smarthome.client.presentation.scripts.addition.graph.events.drag.GRAPH
+import smarthome.client.presentation.scripts.addition.graph.events.drag.*
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.util.Position
 
@@ -36,13 +33,22 @@ class GraphBlockViewModel : KoinViewModel(), EventPublisher {
         border.value = blockState.border
     }
     
-    fun onDragStarted(dragTouch: Position): BlockDragEvent? {
-        return blockId.value?.let { id ->
+    fun move(position: Position) {
+        publishDragEvent(position, DRAG_MOVE)
+    }
+    
+    fun drop(position: Position) {
+        publishDragEvent(position, DRAG_DROP)
+        
+    }
+    
+    private fun publishDragEvent(position: Position, status: String) {
+        blockId.value?.let { id ->
             BlockDragEvent(
                 dragInfo = CommonDragInfo(
                     id = id,
-                    status = DRAG_START,
-                    dragTouch = dragTouch,
+                    status = status,
+                    dragTouch = position,
                     from = GRAPH
                 )
             ).also(eventBus::addEvent)
