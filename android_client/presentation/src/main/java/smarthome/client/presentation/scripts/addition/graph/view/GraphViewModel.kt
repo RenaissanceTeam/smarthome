@@ -8,9 +8,8 @@ import smarthome.client.domain.api.scripts.usecases.CheckIfDependencyPossibleUse
 import smarthome.client.domain.api.scripts.usecases.ObserveBlocksUseCase
 import smarthome.client.domain.api.scripts.usecases.ObserveDependenciesUseCase
 import smarthome.client.entity.script.block.BlockId
-import smarthome.client.entity.script.dependency.DependencyId
-import smarthome.client.util.Position
 import smarthome.client.entity.script.dependency.Dependency
+import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.DependencyState
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.IDLE
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
@@ -29,6 +28,8 @@ import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGra
 import smarthome.client.presentation.scripts.addition.graph.mapper.DependencyToDependencyStateMapper
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.extensions.triggerRebuild
+import smarthome.client.presentation.util.extensions.updateWith
+import smarthome.client.util.Position
 import smarthome.client.util.findAndModify
 
 class GraphViewModel : KoinViewModel() {
@@ -102,26 +103,27 @@ class GraphViewModel : KoinViewModel() {
     }
     
     fun dependencyTipOnBlock(from: BlockId, to: BlockId) {
-        val blocks = blocksWithHiddenBorders()
-        val block = blocks.find { it.block.id == to } ?: return
-        
-        this.blocks.value = blocks.findAndModify({ it.block.id == to }) {
-            block.copyWithInfo(
-                border = BorderStatus(
-                    isVisible = true,
-                    isFailure = !checkIfDependencyPossible.execute(scriptId, from, to)
-                )
+        blocks.updateWith {
+            blocksWithHiddenBorders().findAndModify(
+                { it.block.id == to },
+                {
+                    it.copyWithInfo(
+                        border = BorderStatus(
+                            isVisible = true,
+                            isFailure = !checkIfDependencyPossible.execute(scriptId, from, to)
+                        )
+                    )
+                }
             )
         }
     }
     
     fun dependencyTipNotOnAnyBlock() {
-        this.blocks.value = blocksWithHiddenBorders()
+        blocks.updateWith { blocksWithHiddenBorders() }
     }
     
     private fun blocksWithHiddenBorders(): List<BlockState> {
-        val blocks = this.blocks.value.orEmpty()
-        return blocks.map {
+        return blocks.value.orEmpty().map {
             it.copyWithInfo(border = BorderStatus(isVisible = false))
         }
     }
@@ -139,16 +141,15 @@ class GraphViewModel : KoinViewModel() {
     }
     
     private fun hideBorderOnBlock(to: BlockId) {
-        val blocks = this.blocks.value.orEmpty()
-        this.blocks.value = blocks.findAndModify({ it.block.id == to }) {
-            val border = it.border
-            it.copyWithInfo(border = border.copy(isVisible = false))
+        blocks.updateWith { current ->
+            current.orEmpty().findAndModify({ it.block.id == to }) {
+                it.copyWithInfo(border = it.border.copy(isVisible = false))
+            }
         }
     }
     
     private fun setMovingDependencyToIdle() {
-        val current = movingDependency.value ?: return
-        movingDependency.value = current.copy(status = IDLE)
+        movingDependency.updateWith { it?.copy(status = IDLE) }
     }
     
     fun getBlockState(blockId: BlockId): BlockState? {

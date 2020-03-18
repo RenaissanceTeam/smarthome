@@ -10,10 +10,9 @@ import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import org.koin.core.scope.Scope
 import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.DependencyId
-import smarthome.client.util.Position
-import smarthome.client.util.toPosition
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.*
@@ -22,6 +21,8 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.state.Blo
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
+import smarthome.client.util.Position
+import smarthome.client.util.toPosition
 import smarthome.client.util.visible
 
 class GraphView @JvmOverloads constructor(
@@ -34,10 +35,11 @@ class GraphView @JvmOverloads constructor(
         inflate(R.layout.scripts_graph)
     }
     
+    lateinit var scope: Scope
     private var blockViews = mutableMapOf<BlockId, GraphBlockView>()
     private var dependencyViews = mutableMapOf<DependencyId, DependencyArrowView>()
     private var movingDependencyView = DependencyArrowView(context).also(::addView)
-    private val viewModel = GraphViewModel()
+    private val viewModel by lazy { scope.get<GraphViewModel>() }
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
     
     override fun onAttachedToWindow() {
@@ -124,8 +126,7 @@ class GraphView @JvmOverloads constructor(
         }
     }
     
-    private fun findBlockOnDependencyTip(
-        rawPosition: Position): Map.Entry<BlockId, GraphBlockView>? {
+    private fun findBlockOnDependencyTip(rawPosition: Position): Map.Entry<BlockId, GraphBlockView>? {
         return blockViews.asIterable().find { entry ->
             val block = entry.value
             

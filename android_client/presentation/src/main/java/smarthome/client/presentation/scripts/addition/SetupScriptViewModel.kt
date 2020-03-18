@@ -7,13 +7,13 @@ import smarthome.client.presentation.util.NavigationLiveData
 
 class SetupScriptViewModel : KoinViewModel() {
     val scriptId: Long = 1L // TODO
-    val scriptToAdd = MutableLiveData<Script>()
+    val setupScript = MutableLiveData<Script>()
     val navigateToAddingController = NavigationLiveData()
     val finishFlow = NavigationLiveData()
     
     fun onNextFromScriptInfoClicked(name: String, description: String) {
-        val script = scriptToAdd.value ?: Script()
-        scriptToAdd.value = script.copy(name = name, description = description)
+        val script = setupScript.value ?: Script()
+        setupScript.value = script.copy(name = name, description = description)
         
         navigateToAddingController.trigger()
     }

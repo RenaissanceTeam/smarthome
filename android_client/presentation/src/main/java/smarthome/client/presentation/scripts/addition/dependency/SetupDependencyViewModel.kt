@@ -66,6 +66,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     fun setDependencyId(id: DependencyId) {
         dependencyId = id
         startSetupDependencyUseCase.execute(scriptId, dependencyId)
+        updateSetupToolbarTitle()
         
         disposable.add(
             observeSetupDependencyUseCase.execute().subscribe(this::onSetupDependencyUpdated)

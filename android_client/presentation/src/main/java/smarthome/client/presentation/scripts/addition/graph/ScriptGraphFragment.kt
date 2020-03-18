@@ -27,6 +27,7 @@ class ScriptGraphFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_script_graph, container, false).apply {
             this.add_controllers.scope = lifecycleScope
+            this.script_graph.scope = lifecycleScope
         }
     }
     
@@ -41,7 +42,7 @@ class ScriptGraphFragment : Fragment() {
         
         setupScriptViewModel.finishFlow.onNavigate(this, ::finishFlow)
         
-        setupScriptViewModel.scriptToAdd.observe(this) {
+        setupScriptViewModel.setupScript.observe(this) {
             toolbarController.setTitle(it.name)
         }
     

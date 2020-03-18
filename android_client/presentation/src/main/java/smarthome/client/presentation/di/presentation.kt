@@ -41,6 +41,7 @@ import smarthome.client.presentation.scripts.addition.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
 import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.presentation.scripts.addition.graph.mapper.DependencyToDependencyStateMapper
+import smarthome.client.presentation.scripts.addition.graph.view.GraphViewModel
 import smarthome.client.presentation.scripts.resolver.ActionModelResolver
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 
@@ -95,5 +96,6 @@ val presentation = module {
     
     scope<ScriptGraphFragment> {
         scoped { ControllersHubViewModel() }
+        scoped { GraphViewModel() }
     }
 }
