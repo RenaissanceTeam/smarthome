@@ -4,6 +4,8 @@ dependencies {
     implementation library.rxJava
     implementation library.rxAndroid
     implementation library.coroutinesCore
+    implementation library.logger
+    implementation library.pp
 
     testImplementation groups.forTest
 }

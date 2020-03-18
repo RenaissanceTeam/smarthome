@@ -31,6 +31,7 @@ import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.Position
 import smarthome.client.util.findAndModify
+import smarthome.client.util.log
 
 class GraphViewModel : KoinViewModel() {
     private val eventBus: GraphEventBus by inject()
@@ -53,6 +54,7 @@ class GraphViewModel : KoinViewModel() {
     val dependencies = MutableLiveData<List<DependencyState>>(emptyList())
     
     init {
+        log("create graph vm")
         disposable.add(eventBus.observe()
             .subscribe {
                 if (it is GraphDragEvent) dragBlockHandler.handle(it)
@@ -71,12 +73,12 @@ class GraphViewModel : KoinViewModel() {
         })
         
         disposable.add(observeDependenciesUseCase.execute(scriptId).subscribe { dependencies ->
-            val currentDependencies = this.dependencies.value.orEmpty()
-            
-            this.dependencies.value = dependencies.map { dependency ->
-                currentDependencies.find { it.dependency.id == dependency.id }
-                    ?.copy(dependency = dependency)
-                    ?: dependencyToDependencyStateMapper.map(dependency)
+            this.dependencies.updateWith { current ->
+                dependencies.map { dependency ->
+                    current.orEmpty().find { it.dependency.id == dependency.id }
+                        ?.copy(dependency = dependency)
+                        ?: dependencyToDependencyStateMapper.map(dependency)
+                }
             }
         })
     }
@@ -87,9 +89,8 @@ class GraphViewModel : KoinViewModel() {
             to = GRAPH,
             position = dropPosition - event.dragInfo.dragTouch
         )
-        val dropEvent = event.copyWithDragInfo(droppedInfo)
-        
-        eventBus.addEvent(dropEvent)
+    
+        eventBus.addEvent(event.copyWithDragInfo(droppedInfo))
     }
     
     fun onCanceled(event: GraphDragEvent) {
@@ -97,9 +98,8 @@ class GraphViewModel : KoinViewModel() {
             status = DRAG_CANCEL,
             to = GRAPH
         )
-        val cancelEvent = event.copyWithDragInfo(cancelledInfo)
-        
-        eventBus.addEvent(cancelEvent)
+    
+        eventBus.addEvent(event.copyWithDragInfo(cancelledInfo))
     }
     
     fun dependencyTipOnBlock(from: BlockId, to: BlockId) {

@@ -68,7 +68,6 @@ class ControllersHubViewModel : KoinViewModel() {
     }
     
     private fun fetchDevices() {
-        log("fetch devices $this")
         getGeneralDeviceInfo.runInScopeCatchingAny(viewModelScope) {
             val devices = execute()
             devices.flatMap { it.controllers }.forEach(::startObservingController)
