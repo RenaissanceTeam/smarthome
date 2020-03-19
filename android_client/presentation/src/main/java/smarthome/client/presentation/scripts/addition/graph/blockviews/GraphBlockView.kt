@@ -16,6 +16,7 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.state.Blo
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
 import smarthome.client.presentation.util.*
 import smarthome.client.presentation.util.drag.Draggable
+import smarthome.client.presentation.util.drag.DraggableTrigger
 import smarthome.client.presentation.util.drag.DraggableView
 import smarthome.client.util.Position
 import smarthome.client.util.emptyPosition
@@ -39,7 +40,7 @@ abstract class GraphBlockView @JvmOverloads constructor(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)
     
-        draggable = DraggableView(this, drag_handle)
+        draggable = DraggableView(this, drag_handle, DraggableTrigger.LONG_PRESS)
     }
     
     fun contains(position: Position) = isPositionInside(position)

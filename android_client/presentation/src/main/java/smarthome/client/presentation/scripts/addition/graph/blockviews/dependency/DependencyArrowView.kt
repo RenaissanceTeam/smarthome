@@ -21,7 +21,7 @@ class DependencyArrowView @JvmOverloads constructor(
     init {
         paint.color = Color.RED
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 2f
+        paint.strokeWidth = 4f
         paint.isAntiAlias = true
     
         inflate(context, R.layout.scripts_dependency_arrow, null)

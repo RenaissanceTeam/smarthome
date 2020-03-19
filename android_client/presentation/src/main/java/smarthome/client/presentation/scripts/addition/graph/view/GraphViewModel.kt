@@ -1,8 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph.view
 
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 import smarthome.client.domain.api.scripts.usecases.AddDependencyUseCase
