@@ -41,13 +41,13 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
         viewModel.setFlowViewModel(setupScriptViewModel)
         
         viewModel.close.onNavigate(this) {
-            findNavController().popBackStack()
+            findNavController().navigateUp()
         }
     
-        viewModel.conditionContainers.observe(this, ::bindConditions)
-        viewModel.actionContainers.observe(this, ::bindActions)
-        viewModel.selectionMode.observe(this, ::bindSelectMode)
-        viewModel.toolbarTitle.observe(this, ::bindToolbarTitle)
+        viewModel.conditionContainers.observe(viewLifecycleOwner, ::bindConditions)
+        viewModel.actionContainers.observe(viewLifecycleOwner, ::bindActions)
+        viewModel.selectionMode.observe(viewLifecycleOwner, ::bindSelectMode)
+        viewModel.toolbarTitle.observe(viewLifecycleOwner, ::bindToolbarTitle)
         
         conditions_recycler.adapter = conditionsController.adapter
         actions_recycler.adapter = actionsController.adapter

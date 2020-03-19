@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.get
@@ -43,6 +44,8 @@ class MainActivity : FragmentActivity() {
             
             bottom_navigation.visible = args?.getBoolean(SHOW_BOTTOM_BAR) ?: false
             toolbar.visible = args?.getBoolean(SHOW_TOOL_BAR) ?: false
+    
+            toolbar.setNavigationOnClickListener { navController.navigateUp() }
         }
         
         val appBarConfiguration = AppBarConfiguration(navController.graph)

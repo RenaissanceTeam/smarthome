@@ -37,13 +37,13 @@ class ScriptGraphFragment : Fragment() {
         
         toolbarController.setMenu(R.menu.save) {
             if (it != R.id.save) return@setMenu
-            
+
             setupScriptViewModel.onSaveClicked()
         }
         
         setupScriptViewModel.finishFlow.onNavigate(this, ::finishFlow)
         
-        setupScriptViewModel.setupScript.observe(this) {
+        setupScriptViewModel.setupScript.observe(viewLifecycleOwner) {
             toolbarController.setTitle(it.name)
         }
     
