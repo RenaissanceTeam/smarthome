@@ -47,7 +47,6 @@ class GraphView @JvmOverloads constructor(
         inflate(R.layout.scripts_graph)
     }
     
-    
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         
@@ -115,7 +114,6 @@ class GraphView @JvmOverloads constructor(
         if (dependency.rawEndPosition == null) return
         
         val movedTo = findBlockOnDependencyTip(dependency.rawEndPosition)
-        //log("tip on $movedTo on ${dependency.rawEndPosition}")
         
         when (movedTo == null) {
             true -> viewModel.dependencyTipNotOnAnyBlock()
@@ -149,9 +147,8 @@ class GraphView @JvmOverloads constructor(
     }
     
     private fun retainOnlyPostedDependencies(dependencies: List<DependencyState>) {
-        (dependencyViews.keys - dependencies.map { it.dependency.id }).forEach {
-            (dependencyViews.remove(it)).let(this::removeView)
-        }
+        (dependencyViews.keys - dependencies.map { it.dependency.id })
+            .forEach { (dependencyViews.remove(it)).let(this::removeView) }
     }
     
     private fun getOrInflateBlockView(blockState: BlockState): GraphBlockView {

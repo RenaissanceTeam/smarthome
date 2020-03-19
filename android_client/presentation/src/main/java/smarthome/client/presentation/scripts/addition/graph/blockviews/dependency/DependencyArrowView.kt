@@ -9,6 +9,9 @@ import android.view.View
 import smarthome.client.util.Position
 import smarthome.client.presentation.R
 import smarthome.client.util.emptyPosition
+import smarthome.client.util.log
+import smarthome.client.util.visible
+import kotlin.math.abs
 import kotlin.properties.Delegates
 
 
@@ -21,7 +24,7 @@ class DependencyArrowView @JvmOverloads constructor(
     init {
         paint.color = Color.RED
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 4f
+        paint.strokeWidth = 7f
         paint.isAntiAlias = true
     
         inflate(context, R.layout.scripts_dependency_arrow, null)
@@ -49,6 +52,16 @@ class DependencyArrowView @JvmOverloads constructor(
     
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+    
+        log("""
+            start $startPosition
+            end $endPosition
+            isVisible $visible
+            parent $parent
+            canvas $canvas
+            width $width
+            height $height
+        """.trimIndent())
         
         canvas.drawLine(
             startPosition.x.toFloat(),
