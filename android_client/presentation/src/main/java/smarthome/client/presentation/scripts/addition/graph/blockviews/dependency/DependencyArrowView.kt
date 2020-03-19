@@ -52,17 +52,6 @@ class DependencyArrowView @JvmOverloads constructor(
     
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-    
-        log("""
-            start $startPosition
-            end $endPosition
-            isVisible $visible
-            parent $parent
-            canvas $canvas
-            width $width
-            height $height
-        """.trimIndent())
-        
         canvas.drawLine(
             startPosition.x.toFloat(),
             startPosition.y.toFloat(),

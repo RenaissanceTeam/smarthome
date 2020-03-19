@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.DragEvent
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,7 +40,7 @@ class ControllersHubView @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         
-        lifecycleOwner?.let { lifecycleOwner ->
+        ViewTreeLifecycleOwner.get(this)?.let { lifecycleOwner ->
             lifecycleOwner.lifecycle.addObserver(viewModel)
     
             setupSlideableMenu(lifecycleOwner)

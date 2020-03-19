@@ -28,6 +28,7 @@ import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.Position
 import smarthome.client.util.findAndModify
+import smarthome.client.util.log
 
 class GraphViewModel : KoinViewModel() {
     private val eventBus: GraphEventBus by inject()

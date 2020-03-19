@@ -6,6 +6,7 @@ import android.view.DragEvent
 import android.widget.FrameLayout
 import androidx.core.view.doOnAttach
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
@@ -26,6 +27,7 @@ import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.util.Position
+import smarthome.client.util.log
 import smarthome.client.util.toPosition
 import smarthome.client.util.visible
 
@@ -52,7 +54,13 @@ class GraphView @JvmOverloads constructor(
         
         addView(movingDependencyView)
         handleDroppingBlocksOntoGraph()
-        lifecycleOwner?.let(::observeViewModel)
+        ViewTreeLifecycleOwner.get(this)?.let(::observeViewModel)
+    }
+    
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        
+        setOnDragListener(null)
     }
     
     private fun observeViewModel(lifecycleOwner: LifecycleOwner) {
@@ -115,7 +123,6 @@ class GraphView @JvmOverloads constructor(
         if (dependency.rawEndPosition == null) return
         
         val movedTo = findBlockOnDependencyTip(dependency.rawEndPosition)
-        
         when (movedTo == null) {
             true -> viewModel.dependencyTipNotOnAnyBlock()
             false -> dependency.startBlock?.let {
@@ -238,11 +245,5 @@ class GraphView @JvmOverloads constructor(
                 else -> false
             }
         }
-    }
-    
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        
-        setOnDragListener(null)
     }
 }

@@ -17,6 +17,7 @@ import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.R
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.addition.SetupScriptViewModel
+import smarthome.client.util.log
 
 class ScriptGraphFragment : Fragment() {
     private val setupScriptViewModel: SetupScriptViewModel by sharedViewModel()
@@ -25,6 +26,7 @@ class ScriptGraphFragment : Fragment() {
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        log("on create scr graph view fragment $this")
         return inflater.inflate(R.layout.fragment_script_graph, container, false).apply {
             this.add_controllers.scope = lifecycleScope
             this.script_graph.scope = lifecycleScope

@@ -28,19 +28,6 @@ fun ViewGroup.inflate(layout: Int): View {
     return View.inflate(context, layout, this)
 }
 
-val View.lifecycleOwner: LifecycleOwner? get() {
-    var currentContext = context
-    
-    while (currentContext is ContextWrapper) {
-        if (currentContext is LifecycleOwner) {
-            return currentContext
-        }
-        currentContext = currentContext.baseContext
-    }
-    
-    return null
-}
-
 val View.center: Position get() = Position(width / 2, height / 2)
 
 fun View.isXInside(toTest: Int): Boolean {

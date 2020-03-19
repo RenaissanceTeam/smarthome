@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_block_item.view.*
@@ -48,7 +49,7 @@ abstract class GraphBlockView @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         
-        lifecycleOwner?.let(::observeViewModel)
+        ViewTreeLifecycleOwner.get(this)?.let(::observeViewModel)
     }
     
     private fun observeViewModel(lifecycleOwner: LifecycleOwner) {
