@@ -40,7 +40,7 @@ abstract class GraphBlockView @JvmOverloads constructor(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)
     
-        draggable = DraggableView(this, drag_handle, DraggableTrigger.LONG_PRESS)
+        draggable = DraggableView(this, drag_handle, DraggableTrigger.TOUCH)
     }
     
     fun contains(position: Position) = isPositionInside(position)

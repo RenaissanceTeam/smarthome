@@ -1,6 +1,7 @@
 package smarthome.client.presentation.util.drag
 
 import android.view.View
+import io.reactivex.Observable
 import smarthome.client.util.Position
 
 interface Draggable {
@@ -8,19 +9,24 @@ interface Draggable {
     var possibleHosts: () -> List<DraggableHost>
     var stableRawPosition: Position
     var currentRawPosition: Position
+    val currentHostPosition: Position?
+        get() = host?.convertRawToRelativePosition(currentRawPosition)
     var touchPosition: Position
     
     fun setCurrentPosition(position: Position) {
         currentRawPosition = position - touchPosition
     }
     
-    fun moveUiToCurrent() {
-        host?.convertRawToRelativePosition(currentRawPosition)?.let(::doUiMove)
-    }
     
+    //
+//    fun moveUiToCurrent() {
+//        host?.convertRawToRelativePosition(currentRawPosition)?.let(::doUiMove)
+//    }
+//
+    fun observeEvents(): Observable<DraggableEvent>
     
     fun setTouchHandler(view: View)
-    
-    fun doUiMove(position: Position)
+
+//    fun doUiMove(position: Position)
 }
 

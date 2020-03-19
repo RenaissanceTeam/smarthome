@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.DragEvent
 import android.widget.FrameLayout
+import androidx.core.view.doOnAttach
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_graph.view.*
@@ -18,7 +19,10 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.dependenc
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.GraphBlockFactoryResolver
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
+import smarthome.client.presentation.util.OneTimeGlobalLayoutListener
+import smarthome.client.presentation.util.drag.DraggableEvent
 import smarthome.client.presentation.util.drag.ViewGroupHost
+import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.util.Position
@@ -46,7 +50,7 @@ class GraphView @JvmOverloads constructor(
     
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-    
+        
         handleDroppingBlocksOntoGraph()
         lifecycleOwner?.let(::observeViewModel)
     }
@@ -156,8 +160,28 @@ class GraphView @JvmOverloads constructor(
         if (blockView == null) {
             val viewFactory = graphBlockFactoryResolver.resolve(blockState)
             blockView = viewFactory.inflate(graph, blockState)
+            
+            
+            
+            blockView.doOnAttach {
+                OneTimeGlobalLayoutListener(blockView.viewTreeObserver) {
+                    viewModel.dependencies.triggerRebuild()
+                }
+            }
+            
+            
             blockViews[blockState.block.id] = blockView
-            blockView.draggable?.let { dragHost.onAdd(it) }
+            blockView.draggable?.let { draggable ->
+                dragHost.onAdd(draggable)
+                draggable.observeEvents().subscribe {
+                    when (it) {
+                        DraggableEvent.MOVE -> draggable.currentHostPosition?.let { hostPosition ->
+                            viewModel.onBlockMoved(blockState.block.id, hostPosition)
+                        }
+                    }
+                }
+            }
+            
         }
         
         return blockView

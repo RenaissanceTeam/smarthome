@@ -4,6 +4,8 @@ import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.presentation.util.LongPressGestureDetectorListener
@@ -26,6 +28,7 @@ open class DraggableView(private val view: View,
     private var isDragging: Boolean = false
     private val longPressListener = LongPressGestureDetectorListener()
     private var detector = GestureDetector(view.context, longPressListener)
+    private val events = PublishSubject.create<DraggableEvent>()
     
     init {
         if (trigger == DraggableTrigger.LONG_PRESS) {
@@ -37,6 +40,10 @@ open class DraggableView(private val view: View,
         }
         
         setTouchHandler(touchHandler)
+    }
+    
+    override fun observeEvents(): Observable<DraggableEvent> {
+        return events
     }
     
     final override fun setTouchHandler(view: View) {
@@ -62,9 +69,11 @@ open class DraggableView(private val view: View,
                     setCurrentPosition(event.rawPosition)
                     
                     host?.onMovedDraggable(this)
-                    
-                    
-                    moveUiToCurrent()
+    
+    
+    
+                    events.onNext(DraggableEvent.MOVE)
+    
                     true
                 }
                 MotionEvent.ACTION_UP -> {
@@ -74,7 +83,7 @@ open class DraggableView(private val view: View,
                         null -> {
                             currentRawPosition = stableRawPosition
                             host?.onCancel(this, stableRawPosition)
-                            moveUiToCurrent()
+                            events.onNext(DraggableEvent.MOVE)
                         }
                         host -> {
                             stableRawPosition = currentRawPosition
@@ -95,8 +104,8 @@ open class DraggableView(private val view: View,
             
         }
     }
-    
-    override fun doUiMove(position: Position) {
-        view.setPosition(position)
-    }
+//
+//    override fun doUiMove(position: Position) {
+//        view.setPosition(position)
+//    }
 }

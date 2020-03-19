@@ -3,10 +3,7 @@ package smarthome.client.presentation.scripts.addition.graph.view
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
-import smarthome.client.domain.api.scripts.usecases.AddDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.CheckIfDependencyPossibleUseCase
-import smarthome.client.domain.api.scripts.usecases.ObserveBlocksUseCase
-import smarthome.client.domain.api.scripts.usecases.ObserveDependenciesUseCase
+import smarthome.client.domain.api.scripts.usecases.*
 import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyId
@@ -42,6 +39,7 @@ class GraphViewModel : KoinViewModel() {
     private val addDependencyUseCase: AddDependencyUseCase by inject()
     private val dragBlockHandler: DragBlockEventsHandler by inject { parametersOf(blocks) }
     private val dependencyEventsHandler: DependencyEventsHandler by inject { parametersOf(movingDependency) }
+    private val moveBlockUseCase: MoveBlockUseCase by inject()
     
     val scriptId = 1L // TODO
     val movingDependency = MutableLiveData<MovingDependency>()
@@ -85,6 +83,10 @@ class GraphViewModel : KoinViewModel() {
         )
     
         eventBus.addEvent(event.copyWithDragInfo(droppedInfo))
+    }
+    
+    fun onBlockMoved(blockId: BlockId, newPosition: Position) {
+        moveBlockUseCase.execute(scriptId, blockId, newPosition)
     }
     
     fun onCanceled(event: GraphDragEvent) {
