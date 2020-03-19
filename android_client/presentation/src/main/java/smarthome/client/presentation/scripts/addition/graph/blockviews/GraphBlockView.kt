@@ -15,6 +15,8 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BorderStatus
 import smarthome.client.presentation.util.*
+import smarthome.client.presentation.util.drag.Draggable
+import smarthome.client.presentation.util.drag.DraggableView
 import smarthome.client.util.Position
 import smarthome.client.util.emptyPosition
 import smarthome.client.util.visible
@@ -83,11 +85,11 @@ abstract class GraphBlockView @JvmOverloads constructor(
     }
     
     private fun onBlockChanged(newId: BlockId) {
-//        setupLongPressToStartDependency(
-//            id = newId,
-//            view = this,
-//            eventPublisher = baseViewModel
-//        )
+        setupLongPressToStartDependency(
+            id = newId,
+            view = this,
+            eventPublisher = baseViewModel
+        )
     }
     
     fun setData(blockState: BlockState) {

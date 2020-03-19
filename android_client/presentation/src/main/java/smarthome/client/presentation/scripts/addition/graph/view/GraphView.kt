@@ -18,7 +18,7 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.dependenc
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.GraphBlockFactoryResolver
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
-import smarthome.client.presentation.util.ViewGroupHost
+import smarthome.client.presentation.util.drag.ViewGroupHost
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.util.Position

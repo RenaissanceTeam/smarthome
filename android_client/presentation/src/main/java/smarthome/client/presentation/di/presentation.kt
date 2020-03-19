@@ -44,8 +44,8 @@ import smarthome.client.presentation.scripts.addition.graph.mapper.DependencyToD
 import smarthome.client.presentation.scripts.addition.graph.view.GraphViewModel
 import smarthome.client.presentation.scripts.resolver.ActionModelResolver
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
-import smarthome.client.presentation.util.DraggableHostHolder
-import smarthome.client.presentation.util.DraggableHostHolderImpl
+import smarthome.client.presentation.util.drag.DraggableHostHolder
+import smarthome.client.presentation.util.drag.DraggableHostHolderImpl
 
 val presentation = module {
     
