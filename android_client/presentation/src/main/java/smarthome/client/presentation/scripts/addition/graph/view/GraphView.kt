@@ -38,7 +38,7 @@ class GraphView @JvmOverloads constructor(
     lateinit var scope: Scope
     private var blockViews = mutableMapOf<BlockId, GraphBlockView>()
     private var dependencyViews = mutableMapOf<DependencyId, DependencyArrowView>()
-    private var movingDependencyView = DependencyArrowView(context).also(::addView)
+    private var movingDependencyView = DependencyArrowView(context)
     private val viewModel by lazy { scope.get<GraphViewModel>() }
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
     private val dragHost = ViewGroupHost(this)
@@ -50,6 +50,7 @@ class GraphView @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         
+        addView(movingDependencyView)
         handleDroppingBlocksOntoGraph()
         lifecycleOwner?.let(::observeViewModel)
     }
