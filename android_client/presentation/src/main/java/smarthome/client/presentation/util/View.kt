@@ -60,6 +60,11 @@ fun View.isPositionInside(position: Position): Boolean {
     }
 }
 
+fun View.setPosition(position: Position) {
+    x = position.x.toFloat()
+    y = position.y.toFloat()
+}
+
 val View.viewScope: CoroutineScope get() = GlobalScope
 
 fun View.wrapHeight() {

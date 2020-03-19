@@ -44,6 +44,8 @@ import smarthome.client.presentation.scripts.addition.graph.mapper.DependencyToD
 import smarthome.client.presentation.scripts.addition.graph.view.GraphViewModel
 import smarthome.client.presentation.scripts.resolver.ActionModelResolver
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
+import smarthome.client.presentation.util.DraggableHostHolder
+import smarthome.client.presentation.util.DraggableHostHolderImpl
 
 val presentation = module {
     
@@ -93,6 +95,8 @@ val presentation = module {
     factory(named(ACTION_CONTAINER_VIEWMODEL)) { ContainersViewModel(get<CreateEmptyActionForDependencyUseCase>()::execute) }
     
     factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactoryImpl() }
+    
+    singleBy<DraggableHostHolder, DraggableHostHolderImpl>()
     
     scope<ScriptGraphFragment> {
         scoped { ControllersHubViewModel() }

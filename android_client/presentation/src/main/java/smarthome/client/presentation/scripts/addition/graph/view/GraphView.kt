@@ -3,10 +3,8 @@ package smarthome.client.presentation.scripts.addition.graph.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.DragEvent
-import android.view.View
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
@@ -20,11 +18,10 @@ import smarthome.client.presentation.scripts.addition.graph.blockviews.dependenc
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.GraphBlockFactoryResolver
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDragEvent
-import smarthome.client.presentation.util.DraggableHost
+import smarthome.client.presentation.util.ViewGroupHost
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.lifecycleOwner
 import smarthome.client.util.Position
-import smarthome.client.util.log
 import smarthome.client.util.toPosition
 import smarthome.client.util.visible
 
@@ -32,11 +29,7 @@ class GraphView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), KoinComponent, DraggableHost {
-    
-    init {
-        inflate(R.layout.scripts_graph)
-    }
+) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
     
     lateinit var scope: Scope
     private var blockViews = mutableMapOf<BlockId, GraphBlockView>()
@@ -44,6 +37,12 @@ class GraphView @JvmOverloads constructor(
     private var movingDependencyView = DependencyArrowView(context).also(::addView)
     private val viewModel by lazy { scope.get<GraphViewModel>() }
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
+    private val dragHost = ViewGroupHost(this)
+    
+    init {
+        inflate(R.layout.scripts_graph)
+    }
+    
     
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -158,6 +157,7 @@ class GraphView @JvmOverloads constructor(
             val viewFactory = graphBlockFactoryResolver.resolve(blockState)
             blockView = viewFactory.inflate(graph, blockState)
             blockViews[blockState.block.id] = blockView
+            blockView.draggable?.let { dragHost.onAdd(it) }
         }
         
         return blockView

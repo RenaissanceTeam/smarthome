@@ -17,26 +17,6 @@ import smarthome.client.presentation.util.LongPressGestureDetectorListener
 import smarthome.client.presentation.util.extensions.rawPosition
 import smarthome.client.util.log
 
-fun setupLongPressToStartDependency(
-    id: BlockId,
-    view: View,
-    eventPublisher: EventPublisher,
-    block: LongPressToStartDependencyTouchListener.() -> Unit = {}
-): LongPressToStartDependencyTouchListener {
-    val listener = LongPressGestureDetectorListener()
-    val detector = GestureDetector(view.context, listener)
-    
-    return LongPressToStartDependencyTouchListener(
-        startId = id,
-        blockView = view,
-        longPressListener = listener,
-        detector = detector,
-        eventPublisher = eventPublisher
-    ).apply {
-        block()
-    }
-}
-
 class LongPressToStartDependencyTouchListener(
     private val startId: BlockId,
     private val blockView: View,

@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
@@ -21,13 +20,14 @@ import smarthome.client.util.emptyPosition
 import smarthome.client.util.visible
 
 abstract class GraphBlockView @JvmOverloads constructor(
-    private val contentLayout: Int,
+    contentLayout: Int,
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), Draggable {
+) : FrameLayout(context, attrs, defStyleAttr) {
     protected val baseViewModel = GraphBlockViewModel()
     val centerPosition: Position get() = (baseViewModel.position.value ?: emptyPosition) + center
+    var draggable: Draggable? = null
     
     init {
         inflate(R.layout.scripts_block_item)
@@ -36,37 +36,9 @@ abstract class GraphBlockView @JvmOverloads constructor(
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)
-        
-        handleStartDragging()
-    }
     
-    private fun handleStartDragging() {
-        drag_handle.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_UP,
-                MotionEvent.ACTION_DOWN -> true
-                MotionEvent.ACTION_MOVE -> {
-                    val touchX = (drag_handle.x + event.x).toInt()
-                    val touchY = (drag_handle.y + event.y).toInt()
-                    baseViewModel.move(Position(touchX, touchY))
-                    true
-                }
-                else -> false
-            }
-            
-            
-//            if (event.action != MotionEvent.ACTION_DOWN) return@setOnTouchListener false
-//
-//            val touchX = (drag_handle.x + event.x).toInt()
-//            val touchY = (drag_handle.y + event.y).toInt()
-//
-//            val info = baseViewModel.onDragStarted(Position(touchX, touchY))
-//                ?: return@setOnTouchListener false
-//
-//            true
-        }
+        draggable = DraggableView(this, drag_handle)
     }
-    
     
     fun contains(position: Position) = isPositionInside(position)
     
@@ -111,11 +83,11 @@ abstract class GraphBlockView @JvmOverloads constructor(
     }
     
     private fun onBlockChanged(newId: BlockId) {
-        setupLongPressToStartDependency(
-            id = newId,
-            view = this,
-            eventPublisher = baseViewModel
-        )
+//        setupLongPressToStartDependency(
+//            id = newId,
+//            view = this,
+//            eventPublisher = baseViewModel
+//        )
     }
     
     fun setData(blockState: BlockState) {
@@ -135,4 +107,5 @@ abstract class GraphBlockView @JvmOverloads constructor(
         
         debug_item.text = "$x, $y, width=$width, height=$height"
     }
+    
 }
