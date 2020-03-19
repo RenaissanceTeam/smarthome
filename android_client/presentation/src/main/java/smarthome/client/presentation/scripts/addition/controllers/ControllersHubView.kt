@@ -16,7 +16,6 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DevicesController
 import smarthome.client.presentation.scripts.addition.graph.events.drag.BlockDragEvent
 import smarthome.client.presentation.util.inflate
-import smarthome.client.presentation.util.lifecycleOwner
 
 class ControllersHubView @JvmOverloads constructor(
     context: Context,

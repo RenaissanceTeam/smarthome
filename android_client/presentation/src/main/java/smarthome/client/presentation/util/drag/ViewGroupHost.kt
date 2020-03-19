@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.presentation.util.isPositionInside
+import smarthome.client.presentation.util.rawPosition
 import smarthome.client.util.Position
-import smarthome.client.util.toPosition
 
 open class ViewGroupHost(private val viewGroup: ViewGroup) : DraggableHost, KoinComponent {
     override val hosted: MutableList<Draggable> = mutableListOf()
@@ -29,10 +29,7 @@ open class ViewGroupHost(private val viewGroup: ViewGroup) : DraggableHost, Koin
         return viewGroup.isPositionInside(position)
     }
     
-    override fun convertRawToRelativePosition(raw: Position): Position {
-        val graphPosition = IntArray(2).also { viewGroup.getLocationOnScreen(it) }.toPosition()
-        return raw - graphPosition
-    }
+    override fun convertRawToRelativePosition(raw: Position) = raw - viewGroup.rawPosition
     
     override fun onStartedDragging(draggable: Draggable) {}
     

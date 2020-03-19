@@ -26,7 +26,6 @@ class ScriptGraphFragment : Fragment() {
     
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        log("on create scr graph view fragment $this")
         return inflater.inflate(R.layout.fragment_script_graph, container, false).apply {
             this.add_controllers.scope = lifecycleScope
             this.script_graph.scope = lifecycleScope

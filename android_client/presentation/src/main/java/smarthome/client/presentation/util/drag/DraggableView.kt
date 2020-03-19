@@ -10,6 +10,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import smarthome.client.presentation.util.LongPressGestureDetectorListener
 import smarthome.client.presentation.util.extensions.rawPosition
+import smarthome.client.presentation.util.rawPosition
 import smarthome.client.presentation.util.setPosition
 import smarthome.client.util.Position
 import smarthome.client.util.emptyPosition
@@ -21,6 +22,11 @@ open class DraggableView(private val view: View,
     private val draggableHostHolder by inject<DraggableHostHolder>()
     
     override var host: DraggableHost? = null
+        set(value) {
+            field = value
+            
+            stableRawPosition = view.rawPosition
+        }
     override var possibleHosts: () -> List<DraggableHost> = draggableHostHolder::get
     override var stableRawPosition = emptyPosition
     override var currentRawPosition = emptyPosition
