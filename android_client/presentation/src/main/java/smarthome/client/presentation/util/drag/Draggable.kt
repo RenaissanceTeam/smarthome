@@ -12,21 +12,10 @@ interface Draggable {
     val currentHostPosition: Position?
         get() = host?.convertRawToRelativePosition(currentRawPosition)
     var touchPosition: Position
-    
     fun setCurrentPosition(position: Position) {
         currentRawPosition = position - touchPosition
     }
-    
-    
-    //
-//    fun moveUiToCurrent() {
-//        host?.convertRawToRelativePosition(currentRawPosition)?.let(::doUiMove)
-//    }
-//
     fun observeEvents(): Observable<DraggableEvent>
-    
     fun setTouchHandler(view: View)
-
-//    fun doUiMove(position: Position)
 }
 

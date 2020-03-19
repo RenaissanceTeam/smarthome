@@ -11,7 +11,6 @@ import org.koin.core.inject
 import smarthome.client.presentation.util.LongPressGestureDetectorListener
 import smarthome.client.presentation.util.extensions.rawPosition
 import smarthome.client.presentation.util.rawPosition
-import smarthome.client.presentation.util.setPosition
 import smarthome.client.util.Position
 import smarthome.client.util.emptyPosition
 
@@ -57,61 +56,66 @@ open class DraggableView(private val view: View,
             detector.onTouchEvent(event)
             
             when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    if (trigger == DraggableTrigger.TOUCH) isDragging = true
-                    
-                    val touchX = (view.x + event.x).toInt()
-                    val touchY = (view.y + event.y).toInt()
-                    touchPosition = Position(touchX, touchY)
-                    
-                    if (isDragging) {
-                        setCurrentPosition(event.rawPosition)
-                        host?.onStartedDragging(this)
-                    }
-                    true
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    if (!isDragging) return@setOnTouchListener false
-                    setCurrentPosition(event.rawPosition)
-                    
-                    host?.onMovedDraggable(this)
-    
-    
-    
-                    events.onNext(DraggableEvent.MOVE)
-    
-                    true
-                }
-                MotionEvent.ACTION_UP -> {
-                    if (!isDragging) return@setOnTouchListener true
-                    
-                    when (val newHost = possibleHosts().find { it.hitTest(currentRawPosition) }) {
-                        null -> {
-                            currentRawPosition = stableRawPosition
-                            host?.onCancel(this, stableRawPosition)
-                            events.onNext(DraggableEvent.MOVE)
-                        }
-                        host -> {
-                            stableRawPosition = currentRawPosition
-                            host?.onFinishMovingDraggableInsideHost(this)
-                        }
-                        else -> {
-                            stableRawPosition = currentRawPosition
-                            host?.onRemove(this)
-                            newHost.onAdd(this)
-                        }
-                    }
-                    
-                    isDragging = false
-                    true
-                }
+                MotionEvent.ACTION_DOWN -> handleDownEvent(view, event)
+                MotionEvent.ACTION_MOVE -> if (isDragging) handleMoveEvent(event) else false
+                MotionEvent.ACTION_UP -> if (isDragging) handleUpEvent() else false
                 else -> false
             }
-            
         }
     }
-//
-//    override fun doUiMove(position: Position) {
-//        view.setPosition(position)
-//    }
+    
+    private fun handleDownEvent(view: View, event: MotionEvent): Boolean {
+        initializeTouchPosition(view, event)
+        
+        if (trigger == DraggableTrigger.TOUCH) {
+            isDragging = true
+            setCurrentPosition(event.rawPosition)
+            host?.onStartedDragging(this)
+        }
+        return true
+    }
+    
+    private fun handleMoveEvent(event: MotionEvent): Boolean {
+        setCurrentPosition(event.rawPosition)
+        
+        host?.onMovedDraggable(this)
+        events.onNext(DraggableEvent.MOVE)
+        return true
+    }
+    
+    private fun handleUpEvent(): Boolean {
+        when (val newHost = findNewHost()) {
+            null -> cancelDrag()
+            host -> finishDragInsideHost()
+            else -> finishDragOutsideHost(newHost)
+        }
+        
+        isDragging = false
+        return true
+    }
+    
+    private fun cancelDrag() {
+        currentRawPosition = stableRawPosition
+        host?.onCancel(this, stableRawPosition)
+        events.onNext(DraggableEvent.MOVE)
+    }
+    
+    private fun finishDragInsideHost() {
+        stableRawPosition = currentRawPosition
+        host?.onFinishMovingDraggableInsideHost(this)
+    }
+    
+    private fun finishDragOutsideHost(newHost: DraggableHost) {
+        stableRawPosition = currentRawPosition
+        host?.onRemove(this)
+        newHost.onAdd(this)
+    }
+    
+    private fun findNewHost() = possibleHosts().find { it.hitTest(currentRawPosition) }
+    
+    private fun initializeTouchPosition(view: View, event: MotionEvent) {
+        val touchX = (view.x + event.x).toInt()
+        val touchY = (view.y + event.y).toInt()
+        touchPosition = Position(touchX, touchY)
+    }
 }

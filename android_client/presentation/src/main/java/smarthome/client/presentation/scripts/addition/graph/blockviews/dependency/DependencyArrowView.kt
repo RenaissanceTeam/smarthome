@@ -6,14 +6,10 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import smarthome.client.util.Position
 import smarthome.client.presentation.R
+import smarthome.client.util.Position
 import smarthome.client.util.emptyPosition
-import smarthome.client.util.log
-import smarthome.client.util.visible
-import kotlin.math.abs
 import kotlin.properties.Delegates
-
 
 class DependencyArrowView @JvmOverloads constructor(
     context: Context,
