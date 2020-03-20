@@ -3,8 +3,8 @@ package smarthome.client.presentation.scripts.addition.dependency
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import org.koin.core.qualifier.named
-import smarthome.client.domain.api.scripts.usecases.GetBlockNameUseCase
-import smarthome.client.domain.api.scripts.usecases.RemoveDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.GetBlockNameUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.RemoveDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.*
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyId
@@ -22,7 +22,6 @@ import smarthome.client.util.replaceAt
 import smarthome.client.util.truncate
 
 class SetupDependencyViewModel: KoinViewModel() {
-    private val scriptId: Long = 1L // todo
     private lateinit var dependencyId: DependencyId
     private lateinit var setupScriptViewModel: SetupScriptViewModel
     private val removeDependency: RemoveDependencyUseCase by inject()
@@ -55,7 +54,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     }
     
     fun onCancel() {
-        if (isNew) removeDependency.execute(scriptId, dependencyId)
+        if (isNew) removeDependency.execute(dependencyId)
         close.trigger()
     }
     
@@ -65,7 +64,7 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     fun setDependencyId(id: DependencyId) {
         dependencyId = id
-        startSetupDependencyUseCase.execute(scriptId, dependencyId)
+        startSetupDependencyUseCase.execute(dependencyId)
         updateSetupToolbarTitle()
         
         disposable.add(
@@ -75,8 +74,8 @@ class SetupDependencyViewModel: KoinViewModel() {
     
     private fun updateSetupToolbarTitle() {
         val dependency = getSetupDependencyUseCase.execute()
-        val fromName = getBlockNameUseCase.execute(scriptId, dependency.startBlock)
-        val toName = getBlockNameUseCase.execute(scriptId, dependency.endBlock)
+        val fromName = getBlockNameUseCase.execute(dependency.startBlock)
+        val toName = getBlockNameUseCase.execute(dependency.endBlock)
         
         toolbarTitle.value = fromName.truncate(10) + " -> " + toName.truncate(10)
     }

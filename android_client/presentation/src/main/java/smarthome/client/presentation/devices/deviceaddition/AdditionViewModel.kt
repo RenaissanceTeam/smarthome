@@ -40,8 +40,7 @@ class AdditionViewModel : KoinViewModel() {
     private val acceptPendingDeviceUseCase: AcceptPendingDeviceUseCase by inject()
     private val declinePendingDeviceUseCase: DeclinePendingDeviceUseCase by inject()
     
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+    override fun onResume() {
         onRefresh()
     }
     

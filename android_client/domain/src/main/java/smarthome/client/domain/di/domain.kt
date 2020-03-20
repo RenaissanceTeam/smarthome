@@ -10,8 +10,9 @@ import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCas
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.main.BooleanState
 import smarthome.client.domain.api.main.StateMachine
-import smarthome.client.domain.api.scripts.usecases.*
+import smarthome.client.domain.api.scripts.usecases.GetScriptByIdUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.*
+import smarthome.client.domain.api.scripts.usecases.setup.*
 import smarthome.client.domain.api.usecase.CloudMessageUseCase
 import smarthome.client.domain.auth.usecases.*
 import smarthome.client.domain.conrollers.usecases.*
@@ -19,8 +20,9 @@ import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.main.StateMachineImpl
-import smarthome.client.domain.scripts.usecases.*
+import smarthome.client.domain.scripts.usecases.GetScriptByIdUseCaseImpl
 import smarthome.client.domain.scripts.usecases.dependency.*
+import smarthome.client.domain.scripts.usecases.setup.*
 import smarthome.client.domain.usecases.CloudMessageUseCaseImpl
 
 val domain = module {
@@ -76,7 +78,14 @@ val domain = module {
     factoryBy<RemoveConditionsFromSetupDependencyUseCase, RemoveConditionsFromSetupDependencyUseCaseImpl>()
     factoryBy<UpdateSetupDependencyUseCase, UpdateSetupDependencyUseCaseImpl>()
     factoryBy<SaveSetupDependencyUseCase, SaveSetupDependencyUseCaseImpl>()
-    
+    factoryBy<StartSetupScriptUseCase, StartSetupScriptUseCaseImpl>()
+    factoryBy<GetScriptByIdUseCase, GetScriptByIdUseCaseImpl>()
+    factoryBy<CancelSetupScriptUseCase, CancelSetupScriptUseCaseImpl>()
+    factoryBy<SaveSetupScriptUseCase, SaveSetupScriptUseCaseImpl>()
+    factoryBy<IsSetupInProgressUseCase, IsSetupInProgressUseCaseImpl>()
+    factoryBy<UpdateScriptInfoUseCase, UpdateScriptInfoUseCaseImpl>()
+    factoryBy<ObserveSetupScriptUseCase, ObserveSetupScriptUseCaseImpl>()
+    factoryBy<GetSetupScriptUseCase, GetSetupScriptUseCaseImpl>()
     
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
     

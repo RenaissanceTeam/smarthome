@@ -156,7 +156,7 @@
         android:id="@+id/addScriptInfoFragment"
         android:name="smarthome.client.presentation.scripts.addition.SetupScriptInfoFragment"
         android:label="@string/setup_script"
-        tools:layout="@layout/fragment_add_script">
+        tools:layout="@layout/fragment_setup_script_info">
         <argument
             android:name="show_bottom_bar"
             android:defaultValue="false"
@@ -172,6 +172,9 @@
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
             app:popExitAnim="@anim/exit_to_right" />
+        <argument
+            android:name="script_id"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/addControllersToScriptFragment"

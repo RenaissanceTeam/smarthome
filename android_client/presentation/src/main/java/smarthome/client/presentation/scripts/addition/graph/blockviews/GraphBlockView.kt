@@ -108,8 +108,6 @@ abstract class GraphBlockView @JvmOverloads constructor(
     private fun moveTo(position: Position) {
         x = position.x.toFloat()
         y = position.y.toFloat()
-        
-        debug_item.text = "$x, $y, width=$width, height=$height"
     }
     
 }

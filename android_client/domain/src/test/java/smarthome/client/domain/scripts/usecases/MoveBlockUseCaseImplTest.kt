@@ -3,8 +3,9 @@ package smarthome.client.domain.scripts.usecases
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
-import smarthome.client.data.api.scripts.ScriptGraphRepo
-import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
+import smarthome.client.data.api.scripts.SetupScriptRepo
+import smarthome.client.domain.api.scripts.usecases.setup.MoveBlockUseCase
+import smarthome.client.domain.scripts.usecases.setup.MoveBlockUseCaseImpl
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.controller.ControllerBlock
 import smarthome.client.entity.script.controller.ControllerBlockId
@@ -19,7 +20,7 @@ data class MockControllerBlock(override val id: ControllerBlockId, override val 
 class MoveBlockUseCaseImplTest {
     
     private lateinit var useCase: MoveBlockUseCase
-    private lateinit var repo: ScriptGraphRepo
+    private lateinit var repo: SetupScriptRepo
     
     @Before
     fun setUp() {

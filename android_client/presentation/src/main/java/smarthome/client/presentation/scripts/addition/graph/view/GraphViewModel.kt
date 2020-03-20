@@ -3,7 +3,7 @@ package smarthome.client.presentation.scripts.addition.graph.view
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
-import smarthome.client.domain.api.scripts.usecases.*
+import smarthome.client.domain.api.scripts.usecases.setup.*
 import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyId
@@ -28,7 +28,6 @@ import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.Position
 import smarthome.client.util.findAndModify
-import smarthome.client.util.log
 
 class GraphViewModel : KoinViewModel() {
     private val eventBus: GraphEventBus by inject()
@@ -42,19 +41,18 @@ class GraphViewModel : KoinViewModel() {
     private val dependencyEventsHandler: DependencyEventsHandler by inject { parametersOf(movingDependency) }
     private val moveBlockUseCase: MoveBlockUseCase by inject()
     
-    val scriptId = 1L // TODO
     val movingDependency = MutableLiveData<MovingDependency>()
     val blocks = MutableLiveData<List<BlockState>>(emptyList())
     val dependencies = MutableLiveData<List<DependencyState>>(emptyList())
     
-    init {
+    override fun onResume() {
         disposable.add(eventBus.observe()
             .subscribe {
                 if (it is GraphDragEvent) dragBlockHandler.handle(it)
                 if (it is DependencyEvent) dependencyEventsHandler.handle(it)
             })
         
-        disposable.add(observeBlocksUseCase.execute(scriptId).subscribe { newBlocks ->
+        disposable.add(observeBlocksUseCase.execute().subscribe { newBlocks ->
             val currentBlocks = blocks.value.orEmpty()
             
             blocks.value = newBlocks.map { newBlock ->
@@ -65,7 +63,7 @@ class GraphViewModel : KoinViewModel() {
             dependencies.triggerRebuild()
         })
         
-        disposable.add(observeDependenciesUseCase.execute(scriptId).subscribe { dependencies ->
+        disposable.add(observeDependenciesUseCase.execute().subscribe { dependencies ->
             this.dependencies.updateWith { current ->
                 dependencies.map { dependency ->
                     current.orEmpty().find { it.dependency.id == dependency.id }
@@ -74,6 +72,10 @@ class GraphViewModel : KoinViewModel() {
                 }
             }
         })
+    }
+    
+    override fun onPause() {
+        disposable.clear()
     }
     
     fun onDropped(event: GraphDragEvent, dropPosition: Position) {
@@ -87,7 +89,7 @@ class GraphViewModel : KoinViewModel() {
     }
     
     fun onBlockMoved(blockId: BlockId, newPosition: Position) {
-        moveBlockUseCase.execute(scriptId, blockId, newPosition)
+        moveBlockUseCase.execute(blockId, newPosition)
     }
     
     fun onCanceled(event: GraphDragEvent) {
@@ -107,7 +109,7 @@ class GraphViewModel : KoinViewModel() {
                     it.copyWithInfo(
                         border = BorderStatus(
                             isVisible = true,
-                            isFailure = !checkIfDependencyPossible.execute(scriptId, from, to)
+                            isFailure = !checkIfDependencyPossible.execute(from, to)
                         )
                     )
                 }
@@ -133,8 +135,8 @@ class GraphViewModel : KoinViewModel() {
     fun addDependency(id: DependencyId, from: BlockId, to: BlockId) {
         setMovingDependencyToIdle()
         hideBorderOnBlock(to)
-        
-        addDependencyUseCase.execute(scriptId, Dependency(id, from, to))
+    
+        addDependencyUseCase.execute(Dependency(id, from, to))
         eventBus.addEvent(OpenSetupDependency(id))
     }
     

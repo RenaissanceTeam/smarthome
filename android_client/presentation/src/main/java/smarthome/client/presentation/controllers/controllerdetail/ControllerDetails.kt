@@ -30,7 +30,7 @@ class ControllerDetails : Fragment() {
         lifecycle.addObserver(viewModel)
         viewModel.setControllerId(args.controllerGuid)
     
-        viewModel.refresh.observe(this) { progress_bar.visible = it }
+        viewModel.refresh.observe(viewLifecycleOwner) { progress_bar.visible = it }
         viewModel.controller.observe(this, ::bindController)
     }
     

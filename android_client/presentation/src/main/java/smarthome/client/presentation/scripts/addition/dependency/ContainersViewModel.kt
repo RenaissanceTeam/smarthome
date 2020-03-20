@@ -11,11 +11,10 @@ import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.containsThat
 
 class ContainersViewModel<T : DependencyUnit>(
-    emptyUnitsCreator: (Long, Dependency) -> List<T>
+    emptyUnitsCreator: (Dependency) -> List<T>
 ) : KoinComponent {
-    val scriptId = 1L // TODO
     val containersLiveData = MutableLiveData<List<ContainerState<T>>>()
-    private val containersState = ContainersStates { emptyUnitsCreator.invoke(scriptId, it) }
+    private val containersState = ContainersStates { emptyUnitsCreator.invoke(it) }
     
     fun setData(data: List<T>, dependency: Dependency) {
         containersLiveData.updateWith {

@@ -37,17 +37,11 @@
             android:layout_height="wrap_content"
             android:padding="2dp"
             android:src="@drawable/ic_drag_handle"
-            android:tint="@color/gray"
+            app:tint="@color/gray"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            app:layout_constraintTop_toBottomOf="@id/block_content"
-            android:id="@+id/debug_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

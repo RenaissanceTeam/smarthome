@@ -11,9 +11,9 @@ import org.junit.rules.TestRule
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.GetDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.CreateEmptyActionForDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.CreateEmptyConditionsForDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.GetDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.ObserveSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
@@ -27,11 +27,8 @@ import smarthome.client.presentation.scripts.addition.dependency.mock.MockCondit
 import smarthome.client.presentation.scripts.addition.graph.MockBlockId
 import smarthome.client.presentation.scripts.addition.graph.MockDependencyId
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
-import smarthome.client.util.containsThat
 import smarthome.client.util.findAndModify
 import smarthome.client.util.trampoline
-import smarthome.client.util.withRemoved
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class SetupDependencyViewModelTest {

@@ -1,6 +1,6 @@
 package smarthome.client.presentation.scripts.addition.graph.helper
 
-import smarthome.client.domain.api.scripts.usecases.AddControllerBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.AddControllerBlockUseCase
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.controller.ControllerBlockId
 import smarthome.client.presentation.scripts.addition.graph.events.drag.BlockDragEvent
@@ -9,17 +9,17 @@ import smarthome.client.presentation.scripts.addition.graph.events.drag.GraphDra
 class AddBlockHelper(
     private val addControllerBlockUseCase: AddControllerBlockUseCase
 ) {
-    fun resolveAddingFromEvent(scriptId: Long, event: GraphDragEvent): Block {
+    fun resolveAddingFromEvent(event: GraphDragEvent): Block {
         return when (event) {
-            is BlockDragEvent -> resolveDragEvent(event, scriptId)
+            is BlockDragEvent -> resolveDragEvent(event)
             else -> throw IllegalArgumentException("can't resolve how to add block for event $event")
         }
     }
     
-    private fun resolveDragEvent(event: GraphDragEvent, scriptId: Long): Block {
+    private fun resolveDragEvent(event: GraphDragEvent): Block {
         return when (val id = event.dragInfo.id) {
             is ControllerBlockId ->
-                addControllerBlockUseCase.execute(scriptId, id.id, event.dragInfo.position)
+                addControllerBlockUseCase.execute(id.id, event.dragInfo.position)
             else -> throw IllegalArgumentException("can't resolve how to add dragged block with id $id")
         }
     }

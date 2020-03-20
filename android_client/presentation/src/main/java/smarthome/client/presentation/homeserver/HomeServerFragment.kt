@@ -21,7 +21,7 @@ class HomeServerFragment : Fragment() {
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.serverUrl.observe(this) {
+        viewModel.serverUrl.observe(viewLifecycleOwner) {
             input_server.setText(it)
         }
         

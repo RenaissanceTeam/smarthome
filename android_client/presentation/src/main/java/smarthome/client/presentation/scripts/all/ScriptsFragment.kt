@@ -10,6 +10,8 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_scripts.*
+import org.koin.ext.scope
+import smarthome.client.entity.NOT_DEFINED_ID
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.all.epoxy.ScriptsController
 
@@ -24,33 +26,32 @@ class ScriptsFragment : Fragment() {
     }
     
     
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    
         lifecycle.addObserver(viewModel)
-        
-        viewModel.refresh.observe(this) {
+    
+        viewModel.refresh.observe(viewLifecycleOwner) {
             refresh_layout.isRefreshing = it
         }
-        
-        viewModel.scripts.observe(this) {
+    
+        viewModel.scripts.observe(viewLifecycleOwner) {
             itemsController.setData(it, viewModel)
         }
     
-        viewModel.openAddition.onNavigate(this, ::openAddition)
-    }
-    
-    private fun openAddition() {
-        findNavController().navigate(
-            ScriptsFragmentDirections.actionScriptsFragmentToAddScriptInfoFragment())
-    }
-    
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        viewModel.openNewScript.onNavigate(this, ::openAddition)
         
         script_items.layoutManager = LinearLayoutManager(context)
         script_items.adapter = itemsController.adapter
         refresh_layout.setOnRefreshListener { viewModel.onRefresh() }
         add_script.setOnClickListener { viewModel.onAddScriptClicked() }
+    }
+    
+    
+    private fun openAddition() {
+        findNavController().navigate(
+            ScriptsFragmentDirections.actionScriptsFragmentToAddScriptInfoFragment(scriptId = NOT_DEFINED_ID))
+        
+        "setup".scope.close()
     }
 }

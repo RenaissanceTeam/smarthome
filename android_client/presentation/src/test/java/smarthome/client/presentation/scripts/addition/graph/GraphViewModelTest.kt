@@ -15,10 +15,10 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
-import smarthome.client.domain.api.scripts.usecases.AddDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.CheckIfDependencyPossibleUseCase
-import smarthome.client.domain.api.scripts.usecases.ObserveBlocksUseCase
-import smarthome.client.domain.api.scripts.usecases.ObserveDependenciesUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.AddDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.CheckIfDependencyPossibleUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.ObserveBlocksUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.ObserveDependenciesUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.block.BlockId

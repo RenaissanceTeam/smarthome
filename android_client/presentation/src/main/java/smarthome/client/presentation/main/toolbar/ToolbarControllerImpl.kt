@@ -30,5 +30,11 @@ class ToolbarControllerImpl(
         toolbar.setNavigationIcon(resource)
         toolbar.setNavigationOnClickListener { onClick() }
     }
+    
+    override fun setNavigationCallback(onClick: () -> Unit) {
+        val toolbar = toolbarHolder.toolbar ?: return
+        
+        toolbar.setNavigationOnClickListener { onClick() }
+    }
 }
 

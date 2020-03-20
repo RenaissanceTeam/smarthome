@@ -8,8 +8,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
-import smarthome.client.domain.api.scripts.usecases.CreateEmptyActionForDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.CreateEmptyActionForDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.CreateEmptyConditionsForDependencyUseCase
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.ACTION_CONTAINER_CONTROLLER
@@ -28,7 +28,6 @@ import smarthome.client.presentation.scripts.addition.controllers.ControllersHub
 import smarthome.client.presentation.scripts.addition.dependency.ContainersViewModel
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainerId
 import smarthome.client.presentation.scripts.addition.dependency.container.ContainersController
-import smarthome.client.presentation.scripts.addition.graph.ScriptGraphFragment
 import smarthome.client.presentation.scripts.addition.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.addition.graph.blockviews.factory.*
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
@@ -98,7 +97,8 @@ val presentation = module {
     
     singleBy<DraggableHostHolder, DraggableHostHolderImpl>()
     
-    scope<ScriptGraphFragment> {
+    scope<String> {
+        scoped { SetupScriptViewModel() }
         scoped { ControllersHubViewModel() }
         scoped { GraphViewModel() }
     }

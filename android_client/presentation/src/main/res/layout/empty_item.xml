@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <RelativeLayout
@@ -17,7 +18,7 @@
             android:layout_height="70dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_toys"
-            android:tint="@color/gray" />
+            app:tint="@color/gray" />
 
         <TextView
             android:id="@+id/empty_label"
@@ -26,7 +27,7 @@
             android:layout_below="@id/empty_image"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:text="Not items found."
+            android:text="No items found"
             android:textColor="@color/gray" />
 
     </RelativeLayout>

@@ -11,7 +11,7 @@ import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import org.koin.core.scope.Scope
+import org.koin.ext.scope
 import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.R
@@ -36,11 +36,10 @@ class GraphView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
     
-    lateinit var scope: Scope
     private var blockViews = mutableMapOf<BlockId, GraphBlockView>()
     private var dependencyViews = mutableMapOf<DependencyId, DependencyArrowView>()
     private var movingDependencyView = DependencyArrowView(context)
-    private val viewModel by lazy { scope.get<GraphViewModel>() }
+    private val viewModel by lazy { "setup".scope.get<GraphViewModel>() }
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
     private val dragHost = ViewGroupHost(this)
     private val movingDependencyProcessor by lazy {

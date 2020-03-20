@@ -81,6 +81,7 @@ inline fun <T, R> T.runInScope(scope: CoroutineScope, crossinline block: suspend
     return scope.launch { block() }
 }
 
+
 inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope,
                                           crossinline onFailure: (Throwable) -> Unit = {},
                                           crossinline block: suspend T.() -> R
@@ -88,8 +89,9 @@ inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope,
     return scope.launch { runCatching { block() }.onFailure(onFailure) }
 }
 
-fun <T> BehaviorSubject<List<T>>.onNextModified(modify: (List<T>) -> List<T>) {
-    onNext(modify(value.orEmpty()))
+fun <T> BehaviorSubject<T>.onNextModified(modify: (T) -> T) {
+    val value = value ?: return
+    modify(value)?.let(::onNext)
 }
 
 fun View.show() {

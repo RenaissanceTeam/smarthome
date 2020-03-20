@@ -1,13 +1,13 @@
 package smarthome.client.presentation.scripts.addition.graph.eventhandler
 
 import androidx.lifecycle.MutableLiveData
-import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
-import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.MoveBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.RemoveBlockUseCase
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.block.BlockId
-import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
 import smarthome.client.presentation.scripts.addition.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.addition.graph.events.drag.*
+import smarthome.client.presentation.scripts.addition.graph.helper.AddBlockHelper
 import smarthome.client.presentation.scripts.addition.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.util.withReplacedOrAdded
 
@@ -18,7 +18,6 @@ class DragBlockEventsHandlerImpl(
     private val addBlockHelper: AddBlockHelper,
     private val blockToNewGraphBlockStateMapper: BlockToNewGraphBlockStateMapper
 ): DragBlockEventsHandler {
-    val scriptId: Long = 1L // TODO
     
     override fun handle(event: GraphDragEvent) {
         if (!event.isFromOrTo(GRAPH)) return
@@ -45,14 +44,14 @@ class DragBlockEventsHandlerImpl(
     
     private fun removeBlock(event: GraphDragEvent) {
         val blockBeforeEvent = getBlockState(event.dragInfo.id) ?: return
-        
-        removeBlockUseCase.execute(scriptId, blockBeforeEvent.block.id)
+    
+        removeBlockUseCase.execute(blockBeforeEvent.block.id)
     }
     
     private fun addOrMoveBlock(event: GraphDragEvent) {
         when (event.isFrom(GRAPH)) {
-            true -> moveBlockUseCase.execute(scriptId, event.dragInfo.id, event.dragInfo.position)
-            false -> addBlockHelper.resolveAddingFromEvent(scriptId, event)
+            true -> moveBlockUseCase.execute(event.dragInfo.id, event.dragInfo.position)
+            false -> addBlockHelper.resolveAddingFromEvent(event)
         }
     }
     

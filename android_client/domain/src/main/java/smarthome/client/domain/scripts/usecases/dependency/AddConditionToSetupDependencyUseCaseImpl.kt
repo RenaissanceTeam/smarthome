@@ -1,7 +1,7 @@
 package smarthome.client.domain.scripts.usecases.dependency
 
 import smarthome.client.data.api.scripts.SetupDependencyRepo
-import smarthome.client.domain.api.scripts.usecases.CreateEmptyConditionsForDependencyUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.CreateEmptyConditionsForDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.AddConditionToSetupDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.GetSetupDependencyUseCase
 
@@ -15,7 +15,6 @@ class AddConditionToSetupDependencyUseCaseImpl(
     
         repo.set(dependency.copy(
             conditions = dependency.conditions + getEmptyConditionsForDependencyUseCase.execute(
-                scriptId = repo.getScriptId(),
                 dependency = dependency
             ).first()
         ))

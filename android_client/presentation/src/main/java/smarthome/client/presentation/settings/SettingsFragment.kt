@@ -17,7 +17,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
         
-        viewModel.currentAccount.observe(this) { currentAccount?.summary = it }
+        viewModel.currentAccount.observe(viewLifecycleOwner) { currentAccount?.summary = it }
         signOut?.setOnPreferenceClickListener { viewModel.signOut(); true }
     }
 }

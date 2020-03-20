@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.scripts_controllers_to_add.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.scope.Scope
+import org.koin.ext.scope
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.addition.controllers.epoxy.DevicesController
 import smarthome.client.presentation.scripts.addition.graph.events.drag.BlockDragEvent
@@ -23,9 +24,7 @@ class ControllersHubView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
     
-    lateinit var scope: Scope
-    
-    private val viewModel by lazy { scope.get<ControllersHubViewModel>() }
+    private val viewModel by lazy { "setup".scope.get<ControllersHubViewModel>() }
     private val itemsController = DevicesController()
     private var onOpenMenuCallback: () -> Unit = {}
     

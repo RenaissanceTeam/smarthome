@@ -20,4 +20,8 @@ class ScriptsRepoImpl(
         
         return scriptsDtos.map(scriptsMapper::map)
     }
+    
+    override suspend fun fetchOne(id: Long): Script {
+        TODO()
+    }
 }

@@ -27,7 +27,7 @@ class LoginFragment : Fragment() {
         username.text = "a"
         password.text = "a"
         
-        viewModel.showProgress.observe(this) { progress.visible = it }
+        viewModel.showProgress.observe(viewLifecycleOwner) { progress.visible = it }
         login_button.setOnClickListener {
             viewModel.login(
                 username.text,

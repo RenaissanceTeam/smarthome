@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
-import smarthome.client.domain.api.scripts.usecases.AddBlockToScriptGraphUseCase
-import smarthome.client.domain.api.scripts.usecases.MoveBlockUseCase
-import smarthome.client.domain.api.scripts.usecases.RemoveBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.AddBlockToScriptGraphUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.MoveBlockUseCase
+import smarthome.client.domain.api.scripts.usecases.setup.RemoveBlockUseCase
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.block.BlockId
 import smarthome.client.util.Position

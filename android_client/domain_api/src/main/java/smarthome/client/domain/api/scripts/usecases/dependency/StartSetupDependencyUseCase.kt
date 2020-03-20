@@ -4,5 +4,5 @@ import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyId
 
 interface StartSetupDependencyUseCase {
-    fun execute(scriptId: Long, dependencyId: DependencyId): Dependency
+    fun execute(dependencyId: DependencyId): Dependency
 }

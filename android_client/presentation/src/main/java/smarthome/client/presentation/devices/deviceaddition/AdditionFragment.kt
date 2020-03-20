@@ -22,10 +22,10 @@ class AdditionFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
     
         lifecycle.addObserver(viewModel)
-        viewModel.deviceStates.observe(this) {
+        viewModel.deviceStates.observe(viewLifecycleOwner) {
             controller.setData(it, viewModel)
         }
-        viewModel.refresh.observe(this) {
+        viewModel.refresh.observe(viewLifecycleOwner) {
             refresh_layout.isRefreshing = it
         }
         viewModel.openDeviceDetails.onNavigate(this) {
