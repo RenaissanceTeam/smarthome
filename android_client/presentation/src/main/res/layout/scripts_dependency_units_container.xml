@@ -12,7 +12,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <smarthome.client.presentation.scripts.addition.dependency.container.DependencyUnitsCarousel
+    <smarthome.client.presentation.scripts.setup.dependency.container.DependencyUnitsCarousel
         android:id="@+id/dependency_units_carousel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

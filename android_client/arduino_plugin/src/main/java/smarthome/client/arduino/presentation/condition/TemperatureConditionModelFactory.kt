@@ -1,11 +1,10 @@
 package smarthome.client.arduino.presentation.condition
 
 import com.airbnb.epoxy.EpoxyModel
-import smarthome.client.arduino.entity.condition.HumidityConditionData
 import smarthome.client.arduino.entity.condition.TemperatureConditionData
 import smarthome.client.domain.api.scripts.usecases.dependency.ChangeSetupDependencyConditionUseCase
 import smarthome.client.entity.script.dependency.condition.Condition
-import smarthome.client.presentation.scripts.addition.dependency.condition.ControllerConditionValueViewModel_
+import smarthome.client.presentation.scripts.setup.dependency.condition.ControllerConditionValueViewModel_
 
 class TemperatureConditionModelFactory(
     private val changeSetupDependencyConditionUseCase: ChangeSetupDependencyConditionUseCase

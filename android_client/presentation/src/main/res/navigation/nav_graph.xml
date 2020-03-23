@@ -154,7 +154,7 @@
     </fragment>
     <fragment
         android:id="@+id/addScriptInfoFragment"
-        android:name="smarthome.client.presentation.scripts.addition.SetupScriptInfoFragment"
+        android:name="smarthome.client.presentation.scripts.setup.SetupScriptInfoFragment"
         android:label="@string/setup_script"
         tools:layout="@layout/fragment_setup_script_info">
         <argument
@@ -178,7 +178,7 @@
     </fragment>
     <fragment
         android:id="@+id/addControllersToScriptFragment"
-        android:name="smarthome.client.presentation.scripts.addition.graph.ScriptGraphFragment"
+        android:name="smarthome.client.presentation.scripts.setup.graph.ScriptGraphFragment"
         android:label="@string/empty"
         tools:layout="@layout/fragment_script_graph">
         <argument
@@ -200,7 +200,7 @@
 
     <fragment
         android:id="@+id/setupDependencyFragment"
-        android:name="smarthome.client.presentation.scripts.addition.dependency.SetupDependencyFragment"
+        android:name="smarthome.client.presentation.scripts.setup.dependency.SetupDependencyFragment"
         android:label="@string/empty"
         tools:layout="@layout/scripts_setup_dependency">
 

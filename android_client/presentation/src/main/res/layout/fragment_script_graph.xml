@@ -7,7 +7,7 @@
     app:motionDebug="SHOW_ALL"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <smarthome.client.presentation.scripts.addition.graph.view.GraphView
+    <smarthome.client.presentation.scripts.setup.graph.view.GraphView
         android:id="@+id/script_graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -30,7 +30,7 @@
     </com.github.clans.fab.FloatingActionMenu>
 
 
-    <smarthome.client.presentation.scripts.addition.controllers.ControllersHubView
+    <smarthome.client.presentation.scripts.setup.controllers.ControllersHubView
         android:id="@+id/add_controllers"
         android:layout_height="match_parent"
         android:layout_width="0dp"

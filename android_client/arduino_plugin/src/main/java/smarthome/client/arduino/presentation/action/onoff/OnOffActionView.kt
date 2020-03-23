@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.onoff_action_view.view.*
 import smarthome.client.arduino.entity.action.off
 import smarthome.client.arduino.entity.action.on
 import smarthome.client.arduino_plugin.R
-import smarthome.client.presentation.scripts.addition.dependency.DependencyUnitView
+import smarthome.client.presentation.scripts.setup.dependency.DependencyUnitView
 import smarthome.client.presentation.util.inflate
 import smarthome.client.util.invisible
 import smarthome.client.util.show
