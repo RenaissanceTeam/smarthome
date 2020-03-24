@@ -1,36 +1,31 @@
 package smarthome.client.presentation.scripts.setup
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_setup_script_info.*
 import org.koin.android.ext.android.inject
-import org.koin.ext.scope
 import smarthome.client.entity.script.Script
 import smarthome.client.presentation.R
+import smarthome.client.presentation.core.BackPressState
+import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
+import smarthome.client.presentation.scripts.setup.di.setupScope
 import smarthome.client.presentation.util.confirmAction
 import smarthome.client.util.visible
 
-class SetupScriptInfoFragment : Fragment() {
-    private val viewModel by lazy { "setup".scope.get<SetupScriptViewModel>() }
+class SetupScriptInfoFragment : BaseFragment() {
+    private val viewModel by lazy { setupScope.get<SetupScriptViewModel>() }
     private val toolbarController: ToolbarController by inject()
     private val args: SetupScriptInfoFragmentArgs by navArgs()
     
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_setup_script_info, container, false)
-    }
+    
+    override fun getLayout() = R.layout.fragment_setup_script_info
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        
         setConfirmationOnUpNavigation()
         viewModel.onScriptId(args.scriptId)
         
@@ -51,13 +46,20 @@ class SetupScriptInfoFragment : Fragment() {
     
     private fun setConfirmationOnUpNavigation() {
         toolbarController.setNavigationCallback {
-            lifecycleScope.launchWhenResumed {
-                val confirmed = confirmAction(context) {
-                    title = "Close without saving?"
-                }
-                viewModel.takeIf { confirmed }?.onCancel()
-            }
+            lifecycleScope.launchWhenResumed { confirmCancellation() }
         }
+    }
+    
+    override suspend fun onBackPressed(): BackPressState {
+        confirmCancellation()
+        return BackPressState.CONSUMED
+    }
+    
+    private suspend fun confirmCancellation() {
+        val confirmed = confirmAction(context) {
+            title = "Close without saving?"
+        }
+        viewModel.takeIf { confirmed }?.onCancel()
     }
     
     private fun bindScript(script: Script) {

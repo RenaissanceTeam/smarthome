@@ -3,11 +3,11 @@ package smarthome.client.presentation.scripts.setup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import org.koin.core.inject
-import org.koin.ext.scope
 import smarthome.client.domain.api.scripts.usecases.setup.*
 import smarthome.client.entity.NOT_DEFINED_ID
 import smarthome.client.entity.script.Script
 import smarthome.client.entity.script.ScriptInfo
+import smarthome.client.presentation.scripts.setup.di.setupScope
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.presentation.util.extensions.runInScopeLoading
@@ -54,6 +54,6 @@ class SetupScriptViewModel : KoinViewModel() {
     fun onCancel() {
         cancelSetupScriptUseCase.execute()
         close.trigger()
-        "setup".scope.close()
+        setupScope.close()
     }
 }

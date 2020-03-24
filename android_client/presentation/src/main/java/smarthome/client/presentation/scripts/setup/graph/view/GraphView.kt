@@ -11,10 +11,10 @@ import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import org.koin.ext.scope
 import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.R
+import smarthome.client.presentation.scripts.setup.di.setupScope
 import smarthome.client.presentation.scripts.setup.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.*
 import smarthome.client.presentation.scripts.setup.graph.blockviews.factory.GraphBlockFactoryResolver
@@ -39,7 +39,7 @@ class GraphView @JvmOverloads constructor(
     private var blockViews = mutableMapOf<BlockId, GraphBlockView>()
     private var dependencyViews = mutableMapOf<DependencyId, DependencyArrowView>()
     private var movingDependencyView = DependencyArrowView(context)
-    private val viewModel by lazy { "setup".scope.get<GraphViewModel>() }
+    private val viewModel by lazy { setupScope.get<GraphViewModel>() }
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
     private val dragHost = ViewGroupHost(this)
     private val movingDependencyProcessor by lazy {

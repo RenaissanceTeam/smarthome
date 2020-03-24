@@ -1,7 +1,10 @@
 package smarthome.client.presentation.scripts.setup.dependency
 
 import android.os.Bundle
+import android.view.View
 import android.widget.PopupMenu
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -9,23 +12,25 @@ import kotlinx.android.synthetic.main.scripts_setup_dependency.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
-import org.koin.ext.scope
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.ACTION_CONTAINER_CONTROLLER
 import smarthome.client.presentation.CONDITION_CONTAINER_CONTROLLER
 import smarthome.client.presentation.R
+import smarthome.client.presentation.core.BackPressState
 import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.setup.SetupScriptViewModel
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainerState
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainersController
+import smarthome.client.presentation.scripts.setup.di.setupScope
 import smarthome.client.presentation.util.confirmAction
 
-class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDependencyViewModel::class) {
+class SetupDependencyFragment : BaseFragment() {
+    private val viewModel: SetupDependencyViewModel by viewModels()
     private val navArgs: SetupDependencyFragmentArgs by navArgs()
     private val toolbarController: ToolbarController by inject()
-    private val setupScriptViewModel by lazy { "setup".scope.get<SetupScriptViewModel>() }
+    private val setupScriptViewModel by lazy { setupScope.get<SetupScriptViewModel>() }
     private val conditionsController: ContainersController<Condition>
         by inject(named(CONDITION_CONTAINER_CONTROLLER)) { parametersOf(viewModel::onConditionScrolled) }
     private val actionsController: ContainersController<Action>
@@ -33,9 +38,9 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
     
     override fun getLayout() = R.layout.scripts_setup_dependency
     
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        lifecycle.addObserver(viewModel)
+        
         viewModel.setIsNew(navArgs.isNew)
         viewModel.setDependencyId(navArgs.dependencyId)
         viewModel.setFlowViewModel(setupScriptViewModel)
@@ -90,19 +95,23 @@ class SetupDependencyFragment : BaseFragment<SetupDependencyViewModel>(SetupDepe
                 setCloseNavigationIcon()
             }
         }
-    
-       
     }
     
+    override suspend fun onBackPressed(): BackPressState {
+        confirmCancellation()
+        return BackPressState.CONSUMED
+    }
     private fun setCloseNavigationIcon() {
         toolbarController.setNavigationIcon(R.drawable.ic_close) {
-            launchInViewScope {
-                val confirmed = confirmAction(context) {
-                    title = "Close without saving?"
-                }
-                viewModel.takeIf { confirmed }?.onCancel()
-            }
+            lifecycleScope.launchWhenResumed { confirmCancellation() }
         }
+    }
+    
+    private suspend fun confirmCancellation() {
+        val confirmed = confirmAction(context) {
+            title = "Close without saving?"
+        }
+        viewModel.takeIf { confirmed }?.onCancel()
     }
     
     private fun inflateToolbarSaveMenu() {

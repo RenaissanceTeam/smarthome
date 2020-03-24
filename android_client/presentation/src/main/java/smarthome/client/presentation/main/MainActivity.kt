@@ -15,12 +15,13 @@ import org.koin.core.parameter.parametersOf
 import smarthome.client.presentation.R
 import smarthome.client.presentation.SHOW_BOTTOM_BAR
 import smarthome.client.presentation.SHOW_TOOL_BAR
+import smarthome.client.presentation.core.BaseActivity
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
 import smarthome.client.util.visible
 
 
-class MainActivity : FragmentActivity() {
+class MainActivity : BaseActivity() {
     private val viewModel: MainViewModel by viewModels()
     private val toolbarController: ToolbarController by inject()
     

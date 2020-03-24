@@ -10,14 +10,14 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_script_graph.*
 import org.koin.android.ext.android.inject
-import org.koin.ext.scope
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.R
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.setup.SetupScriptViewModel
+import smarthome.client.presentation.scripts.setup.di.setupScope
 
 class ScriptGraphFragment : Fragment() {
-    private val setupScriptViewModel by lazy { "setup".scope.get<SetupScriptViewModel>() }
+    private val setupScriptViewModel by lazy { setupScope.get<SetupScriptViewModel>() }
     private val viewModel: ScriptGraphViewModel by viewModels()
     private val toolbarController: ToolbarController by inject()
     
@@ -30,8 +30,6 @@ class ScriptGraphFragment : Fragment() {
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        
         lifecycle.addObserver(viewModel)
     
         toolbarController.setMenu(R.menu.save) {
