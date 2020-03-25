@@ -1,3 +1,5 @@
 package smarthome.client.entity.script.block
 
-interface BlockId
+import smarthome.client.entity.Id
+
+interface BlockId: Id

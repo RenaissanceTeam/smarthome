@@ -17,13 +17,13 @@ class DevicesController : Typed2EpoxyController<List<DeviceItemState>, Controlle
                 deviceName(device.name)
                 controllers(device.controllers.map { controllerId ->
                     val controller = viewModel.controllers[controllerId] ?: return@map null
-                    if (!viewModel.shouldShow(controllerId)) return@map null
+                    if (!controller.visible) return@map null
                     
                     ControllerViewModel_().apply {
                         id(controllerId)
                         
-                        name(controller.data?.name.orEmpty())
-                        state(controller.data?.state.orEmpty())
+                        name(controller.controller.data?.name.orEmpty())
+                        state(controller.controller.data?.state.orEmpty())
     
                         onDragStarted { touchPosition ->
                             viewModel.onDragStarted(controllerId, touchPosition)

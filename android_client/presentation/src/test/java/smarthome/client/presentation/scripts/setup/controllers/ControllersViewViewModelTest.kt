@@ -65,7 +65,7 @@ class ControllersViewViewModelTest {
     fun `when drag start from controllers hub should update hidden controllers and emit on devices`() {
         val id = 1L
         
-        assertThat(viewModel.shouldShow(id)).isEqualTo(true)
+        assertThat(viewModel.controllers[id]?.visible).isEqualTo(true)
     
         events.onNext(BlockDragEvent(
             id = id,
@@ -77,14 +77,14 @@ class ControllersViewViewModelTest {
             ))
         )
         
-        assertThat(viewModel.shouldShow(id)).isEqualTo(false)
+        assertThat(viewModel.controllers[id]?.visible).isEqualTo(false)
     }
     
     @Test
     fun `should not accept destination or origin other than controller hub`() {
         val id = 1L
         
-        assertThat(viewModel.shouldShow(id)).isEqualTo(true)
+        assertThat(viewModel.controllers[id]?.visible).isEqualTo(true)
         events.onNext(BlockDragEvent(
             id = id,
             dragInfo = CommonDragInfo(
@@ -96,7 +96,7 @@ class ControllersViewViewModelTest {
             ))
         )
     
-        assertThat(viewModel.shouldShow(id)).isEqualTo(true)
+        assertThat(viewModel.controllers[id]?.visible).isEqualTo(true)
     }
     
     @Test

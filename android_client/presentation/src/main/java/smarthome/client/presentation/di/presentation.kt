@@ -23,6 +23,8 @@ import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.main.toolbar.ToolbarControllerImpl
 import smarthome.client.presentation.main.toolbar.ToolbarHolder
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
+import smarthome.client.presentation.scripts.resolver.ActionModelResolver
+import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.scripts.setup.SetupScriptViewModel
 import smarthome.client.presentation.scripts.setup.controllers.ControllersHubViewModel
 import smarthome.client.presentation.scripts.setup.dependency.ContainersViewModel
@@ -30,19 +32,15 @@ import smarthome.client.presentation.scripts.setup.dependency.container.Containe
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainersController
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.setup.graph.blockviews.factory.*
-import smarthome.client.presentation.scripts.setup.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DependencyEventsHandler
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DependencyEventsHandlerImpl
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DragBlockEventsHandler
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DragBlockEventsHandlerImpl
 import smarthome.client.presentation.scripts.setup.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.setup.graph.events.GraphEventBusImpl
-import smarthome.client.presentation.scripts.setup.graph.helper.AddBlockHelper
 import smarthome.client.presentation.scripts.setup.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.presentation.scripts.setup.graph.mapper.DependencyToDependencyStateMapper
 import smarthome.client.presentation.scripts.setup.graph.view.GraphViewModel
-import smarthome.client.presentation.scripts.resolver.ActionModelResolver
-import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.util.drag.DraggableHostHolder
 import smarthome.client.presentation.util.drag.DraggableHostHolderImpl
 
@@ -70,20 +68,11 @@ val presentation = module {
     factoryBy<GraphBlockFactoryResolver, GraphBlockFactoryResolverImpl>()
     factory { BlockToNewGraphBlockStateMapper() }
     factory { DependencyToDependencyStateMapper() }
-    factory<DragBlockEventsHandler> { (blocks: MutableLiveData<List<BlockState>>) ->
-        DragBlockEventsHandlerImpl(
-            blocks = blocks,
-            addBlockHelper = get(),
-            blockToNewGraphBlockStateMapper = get(),
-            moveBlockUseCase = get(),
-            removeBlockUseCase = get()
-        )
-    }
+    factoryBy<DragBlockEventsHandler, DragBlockEventsHandlerImpl>()
     
     factory<DependencyEventsHandler> { (movingDependency: MutableLiveData<MovingDependency>) ->
         DependencyEventsHandlerImpl(movingDependency = movingDependency)
     }
-    factory { AddBlockHelper(get()) }
     factory(named(CONDITION_CONTAINER_CONTROLLER)) { (onScroll: (ContainerId, Condition) -> Unit) ->
         ContainersController(get<ConditionModelResolver>(), onScroll)
     }

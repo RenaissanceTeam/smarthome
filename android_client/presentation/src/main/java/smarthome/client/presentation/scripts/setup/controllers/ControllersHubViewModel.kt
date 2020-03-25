@@ -6,25 +6,29 @@ import org.koin.core.inject
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
-import smarthome.client.entity.Controller
-import smarthome.client.entity.script.block.BlockId
-import smarthome.client.entity.script.controller.ControllerBlockId
+import smarthome.client.domain.api.scripts.usecases.setup.GetBlockUseCase
+import smarthome.client.entity.script.block.Block
+import smarthome.client.entity.script.controller.ControllerBlock
+import smarthome.client.presentation.scripts.setup.controllers.epoxy.ControllerState
 import smarthome.client.presentation.scripts.setup.controllers.epoxy.DeviceItemState
 import smarthome.client.presentation.scripts.setup.graph.events.GraphEventBus
-import smarthome.client.presentation.scripts.setup.graph.events.drag.*
+import smarthome.client.presentation.scripts.setup.graph.events.drag.BlockDragInfo
+import smarthome.client.presentation.scripts.setup.graph.events.drag.CONTROLLERS_HUB
+import smarthome.client.presentation.scripts.setup.graph.events.drag.DRAG_DROP
+import smarthome.client.presentation.scripts.setup.graph.events.drag.DRAG_START
 import smarthome.client.presentation.util.KoinViewModel
-import smarthome.client.util.DataStatus
 import smarthome.client.util.Position
 import smarthome.client.util.runInScopeCatchingAny
 
 class ControllersHubViewModel : KoinViewModel() {
     
     val devices = MutableLiveData<List<DeviceItemState>>()
-    val controllers = mutableMapOf<Long, DataStatus<Controller>>()
+    val controllers = mutableMapOf<Long, ControllerState>()
     
     private val observingController = mutableMapOf<Long, Boolean>()
     private val hiddenControllers = mutableMapOf<Long, Boolean>()
     private val getGeneralDeviceInfo: GetGeneralDevicesInfo by inject()
+    private val getBlockUseCase: GetBlockUseCase by inject()
     private val observeController: ObserveControllerUseCase by inject()
     private val graphEventBus: GraphEventBus by inject()
     private var width = 0f
@@ -32,41 +36,37 @@ class ControllersHubViewModel : KoinViewModel() {
     
     init {
         disposable.add(graphEventBus.observe()
-            .filter {
-                it is BlockDragEvent
-                    && (it.isFromOrTo(CONTROLLERS_HUB))
-            }
-            .map { it as BlockDragEvent }
+            .filter { it is BlockDragInfo && (it.isFromOrTo(CONTROLLERS_HUB)) }
+            .map { it as BlockDragInfo }
             .subscribe { event ->
-                when (event.dragInfo.status) {
-                    DRAG_START -> if (event.isFrom(CONTROLLERS_HUB)) hideController(event.dragInfo.id)
-                    DRAG_DROP -> if (event.isTo(CONTROLLERS_HUB)) handleDroppedController(event.dragInfo.id)
+                when (event.status) {
+                    DRAG_START -> if (event.isFrom(CONTROLLERS_HUB)) hideController(event.block)
+                    DRAG_DROP -> if (event.isTo(CONTROLLERS_HUB)) handleDroppedController(event.block)
                 }
             })
     }
     
-    private fun handleDroppedController(id: BlockId) {
-        if (id !is ControllerBlockId) return
+    private fun handleDroppedController(block: Block) {
+        if (block !is ControllerBlock) return
         
-        hiddenControllers[id.id] = false
-        startObservingController(id.id)
+        hiddenControllers[block.controllerId] = false
+        startObservingController(block.controllerId)
         triggerDevicesRebuildModels()
     }
     
-    fun onDropped(drag: BlockDragEvent) {
-        val dropInfo = drag.dragInfo.copy(to = CONTROLLERS_HUB, status = DRAG_DROP)
-        val dropEvent = drag.copy(dragInfo = dropInfo)
-        
-        graphEventBus.addEvent(dropEvent)
+    fun onDropped(drag: BlockDragInfo) {
+        graphEventBus.addEvent(drag.copy(to = CONTROLLERS_HUB, status = DRAG_DROP))
     }
     
     fun open() {
         onFirstShow
     }
     
-    private fun hideController(id: BlockId) {
-        if (id !is ControllerBlockId) return
-        hiddenControllers[id.id] = true
+    private fun hideController(block: Block) {
+        if (block !is ControllerBlock) return
+        
+        hiddenControllers[block.controllerId] = true
+        
         triggerDevicesRebuildModels()
     }
     
@@ -83,7 +83,7 @@ class ControllersHubViewModel : KoinViewModel() {
     
         observingController[id] = true
         disposable.add(observeController.execute(id).subscribe {
-            controllers[id] = it
+            controllers[id] = controllers[id]?.copy(controller = it) ?: ControllerState(it)
             triggerDevicesRebuildModels()
         })
     }
@@ -92,18 +92,17 @@ class ControllersHubViewModel : KoinViewModel() {
         return DeviceItemState(device.id, device.name, device.controllers)
     }
     
-    fun onDragStarted(id: Long, dragTouch: Position): BlockDragEvent {
-        return BlockDragEvent(
+    fun onDragStarted(id: Long, dragTouch: Position): BlockDragInfo {
+
+        return (
             dragInfo = CommonDragInfo(
-                id = ControllerBlockId(id),
+                block = ControllerBLock(id),
                 status = DRAG_START,
                 dragTouch = dragTouch,
                 from = CONTROLLERS_HUB
             )
         ).also(graphEventBus::addEvent)
     }
-    
-    fun shouldShow(id: Long) = hiddenControllers[id]?.not() ?: DEFAULT_SHOW
     
     private fun triggerDevicesRebuildModels() {
         devices.value = devices.value ?: return

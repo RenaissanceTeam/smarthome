@@ -19,7 +19,7 @@ class GraphControllerViewModel(
     val data = MutableLiveData<Controller>()
     
     fun onNewBlockData(blockState: ControllerBlockState) {
-        id = blockState.block.id.id
+        id = blockState.block.controllerId
     }
     
     private var id by Delegates.observable<Long?>(null) { _, oldId, newId ->

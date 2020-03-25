@@ -14,7 +14,7 @@ import org.koin.core.KoinComponent
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.setup.controllers.epoxy.DevicesController
 import smarthome.client.presentation.scripts.setup.di.setupScope
-import smarthome.client.presentation.scripts.setup.graph.events.drag.BlockDragEvent
+import smarthome.client.presentation.scripts.setup.graph.events.drag.BlockDragInfo
 import smarthome.client.presentation.util.inflate
 
 class ControllersHubView @JvmOverloads constructor(
@@ -66,7 +66,7 @@ class ControllersHubView @JvmOverloads constructor(
     
     private fun handleDroppedItemsAsCancelledDragAction() {
         setOnDragListener { _, event ->
-            val dragInfo = event.localState as? BlockDragEvent ?: return@setOnDragListener false
+            val dragInfo = event.localState as? BlockDragInfo ?: return@setOnDragListener false
             
             when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> true
