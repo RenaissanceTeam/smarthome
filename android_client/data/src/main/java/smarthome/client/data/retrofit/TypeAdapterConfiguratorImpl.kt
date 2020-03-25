@@ -1,14 +1,14 @@
 package smarthome.client.data.retrofit
 
 import com.google.gson.GsonBuilder
-import smarthome.client.data.retrofit.adapters.BlockTypeAdapterFactory
+import smarthome.client.data.retrofit.adapters.BlockTypeAdapterFactoryImpl
 
 class TypeAdapterConfiguratorImpl(
-    private val blockTypeAdapterFactory: BlockTypeAdapterFactory
+    private val blockTypeAdapterFactoryImpl: BlockTypeAdapterFactoryImpl
 ) : TypeAdapterConfigurator {
     override fun configure(builder: GsonBuilder): GsonBuilder {
         return builder
-            .registerTypeAdapterFactory(blockTypeAdapterFactory.factory)
+            .registerTypeAdapterFactory(blockTypeAdapterFactoryImpl.factory)
         
     }
 }
