@@ -1,5 +1,5 @@
 package smarthome.client.data.api.typeadapter
 
-import smarthome.client.entity.script.dependency.condition.Condition
+import smarthome.client.entity.script.dependency.condition.ConditionData
 
-interface ConditionDataTypeAdapter : DataTypeAdapter<Condition>
+interface ConditionDataTypeAdapter : DataTypeAdapter<ConditionData>

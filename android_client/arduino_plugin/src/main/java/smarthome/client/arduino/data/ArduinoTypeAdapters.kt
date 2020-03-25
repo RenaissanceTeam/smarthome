@@ -6,21 +6,19 @@ import smarthome.client.arduino.entity.action.OnOffActionData
 import smarthome.client.arduino.entity.block.ArduinoControllerBlock
 import smarthome.client.arduino.entity.condition.HumidityConditionData
 import smarthome.client.arduino.entity.condition.TemperatureConditionData
-import smarthome.client.data.api.typeadapter.DataTypeAdapter
-import smarthome.client.entity.script.block.Block
-import smarthome.client.entity.script.dependency.action.ActionData
-import smarthome.client.entity.script.dependency.condition.Condition
-import smarthome.client.entity.script.dependency.condition.ConditionData
+import smarthome.client.data.api.typeadapter.ActionDataTypeAdapter
+import smarthome.client.data.api.typeadapter.BlockTypeAdapter
+import smarthome.client.data.api.typeadapter.ConditionDataTypeAdapter
 
 class ArduinoTypeAdapters : KoinComponent {
     
     init {
-        get<DataTypeAdapter<Block>>().setTypes(listOf(ArduinoControllerBlock::class.java))
-        get<DataTypeAdapter<ConditionData>>().setTypes(listOf(
+        get<BlockTypeAdapter>().setTypes(listOf(ArduinoControllerBlock::class.java))
+        get<ConditionDataTypeAdapter>().setTypes(listOf(
             HumidityConditionData::class.java,
             TemperatureConditionData::class.java
         ))
-        get<DataTypeAdapter<ActionData>>().setTypes(listOf(
+        get<ActionDataTypeAdapter>().setTypes(listOf(
             OnOffActionData::class.java
         ))
     }
