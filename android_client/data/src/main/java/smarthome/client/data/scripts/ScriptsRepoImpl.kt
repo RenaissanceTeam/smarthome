@@ -9,19 +9,25 @@ class ScriptsRepoImpl(
     private val retrofitFactory: RetrofitFactory,
     private val scriptsMapper: ScriptDtoToScriptMapper
 ) : ScriptsRepo {
+    
     override suspend fun fetch(): List<Script> {
         // todo remove mock when endpoint is ready
         return (1..20).map {
             Script(it.toLong(), "script # $it")
         }
-        
-        val scriptsDtos = retrofitFactory.createApi(ScriptsApi::class.java)
-            .fetchAll()
-        
-        return scriptsDtos.map(scriptsMapper::map)
+
+//        val scriptsDtos = retrofitFactory.createApi(ScriptsApi::class.java)
+//            .fetchAll()
+//
+//        return scriptsDtos.map(scriptsMapper::map)
     }
     
     override suspend fun fetchOne(id: Long): Script {
         TODO()
+    }
+    
+    override suspend fun save(script: Script): Script {
+        return retrofitFactory.createApi(ScriptsApi::class.java)
+            .save(script)
     }
 }

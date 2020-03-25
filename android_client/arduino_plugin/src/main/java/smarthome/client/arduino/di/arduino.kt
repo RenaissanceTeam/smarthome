@@ -2,6 +2,7 @@ package smarthome.client.arduino.di
 
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import smarthome.client.arduino.data.ArduinoTypeAdapters
 import smarthome.client.arduino.entity.action.ArduinoActionFromBlockResolver
 import smarthome.client.arduino.entity.block.ArduinoBlockNameResolver
 import smarthome.client.arduino.entity.block.ArduinoControllerBlockResolver

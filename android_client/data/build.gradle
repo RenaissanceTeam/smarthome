@@ -9,6 +9,7 @@ dependencies {
     implementation groups.koinWithExt
     implementation library.retrofit
     implementation library.retrofitGson
+    implementation library.retrofitLog
     implementation library.coroutinesCore
     implementation library.coroutinesAndroid
     implementation library.rxJava

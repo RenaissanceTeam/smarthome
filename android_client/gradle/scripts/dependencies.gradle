@@ -21,6 +21,7 @@ ext {
             firebaseMessaging        : ("com.google.firebase:firebase-messaging:$firebaseMessaging_version"),
             retrofit                 : ("com.squareup.retrofit2:retrofit:$retrofit_version"),
             retrofitGson             : ("com.squareup.retrofit2:converter-gson:$retrofit_version"),
+            retrofitLog              : 'com.squareup.okhttp3:logging-interceptor:4.2.1',
             multidex                 : ("com.android.support:multidex:$multidex_version"),
             junit                    : ("junit:junit:$junit_version"),
             kotlin                   : ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"),

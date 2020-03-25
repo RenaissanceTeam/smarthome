@@ -8,6 +8,7 @@ dependencies {
 
     implementation groups.koinWithExt
     implementation library.domain_api
+    implementation library.data_api
     implementation library.entity
     implementation library.util
     implementation library.presentation
