@@ -19,7 +19,7 @@ import smarthome.client.presentation.scripts.setup.graph.blockviews.GraphBlockVi
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.*
 import smarthome.client.presentation.scripts.setup.graph.blockviews.factory.GraphBlockFactoryResolver
 import smarthome.client.presentation.scripts.setup.graph.blockviews.state.BlockState
-import smarthome.client.presentation.scripts.setup.graph.events.drag.GraphDragEvent
+import smarthome.client.presentation.scripts.setup.graph.events.drag.BlockDragEvent
 import smarthome.client.presentation.util.doOnFirstLayout
 import smarthome.client.presentation.util.drag.Draggable
 import smarthome.client.presentation.util.drag.DraggableEvent
@@ -167,16 +167,16 @@ class GraphView @JvmOverloads constructor(
     
     private fun handleDroppingBlocksOntoGraph() {
         setOnDragListener { _, event ->
-            val dragInfo = event.localState as? GraphDragEvent ?: return@setOnDragListener false
+            val drag = event.localState as? BlockDragEvent ?: return@setOnDragListener false
             
             when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> true
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    if (!event.result) viewModel.onCanceled(dragInfo)
+                    if (!event.result) viewModel.onCanceled(drag)
                     true
                 }
                 DragEvent.ACTION_DROP -> {
-                    viewModel.onDropped(dragInfo, Position(event.x.toInt(), event.y.toInt()))
+                    viewModel.onDropped(drag, Position(event.x.toInt(), event.y.toInt()))
                     true
                 }
                 else -> false

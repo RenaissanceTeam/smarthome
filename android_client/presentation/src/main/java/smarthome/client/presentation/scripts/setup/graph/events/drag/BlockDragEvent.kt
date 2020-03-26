@@ -5,7 +5,7 @@ import smarthome.client.presentation.scripts.setup.graph.events.GraphEvent
 import smarthome.client.util.Position
 import smarthome.client.util.emptyPosition
 
-data class BlockDragInfo(
+data class BlockDragEvent(
     val block: Block,
     val status: String,
     val from: String = UNKNOWN,

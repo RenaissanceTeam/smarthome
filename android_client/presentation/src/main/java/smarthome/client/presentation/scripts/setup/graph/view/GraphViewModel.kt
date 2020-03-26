@@ -16,10 +16,10 @@ import smarthome.client.presentation.scripts.setup.graph.eventhandler.Dependency
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DragBlockEventsHandler
 import smarthome.client.presentation.scripts.setup.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.setup.graph.events.dependency.DependencyEvent
+import smarthome.client.presentation.scripts.setup.graph.events.drag.BlockDragEvent
 import smarthome.client.presentation.scripts.setup.graph.events.drag.DRAG_CANCEL
 import smarthome.client.presentation.scripts.setup.graph.events.drag.DRAG_DROP
 import smarthome.client.presentation.scripts.setup.graph.events.drag.GRAPH
-import smarthome.client.presentation.scripts.setup.graph.events.drag.GraphDragEvent
 import smarthome.client.presentation.scripts.setup.graph.events.navigation.OpenSetupDependency
 import smarthome.client.presentation.scripts.setup.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.presentation.scripts.setup.graph.mapper.DependencyToDependencyStateMapper
@@ -48,7 +48,7 @@ class GraphViewModel : KoinViewModel() {
     override fun onResume() {
         disposable.add(eventBus.observe()
             .subscribe {
-                if (it is GraphDragEvent) dragBlockHandler.handle(it)
+                if (it is BlockDragEvent) dragBlockHandler.handle(it)
                 if (it is DependencyEvent) dependencyEventsHandler.handle(it)
             })
         
@@ -78,27 +78,23 @@ class GraphViewModel : KoinViewModel() {
         disposable.clear()
     }
     
-    fun onDropped(event: GraphDragEvent, dropPosition: Position) {
-        val droppedInfo = event.dragInfo.copy(
+    fun onDropped(event: BlockDragEvent, dropPosition: Position) {
+        eventBus.addEvent(event.copy(
             status = DRAG_DROP,
             to = GRAPH,
-            position = dropPosition - event.dragInfo.dragTouch
-        )
-    
-        eventBus.addEvent(event.copyWithDragInfo(droppedInfo))
+            position = dropPosition - event.dragTouch
+        ))
     }
     
     fun onBlockMoved(blockId: BlockId, newPosition: Position) {
         moveBlockUseCase.execute(blockId, newPosition)
     }
     
-    fun onCanceled(event: GraphDragEvent) {
-        val cancelledInfo = event.dragInfo.copy(
+    fun onCanceled(event: BlockDragEvent) {
+        eventBus.addEvent(event.copy(
             status = DRAG_CANCEL,
             to = GRAPH
-        )
-    
-        eventBus.addEvent(event.copyWithDragInfo(cancelledInfo))
+        ))
     }
     
     fun dependencyTipOnBlock(from: BlockId, to: BlockId) {
