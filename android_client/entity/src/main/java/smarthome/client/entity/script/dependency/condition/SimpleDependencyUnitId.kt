@@ -1,5 +1,3 @@
 package smarthome.client.entity.script.dependency.condition
 
-class SimpleDependencyUnitId(
-    override val id: Long? = null
-): DependencyUnitId
+class SimpleDependencyUnitId(id: Long? = null) : DependencyUnitId(id)
