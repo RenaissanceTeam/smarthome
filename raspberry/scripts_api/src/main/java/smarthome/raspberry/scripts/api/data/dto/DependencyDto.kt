@@ -10,8 +10,8 @@ import smarthome.raspberry.json.classType
 @JsonTypeIdResolver(InheritanceTypeIdResolver::class)
 open class DependencyDto(
         open val id: Long = ID_NOT_DEFINED,
-        open val startBlock: Long,
-        open val endBlock: Long,
+        open val startBlock: String,
+        open val endBlock: String,
         val conditions: List<ConditionDto>,
         val actions: List<ActionDto>
 )

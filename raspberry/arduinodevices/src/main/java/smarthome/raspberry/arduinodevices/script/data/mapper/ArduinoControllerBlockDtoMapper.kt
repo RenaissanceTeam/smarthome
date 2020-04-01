@@ -21,6 +21,7 @@ class ArduinoControllerBlockDtoMapper(
 
         return ArduinoControllerBlock(
                 id = dto.id,
+                uuid = dto.uuid,
                 position = dto.position,
                 controller = getControllerByIdUseCase.execute(dto.controllerId)
         )
@@ -29,6 +30,7 @@ class ArduinoControllerBlockDtoMapper(
     override fun mapEntity(entity: ArduinoControllerBlock): ArduinoControllerBlockDto {
         return ArduinoControllerBlockDto(
                 id = entity.id,
+                uuid = entity.uuid,
                 position = entity.position,
                 controllerId = entity.controller.id
         )

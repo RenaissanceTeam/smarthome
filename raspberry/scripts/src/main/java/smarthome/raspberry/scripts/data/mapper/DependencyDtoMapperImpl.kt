@@ -2,6 +2,7 @@ package smarthome.raspberry.scripts.data.mapper
 
 import org.springframework.stereotype.Component
 import smarthome.raspberry.entity.script.Action
+import smarthome.raspberry.entity.script.Block
 import smarthome.raspberry.entity.script.Condition
 import smarthome.raspberry.entity.script.Dependency
 import smarthome.raspberry.scripts.api.data.dto.ActionDto
@@ -10,28 +11,26 @@ import smarthome.raspberry.scripts.api.data.dto.DependencyDto
 import smarthome.raspberry.scripts.api.data.mapper.ActionDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.ConditionDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.DependencyDtoMapper
-import smarthome.raspberry.scripts.api.data.mapper.resolver.DependencyMapperResolver
+import smarthome.raspberry.scripts.api.data.mapper.resolver.ActionMapperResolver
+import smarthome.raspberry.scripts.api.data.mapper.resolver.ConditionMapperResolver
 import kotlin.reflect.KClass
 
 @Component
 class DependencyDtoMapperImpl(
-        dependencyMapperResolver: DependencyMapperResolver,
-        private val actionsResolver: DependencyMapperResolver,
-        private val conditionsResolver: DependencyMapperResolver
-) : DependencyDtoMapper<Dependency, DependencyDto> {
+        private val actionsResolver: ActionMapperResolver,
+        private val conditionsResolver: ConditionMapperResolver
+) : DependencyDtoMapper {
 
-    init {
-        dependencyMapperResolver.register(Dependency::class, DependencyDto::class, this)
-    }
 
-    override fun mapDto(dto: DependencyDto): Dependency {
+    override fun map(dto: DependencyDto, blocks: List<Block>): Dependency {
         return Dependency(
                 id = dto.id,
                 actions = dto.actions.map { resolveActionsMapper(it::class).mapDto(it) },
                 conditions = dto.conditions.map { resolveConditionsMapper(it::class).mapDto(it) },
-                end = TODO(" add column identifier for block, dependency entity contains only id"),
-                start = TODO(" add column identifier for block, dependency entity contains only id")
-
+                end = blocks.find { it.uuid == dto.endBlock }
+                        ?: throw IllegalArgumentException("Can't find end block for $dto"),
+                start = blocks.find { it.uuid == dto.startBlock }
+                        ?: throw IllegalArgumentException("Can't find start block for $dto")
         )
     }
 
@@ -41,7 +40,13 @@ class DependencyDtoMapperImpl(
     private fun resolveConditionsMapper(type: KClass<out Any>) =
             conditionsResolver.resolve<ConditionDtoMapper<Condition, ConditionDto>>(type)
 
-    override fun mapEntity(entity: Dependency): DependencyDto {
-        TODO()
+    override fun map(entity: Dependency): DependencyDto {
+        return DependencyDto(
+                id = entity.id,
+                startBlock = entity.start.uuid,
+                endBlock = entity.end.uuid,
+                conditions = entity.conditions.map { resolveConditionsMapper(it::class).mapEntity(it) },
+                actions = entity.actions.map { resolveActionsMapper(it::class).mapEntity(it) }
+        )
     }
 }

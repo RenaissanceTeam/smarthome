@@ -96,7 +96,9 @@ public class InheritanceTypeIdResolver implements TypeIdResolver {
         String name = aClass.getSimpleName();
 
         if (typeMap.containsKey(name)) {
-            return typeMap.get(name).getRawClass().getSimpleName();
+            String result = typeMap.get(name).getRawClass().getSimpleName();
+            if (result.endsWith("Dto")) return result.substring(0, result.length() - 3);
+            return result;
         }
 
         return null;

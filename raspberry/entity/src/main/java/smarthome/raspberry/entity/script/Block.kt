@@ -8,6 +8,7 @@ import javax.persistence.*
 open class Block(
         @Id @GeneratedValue
         val id: Long = ID_NOT_DEFINED,
+        val uuid: String,
         @Embedded
         val position: Position
 )

@@ -10,8 +10,9 @@ import javax.persistence.ManyToOne
 @Entity
 open class ArduinoControllerBlock(
         id: Long,
+        uuid: String,
         position: Position,
         @ManyToOne
         @JsonIdentityReference(alwaysAsId = true)
         val controller: Controller
-) : Block(id, position)
+) : Block(id, uuid, position)

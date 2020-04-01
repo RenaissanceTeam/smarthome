@@ -11,5 +11,6 @@ import smarthome.raspberry.json.classType
 @JsonTypeIdResolver(InheritanceTypeIdResolver::class)
 open class BlockDto(
         val id: Long = ID_NOT_DEFINED,
+        val uuid: String,
         val position: Position
 )
