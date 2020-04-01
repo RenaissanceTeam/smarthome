@@ -8,7 +8,7 @@ import smarthome.raspberry.json.classType
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.PROPERTY, property = classType)
 @JsonTypeIdResolver(InheritanceTypeIdResolver::class)
-class DependencyDto(
+open class DependencyDto(
         open val id: Long = ID_NOT_DEFINED,
         open val startBlock: Long,
         open val endBlock: Long,

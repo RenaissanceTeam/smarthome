@@ -61,7 +61,7 @@ public class InheritanceTypeIdResolver implements TypeIdResolver {
         Class<?> clazz = baseType.getRawClass();
 
         Reflections reflections = new Reflections("smarthome.raspberry");
-        Set<Class<?>> subtypes = (Set<Class<?>>)reflections.getSubTypesOf(clazz);
+        Set<Class<?>> subtypes = (Set<Class<?>>) reflections.getSubTypesOf(clazz);
 
         int classModifiers = clazz.getModifiers();
 
@@ -76,7 +76,8 @@ public class InheritanceTypeIdResolver implements TypeIdResolver {
                 throw new IllegalStateException("Type name \"" + key + "\" already exists.");
             }
 
-            typeMap.put(type.getSimpleName(), TypeFactory.defaultInstance().constructSpecializedType(baseType, type));
+            String className = type.getSimpleName();
+            typeMap.put(className, TypeFactory.defaultInstance().constructSpecializedType(baseType, type));
         });
     }
 
@@ -106,6 +107,8 @@ public class InheritanceTypeIdResolver implements TypeIdResolver {
         if (typeMap.containsKey(s)) {
             return typeMap.get(s);
         }
+
+        if (typeMap.containsKey(s + "Dto")) return typeMap.get(s + "Dto");
 
         throw new IOException("Cannot find class for type id \"" + s + "\"");
     }

@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-class Dependency(
+open class Dependency(
         @Id @GeneratedValue
         open val id: Long = ID_NOT_DEFINED,
         @ManyToOne
