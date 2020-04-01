@@ -10,11 +10,14 @@ dependencies {
     implementation library.rxKotlin
     implementation library.springData
 
+    implementation library.scripts_api
     implementation library.channel_api
     implementation library.controllers_api
     implementation library.devices_api
     implementation library.home_api
     implementation library.entity
+    implementation library.util
+    implementation library.json
 
     testImplementation groups.forTest
 }

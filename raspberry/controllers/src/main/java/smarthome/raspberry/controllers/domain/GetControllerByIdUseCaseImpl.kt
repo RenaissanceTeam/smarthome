@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import smarthome.raspberry.controllers.api.domain.GetControllerByIdUseCase
 import smarthome.raspberry.controllers.api.domain.NoControllerException
 import smarthome.raspberry.controllers.data.ControllersRepo
-import smarthome.raspberry.entity.Controller
+import smarthome.raspberry.entity.controller.Controller
 
 @Component
 open class GetControllerByIdUseCaseImpl(

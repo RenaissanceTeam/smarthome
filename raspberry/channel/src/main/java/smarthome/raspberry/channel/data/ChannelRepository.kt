@@ -1,6 +1,6 @@
 package smarthome.raspberry.channel.data
 
-import smarthome.raspberry.entity.DeviceChannel
+import smarthome.raspberry.channel.api.domain.entity.DeviceChannel
 
 
 interface ChannelRepository {

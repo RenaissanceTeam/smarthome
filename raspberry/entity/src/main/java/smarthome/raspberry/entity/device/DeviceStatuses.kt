@@ -1,4 +1,4 @@
-package smarthome.raspberry.entity
+package smarthome.raspberry.entity.device
 
 enum class DeviceStatuses {
     PENDING, ACCEPTED

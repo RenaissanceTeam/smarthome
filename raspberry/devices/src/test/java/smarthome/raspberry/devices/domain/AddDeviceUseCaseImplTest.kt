@@ -11,9 +11,9 @@ import smarthome.raspberry.devices.api.domain.dto.DeviceDTO
 import smarthome.raspberry.devices.data.DeviceStatusRepository
 import smarthome.raspberry.devices.data.DevicesRepository
 import smarthome.raspberry.devices.domain.mapper.DeviceDtoToDeviceMapper
-import smarthome.raspberry.entity.Device
-import smarthome.raspberry.entity.DeviceStatus
-import smarthome.raspberry.entity.DeviceStatuses
+import smarthome.raspberry.entity.device.Device
+import smarthome.raspberry.entity.device.DeviceStatus
+import smarthome.raspberry.entity.device.DeviceStatuses
 
 class AddDeviceUseCaseImplTest {
     private lateinit var devicesRepo: DevicesRepository

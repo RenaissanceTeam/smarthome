@@ -1,4 +1,6 @@
-package smarthome.raspberry.entity
+package smarthome.raspberry.channel.api.domain.entity
+
+import smarthome.raspberry.entity.controller.Controller
 
 interface DeviceChannel {
     fun canWorkWith(type: String): Boolean

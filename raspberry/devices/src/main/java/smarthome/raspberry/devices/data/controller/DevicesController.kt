@@ -6,7 +6,7 @@ import smarthome.raspberry.devices.api.data.dto.GeneralDeviceInfo
 import smarthome.raspberry.devices.api.domain.*
 import smarthome.raspberry.devices.data.mapper.DeviceToDeviceDetailsMapper
 import smarthome.raspberry.devices.data.mapper.DeviceToGeneralDeviceInfoMapper
-import smarthome.raspberry.entity.Device
+import smarthome.raspberry.entity.device.Device
 import smarthome.raspberry.util.exceptions.notFound
 
 @RestController

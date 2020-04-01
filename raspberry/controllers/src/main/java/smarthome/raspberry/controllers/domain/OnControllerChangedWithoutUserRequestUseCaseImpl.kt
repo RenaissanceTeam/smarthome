@@ -3,7 +3,7 @@ package smarthome.raspberry.controllers.domain
 import smarthome.raspberry.controllers.api.domain.OnControllerChangedWithoutUserRequestUseCase
 import smarthome.raspberry.devices.api.domain.GetDeviceByControllerUseCase
 import smarthome.raspberry.devices.api.domain.SaveDeviceUseCase
-import smarthome.raspberry.entity.Controller
+import smarthome.raspberry.entity.controller.Controller
 
 class OnControllerChangedWithoutUserRequestUseCaseImpl(
     private val getDeviceByControllerUseCase: GetDeviceByControllerUseCase,

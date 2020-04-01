@@ -10,7 +10,7 @@ import smarthome.raspberry.arduinodevices.data.ArduinoDeviceAddressRepository
 import smarthome.raspberry.arduinodevices.data.ArduinoDeviceApiFactory
 import smarthome.raspberry.arduinodevices.domain.ArduinoDeviceChannel
 import smarthome.raspberry.channel.api.domain.arduinoChannel
-import smarthome.raspberry.entity.DeviceChannel
+import smarthome.raspberry.channel.api.domain.entity.DeviceChannel
 
 @Configuration
 open class Configuration {

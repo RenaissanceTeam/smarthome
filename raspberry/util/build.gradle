@@ -6,6 +6,7 @@ dependencies {
     implementation library.rxJava
     implementation library.rxKotlin
     implementation library.coroutinesCore
+    implementation library.javaReflections
 
     testImplementation groups.forTest
 }

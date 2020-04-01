@@ -1,11 +1,13 @@
-package smarthome.raspberry.entity
+package smarthome.raspberry.entity.device
 
+import smarthome.raspberry.entity.ID_NOT_DEFINED
+import smarthome.raspberry.entity.controller.Controller
 import javax.persistence.*
 
 @Entity
 class Device(
         @Id @GeneratedValue
-        val id: Long = 0,
+        val id: Long = ID_NOT_DEFINED,
         val serialName: String,
         val name: String = "",
         val description: String = "",
