@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.script.data.dto
+package smarthome.raspberry.arduinodevices.script.data.onoff
 
 import smarthome.raspberry.scripts.api.data.dto.ActionDto
 

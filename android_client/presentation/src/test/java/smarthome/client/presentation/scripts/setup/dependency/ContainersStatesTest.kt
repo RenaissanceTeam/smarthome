@@ -9,10 +9,23 @@ import smarthome.client.entity.script.dependency.DependencyUnit
 import kotlin.test.assertEquals
 
 
-data class MockDependencyUnit(
-    override val id: String,
+data class MockDependencyUnit_A(
+    override val id: String = "idA",
+    override val data: String = "dataA"
+) : MockDependencyUnit(data)
 
-) : DependencyUnit
+data class MockDependencyUnit_B(
+    override val id: String = "idB",
+    override val data: String = "dataB"
+) : MockDependencyUnit(data)
+
+
+data class MockDependencyUnit_C(
+    override val id: String = "idC",
+    override val data: String = "dataC"
+) : MockDependencyUnit(data)
+
+abstract class MockDependencyUnit(open val data: String) : DependencyUnit
 
 //class A : DependencyUnitData
 //class B : DependencyUnitData
@@ -22,18 +35,14 @@ class ContainersStatesTest {
     private lateinit var emptyUnitsCreator: (Dependency) -> List<MockDependencyUnit>
     private lateinit var states: ContainersStates<MockDependencyUnit>
     private lateinit var dependency: Dependency
-    private val a1 = A()
-    private val a2 = A()
-    private val b1 = B()
-    private val c1 = C()
-    val id = "id"
-    private val unit_a1 = MockDependencyUnit(id, a1)
-    private val unit_b1 = MockDependencyUnit(id, b1)
-    private val unit_c1 = MockDependencyUnit(id, c1)
+    
+    private val unit_a1 = MockDependencyUnit_A()
+    private val unit_b1 = MockDependencyUnit_B()
+    private val unit_c1 = MockDependencyUnit_C()
     
     @Before
     fun setUp() {
-        dependency = Dependency(id, "blockId", "blockId2")
+        dependency = Dependency("dependencyId", "blockId", "blockId2")
         emptyUnitsCreator = mock {
             on { invoke(dependency) }.then { listOf(unit_a1, unit_b1, unit_c1) }
         }
@@ -42,7 +51,7 @@ class ContainersStatesTest {
     
     @Test
     fun `when pass data with one extra unit should add container for it`() {
-        val newData = MockDependencyUnit(id, B())
+        val newData = MockDependencyUnit_B()
         
         val containers = states.apply { setData(listOf(newData), dependency) }.asList()
         
@@ -55,8 +64,8 @@ class ContainersStatesTest {
     @Test
     fun `data units should be current data of each container`() {
         val newData = listOf(
-            MockDependencyUnit(id, B()),
-            MockDependencyUnit(id, C())
+            MockDependencyUnit_B(),
+            MockDependencyUnit_C()
         )
         
         val containers = states.apply { setData(newData, dependency) }.asList()
@@ -67,9 +76,9 @@ class ContainersStatesTest {
     
     @Test
     fun `when pass data without some saved unit should remove its container `() {
-        val willStay = MockDependencyUnit(id, C())
+        val willStay = MockDependencyUnit_C()
         val newData = listOf(
-            MockDependencyUnit(id, B()),
+            MockDependencyUnit_B(),
             willStay
         )
         
@@ -84,7 +93,7 @@ class ContainersStatesTest {
     
     @Test
     fun `when send the same data units should not create new containers`() {
-        val newData = listOf(MockDependencyUnit(id, B()))
+        val newData = listOf(MockDependencyUnit_B())
         
         val containers = states.apply {
             setData(newData, dependency)
@@ -99,25 +108,27 @@ class ContainersStatesTest {
     
     @Test
     fun `container data should be updated with new units`() {
-        val id = id
-        val firstData = B()
-        val secondData = B()
+        
+        val firstData = MockDependencyUnit_B()
+        val secondData = MockDependencyUnit_B()
         
         val containers = states.apply {
-            setData(listOf(MockDependencyUnit(id, firstData)), dependency)
-            setData(listOf(MockDependencyUnit(id, secondData)), dependency)
+            setData(listOf(firstData), dependency)
+            setData(listOf(secondData), dependency)
         }.asList()
         
         
-        assertEquals(secondData, containers.first().allData[1].data)
+        assertEquals(secondData, containers.first().allData[1])
     }
     
     @Test
     fun `when send data with changed unit should find its container and update currentData field`() {
-        val newData = A()
-        val empty_1 = MockDependencyUnit(id, a1)
-        val empty_2 = MockDependencyUnit(id, b1)
-        val firstUnit = MockDependencyUnit(id, B())
+        val newData = "newData"
+        
+        val empty_1 = MockDependencyUnit_A()
+        val empty_2 = MockDependencyUnit_B()
+        
+        val firstUnit = MockDependencyUnit_B()
         
         whenever(emptyUnitsCreator.invoke(dependency)).then { listOf(empty_1, empty_2) }
         

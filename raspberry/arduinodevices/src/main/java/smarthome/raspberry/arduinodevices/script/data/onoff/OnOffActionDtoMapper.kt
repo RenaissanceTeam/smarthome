@@ -1,7 +1,6 @@
-package smarthome.raspberry.arduinodevices.script.data.mapper
+package smarthome.raspberry.arduinodevices.script.data.onoff
 
 import org.springframework.stereotype.Component
-import smarthome.raspberry.arduinodevices.script.data.dto.OnOffActionDto
 import smarthome.raspberry.arduinodevices.script.domain.entity.onoff.OnOffAction
 import smarthome.raspberry.scripts.api.data.mapper.ActionDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.resolver.ActionMapperResolver

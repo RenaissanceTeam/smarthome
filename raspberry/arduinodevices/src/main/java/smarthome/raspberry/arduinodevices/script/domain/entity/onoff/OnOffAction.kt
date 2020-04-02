@@ -6,5 +6,5 @@ import javax.persistence.Entity
 @Entity
 data class OnOffAction(
         override val id: String,
-        val state: String
+        val value: String
 ) : Action(id)

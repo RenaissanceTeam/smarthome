@@ -122,8 +122,8 @@ class SetupDependencyViewModelTest {
         val domainCondition = MockCondition(domainConditionId)
         val currentDependency = setupContainerWithOneEmptyAndOneDomainConditions(domainCondition)
         
-        val newData = MockCondition_B()
-        val newCondition = Condition(domainConditionId, newData)
+        val newData = "asdf"
+        val newCondition = MockCondition(domainConditionId, newData)
         val newConditions = currentDependency.conditions.findAndModify(
             predicate = { it.id == domainConditionId },
             modify = { newCondition }
@@ -133,7 +133,7 @@ class SetupDependencyViewModelTest {
         
         assertTrue {
             val containers = viewModel.conditionContainers.value!!
-            val shouldHaveChanged = containers.first().allData[1]
+            val shouldHaveChanged = containers.first().allData[1] as MockCondition
             shouldHaveChanged.id == domainConditionId &&
                 shouldHaveChanged.data == newData
         }

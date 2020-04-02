@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.script.data.dto
+package smarthome.raspberry.arduinodevices.script.data
 
 import smarthome.raspberry.entity.script.Position
 import smarthome.raspberry.scripts.api.data.dto.BlockDto

@@ -1,7 +1,7 @@
-package smarthome.raspberry.arduinodevices.script.data.mapper
+package smarthome.raspberry.arduinodevices.script.data
 
 import org.springframework.stereotype.Component
-import smarthome.raspberry.arduinodevices.script.data.dto.ArduinoControllerBlockDto
+import smarthome.raspberry.arduinodevices.script.data.ArduinoControllerBlockDto
 import smarthome.raspberry.arduinodevices.script.domain.entity.ArduinoControllerBlock
 import smarthome.raspberry.controllers.api.domain.GetControllerByIdUseCase
 import smarthome.raspberry.scripts.api.data.mapper.BlockDtoMapper
