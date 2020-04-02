@@ -5,20 +5,20 @@ import smarthome.client.arduino.entity.onoff
 import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.dependency.action.Action
-import smarthome.client.entity.script.dependency.condition.SimpleDependencyUnitId
+import smarthome.client.util.generateId
 
-class ArduinoActionFromBlockResolver: ActionFromBlockResolver {
+class ArduinoActionFromBlockResolver : ActionFromBlockResolver {
     
-    override fun resolve(block: Block): List<Action> {
-        if (block !is ArduinoControllerBlock) return emptyList()
+    override fun resolve(item: Block): List<Action> {
+        if (item !is ArduinoControllerBlock) return emptyList()
         
-        val data = when (block.type) {
+        val data = when (item.type) {
             onoff -> listOf(OnOffActionData())
             else -> emptyList()
         }
         
-        return data.map { Action(SimpleDependencyUnitId(), it) }
+        return data.map { Action(generateId(), it) }
     }
     
-    override fun canResolve(block: Block) = block is ArduinoControllerBlock
+    override fun canResolve(item: Block) = item is ArduinoControllerBlock
 }

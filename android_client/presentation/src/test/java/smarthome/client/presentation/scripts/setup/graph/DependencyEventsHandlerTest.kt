@@ -7,9 +7,8 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
-import smarthome.client.entity.script.block.BlockId
+
 import smarthome.client.entity.script.dependency.Dependency
-import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.*
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DependencyEventsHandler
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DependencyEventsHandlerImpl
@@ -26,7 +25,7 @@ class DependencyEventsHandlerTest {
     private val blockId = MockBlockId()
     private val otherBlockId = MockBlockId()
     
-    private val dependencyId = MockDependencyId()
+    private val dependencyId = MockString()
     private val dependency = Dependency(dependencyId, blockId, otherBlockId)
     private val dependencyState = DependencyState(dependency)
     private lateinit var dependencyLiveData: MutableLiveData<MovingDependency>
@@ -40,7 +39,7 @@ class DependencyEventsHandlerTest {
         )
     }
     
-    private fun createMovingDependency(id: DependencyId = dependencyId,
+    private fun createMovingDependency(id: String = dependencyId,
                                        startBlock: BlockId? = blockId,
                                        status: String = IDLE,
                                        rawEndPosition: Position? = null): MovingDependency {
@@ -48,7 +47,7 @@ class DependencyEventsHandlerTest {
     }
     
     private fun createDependencyEvent(
-        id: DependencyId = dependencyId,
+        id: String = dependencyId,
         status: String = DEPENDENCY_START,
         startId: BlockId,
         endId: BlockId? = null,

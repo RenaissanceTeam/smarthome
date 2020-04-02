@@ -7,14 +7,10 @@ import org.junit.Test
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyUnit
 import smarthome.client.entity.script.dependency.DependencyUnitData
-import smarthome.client.entity.script.dependency.SimpleDependencyId
-import smarthome.client.entity.script.dependency.condition.DependencyUnitId
-import smarthome.client.entity.script.dependency.condition.SimpleDependencyUnitId
-import smarthome.client.presentation.scripts.setup.graph.MockBlockId
 import kotlin.test.assertEquals
 
 data class MockDependencyUnit(
-    override val id: DependencyUnitId,
+    override val id: String,
     override val data: DependencyUnitData
 ) : DependencyUnit
 
@@ -30,13 +26,14 @@ class ContainersStatesTest {
     private val a2 = A()
     private val b1 = B()
     private val c1 = C()
-    private val unit_a1 = MockDependencyUnit(SimpleDependencyUnitId(), a1)
-    private val unit_b1 = MockDependencyUnit(SimpleDependencyUnitId(), b1)
-    private val unit_c1 = MockDependencyUnit(SimpleDependencyUnitId(), c1)
+    val id = "id"
+    private val unit_a1 = MockDependencyUnit(id, a1)
+    private val unit_b1 = MockDependencyUnit(id, b1)
+    private val unit_c1 = MockDependencyUnit(id, c1)
     
     @Before
     fun setUp() {
-        dependency = Dependency(SimpleDependencyId(), MockBlockId(), MockBlockId())
+        dependency = Dependency(id, "blockId", "blockId2")
         emptyUnitsCreator = mock {
             on { invoke(dependency) }.then { listOf(unit_a1, unit_b1, unit_c1) }
         }
@@ -45,7 +42,7 @@ class ContainersStatesTest {
     
     @Test
     fun `when pass data with one extra unit should add container for it`() {
-        val newData = MockDependencyUnit(SimpleDependencyUnitId(), B())
+        val newData = MockDependencyUnit(id, B())
         
         val containers = states.apply { setData(listOf(newData), dependency) }.asList()
         
@@ -58,8 +55,8 @@ class ContainersStatesTest {
     @Test
     fun `data units should be current data of each container`() {
         val newData = listOf(
-            MockDependencyUnit(SimpleDependencyUnitId(), B()),
-            MockDependencyUnit(SimpleDependencyUnitId(), C())
+            MockDependencyUnit(id, B()),
+            MockDependencyUnit(id, C())
         )
         
         val containers = states.apply { setData(newData, dependency) }.asList()
@@ -70,9 +67,9 @@ class ContainersStatesTest {
     
     @Test
     fun `when pass data without some saved unit should remove its container `() {
-        val willStay = MockDependencyUnit(SimpleDependencyUnitId(), C())
+        val willStay = MockDependencyUnit(id, C())
         val newData = listOf(
-            MockDependencyUnit(SimpleDependencyUnitId(), B()),
+            MockDependencyUnit(id, B()),
             willStay
         )
         
@@ -87,7 +84,7 @@ class ContainersStatesTest {
     
     @Test
     fun `when send the same data units should not create new containers`() {
-        val newData = listOf(MockDependencyUnit(SimpleDependencyUnitId(), B()))
+        val newData = listOf(MockDependencyUnit(id, B()))
         
         val containers = states.apply {
             setData(newData, dependency)
@@ -102,7 +99,7 @@ class ContainersStatesTest {
     
     @Test
     fun `container data should be updated with new units`() {
-        val id = SimpleDependencyUnitId()
+        val id = id
         val firstData = B()
         val secondData = B()
         
@@ -118,9 +115,9 @@ class ContainersStatesTest {
     @Test
     fun `when send data with changed unit should find its container and update currentData field`() {
         val newData = A()
-        val empty_1 = MockDependencyUnit(SimpleDependencyUnitId(), a1)
-        val empty_2 = MockDependencyUnit(SimpleDependencyUnitId(), b1)
-        val firstUnit = MockDependencyUnit(SimpleDependencyUnitId(), B())
+        val empty_1 = MockDependencyUnit(id, a1)
+        val empty_2 = MockDependencyUnit(id, b1)
+        val firstUnit = MockDependencyUnit(id, B())
         
         whenever(emptyUnitsCreator.invoke(dependency)).then { listOf(empty_1, empty_2) }
         

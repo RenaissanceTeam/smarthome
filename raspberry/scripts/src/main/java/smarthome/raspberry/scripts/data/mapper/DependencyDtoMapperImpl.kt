@@ -21,15 +21,14 @@ class DependencyDtoMapperImpl(
         private val conditionsResolver: ConditionMapperResolver
 ) : DependencyDtoMapper {
 
-
     override fun map(dto: DependencyDto, blocks: List<Block>): Dependency {
         return Dependency(
                 id = dto.id,
                 actions = dto.actions.map { resolveActionsMapper(it::class).mapDto(it) },
                 conditions = dto.conditions.map { resolveConditionsMapper(it::class).mapDto(it) },
-                end = blocks.find { it.uuid == dto.endBlock }
+                end = blocks.find { it.id == dto.endBlock }
                         ?: throw IllegalArgumentException("Can't find end block for $dto"),
-                start = blocks.find { it.uuid == dto.startBlock }
+                start = blocks.find { it.id == dto.startBlock }
                         ?: throw IllegalArgumentException("Can't find start block for $dto")
         )
     }
@@ -43,8 +42,8 @@ class DependencyDtoMapperImpl(
     override fun map(entity: Dependency): DependencyDto {
         return DependencyDto(
                 id = entity.id,
-                startBlock = entity.start.uuid,
-                endBlock = entity.end.uuid,
+                startBlock = entity.start.id,
+                endBlock = entity.end.id,
                 conditions = entity.conditions.map { resolveConditionsMapper(it::class).mapEntity(it) },
                 actions = entity.actions.map { resolveActionsMapper(it::class).mapEntity(it) }
         )

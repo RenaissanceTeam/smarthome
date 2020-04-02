@@ -8,15 +8,13 @@ import smarthome.client.domain.api.scripts.usecases.setup.CreateEmptyConditionsF
 import smarthome.client.domain.api.scripts.usecases.setup.GetDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.StartSetupDependencyUseCase
 import smarthome.client.entity.script.dependency.Dependency
-import smarthome.client.entity.script.dependency.DependencyId
-
 class StartSetupDependencyUseCaseImpl(
     private val repo: SetupDependencyRepo,
     private val createEmptyConditionsForDependencyUseCase: CreateEmptyConditionsForDependencyUseCase,
     private val createEmptyActionForDependencyUseCase: CreateEmptyActionForDependencyUseCase,
     private val getDependencyUseCase: GetDependencyUseCase
 ) : StartSetupDependencyUseCase {
-    override fun execute(dependencyId: DependencyId): Dependency {
+    override fun execute(dependencyId: String): Dependency {
         
         return getDependencyUseCase.execute(dependencyId)
             .let { dependency -> addConditionsIfEmpty(dependency) }

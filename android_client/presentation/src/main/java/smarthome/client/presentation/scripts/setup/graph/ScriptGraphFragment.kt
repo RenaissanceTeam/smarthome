@@ -10,7 +10,6 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_script_graph.*
 import org.koin.android.ext.android.inject
-import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.R
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.setup.SetupScriptViewModel
@@ -55,7 +54,7 @@ class ScriptGraphFragment : Fragment() {
         findNavController().popBackStack(R.id.addScriptInfoFragment, true)
     }
     
-    private fun setupDependency(id: DependencyId) {
+    private fun setupDependency(id: String) {
         findNavController().navigate(ScriptGraphFragmentDirections
             .actionAddControllersToScriptFragmentToSetupDependencyFragment(dependencyId = id, isNew = true))
     }

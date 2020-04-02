@@ -4,9 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 import smarthome.client.domain.api.scripts.usecases.setup.*
-import smarthome.client.entity.script.block.BlockId
+
 import smarthome.client.entity.script.dependency.Dependency
-import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.DependencyState
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.IDLE
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.MovingDependency
@@ -28,8 +27,6 @@ import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.Position
 import smarthome.client.util.findAndModify
-import smarthome.client.util.log
-import smarthome.client.util.logObject
 
 class GraphViewModel : KoinViewModel() {
     private val eventBus: GraphEventBus by inject()
@@ -101,7 +98,7 @@ class GraphViewModel : KoinViewModel() {
     fun dependencyTipOnBlock(from: String, to: String) {
         blocks.updateWith {
             blocksWithHiddenBorders().findAndModify(
-                { it.block.uuid == to },
+                { it.block.id == to },
                 {
                     it.copyWithInfo(
                         border = BorderStatus(
@@ -129,7 +126,7 @@ class GraphViewModel : KoinViewModel() {
         dependencyTipNotOnAnyBlock()
     }
     
-    fun addDependency(id: DependencyId, from: String, to: String) {
+    fun addDependency(id: String, from: String, to: String) {
         setMovingDependencyToIdle()
         hideBorderOnBlock(to)
     
@@ -139,7 +136,7 @@ class GraphViewModel : KoinViewModel() {
     
     private fun hideBorderOnBlock(to: String) {
         blocks.updateWith { current ->
-            current.orEmpty().findAndModify({ it.block.uuid == to }) {
+            current.orEmpty().findAndModify({ it.block.id == to }) {
                 it.copyWithInfo(border = it.border.copy(isVisible = false))
             }
         }
@@ -150,6 +147,6 @@ class GraphViewModel : KoinViewModel() {
     }
     
     fun getBlockState(blockId: String): BlockState? {
-        return blocks.value?.find { it.block.uuid == blockId }
+        return blocks.value?.find { it.block.id == blockId }
     }
 }

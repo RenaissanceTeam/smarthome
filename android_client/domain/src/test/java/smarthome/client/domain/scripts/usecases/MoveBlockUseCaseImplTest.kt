@@ -8,7 +8,6 @@ import smarthome.client.domain.api.scripts.usecases.setup.MoveBlockUseCase
 import smarthome.client.domain.scripts.usecases.setup.MoveBlockUseCaseImpl
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.controller.ControllerBlock
-import smarthome.client.entity.script.controller.ControllerBlockId
 import smarthome.client.util.Position
 
 data class MockControllerBlock(override val id: ControllerBlockId, override val position: Position) : ControllerBlock {

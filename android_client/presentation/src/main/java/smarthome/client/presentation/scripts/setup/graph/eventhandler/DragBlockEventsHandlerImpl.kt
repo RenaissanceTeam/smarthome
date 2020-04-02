@@ -18,7 +18,7 @@ class DragBlockEventsHandlerImpl(
             DRAG_DROP -> {
                 if (event.isTo(GRAPH)) {
                     addBlockUseCase.execute(event.block)
-                    moveBlockUseCase.execute(event.block.uuid, event.position)
+                    moveBlockUseCase.execute(event.block.id, event.position)
                 }
             }
         }

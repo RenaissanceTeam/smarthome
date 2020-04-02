@@ -221,7 +221,7 @@
 
         <argument
             android:name="dependency_id"
-            app:argType="smarthome.client.entity.script.dependency.DependencyId" />
+            app:argType="string" />
 
     </fragment>
 </navigation>

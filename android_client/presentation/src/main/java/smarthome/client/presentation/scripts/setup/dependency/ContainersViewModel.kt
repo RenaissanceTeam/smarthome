@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import org.koin.core.KoinComponent
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyUnit
-import smarthome.client.entity.script.dependency.condition.DependencyUnitId
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainerId
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainerState
 import smarthome.client.presentation.util.extensions.updateWith
@@ -32,7 +31,7 @@ class ContainersViewModel<T : DependencyUnit>(
         return containersState.asList().containsThat { it.id == id }
     }
     
-    fun getUnit(containerId: ContainerId, unitId: DependencyUnitId): T? {
+    fun getUnit(containerId: ContainerId, unitId: String): T? {
         return containersState.asList().find { it.id == containerId }?.allData?.find { it.id == unitId }
     }
     

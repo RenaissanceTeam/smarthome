@@ -11,7 +11,6 @@ import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.setup.di.setupScope
 import smarthome.client.presentation.scripts.setup.graph.blockviews.GraphBlockView
@@ -36,7 +35,7 @@ class GraphView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
     
     private var blockViews = mutableMapOf<String, GraphBlockView>()
-    private var dependencyViews = mutableMapOf<DependencyId, DependencyArrowView>()
+    private var dependencyViews = mutableMapOf<String, DependencyArrowView>()
     private var movingDependencyView = DependencyArrowView(context)
     private val viewModel by lazy { setupScope.get<GraphViewModel>() }
     private val graphBlockFactoryResolver: GraphBlockFactoryResolver by inject()
@@ -94,7 +93,7 @@ class GraphView @JvmOverloads constructor(
     
     
     private fun retainOnlyPostedBlocks(blocks: List<BlockState>) {
-        (blockViews.keys - blocks.map { it.block.uuid }).forEach {
+        (blockViews.keys - blocks.map { it.block.id }).forEach {
             (blockViews.remove(it)).let(this::removeView)
         }
     }
@@ -105,8 +104,8 @@ class GraphView @JvmOverloads constructor(
     }
     
     private fun getOrInflateBlockView(blockState: BlockState): GraphBlockView {
-        return blockViews[blockState.block.uuid]
-            ?: inflateBlockView(blockState).also { blockViews[blockState.block.uuid] = it }
+        return blockViews[blockState.block.id]
+            ?: inflateBlockView(blockState).also { blockViews[blockState.block.id] = it }
     }
     
     private fun inflateBlockView(blockState: BlockState): GraphBlockView {
@@ -128,7 +127,7 @@ class GraphView @JvmOverloads constructor(
             if (it != DraggableEvent.MOVE) return@subscribe
             
             draggable.currentHostPosition?.let { hostPosition ->
-                viewModel.onBlockMoved(blockState.block.uuid, hostPosition)
+                viewModel.onBlockMoved(blockState.block.id, hostPosition)
             }
         }
     }
@@ -159,7 +158,7 @@ class GraphView @JvmOverloads constructor(
     }
     
     
-    private fun getOrInflateDependency(id: DependencyId): DependencyArrowView {
+    private fun getOrInflateDependency(id: String): DependencyArrowView {
         return dependencyViews[id]
             ?: DependencyArrowView(context).also(this::addView).also { dependencyViews[id] = it }
     }

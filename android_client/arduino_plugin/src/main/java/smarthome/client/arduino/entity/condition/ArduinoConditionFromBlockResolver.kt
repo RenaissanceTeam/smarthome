@@ -5,7 +5,7 @@ import smarthome.client.arduino.entity.dht
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.dependency.condition.Condition
-import smarthome.client.entity.script.dependency.condition.SimpleDependencyUnitId
+import smarthome.client.util.generateId
 
 class ArduinoConditionFromBlockResolver : ConditionFromBlockResolver {
     
@@ -24,6 +24,6 @@ class ArduinoConditionFromBlockResolver : ConditionFromBlockResolver {
             else -> emptyList()
         }
         
-        return data.map { Condition(SimpleDependencyUnitId(), it) }
+        return data.map { Condition(generateId(), it) }
     }
 }

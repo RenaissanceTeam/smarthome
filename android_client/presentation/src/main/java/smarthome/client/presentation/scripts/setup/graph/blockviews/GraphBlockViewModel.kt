@@ -2,7 +2,7 @@ package smarthome.client.presentation.scripts.setup.graph.blockviews
 
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
-import smarthome.client.entity.script.block.BlockId
+
 import smarthome.client.presentation.scripts.setup.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.setup.graph.blockviews.state.BorderStatus
 import smarthome.client.presentation.scripts.setup.graph.events.EventPublisher
@@ -26,7 +26,7 @@ class GraphBlockViewModel : KoinViewModel(), EventPublisher {
     override fun publish(e: GraphEvent) = eventBus.addEvent(e)
     
     fun onNewBlockData(blockState: BlockState) {
-        blockUuid.value = blockState.block.uuid
+        blockUuid.value = blockState.block.id
         visible.value = blockState.visible
         position.value = blockState.block.position
         border.value = blockState.border

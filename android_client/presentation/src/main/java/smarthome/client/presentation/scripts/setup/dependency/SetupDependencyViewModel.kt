@@ -3,11 +3,10 @@ package smarthome.client.presentation.scripts.setup.dependency
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import org.koin.core.qualifier.named
+import smarthome.client.domain.api.scripts.usecases.dependency.*
 import smarthome.client.domain.api.scripts.usecases.setup.GetBlockNameUseCase
 import smarthome.client.domain.api.scripts.usecases.setup.RemoveDependencyUseCase
-import smarthome.client.domain.api.scripts.usecases.dependency.*
 import smarthome.client.entity.script.dependency.Dependency
-import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.ACTION_CONTAINER_VIEWMODEL
@@ -21,11 +20,10 @@ import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.replaceAt
 import smarthome.client.util.truncate
 
-class SetupDependencyViewModel: KoinViewModel() {
-    private lateinit var dependencyId: DependencyId
+class SetupDependencyViewModel : KoinViewModel() {
+    private lateinit var dependencyId: String
     private lateinit var setupScriptViewModel: SetupScriptViewModel
     private val removeDependency: RemoveDependencyUseCase by inject()
-    
     private val observeSetupDependencyUseCase: ObserveSetupDependencyUseCase by inject()
     private val startSetupDependencyUseCase: StartSetupDependencyUseCase by inject()
     private val getSetupDependencyUseCase: GetSetupDependencyUseCase by inject()
@@ -34,12 +32,10 @@ class SetupDependencyViewModel: KoinViewModel() {
     private val removeConditionsFromSetupDependencyUseCase: RemoveConditionsFromSetupDependencyUseCase by inject()
     private val updateSetupDependencyUseCase: UpdateSetupDependencyUseCase by inject()
     private val saveSetupDependencyUseCase: SaveSetupDependencyUseCase by inject()
-    
-    val close = NavigationLiveData()
-    
     private val conditionsViewModel: ContainersViewModel<Condition> by inject(named(CONDITION_CONTAINER_VIEWMODEL))
     private val actionsViewModel: ContainersViewModel<Action> by inject(named(ACTION_CONTAINER_VIEWMODEL))
     
+    val close = NavigationLiveData()
     val conditionContainers = conditionsViewModel.containersLiveData
     val actionContainers = actionsViewModel.containersLiveData
     val toolbarTitle = MutableLiveData<String>()
@@ -62,7 +58,7 @@ class SetupDependencyViewModel: KoinViewModel() {
         this.isNew = isNew
     }
     
-    fun setDependencyId(id: DependencyId) {
+    fun setString(id: String) {
         dependencyId = id
         startSetupDependencyUseCase.execute(dependencyId)
         updateSetupToolbarTitle()
@@ -133,7 +129,7 @@ class SetupDependencyViewModel: KoinViewModel() {
             .filter { it.isSelected }
             .map { it.currentData.id }
             .toTypedArray()
-    
+        
         removeConditionsFromSetupDependencyUseCase.execute(*selectedConditions)
         cancelSelection()
     }

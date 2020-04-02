@@ -5,7 +5,7 @@ import javax.persistence.Entity
 
 @Entity
 data class OnOffCondition(
-        override val id: Long,
+        override val id: String,
         val value: String
-) : Condition()
+) : Condition(id)
 

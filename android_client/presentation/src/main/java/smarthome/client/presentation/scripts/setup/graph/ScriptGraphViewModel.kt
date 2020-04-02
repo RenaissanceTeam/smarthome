@@ -3,7 +3,6 @@ package smarthome.client.presentation.scripts.setup.graph
 import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.setup.GetSetupScriptUseCase
-import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.scripts.setup.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.setup.graph.events.navigation.NavigationEvent
 import smarthome.client.presentation.scripts.setup.graph.events.navigation.OpenSetupDependency
@@ -11,7 +10,7 @@ import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 
 class ScriptGraphViewModel : KoinViewModel() {
-    val setupDependency = NavigationParamLiveData<DependencyId>()
+    val setupDependency = NavigationParamLiveData<String>()
     private val eventBus: GraphEventBus by inject()
     private val getSetupScriptUseCase: GetSetupScriptUseCase by inject()
     val title = MutableLiveData<String>()

@@ -1,14 +1,11 @@
 package smarthome.client.presentation.scripts.setup.graph.events.dependency
 
-import smarthome.client.entity.script.block.BlockId
-import smarthome.client.entity.script.dependency.DependencyId
-import smarthome.client.util.Position
 import smarthome.client.presentation.scripts.setup.graph.events.GraphEvent
+import smarthome.client.util.Position
 
 data class DependencyEvent(
-    val id: DependencyId,
+    val id: String,
     val status: String,
     val startId: String,
-    val endId: BlockId? = null,
     val rawEndPosition: Position
-): GraphEvent
+) : GraphEvent

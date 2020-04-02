@@ -21,7 +21,7 @@ import smarthome.client.domain.api.scripts.usecases.setup.ObserveBlocksUseCase
 import smarthome.client.domain.api.scripts.usecases.setup.ObserveDependenciesUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.entity.script.block.Block
-import smarthome.client.entity.script.block.BlockId
+
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.util.Position
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.IDLE
@@ -66,7 +66,7 @@ class GraphViewModelTest {
     private val otherBlock = MockBlock(otherBlockId, position1_1)
     private val blockState = MockBlockState(block)
     private val otherBlockState = MockBlockState(otherBlock)
-    private val dependencyId = MockDependencyId()
+    private val dependencyId = MockString()
     private val scriptId: Long = 1L // todo
     @Before
     fun setUp() {
@@ -179,7 +179,7 @@ class GraphViewModelTest {
     @Test
     fun `when end creating dependency on graph then should emit idle moving dependency`() {
         viewModel.movingDependency.value = MovingDependency(
-            MockDependencyId(),
+            MockString(),
             otherBlockId,
             MOVING,
             position1_1

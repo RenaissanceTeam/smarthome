@@ -1,15 +1,14 @@
 package smarthome.client.arduino.entity.block
 
 import smarthome.client.entity.script.block.Block
-import smarthome.client.entity.script.block.BlockId
+
 import smarthome.client.entity.script.controller.ControllerBlock
 import smarthome.client.util.Position
 import smarthome.client.util.emptyPosition
 import java.util.*
 
 data class ArduinoControllerBlock(
-    override val id: BlockId,
-    override val uuid: String,
+    override val id: String,
     override val controllerId: Long,
     val type: String,
     override val position: Position = emptyPosition

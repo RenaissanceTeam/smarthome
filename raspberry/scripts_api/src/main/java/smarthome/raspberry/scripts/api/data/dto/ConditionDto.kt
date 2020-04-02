@@ -9,5 +9,5 @@ import smarthome.raspberry.json.classType
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.PROPERTY, property = classType)
 @JsonTypeIdResolver(InheritanceTypeIdResolver::class)
 open class ConditionDto(
-        open val id: Long = ID_NOT_DEFINED
+        open val id: String
 )

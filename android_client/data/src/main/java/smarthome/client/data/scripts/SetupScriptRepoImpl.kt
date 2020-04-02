@@ -6,9 +6,7 @@ import smarthome.client.data.api.scripts.SetupScriptRepo
 import smarthome.client.entity.script.Script
 import smarthome.client.entity.script.ScriptInfo
 import smarthome.client.entity.script.block.Block
-import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.Dependency
-import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.util.findAndModify
 import smarthome.client.util.onNextModified
 import smarthome.client.util.withRemoved
@@ -31,7 +29,7 @@ class SetupScriptRepoImpl : SetupScriptRepo {
     }
     
     override fun getBlock(blockId: String): Block? {
-        return getBlocks().find { it.uuid == blockId }
+        return getBlocks().find { it.id == blockId }
     }
     
     override fun getScript(): Script? {
@@ -63,7 +61,7 @@ class SetupScriptRepoImpl : SetupScriptRepo {
         return block
     }
     
-    override fun removeBlock(blockId: BlockId) {
+    override fun removeBlock(blockId: String) {
         script.onNextModified {
             val removed = it.blocks.withRemoved { it.id == blockId }
             it.copy(blocks = removed)
@@ -81,7 +79,7 @@ class SetupScriptRepoImpl : SetupScriptRepo {
         }
     }
     
-    override fun getDependency(dependencyId: DependencyId): Dependency? {
+    override fun getDependency(dependencyId: String): Dependency? {
         return script.value?.dependencies.orEmpty().find { it.id == dependencyId }
     }
     
@@ -93,7 +91,7 @@ class SetupScriptRepoImpl : SetupScriptRepo {
         return script.map { it.blocks }
     }
     
-    override fun removeDependency(dependencyId: DependencyId) {
+    override fun removeDependency(dependencyId: String) {
         script.onNextModified {
             val removed = it.dependencies.withRemoved { it.id == dependencyId }
             it.copy(dependencies = removed)
