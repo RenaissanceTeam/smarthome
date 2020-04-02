@@ -11,7 +11,7 @@ import smarthome.raspberry.scripts.api.domain.GetScriptByIdUseCase
 
 
 @RestController
-@RequestMapping("/scripts")
+@RequestMapping("api/scripts")
 class ScriptsController(
         private val addScriptUseCase: AddScriptUseCase,
         private val getAllScriptsUseCase: GetAllScriptsUseCase,

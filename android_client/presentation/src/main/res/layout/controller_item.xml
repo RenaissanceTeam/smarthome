@@ -39,7 +39,7 @@
         android:textSize="24sp"
         android:layout_alignParentEnd="true"/>
 
-    <ProgressBar
+    <smarthome.client.presentation.components.LoadingIndicator
         android:id="@+id/progress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

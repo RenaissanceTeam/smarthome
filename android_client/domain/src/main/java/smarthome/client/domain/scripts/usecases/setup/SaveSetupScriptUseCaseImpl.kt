@@ -12,5 +12,6 @@ class SaveSetupScriptUseCaseImpl(
         val script = repo.getScript() ?: throw IllegalStateException("can't save script that is null")
     
         scriptsRepo.save(script)
+        repo.reset()
     }
 }

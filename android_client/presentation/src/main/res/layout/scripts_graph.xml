@@ -4,6 +4,5 @@
     android:id="@+id/graph"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_normal">
-
+    android:background="#87B3C3">
 </FrameLayout>

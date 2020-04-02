@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_login.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.core.BaseFragment
@@ -20,21 +20,32 @@ class LoginFragment : BaseFragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
         username.text = "a"
         password.text = "a"
         
         viewModel.showProgress.observe(viewLifecycleOwner) { progress.visible = it }
         viewModel.errors.onToast(viewLifecycleOwner) { context?.showToast(it) }
+        viewModel.openHomeServer.onNavigate(viewLifecycleOwner) { navigateToHomeServerSetup() }
+        viewModel.close.onNavigate(this) { onClose() }
+        
+        change_server.setOnClickListener { viewModel.onHomeServerClick() }
         login_button.setOnClickListener {
             viewModel.login(
                 username.text,
                 password.text
             )
         }
-        viewModel.close.onNavigate(this) {
-            hideSoftKeyboard()
-            view.findNavController().popBackStack()
-        }
+        
+    }
+    
+    private fun onClose() {
+        hideSoftKeyboard()
+        findNavController().popBackStack()
+    }
+    
+    private fun navigateToHomeServerSetup() {
+        findNavController().navigate(LoginFragmentDirections.actionGlobalHomeServerFragment())
     }
 }
 

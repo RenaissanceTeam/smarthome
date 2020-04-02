@@ -13,6 +13,8 @@ class LoginViewModel : KoinViewModel() {
     val showProgress = MutableLiveData<Boolean>(false)
     val errors = ToastLiveData()
     val close = NavigationLiveData()
+    val openHomeServer = NavigationLiveData()
+    
     private val loginUseCase: LoginUseCase by inject()
     
     fun login(login: String, password: String) {
@@ -26,4 +28,6 @@ class LoginViewModel : KoinViewModel() {
             showProgress.postValue(false)
         }
     }
+    
+    fun onHomeServerClick() = openHomeServer.trigger()
 }

@@ -15,6 +15,7 @@ import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.setup.di.setupScope
 import smarthome.client.presentation.util.confirmAction
+import smarthome.client.presentation.util.hideSoftKeyboard
 import smarthome.client.util.visible
 
 class SetupScriptInfoFragment : BaseFragment() {
@@ -72,6 +73,7 @@ class SetupScriptInfoFragment : BaseFragment() {
     }
     
     private fun goToAddingControllers() {
+        hideSoftKeyboard()
         findNavController().navigate(
             SetupScriptInfoFragmentDirections.actionAddScriptInfoFragmentToAddControllersToScriptFragment())
     }

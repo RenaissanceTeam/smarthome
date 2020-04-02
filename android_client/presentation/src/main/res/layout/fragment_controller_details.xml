@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ProgressBar
+    <smarthome.client.presentation.components.LoadingIndicator
         android:layout_marginTop="34dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/progress_bar"

@@ -57,7 +57,7 @@
         tools:itemCount="3"
         tools:listitem="@layout/controller_item" />
 
-    <ProgressBar
+    <smarthome.client.presentation.components.LoadingIndicator
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

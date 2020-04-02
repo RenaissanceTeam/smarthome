@@ -10,6 +10,7 @@ import smarthome.client.entity.script.ScriptInfo
 import smarthome.client.presentation.scripts.setup.di.setupScope
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
+import smarthome.client.presentation.util.ToastLiveData
 import smarthome.client.presentation.util.extensions.runInScopeLoading
 
 class SetupScriptViewModel : KoinViewModel() {
@@ -18,6 +19,7 @@ class SetupScriptViewModel : KoinViewModel() {
     val navigateToAddingController = NavigationLiveData()
     val close = NavigationLiveData()
     val finishFlow = NavigationLiveData()
+    val errors = ToastLiveData()
     private val startSetupScriptUseCase: StartSetupScriptUseCase by inject()
     private val updateScriptInfoUseCase: UpdateScriptInfoUseCase by inject()
     private val saveSetupScriptUseCase: SaveSetupScriptUseCase by inject()
@@ -37,8 +39,9 @@ class SetupScriptViewModel : KoinViewModel() {
     
     fun onSaveClicked() {
         saveSetupScriptUseCase.runInScopeLoading(viewModelScope, loading) {
-            execute()
-            finishFlow.trigger()
+            runCatching { execute() }
+                .onSuccess { onSaved() }
+                .onFailure { errors.post("Can't save: ${it.message}") }
         }
     }
     
@@ -50,10 +53,14 @@ class SetupScriptViewModel : KoinViewModel() {
         }
     }
     
-    
     fun onCancel() {
         cancelSetupScriptUseCase.execute()
         close.trigger()
         setupScope.close()
+    }
+    
+    private fun onSaved() {
+        setupScope.close()
+        finishFlow.trigger()
     }
 }
