@@ -4,9 +4,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.observe
 
-class NavigationParamLiveData<T> : MutableLiveData<NavigationEvent<T>>() {
+class NavigationParamLiveData<T> : MutableLiveData<ConsumableEvent<T>>() {
     fun trigger(param: T) {
-        postValue(NavigationEvent(param))
+        postValue(ConsumableEvent(param))
     }
     
     fun onNavigate(lifecycleOwner: LifecycleOwner, action: (T) -> Unit) {
@@ -16,9 +16,9 @@ class NavigationParamLiveData<T> : MutableLiveData<NavigationEvent<T>>() {
     }
 }
 
-class NavigationLiveData: MutableLiveData<NavigationEvent<Unit>>() {
+class NavigationLiveData : MutableLiveData<ConsumableEvent<Unit>>() {
     fun trigger() {
-        postValue(NavigationEvent(Unit))
+        postValue(ConsumableEvent(Unit))
     }
     
     fun onNavigate(lifecycleOwner: LifecycleOwner, action: () -> Unit) {
@@ -27,3 +27,4 @@ class NavigationLiveData: MutableLiveData<NavigationEvent<Unit>>() {
         }
     }
 }
+
