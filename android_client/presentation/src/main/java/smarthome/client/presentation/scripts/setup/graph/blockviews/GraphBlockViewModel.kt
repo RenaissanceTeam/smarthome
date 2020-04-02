@@ -19,14 +19,14 @@ class GraphBlockViewModel : KoinViewModel(), EventPublisher {
     val position = MutableLiveData<Position>()
     val loading = MutableLiveData<Boolean>()
     val border = MutableLiveData<BorderStatus>()
-    val blockId = MutableLiveData<BlockId>()
+    val blockUuid = MutableLiveData<String>()
     
     private val eventBus: GraphEventBus by inject()
     
     override fun publish(e: GraphEvent) = eventBus.addEvent(e)
     
     fun onNewBlockData(blockState: BlockState) {
-        blockId.value = blockState.block.id
+        blockUuid.value = blockState.block.uuid
         visible.value = blockState.visible
         position.value = blockState.block.position
         border.value = blockState.border

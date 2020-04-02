@@ -4,5 +4,5 @@ import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.block.BlockId
 
 interface GetBlockUseCase {
-    fun execute(id: BlockId): Block
+    fun execute(uuid: String): Block
 }

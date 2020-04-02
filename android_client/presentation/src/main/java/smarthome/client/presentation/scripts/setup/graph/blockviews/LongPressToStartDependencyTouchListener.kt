@@ -5,7 +5,6 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import com.jakewharton.rxbinding3.view.touches
-import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.entity.script.dependency.SimpleDependencyId
 import smarthome.client.presentation.scripts.setup.graph.events.EventPublisher
@@ -17,7 +16,7 @@ import smarthome.client.presentation.util.LongPressGestureDetectorListener
 import smarthome.client.presentation.util.extensions.rawPosition
 
 fun setupLongPressToStartDependency(
-    id: BlockId,
+    uuid: String,
     view: View,
     eventPublisher: EventPublisher,
     block: LongPressToStartDependencyTouchListener.() -> Unit = {}
@@ -26,7 +25,7 @@ fun setupLongPressToStartDependency(
     val detector = GestureDetector(view.context, listener)
     
     return LongPressToStartDependencyTouchListener(
-        startId = id,
+        startId = uuid,
         blockView = view,
         longPressListener = listener,
         detector = detector,
@@ -37,7 +36,7 @@ fun setupLongPressToStartDependency(
 }
 
 class LongPressToStartDependencyTouchListener(
-    private val startId: BlockId,
+    private val startId: String,
     private val blockView: View,
     private val longPressListener: LongPressGestureDetectorListener,
     private val detector: GestureDetector,

@@ -28,6 +28,8 @@ import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.Position
 import smarthome.client.util.findAndModify
+import smarthome.client.util.log
+import smarthome.client.util.logObject
 
 class GraphViewModel : KoinViewModel() {
     private val eventBus: GraphEventBus by inject()
@@ -54,7 +56,6 @@ class GraphViewModel : KoinViewModel() {
         
         disposable.add(observeBlocksUseCase.execute().subscribe { newBlocks ->
             val currentBlocks = blocks.value.orEmpty()
-            
             blocks.value = newBlocks.map { newBlock ->
                 currentBlocks.find { it.block == newBlock }
                     ?.copyWithInfo(block = newBlock)
@@ -86,7 +87,7 @@ class GraphViewModel : KoinViewModel() {
         ))
     }
     
-    fun onBlockMoved(blockId: BlockId, newPosition: Position) {
+    fun onBlockMoved(blockId: String, newPosition: Position) {
         moveBlockUseCase.execute(blockId, newPosition)
     }
     
@@ -97,10 +98,10 @@ class GraphViewModel : KoinViewModel() {
         ))
     }
     
-    fun dependencyTipOnBlock(from: BlockId, to: BlockId) {
+    fun dependencyTipOnBlock(from: String, to: String) {
         blocks.updateWith {
             blocksWithHiddenBorders().findAndModify(
-                { it.block.id == to },
+                { it.block.uuid == to },
                 {
                     it.copyWithInfo(
                         border = BorderStatus(
@@ -128,7 +129,7 @@ class GraphViewModel : KoinViewModel() {
         dependencyTipNotOnAnyBlock()
     }
     
-    fun addDependency(id: DependencyId, from: BlockId, to: BlockId) {
+    fun addDependency(id: DependencyId, from: String, to: String) {
         setMovingDependencyToIdle()
         hideBorderOnBlock(to)
     
@@ -136,9 +137,9 @@ class GraphViewModel : KoinViewModel() {
         eventBus.addEvent(OpenSetupDependency(id))
     }
     
-    private fun hideBorderOnBlock(to: BlockId) {
+    private fun hideBorderOnBlock(to: String) {
         blocks.updateWith { current ->
-            current.orEmpty().findAndModify({ it.block.id == to }) {
+            current.orEmpty().findAndModify({ it.block.uuid == to }) {
                 it.copyWithInfo(border = it.border.copy(isVisible = false))
             }
         }
@@ -148,7 +149,7 @@ class GraphViewModel : KoinViewModel() {
         movingDependency.updateWith { it?.copy(status = IDLE) }
     }
     
-    fun getBlockState(blockId: BlockId): BlockState? {
-        return blocks.value?.find { it.block.id == blockId }
+    fun getBlockState(blockId: String): BlockState? {
+        return blocks.value?.find { it.block.uuid == blockId }
     }
 }

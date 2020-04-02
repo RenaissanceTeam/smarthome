@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_block_item.view.*
-import smarthome.client.entity.script.block.BlockId
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.setup.graph.blockviews.state.BlockState
 import smarthome.client.presentation.scripts.setup.graph.blockviews.state.BorderStatus
@@ -59,7 +58,7 @@ abstract class GraphBlockView @JvmOverloads constructor(
         baseViewModel.position.distinctUntilChanged().observe(lifecycleOwner, ::moveTo)
         baseViewModel.loading.distinctUntilChanged().observe(lifecycleOwner, ::changeProgress)
         baseViewModel.dragVisible.observe(lifecycleOwner) { drag_handle.visible = it }
-        baseViewModel.blockId.distinctUntilChanged().observe(lifecycleOwner, ::onBlockChanged)
+        baseViewModel.blockUuid.distinctUntilChanged().observe(lifecycleOwner, ::onBlockChanged)
         baseViewModel.border.distinctUntilChanged().observe(lifecycleOwner, ::bindBorderStatus)
         
         onObserveViewModel(lifecycleOwner)
@@ -86,9 +85,9 @@ abstract class GraphBlockView @JvmOverloads constructor(
         controller_item_content.background = border
     }
     
-    private fun onBlockChanged(newId: BlockId) {
+    private fun onBlockChanged(newUuid: String) {
         setupLongPressToStartDependency(
-            id = newId,
+            uuid = newUuid,
             view = this,
             eventPublisher = baseViewModel
         )

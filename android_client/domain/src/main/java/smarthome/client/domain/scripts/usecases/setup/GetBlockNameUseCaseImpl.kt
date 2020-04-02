@@ -9,7 +9,7 @@ class GetBlockNameUseCaseImpl(
     private val blockNameResolver: BlockNameResolver,
     private val getBlockUseCase: GetBlockUseCase
 ) : GetBlockNameUseCase {
-    override fun execute(blockId: BlockId): String {
+    override fun execute(blockId: String): String {
         val block = getBlockUseCase.execute(blockId)
         return blockNameResolver.resolve(block)
     }

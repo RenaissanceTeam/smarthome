@@ -20,7 +20,7 @@ interface SetupScriptRepo {
     fun observeDependencies(): Observable<List<Dependency>>
     fun observeBlocks(): Observable<List<Block>>
     fun removeDependency(dependencyId: DependencyId)
-    fun getBlock(blockId: BlockId): Block?
+    fun getBlock(blockId: String): Block?
     fun getScript(): Script?
     fun reset()
     fun setScriptInfo(info: ScriptInfo)

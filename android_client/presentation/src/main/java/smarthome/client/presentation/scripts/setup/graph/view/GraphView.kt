@@ -11,7 +11,6 @@ import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.scripts_graph.view.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import smarthome.client.entity.script.block.BlockId
 import smarthome.client.entity.script.dependency.DependencyId
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.setup.di.setupScope
@@ -36,7 +35,7 @@ class GraphView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
     
-    private var blockViews = mutableMapOf<BlockId, GraphBlockView>()
+    private var blockViews = mutableMapOf<String, GraphBlockView>()
     private var dependencyViews = mutableMapOf<DependencyId, DependencyArrowView>()
     private var movingDependencyView = DependencyArrowView(context)
     private val viewModel by lazy { setupScope.get<GraphViewModel>() }
@@ -72,13 +71,13 @@ class GraphView @JvmOverloads constructor(
     
     private fun observeViewModel(lifecycleOwner: LifecycleOwner) {
         lifecycleOwner.lifecycle.addObserver(viewModel)
-    
+        
         viewModel.blocks.observe(lifecycleOwner, this::bindBlocks)
         viewModel.dependencies.observe(lifecycleOwner, this::bindDependencies)
         viewModel.movingDependency.observe(lifecycleOwner, movingDependencyProcessor::onData)
     }
     
-    private fun setStartToCenterOfBlock(view: DependencyArrowView?, startBlock: BlockId?) {
+    private fun setStartToCenterOfBlock(view: DependencyArrowView?, startBlock: String?) {
         startBlock?.let { startId ->
             val start = runCatching { getOrInflateBlockView(startId) }.getOrElse { return@let }
             view?.setStart(start.centerPosition)
@@ -95,7 +94,7 @@ class GraphView @JvmOverloads constructor(
     
     
     private fun retainOnlyPostedBlocks(blocks: List<BlockState>) {
-        (blockViews.keys - blocks.map { it.block.id }).forEach {
+        (blockViews.keys - blocks.map { it.block.uuid }).forEach {
             (blockViews.remove(it)).let(this::removeView)
         }
     }
@@ -106,8 +105,8 @@ class GraphView @JvmOverloads constructor(
     }
     
     private fun getOrInflateBlockView(blockState: BlockState): GraphBlockView {
-        return blockViews[blockState.block.id]
-            ?: inflateBlockView(blockState).also { blockViews[blockState.block.id] = it }
+        return blockViews[blockState.block.uuid]
+            ?: inflateBlockView(blockState).also { blockViews[blockState.block.uuid] = it }
     }
     
     private fun inflateBlockView(blockState: BlockState): GraphBlockView {
@@ -129,12 +128,12 @@ class GraphView @JvmOverloads constructor(
             if (it != DraggableEvent.MOVE) return@subscribe
             
             draggable.currentHostPosition?.let { hostPosition ->
-                viewModel.onBlockMoved(blockState.block.id, hostPosition)
+                viewModel.onBlockMoved(blockState.block.uuid, hostPosition)
             }
         }
     }
     
-    private fun getOrInflateBlockView(blockId: BlockId): GraphBlockView {
+    private fun getOrInflateBlockView(blockId: String): GraphBlockView {
         return blockViews[blockId]
             ?: {
                 val state = viewModel.getBlockState(blockId)
@@ -154,7 +153,7 @@ class GraphView @JvmOverloads constructor(
         }
     }
     
-    private fun setEndToCenterOfBlock(view: DependencyArrowView, id: BlockId) {
+    private fun setEndToCenterOfBlock(view: DependencyArrowView, id: String) {
         val endBlock = runCatching { getOrInflateBlockView(id) }.getOrElse { return }
         endBlock.centerPosition.let(view::setEnd)
     }
@@ -189,9 +188,9 @@ class GraphView @JvmOverloads constructor(
 private class MovingDependencyProcessor(
     private val movingDependencyView: DependencyArrowView,
     private val viewModel: GraphViewModel,
-    private val blockViews: () -> Map<BlockId, GraphBlockView>,
+    private val blockViews: () -> Map<String, GraphBlockView>,
     private val graphRawPosition: () -> Position,
-    private val setStartToCenterOfBlock: (DependencyArrowView, BlockId?) -> Unit
+    private val setStartToCenterOfBlock: (DependencyArrowView, String?) -> Unit
 ) {
     
     fun onData(dependency: MovingDependency) {
@@ -251,7 +250,7 @@ private class MovingDependencyProcessor(
         }
     }
     
-    private fun findBlockOnDependencyTip(rawPosition: Position): Map.Entry<BlockId, GraphBlockView>? {
+    private fun findBlockOnDependencyTip(rawPosition: Position): Map.Entry<String, GraphBlockView>? {
         return blockViews().asIterable().find { entry ->
             val block = entry.value
             

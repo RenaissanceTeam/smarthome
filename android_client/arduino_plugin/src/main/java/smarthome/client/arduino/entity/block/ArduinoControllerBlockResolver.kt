@@ -6,8 +6,9 @@ import smarthome.client.domain.api.scripts.resolver.ControllerBlockResolver
 import smarthome.client.entity.Controller
 import smarthome.client.entity.script.controller.ControllerBlock
 import smarthome.client.entity.script.controller.ControllerBlockId
+import java.util.*
 
-class ArduinoControllerBlockResolver: ControllerBlockResolver {
+class ArduinoControllerBlockResolver : ControllerBlockResolver {
     
     override fun canResolve(item: Controller): Boolean {
         return possibleTypes.contains(item.type)
@@ -16,6 +17,7 @@ class ArduinoControllerBlockResolver: ControllerBlockResolver {
     override fun resolve(item: Controller): ControllerBlock {
         return ArduinoControllerBlock(
             id = ControllerBlockId(),
+            uuid = UUID.randomUUID().toString(),
             controllerId = item.id,
             type = item.type
         )

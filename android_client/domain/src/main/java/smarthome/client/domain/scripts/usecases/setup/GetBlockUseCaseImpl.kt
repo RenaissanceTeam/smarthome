@@ -8,7 +8,7 @@ import smarthome.client.entity.script.block.BlockId
 class GetBlockUseCaseImpl(
     private val repo: SetupScriptRepo
 ) : GetBlockUseCase {
-    override fun execute(id: BlockId): Block {
-        return repo.getBlock(id) ?: throw IllegalArgumentException("No block with id $id")
+    override fun execute(uuid: String): Block {
+        return repo.getBlock(uuid) ?: throw IllegalArgumentException("No block with id $uuid")
     }
 }

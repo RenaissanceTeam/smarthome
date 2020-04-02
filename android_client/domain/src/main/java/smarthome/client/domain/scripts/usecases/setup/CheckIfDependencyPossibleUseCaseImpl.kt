@@ -4,7 +4,7 @@ import smarthome.client.domain.api.scripts.usecases.setup.CheckIfDependencyPossi
 import smarthome.client.entity.script.block.BlockId
 
 class CheckIfDependencyPossibleUseCaseImpl : CheckIfDependencyPossibleUseCase {
-    override fun execute(from: BlockId, to: BlockId): Boolean {
+    override fun execute(from: String, to: String): Boolean {
         return true
     }
 }

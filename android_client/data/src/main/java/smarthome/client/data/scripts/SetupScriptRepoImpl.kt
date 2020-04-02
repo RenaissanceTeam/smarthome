@@ -30,8 +30,8 @@ class SetupScriptRepoImpl : SetupScriptRepo {
         return script.value?.blocks.orEmpty()
     }
     
-    override fun getBlock(blockId: BlockId): Block? {
-        return getBlocks().find { it.id == blockId }
+    override fun getBlock(blockId: String): Block? {
+        return getBlocks().find { it.uuid == blockId }
     }
     
     override fun getScript(): Script? {
