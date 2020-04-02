@@ -6,17 +6,17 @@ import org.junit.Before
 import org.junit.Test
 import smarthome.client.entity.script.dependency.Dependency
 import smarthome.client.entity.script.dependency.DependencyUnit
-import smarthome.client.entity.script.dependency.DependencyUnitData
 import kotlin.test.assertEquals
+
 
 data class MockDependencyUnit(
     override val id: String,
-    override val data: DependencyUnitData
+
 ) : DependencyUnit
 
-class A : DependencyUnitData
-class B : DependencyUnitData
-class C : DependencyUnitData
+//class A : DependencyUnitData
+//class B : DependencyUnitData
+//class C : DependencyUnitData
 
 class ContainersStatesTest {
     private lateinit var emptyUnitsCreator: (Dependency) -> List<MockDependencyUnit>

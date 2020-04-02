@@ -1,6 +1,6 @@
 package smarthome.client.data.retrofit.adapters
 
 import smarthome.client.data.api.typeadapter.ActionDataTypeAdapter
-import smarthome.client.entity.script.dependency.action.ActionData
+import smarthome.client.entity.script.dependency.action.Action
 
-class ActionTypeAdapterFactoryImpl : RuntimeDataTypeAdapter<ActionData>(ActionData::class.java), ActionDataTypeAdapter
+class ActionTypeAdapterFactoryImpl : RuntimeDataTypeAdapter<Action>(Action::class.java), ActionDataTypeAdapter

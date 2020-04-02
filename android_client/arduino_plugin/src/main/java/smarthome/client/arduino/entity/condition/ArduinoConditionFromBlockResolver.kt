@@ -16,14 +16,12 @@ class ArduinoConditionFromBlockResolver : ConditionFromBlockResolver {
     override fun resolve(item: Block): List<Condition> {
         if (item !is ArduinoControllerBlock) return emptyList()
         
-        val data = when (item.type) {
+        return when (item.type) {
             dht -> listOf(
-                TemperatureConditionData(item.controllerId),
-                HumidityConditionData(item.controllerId)
+                TemperatureCondition(generateId(), item.controllerId),
+                HumidityCondition(generateId(), item.controllerId)
             )
             else -> emptyList()
         }
-        
-        return data.map { Condition(generateId(), it) }
     }
 }

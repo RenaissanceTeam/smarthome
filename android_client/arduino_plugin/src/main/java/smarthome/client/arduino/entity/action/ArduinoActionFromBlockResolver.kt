@@ -12,12 +12,10 @@ class ArduinoActionFromBlockResolver : ActionFromBlockResolver {
     override fun resolve(item: Block): List<Action> {
         if (item !is ArduinoControllerBlock) return emptyList()
         
-        val data = when (item.type) {
-            onoff -> listOf(OnOffActionData())
+        return when (item.type) {
+            onoff -> listOf(OnOffAction(generateId()))
             else -> emptyList()
         }
-        
-        return data.map { Action(generateId(), it) }
     }
     
     override fun canResolve(item: Block) = item is ArduinoControllerBlock

@@ -1,6 +1,7 @@
 package smarthome.client.presentation.scripts.setup.dependency.mock
 
-import smarthome.client.entity.script.dependency.condition.ConditionData
+import smarthome.client.entity.script.dependency.action.Action
+import smarthome.client.entity.script.dependency.condition.Condition
 
-class MockConditionData_A : ConditionData
-class MockConditionData_B : ConditionData
+class MockCondition(override val id: String?) : Condition()
+class MockAction(override val id: String?) : Action()

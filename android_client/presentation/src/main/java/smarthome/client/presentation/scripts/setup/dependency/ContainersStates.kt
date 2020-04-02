@@ -59,7 +59,7 @@ class ContainersStates<T : DependencyUnit>(
         val emptyUnits = emptyUnitsCreator(dependency)
         
         val filledUnits = emptyUnits.findAndModify(
-            predicate = { it.data::class == unit.data::class },
+            predicate = { it::class == unit::class },
             modify = { unit }
         )
         

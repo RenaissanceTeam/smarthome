@@ -1,5 +1,5 @@
 package smarthome.client.data.api.typeadapter
 
-import smarthome.client.entity.script.dependency.action.ActionData
+import smarthome.client.entity.script.dependency.action.Action
 
-interface ActionDataTypeAdapter : DataTypeAdapter<ActionData>
+interface ActionDataTypeAdapter : DataTypeAdapter<Action>

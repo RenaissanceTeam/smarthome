@@ -21,12 +21,10 @@ import smarthome.client.domain.api.scripts.usecases.setup.CreateEmptyActionForDe
 import smarthome.client.domain.api.scripts.usecases.setup.CreateEmptyConditionsForDependencyUseCase
 import smarthome.client.domain.api.scripts.usecases.setup.GetDependencyUseCase
 import smarthome.client.entity.script.dependency.Dependency
-import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
-import smarthome.client.presentation.scripts.setup.dependency.mock.MockActionData
-import smarthome.client.presentation.scripts.setup.dependency.mock.MockConditionData_A
-import smarthome.client.presentation.scripts.setup.dependency.mock.MockConditionData_B
+import smarthome.client.presentation.scripts.setup.dependency.mock.MockAction
+import smarthome.client.presentation.scripts.setup.dependency.mock.MockCondition
 import smarthome.client.util.findAndModify
 import smarthome.client.util.trampoline
 import kotlin.test.assertTrue
@@ -45,16 +43,12 @@ class SetupDependencyViewModelTest {
     private val dependencyId = "dependencyId"
     private val startBlock = "blockId1"
     private val endBlock = "blockId2"
-    private val conditionData = MockConditionData_A()
     private val conditionId = "conditionId"
-    private val condition = Condition(conditionId, conditionData)
-    private val actionData = MockActionData()
+    private val condition = MockCondition(conditionId)
     private val actionId = "actionId"
-    private val action = Action(actionId, actionData)
-    private val conditionData_A = MockConditionData_A()
-    private val conditionData_B = MockConditionData_B()
-    private val condition_A = Condition("conditionA", conditionData_A)
-    private val condition_B = Condition("conditionB", conditionData_B)
+    private val action = MockAction(actionId)
+    private val condition_A = MockCondition("conditionA")
+    private val condition_B = MockCondition("conditionB")
     private val dependency = Dependency(dependencyId, startBlock, endBlock, listOf(condition), listOf(action))
     
     @get:Rule
@@ -124,12 +118,11 @@ class SetupDependencyViewModelTest {
     
     @Test
     fun `when emit observed setup dependency should update conditions`() {
-        val domainData = MockConditionData_B()
         val domainConditionId = "id"
-        val domainCondition = Condition(domainConditionId, domainData)
+        val domainCondition = MockCondition(domainConditionId)
         val currentDependency = setupContainerWithOneEmptyAndOneDomainConditions(domainCondition)
         
-        val newData = MockConditionData_B()
+        val newData = MockCondition_B()
         val newCondition = Condition(domainConditionId, newData)
         val newConditions = currentDependency.conditions.findAndModify(
             predicate = { it.id == domainConditionId },

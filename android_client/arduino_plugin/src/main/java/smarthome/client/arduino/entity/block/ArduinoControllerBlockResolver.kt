@@ -5,6 +5,7 @@ import smarthome.client.arduino.entity.onoff
 import smarthome.client.domain.api.scripts.resolver.ControllerBlockResolver
 import smarthome.client.entity.Controller
 import smarthome.client.entity.script.controller.ControllerBlock
+import smarthome.client.util.generateId
 import java.util.*
 
 class ArduinoControllerBlockResolver : ControllerBlockResolver {
@@ -15,7 +16,7 @@ class ArduinoControllerBlockResolver : ControllerBlockResolver {
     
     override fun resolve(item: Controller): ControllerBlock {
         return ArduinoControllerBlock(
-            id = UUID.randomUUID().toString(),
+            id = generateId(),
             controllerId = item.id,
             type = item.type
         )
