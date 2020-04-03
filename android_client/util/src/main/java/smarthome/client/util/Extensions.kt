@@ -9,9 +9,19 @@ import kotlinx.coroutines.launch
 var View.visible
     get() = visibility == View.VISIBLE
     set(value: Boolean) {
-    visibility = when (value) {
-        true -> View.VISIBLE
-        false -> View.GONE
+        visibility = when (value) {
+            true -> View.VISIBLE
+            false -> View.GONE
+        }
+    }
+
+fun <T> List<T>.forEachDivided(each: (T) -> Unit, divide: (Int) -> Unit) {
+    val iterator = iterator().withIndex()
+
+    while (iterator.hasNext()) {
+        val next = iterator.next()
+        each(next.value)
+        if (iterator.hasNext()) divide(next.index)
     }
 }
 
@@ -25,7 +35,7 @@ fun <T> List<T>.replaceAt(index: Int, newItem: T): List<T> {
 
 fun <T> MutableList<T>.filterRemove(predicate: (T) -> Boolean) {
     val each = iterator()
-    
+
     while (each.hasNext()) {
         if (predicate(each.next())) each.remove()
     }
@@ -35,7 +45,7 @@ fun <T> MutableList<T>.filterRemove(predicate: (T) -> Boolean) {
 fun <T> List<T>.findAndModify(predicate: (T) -> Boolean, modify: (T) -> T): List<T> {
     val found = find(predicate) ?: return this
     val modified = modify(found)
-    
+
     return replace(modified, predicate)
 }
 
@@ -48,7 +58,7 @@ fun <T> MutableList<T>.findAndReplace(predicate: (T) -> Boolean, replaceWith: (T
 fun <T> List<T>.withRemoved(predicate: (T) -> Boolean): List<T> {
     val toRemove = find(predicate)
     val index = indexOf(toRemove).takeIf { it != -1 } ?: return this
-    
+
     return subList(0, index) + subList(index + 1, size)
 }
 
@@ -85,7 +95,7 @@ inline fun <T, R> T.runInScope(scope: CoroutineScope, crossinline block: suspend
 inline fun <T, R> T.runInScopeCatchingAny(scope: CoroutineScope,
                                           crossinline onFailure: (Throwable) -> Unit = {},
                                           crossinline block: suspend T.() -> R
-                                          ): Job {
+): Job {
     return scope.launch { runCatching { block() }.onFailure(onFailure) }
 }
 

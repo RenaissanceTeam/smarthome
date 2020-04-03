@@ -1,7 +1,7 @@
 package smarthome.client.presentation.scripts.all.items
 
-import smarthome.client.entity.script.Script
+import smarthome.client.entity.script.ScriptOverview
 
 data class ScriptsItemState(
-    val script: Script
+        val script: ScriptOverview
 )

@@ -3,47 +3,48 @@ package smarthome.client.presentation.scripts.all
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import org.koin.core.inject
-import smarthome.client.domain.api.scripts.usecases.setup.FetchScriptsUseCase
-import smarthome.client.entity.script.Script
+import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
 import smarthome.client.presentation.scripts.all.items.ScriptsItemState
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
-import smarthome.client.util.log
-import smarthome.client.util.runInScope
+import smarthome.client.presentation.util.ToastLiveData
+import smarthome.client.presentation.util.extensions.runInScopeLoading
 
 class ScriptsViewModel : KoinViewModel() {
 
     val scripts = MutableLiveData<List<ScriptsItemState>>()
-    val refresh = MutableLiveData<Boolean>()
+    val refresh = MutableLiveData(false)
     val openNewScript = NavigationLiveData()
-    private val fetchScripts: FetchScriptsUseCase by inject()
-    
-    
+    val errors = ToastLiveData()
+    private val getScripts: GetScriptsOverviewUseCase by inject()
+
+
     override fun onResume() {
         onRefresh()
     }
 
     fun onRefresh() {
-        fetchScripts.runInScope(viewModelScope) {
-            refresh.value = true
+        getScripts.runInScopeLoading(viewModelScope, refresh) {
+            runCatching { execute() }
+                    .onFailure { errors.post("Can't load scripts: ${it.message}") }
+                    .onSuccess { scripts.value = it.map { ScriptsItemState(script = it) } }
 
-            runCatching {
-                execute()
-            }.onFailure {
-                log(it)
-            }.onSuccess { it: List<Script> ->
-                scripts.value = it.map { ScriptsItemState(script = it) }
-            }
-
-            refresh.value = false
         }
     }
-    
+
     fun onAddScriptClicked() {
         openNewScript.trigger()
     }
 
     fun notRefreshing(): Boolean {
         return refresh.value == false
+    }
+
+    fun onScriptClicked(id: Long) {
+
+    }
+
+    fun onEnableClicked(id: Long, enable: Boolean) {
+
     }
 }

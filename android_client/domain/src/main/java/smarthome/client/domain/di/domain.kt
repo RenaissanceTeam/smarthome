@@ -11,6 +11,7 @@ import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUs
 import smarthome.client.domain.api.main.BooleanState
 import smarthome.client.domain.api.main.StateMachine
 import smarthome.client.domain.api.scripts.usecases.GetScriptByIdUseCase
+import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.*
 import smarthome.client.domain.api.scripts.usecases.setup.*
 import smarthome.client.domain.api.usecase.CloudMessageUseCase
@@ -21,6 +22,7 @@ import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImp
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.main.StateMachineImpl
 import smarthome.client.domain.scripts.usecases.GetScriptByIdUseCaseImpl
+import smarthome.client.domain.scripts.usecases.GetScriptsOverviewUseCaseImpl
 import smarthome.client.domain.scripts.usecases.dependency.*
 import smarthome.client.domain.scripts.usecases.setup.*
 import smarthome.client.domain.usecases.CloudMessageUseCaseImpl
@@ -54,7 +56,6 @@ val domain = module {
     factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
     
     //scripts
-    factoryBy<FetchScriptsUseCase, FetchScriptsUseCaseImpl>()
     factoryBy<AddBlockToScriptGraphUseCase, AddBlockToScriptGraphUseCaseImpl>()
     factoryBy<MoveBlockUseCase, MoveBlockUseCaseImpl>()
     factoryBy<RemoveBlockUseCase, RemoveBlockUseCaseImpl>()
@@ -86,7 +87,8 @@ val domain = module {
     factoryBy<UpdateScriptInfoUseCase, UpdateScriptInfoUseCaseImpl>()
     factoryBy<ObserveSetupScriptUseCase, ObserveSetupScriptUseCaseImpl>()
     factoryBy<GetSetupScriptUseCase, GetSetupScriptUseCaseImpl>()
-    
+    factoryBy<GetScriptsOverviewUseCase, GetScriptsOverviewUseCaseImpl>()
+
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
     
     single(named("login")) {

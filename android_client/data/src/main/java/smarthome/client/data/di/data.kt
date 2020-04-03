@@ -24,7 +24,6 @@ import smarthome.client.data.retrofit.RetrofitFactory
 import smarthome.client.data.scripts.ScriptsRepoImpl
 import smarthome.client.data.scripts.SetupDependencyRepoImpl
 import smarthome.client.data.scripts.SetupScriptRepoImpl
-import smarthome.client.data.scripts.mapper.ScriptDtoToScriptMapper
 
 private val dataInnerModule = module {
     single { GsonBuilder().create() }
@@ -56,7 +55,6 @@ private val dataInnerModule = module {
     singleBy<ScriptsRepo, ScriptsRepoImpl>()
     singleBy<SetupScriptRepo, SetupScriptRepoImpl>()
     singleBy<SetupDependencyRepo, SetupDependencyRepoImpl>()
-    factory { ScriptDtoToScriptMapper() }
 }
 
 val data = dataInnerModule + typeAdapterModule
