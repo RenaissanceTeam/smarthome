@@ -1,7 +1,6 @@
 package smarthome.raspberry.arduinodevices.script.data
 
 import org.springframework.stereotype.Component
-import smarthome.raspberry.arduinodevices.script.data.ArduinoControllerBlockDto
 import smarthome.raspberry.arduinodevices.script.domain.entity.ArduinoControllerBlock
 import smarthome.raspberry.controllers.api.domain.GetControllerByIdUseCase
 import smarthome.raspberry.scripts.api.data.mapper.BlockDtoMapper
@@ -22,6 +21,7 @@ class ArduinoControllerBlockDtoMapper(
         return ArduinoControllerBlock(
                 id = dto.id,
                 position = dto.position,
+                type = dto.type,
                 controller = getControllerByIdUseCase.execute(dto.controllerId)
         )
     }
@@ -29,6 +29,7 @@ class ArduinoControllerBlockDtoMapper(
     override fun mapEntity(entity: ArduinoControllerBlock): ArduinoControllerBlockDto {
         return ArduinoControllerBlockDto(
                 id = entity.id,
+                type = entity.type,
                 position = entity.position,
                 controllerId = entity.controller.id
         )

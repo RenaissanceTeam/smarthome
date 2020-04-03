@@ -25,31 +25,32 @@ class SetupScriptViewModel : KoinViewModel() {
     private val saveSetupScriptUseCase: SaveSetupScriptUseCase by inject()
     private val observeSetupScriptUseCase: ObserveSetupScriptUseCase by inject()
     private val cancelSetupScriptUseCase: CancelSetupScriptUseCase by inject()
-    
+
     init {
         disposable.add(observeSetupScriptUseCase.execute().subscribe { script ->
             setupScript.value = script
         })
     }
-    
+
     fun onNextFromScriptInfoClicked(name: String, description: String) {
         updateScriptInfoUseCase.execute(ScriptInfo(name, description))
         navigateToAddingController.trigger()
     }
-    
+
     fun onSaveClicked() {
         saveSetupScriptUseCase.runInScopeLoading(viewModelScope, loading) {
             runCatching { execute() }
-                .onSuccess { onSaved() }
-                .onFailure { errors.post("Can't save: ${it.message}") }
+                    .onSuccess { onSaved() }
+                    .onFailure { errors.post("Can't save: ${it.message}") }
         }
     }
-    
+
     fun onScriptId(id: Long) {
         if (setupScript.value != null) return
-        
+
         startSetupScriptUseCase.runInScopeLoading(viewModelScope, loading) {
             runCatching { execute(id.takeUnless { it == NOT_DEFINED_ID }) }
+                    .onFailure { onCancel() }
         }
     }
     
@@ -58,7 +59,7 @@ class SetupScriptViewModel : KoinViewModel() {
         close.trigger()
         setupScope.close()
     }
-    
+
     private fun onSaved() {
         setupScope.close()
         finishFlow.trigger()

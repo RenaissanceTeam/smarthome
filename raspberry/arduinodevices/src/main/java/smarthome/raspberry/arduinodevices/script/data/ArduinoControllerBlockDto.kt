@@ -6,5 +6,6 @@ import smarthome.raspberry.scripts.api.data.dto.BlockDto
 class ArduinoControllerBlockDto(
         id: String,
         position: Position,
+        val type: String,
         val controllerId: Long
 ) : BlockDto(id, position)

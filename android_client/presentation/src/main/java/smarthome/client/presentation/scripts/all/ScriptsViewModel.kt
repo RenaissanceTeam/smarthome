@@ -4,9 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
+import smarthome.client.entity.NOT_DEFINED_ID
 import smarthome.client.presentation.scripts.all.items.ScriptsItemState
 import smarthome.client.presentation.util.KoinViewModel
-import smarthome.client.presentation.util.NavigationLiveData
+import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.presentation.util.ToastLiveData
 import smarthome.client.presentation.util.extensions.runInScopeLoading
 
@@ -14,7 +15,7 @@ class ScriptsViewModel : KoinViewModel() {
 
     val scripts = MutableLiveData<List<ScriptsItemState>>()
     val refresh = MutableLiveData(false)
-    val openNewScript = NavigationLiveData()
+    val openSetup = NavigationParamLiveData<Long>()
     val errors = ToastLiveData()
     private val getScripts: GetScriptsOverviewUseCase by inject()
 
@@ -33,7 +34,7 @@ class ScriptsViewModel : KoinViewModel() {
     }
 
     fun onAddScriptClicked() {
-        openNewScript.trigger()
+        openSetup.trigger(NOT_DEFINED_ID)
     }
 
     fun notRefreshing(): Boolean {
@@ -41,7 +42,7 @@ class ScriptsViewModel : KoinViewModel() {
     }
 
     fun onScriptClicked(id: Long) {
-
+        openSetup.trigger(id)
     }
 
     fun onEnableClicked(id: Long, enable: Boolean) {
