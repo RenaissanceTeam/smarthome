@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.domain
+package smarthome.raspberry.arduinodevices.domain.entity
 
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction

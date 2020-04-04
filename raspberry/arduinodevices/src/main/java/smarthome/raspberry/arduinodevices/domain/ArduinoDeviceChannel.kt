@@ -1,9 +1,9 @@
 package smarthome.raspberry.arduinodevices.domain
 
 
-import smarthome.raspberry.arduinodevices.data.ArduinoDeviceAddressRepository
-import smarthome.raspberry.arduinodevices.data.ArduinoDeviceApi
-import smarthome.raspberry.arduinodevices.data.ArduinoDeviceApiFactory
+import smarthome.raspberry.arduinodevices.data.repository.ArduinoDeviceAddressRepository
+import smarthome.raspberry.arduinodevices.data.api.ArduinoDeviceApi
+import smarthome.raspberry.arduinodevices.data.api.ArduinoDeviceApiFactory
 import smarthome.raspberry.arduinodevices.util.index
 import smarthome.raspberry.entity.controller.Controller
 import smarthome.raspberry.channel.api.domain.entity.DeviceChannel

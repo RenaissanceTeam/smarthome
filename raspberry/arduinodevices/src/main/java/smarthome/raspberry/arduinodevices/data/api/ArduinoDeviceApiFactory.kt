@@ -1,4 +1,4 @@
-package smarthome.raspberry.arduinodevices.data
+package smarthome.raspberry.arduinodevices.data.api
 
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestOperations

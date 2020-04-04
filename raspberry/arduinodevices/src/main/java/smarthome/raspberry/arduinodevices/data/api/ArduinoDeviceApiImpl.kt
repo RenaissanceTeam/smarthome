@@ -1,8 +1,9 @@
-package smarthome.raspberry.arduinodevices.data
+package smarthome.raspberry.arduinodevices.data.api
 
 import org.springframework.web.client.RestOperations
 import org.springframework.web.client.getForObject
 import org.springframework.web.client.postForObject
+import smarthome.raspberry.arduinodevices.data.api.ArduinoDeviceApi
 
 class ArduinoDeviceApiImpl(private val address: String, private val rest: RestOperations) : ArduinoDeviceApi {
 

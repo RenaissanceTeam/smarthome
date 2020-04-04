@@ -1,16 +1,19 @@
 package smarthome.raspberry.entity.controller
 
-import smarthome.raspberry.entity.device.Device
 import smarthome.raspberry.entity.ID_NOT_DEFINED
-import javax.persistence.*
+import smarthome.raspberry.entity.device.Device
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.ManyToOne
 
 @Entity
 data class Controller(
         @Id @GeneratedValue
-    val id: Long = ID_NOT_DEFINED,
+        val id: Long = ID_NOT_DEFINED,
         @ManyToOne
-    val device: Device,
+        val device: Device,
         val type: String,
-        val name: String,
-        val state: String
+        val name: String = "",
+        val state: String?
 )
