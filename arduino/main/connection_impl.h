@@ -9,11 +9,8 @@
 
 #define DEBUG 0
 
-#define home_info "name=" DEVICE_NAME "&services=" SERVICES_STR "&names=" SERVICE_NAMES_STR
-
 WiFiEspClient wifiClient;
-HttpClient* client;
-char ip[IP_BUFFER_LENGTH];
+HttpClient client = HttpClient(wifiClient, RASPBERRY_IP, RASPBERRY_PORT);
 
 
 
@@ -49,9 +46,9 @@ dht DHT11;
 void humidityDht11GetRequest(WebServer& server, int serviceIndex) {
   #if DEBUG > 1
       Serial.print("read HUMIDITY on pin ");
-      Serial.println(PINS[serviceIndex]);
+      Serial.println(services[serviceIndex].pin);
 #endif
-      DHT11.read11(PINS[serviceIndex]);
+      DHT11.read11(services[serviceIndex].pin);
       baseResponse(server, DHT11.humidity);
 }
 
@@ -59,9 +56,9 @@ void humidityDht11GetRequest(WebServer& server, int serviceIndex) {
 void temperatureDht11GetRequest(WebServer& server, int serviceIndex) {
   #if DEBUG > 1
       Serial.print("read TEMPERATURE on pin ");
-      Serial.println(PINS[serviceIndex]);
+      Serial.println(services[serviceIndex].pin);
 #endif
-      DHT11.read11(PINS[serviceIndex]);
+      DHT11.read11(services[serviceIndex].pin);
       baseResponse(server, DHT11.temperature);
 }
 
@@ -82,9 +79,9 @@ dht DHT22;
 void humidityDht22GetRequest(WebServer& server, int serviceIndex) {
   #if DEBUG > 1
       Serial.print("read HUMIDITY on pin ");
-      Serial.println(PINS[serviceIndex]);
+      Serial.println(services[serviceIndex].pin);
 #endif
-      DHT22.read22(PINS[serviceIndex]);
+      DHT22.read22(services[serviceIndex].pin);
       baseResponse(server, DHT22.humidity);
 }
 
@@ -92,9 +89,9 @@ void humidityDht22GetRequest(WebServer& server, int serviceIndex) {
 void temperatureDht22GetRequest(WebServer& server, int serviceIndex) {
   #if DEBUG > 1
       Serial.print("read TEMPERATURE on pin ");
-      Serial.println(PINS[serviceIndex]);
+      Serial.println(services[serviceIndex].pin);
 #endif
-      DHT22.read22(PINS[serviceIndex]);
+      DHT22.read22(services[serviceIndex].pin);
       baseResponse(server, DHT22.temperature);
 }
 
@@ -114,19 +111,19 @@ void temperatureDht22GetRequest(WebServer& server, int serviceIndex) {
 void onoffGetRequest(WebServer& server, int serviceIndex) {
 #if DEBUG > 1
       Serial.print("read ON_OFF on pin ");
-      Serial.println(PINS[serviceIndex]);
+      Serial.println(services[serviceIndex].pin);
 #endif
-      baseResponse(server, digitalRead(PINS[serviceIndex]));
+      baseResponse(server, digitalRead(services[serviceIndex].pin));
 } 
 
 void onoffPostRequest(WebServer& server, int serviceIndex, int value) {
 #if DEBUG > 1
       Serial.print("set ON_OFF on pin ");
-      Serial.print(PINS[serviceIndex]);
+      Serial.print(services[serviceIndex].pin);
       Serial.print(" to value ");
       Serial.println(value);
 #endif
-      digitalWrite(PINS[serviceIndex], value);
+      digitalWrite(services[serviceIndex].pin, value);
       baseResponse(server, value);
 }
 
@@ -142,9 +139,9 @@ void onoffPostRequest(WebServer& server, int serviceIndex, int value) {
 void analogGetRequest(WebServer& server, int serviceIndex) {
 #if DEBUG > 1
       Serial.print("read ANALOG on pin ");
-      Serial.println(PINS[serviceIndex]);
+      Serial.println(services[serviceIndex].pin);
 #endif
-      baseResponse(server, analogRead(PINS[serviceIndex]));
+      baseResponse(server, analogRead(services[serviceIndex].pin));
 } 
 
 #endif
@@ -159,9 +156,9 @@ void analogGetRequest(WebServer& server, int serviceIndex) {
 void digitalAlertGetRequest(WebServer& server, int serviceIndex) {
 #if DEBUG > 1
       Serial.print("read digitalAlert on pin ");
-      Serial.println(PINS[serviceIndex]);
+      Serial.println(services[serviceIndex].pin);
 #endif
-      baseResponse(server, digitalRead(PINS[serviceIndex]));
+      baseResponse(server, digitalRead(services[serviceIndex].pin));
 } 
 
 #endif
@@ -214,7 +211,7 @@ bool tryParseRequestValues(WebServer &server, WebServer::ConnectionType type,
     }
   }
 
-  if (serviceIndex < 0 || serviceIndex >= SERVICES_COUNT) {
+  if (serviceIndex < 0 || serviceIndex >= SIZE(services)) {
     return false;
   }
 
@@ -241,14 +238,14 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
   if (type == WebServer::GET) {
     
 #ifdef ONOFF   
-    if (SERVICES[serviceIndex] == ONOFF_ID) {
+    if (services[serviceIndex].type == ONOFF_ID) {
       onoffGetRequest(server, serviceIndex);
       return;
     }
 #endif
 
 #ifdef ANALOG
-    if (SERVICES[serviceIndex] == ANALOG_ID) {
+    if (services[serviceIndex].type == ANALOG_ID) {
       analogGetRequest(server, serviceIndex);
       return;
     }
@@ -256,35 +253,35 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
 
 #ifdef TEMPERATURE_DHT11
-    if (SERVICES[serviceIndex] == TEMPERATURE_DHT11_ID) {
+    if (services[serviceIndex].type == TEMPERATURE_DHT11_ID) {
       temperatureDht11GetRequest(server, serviceIndex);  
       return;
     }
 #endif
 
 #ifdef HUMIDITY_DHT11
-    if (SERVICES[serviceIndex] == HUMIDITY_DHT11_ID) {
+    if (services[serviceIndex].type == HUMIDITY_DHT11_ID) {
       humidityDht11GetRequest(server, serviceIndex);
       return;
     }
 #endif
 
 #ifdef TEMPERATURE_DHT22
-    if (SERVICES[serviceIndex] == TEMPERATURE_DHT22_ID) {
+    if (services[serviceIndex].type == TEMPERATURE_DHT22_ID) {
       temperatureDht22GetRequest(server, serviceIndex);  
       return;
     }
 #endif
 
 #ifdef HUMIDITY_DHT22
-    if (SERVICES[serviceIndex] == HUMIDITY_DHT22_ID) {
+    if (services[serviceIndex].type == HUMIDITY_DHT22_ID) {
       humidityDht22GetRequest(server, serviceIndex);
       return;
     }
 #endif
 
 #ifdef DIGITAL_ALERT
-    if (SERVICES[serviceIndex] == DIGITAL_ALERT_ID) {
+    if (services[serviceIndex].type == DIGITAL_ALERT_ID) {
       digitalAlertGetRequest(server, serviceIndex);
       return;
     }
@@ -293,7 +290,7 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
   } else if (type == WebServer::POST) {
 
 #ifdef ONOFF   
-    if (SERVICES[serviceIndex] == ONOFF_ID) {
+    if (services[serviceIndex].type == ONOFF_ID) {
       onoffPostRequest(server, serviceIndex, parsedValue);
       return;
     }
@@ -344,30 +341,59 @@ void homePage(WebServer &server, WebServer::ConnectionType type,
  			  char* params, bool complete)
 {
   server.httpSuccess();
-  server.print(home_info);
+//  P(homeInfo) = 
+//  server.print(home_info);
   server.flushBuf();
 }
 
 
-void init(WebServer &server, WebServer::ConnectionType type, char * params, bool complete) {
-  server.httpSuccess();
-  Serial.println(home_info);
-  server.getRemoteIp(ip);
-  Serial.print(F("remote ip="));
-  Serial.println(ip);
+
+void printService(WebServer &server, Service service) {
+  server.print("{\"type\"=");
+  server.print(service.type);
+  server.print(",\"serial\"=");
+  server.print( service.serial);
+  server.print("}");
+}
+
+void printAllServices(WebServer &server) {
+  server.print("[");
+  int all = SIZE(services);
+  for (int i = 0; i < all; ++i) { 
+    printService(server, services[i]);
+    if (i != all - 1) server.print(",");
+  }
+  server.print("]");
+}
+
+String serviceToJson(Service service) {
+  return "{\"type\"=" + String(service.type) + ",\"serial\"=" + service.serial + "}";
+}
+
+String servicesToJson() {
+  String result = "";
+  int all = SIZE(services);
+
+  result += "{";
+  for (int i = 0; i < all; ++i) { 
+    result += serviceToJson(services[i]);
+    if (i != all - 1) result += ",";
+  }
+  result += "}";
   
-  
-  if (client != 0) delete client;
-  client = new HttpClient(wifiClient, ip, RASPBERRY_PORT);
-  client->post("/init?" home_info, "text", "");
-  client->flush();
-  client->stop();
+  return result;
+}
+
+
+void sendInitToServer() {
+  client.post("/init?", JSON_CONTENT_TYPE, servicesToJson());
+  client.flush();
+  client.stop();
 }
 
 void runHttpServer(WebServer& server) {
   server.setDefaultCommand(&homePage);    // callback to home page request
   server.addCommand("service", &service); // smart home server request to do something with service
-  server.addCommand("init", &init);
   server.begin();
 }
 
@@ -390,8 +416,10 @@ void sendAlertToServer(int serviceIndex, int value) {
 	if (client == 0) {
 	  return;
 	}
-	client->post("/alert?ind=" + String(serviceIndex) + "&value=" + value, "text", "");
-  client->flush();
-  client->stop();
+
+ String alert = "{\"serial\"=" + String(services[serviceIndex].serial) + ",\"state\"="  + value + "}";
+	client.post("/api/controllers/alert" , JSON_CONTENT_TYPE, alert);
+  client.flush();
+  client.stop();
 }
 #endif

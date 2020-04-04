@@ -27,11 +27,11 @@ void setup()
 #endif
 
   runHttpServer(server);
+  sendInitToServer();
 
 #if DEBUG > 0
   Serial.println("setup end");
 #endif
-  sendUdpInitToHomeServer();
 }
 
 void loop() {

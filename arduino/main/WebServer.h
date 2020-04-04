@@ -40,6 +40,7 @@
 
 // standard END-OF-LINE marker in HTTP
 #define CRLF "\r\n"
+#define JSON_CONTENT_TYPE "application/json"
 #define IP_BUFFER_LENGTH 15
 
 // If processConnection is called without a buffer, it allocates one
@@ -624,13 +625,14 @@ void WebServer::httpSuccess(const char *contentType,
 
   P(successMsg2) = 
     "Access-Control-Allow-Origin: *" CRLF
-    "Content-Type: ";
+    "Content-Type: " JSON_CONTENT_TYPE;
 
   printP(successMsg2);
-  print(contentType);
   printCRLF();
+  
   if (extraHeaders)
     print(extraHeaders);
+    
   printCRLF();
 }
 
