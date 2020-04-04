@@ -53,7 +53,7 @@ class SetupScriptViewModel : KoinViewModel() {
                     .onFailure { onCancel() }
         }
     }
-    
+
     fun onCancel() {
         cancelSetupScriptUseCase.execute()
         close.trigger()

@@ -16,6 +16,7 @@ import smarthome.client.presentation.ACTION_CONTAINER_CONTROLLER
 import smarthome.client.presentation.ACTION_CONTAINER_VIEWMODEL
 import smarthome.client.presentation.CONDITION_CONTAINER_CONTROLLER
 import smarthome.client.presentation.CONDITION_CONTAINER_VIEWMODEL
+import smarthome.client.presentation.controllers.controllerdetail.statechanger.ControllerStateChanger
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.OnOffStateChanger
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.ReadStateChanger
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerFactory
@@ -48,11 +49,11 @@ val presentation = module {
     
     // controllers
     factory { StateChangerFactory() }
-    factory(named("dht")) { (controllerId: Long) ->
+    factory<ControllerStateChanger>(named("dht")) { (controllerId: Long) ->
         ReadStateChanger(id = controllerId, readControllerUseCase = get())
     }
     
-    factory(named("onoff")) { (controllerId: Long) ->
+    factory<ControllerStateChanger>(named("onoff")) { (controllerId: Long) ->
         OnOffStateChanger(id = controllerId, writeStateToControllerUseCase = get(), observeControllerUseCase = get())
     }
     
