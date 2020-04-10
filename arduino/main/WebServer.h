@@ -258,7 +258,6 @@ public:
   // Close the current connection and flush ethernet buffers
   void reset(); 
 
-  void getRemoteIp(char *ip);
 private:
   WiFiEspServer m_server;
   WiFiEspClient m_client;
@@ -268,7 +267,6 @@ private:
   unsigned char m_pushbackDepth;
 
   int m_contentLength;
-  char m_remoteIp[15];
   bool m_readingContent;
 
   Command *m_failureCmd;
@@ -299,14 +297,7 @@ private:
    multiple source files are using the Webduino class. */
 #ifndef WEBDUINO_NO_IMPLEMENTATION
 
-/********************************************************************
- * IMPLEMENTATION
- ********************************************************************/
-void WebServer::getRemoteIp(char* ip) {
-  for(int i=0; i < 15; ++i){
-    ip[i] = m_remoteIp[i];
-  }
-}
+
 WebServer::WebServer(const char *urlPrefix, uint16_t port) :
   m_server(port),
   m_client(),
@@ -878,10 +869,6 @@ void WebServer::processHeaders()
       continue;
     }
 
-    if (expect("Remote_Addr:")) {
-      readHeader(m_remoteIp, IP_BUFFER_LENGTH);
-      continue;
-    }
 
     if (expect(CRLF CRLF))
     {

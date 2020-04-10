@@ -59,5 +59,4 @@ void setupConfiguration() {
   services[7].pin = 2;
   services[7].type = 1001;
   services[7].serial = -535431216;
-
 }
