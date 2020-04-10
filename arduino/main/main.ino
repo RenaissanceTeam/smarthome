@@ -27,7 +27,7 @@ void setup()
 #if DEBUG > 0
   Serial.println(WiFi.localIP());
 #endif
-  sendInitToServer();
+//  sendInitToServer();
 #if DEBUG > 0
   Serial.println("setup end");
 #endif

@@ -9,19 +9,15 @@
 
 #define DEBUG 0
 
-WiFiEspClient wifiClient;
-HttpClient client = HttpClient(wifiClient, RASPBERRY_IP, RASPBERRY_PORT);
-String baseControllersUrl = "iot/api/arduino/";
-String responseStart = "{\"response\":";
-String responseEnd = "}";
-
+WiFiEspClient wifiClient; // 20b
+HttpClient client = HttpClient(wifiClient, RASPBERRY_IP, RASPBERRY_PORT); // 150b
 
 void baseResponse(WebServer& server, int val) {
   Serial.println(val);
   server.httpSuccess();
-  server.print(responseStart);
+  server.print(FPSTR(responseStart));
   server.print(val);
-  server.print(responseEnd);
+  server.print(FPSTR(responseEnd));
   server.print(CRLF);
   server.flushBuf();
 }
@@ -29,9 +25,9 @@ void baseResponse(WebServer& server, int val) {
 void baseResponse(WebServer& server, double val) {
   Serial.println(val);
   server.httpSuccess();
-  server.print(responseStart);
+  server.print(FPSTR(responseStart));
   server.print(val);
-  server.print(responseEnd);
+  server.print(FPSTR(responseEnd));
   server.print(CRLF);
   server.flushBuf();
 }
@@ -172,7 +168,8 @@ void digitalAlertGetRequest(WebServer& server, int serviceIndex) {
 
 int parseIntParam(char *from, int& shift, char key[], int &val) {
   int i;
-  for (i = 0; i < strlen(key); ++i) {
+  int toSkip = strlen(key);
+  for (i = 0; i < toSkip; ++i) {
     if (key[i] != from[i + shift]) {
       return -1;
     }
@@ -186,7 +183,7 @@ int parseIntParam(char *from, int& shift, char key[], int &val) {
   {
     val = val * 10 + ch - '0';
     ch = from[++i + shift];
-    //    Serial.print(ch);
+//        Serial.print(ch);
   }
   //  Serial.println();
   return i;
@@ -195,15 +192,15 @@ int parseIntParam(char *from, int& shift, char key[], int &val) {
 bool tryParseRequestValues(WebServer &server, WebServer::ConnectionType type,
                            char * params, int& serviceIndex, int& parsedValue) {
   int shift = 0;
-  shift = parseIntParam(params, shift, "index=", serviceIndex);
+  shift = parseIntParam(params, shift, indexLabel, serviceIndex);
 #if DEBUG > 1
-  Serial.print("read index = ");
+  Serial.print(F("read index = "));
   Serial.println(serviceIndex);
 #endif
   if (type == WebServer::POST) {
     // skip '&'
     ++shift;
-    shift = parseIntParam(params, shift, "value=", parsedValue);
+    shift = parseIntParam(params, shift, valueLabel, parsedValue);
     if (shift < 0) {
 #if DEBUG > 1
       Serial.println("Failed to read value");
@@ -228,7 +225,7 @@ bool tryParseRequestValues(WebServer &server, WebServer::ConnectionType type,
 void service(WebServer &server, WebServer::ConnectionType type, char * params, bool complete)
 {
 #if DEBUG > 1
-  Serial.print("service params=");
+  Serial.print(F("service params="));
   Serial.println(params);
 #endif
 
@@ -311,7 +308,6 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
 
 
-
 void connectToWifi(SoftwareSerial& esp_serial) {
 
   // start communication with esp on selected serial
@@ -319,75 +315,61 @@ void connectToWifi(SoftwareSerial& esp_serial) {
 
   // check for the presence of the shield
   if (WiFi.status() == WL_NO_SHIELD) {
-    Serial.println("WiFi shield not present");
+    Serial.println(FPSTR(noWifiShieldMessage));
     while (true);
   }
 
   int connectionStatus = WL_IDLE_STATUS;
   // actual connection to wifi
   while (connectionStatus != WL_CONNECTED) {
-#if DEBUG > 0
+    //#if DEBUG > 0
     Serial.print("Attempting to connect to WPA SSID: ");
     Serial.println(WIFI_SSID);
-#endif
+    //#endif
     // Connect to WPA/WPA2 network
+
     connectionStatus = WiFi.begin(WIFI_SSID, PASSWORD);
   }
 }
 
 
-void printService(WebServer &server, Service service) {
-  server.print("{\"type\"=");
-  server.print(service.type);
-  server.print(",\"serial\"=");
-  server.print(service.serial);
-  server.print("}");
-}
-
-void printAllServices(WebServer &server) {
-  server.print("[");
-  int all = SIZE(services);
-  for (int i = 0; i < all; ++i) {
-    printService(server, services[i]);
-    if (i != all - 1) server.print(",");
-  }
-  server.print("]");
-}
-
-void homePage(WebServer &server, WebServer::ConnectionType type,
-              char* params, bool complete)
-{
-  server.httpSuccess();
-  printAllServices(server);
-  server.printCRLF();
-  server.flushBuf();
-}
-
 String serviceToJson(Service service) {
-  return "{\"type\"=" + String(service.type) + ",\"serial\"=" + service.serial + "}";
+  return String(FPSTR(curlyOpen))
+         + keyValueJson(FPSTR(typeLabel), String(service.type))
+         + String(FPSTR(comma))
+         + keyValueJson(FPSTR(serialLabel), String(service.serial))
+         + String(FPSTR(curlyClose));
 }
 
 String servicesToJson() {
   String result = "";
   int all = SIZE(services);
 
-  result += "{";
+  result += String(FPSTR(squareOpen));
   for (int i = 0; i < all; ++i) {
     result += serviceToJson(services[i]);
-    if (i != all - 1) result += ",";
+    if (i != all - 1) result += String(FPSTR(comma));
   }
-  result += "}";
+  result += String(FPSTR(squareClose));
 
   return result;
 }
 
+void homePage(WebServer &server, WebServer::ConnectionType type,
+              char* params, bool complete)
+{
+  server.httpSuccess();
+  server.print(servicesToJson());
+  server.printCRLF();
+  server.flushBuf();
+}
 
-void doPost(String url, String postData) {
+void doPost(const __FlashStringHelper* url, String postData) {
   client.beginRequest();
-  client.post(baseControllersUrl + url);
+  client.post(String(FPSTR(baseControllersUrl)) + String(url));
   client.sendHeader(HTTP_HEADER_CONTENT_TYPE, JSON_CONTENT_TYPE);
   client.sendHeader(HTTP_HEADER_CONTENT_LENGTH, postData.length());
-//  client.sendHeader("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhIiwiaWF0IjowLCJleHAiOjI1ODY2OTc4OTV9.O9mqWMTV9CYVN0SrnOp9TE_1HySl9bf4D719-gzBnMChXw7iqnVTTUZf9IHjL5Dm4tfeUgM8wo2hWAm8O9KEeg");
+  client.sendHeader(authHeader, authToken);
   client.print(postData);
   client.flush();
   client.responseStatusCode();
@@ -396,32 +378,22 @@ void doPost(String url, String postData) {
 }
 
 void sendInitToServer() {
-  doPost("init", servicesToJson());
+  doPost(FPSTR(initEndpoint), servicesToJson());
 }
 
 void runHttpServer(WebServer& server) {
   server.setDefaultCommand(&homePage);    // callback to home page request
-  server.addCommand("service", &service); // smart home server request to do something with service
+  server.addCommand(serviceEndpoint, &service); // smart home server request to do something with service
   server.begin();
 }
 
-#ifdef INIT_SERVICE
-void sendUdpInitToHomeServer() {
-  Serial.println("send udp");
-  WiFiEspUDP udpClient;
-  IPAddress broadcastIp(192, 168, 1, 255);
-  udpClient.begin(UDP_PORT);
-  udpClient.beginPacket(broadcastIp, UDP_PORT);
-  udpClient.write(DEVICE_NAME); // todo some key instead (encryption needed)
-  udpClient.endPacket();
-  udpClient.flush();
-  udpClient.stop();
-}
-#endif
-
 #ifdef DIGITAL_ALERT
 void sendAlertToServer(int serviceIndex, int value) {
-  String alert = "{\"serial\"=" + String(services[serviceIndex].serial) + ",\"state\"="  + value + "}";
-  doPost("alert", alert);
+  String alert = String(FPSTR(curlyOpen))
+                 + keyValueJson(FPSTR(serialLabel), String(services[serviceIndex].serial))
+                 + String(FPSTR(comma))
+                 + keyValueJson(FPSTR(stateLabel), String(value))
+                 + String(curlyClose);
+  doPost(FPSTR(alertEndpoint), alert);
 }
 #endif

@@ -36,12 +36,10 @@
  ********************************************************************/
 
 #define WEBDUINO_VERSION 1007
-#define WEBDUINO_VERSION_STRING "0.1"
 
 // standard END-OF-LINE marker in HTTP
 #define CRLF "\r\n"
-#define JSON_CONTENT_TYPE "application/json"
-#define IP_BUFFER_LENGTH 15
+const PROGMEM char JSON_CONTENT_TYPE[] = "application/json";
 
 // If processConnection is called without a buffer, it allocates one
 // of 32 bytes
@@ -312,7 +310,7 @@ WebServer::WebServer(const char *urlPrefix, uint16_t port) :
 {
 }
 
-P(webServerHeader) = "Server: SmartHomeArduinoServer/" WEBDUINO_VERSION_STRING CRLF;
+P(webServerHeader) = "Server: SmartHomeArduinoServer/0.1" CRLF;
 
 void WebServer::begin()
 {
@@ -616,7 +614,7 @@ void WebServer::httpSuccess(const char *contentType,
 
   P(successMsg2) = 
     "Access-Control-Allow-Origin: *" CRLF
-    "Content-Type: " JSON_CONTENT_TYPE;
+    "Content-Type: ", JSON_CONTENT_TYPE;
 
   printP(successMsg2);
   printCRLF();

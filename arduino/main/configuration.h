@@ -1,10 +1,20 @@
 #include "user_properties.h"
 #include "services.h"
 #include "service.h"
+#include "constants.h"
+#include "jsonUtil.h"
+#include "util.h"
 
-#define RASPBERRY_PORT 8080
-#define RASPBERRY_IP "192.168.0.102"
-#define ARDUINO_PORT 80
+#ifdef __ets__
+
+#include "ets_sys.h"
+#include "osapi.h"
+
+#endif
+
+const PROGMEM char RASPBERRY_IP[] = "192.168.0.102";
+const PROGMEM int RASPBERRY_PORT  = 8080;
+const PROGMEM int ARDUINO_PORT = 80;
 
 // used services
 #define DIGITAL_ALERT
