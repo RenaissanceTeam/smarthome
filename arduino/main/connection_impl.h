@@ -12,8 +12,6 @@
 WiFiEspClient wifiClient;
 HttpClient client = HttpClient(wifiClient, RASPBERRY_IP, RASPBERRY_PORT);
 
-
-
 void baseResponse(WebServer& server, int val) {
   Serial.println(val);
   server.httpSuccess();
