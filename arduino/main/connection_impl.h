@@ -11,13 +11,17 @@
 
 WiFiEspClient wifiClient;
 HttpClient client = HttpClient(wifiClient, RASPBERRY_IP, RASPBERRY_PORT);
+String baseControllersUrl = "iot/api/arduino/";
+String responseStart = "{\"response\":";
+String responseEnd = "}";
+
 
 void baseResponse(WebServer& server, int val) {
   Serial.println(val);
   server.httpSuccess();
-  server.print("{\"response\" : \"");
+  server.print(responseStart);
   server.print(val);
-  server.print("\"}");
+  server.print(responseEnd);
   server.print(CRLF);
   server.flushBuf();
 }
@@ -25,9 +29,9 @@ void baseResponse(WebServer& server, int val) {
 void baseResponse(WebServer& server, double val) {
   Serial.println(val);
   server.httpSuccess();
-  server.print("{\"response\" : \"");
+  server.print(responseStart);
   server.print(val);
-  server.print("\"}");
+  server.print(responseEnd);
   server.print(CRLF);
   server.flushBuf();
 }
@@ -42,22 +46,22 @@ void baseResponse(WebServer& server, double val) {
 dht DHT11;
 
 void humidityDht11GetRequest(WebServer& server, int serviceIndex) {
-  #if DEBUG > 1
-      Serial.print("read HUMIDITY on pin ");
-      Serial.println(services[serviceIndex].pin);
+#if DEBUG > 1
+  Serial.print("read HUMIDITY on pin ");
+  Serial.println(services[serviceIndex].pin);
 #endif
-      DHT11.read11(services[serviceIndex].pin);
-      baseResponse(server, DHT11.humidity);
+  DHT11.read11(services[serviceIndex].pin);
+  baseResponse(server, DHT11.humidity);
 }
 
 
 void temperatureDht11GetRequest(WebServer& server, int serviceIndex) {
-  #if DEBUG > 1
-      Serial.print("read TEMPERATURE on pin ");
-      Serial.println(services[serviceIndex].pin);
+#if DEBUG > 1
+  Serial.print("read TEMPERATURE on pin ");
+  Serial.println(services[serviceIndex].pin);
 #endif
-      DHT11.read11(services[serviceIndex].pin);
-      baseResponse(server, DHT11.temperature);
+  DHT11.read11(services[serviceIndex].pin);
+  baseResponse(server, DHT11.temperature);
 }
 
 #endif
@@ -75,22 +79,22 @@ void temperatureDht11GetRequest(WebServer& server, int serviceIndex) {
 dht DHT22;
 
 void humidityDht22GetRequest(WebServer& server, int serviceIndex) {
-  #if DEBUG > 1
-      Serial.print("read HUMIDITY on pin ");
-      Serial.println(services[serviceIndex].pin);
+#if DEBUG > 1
+  Serial.print("read HUMIDITY on pin ");
+  Serial.println(services[serviceIndex].pin);
 #endif
-      DHT22.read22(services[serviceIndex].pin);
-      baseResponse(server, DHT22.humidity);
+  DHT22.read22(services[serviceIndex].pin);
+  baseResponse(server, DHT22.humidity);
 }
 
 
 void temperatureDht22GetRequest(WebServer& server, int serviceIndex) {
-  #if DEBUG > 1
-      Serial.print("read TEMPERATURE on pin ");
-      Serial.println(services[serviceIndex].pin);
+#if DEBUG > 1
+  Serial.print("read TEMPERATURE on pin ");
+  Serial.println(services[serviceIndex].pin);
 #endif
-      DHT22.read22(services[serviceIndex].pin);
-      baseResponse(server, DHT22.temperature);
+  DHT22.read22(services[serviceIndex].pin);
+  baseResponse(server, DHT22.temperature);
 }
 
 #endif
@@ -108,21 +112,21 @@ void temperatureDht22GetRequest(WebServer& server, int serviceIndex) {
 #ifdef ONOFF
 void onoffGetRequest(WebServer& server, int serviceIndex) {
 #if DEBUG > 1
-      Serial.print("read ON_OFF on pin ");
-      Serial.println(services[serviceIndex].pin);
+  Serial.print("read ON_OFF on pin ");
+  Serial.println(services[serviceIndex].pin);
 #endif
-      baseResponse(server, digitalRead(services[serviceIndex].pin));
-} 
+  baseResponse(server, digitalRead(services[serviceIndex].pin));
+}
 
 void onoffPostRequest(WebServer& server, int serviceIndex, int value) {
-#if DEBUG > 1
-      Serial.print("set ON_OFF on pin ");
-      Serial.print(services[serviceIndex].pin);
-      Serial.print(" to value ");
-      Serial.println(value);
+#if DEBUG > 0
+  Serial.print("set ON_OFF on pin ");
+  Serial.print(services[serviceIndex].pin);
+  Serial.print(" to value ");
+  Serial.println(value);
 #endif
-      digitalWrite(services[serviceIndex].pin, value);
-      baseResponse(server, value);
+  digitalWrite(services[serviceIndex].pin, value);
+  baseResponse(server, value);
 }
 
 #endif
@@ -136,11 +140,11 @@ void onoffPostRequest(WebServer& server, int serviceIndex, int value) {
 #ifdef ANALOG
 void analogGetRequest(WebServer& server, int serviceIndex) {
 #if DEBUG > 1
-      Serial.print("read ANALOG on pin ");
-      Serial.println(services[serviceIndex].pin);
+  Serial.print("read ANALOG on pin ");
+  Serial.println(services[serviceIndex].pin);
 #endif
-      baseResponse(server, analogRead(services[serviceIndex].pin));
-} 
+  baseResponse(server, analogRead(services[serviceIndex].pin));
+}
 
 #endif
 // ==========================================================================
@@ -153,11 +157,11 @@ void analogGetRequest(WebServer& server, int serviceIndex) {
 #ifdef DIGITAL_ALERT
 void digitalAlertGetRequest(WebServer& server, int serviceIndex) {
 #if DEBUG > 1
-      Serial.print("read digitalAlert on pin ");
-      Serial.println(services[serviceIndex].pin);
+  Serial.print("read digitalAlert on pin ");
+  Serial.println(services[serviceIndex].pin);
 #endif
-      baseResponse(server, digitalRead(services[serviceIndex].pin));
-} 
+  baseResponse(server, digitalRead(services[serviceIndex].pin));
+}
 
 #endif
 // ==========================================================================
@@ -234,8 +238,8 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
 
   if (type == WebServer::GET) {
-    
-#ifdef ONOFF   
+
+#ifdef ONOFF
     if (services[serviceIndex].type == ONOFF_ID) {
       onoffGetRequest(server, serviceIndex);
       return;
@@ -252,7 +256,7 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
 #ifdef TEMPERATURE_DHT11
     if (services[serviceIndex].type == TEMPERATURE_DHT11_ID) {
-      temperatureDht11GetRequest(server, serviceIndex);  
+      temperatureDht11GetRequest(server, serviceIndex);
       return;
     }
 #endif
@@ -266,7 +270,7 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
 #ifdef TEMPERATURE_DHT22
     if (services[serviceIndex].type == TEMPERATURE_DHT22_ID) {
-      temperatureDht22GetRequest(server, serviceIndex);  
+      temperatureDht22GetRequest(server, serviceIndex);
       return;
     }
 #endif
@@ -287,15 +291,12 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
   } else if (type == WebServer::POST) {
 
-#ifdef ONOFF   
+#ifdef ONOFF
     if (services[serviceIndex].type == ONOFF_ID) {
       onoffPostRequest(server, serviceIndex, parsedValue);
       return;
     }
 #endif
-
-    // todo read other types
-
   } else {
 #if DEBUG > 0
     Serial.println("index out of bounds");
@@ -312,14 +313,13 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
 
 void connectToWifi(SoftwareSerial& esp_serial) {
-  
+
   // start communication with esp on selected serial
   WiFi.init(&esp_serial);
 
   // check for the presence of the shield
   if (WiFi.status() == WL_NO_SHIELD) {
     Serial.println("WiFi shield not present");
-    // don't continue
     while (true);
   }
 
@@ -335,33 +335,32 @@ void connectToWifi(SoftwareSerial& esp_serial) {
   }
 }
 
-void homePage(WebServer &server, WebServer::ConnectionType type,
- 			  char* params, bool complete)
-{
-  server.httpSuccess();
-//  P(homeInfo) = 
-//  server.print(home_info);
-  server.flushBuf();
-}
-
-
 
 void printService(WebServer &server, Service service) {
   server.print("{\"type\"=");
   server.print(service.type);
   server.print(",\"serial\"=");
-  server.print( service.serial);
+  server.print(service.serial);
   server.print("}");
 }
 
 void printAllServices(WebServer &server) {
   server.print("[");
   int all = SIZE(services);
-  for (int i = 0; i < all; ++i) { 
+  for (int i = 0; i < all; ++i) {
     printService(server, services[i]);
     if (i != all - 1) server.print(",");
   }
   server.print("]");
+}
+
+void homePage(WebServer &server, WebServer::ConnectionType type,
+              char* params, bool complete)
+{
+  server.httpSuccess();
+  printAllServices(server);
+  server.printCRLF();
+  server.flushBuf();
 }
 
 String serviceToJson(Service service) {
@@ -373,20 +372,31 @@ String servicesToJson() {
   int all = SIZE(services);
 
   result += "{";
-  for (int i = 0; i < all; ++i) { 
+  for (int i = 0; i < all; ++i) {
     result += serviceToJson(services[i]);
     if (i != all - 1) result += ",";
   }
   result += "}";
-  
+
   return result;
 }
 
 
-void sendInitToServer() {
-  client.post("/init?", JSON_CONTENT_TYPE, servicesToJson());
+void doPost(String url, String postData) {
+  client.beginRequest();
+  client.post(baseControllersUrl + url);
+  client.sendHeader(HTTP_HEADER_CONTENT_TYPE, JSON_CONTENT_TYPE);
+  client.sendHeader(HTTP_HEADER_CONTENT_LENGTH, postData.length());
+//  client.sendHeader("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhIiwiaWF0IjowLCJleHAiOjI1ODY2OTc4OTV9.O9mqWMTV9CYVN0SrnOp9TE_1HySl9bf4D719-gzBnMChXw7iqnVTTUZf9IHjL5Dm4tfeUgM8wo2hWAm8O9KEeg");
+  client.print(postData);
   client.flush();
+  client.responseStatusCode();
+  client.responseBody();
   client.stop();
+}
+
+void sendInitToServer() {
+  doPost("init", servicesToJson());
 }
 
 void runHttpServer(WebServer& server) {
@@ -399,7 +409,7 @@ void runHttpServer(WebServer& server) {
 void sendUdpInitToHomeServer() {
   Serial.println("send udp");
   WiFiEspUDP udpClient;
-  IPAddress broadcastIp(192,168,1,255);
+  IPAddress broadcastIp(192, 168, 1, 255);
   udpClient.begin(UDP_PORT);
   udpClient.beginPacket(broadcastIp, UDP_PORT);
   udpClient.write(DEVICE_NAME); // todo some key instead (encryption needed)
@@ -411,13 +421,7 @@ void sendUdpInitToHomeServer() {
 
 #ifdef DIGITAL_ALERT
 void sendAlertToServer(int serviceIndex, int value) {
-	if (client == 0) {
-	  return;
-	}
-
- String alert = "{\"serial\"=" + String(services[serviceIndex].serial) + ",\"state\"="  + value + "}";
-	client.post("/api/controllers/alert" , JSON_CONTENT_TYPE, alert);
-  client.flush();
-  client.stop();
+  String alert = "{\"serial\"=" + String(services[serviceIndex].serial) + ",\"state\"="  + value + "}";
+  doPost("alert", alert);
 }
 #endif
