@@ -183,7 +183,7 @@ int parseIntParam(char *from, int& shift, char key[], int &val) {
   {
     val = val * 10 + ch - '0';
     ch = from[++i + shift];
-//        Serial.print(ch);
+    //        Serial.print(ch);
   }
   //  Serial.println();
   return i;
@@ -331,7 +331,13 @@ void connectToWifi(SoftwareSerial& esp_serial) {
     connectionStatus = WiFi.begin(WIFI_SSID, PASSWORD);
   }
 }
-
+void printService(Service service, Print& out) {
+  out.print(FPSTR(curlyOpen));
+  printKeyValueJson(FPSTR(typeLabel), String(service.type), out);
+  out.print(FPSTR(comma));
+  printKeyValueJson(FPSTR(serialLabel), String(service.serial), out);
+  out.print(FPSTR(curlyClose));
+}
 
 String serviceToJson(Service service) {
   return String(FPSTR(curlyOpen))
@@ -341,9 +347,21 @@ String serviceToJson(Service service) {
          + String(FPSTR(curlyClose));
 }
 
+void printServices(Print& out) {
+  int all = SIZE(services);
+
+  out.print(FPSTR(squareOpen));
+  for (int i = 0; i < all; ++i) {
+    String s = serviceToJson(services[i]);
+    if (i != all - 1) s += String(FPSTR(comma));
+    out.print(s);
+  }
+  out.print(FPSTR(squareClose));
+}
+
 String servicesToJson() {
   String result = "";
-  int all = SIZE(services);
+  int all = 2;
 
   result += String(FPSTR(squareOpen));
   for (int i = 0; i < all; ++i) {
@@ -364,21 +382,53 @@ void homePage(WebServer &server, WebServer::ConnectionType type,
   server.flushBuf();
 }
 
-void doPost(const __FlashStringHelper* url, String postData) {
+void doPost(const __FlashStringHelper* url) {
   client.beginRequest();
   client.post(String(FPSTR(baseControllersUrl)) + String(url));
-  client.sendHeader(HTTP_HEADER_CONTENT_TYPE, JSON_CONTENT_TYPE);
-  client.sendHeader(HTTP_HEADER_CONTENT_LENGTH, postData.length());
-  client.sendHeader(authHeader, authToken);
-  client.print(postData);
-  client.flush();
-  client.responseStatusCode();
-  client.responseBody();
-  client.stop();
+  client.println(HTTP_HEADER_CONTENT_TYPE + String(FPSTR(headerDelim)) + String(FPSTR(JSON_CONTENT_TYPE)));
+  client.println(String(FPSTR(authHeader)));
+  client.endRequest();
+}
+
+void printInitBody(Print& out) {
+  out.print(FPSTR(curlyOpen));
+  printKeyValueJson(FPSTR(serialLabel), String(FPSTR(DEVICE_SERIAL)), out);
+
+
+  out.print(
+    String(FPSTR(comma))
+    + String(FPSTR(quote))
+    + String(FPSTR(servicesLabel))
+    + String(FPSTR(quote))
+    + String(FPSTR(colon))
+  );
+
+  printServices(out);
+
+  out.print(FPSTR(curlyClose));
+}
+
+// e.g.
+// {"serial":"#1","services":[{"type":1000,"serial":-28786},{"type":1004,"serial":-28215},
+// {"type":1004,"serial":12935},{"type":1006,"serial":-21083},{"type":1007,"serial":-30824},
+// {"type":1001,"serial":21033},{"type":1001,"serial":-8020},{"type":1001,"serial":-2096}]}
+String composeInitPayload() {
+  String result = "";
+
+  result += String(FPSTR(curlyOpen));
+  result += keyValueJson(FPSTR(serialLabel), String(FPSTR(DEVICE_SERIAL)));
+  result += String(FPSTR(comma));
+  result += keyValueJson(FPSTR(servicesLabel), servicesToJson());
+  result += String(FPSTR(curlyClose));;
+
+  return result;
 }
 
 void sendInitToServer() {
-  doPost(FPSTR(initEndpoint), servicesToJson());
+  doPost(FPSTR(initEndpoint));
+
+  printInitBody(client);
+  client.stop();
 }
 
 void runHttpServer(WebServer& server) {
@@ -389,11 +439,11 @@ void runHttpServer(WebServer& server) {
 
 #ifdef DIGITAL_ALERT
 void sendAlertToServer(int serviceIndex, int value) {
-  String alert = String(FPSTR(curlyOpen))
-                 + keyValueJson(FPSTR(serialLabel), String(services[serviceIndex].serial))
-                 + String(FPSTR(comma))
-                 + keyValueJson(FPSTR(stateLabel), String(value))
-                 + String(curlyClose);
-  doPost(FPSTR(alertEndpoint), alert);
+  //  String alert = String(FPSTR(curlyOpen))
+  //                 + keyValueJson(FPSTR(serialLabel), String(services[serviceIndex].serial))
+  //                 + String(FPSTR(comma))
+  //                 + keyValueJson(FPSTR(stateLabel), String(value))
+  //                 + String(curlyClose);
+  //  doPost(FPSTR(alertEndpoint), alert);
 }
 #endif

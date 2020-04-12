@@ -17,17 +17,16 @@ void setup()
 {
   Serial    .begin(9600);           // initialize serial for debugging
   esp_serial.begin(9600);           // initialize serial for ESP module
-  connectToWifi(esp_serial);        // blocking call, won't return until the wifi connection is established
+  
   setupConfiguration();             // method from configuration.h
+   
+  connectToWifi(esp_serial);        // blocking call, won't return until the wifi connection is established
   runHttpServer(server);  
   
 #ifdef DIGITAL_ALERT 
   alertSetup();
 #endif
-#if DEBUG > 0
-  Serial.println(WiFi.localIP());
-#endif
-//  sendInitToServer();
+  sendInitToServer();
 #if DEBUG > 0
   Serial.println("setup end");
 #endif

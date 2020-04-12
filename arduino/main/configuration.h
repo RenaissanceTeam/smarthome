@@ -12,9 +12,10 @@
 
 #endif
 
-const PROGMEM char RASPBERRY_IP[] = "192.168.0.102";
-const PROGMEM int RASPBERRY_PORT  = 8080;
-const PROGMEM int ARDUINO_PORT = 80;
+const IPAddress RASPBERRY_IP = IPAddress(192,168,0,102);
+const int RASPBERRY_PORT  = 8080;
+const int ARDUINO_PORT = 80;
+const PROGMEM char DEVICE_SERIAL[] = "\"#1\"";
 
 // used services
 #define DIGITAL_ALERT

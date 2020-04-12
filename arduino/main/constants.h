@@ -13,6 +13,8 @@ const PROGMEM char responseEnd[] = "}";
 const PROGMEM char typeLabel[] = "type";
 const PROGMEM char serialLabel[] = "serial";
 const PROGMEM char stateLabel[] = "state";
+const PROGMEM char servicesLabel[] = "services";
+const PROGMEM char headerDelim[] = ": ";
 
 #define indexLabel "i="
 #define valueLabel "v="
@@ -23,5 +25,3 @@ const PROGMEM char initEndpoint[] = "init";
 const PROGMEM char alertEndpoint[] = "alert";
 
 #define serviceEndpoint "service"
-
-const PROGMEM char authHeader[] = "Authorization";
