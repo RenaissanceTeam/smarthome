@@ -12,7 +12,7 @@ open class Dependency(
         @ManyToOne
         open val end: Block,
         @OneToMany(targetEntity = Condition::class, cascade = [CascadeType.ALL])
-        val conditions: List<Condition>,
+        open val conditions: List<Condition>,
         @OneToMany(targetEntity = Action::class, cascade = [CascadeType.ALL])
-        val actions: List<Action>
+        open val actions: List<Action>
 )

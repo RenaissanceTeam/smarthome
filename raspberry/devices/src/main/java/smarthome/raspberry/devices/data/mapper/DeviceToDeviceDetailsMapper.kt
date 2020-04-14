@@ -12,7 +12,7 @@ open class DeviceToDeviceDetailsMapper(
 ) {
     fun map(device: Device) = DeviceDetails(
             id = device.id,
-            serialName = device.serialName,
+            serial = device.serial,
             name = device.name,
             description = device.description,
             type = device.type,

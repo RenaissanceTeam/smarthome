@@ -8,7 +8,7 @@ import javax.persistence.*
 class Device(
         @Id @GeneratedValue
         val id: Long = ID_NOT_DEFINED,
-        val serialName: String,
+        val serial: Int,
         val name: String = "",
         val description: String = "",
         val type: String,

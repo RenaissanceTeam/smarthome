@@ -1,10 +1,9 @@
 package smarthome.raspberry.arduinodevices.domain.dto
 
 data class ArduinoDeviceInit(
-        val serialName: String,
+        val serial: Int,
         val name: String = "",
         val description: String = "",
-        val type: String,
-        val controllers: List<ArduinoControllerDto>
+        val services: List<ArduinoControllerDto>
 )
 

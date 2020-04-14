@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne
 data class Controller(
         @Id @GeneratedValue
         val id: Long = ID_NOT_DEFINED,
+        val serial: Int,
         @ManyToOne
         val device: Device,
         val type: String,

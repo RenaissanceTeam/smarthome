@@ -12,6 +12,7 @@ open class ControllerDtoToControllerMapper {
                     device = device,
                     type = dto.type,
                     name = dto.name,
-                    state = dto.state
+                    state = dto.state,
+                    serial = dto.serial
             )
 }

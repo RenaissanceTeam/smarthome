@@ -10,7 +10,7 @@ open class DeviceDtoToDeviceMapper(
 ) {
     fun map(dto: DeviceDTO): Device {
         return Device(
-                serialName = dto.serialName,
+                serial = dto.serial,
                 type = dto.type,
                 controllers = mutableListOf(),
                 description = dto.description,

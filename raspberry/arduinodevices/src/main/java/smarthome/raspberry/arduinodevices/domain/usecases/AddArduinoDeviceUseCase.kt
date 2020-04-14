@@ -22,7 +22,7 @@ open class AddArduinoDeviceUseCase(
 
         addressRepository.save(ArduinoDeviceAddress(device = device, address = ip))
 
-        device.controllers.zip(arduino.controllers)
+        device.controllers.zip(arduino.services)
                 .map { ArduinoController(controller = it.first, serial = it.second.serial) }
                 .forEach { controllerRepository.save(it) }
     }

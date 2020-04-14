@@ -6,7 +6,7 @@ import javax.persistence.*
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 open class Block(
         @Id
-        val id: String,
+        open val id: String,
         @Embedded
-        val position: Position
+        open val position: Position
 )

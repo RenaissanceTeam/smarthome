@@ -18,7 +18,7 @@ class AddDeviceUseCaseImpl(
 
 ) : AddDeviceUseCase {
     override fun execute(deviceDto: DeviceDTO): Device {
-        if (devicesRepository.findBySerialName(deviceDto.serialName) != null) {
+        if (devicesRepository.findBySerial(deviceDto.serial) != null) {
             TODO()
         }
 

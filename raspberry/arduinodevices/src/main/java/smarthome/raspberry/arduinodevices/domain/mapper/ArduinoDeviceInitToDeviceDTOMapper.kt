@@ -10,9 +10,9 @@ class ArduinoDeviceInitToDeviceDTOMapper(
 ) {
     fun map(arduino: ArduinoDeviceInit) = DeviceDTO(
             name = arduino.name,
-            serialName = arduino.serialName,
-            controllers = arduino.controllers.map(controllerMapper::map),
+            serial = arduino.serial,
+            controllers = arduino.services.map(controllerMapper::map),
             description = arduino.description,
-            type = arduino.type
+            type = "arduino"
     )
 }

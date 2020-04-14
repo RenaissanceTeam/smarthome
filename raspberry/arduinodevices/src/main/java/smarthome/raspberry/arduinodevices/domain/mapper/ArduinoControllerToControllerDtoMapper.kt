@@ -9,6 +9,7 @@ class ArduinoControllerToControllerDtoMapper(
         private val typeMapper: ArduinoControllerTypeMapper
 ) {
     fun map(arduino: ArduinoControllerDto) = ControllerDTO(
-            type = typeMapper.map(arduino.type)
+            type = typeMapper.map(arduino.type),
+            serial = arduino.serial
     )
 }
