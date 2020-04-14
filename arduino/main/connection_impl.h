@@ -386,7 +386,7 @@ void doPost(const __FlashStringHelper* url) {
   client.beginRequest();
   client.post(String(FPSTR(baseControllersUrl)) + String(url));
   client.println(HTTP_HEADER_CONTENT_TYPE + String(FPSTR(headerDelim)) + String(FPSTR(JSON_CONTENT_TYPE)));
-  client.println(String(FPSTR(authHeader)));
+//  client.println(String(FPSTR(authHeader)));
   client.endRequest();
 }
 
@@ -405,7 +405,7 @@ void printInitBody(Print& out) {
 
   printServices(out);
 
-  out.print(FPSTR(curlyClose));
+  out.println(FPSTR(curlyClose));
 }
 
 // e.g.
@@ -416,7 +416,7 @@ String composeInitPayload() {
   String result = "";
 
   result += String(FPSTR(curlyOpen));
-  result += keyValueJson(FPSTR(serialLabel), String(FPSTR(DEVICE_SERIAL)));
+  result += keyValueJson(FPSTR(serialLabel), String(DEVICE_SERIAL));
   result += String(FPSTR(comma));
   result += keyValueJson(FPSTR(servicesLabel), servicesToJson());
   result += String(FPSTR(curlyClose));;

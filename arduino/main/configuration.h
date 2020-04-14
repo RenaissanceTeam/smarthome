@@ -15,7 +15,7 @@
 const IPAddress RASPBERRY_IP = IPAddress(192,168,0,102);
 const int RASPBERRY_PORT  = 8080;
 const int ARDUINO_PORT = 80;
-const PROGMEM char DEVICE_SERIAL[] = "\"#1\"";
+const int DEVICE_SERIAL= 123;
 
 // used services
 #define DIGITAL_ALERT

@@ -7,7 +7,7 @@ const PROGMEM char squareOpen[] = "[";
 const PROGMEM char squareClose[] = "]";
 const PROGMEM char equal[] = "=";
 
-const PROGMEM char baseControllersUrl[] = "iot/api/arduino/";
+const PROGMEM char baseControllersUrl[] = "/iot/api/arduino/";
 const PROGMEM char responseStart[] = "{\"response\":";
 const PROGMEM char responseEnd[] = "}";
 const PROGMEM char typeLabel[] = "type";
