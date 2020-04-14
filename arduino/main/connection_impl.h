@@ -11,6 +11,8 @@
 
 WiFiEspClient wifiClient; // 20b
 HttpClient client = HttpClient(wifiClient, RASPBERRY_IP, RASPBERRY_PORT); // 150b
+PrintLengthCounter printLengthCounter;
+
 
 void baseResponse(WebServer& server, int val) {
   Serial.println(val);
@@ -331,13 +333,6 @@ void connectToWifi(SoftwareSerial& esp_serial) {
     connectionStatus = WiFi.begin(WIFI_SSID, PASSWORD);
   }
 }
-void printService(Service service, Print& out) {
-  out.print(FPSTR(curlyOpen));
-  printKeyValueJson(FPSTR(typeLabel), String(service.type), out);
-  out.print(FPSTR(comma));
-  printKeyValueJson(FPSTR(serialLabel), String(service.serial), out);
-  out.print(FPSTR(curlyClose));
-}
 
 String serviceToJson(Service service) {
   return String(FPSTR(curlyOpen))
@@ -359,40 +354,29 @@ void printServices(Print& out) {
   out.print(FPSTR(squareClose));
 }
 
-String servicesToJson() {
-  String result = "";
-  int all = 2;
-
-  result += String(FPSTR(squareOpen));
-  for (int i = 0; i < all; ++i) {
-    result += serviceToJson(services[i]);
-    if (i != all - 1) result += String(FPSTR(comma));
-  }
-  result += String(FPSTR(squareClose));
-
-  return result;
-}
 
 void homePage(WebServer &server, WebServer::ConnectionType type,
               char* params, bool complete)
 {
   server.httpSuccess();
-  server.print(servicesToJson());
+  //  server.print(servicesToJson());
   server.printCRLF();
   server.flushBuf();
 }
 
-void doPost(const __FlashStringHelper* url) {
+void doPost(const __FlashStringHelper* url, int contentLen) {
   client.beginRequest();
   client.post(String(FPSTR(baseControllersUrl)) + String(url));
   client.println(HTTP_HEADER_CONTENT_TYPE + String(FPSTR(headerDelim)) + String(FPSTR(JSON_CONTENT_TYPE)));
-  client.println(String(FPSTR(authHeader)));
+//  client.println(String(FPSTR(authHeader)));
+  client.sendHeader(HTTP_HEADER_CONTENT_LENGTH, contentLen);
+  client.print(String(F("Host: "))); client.println(WiFi.localIP());
   client.endRequest();
 }
 
 void printInitBody(Print& out) {
   out.print(FPSTR(curlyOpen));
-  printKeyValueJson(FPSTR(serialLabel), String(FPSTR(DEVICE_SERIAL)), out);
+  printKeyValueJson(FPSTR(serialLabel), String(DEVICE_SERIAL), out);
 
 
   out.print(
@@ -412,20 +396,10 @@ void printInitBody(Print& out) {
 // {"serial":"#1","services":[{"type":1000,"serial":-28786},{"type":1004,"serial":-28215},
 // {"type":1004,"serial":12935},{"type":1006,"serial":-21083},{"type":1007,"serial":-30824},
 // {"type":1001,"serial":21033},{"type":1001,"serial":-8020},{"type":1001,"serial":-2096}]}
-String composeInitPayload() {
-  String result = "";
-
-  result += String(FPSTR(curlyOpen));
-  result += keyValueJson(FPSTR(serialLabel), String(FPSTR(DEVICE_SERIAL)));
-  result += String(FPSTR(comma));
-  result += keyValueJson(FPSTR(servicesLabel), servicesToJson());
-  result += String(FPSTR(curlyClose));;
-
-  return result;
-}
-
 void sendInitToServer() {
-  doPost(FPSTR(initEndpoint));
+  printLengthCounter.reset(); printInitBody(printLengthCounter);
+
+  doPost(FPSTR(initEndpoint), printLengthCounter.len());
 
   printInitBody(client);
   client.stop();
