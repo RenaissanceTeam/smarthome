@@ -11,6 +11,8 @@
 
 WiFiEspClient wifiClient; // 20b
 HttpClient client = HttpClient(wifiClient, RASPBERRY_IP, RASPBERRY_PORT); // 150b
+PrintLengthCounter printLengthCounter;
+
 
 void baseResponse(WebServer& server, int val) {
   Serial.println(val);
@@ -357,22 +359,24 @@ void homePage(WebServer &server, WebServer::ConnectionType type,
               char* params, bool complete)
 {
   server.httpSuccess();
-//  server.print(servicesToJson());
+  //  server.print(servicesToJson());
   server.printCRLF();
   server.flushBuf();
 }
 
-void doPost(const __FlashStringHelper* url) {
+void doPost(const __FlashStringHelper* url, int contentLen) {
   client.beginRequest();
   client.post(String(FPSTR(baseControllersUrl)) + String(url));
   client.println(HTTP_HEADER_CONTENT_TYPE + String(FPSTR(headerDelim)) + String(FPSTR(JSON_CONTENT_TYPE)));
-  client.println(String(FPSTR(authHeader)));
+//  client.println(String(FPSTR(authHeader)));
+  client.sendHeader(HTTP_HEADER_CONTENT_LENGTH, contentLen);
+  client.print(String(F("Host: "))); client.println(WiFi.localIP());
   client.endRequest();
 }
 
 void printInitBody(Print& out) {
   out.print(FPSTR(curlyOpen));
-  printKeyValueJson(FPSTR(serialLabel), String(FPSTR(DEVICE_SERIAL)), out);
+  printKeyValueJson(FPSTR(serialLabel), String(DEVICE_SERIAL), out);
 
 
   out.print(
@@ -392,9 +396,10 @@ void printInitBody(Print& out) {
 // {"serial":"#1","services":[{"type":1000,"serial":-28786},{"type":1004,"serial":-28215},
 // {"type":1004,"serial":12935},{"type":1006,"serial":-21083},{"type":1007,"serial":-30824},
 // {"type":1001,"serial":21033},{"type":1001,"serial":-8020},{"type":1001,"serial":-2096}]}
-
 void sendInitToServer() {
-  doPost(FPSTR(initEndpoint));
+  printLengthCounter.reset(); printInitBody(printLengthCounter);
+
+  doPost(FPSTR(initEndpoint), printLengthCounter.len());
 
   printInitBody(client);
   client.stop();

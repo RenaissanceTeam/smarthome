@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "jsonUtil.h"
 #include "util.h"
+#include "streamLengthCounter.h"
 
 #ifdef __ets__
 

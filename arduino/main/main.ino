@@ -20,6 +20,7 @@ void setup()
   
   setupConfiguration();             // method from configuration.h
    
+
   connectToWifi(esp_serial);        // blocking call, won't return until the wifi connection is established
   runHttpServer(server);  
   
