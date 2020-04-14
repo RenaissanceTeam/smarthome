@@ -1,8 +1,8 @@
-package smarthome.client.arduino.presentation.condition
+package smarthome.client.arduino.scripts.presentation.condition
 
 import com.airbnb.epoxy.EpoxyModel
-import smarthome.client.arduino.entity.condition.HumidityCondition
-import smarthome.client.arduino.entity.condition.TemperatureCondition
+import smarthome.client.arduino.scripts.entity.condition.HumidityCondition
+import smarthome.client.arduino.scripts.entity.condition.TemperatureCondition
 import smarthome.client.entity.script.dependency.condition.Condition
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 

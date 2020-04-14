@@ -1,4 +1,4 @@
-package smarthome.client.arduino.entity.block
+package smarthome.client.arduino.scripts.entity.block
 
 import smarthome.client.domain.api.conrollers.usecases.GetControllerUseCase
 import smarthome.client.domain.api.scripts.resolver.BlockNameResolver

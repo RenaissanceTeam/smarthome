@@ -1,11 +1,11 @@
-package smarthome.client.arduino.data
+package smarthome.client.arduino.scripts.data
 
 import org.koin.core.KoinComponent
 import org.koin.core.get
-import smarthome.client.arduino.entity.action.OnOffAction
-import smarthome.client.arduino.entity.block.ArduinoControllerBlock
-import smarthome.client.arduino.entity.condition.HumidityCondition
-import smarthome.client.arduino.entity.condition.TemperatureCondition
+import smarthome.client.arduino.scripts.entity.action.OnOffAction
+import smarthome.client.arduino.scripts.entity.block.ArduinoControllerBlock
+import smarthome.client.arduino.scripts.entity.condition.HumidityCondition
+import smarthome.client.arduino.scripts.entity.condition.TemperatureCondition
 import smarthome.client.data.api.typeadapter.ActionDataTypeAdapter
 import smarthome.client.data.api.typeadapter.BlockTypeAdapter
 import smarthome.client.data.api.typeadapter.ConditionTypeAdapter

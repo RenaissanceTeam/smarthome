@@ -1,8 +1,8 @@
-package smarthome.client.arduino.presentation.action
+package smarthome.client.arduino.scripts.presentation.action
 
 import com.airbnb.epoxy.EpoxyModel
-import smarthome.client.arduino.entity.action.OnOffAction
-import smarthome.client.arduino.presentation.action.onoff.OnOffModelFactory
+import smarthome.client.arduino.scripts.entity.action.OnOffAction
+import smarthome.client.arduino.scripts.presentation.action.onoff.OnOffModelFactory
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.presentation.scripts.resolver.ActionModelResolver
 

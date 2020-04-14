@@ -1,4 +1,4 @@
-package smarthome.client.arduino.presentation.action.onoff
+package smarthome.client.arduino.scripts.presentation.action.onoff
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,8 +8,8 @@ import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
 import kotlinx.android.synthetic.main.onoff_action_view.view.*
-import smarthome.client.arduino.entity.action.off
-import smarthome.client.arduino.entity.action.on
+import smarthome.client.arduino.scripts.entity.action.off
+import smarthome.client.arduino.scripts.entity.action.on
 import smarthome.client.arduino_plugin.R
 import smarthome.client.presentation.scripts.setup.dependency.DependencyUnitView
 import smarthome.client.presentation.util.inflate

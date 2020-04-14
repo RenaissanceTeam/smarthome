@@ -16,9 +16,6 @@ import smarthome.client.presentation.ACTION_CONTAINER_CONTROLLER
 import smarthome.client.presentation.ACTION_CONTAINER_VIEWMODEL
 import smarthome.client.presentation.CONDITION_CONTAINER_CONTROLLER
 import smarthome.client.presentation.CONDITION_CONTAINER_VIEWMODEL
-import smarthome.client.presentation.controllers.controllerdetail.statechanger.ControllerStateChanger
-import smarthome.client.presentation.controllers.controllerdetail.statechanger.OnOffStateChanger
-import smarthome.client.presentation.controllers.controllerdetail.statechanger.ReadStateChanger
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerFactory
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.main.toolbar.ToolbarControllerImpl
@@ -49,14 +46,6 @@ val presentation = module {
     
     // controllers
     factory { StateChangerFactory() }
-    factory<ControllerStateChanger>(named("dht")) { (controllerId: Long) ->
-        ReadStateChanger(id = controllerId, readControllerUseCase = get())
-    }
-    
-    factory<ControllerStateChanger>(named("onoff")) { (controllerId: Long) ->
-        OnOffStateChanger(id = controllerId, writeStateToControllerUseCase = get(), observeControllerUseCase = get())
-    }
-    
     
     // toolbar
     single { ToolbarHolder() }

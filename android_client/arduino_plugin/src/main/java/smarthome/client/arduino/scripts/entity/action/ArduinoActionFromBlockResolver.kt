@@ -1,7 +1,7 @@
-package smarthome.client.arduino.entity.action
+package smarthome.client.arduino.scripts.entity.action
 
-import smarthome.client.arduino.entity.block.ArduinoControllerBlock
-import smarthome.client.arduino.entity.onoff
+import smarthome.client.arduino.scripts.entity.block.ArduinoControllerBlock
+import smarthome.client.arduino.scripts.entity.onoff
 import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.dependency.action.Action

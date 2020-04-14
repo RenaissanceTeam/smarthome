@@ -1,4 +1,4 @@
-package smarthome.client.arduino.entity.action
+package smarthome.client.arduino.scripts.entity.action
 
 const val on = "on"
 const val off = "off"

@@ -1,4 +1,4 @@
-package smarthome.client.arduino.entity.condition
+package smarthome.client.arduino.scripts.entity.condition
 
 import smarthome.client.entity.script.dependency.condition.Condition
 

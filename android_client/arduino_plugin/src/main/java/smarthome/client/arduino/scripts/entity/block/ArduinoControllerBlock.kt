@@ -1,4 +1,4 @@
-package smarthome.client.arduino.entity.block
+package smarthome.client.arduino.scripts.entity.block
 
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.controller.ControllerBlock
