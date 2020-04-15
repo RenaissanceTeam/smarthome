@@ -9,7 +9,7 @@ data class ArduinoController(
 
         @Id @GeneratedValue
         val id: Long = ID_NOT_DEFINED,
-        @OneToOne(cascade = [CascadeType.ALL])
+        @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
         val controller: Controller,
         val serial: Int
 )
