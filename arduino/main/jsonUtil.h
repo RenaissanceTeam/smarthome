@@ -1,5 +1,4 @@
 #include "util.h"
-#include <ArduinoJson.h>
 
 String keyValueJson(const __FlashStringHelper *key, String value) {
   String result = "";

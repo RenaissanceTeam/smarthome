@@ -13,25 +13,17 @@ WiFiEspClient wifiClient; // 20b
 HttpClient client = HttpClient(wifiClient, RASPBERRY_IP, RASPBERRY_PORT); // 150b
 PrintLengthCounter printLengthCounter;
 
-
-void baseResponse(WebServer& server, int val) {
+void baseResponse(WebServer& server, String val) {
   Serial.println(val);
   server.httpSuccess();
-  server.print(FPSTR(responseStart));
-  server.print(val);
-  server.print(FPSTR(responseEnd));
+  
+  server.print(
+    String(FPSTR(responseStart))
+    + val
+    + String(FPSTR(responseEnd))
+  );
+  
   server.print(CRLF);
-  server.flushBuf();
-}
-
-void baseResponse(WebServer& server, double val) {
-  Serial.println(val);
-  server.httpSuccess();
-  server.print(FPSTR(responseStart));
-  server.print(val);
-  server.print(FPSTR(responseEnd));
-  server.print(CRLF);
-  server.flushBuf();
 }
 
 // ==========================================================================
@@ -49,7 +41,7 @@ void humidityDht11GetRequest(WebServer& server, int serviceIndex) {
   Serial.println(services[serviceIndex].pin);
 #endif
   DHT11.read11(services[serviceIndex].pin);
-  baseResponse(server, DHT11.humidity);
+  baseResponse(server, String(DHT11.humidity));
 }
 
 
@@ -59,7 +51,7 @@ void temperatureDht11GetRequest(WebServer& server, int serviceIndex) {
   Serial.println(services[serviceIndex].pin);
 #endif
   DHT11.read11(services[serviceIndex].pin);
-  baseResponse(server, DHT11.temperature);
+  baseResponse(server, String(DHT11.temperature));
 }
 
 #endif
@@ -82,7 +74,7 @@ void humidityDht22GetRequest(WebServer& server, int serviceIndex) {
   Serial.println(services[serviceIndex].pin);
 #endif
   DHT22.read22(services[serviceIndex].pin);
-  baseResponse(server, DHT22.humidity);
+  baseResponse(server, String(DHT22.humidity));
 }
 
 
@@ -92,7 +84,7 @@ void temperatureDht22GetRequest(WebServer& server, int serviceIndex) {
   Serial.println(services[serviceIndex].pin);
 #endif
   DHT22.read22(services[serviceIndex].pin);
-  baseResponse(server, DHT22.temperature);
+  baseResponse(server, String(DHT22.temperature));
 }
 
 #endif
@@ -113,7 +105,7 @@ void onoffGetRequest(WebServer& server, int serviceIndex) {
   Serial.print("read ON_OFF on pin ");
   Serial.println(services[serviceIndex].pin);
 #endif
-  baseResponse(server, digitalRead(services[serviceIndex].pin));
+  baseResponse(server, String(digitalRead(services[serviceIndex].pin)));
 }
 
 void onoffPostRequest(WebServer& server, int serviceIndex, int value) {
@@ -124,7 +116,7 @@ void onoffPostRequest(WebServer& server, int serviceIndex, int value) {
   Serial.println(value);
 #endif
   digitalWrite(services[serviceIndex].pin, value);
-  baseResponse(server, value);
+  baseResponse(server, String(value));
 }
 
 #endif
@@ -141,7 +133,7 @@ void analogGetRequest(WebServer& server, int serviceIndex) {
   Serial.print("read ANALOG on pin ");
   Serial.println(services[serviceIndex].pin);
 #endif
-  baseResponse(server, analogRead(services[serviceIndex].pin));
+  baseResponse(server, String(analogRead(services[serviceIndex].pin)));
 }
 
 #endif
@@ -158,7 +150,7 @@ void digitalAlertGetRequest(WebServer& server, int serviceIndex) {
   Serial.print("read digitalAlert on pin ");
   Serial.println(services[serviceIndex].pin);
 #endif
-  baseResponse(server, digitalRead(services[serviceIndex].pin));
+  baseResponse(server, String(digitalRead(services[serviceIndex].pin)));
 }
 
 #endif

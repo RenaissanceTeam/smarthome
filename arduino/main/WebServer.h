@@ -235,8 +235,7 @@ public:
   // output standard headers indicating "200 Success".  You can change the
   // type of the data you're outputting or also add extra headers like
   // "Refresh: 1".  Extra headers should each be terminated with CRLF.
-  void httpSuccess(const char *contentType = "text/html; charset=utf-8",
-                   const char *extraHeaders = NULL);
+  void httpSuccess();
 
   // used with POST to output a redirect to another URL.  This is
   // preferable to outputting HTML from a post because you can then
@@ -310,7 +309,7 @@ WebServer::WebServer(const char *urlPrefix, uint16_t port) :
 {
 }
 
-P(webServerHeader) = "Server: SmartHomeArduinoServer/0.1" CRLF;
+P(webServerHeader) = "Server: ArduinoServer/0.1" CRLF;
 
 void WebServer::begin()
 {
@@ -602,8 +601,7 @@ void WebServer::defaultFailCmd(WebServer &server,
 
 
 
-void WebServer::httpSuccess(const char *contentType,
-                            const char *extraHeaders)
+void WebServer::httpSuccess()
 {
   P(successMsg1) = "HTTP/1.0 200 OK" CRLF;
   printP(successMsg1);
@@ -614,14 +612,10 @@ void WebServer::httpSuccess(const char *contentType,
 
   P(successMsg2) = 
     "Access-Control-Allow-Origin: *" CRLF
-    "Content-Type: ", JSON_CONTENT_TYPE;
+    "Content-Type: application/json";
 
   printP(successMsg2);
   printCRLF();
-  
-  if (extraHeaders)
-    print(extraHeaders);
-    
   printCRLF();
 }
 
