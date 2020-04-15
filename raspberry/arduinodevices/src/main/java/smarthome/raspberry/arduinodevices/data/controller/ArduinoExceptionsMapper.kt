@@ -9,5 +9,5 @@ import smarthome.raspberry.util.toResponseEntityStatus
 @ControllerAdvice
 class ArduinoExceptionsMapper {
     @ExceptionHandler
-    fun channelException(e: ArduinoChannelException) = e.toResponseEntityStatus(HttpStatus.BAD_REQUEST)
+    fun channelException(e: ArduinoChannelException) = e.toResponseEntityStatus(HttpStatus.BAD_REQUEST, message = e.toString())
 }

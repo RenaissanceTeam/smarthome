@@ -30,4 +30,3 @@ class HomeServerFragment : BaseFragment() {
         save.setOnClickListener { viewModel.save(input_server.text.toString()) }
     }
 }
-

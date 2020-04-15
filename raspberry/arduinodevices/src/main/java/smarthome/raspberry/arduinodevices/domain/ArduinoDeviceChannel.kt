@@ -29,6 +29,7 @@ class ArduinoDeviceChannel(
     override fun write(controller: Controller, state: String): String {
         val writeState = stateMapper.mapToRaw(controller, state)
         return getApi(controller).writeStateToController(controller.index, writeState)
+                .let { stateMapper.mapFromRaw(controller, it) }
     }
 }
 
