@@ -43,8 +43,7 @@ class RetrofitFactory(
     
     private fun addAuthorizationHeaderInHttpClient() = OkHttpClient.Builder()
         .addInterceptor { chain ->
-    
-            SystemClock.sleep(1000)
+//            SystemClock.sleep(1000)
             val ongoing = chain.request().newBuilder()
             val currentToken = getCurrentTokenUseCase.execute()
             if (currentToken is Data) {
