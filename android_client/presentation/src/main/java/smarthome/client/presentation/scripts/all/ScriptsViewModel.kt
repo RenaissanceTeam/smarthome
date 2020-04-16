@@ -28,8 +28,7 @@ class ScriptsViewModel : KoinViewModel() {
         getScripts.runInScopeLoading(viewModelScope, refresh) {
             runCatching { execute() }
                     .onFailure { errors.post("Can't load scripts: ${it.message}") }
-                    .onSuccess { scripts.value = it.map { ScriptsItemState(script = it) } }
-
+                    .onSuccess { scripts.postValue(it.map { ScriptsItemState(script = it) }) }
         }
     }
 

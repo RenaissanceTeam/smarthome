@@ -18,7 +18,8 @@
             android:layout_height="70dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_toys"
-            app:tint="#4A4A4A" />
+            android:tint="#4A4A4A"
+            tools:ignore="UseAppTint" />
 
         <TextView
             android:id="@+id/empty_label"

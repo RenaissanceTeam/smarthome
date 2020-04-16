@@ -11,19 +11,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_scripts.*
 import smarthome.client.presentation.R
+import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.scripts.all.epoxy.ScriptsController
 import smarthome.client.presentation.scripts.setup.di.setupScope
 
-class ScriptsFragment : Fragment() {
+class ScriptsFragment : BaseFragment() {
 
     private val viewModel by viewModels<ScriptsViewModel>()
     private val itemsController = ScriptsController()
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_scripts, container, false)
-    }
-
+    
+    override fun getLayout() = R.layout.fragment_scripts
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

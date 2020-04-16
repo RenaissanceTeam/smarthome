@@ -13,7 +13,7 @@
     <style name="AdditionalTextStyle" parent="TextAppearance.AppCompat.Caption" />
 
     <style name="DividerItemStyle">
-        <item name="android:background">@color/gray</item>
+        <item name="android:background">@color/lightGray</item>
     </style>
 
 </resources>

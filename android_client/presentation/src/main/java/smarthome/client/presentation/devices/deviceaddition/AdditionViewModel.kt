@@ -167,7 +167,7 @@ class AdditionViewModel : KoinViewModel() {
     }
     
     fun onAddDeviceClicked() {
-        TODO()
+
     }
     
     override fun onCleared() {
