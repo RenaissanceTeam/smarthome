@@ -1,4 +1,5 @@
 #include "connection_impl.h"
+#include <AltSoftSerial.h>
 
 #ifdef DIGITAL_ALERT 
 #include "sensor_checker.h"
@@ -10,7 +11,7 @@
 
 #define DEBUG 1
 
-SoftwareSerial esp_serial(RX, TX);
+AltSoftSerial esp_serial(RX, TX);
 WebServer server("", ARDUINO_PORT);
 
 void setup()

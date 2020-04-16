@@ -1,5 +1,4 @@
 #include "WebServer.h"
-#include "SoftwareSerial.h"
 #include <ArduinoHttpClient.h>
 #include "configuration.h"
 
@@ -22,8 +21,7 @@ void baseResponse(WebServer& server, String val) {
     + val
     + String(FPSTR(responseEnd))
   );
-  
-  server.print(CRLF);
+ 
 }
 
 // ==========================================================================
@@ -302,7 +300,7 @@ void service(WebServer &server, WebServer::ConnectionType type, char * params, b
 
 
 
-void connectToWifi(SoftwareSerial& esp_serial) {
+void connectToWifi(Print& esp_serial) {
 
   // start communication with esp on selected serial
   WiFi.init(&esp_serial);
