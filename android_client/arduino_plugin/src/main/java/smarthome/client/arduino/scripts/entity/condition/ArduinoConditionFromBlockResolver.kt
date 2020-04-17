@@ -1,10 +1,7 @@
 package smarthome.client.arduino.scripts.entity.condition
 
+import smarthome.client.arduino.scripts.entity.*
 import smarthome.client.arduino.scripts.entity.block.ArduinoControllerBlock
-import smarthome.client.arduino.scripts.entity.humidity11
-import smarthome.client.arduino.scripts.entity.humidity22
-import smarthome.client.arduino.scripts.entity.temperature11
-import smarthome.client.arduino.scripts.entity.temperature22
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.dependency.condition.Condition
@@ -24,6 +21,8 @@ class ArduinoConditionFromBlockResolver : ConditionFromBlockResolver {
             temperature22 -> listOf(TemperatureCondition(generateId(), item.controllerId))
             humidity11 -> listOf(HumidityCondition(generateId(), item.controllerId))
             humidity22 -> listOf(HumidityCondition(generateId(), item.controllerId))
+            onoff -> listOf(OnOffCondition(generateId(), item.controllerId))
+            analog -> listOf(AnalogCondition(generateId(), item.controllerId))
             else -> emptyList()
         }
     }

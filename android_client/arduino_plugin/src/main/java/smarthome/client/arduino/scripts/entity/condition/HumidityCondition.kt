@@ -8,4 +8,3 @@ data class HumidityCondition(
     val value: String? = null,
     val sign: String? = null
 ) : Condition()
-
