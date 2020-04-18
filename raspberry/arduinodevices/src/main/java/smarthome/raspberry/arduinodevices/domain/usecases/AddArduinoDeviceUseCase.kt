@@ -8,22 +8,32 @@ import smarthome.raspberry.arduinodevices.domain.entity.ArduinoControllerReposit
 import smarthome.raspberry.arduinodevices.domain.entity.ArduinoDeviceAddress
 import smarthome.raspberry.arduinodevices.domain.mapper.ArduinoDeviceInitToDeviceDTOMapper
 import smarthome.raspberry.devices.api.domain.AddDeviceUseCase
+import smarthome.raspberry.devices.api.domain.GetDeviceBySerialUseCase
+import smarthome.raspberry.devices.api.domain.exceptions.DeviceAlreadyExists
 
 @Component
 open class AddArduinoDeviceUseCase(
         private val addDeviceUseCase: AddDeviceUseCase,
         private val mapper: ArduinoDeviceInitToDeviceDTOMapper,
         private val addressRepository: ArduinoDeviceAddressRepository,
-        private val controllerRepository: ArduinoControllerRepository
+        private val controllerRepository: ArduinoControllerRepository,
+        private val getDeviceBySerialUseCase: GetDeviceBySerialUseCase
 ) {
 
     fun execute(ip: String, arduino: ArduinoDeviceInit) {
-        val device = addDeviceUseCase.execute(mapper.map(arduino))
+        addDeviceUseCase.runCatching { execute(mapper.map(arduino)) }
+                .onSuccess { device ->
+                    addressRepository.save(ArduinoDeviceAddress(device = device, address = ip))
 
-        addressRepository.save(ArduinoDeviceAddress(device = device, address = ip))
-
-        device.controllers.zip(arduino.services)
-                .map { ArduinoController(controller = it.first, serial = it.second.serial) }
-                .forEach { controllerRepository.save(it) }
+                    device.controllers.zip(arduino.services)
+                            .map { ArduinoController(controller = it.first, serial = it.second.serial) }
+                            .forEach { controllerRepository.save(it) }
+                }
+                .onFailure {
+                    if (it is DeviceAlreadyExists) {
+                        val device = getDeviceBySerialUseCase.execute(arduino.serial) ?: return
+                        addressRepository.save(ArduinoDeviceAddress(device = device, address = ip))
+                    }
+                }
     }
 }
