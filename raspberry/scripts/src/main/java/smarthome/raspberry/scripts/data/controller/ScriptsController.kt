@@ -5,7 +5,7 @@ import smarthome.raspberry.scripts.api.data.dto.ScriptDto
 import smarthome.raspberry.scripts.api.data.dto.ScriptItemDto
 import smarthome.raspberry.scripts.api.data.mapper.ScriptDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.ScriptItemDtoMapper
-import smarthome.raspberry.scripts.api.domain.AddScriptUseCase
+import smarthome.raspberry.scripts.api.domain.SaveScriptUseCase
 import smarthome.raspberry.scripts.api.domain.GetAllScriptsUseCase
 import smarthome.raspberry.scripts.api.domain.GetScriptByIdUseCase
 
@@ -13,7 +13,7 @@ import smarthome.raspberry.scripts.api.domain.GetScriptByIdUseCase
 @RestController
 @RequestMapping("api/scripts")
 class ScriptsController(
-        private val addScriptUseCase: AddScriptUseCase,
+        private val saveScriptUseCase: SaveScriptUseCase,
         private val getAllScriptsUseCase: GetAllScriptsUseCase,
         private val scriptDtoMapper: ScriptDtoMapper,
         private val getScriptById: GetScriptByIdUseCase,
@@ -24,7 +24,7 @@ class ScriptsController(
     fun add(@RequestBody script: ScriptDto): ScriptDto {
         return script
                 .let(scriptDtoMapper::map)
-                .let(addScriptUseCase::execute)
+                .let(saveScriptUseCase::execute)
                 .let(scriptDtoMapper::map)
     }
 

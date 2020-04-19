@@ -4,6 +4,7 @@ dependencies {
     implementation library.kotlin
     implementation library.coroutinesCore
     implementation library.springData
+    implementation library.rxJava
 
     // modules
     implementation library.controllers_api
