@@ -9,14 +9,14 @@ import org.junit.Before
 import org.junit.Test
 import smarthome.raspberry.entity.script.*
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
-import smarthome.raspberry.scripts.api.domain.ObserveBlockStatesUseCase
+import smarthome.raspberry.scripts.api.domain.BlockObserver
 import smarthome.raspberry.scripts.api.domain.RunScriptActionUseCase
 import java.util.*
 
 class RegisterScriptProtocolUseCaseImplTest {
 
     private lateinit var protocol: RegisterScriptProtocolUseCaseImpl
-    private lateinit var observeBlockStatesUseCase: ObserveBlockStatesUseCase
+    private lateinit var blockObserver: BlockObserver
     private lateinit var conditionValidators: Map<String, ConditionValidator>
     private lateinit var runScriptActionUseCase: RunScriptActionUseCase
     private lateinit var script: Script
@@ -38,7 +38,7 @@ class RegisterScriptProtocolUseCaseImplTest {
         condition_a = Condition("condition_a")
         action_b = Action("action_b")
 
-        observeBlockStatesUseCase = mock { }
+        blockObserver = mock { }
         runScriptActionUseCase = mock { }
 
         validator = mock { }
@@ -50,7 +50,7 @@ class RegisterScriptProtocolUseCaseImplTest {
                 blocks = listOf(),
                 dependencies = listOf()
         )
-        protocol = RegisterScriptProtocolUseCaseImpl(observeBlockStatesUseCase, conditionValidators, runScriptActionUseCase)
+        protocol = RegisterScriptProtocolUseCaseImpl(blockObserver, conditionValidators, runScriptActionUseCase)
     }
 
     private fun generateUniqueId(): String = UUID.randomUUID().toString()
@@ -97,11 +97,11 @@ class RegisterScriptProtocolUseCaseImplTest {
                 dependencies = listOf(dependency)
         )
 
-        whenever(observeBlockStatesUseCase.execute(a.id)).then { Observable.empty<Block>() }
+        whenever(blockObserver.execute(a.id)).then { Observable.empty<Block>() }
 
         protocol.execute(script)
 
-        verify(observeBlockStatesUseCase).execute(a.id)
+        verify(blockObserver).execute(a.id)
     }
 
     @Test
@@ -114,11 +114,11 @@ class RegisterScriptProtocolUseCaseImplTest {
                 dependencies = listOf(dependency)
         )
 
-        whenever(observeBlockStatesUseCase.execute(b.id)).then { Observable.empty<Block>() }
+        whenever(blockObserver.execute(b.id)).then { Observable.empty<Block>() }
 
         protocol.execute(script)
 
-        verify(observeBlockStatesUseCase).execute(b.id)
+        verify(blockObserver).execute(b.id)
     }
 
     @Test
@@ -134,7 +134,7 @@ class RegisterScriptProtocolUseCaseImplTest {
         val firstState = Block(a.id, a.position)
         val secondState = Block(a.id, a.position)
 
-        whenever(observeBlockStatesUseCase.execute(a.id)).then { Observable.just(firstState, secondState) }
+        whenever(blockObserver.execute(a.id)).then { Observable.just(firstState, secondState) }
 
         protocol.execute(script)
 
@@ -155,7 +155,7 @@ class RegisterScriptProtocolUseCaseImplTest {
         val firstState = Block(a.id, a.position)
         val secondState = Block(a.id, a.position)
 
-        whenever(observeBlockStatesUseCase.execute(a.id)).then { Observable.just(firstState, secondState) }
+        whenever(blockObserver.execute(a.id)).then { Observable.just(firstState, secondState) }
         whenever(validator.validate(dependency.conditions.first(), secondState)).then { true }
 
         protocol.execute(script)

@@ -5,14 +5,14 @@ import org.springframework.stereotype.Component
 import smarthome.raspberry.entity.script.Block
 import smarthome.raspberry.entity.script.Dependency
 import smarthome.raspberry.entity.script.Script
+import smarthome.raspberry.scripts.api.domain.BlockObserver
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
-import smarthome.raspberry.scripts.api.domain.ObserveBlockStatesUseCase
-import smarthome.raspberry.scripts.api.domain.RunScriptActionUseCase
 import smarthome.raspberry.scripts.api.domain.RegisterScriptProtocolUseCase
+import smarthome.raspberry.scripts.api.domain.RunScriptActionUseCase
 
 @Component
 class RegisterScriptProtocolUseCaseImpl(
-        private val observeBlockStatesUseCase: ObserveBlockStatesUseCase,
+        private val blockObservers: Map<String, BlockObserver>,
         private val conditionValidators: Map<String, ConditionValidator>,
         private val runScriptActionUseCase: RunScriptActionUseCase
 
@@ -30,12 +30,14 @@ class RegisterScriptProtocolUseCaseImpl(
                 condition to validator
             }
 
-            dependency.start.id.let(observeBlockStatesUseCase::execute)
+            val blockObserver = blockObservers[dependency.start::class.simpleName!!]
+                    ?: throw IllegalStateException("No block observer for ${dependency.start}")
+
+            dependency.start.id.let(blockObserver::execute)
                     .map { block -> validators.all { it.second.validate(it.first, block) } }
                     .distinct()
                     .doOnNext { if (it) dependency.actions.forEach { runScriptActionUseCase.execute(dependency.end, it) } }
         }.forEach { it.subscribe() }
-
     }
 
     private fun findTopDependencies(script: Script): List<Dependency> {
