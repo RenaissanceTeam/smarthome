@@ -3,6 +3,7 @@ package smarthome.raspberry.scripts.domain
 import io.reactivex.disposables.CompositeDisposable
 import org.springframework.stereotype.Component
 import smarthome.raspberry.entity.script.Block
+import smarthome.raspberry.entity.script.Condition
 import smarthome.raspberry.entity.script.Dependency
 import smarthome.raspberry.entity.script.Script
 import smarthome.raspberry.scripts.api.domain.BlockObserver
@@ -24,13 +25,13 @@ class RegisterScriptProtocolUseCaseImpl(
 
         topDependencies.map { dependency ->
             val validators = dependency.conditions.map { condition ->
-                val validator = conditionValidators["${condition::class.simpleName!!}Validator"]
+                val validator = conditionValidators[composeValidatorName(condition)]
                         ?: throw IllegalStateException("No condition validator for $dependency")
 
                 condition to validator
             }
 
-            val blockObserver = blockObservers[dependency.start::class.simpleName!!]
+            val blockObserver = blockObservers[composeObserverName(dependency.start)]
                     ?: throw IllegalStateException("No block observer for ${dependency.start}")
 
             dependency.start.id.let(blockObserver::execute)
@@ -39,6 +40,9 @@ class RegisterScriptProtocolUseCaseImpl(
                     .doOnNext { if (it) dependency.actions.forEach { runScriptActionUseCase.execute(dependency.end, it) } }
         }.forEach { it.subscribe() }
     }
+
+    private fun composeObserverName(block: Block) = "${block::class.simpleName!!}Observer"
+    private fun composeValidatorName(condition: Condition) = "${condition::class.simpleName!!}Validator"
 
     private fun findTopDependencies(script: Script): List<Dependency> {
         val topBlocks = script.blocks.filter { !script.dependencies.map { it.end }.contains(it) }

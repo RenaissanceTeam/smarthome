@@ -17,6 +17,7 @@ class RegisterScriptProtocolUseCaseImplTest {
 
     private lateinit var protocol: RegisterScriptProtocolUseCaseImpl
     private lateinit var blockObserver: BlockObserver
+    private lateinit var blockObservers: Map<String, BlockObserver>
     private lateinit var conditionValidators: Map<String, ConditionValidator>
     private lateinit var runScriptActionUseCase: RunScriptActionUseCase
     private lateinit var script: Script
@@ -33,12 +34,13 @@ class RegisterScriptProtocolUseCaseImplTest {
         block_a = Block("a", Position(1, 1))
         block_b = Block("b", Position(1, 1))
 
-
-
         condition_a = Condition("condition_a")
         action_b = Action("action_b")
 
-        blockObserver = mock { }
+        blockObserver =  mock { }
+        blockObservers = mapOf(
+                "BlockObserver" to blockObserver
+        )
         runScriptActionUseCase = mock { }
 
         validator = mock { }
@@ -50,7 +52,7 @@ class RegisterScriptProtocolUseCaseImplTest {
                 blocks = listOf(),
                 dependencies = listOf()
         )
-        protocol = RegisterScriptProtocolUseCaseImpl(blockObserver, conditionValidators, runScriptActionUseCase)
+        protocol = RegisterScriptProtocolUseCaseImpl(blockObservers, conditionValidators, runScriptActionUseCase)
     }
 
     private fun generateUniqueId(): String = UUID.randomUUID().toString()
