@@ -7,17 +7,17 @@ import smarthome.raspberry.entity.script.Script
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
 import smarthome.raspberry.scripts.api.domain.ObserveBlockStatesUseCase
 import smarthome.raspberry.scripts.api.domain.RunScriptActionUseCase
-import smarthome.raspberry.scripts.api.domain.ScriptProtocol
+import smarthome.raspberry.scripts.api.domain.RegisterScriptProtocolUseCase
 
-class ScriptProtocolImpl(
+class RegisterScriptProtocolUseCaseImpl(
         private val observeBlockStatesUseCase: ObserveBlockStatesUseCase,
         private val conditionValidators: Map<String, ConditionValidator>,
         private val runScriptActionUseCase: RunScriptActionUseCase
 
-) : ScriptProtocol {
+) : RegisterScriptProtocolUseCase {
     private val disposable = CompositeDisposable()
 
-    override fun register(script: Script) {
+    override fun execute(script: Script) {
         val topDependencies = findTopDependencies(script)
 
         topDependencies.map { dependency ->

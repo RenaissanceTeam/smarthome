@@ -13,9 +13,9 @@ import smarthome.raspberry.scripts.api.domain.ObserveBlockStatesUseCase
 import smarthome.raspberry.scripts.api.domain.RunScriptActionUseCase
 import java.util.*
 
-class ScriptProtocolImplTest {
+class RegisterScriptProtocolUseCaseImplTest {
 
-    private lateinit var protocol: ScriptProtocolImpl
+    private lateinit var protocol: RegisterScriptProtocolUseCaseImpl
     private lateinit var observeBlockStatesUseCase: ObserveBlockStatesUseCase
     private lateinit var conditionValidators: Map<String, ConditionValidator>
     private lateinit var runScriptActionUseCase: RunScriptActionUseCase
@@ -50,7 +50,7 @@ class ScriptProtocolImplTest {
                 blocks = listOf(),
                 dependencies = listOf()
         )
-        protocol = ScriptProtocolImpl(observeBlockStatesUseCase, conditionValidators, runScriptActionUseCase)
+        protocol = RegisterScriptProtocolUseCaseImpl(observeBlockStatesUseCase, conditionValidators, runScriptActionUseCase)
     }
 
     private fun generateUniqueId(): String = UUID.randomUUID().toString()
@@ -99,7 +99,7 @@ class ScriptProtocolImplTest {
 
         whenever(observeBlockStatesUseCase.execute(a.id)).then { Observable.empty<Block>() }
 
-        protocol.register(script)
+        protocol.execute(script)
 
         verify(observeBlockStatesUseCase).execute(a.id)
     }
@@ -116,7 +116,7 @@ class ScriptProtocolImplTest {
 
         whenever(observeBlockStatesUseCase.execute(b.id)).then { Observable.empty<Block>() }
 
-        protocol.register(script)
+        protocol.execute(script)
 
         verify(observeBlockStatesUseCase).execute(b.id)
     }
@@ -136,7 +136,7 @@ class ScriptProtocolImplTest {
 
         whenever(observeBlockStatesUseCase.execute(a.id)).then { Observable.just(firstState, secondState) }
 
-        protocol.register(script)
+        protocol.execute(script)
 
         verify(validator).validate(dependency.conditions.first(), firstState)
         verify(validator).validate(dependency.conditions.first(), secondState)
@@ -158,7 +158,7 @@ class ScriptProtocolImplTest {
         whenever(observeBlockStatesUseCase.execute(a.id)).then { Observable.just(firstState, secondState) }
         whenever(validator.validate(dependency.conditions.first(), secondState)).then { true }
 
-        protocol.register(script)
+        protocol.execute(script)
 
         verify(runScriptActionUseCase).execute(b, dependency.actions.first())
         verifyNoMoreInteractions(runScriptActionUseCase)
