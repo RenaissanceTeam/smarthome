@@ -17,6 +17,7 @@ dependencies {
     implementation library.entity
     implementation library.util
     implementation library.json
+    implementation library.core
 
     testImplementation groups.forTest
 }

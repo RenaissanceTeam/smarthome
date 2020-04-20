@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
+import smarthome.raspberry.core.toOptional
 import smarthome.raspberry.entity.script.*
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
 import smarthome.raspberry.scripts.api.domain.BlockObserver
@@ -99,7 +100,7 @@ class RegisterScriptProtocolUseCaseImplTest {
                 dependencies = listOf(dependency)
         )
 
-        whenever(blockObserver.execute(a.id)).then { Observable.empty<Block>() }
+        whenever(blockObserver.execute(a.id)).then { Observable.empty<Optional<Block>>() }
 
         protocol.execute(script)
 
@@ -116,7 +117,7 @@ class RegisterScriptProtocolUseCaseImplTest {
                 dependencies = listOf(dependency)
         )
 
-        whenever(blockObserver.execute(b.id)).then { Observable.empty<Block>() }
+        whenever(blockObserver.execute(b.id)).then { Observable.empty<Optional<Block>>() }
 
         protocol.execute(script)
 
@@ -136,12 +137,15 @@ class RegisterScriptProtocolUseCaseImplTest {
         val firstState = Block(a.id, a.position)
         val secondState = Block(a.id, a.position)
 
-        whenever(blockObserver.execute(a.id)).then { Observable.just(firstState, secondState) }
+        whenever(blockObserver.execute(a.id)).then { Observable.just(
+                firstState.toOptional(),
+                secondState.toOptional()
+        ) }
 
         protocol.execute(script)
 
-        verify(validator).validate(dependency.conditions.first(), firstState)
-        verify(validator).validate(dependency.conditions.first(), secondState)
+        verify(validator).validate(dependency.conditions.first(), firstState.toOptional())
+        verify(validator).validate(dependency.conditions.first(), secondState.toOptional())
     }
 
     @Test
@@ -157,8 +161,12 @@ class RegisterScriptProtocolUseCaseImplTest {
         val firstState = Block(a.id, a.position)
         val secondState = Block(a.id, a.position)
 
-        whenever(blockObserver.execute(a.id)).then { Observable.just(firstState, secondState) }
-        whenever(validator.validate(dependency.conditions.first(), secondState)).then { true }
+
+        whenever(blockObserver.execute(a.id)).then { Observable.just(
+                firstState.toOptional(),
+                secondState.toOptional()
+        ) }
+        whenever(validator.validate(dependency.conditions.first(), secondState.toOptional())).then { true }
 
         protocol.execute(script)
 

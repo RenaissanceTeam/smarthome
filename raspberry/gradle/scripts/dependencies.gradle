@@ -48,6 +48,7 @@ ext {
             notification_api  : project(":notification_api"),
             entity            : project(":entity"),
             json              : project(":json"),
+            core              : project(":core"),
 
 //            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),
     ]

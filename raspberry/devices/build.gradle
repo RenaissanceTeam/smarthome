@@ -12,6 +12,7 @@ dependencies {
 
     implementation library.util
     implementation library.entity
+    implementation library.core
 
     testImplementation groups.forTest
 }

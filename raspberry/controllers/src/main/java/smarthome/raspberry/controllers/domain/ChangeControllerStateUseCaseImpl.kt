@@ -10,6 +10,6 @@ class ChangeControllerStateUseCaseImpl(
         private val repo: ControllersRepo
 ) : ChangeControllerStateUseCase {
     override fun execute(controller: Controller, newState: String): Controller {
-        return repo.save(controller.copy(state = newState)).blockingGet()
+        return repo.save(controller.copy(state = newState))
     }
 }

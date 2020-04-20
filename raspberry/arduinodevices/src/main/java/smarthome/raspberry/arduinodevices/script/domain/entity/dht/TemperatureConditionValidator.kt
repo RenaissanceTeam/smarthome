@@ -5,17 +5,21 @@ import smarthome.raspberry.arduinodevices.script.domain.entity.ArduinoController
 import smarthome.raspberry.entity.script.Block
 import smarthome.raspberry.entity.script.Condition
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
+import java.util.*
 
 @Component
 class TemperatureConditionValidator : ConditionValidator {
 
-    override fun validate(condition: Condition, block: Block): Boolean {
+    override fun validate(condition: Condition, block: Optional<Block>): Boolean {
+        if (!block.isPresent) return false
+        val blockValue = block.get()
+
         require(condition is TemperatureCondition)
-        require(block is ArduinoControllerBlock)
+        require(blockValue is ArduinoControllerBlock)
 
 
         val conditionValue = condition.value.toDoubleOrNull() ?: return false
-        val currentValue = block.controller.state?.toDoubleOrNull() ?: return false
+        val currentValue = blockValue.controller.state?.toDoubleOrNull() ?: return false
 
         return when (condition.sign) {
             ">" -> currentValue > conditionValue
