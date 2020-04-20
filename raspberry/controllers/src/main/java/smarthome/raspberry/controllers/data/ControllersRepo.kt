@@ -1,6 +1,6 @@
 package smarthome.raspberry.controllers.data
 
-import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.repository.reactive.RxJava2CrudRepository
 import smarthome.raspberry.entity.controller.Controller
 
-interface ControllersRepo : JpaRepository<Controller, Long>
+interface ControllersRepo : RxJava2CrudRepository<Controller, Long>

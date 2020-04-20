@@ -11,6 +11,6 @@ open class GetControllerByIdUseCaseImpl(
         private val controllersRepo: ControllersRepo
 ) : GetControllerByIdUseCase {
     override fun execute(id: Long): Controller {
-        return controllersRepo.findById(id).runCatching { get() }.getOrElse { throw NoControllerException() }
+        return controllersRepo.findById(id).runCatching { blockingGet() }.getOrElse { throw NoControllerException() }
     }
 }

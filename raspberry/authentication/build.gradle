@@ -5,7 +5,6 @@ dependencies {
     implementation library.springSecurity
     implementation library.springData
     implementation library.coroutinesCore
-    implementation library.rxJava
     implementation library.jjwt
 
     // modules

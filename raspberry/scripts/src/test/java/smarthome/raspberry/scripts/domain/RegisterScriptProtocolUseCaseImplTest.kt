@@ -42,7 +42,7 @@ class RegisterScriptProtocolUseCaseImplTest {
         runScriptActionUseCase = mock { }
 
         validator = mock { }
-        conditionValidators = mapOf("Dependency" to validator)
+        conditionValidators = mapOf("ConditionValidator" to validator)
         script = Script(
                 name = "",
                 description = "",

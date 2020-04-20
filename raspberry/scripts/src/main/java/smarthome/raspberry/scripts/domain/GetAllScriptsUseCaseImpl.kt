@@ -10,6 +10,6 @@ class GetAllScriptsUseCaseImpl(
         private val repo: ScriptsRepository
 ) : GetAllScriptsUseCase {
     override fun execute(): List<Script> {
-        return repo.findAll()
+        return repo.findAll().blockingIterable().toList()
     }
 }

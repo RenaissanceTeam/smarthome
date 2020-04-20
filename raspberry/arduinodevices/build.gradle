@@ -6,7 +6,6 @@ dependencies {
     implementation library.coroutinesCore
     implementation library.retrofit
     implementation library.retrofitGson
-    implementation library.rxJava
     implementation library.rxKotlin
     implementation library.springData
 

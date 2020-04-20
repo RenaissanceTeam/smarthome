@@ -3,7 +3,6 @@ apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 dependencies {
     implementation library.kotlin
     implementation library.kotlinReflection
-    implementation library.rxJava
     implementation library.coroutinesCore
     implementation library.springData
 
