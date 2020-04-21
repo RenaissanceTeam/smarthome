@@ -6,9 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import smarthome.raspberry.core.ObservableJpaRepository
+import smarthome.raspberry.core.ObservableJpaRepositoryImpl
 
 @SpringBootApplication
-@EnableJpaRepositories(repositoryBaseClass = ObservableJpaRepository::class)
+@EnableJpaRepositories(repositoryBaseClass = ObservableJpaRepositoryImpl::class)
 open class RaspberryApplication
 
 fun main(args: Array<String>) {

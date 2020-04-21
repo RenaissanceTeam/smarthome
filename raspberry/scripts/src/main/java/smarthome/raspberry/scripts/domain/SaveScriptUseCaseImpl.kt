@@ -13,7 +13,7 @@ class SaveScriptUseCaseImpl(
 ) : SaveScriptUseCase {
 
     override fun execute(script: Script): Script {
-        return repo.save(script).blockingGet().also {
+        return repo.save(script).also {
             registerScriptProtocolUseCase.execute(it)
         }
     }

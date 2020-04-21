@@ -1,6 +1,6 @@
 package smarthome.raspberry.scripts.data
 
-import org.springframework.data.repository.reactive.RxJava2CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import smarthome.raspberry.entity.script.Script
 
-interface ScriptsRepository : RxJava2CrudRepository<Script, Long>
+interface ScriptsRepository : JpaRepository<Script, Long>

@@ -11,6 +11,6 @@ class GetScriptByIdUseCaseImpl(
         private val repository: ScriptsRepository
 ) : GetScriptByIdUseCase {
     override fun execute(id: Long): Script {
-        return repository.findById(id).runCatching { blockingGet() }.getOrElse { throw notFound }
+        return repository.findById(id).runCatching { get() }.getOrElse { throw notFound }
     }
 }

@@ -11,6 +11,6 @@ class GetBlockByIdUseCaseImpl(
         private val blockRepository: BlockRepository
 ) : GetBlockByIdUseCase {
     override fun execute(id: String): Block {
-        return blockRepository.findById(id).runCatching { blockingGet() }.getOrElse { throw notFound }
+        return blockRepository.findById(id).runCatching { get() }.getOrElse { throw notFound }
     }
 }
