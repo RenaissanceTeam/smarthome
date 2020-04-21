@@ -7,8 +7,8 @@ import org.springframework.web.client.RestOperations
 class ArduinoDeviceApiFactory(
         private val rest: RestOperations
 ) {
-    fun getForAddress(address: String): ArduinoDeviceApi {
-        return ArduinoDeviceApiImpl(address, rest)
+    fun getForAddress(address: String, port: String): ArduinoDeviceApi {
+        return ArduinoDeviceApiImpl(address, port, rest)
     }
 }
 

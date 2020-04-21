@@ -5,8 +5,8 @@ import org.springframework.web.client.RestOperations
 import smarthome.raspberry.arduinodevices.controllers.data.dto.ArduinoControllerResponse
 import smarthome.raspberry.arduinodevices.channel.domain.exceptions.ArduinoChannelException
 
-class ArduinoDeviceApiImpl(address: String, private val rest: RestOperations) : ArduinoDeviceApi {
-    private val url = "http://$address"
+class ArduinoDeviceApiImpl(address: String, port: String, private val rest: RestOperations) : ArduinoDeviceApi {
+    private val url = "http://$address:$port"
 
     override fun readController(controllerIndex: Int): String {
         return rest.runCatching {

@@ -12,5 +12,6 @@ data class ArduinoDeviceAddress(
         @OneToOne
         @OnDelete(action = OnDeleteAction.CASCADE)
         val device: Device,
-        val address: String
+        val address: String,
+        val port: String = "80"
 )

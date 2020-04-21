@@ -22,8 +22,8 @@ class ArduinoDeviceChannel(
     }
 
     private fun getApi(controller: Controller): ArduinoDeviceApi {
-        val address = addressRepository.findByDevice(controller.device).address
-        return arduinoDeviceApiFactory.getForAddress(address)
+        val device = addressRepository.findByDevice(controller.device)
+        return arduinoDeviceApiFactory.getForAddress(device.address, device.port)
     }
 
     override fun write(controller: Controller, state: String): String {

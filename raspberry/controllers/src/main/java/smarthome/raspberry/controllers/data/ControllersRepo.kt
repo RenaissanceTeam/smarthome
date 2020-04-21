@@ -1,6 +1,6 @@
 package smarthome.raspberry.controllers.data
 
-import smarthome.raspberry.core.ObservableJpaRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import smarthome.raspberry.entity.controller.Controller
 
-interface ControllersRepo : ObservableJpaRepository<Controller, Long>
+interface ControllersRepo : JpaRepository<Controller, Long>
