@@ -11,9 +11,11 @@ import smarthome.raspberry.scripts.api.domain.BlockObserver
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
 import smarthome.raspberry.scripts.api.domain.RegisterScriptProtocolUseCase
 import smarthome.raspberry.scripts.api.domain.RunScriptActionUseCase
+import javax.transaction.Transactional
 
 @Component
-class RegisterScriptProtocolUseCaseImpl(
+@Transactional
+open class RegisterScriptProtocolUseCaseImpl(
         private val blockObservers: Map<String, BlockObserver>,
         private val conditionValidators: Map<String, ConditionValidator>,
         private val runScriptActionUseCase: RunScriptActionUseCase
@@ -48,11 +50,11 @@ class RegisterScriptProtocolUseCaseImpl(
     private fun composeValidatorName(condition: Condition) = "${condition::class.simpleName!!.decapitalize()}Validator"
 
     private fun findTopDependencies(script: Script): List<Dependency> {
-        val topBlocks = script.blocks.filter { !script.dependencies.map { it.end }.contains(it) }
+        val topBlocks = script.blocks.filter { !script.dependencies.map { it.end.id }.contains(it.id) }
         return topBlocks.flatMap { findBlockDependencies(script, it) }
     }
 
     private fun findBlockDependencies(script: Script, block: Block): List<Dependency> {
-        return script.dependencies.filter { it.start == block }
+        return script.dependencies.filter { it.start.id == block.id }
     }
 }
