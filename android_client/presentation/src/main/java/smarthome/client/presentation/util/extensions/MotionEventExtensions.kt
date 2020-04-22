@@ -9,5 +9,5 @@ val MotionEvent.position get() = Position(
 val MotionEvent.rawPosition get() = Position(
     rawX.toInt(), rawY.toInt())
 fun <T> MutableLiveData<T>.triggerRebuild() {
-    this.value = value
+    this.value = value ?: return
 }

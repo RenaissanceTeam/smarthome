@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.scripts_controllers_to_add.view.*
 import org.koin.core.KoinComponent
 import smarthome.client.presentation.R
+import smarthome.client.presentation.scripts.setup.SetupScriptViewModel
 import smarthome.client.presentation.scripts.setup.controllers.epoxy.DevicesController
 import smarthome.client.presentation.scripts.setup.di.setupScope
 import smarthome.client.presentation.scripts.setup.graph.events.drag.BlockDragEvent
