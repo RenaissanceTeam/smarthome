@@ -37,10 +37,6 @@ class AdditionFragment : BaseFragment() {
                     .navigate(AdditionFragmentDirections.actionAdditionFragmentToControllerDetails(it))
         }
 
-        add_device_fab.setOnClickListener {
-            viewModel.onAddDeviceClicked()
-        }
-
         refresh_layout.setOnRefreshListener(viewModel::onRefresh)
 
         add_device_recycler.layoutManager = LinearLayoutManager(view.context)
