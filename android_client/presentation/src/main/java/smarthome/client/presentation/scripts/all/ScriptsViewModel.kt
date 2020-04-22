@@ -2,6 +2,7 @@ package smarthome.client.presentation.scripts.all
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
 import smarthome.client.entity.NOT_DEFINED_ID
@@ -10,6 +11,9 @@ import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.presentation.util.ToastLiveData
 import smarthome.client.presentation.util.extensions.runInScopeLoading
+import smarthome.client.presentation.util.extensions.updateWith
+import smarthome.client.util.findAndModify
+import smarthome.client.util.runInScope
 
 class ScriptsViewModel : KoinViewModel() {
 
@@ -45,6 +49,26 @@ class ScriptsViewModel : KoinViewModel() {
     }
 
     fun onEnableClicked(id: Long, enable: Boolean) {
+        runInScope(viewModelScope) {
+            scripts.updateWith { scripts ->
+                scripts ?: return@updateWith scripts
+                scripts.findAndModify({ it.script.id == id }, { it.copy(enableInProgress = true) })
+            }
 
+            delay(1000)
+
+            scripts.updateWith { scripts ->
+                scripts ?: return@updateWith scripts
+                scripts.findAndModify(
+                        { it.script.id == id },
+                        {
+                            it.copy(
+                                    enableInProgress = false,
+                                    script = it.script.copy(enabled = !it.script.enabled)
+                            )
+                        }
+                )
+            }
+        }
     }
 }

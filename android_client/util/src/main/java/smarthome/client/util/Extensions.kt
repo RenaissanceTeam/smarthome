@@ -15,6 +15,16 @@ var View.visible
         }
     }
 
+fun View.fadeVisibility(visible: Boolean) {
+    animate()
+            .apply { if (visible) withStartAction { this@fadeVisibility.visible = true } }
+            .alpha(if (visible) 1f else 0f)
+            .apply { this@fadeVisibility.alpha = if (visible) 0f else 1f }
+            .apply { if (!visible) withEndAction() { this@fadeVisibility.visible = false } }
+            .setDuration(600)
+            .start()
+}
+
 fun <T> List<T>.forEachDivided(each: (T) -> Unit, divide: (Int) -> Unit) {
     val iterator = iterator().withIndex()
 
@@ -22,6 +32,14 @@ fun <T> List<T>.forEachDivided(each: (T) -> Unit, divide: (Int) -> Unit) {
         val next = iterator.next()
         each(next.value)
         if (iterator.hasNext()) divide(next.index)
+    }
+}
+
+fun <T> Boolean.fold(ifTrue: () -> T, ifFalse: () -> T): T {
+    return if (this) {
+        ifTrue()
+    } else {
+        ifFalse()
     }
 }
 

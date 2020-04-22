@@ -23,6 +23,7 @@ class ScriptsController : Typed2EpoxyController<List<ScriptsItemState>, ScriptsV
                         name(script.name)
                         description(script.description)
                         scriptEnabled(script.enabled)
+                        enableInProgress(it.enableInProgress)
 
                         onClick { viewModel.onScriptClicked(script.id) }
                         onEnableClick { enable -> viewModel.onEnableClicked(script.id, enable) }
