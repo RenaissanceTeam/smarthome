@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TitleTextStyle" parent="TextAppearance.AppCompat.Title" />
+    <style name="EmptyTitleTextStyle" parent="TextAppearance.AppCompat.Title" >
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="AdditionalTextStyle" parent="TextAppearance.AppCompat.Caption" />
+
+    <style name="DividerItemStyle">
+        <item name="android:background">@color/lightGray</item>
+    </style>
+
 </resources>

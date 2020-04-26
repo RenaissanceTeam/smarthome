@@ -4,10 +4,13 @@ apply plugin: 'kotlin-kapt'
 dependencies {
     implementation library.rxJava
     implementation library.epoxy
+    implementation library.coroutinesCore
     kapt library.epoxyAnnotations
 
+    implementation library.processButton
     implementation groups.koinWithExt
     implementation library.domain_api
+    implementation library.data_api
     implementation library.entity
     implementation library.util
     implementation library.presentation

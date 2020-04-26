@@ -40,8 +40,7 @@ class DeviceDetailViewModel : KoinViewModel() {
         this.deviceId = deviceId
     }
     
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+    override fun onResume() {
         onRefresh()
     }
     

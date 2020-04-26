@@ -13,6 +13,7 @@ test {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation library.kotlin
+    implementation library.rxJava
 }
 compileKotlin {
     kotlinOptions {

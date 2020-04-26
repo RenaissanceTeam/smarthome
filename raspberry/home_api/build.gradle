@@ -6,5 +6,4 @@ dependencies {
     // modules
     implementation library.entity
 
-    implementation library.rxJava
 }

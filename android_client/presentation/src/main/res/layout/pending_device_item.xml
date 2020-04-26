@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    android:id="@+id/card"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:layout_marginBottom="8dp"
     android:clickable="true"
     android:focusable="true"
-    android:layout_marginBottom="8dp"
+    android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/colorAccentDark"
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:animateLayoutChanges="true"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
         <TextView
             android:id="@+id/name"
@@ -26,9 +25,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/white"
-            tools:text="Some device name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Some device name" />
 
         <TextView
             android:id="@+id/type"
@@ -36,22 +35,22 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="@color/white"
-            tools:text="Some device type"
             app:layout_constraintStart_toStartOf="@id/name"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            tools:text="Some device type" />
 
         <smarthome.client.presentation.devices.deviceaddition.epoxy.PendingControllers
             android:id="@+id/controllers_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/type"
             app:layout_constraintTop_toBottomOf="@+id/type" />
 
-        <ProgressBar
+        <smarthome.client.presentation.components.LoadingIndicator
             android:layout_width="36dp"
             android:layout_height="36dp"
             app:layout_constraintBottom_toBottomOf="@+id/accept_button"
@@ -63,12 +62,12 @@
             android:id="@+id/delete"
             android:layout_width="100dp"
             android:layout_height="36dp"
-            app:cardCornerRadius="18dp"
             app:cardBackgroundColor="@color/reject"
+            app:cardCornerRadius="18dp"
             app:layout_constraintBottom_toBottomOf="@+id/expand_button"
             app:layout_constraintEnd_toStartOf="@+id/expand_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/expand_button" >
+            app:layout_constraintTop_toTopOf="@+id/expand_button">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -102,7 +101,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <ProgressBar
+        <smarthome.client.presentation.components.LoadingIndicator
             android:layout_width="36dp"
             android:layout_height="36dp"
             app:layout_constraintBottom_toBottomOf="@+id/delete"
@@ -114,12 +113,12 @@
             android:id="@+id/accept_button"
             android:layout_width="100dp"
             android:layout_height="36dp"
-            app:cardCornerRadius="18dp"
             app:cardBackgroundColor="@color/accept"
+            app:cardCornerRadius="18dp"
             app:layout_constraintBottom_toBottomOf="@+id/expand_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/expand_button"
-            app:layout_constraintTop_toTopOf="@+id/expand_button" >
+            app:layout_constraintTop_toTopOf="@+id/expand_button">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -163,8 +162,8 @@
             android:layout_marginBottom="16dp"
             android:background="@null"
             android:paddingStart="30dp"
-            android:paddingEnd="30dp"
             android:paddingTop="4dp"
+            android:paddingEnd="30dp"
             android:paddingBottom="4dp"
             android:src="@drawable/expand_more"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -5,5 +5,5 @@ data class ControllerDetails(
         val deviceId: Long,
         val type: String,
         val name: String,
-        val state: String
+        val state: String?
 )

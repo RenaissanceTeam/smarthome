@@ -1,8 +1,6 @@
 package smarthome.client.domain.api.scripts.usecases.dependency
 
-import smarthome.client.entity.script.dependency.DependencyDetails
-import smarthome.client.entity.script.dependency.DependencyId
-
+import smarthome.client.entity.script.dependency.Dependency
 interface StartSetupDependencyUseCase {
-    fun execute(scriptId: Long, dependencyId: DependencyId): DependencyDetails
+    fun execute(dependencyId: String): Dependency
 }

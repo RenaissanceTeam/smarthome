@@ -22,7 +22,7 @@ class ConfirmationDialog {
         return suspendCancellableCoroutine { continuation ->
             AlertDialog.Builder(context)
                 .setTitle(title)
-                .setMessage(message)
+                .apply { if (message.isNotEmpty()) setMessage(message) }
                 .apply { if (icon != NO_ICON) setIcon(icon) }
                 .setPositiveButton(android.R.string.yes) { _, _ ->
                     continuation.resumeWith(Result.success(true))

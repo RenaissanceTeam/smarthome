@@ -44,6 +44,7 @@ dependencies {
     implementation library.scripts_api
 
     implementation library.util
+    implementation library.core
 
     implementation library.arduinoDevices
 }

@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:title="Account">
-        <Preference
-            android:icon="@drawable/ic_account_circle_accent"
-            android:enabled="false"
-            android:key="current_account"
-            android:title="Current account" />
-
-        <Preference
-            android:icon="@drawable/ic_exit_to_app_accent"
-            android:key="sign_out"
-            android:title="Sign out" />
-
-    </PreferenceCategory>
+    <Preference
+        android:icon="@drawable/ic_home"
+        android:key="home_server"
+        android:title="Home Server"
+        app:summary="Change the URL of smart home server" />
 
     <SwitchPreference
         android:icon="@drawable/ic_remove_circle_outline_accent"
@@ -25,4 +17,9 @@
         app:key="feedback"
         app:summary="Report technical issues or suggest new features"
         app:title="Send feedback" />
+
+    <Preference
+        android:icon="@drawable/ic_exit_to_app_accent"
+        android:key="sign_out"
+        android:title="Sign Out" />
 </PreferenceScreen>

@@ -58,9 +58,9 @@ class DeviceDetails : Fragment() {
     
         lifecycle.addObserver(viewModel)
     
-        viewModel.refresh.observe(this) { progress_bar.visible = it }
-        viewModel.device.observe(this, ::bindDevice)
-        viewModel.controllersLiveData.observe(this) {
+        viewModel.refresh.observe(viewLifecycleOwner) { progress_bar.visible = it }
+        viewModel.device.observe(viewLifecycleOwner, ::bindDevice)
+        viewModel.controllersLiveData.observe(viewLifecycleOwner) {
             itemsController.setData(it, viewModel)
         }
     

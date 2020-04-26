@@ -38,8 +38,7 @@ class ControllerDetailViewModel : KoinViewModel() {
         })
     }
     
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+    override fun onResume() {
         onRefresh()
     }
     

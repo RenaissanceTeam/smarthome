@@ -15,7 +15,8 @@ include ":app",
         ":notification",
         ":notification_api",
         ":util",
-        ":entity"
-
-
+        ":entity",
+        ":json",
+        ":core"
 //        ":${gradle.ext.homeServerFolder}:thirdpartydevices"
+

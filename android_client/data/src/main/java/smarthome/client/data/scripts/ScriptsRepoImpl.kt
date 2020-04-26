@@ -2,22 +2,25 @@ package smarthome.client.data.scripts
 
 import smarthome.client.data.api.scripts.ScriptsRepo
 import smarthome.client.data.retrofit.RetrofitFactory
-import smarthome.client.data.scripts.mapper.ScriptDtoToScriptMapper
 import smarthome.client.entity.script.Script
+import smarthome.client.entity.script.ScriptOverview
 
 class ScriptsRepoImpl(
-    private val retrofitFactory: RetrofitFactory,
-    private val scriptsMapper: ScriptDtoToScriptMapper
+        private val retrofitFactory: RetrofitFactory
 ) : ScriptsRepo {
-    override suspend fun fetch(): List<Script> {
-        // todo remove mock when endpoint is ready
-        return (1..20).map {
-            Script(it.toLong(), "script # $it")
-        }
-        
-        val scriptsDtos = retrofitFactory.createApi(ScriptsApi::class.java)
-            .fetchAll()
-        
-        return scriptsDtos.map(scriptsMapper::map)
+
+    override suspend fun fetch(): List<ScriptOverview> {
+        return retrofitFactory.createApi(ScriptsApi::class.java)
+                .fetchAll()
+    }
+
+    override suspend fun fetchOne(id: Long): Script {
+        return retrofitFactory.createApi(ScriptsApi::class.java)
+                .fetchDetails(id)
+    }
+
+    override suspend fun save(script: Script): Script {
+        return retrofitFactory.createApi(ScriptsApi::class.java)
+                .save(script)
     }
 }

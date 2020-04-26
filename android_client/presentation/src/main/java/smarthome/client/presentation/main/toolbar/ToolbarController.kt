@@ -4,5 +4,6 @@ interface ToolbarController {
     fun setMenu(menuResource: Int, onMenuItemClick: (Int) -> Unit)
     fun clearMenu()
     fun setNavigationIcon(resource: Int, onClick: () -> Unit)
+    fun setNavigationCallback(onClick: () -> Unit)
     fun setTitle(value: String)
 }

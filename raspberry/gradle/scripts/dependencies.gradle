@@ -26,6 +26,8 @@ ext {
             jacksonKotlin                : ("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"),
             postgres                     : ("org.postgresql:postgresql"),
             jjwt                         : ("io.jsonwebtoken:jjwt:0.9.1"),
+            javaReflections              : ("org.reflections:reflections:0.9.10"),
+            jackson                      : ("com.fasterxml.jackson.core:jackson-databind:2.10.2"),
 
 
             arduinoDevices    : project(":arduinodevices"),
@@ -45,7 +47,8 @@ ext {
             notification      : project(":notification"),
             notification_api  : project(":notification_api"),
             entity            : project(":entity"),
-
+            json              : project(":json"),
+            core              : project(":core"),
 
 //            homeServer_thirdpartyDevices: project(":${gradle.ext.homeServerFolder}:thirdpartydevices"),
     ]

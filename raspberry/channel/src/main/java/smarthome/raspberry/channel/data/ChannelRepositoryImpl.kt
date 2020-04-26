@@ -3,7 +3,7 @@ package smarthome.raspberry.channel.data
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 import smarthome.raspberry.channel.api.domain.arduinoChannel
-import smarthome.raspberry.entity.DeviceChannel
+import smarthome.raspberry.channel.api.domain.entity.DeviceChannel
 
 @Component
 class ChannelRepositoryImpl(

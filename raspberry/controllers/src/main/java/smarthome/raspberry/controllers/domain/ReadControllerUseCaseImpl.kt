@@ -4,13 +4,13 @@ import org.springframework.stereotype.Component
 import smarthome.raspberry.channel.api.domain.GetChannelForDeviceUseCase
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
 import smarthome.raspberry.controllers.data.ControllersRepo
-import smarthome.raspberry.devices.api.domain.SaveDeviceUseCase
-import smarthome.raspberry.entity.Controller
+import smarthome.raspberry.controllers.data.ObservableControllersRepo
+import smarthome.raspberry.entity.controller.Controller
 
 @Component
 open class ReadControllerUseCaseImpl(
         private val getChannelForDeviceUseCase: GetChannelForDeviceUseCase,
-        private val controllersRepo: ControllersRepo) :
+        private val controllersRepo: ObservableControllersRepo) :
         ReadControllerUseCase {
 
     override fun execute(controller: Controller): String {

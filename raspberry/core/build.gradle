@@ -1,0 +1,10 @@
+apply from: "$rootDir/gradle/scripts/spring-module.gradle"
+
+dependencies {
+    implementation library.kotlin
+    implementation library.springData
+
+    implementation library.util
+
+    testImplementation groups.forTest
+}

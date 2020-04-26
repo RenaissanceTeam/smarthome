@@ -1,15 +1,19 @@
 package smarthome.client.data.retrofit
 
 import android.os.SystemClock
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import smarthome.client.domain.api.auth.usecases.GetCurrentTokenUseCase
 import smarthome.client.util.Data
+import smarthome.client.util.log
 
 class RetrofitFactory(
     private val urlHolder: HomeServerUrlHolder,
-    private val getCurrentTokenUseCase: GetCurrentTokenUseCase
+    private val getCurrentTokenUseCase: GetCurrentTokenUseCase,
+    private val typesConfigurator: TypeAdapterConfigurator
 ) {
     private var url: String? = null
     private var retrofit: Retrofit? = null
@@ -23,9 +27,11 @@ class RetrofitFactory(
         
         val httpClient = addAuthorizationHeaderInHttpClient()
     
+        val gson = GsonBuilder().let(typesConfigurator::configure).create()
+        
         return Retrofit.Builder()
             .baseUrl(urlHolder.get())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(httpClient)
             .build()
             .also { retrofit = it }
@@ -37,7 +43,7 @@ class RetrofitFactory(
     
     private fun addAuthorizationHeaderInHttpClient() = OkHttpClient.Builder()
         .addInterceptor { chain ->
-            SystemClock.sleep(1000)
+//            SystemClock.sleep(1000)
             val ongoing = chain.request().newBuilder()
             val currentToken = getCurrentTokenUseCase.execute()
             if (currentToken is Data) {
@@ -45,5 +51,9 @@ class RetrofitFactory(
             }
             chain.proceed(ongoing.build())
         }
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+            
+        })
         .build()
 }

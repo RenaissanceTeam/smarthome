@@ -4,13 +4,14 @@ dependencies {
     implementation library.kotlin
     implementation library.coroutinesCore
     implementation library.springData
-
+    
     // modules
     implementation library.controllers_api
     implementation library.devices_api
     implementation library.channel_api
     implementation library.entity
     implementation library.util
+    implementation library.core
 
     testImplementation groups.forTest
 }

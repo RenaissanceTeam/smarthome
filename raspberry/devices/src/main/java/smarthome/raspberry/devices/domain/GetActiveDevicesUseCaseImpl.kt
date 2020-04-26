@@ -3,8 +3,8 @@ package smarthome.raspberry.devices.domain
 import org.springframework.stereotype.Component
 import smarthome.raspberry.devices.api.domain.GetActiveDevicesUseCase
 import smarthome.raspberry.devices.data.DeviceStatusRepository
-import smarthome.raspberry.entity.Device
-import smarthome.raspberry.entity.DeviceStatuses
+import smarthome.raspberry.entity.device.Device
+import smarthome.raspberry.entity.device.DeviceStatuses
 
 @Component
 open class GetActiveDevicesUseCaseImpl(

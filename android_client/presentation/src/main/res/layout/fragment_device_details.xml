@@ -13,7 +13,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/settings"
-        android:tint="@android:color/darker_gray"
+        app:tint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -57,7 +57,7 @@
         tools:itemCount="3"
         tools:listitem="@layout/controller_item" />
 
-    <ProgressBar
+    <smarthome.client.presentation.components.LoadingIndicator
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

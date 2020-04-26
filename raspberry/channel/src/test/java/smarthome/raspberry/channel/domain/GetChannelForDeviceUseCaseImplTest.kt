@@ -8,8 +8,8 @@ import org.junit.Test
 import smarthome.raspberry.channel.api.domain.GetChannelForDeviceUseCase
 import smarthome.raspberry.channel.api.domain.NoChannelException
 import smarthome.raspberry.channel.data.ChannelRepository
-import smarthome.raspberry.entity.Device
-import smarthome.raspberry.entity.DeviceChannel
+import smarthome.raspberry.entity.device.Device
+import smarthome.raspberry.channel.api.domain.entity.DeviceChannel
 import kotlin.test.assertFailsWith
 
 class GetChannelForDeviceUseCaseImplTest {

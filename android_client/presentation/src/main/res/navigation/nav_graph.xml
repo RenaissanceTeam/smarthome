@@ -134,7 +134,8 @@
         android:label="LoginFragment" />
     <action
         android:id="@+id/action_global_loginFragment"
-        app:destination="@id/loginFragment" />
+        app:destination="@id/loginFragment"
+        app:launchSingleTop="true" />
     <fragment
         android:id="@+id/scriptsFragment"
         android:name="smarthome.client.presentation.scripts.all.ScriptsFragment"
@@ -154,9 +155,9 @@
     </fragment>
     <fragment
         android:id="@+id/addScriptInfoFragment"
-        android:name="smarthome.client.presentation.scripts.addition.SetupScriptInfoFragment"
+        android:name="smarthome.client.presentation.scripts.setup.SetupScriptInfoFragment"
         android:label="@string/setup_script"
-        tools:layout="@layout/fragment_add_script">
+        tools:layout="@layout/fragment_setup_script_info">
         <argument
             android:name="show_bottom_bar"
             android:defaultValue="false"
@@ -172,10 +173,13 @@
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
             app:popExitAnim="@anim/exit_to_right" />
+        <argument
+            android:name="script_id"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/addControllersToScriptFragment"
-        android:name="smarthome.client.presentation.scripts.addition.graph.ScriptGraphFragment"
+        android:name="smarthome.client.presentation.scripts.setup.graph.ScriptGraphFragment"
         android:label="@string/empty"
         tools:layout="@layout/fragment_script_graph">
         <argument
@@ -197,7 +201,7 @@
 
     <fragment
         android:id="@+id/setupDependencyFragment"
-        android:name="smarthome.client.presentation.scripts.addition.dependency.SetupDependencyFragment"
+        android:name="smarthome.client.presentation.scripts.setup.dependency.SetupDependencyFragment"
         android:label="@string/empty"
         tools:layout="@layout/scripts_setup_dependency">
 
@@ -218,7 +222,7 @@
 
         <argument
             android:name="dependency_id"
-            app:argType="smarthome.client.entity.script.dependency.DependencyId" />
+            app:argType="string" />
 
     </fragment>
 </navigation>

@@ -10,10 +10,9 @@ import smarthome.client.data.api.auth.LoginCommand
 import smarthome.client.data.api.auth.TokenRepo
 import smarthome.client.data.api.controllers.ControllersRepo
 import smarthome.client.data.api.devices.DevicesRepo
-import smarthome.client.data.api.scripts.DependencyDetailsRepo
-import smarthome.client.data.api.scripts.ScriptGraphRepo
 import smarthome.client.data.api.scripts.ScriptsRepo
 import smarthome.client.data.api.scripts.SetupDependencyRepo
+import smarthome.client.data.api.scripts.SetupScriptRepo
 import smarthome.client.data.auth.LoginCommandImpl
 import smarthome.client.data.auth.TokenRepoImpl
 import smarthome.client.data.controllers.ControllersRepoImpl
@@ -22,15 +21,13 @@ import smarthome.client.data.devices.mapper.DeviceDetailsToDeviceMapper
 import smarthome.client.data.devices.mapper.GeneralDeviceAndControllersInfoToGeneralDeviceInfoMapper
 import smarthome.client.data.retrofit.HomeServerUrlHolder
 import smarthome.client.data.retrofit.RetrofitFactory
-import smarthome.client.data.scripts.DependencyDetailsRepoImpl
-import smarthome.client.data.scripts.ScriptGraphRepoImpl
 import smarthome.client.data.scripts.ScriptsRepoImpl
 import smarthome.client.data.scripts.SetupDependencyRepoImpl
-import smarthome.client.data.scripts.mapper.ScriptDtoToScriptMapper
+import smarthome.client.data.scripts.SetupScriptRepoImpl
 
-val data = module {
+private val dataInnerModule = module {
     single { GsonBuilder().create() }
-    single { RetrofitFactory(urlHolder = get(), getCurrentTokenUseCase = get()) }
+    single { RetrofitFactory(urlHolder = get(), getCurrentTokenUseCase = get(), typesConfigurator = get()) }
     single<AppDatabase> {
         Room.databaseBuilder(
             get(),
@@ -56,8 +53,8 @@ val data = module {
     
     //scripts
     singleBy<ScriptsRepo, ScriptsRepoImpl>()
-    singleBy<ScriptGraphRepo, ScriptGraphRepoImpl>()
-    singleBy<DependencyDetailsRepo, DependencyDetailsRepoImpl>()
+    singleBy<SetupScriptRepo, SetupScriptRepoImpl>()
     singleBy<SetupDependencyRepo, SetupDependencyRepoImpl>()
-    factory { ScriptDtoToScriptMapper() }
 }
+
+val data = dataInnerModule + typeAdapterModule

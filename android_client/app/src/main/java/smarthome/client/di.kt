@@ -14,12 +14,12 @@ fun startDi(context: Context) {
     startKoin {
         androidLogger()
         androidContext(context)
-        modules(listOf(
-            domain,
-            data,
-            presentation,
-            arduino,
-            plugingate
-        ))
+        modules(
+            domain +
+                data +
+                presentation +
+                arduino +
+                plugingate
+        )
     }
 }

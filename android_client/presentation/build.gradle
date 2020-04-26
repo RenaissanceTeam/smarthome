@@ -27,6 +27,7 @@ dependencies {
     implementation groups.androidXktx
     implementation library.firebaseMessaging
     implementation library.fab
+    implementation library.rxView
 
     testImplementation groups.forTest
     testImplementation library.coroutinesTest

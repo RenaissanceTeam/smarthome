@@ -13,5 +13,5 @@
         android:layout_gravity="end"
         android:padding="16dp"
         android:src="@drawable/ic_done"
-        android:tint="@color/colorPrimaryDark" />
+        app:tint="@color/colorPrimaryDark" />
 </androidx.appcompat.widget.Toolbar>

@@ -1,10 +1,6 @@
 package smarthome.raspberry.scripts.data
 
-//import smarthome.library.common.scripts.Script
-//
-//interface ScriptsRepository {
-//    val scripts: List<Script>
-//
-//    suspend fun save(newScript: Script)
-//    suspend fun delete(script: Script)
-//}
+import org.springframework.data.jpa.repository.JpaRepository
+import smarthome.raspberry.entity.script.Script
+
+interface ScriptsRepository : JpaRepository<Script, Long>

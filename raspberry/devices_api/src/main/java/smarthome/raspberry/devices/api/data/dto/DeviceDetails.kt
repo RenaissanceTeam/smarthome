@@ -4,7 +4,7 @@ import smarthome.raspberry.controllers.api.data.dto.GeneralControllerInfo
 
 data class DeviceDetails(
         val id: Long,
-        val serialName: String,
+        val serial: Int,
         val name: String,
         val description: String,
         val type: String,

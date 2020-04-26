@@ -7,21 +7,27 @@ import org.koin.core.inject
 import smarthome.client.domain.api.auth.usecases.LoginUseCase
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
-import smarthome.client.util.log
+import smarthome.client.presentation.util.ToastLiveData
 
 class LoginViewModel : KoinViewModel() {
     val showProgress = MutableLiveData<Boolean>(false)
+    val errors = ToastLiveData()
     val close = NavigationLiveData()
+    val openHomeServer = NavigationLiveData()
+    
     private val loginUseCase: LoginUseCase by inject()
     
     fun login(login: String, password: String) {
         viewModelScope.launch {
             showProgress.postValue(true)
-            val loggedIn = loginUseCase.runCatching { execute(login, password) }.onFailure {
-                log(it)
-            }.isSuccess
+            
+            loginUseCase.runCatching { execute(login, password) }
+                .onSuccess { close.trigger() }
+                .onFailure { errors.post("Can't login: ${it.message}") }
+            
             showProgress.postValue(false)
-            if (loggedIn) close.trigger()
         }
     }
+    
+    fun onHomeServerClick() = openHomeServer.trigger()
 }

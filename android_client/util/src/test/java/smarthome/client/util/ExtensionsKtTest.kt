@@ -2,9 +2,6 @@ package smarthome.client.util
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import smarthome.client.util.findAndModify
-import smarthome.client.util.replace
-import smarthome.client.util.withRemoved
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -54,5 +51,16 @@ class ExtensionsKtTest {
         
         assertEquals(4, after.size)
         assertEquals(9, after[1])
+    }
+    
+    @Test
+    fun `when filter remove mutable list should be changed`() {
+        val before = mutableListOf(1, 2, 3)
+        val shouldBe = mutableListOf(1, 2)
+        
+        before.filterRemove { it == 3 }
+        
+        assertEquals(2, before.size)
+        assertEquals(shouldBe, before)
     }
 }

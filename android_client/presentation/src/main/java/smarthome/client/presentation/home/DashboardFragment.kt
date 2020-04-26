@@ -19,11 +19,11 @@ class DashboardFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         
-        viewModel.items.observe(this) {
+        viewModel.items.observe(viewLifecycleOwner) {
             itemsController.setData(it, viewModel)
         }
         
-        viewModel.allHomeUpdateState.observe(this) {
+        viewModel.allHomeUpdateState.observe(viewLifecycleOwner) {
             refresh_layout.isRefreshing = it
         }
     

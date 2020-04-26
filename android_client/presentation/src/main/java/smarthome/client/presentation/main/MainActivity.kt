@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.get
@@ -14,12 +15,13 @@ import org.koin.core.parameter.parametersOf
 import smarthome.client.presentation.R
 import smarthome.client.presentation.SHOW_BOTTOM_BAR
 import smarthome.client.presentation.SHOW_TOOL_BAR
+import smarthome.client.presentation.core.BaseActivity
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.main.toolbar.ToolbarSetter
 import smarthome.client.util.visible
 
 
-class MainActivity : FragmentActivity() {
+class MainActivity : BaseActivity() {
     private val viewModel: MainViewModel by viewModels()
     private val toolbarController: ToolbarController by inject()
     
@@ -43,6 +45,8 @@ class MainActivity : FragmentActivity() {
             
             bottom_navigation.visible = args?.getBoolean(SHOW_BOTTOM_BAR) ?: false
             toolbar.visible = args?.getBoolean(SHOW_TOOL_BAR) ?: false
+    
+            toolbar.setNavigationOnClickListener { navController.navigateUp() }
         }
         
         val appBarConfiguration = AppBarConfiguration(navController.graph)

@@ -8,12 +8,13 @@ import smarthome.client.util.findAndModify
 class ChangeSetupDependencyActionUseCaseImpl(
     private val repo: SetupDependencyRepo
 ) : ChangeSetupDependencyActionUseCase {
-    override fun execute(action: Action) {
-        val details = repo.get()
-        val changedActions = details.actions.findAndModify(
-            predicate = { it.id == action.id },
-            modify = { action }
+    
+    override fun execute(id: String, partialUpdate: (Action) -> Action) {
+        val dependency = repo.get()
+        val changedActions = dependency.actions.findAndModify(
+            predicate = { it.id == id },
+            modify = { partialUpdate(it) }
         )
-        repo.set(details.copy(actions = changedActions))
+        repo.set(dependency.copy(actions = changedActions))
     }
 }

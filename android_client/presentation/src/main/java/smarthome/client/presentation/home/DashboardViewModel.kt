@@ -1,8 +1,6 @@
 package smarthome.client.presentation.home
 
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
@@ -13,12 +11,12 @@ import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.entity.Controller
-import smarthome.client.util.runInScope
-import smarthome.client.util.runInScopeCatchingAny
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.util.DataStatus
 import smarthome.client.util.EmptyStatus
+import smarthome.client.util.runInScope
+import smarthome.client.util.runInScopeCatchingAny
 
 
 class DashboardViewModel : KoinViewModel() {
@@ -35,8 +33,8 @@ class DashboardViewModel : KoinViewModel() {
     val openDeviceDetails = NavigationParamLiveData<Long>()
     private val controllersObserving = mutableMapOf<Long, Disposable>()
     
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+    
+    override fun onResume() {
         onRefresh()
     }
     

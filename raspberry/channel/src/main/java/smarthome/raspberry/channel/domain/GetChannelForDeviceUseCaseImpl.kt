@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component
 import smarthome.raspberry.channel.api.domain.GetChannelForDeviceUseCase
 import smarthome.raspberry.channel.api.domain.NoChannelException
 import smarthome.raspberry.channel.data.ChannelRepository
-import smarthome.raspberry.entity.Device
-import smarthome.raspberry.entity.DeviceChannel
+import smarthome.raspberry.entity.device.Device
+import smarthome.raspberry.channel.api.domain.entity.DeviceChannel
 
 @Component
 class GetChannelForDeviceUseCaseImpl(
@@ -13,7 +13,7 @@ class GetChannelForDeviceUseCaseImpl(
 ) : GetChannelForDeviceUseCase {
     override fun execute(device: Device): DeviceChannel {
         val channels = repository.getDeviceChannels()
-        
+
         return channels.find { it.canWorkWith(device.type) } ?: throw NoChannelException(device)
     }
 }

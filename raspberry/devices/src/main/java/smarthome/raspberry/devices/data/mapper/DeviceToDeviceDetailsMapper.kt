@@ -4,7 +4,7 @@ package smarthome.raspberry.devices.data.mapper
 import org.springframework.stereotype.Component
 import smarthome.raspberry.controllers.api.data.mapper.ControllerToGeneralControllerInfoMapper
 import smarthome.raspberry.devices.api.data.dto.DeviceDetails
-import smarthome.raspberry.entity.Device
+import smarthome.raspberry.entity.device.Device
 
 @Component
 open class DeviceToDeviceDetailsMapper(
@@ -12,7 +12,7 @@ open class DeviceToDeviceDetailsMapper(
 ) {
     fun map(device: Device) = DeviceDetails(
             id = device.id,
-            serialName = device.serialName,
+            serial = device.serial,
             name = device.name,
             description = device.description,
             type = device.type,

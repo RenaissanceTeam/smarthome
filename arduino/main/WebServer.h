@@ -36,11 +36,10 @@
  ********************************************************************/
 
 #define WEBDUINO_VERSION 1007
-#define WEBDUINO_VERSION_STRING "0.1"
 
 // standard END-OF-LINE marker in HTTP
 #define CRLF "\r\n"
-#define IP_BUFFER_LENGTH 15
+const PROGMEM char JSON_CONTENT_TYPE[] = "application/json";
 
 // If processConnection is called without a buffer, it allocates one
 // of 32 bytes
@@ -236,8 +235,7 @@ public:
   // output standard headers indicating "200 Success".  You can change the
   // type of the data you're outputting or also add extra headers like
   // "Refresh: 1".  Extra headers should each be terminated with CRLF.
-  void httpSuccess(const char *contentType = "text/html; charset=utf-8",
-                   const char *extraHeaders = NULL);
+  void httpSuccess();
 
   // used with POST to output a redirect to another URL.  This is
   // preferable to outputting HTML from a post because you can then
@@ -257,7 +255,6 @@ public:
   // Close the current connection and flush ethernet buffers
   void reset(); 
 
-  void getRemoteIp(char *ip);
 private:
   WiFiEspServer m_server;
   WiFiEspClient m_client;
@@ -267,7 +264,6 @@ private:
   unsigned char m_pushbackDepth;
 
   int m_contentLength;
-  char m_remoteIp[15];
   bool m_readingContent;
 
   Command *m_failureCmd;
@@ -298,14 +294,7 @@ private:
    multiple source files are using the Webduino class. */
 #ifndef WEBDUINO_NO_IMPLEMENTATION
 
-/********************************************************************
- * IMPLEMENTATION
- ********************************************************************/
-void WebServer::getRemoteIp(char* ip) {
-  for(int i=0; i < 15; ++i){
-    ip[i] = m_remoteIp[i];
-  }
-}
+
 WebServer::WebServer(const char *urlPrefix, uint16_t port) :
   m_server(port),
   m_client(),
@@ -320,7 +309,7 @@ WebServer::WebServer(const char *urlPrefix, uint16_t port) :
 {
 }
 
-P(webServerHeader) = "Server: SmartHomeArduinoServer/" WEBDUINO_VERSION_STRING CRLF;
+P(webServerHeader) = "Server: ArduinoServer/0.1" CRLF;
 
 void WebServer::begin()
 {
@@ -612,8 +601,7 @@ void WebServer::defaultFailCmd(WebServer &server,
 
 
 
-void WebServer::httpSuccess(const char *contentType,
-                            const char *extraHeaders)
+void WebServer::httpSuccess()
 {
   P(successMsg1) = "HTTP/1.0 200 OK" CRLF;
   printP(successMsg1);
@@ -624,13 +612,10 @@ void WebServer::httpSuccess(const char *contentType,
 
   P(successMsg2) = 
     "Access-Control-Allow-Origin: *" CRLF
-    "Content-Type: ";
+    "Content-Type: application/json";
 
   printP(successMsg2);
-  print(contentType);
   printCRLF();
-  if (extraHeaders)
-    print(extraHeaders);
   printCRLF();
 }
 
@@ -876,10 +861,6 @@ void WebServer::processHeaders()
       continue;
     }
 
-    if (expect("Remote_Addr:")) {
-      readHeader(m_remoteIp, IP_BUFFER_LENGTH);
-      continue;
-    }
 
     if (expect(CRLF CRLF))
     {

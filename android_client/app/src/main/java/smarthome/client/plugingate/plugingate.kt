@@ -2,12 +2,12 @@ package smarthome.client.plugingate
 
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import smarthome.client.arduino.entity.action.ArduinoActionFromBlockResolver
-import smarthome.client.arduino.entity.block.ArduinoBlockNameResolver
-import smarthome.client.arduino.entity.condition.ArduinoConditionFromBlockResolver
-import smarthome.client.arduino.entity.block.ArduinoControllerBlockResolver
-import smarthome.client.arduino.presentation.action.ArduinoActionModelResolver
-import smarthome.client.arduino.presentation.condition.ArduinoConditionModelResolver
+import smarthome.client.arduino.scripts.entity.action.ArduinoActionFromBlockResolver
+import smarthome.client.arduino.scripts.entity.block.ArduinoBlockNameResolver
+import smarthome.client.arduino.scripts.entity.condition.ArduinoConditionFromBlockResolver
+import smarthome.client.arduino.scripts.entity.block.ArduinoControllerBlockResolver
+import smarthome.client.arduino.scripts.presentation.action.ArduinoActionModelResolver
+import smarthome.client.arduino.scripts.presentation.condition.ArduinoConditionModelResolver
 import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.BlockNameResolver
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver

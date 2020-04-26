@@ -7,7 +7,7 @@ import smarthome.raspberry.controllers.api.domain.GetControllerByIdUseCase
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
 import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
 import smarthome.raspberry.controllers.data.StateDto
-import smarthome.raspberry.entity.Controller
+import smarthome.raspberry.entity.controller.Controller
 import smarthome.raspberry.util.exceptions.notFound
 
 @RestController

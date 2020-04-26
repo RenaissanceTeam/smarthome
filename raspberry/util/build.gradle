@@ -3,9 +3,9 @@ apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 dependencies {
 
     implementation library.kotlin
-    implementation library.rxJava
     implementation library.rxKotlin
     implementation library.coroutinesCore
+    implementation library.javaReflections
 
     testImplementation groups.forTest
 }

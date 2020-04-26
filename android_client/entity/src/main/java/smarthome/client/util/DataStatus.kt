@@ -17,7 +17,6 @@ class ErrorStatus<T>(val cause: Throwable,
 class EmptyStatus<T> : DataStatus<T>()
 class LoadingStatus<T>(val lastData: Data<T>? = null) : DataStatus<T>()
 
-
 val <T>DataStatus<T>.data: T? get() {
     return when (this) {
         is Data -> this.data

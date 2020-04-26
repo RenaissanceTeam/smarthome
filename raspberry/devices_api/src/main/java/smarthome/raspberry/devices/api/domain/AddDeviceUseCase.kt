@@ -1,7 +1,7 @@
 package smarthome.raspberry.devices.api.domain
 
 import smarthome.raspberry.devices.api.domain.dto.DeviceDTO
-import smarthome.raspberry.entity.Device
+import smarthome.raspberry.entity.device.Device
 
 /**
  * Triggered when new device should be added to the smarthome.
