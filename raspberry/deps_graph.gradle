@@ -1,0 +1,17 @@
+//import com.vanniktech.dependency.graph.generator.DependencyGraphGeneratorPlugin
+//import com.vanniktech.dependency.graph.generator.DependencyGraphGeneratorExtension.Generator
+//import guru.nidi.graphviz.attribute.Color
+//import guru.nidi.graphviz.attribute.Style
+//
+//plugins.apply(DependencyGraphGenseratorPlugin)
+//
+//def firebaseGenerator = new Generator(
+//        "firebaseLibraries", // Suffix for our Gradle task.
+//        { dependency -> dependency.getModuleGroup().startsWith("smarthome") }, // Only want Firebase.
+//        { dependency -> true }, // Include transitive dependencies.
+//        { node, dependency -> node.add(Style.FILLED, Color.rgb("#ffcb2b")) }, // Give them some color.
+//)
+//
+//dependencyGraphGenerator {
+//    generators = [ firebaseGenerator ]
+//}
