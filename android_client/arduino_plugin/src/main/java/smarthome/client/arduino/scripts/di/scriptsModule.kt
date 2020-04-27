@@ -13,7 +13,8 @@ import smarthome.client.arduino.scripts.presentation.common.ReadActionModelFacto
 import smarthome.client.arduino.scripts.presentation.dht.HumidityConditionModelFactory
 import smarthome.client.arduino.scripts.presentation.dht.TemperatureConditionModelFactory
 import smarthome.client.arduino.scripts.presentation.digital.DigitalConditionModelFactory
-import smarthome.client.arduino.scripts.presentation.onoff.OnOffModelFactory
+import smarthome.client.arduino.scripts.presentation.onoff.OnOffActionModelFactory
+import smarthome.client.arduino.scripts.presentation.onoff.OnOffConditionModelFactory
 import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.BlockNameResolver
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
@@ -29,11 +30,12 @@ val scriptsModule = module {
             humidityConditionModelFactory = get(),
             temperatureConditionModelFactory = get(),
             analogConditionModelFactory = get(),
-            digitalConditionModelFactory = get()
+            digitalConditionModelFactory = get(),
+            onOffConditionModelFactory = get()
     ) }
     factory<ActionFromBlockResolver>(named<ArduinoActionFromBlockResolver>()) { ArduinoActionFromBlockResolver() }
     factory<ActionModelResolver>(named<ArduinoActionModelResolver>()) { ArduinoActionModelResolver(
-            onOffModelFactory = get(),
+            onOffActionModelFactory = get(),
             readActionModelFactory = get()
     ) }
     factory<BlockNameResolver>(named<ArduinoBlockNameResolver>()) { ArduinoBlockNameResolver(get()) }
@@ -43,5 +45,6 @@ val scriptsModule = module {
     factory { ReadActionModelFactory() }
     factory { AnalogConditionModelFactory(get()) }
     factory { DigitalConditionModelFactory(get()) }
-    factory { OnOffModelFactory(get()) }
+    factory { OnOffActionModelFactory(get()) }
+    factory { OnOffConditionModelFactory(get()) }
 }

@@ -5,7 +5,7 @@ import smarthome.client.arduino.scripts.entity.action.OnOffAction
 import smarthome.client.domain.api.scripts.usecases.dependency.ChangeSetupDependencyActionUseCase
 import smarthome.client.entity.script.dependency.action.Action
 
-class OnOffModelFactory(
+class OnOffActionModelFactory(
     private val changeSetupDependencyActionUseCase: ChangeSetupDependencyActionUseCase
 ) {
     fun create(action: Action): EpoxyModel<*> {

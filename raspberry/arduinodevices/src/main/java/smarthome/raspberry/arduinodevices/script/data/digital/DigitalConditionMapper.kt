@@ -1,6 +1,6 @@
+package smarthome.raspberry.arduinodevices.script.data.digital
 
 import org.springframework.stereotype.Component
-import smarthome.raspberry.arduinodevices.script.data.digital.DigitalConditionDto
 import smarthome.raspberry.arduinodevices.script.domain.entity.digital.DigitalCondition
 import smarthome.raspberry.scripts.api.data.mapper.ConditionDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.resolver.ConditionMapperResolver
@@ -9,6 +9,7 @@ import smarthome.raspberry.scripts.api.data.mapper.resolver.ConditionMapperResol
 class DigitalConditionMapper(
         conditionMapperResolver: ConditionMapperResolver
 ): ConditionDtoMapper<DigitalCondition, DigitalConditionDto> {
+
     init {
         conditionMapperResolver.register(DigitalCondition::class, DigitalConditionDto::class, this)
     }

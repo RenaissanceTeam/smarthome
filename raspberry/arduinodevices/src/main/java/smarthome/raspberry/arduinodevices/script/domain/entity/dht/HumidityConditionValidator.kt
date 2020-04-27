@@ -8,13 +8,13 @@ import smarthome.raspberry.scripts.api.domain.ConditionValidator
 import java.util.*
 
 @Component
-class TemperatureConditionValidator : ConditionValidator {
+class HumidityConditionValidator : ConditionValidator {
 
     override fun validate(condition: Condition, block: Optional<Block>): Boolean {
         if (!block.isPresent) return false
         val blockValue = block.get()
 
-        require(condition is TemperatureCondition)
+        require(condition is HumidityCondition)
         require(blockValue is ArduinoControllerBlock)
 
 
@@ -29,4 +29,3 @@ class TemperatureConditionValidator : ConditionValidator {
         }
     }
 }
-

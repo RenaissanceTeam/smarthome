@@ -35,6 +35,8 @@ fun <T> List<T>.forEachDivided(each: (T) -> Unit, divide: (Int) -> Unit) {
     }
 }
 
+fun String.onEmpty(f: () -> String) = if (this.isEmpty()) f() else this
+
 fun <T> Boolean.fold(ifTrue: () -> T, ifFalse: () -> T): T {
     return if (this) {
         ifTrue()

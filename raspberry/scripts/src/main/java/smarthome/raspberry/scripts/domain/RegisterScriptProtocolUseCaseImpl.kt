@@ -49,7 +49,9 @@ open class RegisterScriptProtocolUseCaseImpl(
                             runners[action]?.runAction(action, dependency.end.id)
                         }
                     }
-        }.map { it.subscribe() }.forEach { disposable.add(it) }
+        }.map {
+            it.subscribe({}, {})
+        }.forEach { disposable.add(it) }
 
         return disposable
     }

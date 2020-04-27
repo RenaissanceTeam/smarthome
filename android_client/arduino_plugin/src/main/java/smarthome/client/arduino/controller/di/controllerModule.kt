@@ -29,7 +29,7 @@ val controllerModule = module {
         ReadStateChanger(id = controllerId, readControllerUseCase = get())
     }
 
-    factory<ControllerStateChanger>(named(digitalAlert)) { (controllerId: Long) ->
+    factory<ControllerStateChanger>(named(digital)) { (controllerId: Long) ->
         ReadStateChanger(id = controllerId, readControllerUseCase = get())
     }
 
