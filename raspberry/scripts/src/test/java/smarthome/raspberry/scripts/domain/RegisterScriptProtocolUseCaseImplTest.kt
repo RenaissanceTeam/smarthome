@@ -9,6 +9,7 @@ import org.junit.Before
 import org.junit.Test
 import smarthome.raspberry.core.toOptional
 import smarthome.raspberry.entity.script.*
+import smarthome.raspberry.scripts.api.domain.ActionRunner
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
 import smarthome.raspberry.scripts.api.domain.BlockObserver
 import smarthome.raspberry.scripts.api.domain.RunScriptActionUseCase
@@ -20,7 +21,8 @@ class RegisterScriptProtocolUseCaseImplTest {
     private lateinit var blockObserver: BlockObserver
     private lateinit var blockObservers: Map<String, BlockObserver>
     private lateinit var conditionValidators: Map<String, ConditionValidator>
-    private lateinit var runScriptActionUseCase: RunScriptActionUseCase
+    private lateinit var actionRunner: ActionRunner
+    private lateinit var actionRunners: Map<String, ActionRunner>
     private lateinit var script: Script
     private lateinit var block_a: Block
     private lateinit var block_b: Block
@@ -40,12 +42,13 @@ class RegisterScriptProtocolUseCaseImplTest {
 
         blockObserver =  mock { }
         blockObservers = mapOf(
-                "BlockObserver" to blockObserver
+                "blockObserver" to blockObserver
         )
-        runScriptActionUseCase = mock { }
+        actionRunner = mock { }
+        actionRunners = mapOf("actionRunner" to  actionRunner)
 
         validator = mock { }
-        conditionValidators = mapOf("ConditionValidator" to validator)
+        conditionValidators = mapOf("conditionValidator" to validator)
         script = Script(
                 name = "",
                 description = "",
@@ -53,7 +56,7 @@ class RegisterScriptProtocolUseCaseImplTest {
                 blocks = listOf(),
                 dependencies = listOf()
         )
-        protocol = RegisterScriptProtocolUseCaseImpl(blockObservers, conditionValidators, runScriptActionUseCase)
+        protocol = RegisterScriptProtocolUseCaseImpl(blockObservers, conditionValidators, actionRunners)
     }
 
     private fun generateUniqueId(): String = UUID.randomUUID().toString()
@@ -170,7 +173,7 @@ class RegisterScriptProtocolUseCaseImplTest {
 
         protocol.execute(script)
 
-        verify(runScriptActionUseCase).execute(b, dependency.actions.first())
-        verifyNoMoreInteractions(runScriptActionUseCase)
+        verify(actionRunner).runAction(dependency.actions.first(), b.id)
+        verifyNoMoreInteractions(actionRunner)
     }
 }
