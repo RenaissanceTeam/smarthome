@@ -15,13 +15,13 @@ PrintLengthCounter printLengthCounter;
 void baseResponse(WebServer& server, String val) {
   Serial.println(val);
   server.httpSuccess();
-  
+
   server.print(
     String(FPSTR(responseStart))
     + val
     + String(FPSTR(responseEnd))
   );
- 
+
 }
 
 // ==========================================================================
@@ -358,7 +358,7 @@ void doPost(const __FlashStringHelper* url, int contentLen) {
   client.beginRequest();
   client.post(String(FPSTR(baseControllersUrl)) + String(url));
   client.println(HTTP_HEADER_CONTENT_TYPE + String(FPSTR(headerDelim)) + String(FPSTR(JSON_CONTENT_TYPE)));
-//  client.println(String(FPSTR(authHeader)));
+  //  client.println(String(FPSTR(authHeader)));
   client.sendHeader(HTTP_HEADER_CONTENT_LENGTH, contentLen);
   client.print(String(F("Host: "))); client.println(WiFi.localIP());
   client.endRequest();
@@ -395,19 +395,36 @@ void sendInitToServer() {
   client.stop();
 }
 
+
+
+void printUpdateBody(Print& out, Service service, String state) {
+  out.print(FPSTR(curlyOpen));
+  printKeyValueJson(FPSTR(serialLabel), String(service.serial), out);
+
+  out.print(
+    String(FPSTR(comma))
+    + String(FPSTR(quote))
+    + String(FPSTR(stateLabel))
+    + String(FPSTR(quote))
+    + String(FPSTR(colon))
+    + state
+  );
+
+  out.print(FPSTR(curlyClose));
+}
+
+void sendUpdateToServer(Service service, String state) {
+
+  printLengthCounter.reset(); printUpdateBody(printLengthCounter, service, state);
+
+  doPost(FPSTR(updateEndpoint), printLengthCounter.len());
+
+  printUpdateBody(client, service, state);
+  client.stop();
+}
+
 void runHttpServer(WebServer& server) {
   server.setDefaultCommand(&homePage);    // callback to home page request
   server.addCommand(serviceEndpoint, &service); // smart home server request to do something with service
   server.begin();
 }
-
-#ifdef DIGITAL_ALERT
-void sendAlertToServer(int serviceIndex, int value) {
-  //  String alert = String(FPSTR(curlyOpen))
-  //                 + keyValueJson(FPSTR(serialLabel), String(services[serviceIndex].serial))
-  //                 + String(FPSTR(comma))
-  //                 + keyValueJson(FPSTR(stateLabel), String(value))
-  //                 + String(curlyClose);
-  //  doPost(FPSTR(alertEndpoint), alert);
-}
-#endif

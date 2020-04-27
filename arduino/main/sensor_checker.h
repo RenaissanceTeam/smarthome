@@ -28,7 +28,7 @@ void notifyIfStateChanged(int cur, int serviceIndex) {
     Serial.println(newState);
 #endif
 
-    sendAlertToServer(serviceIndex, newState);
+    sendUpdateToServer(services[serviceIndex], String(newState));
   }
 }
 

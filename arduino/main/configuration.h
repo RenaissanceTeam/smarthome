@@ -18,6 +18,7 @@ const int ARDUINO_PORT = 80;
 const int DEVICE_SERIAL = 460902108;
 
 #define ONOFF
+#define DIGITAL_ALERT
 
 // pins for communication with esp8266
 #define RX 8 // attach to TX of esp

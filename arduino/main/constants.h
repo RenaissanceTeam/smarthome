@@ -22,6 +22,6 @@ const PROGMEM char headerDelim[] = ": ";
 const PROGMEM char noWifiShieldMessage[] = "WiFi shield not present";
 
 const PROGMEM char initEndpoint[] = "init";
-const PROGMEM char alertEndpoint[] = "alert";
+const PROGMEM char updateEndpoint[] = "update";
 
 #define serviceEndpoint "service"
