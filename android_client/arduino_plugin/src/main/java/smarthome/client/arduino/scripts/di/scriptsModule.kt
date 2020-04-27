@@ -6,11 +6,14 @@ import smarthome.client.arduino.scripts.entity.action.ArduinoActionFromBlockReso
 import smarthome.client.arduino.scripts.entity.block.ArduinoBlockNameResolver
 import smarthome.client.arduino.scripts.entity.block.ArduinoControllerBlockResolver
 import smarthome.client.arduino.scripts.entity.condition.ArduinoConditionFromBlockResolver
-import smarthome.client.arduino.scripts.presentation.action.ArduinoActionModelResolver
-import smarthome.client.arduino.scripts.presentation.action.onoff.OnOffModelFactory
-import smarthome.client.arduino.scripts.presentation.condition.ArduinoConditionModelResolver
-import smarthome.client.arduino.scripts.presentation.condition.HumidityConditionModelFactory
-import smarthome.client.arduino.scripts.presentation.condition.TemperatureConditionModelFactory
+import smarthome.client.arduino.scripts.presentation.ArduinoActionModelResolver
+import smarthome.client.arduino.scripts.presentation.ArduinoConditionModelResolver
+import smarthome.client.arduino.scripts.presentation.analog.AnalogConditionModelFactory
+import smarthome.client.arduino.scripts.presentation.common.ReadActionModelFactory
+import smarthome.client.arduino.scripts.presentation.dht.HumidityConditionModelFactory
+import smarthome.client.arduino.scripts.presentation.dht.TemperatureConditionModelFactory
+import smarthome.client.arduino.scripts.presentation.digital.DigitalConditionModelFactory
+import smarthome.client.arduino.scripts.presentation.onoff.OnOffModelFactory
 import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.BlockNameResolver
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
@@ -22,12 +25,23 @@ val scriptsModule = module {
     // inject as plugin
     factory<ConditionFromBlockResolver>(named<ArduinoConditionFromBlockResolver>()) { ArduinoConditionFromBlockResolver() }
     factory<ControllerBlockResolver>(named<ArduinoControllerBlockResolver>()) { ArduinoControllerBlockResolver() }
-    factory<ConditionModelResolver>(named<ArduinoConditionModelResolver>()) { ArduinoConditionModelResolver(get(), get()) }
+    factory<ConditionModelResolver>(named<ArduinoConditionModelResolver>()) { ArduinoConditionModelResolver(
+            humidityConditionModelFactory = get(),
+            temperatureConditionModelFactory = get(),
+            analogConditionModelFactory = get(),
+            digitalConditionModelFactory = get()
+    ) }
     factory<ActionFromBlockResolver>(named<ArduinoActionFromBlockResolver>()) { ArduinoActionFromBlockResolver() }
-    factory<ActionModelResolver>(named<ArduinoActionModelResolver>()) { ArduinoActionModelResolver(get()) }
+    factory<ActionModelResolver>(named<ArduinoActionModelResolver>()) { ArduinoActionModelResolver(
+            onOffModelFactory = get(),
+            readActionModelFactory = get()
+    ) }
     factory<BlockNameResolver>(named<ArduinoBlockNameResolver>()) { ArduinoBlockNameResolver(get()) }
 
     factory { HumidityConditionModelFactory(get()) }
     factory { TemperatureConditionModelFactory(get()) }
+    factory { ReadActionModelFactory() }
+    factory { AnalogConditionModelFactory(get()) }
+    factory { DigitalConditionModelFactory(get()) }
     factory { OnOffModelFactory(get()) }
 }

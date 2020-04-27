@@ -14,7 +14,7 @@ class ArduinoActionFromBlockResolver : ActionFromBlockResolver {
         
         return when (item.type) {
             onoff -> listOf(OnOffAction(generateId()))
-            else -> emptyList()
+            else -> listOf(ReadAction(generateId()))
         }
     }
     

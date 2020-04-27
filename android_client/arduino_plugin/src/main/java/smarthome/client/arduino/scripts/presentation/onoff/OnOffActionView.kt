@@ -1,4 +1,4 @@
-package smarthome.client.arduino.scripts.presentation.action.onoff
+package smarthome.client.arduino.scripts.presentation.onoff
 
 import android.content.Context
 import android.util.AttributeSet

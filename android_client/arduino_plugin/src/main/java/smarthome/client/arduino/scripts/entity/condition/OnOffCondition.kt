@@ -4,7 +4,6 @@ import smarthome.client.entity.script.dependency.condition.Condition
 
 data class OnOffCondition(
         override val id: String,
-        val controllerId: Long,
         val value: String? = null
 ) : Condition()
 

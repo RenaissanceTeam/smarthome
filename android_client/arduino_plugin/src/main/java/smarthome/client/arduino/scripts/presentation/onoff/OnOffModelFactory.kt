@@ -1,4 +1,4 @@
-package smarthome.client.arduino.scripts.presentation.action.onoff
+package smarthome.client.arduino.scripts.presentation.onoff
 
 import com.airbnb.epoxy.EpoxyModel
 import smarthome.client.arduino.scripts.entity.action.OnOffAction

@@ -1,4 +1,4 @@
-package smarthome.client.arduino.scripts.presentation.condition
+package smarthome.client.arduino.scripts.presentation.dht
 
 import com.airbnb.epoxy.EpoxyModel
 import smarthome.client.arduino.scripts.entity.condition.TemperatureCondition
@@ -9,12 +9,10 @@ import smarthome.client.presentation.scripts.setup.dependency.condition.Controll
 class TemperatureConditionModelFactory(
     private val changeSetupDependencyConditionUseCase: ChangeSetupDependencyConditionUseCase
 ) {
-    fun create(condition: Condition): EpoxyModel<*> {
-        val temperature = condition as? TemperatureCondition
-            ?: throw IllegalStateException("creating temperature condition model with wrong condition $condition")
-        
+    fun create(temperature: TemperatureCondition): EpoxyModel<*> {
+
         return ControllerConditionValueViewModel_().apply {
-            id(condition.id.hashCode())
+            id(temperature.id.hashCode())
             title("Temperature")
             sign(temperature.sign)
             value(temperature.value)
