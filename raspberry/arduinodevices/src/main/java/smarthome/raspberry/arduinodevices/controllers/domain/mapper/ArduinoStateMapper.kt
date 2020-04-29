@@ -15,6 +15,9 @@ class ArduinoStateMapper {
                     else -> throw RuntimeException("Can't map onoff raw $raw")
                 }
             }
+            ArduinoControllerTypes.analog.string -> {
+                ((raw.toIntOrNull() ?: 0) * 100 / 1024).toString()
+            }
             else -> raw
         }
     }
