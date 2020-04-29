@@ -17,12 +17,13 @@ class ArduinoConditionFromBlockResolver : ConditionFromBlockResolver {
         if (item !is ArduinoControllerBlock) return emptyList()
 
         return when (item.type) {
-            temperature11 -> listOf(TemperatureCondition(generateId(), item.controllerId))
-            temperature22 -> listOf(TemperatureCondition(generateId(), item.controllerId))
-            humidity11 -> listOf(HumidityCondition(generateId(), item.controllerId))
-            humidity22 -> listOf(HumidityCondition(generateId(), item.controllerId))
-            onoff -> listOf(OnOffCondition(generateId(), item.controllerId))
-            analog -> listOf(AnalogCondition(generateId(), item.controllerId))
+            temperature11 -> listOf(TemperatureCondition(generateId()))
+            temperature22 -> listOf(TemperatureCondition(generateId()))
+            humidity11 -> listOf(HumidityCondition(generateId()))
+            humidity22 -> listOf(HumidityCondition(generateId()))
+            onoff -> listOf(OnOffCondition(generateId()))
+            analog -> listOf(AnalogCondition(generateId()))
+            digital -> listOf(DigitalCondition(generateId()))
             else -> emptyList()
         }
     }

@@ -9,6 +9,7 @@ import smarthome.client.entity.Controller
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.setup.graph.blockviews.GraphBlockView
 import smarthome.client.presentation.scripts.setup.graph.blockviews.state.BlockState
+import smarthome.client.util.onEmpty
 
 class GraphControllerView @JvmOverloads constructor(
     context: Context,
@@ -27,7 +28,7 @@ class GraphControllerView @JvmOverloads constructor(
     }
     
     private fun bind(controller: Controller) {
-        controller_name.text = controller.name
+        controller_name.text = controller.name.onEmpty { controller.type }
         controller_state.text = controller.state
     }
 }

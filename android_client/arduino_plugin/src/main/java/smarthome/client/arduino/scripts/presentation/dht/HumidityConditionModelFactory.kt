@@ -1,4 +1,4 @@
-package smarthome.client.arduino.scripts.presentation.condition
+package smarthome.client.arduino.scripts.presentation.dht
 
 import com.airbnb.epoxy.EpoxyModel
 import smarthome.client.arduino.scripts.entity.condition.HumidityCondition
@@ -9,12 +9,10 @@ import smarthome.client.presentation.scripts.setup.dependency.condition.Controll
 class HumidityConditionModelFactory(
     private val changeSetupDependencyConditionUseCase: ChangeSetupDependencyConditionUseCase
 ) {
-    fun create(condition: Condition): EpoxyModel<*> {
-        val humidity = condition as? HumidityCondition
-            ?: throw IllegalStateException("creating humidity condition model with wrong condition $condition")
-        
+    fun create(humidity: HumidityCondition): EpoxyModel<*> {
+
         return ControllerConditionValueViewModel_().apply {
-            id(condition.id.hashCode())
+            id(humidity.id.hashCode())
             title("Humidity")
             sign(humidity.sign)
             value(humidity.value)

@@ -26,7 +26,7 @@ class ArduinoControllerBlockResolver : ControllerBlockResolver {
                 onoff,
                 temperature11,
                 humidity11,
-                digitalAlert,
+                digital,
                 temperature22,
                 humidity22,
                 pressure)

@@ -1,11 +1,11 @@
-package smarthome.client.arduino.scripts.presentation.action.onoff
+package smarthome.client.arduino.scripts.presentation.onoff
 
 import com.airbnb.epoxy.EpoxyModel
 import smarthome.client.arduino.scripts.entity.action.OnOffAction
 import smarthome.client.domain.api.scripts.usecases.dependency.ChangeSetupDependencyActionUseCase
 import smarthome.client.entity.script.dependency.action.Action
 
-class OnOffModelFactory(
+class OnOffActionModelFactory(
     private val changeSetupDependencyActionUseCase: ChangeSetupDependencyActionUseCase
 ) {
     fun create(action: Action): EpoxyModel<*> {

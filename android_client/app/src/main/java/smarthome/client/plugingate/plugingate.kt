@@ -6,8 +6,8 @@ import smarthome.client.arduino.scripts.entity.action.ArduinoActionFromBlockReso
 import smarthome.client.arduino.scripts.entity.block.ArduinoBlockNameResolver
 import smarthome.client.arduino.scripts.entity.condition.ArduinoConditionFromBlockResolver
 import smarthome.client.arduino.scripts.entity.block.ArduinoControllerBlockResolver
-import smarthome.client.arduino.scripts.presentation.action.ArduinoActionModelResolver
-import smarthome.client.arduino.scripts.presentation.condition.ArduinoConditionModelResolver
+import smarthome.client.arduino.scripts.presentation.ArduinoActionModelResolver
+import smarthome.client.arduino.scripts.presentation.ArduinoConditionModelResolver
 import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.BlockNameResolver
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
