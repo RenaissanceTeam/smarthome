@@ -46,7 +46,7 @@ open class RegisterScriptProtocolUseCaseImpl(
                     .filter { it }
                     .doOnNext {
                         dependency.actions.forEach { action ->
-                            runners[action]?.runAction(action, dependency.end.id)
+                            runners[action]?.runCatching { runAction(action, dependency.end.id) }
                         }
                     }
         }.map {
