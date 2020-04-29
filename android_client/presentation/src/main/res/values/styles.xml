@@ -1,11 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 
     <style name="TitleTextStyle" parent="TextAppearance.AppCompat.Title" />
@@ -17,6 +18,32 @@
 
     <style name="DividerItemStyle">
         <item name="android:background">@color/lightGray</item>
+    </style>
+
+
+    <style name="Login">
+        <item name="cardBackgroundColor">@color/semitransparent</item>
+        <item name="backgroundTint">@color/semitransparent</item>
+    </style>
+
+    <style name="Login.Input">
+        <item name="cardCornerRadius">24dp</item>
+        <item name="contentPaddingBottom">2dp</item>
+        <item name="contentPaddingTop">4dp</item>
+        <item name="contentPaddingLeft">12dp</item>
+        <item name="contentPaddingRight">12dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+    </style>
+
+    <style name="Login.Button">
+        <item name="cornerRadius">24dp</item>
+    </style>
+
+    <style name="Login.Link">
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
 </resources>

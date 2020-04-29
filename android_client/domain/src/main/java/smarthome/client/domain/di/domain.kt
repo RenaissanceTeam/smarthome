@@ -8,6 +8,7 @@ import smarthome.client.domain.api.conrollers.usecases.*
 import smarthome.client.domain.api.devices.usecase.*
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
+import smarthome.client.domain.api.homeserver.usecases.ObserveRecentServersUseCase
 import smarthome.client.domain.api.main.BooleanState
 import smarthome.client.domain.api.main.StateMachine
 import smarthome.client.domain.api.scripts.usecases.GetScriptByIdUseCase
@@ -20,6 +21,7 @@ import smarthome.client.domain.conrollers.usecases.*
 import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
+import smarthome.client.domain.homeserver.usecases.ObserveRecentServersUseCaseImpl
 import smarthome.client.domain.main.StateMachineImpl
 import smarthome.client.domain.scripts.usecases.GetScriptByIdUseCaseImpl
 import smarthome.client.domain.scripts.usecases.GetScriptsOverviewUseCaseImpl
@@ -31,22 +33,23 @@ val domain = module {
     // homeserver
     factoryBy<ObserveActiveHomeServerUseCase, ObserveActiveHomeServerUseCaseImpl>()
     factoryBy<ChangeHomeServerUrlUseCase, ChangeHomeServerUrlUseCaseImpl>()
-    
+    factoryBy<ObserveRecentServersUseCase, ObserveRecentServersUseCaseImpl>()
+
     // auth
-    factoryBy<ObserveAuthenticationStatusUseCase,ObserveAuthenticationStatusUseCaseImpl>()
+    factoryBy<ObserveAuthenticationStatusUseCase, ObserveAuthenticationStatusUseCaseImpl>()
     factoryBy<ObserveCurrentTokenUseCase, ObserveCurrentTokenUseCaseImpl>()
     factoryBy<ObserveCurrentUserUseCase, ObserveCurrentUserUseCaseImpl>()
     factoryBy<LoginUseCase, LoginUseCaseImpl>()
     factoryBy<SaveNewTokenUseCase, SaveNewTokenUseCaseImpl>()
     factoryBy<GetCurrentTokenUseCase, GetCurrentTokenUseCaseImpl>()
-    
+
     // devices
     factoryBy<GetGeneralDevicesInfo, GetAddedDevicesInfoImpl>()
     factoryBy<GetDeviceUseCase, GetDeviceUseCaseImpl>()
     factoryBy<GetPendingDevicesUseCase, GetPendingDevicesUseCaseImpl>()
     factoryBy<DeclinePendingDeviceUseCase, DeclinePendingDeviceUseCaseImpl>()
     factoryBy<AcceptPendingDeviceUseCase, AcceptPendingDeviceUseCaseImpl>()
-    
+
     // controllers
     factoryBy<ObserveControllerUseCase, ObserveControllerUseCaseImpl>()
     factoryBy<FetchControllerUseCase, FetchControllerUseCaseImpl>()
@@ -54,7 +57,7 @@ val domain = module {
     factoryBy<WriteStateToControllerUseCase, WriteStateToControllerUseCaseImpl>()
     factoryBy<PipelineControllerToStorageUseCase, PipelineControllerToStorageUseCaseImpl>()
     factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
-    
+
     //scripts
     factoryBy<AddBlockToScriptGraphUseCase, AddBlockToScriptGraphUseCaseImpl>()
     factoryBy<MoveBlockUseCase, MoveBlockUseCaseImpl>()
@@ -90,19 +93,19 @@ val domain = module {
     factoryBy<GetScriptsOverviewUseCase, GetScriptsOverviewUseCaseImpl>()
 
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
-    
+
     single(named("login")) {
         BooleanState()
     }
     single(named("homeServer")) {
         BooleanState()
     }
-    
+
     single<StateMachine> {
         StateMachineImpl(
-            loginState = get<BooleanState>(named("login")),
-            homeServerState = get<BooleanState>(named("homeServer"))
+                loginState = get<BooleanState>(named("login")),
+                homeServerState = get<BooleanState>(named("homeServer"))
         )
     }
-    
+
 }

@@ -28,6 +28,7 @@ dependencies {
     implementation library.firebaseMessaging
     implementation library.fab
     implementation library.rxView
+    implementation library.lottie
 
     testImplementation groups.forTest
     testImplementation library.coroutinesTest

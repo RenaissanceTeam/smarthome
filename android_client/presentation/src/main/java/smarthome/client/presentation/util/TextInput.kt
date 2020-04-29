@@ -5,6 +5,7 @@ import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import androidx.cardview.widget.CardView
 import androidx.core.widget.addTextChangedListener
 import kotlinx.android.synthetic.main.text_input.view.*
 import smarthome.client.presentation.R
@@ -13,7 +14,7 @@ class TextInput @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr) {
+) : CardView(context, attrs, defStyleAttr) {
     private var listener: TextWatcher? = null
     
     init {

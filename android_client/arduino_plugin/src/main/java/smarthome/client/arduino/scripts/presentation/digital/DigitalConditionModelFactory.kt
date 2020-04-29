@@ -18,7 +18,6 @@ class DigitalConditionModelFactory(
                     (it as? DigitalCondition)?.copy(value = newValue.toString()) ?: it
                 }
             }
-
         }
     }
 }
