@@ -18,6 +18,8 @@ class HomeServerController : Typed2EpoxyController<List<HomeServer>, HomeServerV
                     homeServerItem {
                         id(server.id)
                         url(server.url)
+
+                        onClick { viewModel.selectRecent(server) }
                     }
                 },
                 divide = { dividerItem { id(it) } }

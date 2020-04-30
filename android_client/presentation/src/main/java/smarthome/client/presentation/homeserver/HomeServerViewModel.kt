@@ -36,11 +36,13 @@ class HomeServerViewModel : KoinViewModel() {
 
     fun save(url: String) {
         viewModelScope.launch {
-            if (serverUrl.value != url) {
-                changeHomeServerUrlUseCase.execute(url)
-            }
+            changeHomeServerUrlUseCase.execute(url)
 
             close.trigger()
         }
+    }
+
+    fun selectRecent(server: HomeServer) {
+        serverUrl.value = server.url
     }
 }
