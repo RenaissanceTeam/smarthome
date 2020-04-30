@@ -17,4 +17,8 @@ class TokenRepoImpl : TokenRepo {
     }
     
     override fun getCurrent(): DataStatus<String> = token.value ?: default
+
+    override fun clear() {
+        token.onNext(EmptyStatus())
+    }
 }

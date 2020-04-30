@@ -5,11 +5,12 @@ import smarthome.client.domain.api.usecase.CloudMessageUseCase
 class CloudMessageUseCaseImpl() : CloudMessageUseCase {
     override suspend fun onNewToken(newToken: String?) {
         newToken ?: return
-        
-        TODO()
+
+//        TODO()
     }
-    
+
     override suspend fun noSavedToken(): Boolean {
-        TODO()
+//        TODO()
+        return false
     }
 }

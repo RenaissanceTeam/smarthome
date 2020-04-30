@@ -11,6 +11,7 @@ import smarthome.client.entity.HomeServer
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.util.data
+import smarthome.client.util.fold
 
 class HomeServerViewModel : KoinViewModel() {
     private val changeHomeServerUrlUseCase by inject<ChangeHomeServerUrlUseCase>()
@@ -19,6 +20,7 @@ class HomeServerViewModel : KoinViewModel() {
     val serverUrl = MutableLiveData("")
     val recents = MutableLiveData<List<HomeServer>>()
     val close = NavigationLiveData()
+    val toLogin = NavigationLiveData()
 
     override fun onResume() {
         disposable.add(
@@ -36,9 +38,10 @@ class HomeServerViewModel : KoinViewModel() {
 
     fun save(url: String) {
         viewModelScope.launch {
-            changeHomeServerUrlUseCase.execute(url)
-
-            close.trigger()
+            changeHomeServerUrlUseCase.execute(url).fold(
+                    ifTrue = { toLogin.trigger() },
+                    ifFalse = { close.trigger() }
+            )
         }
     }
 

@@ -45,6 +45,14 @@ fun <T> Boolean.fold(ifTrue: () -> T, ifFalse: () -> T): T {
     }
 }
 
+suspend fun <T> Boolean.suspendFold(ifTrue: suspend () -> T, ifFalse: suspend () -> T): T {
+    return if (this) {
+        ifTrue()
+    } else {
+        ifFalse()
+    }
+}
+
 fun <T> List<T>.replace(newItem: T, predicate: (T) -> Boolean): List<T> {
     return replaceAt(indexOf(find(predicate)), newItem)
 }
