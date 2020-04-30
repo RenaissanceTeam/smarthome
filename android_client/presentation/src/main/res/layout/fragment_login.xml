@@ -20,11 +20,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Username"
-        app:layout_constraintVertical_bias="0.3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
 
     <smarthome.client.presentation.util.TextInput
         android:id="@+id/password"
@@ -41,7 +41,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_button"
-        style="@style/Login.Button"
+        style="@style/Login.Shadow.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -51,34 +51,27 @@
         app:layout_constraintEnd_toEndOf="@id/password"
         app:layout_constraintTop_toBottomOf="@id/password" />
 
-    <LinearLayout
-        android:id="@+id/links"
+
+    <TextView
+        android:id="@+id/change_server"
+        style="@style/Login.Shadow.Link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Change server?"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:paddingTop="20dp"
-        android:background="@color/semitransparent"
-        android:layout_height="wrap_content" >
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/change_server"
-            style="@style/Login.Link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="Change server?"/>
+    <TextView
+        android:id="@+id/register"
+        style="@style/Login.Shadow.Link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Register"
+        app:layout_constraintBottom_toTopOf="@id/change_server"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/register"
-            style="@style/Login.Link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Register"/>
-
-    </LinearLayout>
 
     <smarthome.client.presentation.components.LoadingIndicator
         android:id="@+id/progress"

@@ -37,13 +37,21 @@
         <item name="android:layout_marginEnd">8dp</item>
     </style>
 
-    <style name="Login.Button">
-        <item name="cornerRadius">24dp</item>
+    <style name="Login.Shadow">
+        <item name="android:shadowColor">@color/colorTextPrimary</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
     </style>
 
-    <style name="Login.Link">
+    <style name="Login.Shadow.Button">
+        <item name="cornerRadius">24dp</item>
+        <item name="android:textColor">@color/colorAccentDark</item>
+    </style>
+
+    <style name="Login.Shadow.Link">
         <item name="android:layout_marginStart">24dp</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorAccentDark</item>
     </style>
 
 </resources>

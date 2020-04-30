@@ -28,7 +28,7 @@ class HomeServerViewModel : KoinViewModel() {
 
         disposable.add(
                 observeRecentServersUseCase.execute().subscribe {
-                    recents.value = it.map { it.url }
+                    recents.postValue(it.map { it.url })
                 }
         )
     }
