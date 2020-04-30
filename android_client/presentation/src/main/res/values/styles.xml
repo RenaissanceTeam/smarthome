@@ -21,6 +21,13 @@
     </style>
 
 
+
+
+
+
+
+
+
     <style name="Login">
         <item name="cardBackgroundColor">@color/semitransparent</item>
         <item name="backgroundTint">@color/semitransparent</item>
@@ -32,7 +39,6 @@
         <item name="contentPaddingTop">4dp</item>
         <item name="contentPaddingLeft">12dp</item>
         <item name="contentPaddingRight">12dp</item>
-        <item name="cardElevation">0dp</item>
         <item name="android:layout_marginStart">8dp</item>
         <item name="android:layout_marginEnd">8dp</item>
     </style>
@@ -52,6 +58,26 @@
     <style name="Login.Shadow.Link">
         <item name="android:layout_marginStart">24dp</item>
         <item name="android:textColor">@color/colorAccentDark</item>
+    </style>
+
+
+
+
+
+
+    <style name="HomeServer">
+
+    </style>
+
+    <style name="HomeServer.Title">
+        <item name="android:textSize">24sp</item>
+
+    </style>
+
+    <style name="HomeServer.Item">
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
     </style>
 
 </resources>

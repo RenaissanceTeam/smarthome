@@ -7,6 +7,7 @@ import org.koin.core.inject
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveRecentServersUseCase
+import smarthome.client.entity.HomeServer
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.util.data
@@ -16,7 +17,7 @@ class HomeServerViewModel : KoinViewModel() {
     private val observeHomeServerUrlUseCase: ObserveActiveHomeServerUseCase by inject()
     private val observeRecentServersUseCase: ObserveRecentServersUseCase by inject()
     val serverUrl = MutableLiveData("")
-    val recents = MutableLiveData<List<String>>()
+    val recents = MutableLiveData<List<HomeServer>>()
     val close = NavigationLiveData()
 
     override fun onResume() {
@@ -28,7 +29,7 @@ class HomeServerViewModel : KoinViewModel() {
 
         disposable.add(
                 observeRecentServersUseCase.execute().subscribe {
-                    recents.postValue(it.map { it.url })
+                    recents.postValue(it)
                 }
         )
     }
