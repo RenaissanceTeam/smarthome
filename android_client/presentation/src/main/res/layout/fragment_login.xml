@@ -4,51 +4,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="waves.json"
+        app:lottie_loop="true" />
+
+
     <smarthome.client.presentation.util.TextInput
         android:id="@+id/username"
+        style="@style/Login.Input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:hint="Username"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
 
     <smarthome.client.presentation.util.TextInput
         android:id="@+id/password"
+        style="@style/Login.Input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@id/username"
-        app:layout_constraintStart_toStartOf="@id/username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/username"
         app:passwordToggleEnabled="true" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/login_button"
-        style="?android:attr/borderlessButtonStyle"
+        style="@style/Login.Shadow.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:paddingHorizontal="16dp"
         android:text="LOGIN"
-        android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="@id/password"
         app:layout_constraintTop_toBottomOf="@id/password" />
 
+
     <TextView
         android:id="@+id/change_server"
+        style="@style/Login.Shadow.Link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginBottom="24dp"
         android:text="Change server?"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@id/login_button" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/register"
+        style="@style/Login.Shadow.Link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Register"
+        app:layout_constraintBottom_toTopOf="@id/change_server"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <smarthome.client.presentation.components.LoadingIndicator
         android:id="@+id/progress"

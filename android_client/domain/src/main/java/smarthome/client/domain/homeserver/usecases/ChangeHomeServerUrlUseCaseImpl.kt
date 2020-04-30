@@ -3,22 +3,37 @@ package smarthome.client.domain.homeserver.usecases
 import smarthome.client.data.api.homeserver.HomeServerRepo
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.entity.HomeServer
+import smarthome.client.util.fold
 
 class ChangeHomeServerUrlUseCaseImpl(
-    private val repo: HomeServerRepo
+        private val repo: HomeServerRepo
 ) : ChangeHomeServerUrlUseCase {
     override suspend fun execute(url: String) {
-        when  (val currentActive = repo.getCurrentActive()) {
-            null -> saveNewHomeServer(url)
-            else -> updateExistingHomeServer(currentActive, url)
+        val currentActive = repo.getCurrentActive()
+        val savedWithSameUrl = repo.getByUrl(url)
+
+        if (currentActive?.url == url) return
+        if (currentActive == null) {
+            repo.save(createNewServer(url))
+            return
+        }
+
+        deactivate(currentActive)
+
+        if (savedWithSameUrl == null) {
+            createNewServer(url).let { repo.save(it) }
+        } else {
+            activate(savedWithSameUrl)
         }
     }
-    
-    private suspend fun saveNewHomeServer(url: String) {
-        repo.save(HomeServer(url = url, active = true))
+
+    private suspend fun activate(server: HomeServer) {
+        repo.update(server.copy(active = true))
     }
-    
-    private suspend fun updateExistingHomeServer(homeServer: HomeServer, url: String) {
-        repo.update(homeServer.copy(url = url))
+
+    private suspend fun deactivate(server: HomeServer) {
+        repo.update(server.copy(active = false))
     }
+
+    private fun createNewServer(url: String) = HomeServer(url = url, active = true)
 }

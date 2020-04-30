@@ -6,31 +6,77 @@
 
     <TextView
         android:id="@+id/label"
+        style="@style/HomeServer.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Your current home server url:"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Setup\nHome\nServer\nAddress"
+        app:layout_constraintEnd_toStartOf="@id/server_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/server_icon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/server"
+        app:layout_constraintBottom_toBottomOf="@id/label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/label"
+        app:layout_constraintTop_toTopOf="@id/label" />
 
-    <EditText
-        android:id="@+id/input_server"
-        android:layout_width="match_parent"
+    <smarthome.client.presentation.components.DividerItem
+        android:id="@+id/divider"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/label" />
 
-    <Button
+    <smarthome.client.presentation.util.TextInput
+        android:id="@+id/input_server"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/transparent"
+        android:hint="Home URL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <TextView
+        android:id="@+id/recents_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Recent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_server" />
+
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/recents_carousel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recents_label" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Save"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorAccent"
+        android:minWidth="200dp"
+        android:text="SAVE"
+        app:cornerRadius="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/input_server" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

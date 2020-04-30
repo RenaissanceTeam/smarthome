@@ -14,6 +14,9 @@ interface HomeServerRepo {
     
     @Query("select * from HomeServer where active = 1" )
     suspend fun getCurrentActive(): HomeServer?
+
+    @Query("select * from HomeServer where url = :url")
+    suspend fun getByUrl(url: String): HomeServer?
     
     @Insert
     suspend fun save(homeServer: HomeServer)

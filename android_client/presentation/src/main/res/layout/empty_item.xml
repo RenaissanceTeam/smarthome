@@ -17,8 +17,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_toys"
-            android:tint="#4A4A4A"
+            android:src="@drawable/tumbleweed"
             tools:ignore="UseAppTint" />
 
         <TextView
@@ -29,7 +28,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:text="No items found"
-            android:textColor="#4A4A4A" />
+            android:textColor="#919191" />
 
     </RelativeLayout>
 
