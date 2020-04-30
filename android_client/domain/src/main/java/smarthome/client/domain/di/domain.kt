@@ -1,6 +1,5 @@
 package smarthome.client.domain.di
 
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import smarthome.client.domain.api.auth.usecases.*
@@ -9,8 +8,6 @@ import smarthome.client.domain.api.devices.usecase.*
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveRecentServersUseCase
-import smarthome.client.domain.api.main.BooleanState
-import smarthome.client.domain.api.main.StateMachine
 import smarthome.client.domain.api.scripts.usecases.GetScriptByIdUseCase
 import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.*
@@ -22,7 +19,6 @@ import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveRecentServersUseCaseImpl
-import smarthome.client.domain.main.StateMachineImpl
 import smarthome.client.domain.scripts.usecases.GetScriptByIdUseCaseImpl
 import smarthome.client.domain.scripts.usecases.GetScriptsOverviewUseCaseImpl
 import smarthome.client.domain.scripts.usecases.dependency.*
@@ -42,6 +38,7 @@ val domain = module {
     factoryBy<LoginUseCase, LoginUseCaseImpl>()
     factoryBy<SaveNewTokenUseCase, SaveNewTokenUseCaseImpl>()
     factoryBy<GetCurrentTokenUseCase, GetCurrentTokenUseCaseImpl>()
+    factoryBy<LogoutUseCase, LogoutUseCaseImpl>()
 
     // devices
     factoryBy<GetGeneralDevicesInfo, GetAddedDevicesInfoImpl>()
@@ -93,19 +90,4 @@ val domain = module {
     factoryBy<GetScriptsOverviewUseCase, GetScriptsOverviewUseCaseImpl>()
 
     factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
-
-    single(named("login")) {
-        BooleanState()
-    }
-    single(named("homeServer")) {
-        BooleanState()
-    }
-
-    single<StateMachine> {
-        StateMachineImpl(
-                loginState = get<BooleanState>(named("login")),
-                homeServerState = get<BooleanState>(named("homeServer"))
-        )
-    }
-
 }

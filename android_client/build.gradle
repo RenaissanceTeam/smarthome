@@ -6,7 +6,7 @@ buildscript {
         kotlin_version = '1.3.70'
         google_services_version = '4.3.2'
         build_tools_version = '3.6.1'
-        navigation_safe_args_version = '2.2.0-rc02'
+        navigation_safe_args_version = '2.2.2'
 
         compileSdk_version = 29
         targetSdk_version = 29

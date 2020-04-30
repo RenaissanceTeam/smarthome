@@ -30,16 +30,12 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
     
         get<ToolbarSetter> { parametersOf(this, toolbar) }
-    
-        viewModel.openHomeServerSetup.onNavigate(this, ::navigateToHomeServerSelection)
-        viewModel.openLogin.onNavigate(this, ::navigateToLogin)
-        
+
         lifecycle.addObserver(viewModel)
         
         val navController = findNavController(R.id.nav_host_fragment)
         bottom_navigation.setupWithNavController(navController)
-        
-        
+
         navController.addOnDestinationChangedListener { _, _, args ->
             toolbarController.clearMenu()
             
@@ -52,13 +48,4 @@ class MainActivity : BaseActivity() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         toolbar.setupWithNavController(navController, appBarConfiguration)
     }
-    
-    private fun navigateToHomeServerSelection() {
-        nav_host_fragment.findNavController().navigate(R.id.action_global_homeServerFragment)
-    }
-    
-    private fun navigateToLogin() {
-        nav_host_fragment.findNavController().navigate(R.id.action_global_loginFragment)
-    }
-    
 }

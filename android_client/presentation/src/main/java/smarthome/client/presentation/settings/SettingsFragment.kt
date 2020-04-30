@@ -3,6 +3,7 @@ package smarthome.client.presentation.settings
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import smarthome.client.presentation.R
@@ -19,6 +20,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        signOut?.setOnPreferenceClickListener { viewModel.signOut(); true }
+        lifecycle.addObserver(viewModel)
+
+        viewModel.toLogin.onNavigate(this) {
+            findNavController().popBackStack(R.id.loginFragment, false)
+        }
+
+        viewModel.toHomeServer.onNavigate(this) {
+            findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToHomeServerFragment())
+        }
+
+        signOut?.setOnPreferenceClickListener { viewModel.onSignOut(); true }
+        homeServer?.setOnPreferenceClickListener { viewModel.onChangeHomeServer(); true }
     }
 }

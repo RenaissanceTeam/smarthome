@@ -1,30 +1,33 @@
 package smarthome.client.domain.homeserver.usecases
 
 import smarthome.client.data.api.homeserver.HomeServerRepo
+import smarthome.client.domain.api.auth.usecases.LogoutUseCase
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.entity.HomeServer
-import smarthome.client.util.fold
 
 class ChangeHomeServerUrlUseCaseImpl(
-        private val repo: HomeServerRepo
+        private val repo: HomeServerRepo,
+        private val logoutUseCase: LogoutUseCase
 ) : ChangeHomeServerUrlUseCase {
-    override suspend fun execute(url: String) {
+    override suspend fun execute(url: String): Boolean {
         val currentActive = repo.getCurrentActive()
         val savedWithSameUrl = repo.getByUrl(url)
 
-        if (currentActive?.url == url) return
-        if (currentActive == null) {
-            repo.save(createNewServer(url))
-            return
-        }
+        if (currentActive?.url == url) return false
 
-        deactivate(currentActive)
+        currentActive
+                ?.let {
+                    deactivate(it)
+                    savedWithSameUrl?.let { activate(it) } ?: createAndSave(url)
+                }
+                ?: createAndSave(url)
 
-        if (savedWithSameUrl == null) {
-            createNewServer(url).let { repo.save(it) }
-        } else {
-            activate(savedWithSameUrl)
-        }
+        logoutUseCase.execute()
+        return true
+    }
+
+    private suspend fun createAndSave(url: String) {
+        repo.save(createNewServer(url))
     }
 
     private suspend fun activate(server: HomeServer) {

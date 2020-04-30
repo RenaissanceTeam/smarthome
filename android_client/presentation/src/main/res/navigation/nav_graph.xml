@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/dashboardFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/deviceDetails"
@@ -97,6 +97,13 @@
             android:name="show_bottom_bar"
             app:argType="boolean"
             android:defaultValue="true" />
+        <action
+            android:id="@+id/action_settingsFragment_to_homeServerFragment"
+            app:destination="@id/homeServerFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
 
     </fragment>
     <fragment
@@ -117,25 +124,39 @@
         <argument
             android:name="show_tool_bar"
             android:defaultValue="false"
-            app:argType="boolean" />
+            app:argType="boolean"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
         <argument
             android:name="show_bottom_bar"
             android:defaultValue="false"
-            app:argType="boolean" />
+            app:argType="boolean"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
     </fragment>
-    <action
-        android:id="@+id/action_global_homeServerFragment"
-        app:destination="@id/homeServerFragment"
-        app:launchSingleTop="false"
-        app:popUpToInclusive="false" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="smarthome.client.presentation.auth.LoginFragment"
-        android:label="LoginFragment" />
-    <action
-        android:id="@+id/action_global_loginFragment"
-        app:destination="@id/loginFragment"
-        app:launchSingleTop="true" />
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_homeServerFragment"
+            app:destination="@id/homeServerFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+        <action
+            android:id="@+id/action_loginFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+    </fragment>
     <fragment
         android:id="@+id/scriptsFragment"
         android:name="smarthome.client.presentation.scripts.all.ScriptsFragment"
