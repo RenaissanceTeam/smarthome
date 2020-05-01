@@ -3,9 +3,9 @@ package smarthome.raspberry.notification.domain
 import smarthome.raspberry.devices.api.domain.GetDeviceByControllerUseCase
 import smarthome.raspberry.entity.controller.Controller
 import smarthome.raspberry.entity.device.Device
-import smarthome.raspberry.notification.api.domain.ComposeDataNotificationUseCase
-import smarthome.raspberry.notification.api.domain.Notification
-import smarthome.raspberry.notification.api.domain.Priority
+import smarthome.raspberry.notification.api.domain.usecase.ComposeDataNotificationUseCase
+import smarthome.raspberry.notification.api.domain.entity.Notification
+import smarthome.raspberry.notification.api.domain.entity.Priority
 
 class ComposeDataNotificationUseCaseImpl(
     private val getDeviceByControllerUseCase: GetDeviceByControllerUseCase) :

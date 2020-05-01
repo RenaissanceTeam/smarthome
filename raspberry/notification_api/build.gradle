@@ -1,9 +1,9 @@
-apply from: "$rootDir/gradle/scripts/jar-module.gradle"
+apply from: "$rootDir/gradle/scripts/spring-module.gradle"
 
 dependencies {
-    implementation library.kotlin
+    implementation library.springData
 
     // modules
     implementation library.entity
-
+    implementation library.authentication_api
 }

@@ -6,15 +6,16 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
-import smarthome.raspberry.authentication.api.domain.SignInUseCase
-import smarthome.raspberry.authentication.api.domain.SignUpUseCase
+import smarthome.raspberry.authentication.api.domain.usecase.SignInUseCase
+import smarthome.raspberry.authentication.api.domain.usecase.SignUpUseCase
 import smarthome.raspberry.authentication.api.domain.entity.Credentials
 import smarthome.raspberry.authentication.api.domain.entity.RegistrationInfo
 import smarthome.raspberry.authentication.api.domain.exceptions.UserExistsException
 import smarthome.raspberry.authentication.data.AuthRepo
 import smarthome.raspberry.authentication.data.UserRoleRepo
-import smarthome.raspberry.authentication.domain.entity.User
-import smarthome.raspberry.authentication.domain.entity.UserRoles
+import smarthome.raspberry.authentication.api.domain.entity.User
+import smarthome.raspberry.authentication.api.domain.entity.UserRoles
+import smarthome.raspberry.authentication.domain.usecase.SignUpUseCaseImpl
 import kotlin.test.assertFailsWith
 
 class SignUpUseCaseImplTest {
