@@ -6,19 +6,19 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
-import smarthome.raspberry.authentication.api.domain.SignInUseCase
-import smarthome.raspberry.authentication.api.domain.SignUpUseCase
+import smarthome.raspberry.authentication.api.domain.usecase.SignInUseCase
+import smarthome.raspberry.authentication.api.domain.usecase.SignUpUseCase
 import smarthome.raspberry.authentication.api.domain.dto.TokenResponse
 import smarthome.raspberry.authentication.api.domain.entity.Credentials
 import smarthome.raspberry.authentication.api.domain.entity.RegistrationInfo
 import smarthome.raspberry.authentication.api.domain.exceptions.UserExistsException
-import smarthome.raspberry.authentication.domain.entity.Roles
+import smarthome.raspberry.authentication.api.domain.entity.Roles
 
 
 @RestController
 class AuthController(
-    private val signInUseCase: SignInUseCase,
-    private val signUpUseCase: SignUpUseCase
+        private val signInUseCase: SignInUseCase,
+        private val signUpUseCase: SignUpUseCase
 ) {
 
     @PostMapping("/login")

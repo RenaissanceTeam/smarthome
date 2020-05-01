@@ -3,8 +3,8 @@ package smarthome.raspberry.authentication.data.jwt
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import smarthome.raspberry.authentication.domain.entity.User
-import smarthome.raspberry.authentication.domain.entity.UserRoles
+import smarthome.raspberry.authentication.api.domain.entity.User
+import smarthome.raspberry.authentication.api.domain.entity.UserRoles
 
 class UserPrincipal(private val user: User, private val userRoles: UserRoles) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> =

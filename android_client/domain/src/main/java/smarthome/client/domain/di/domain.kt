@@ -8,22 +8,22 @@ import smarthome.client.domain.api.devices.usecase.*
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveRecentServersUseCase
+import smarthome.client.domain.api.notifications.SaveNotificationTokenUseCase
 import smarthome.client.domain.api.scripts.usecases.GetScriptByIdUseCase
 import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.*
 import smarthome.client.domain.api.scripts.usecases.setup.*
-import smarthome.client.domain.api.usecase.CloudMessageUseCase
 import smarthome.client.domain.auth.usecases.*
 import smarthome.client.domain.conrollers.usecases.*
 import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveRecentServersUseCaseImpl
+import smarthome.client.domain.notifications.SaveNotificationTokenUseCaseImpl
 import smarthome.client.domain.scripts.usecases.GetScriptByIdUseCaseImpl
 import smarthome.client.domain.scripts.usecases.GetScriptsOverviewUseCaseImpl
 import smarthome.client.domain.scripts.usecases.dependency.*
 import smarthome.client.domain.scripts.usecases.setup.*
-import smarthome.client.domain.usecases.CloudMessageUseCaseImpl
 
 val domain = module {
     // homeserver
@@ -89,5 +89,6 @@ val domain = module {
     factoryBy<GetSetupScriptUseCase, GetSetupScriptUseCaseImpl>()
     factoryBy<GetScriptsOverviewUseCase, GetScriptsOverviewUseCaseImpl>()
 
-    factoryBy<CloudMessageUseCase, CloudMessageUseCaseImpl>()
+    // notifications
+    factoryBy<SaveNotificationTokenUseCase, SaveNotificationTokenUseCaseImpl>()
 }

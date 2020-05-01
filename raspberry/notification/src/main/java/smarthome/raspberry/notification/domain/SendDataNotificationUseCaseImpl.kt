@@ -1,6 +1,6 @@
 package smarthome.raspberry.notification.domain
 
-import smarthome.raspberry.notification.api.domain.SendDataNotificationUseCase
+import smarthome.raspberry.notification.api.domain.usecase.SendDataNotificationUseCase
 
 class SendDataNotificationUseCaseImpl() :
         SendDataNotificationUseCase {

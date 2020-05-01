@@ -11,12 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.web.client.HttpClientErrorException
 import smarthome.raspberry.authentication.data.jwt.CustomUserDetailsService
 import smarthome.raspberry.authentication.data.jwt.JwtAuthenticationEntryPoint
 import smarthome.raspberry.authentication.data.jwt.JwtAuthenticationFilter
-import smarthome.raspberry.authentication.domain.entity.Roles
-import javax.sql.DataSource
+import smarthome.raspberry.authentication.api.domain.entity.Roles
 
 
 @Configuration
