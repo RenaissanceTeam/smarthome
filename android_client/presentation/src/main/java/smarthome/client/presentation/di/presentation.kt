@@ -28,8 +28,10 @@ import smarthome.client.presentation.scripts.setup.controllers.ControllersHubVie
 import smarthome.client.presentation.scripts.setup.dependency.ContainersViewModel
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainerId
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainersController
+import smarthome.client.presentation.scripts.setup.graph.blockviews.controller.ControllerBlockFactory
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.setup.graph.blockviews.factory.*
+import smarthome.client.presentation.scripts.setup.graph.blockviews.notifications.NotificationBlockFactory
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DependencyEventsHandler
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DependencyEventsHandlerImpl
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DragBlockEventsHandler
@@ -72,8 +74,9 @@ val presentation = module {
     factory(named(CONDITION_CONTAINER_VIEWMODEL)) { ContainersViewModel(get<CreateEmptyConditionsForDependencyUseCase>()::execute) }
     factory(named(ACTION_CONTAINER_VIEWMODEL)) { ContainersViewModel(get<CreateEmptyActionForDependencyUseCase>()::execute) }
     
-    factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactoryImpl() }
-    
+    factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactory() }
+    factory<GraphBlockFactory>(named(NOTIFICATION_FACTORY)) { NotificationBlockFactory() }
+
     singleBy<DraggableHostHolder, DraggableHostHolderImpl>()
     
     scope<String> {

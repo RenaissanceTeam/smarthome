@@ -56,7 +56,6 @@ val domain = module {
     factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
 
     //scripts
-    factoryBy<AddBlockToScriptGraphUseCase, AddBlockToScriptGraphUseCaseImpl>()
     factoryBy<MoveBlockUseCase, MoveBlockUseCaseImpl>()
     factoryBy<RemoveBlockUseCase, RemoveBlockUseCaseImpl>()
     factoryBy<AddDependencyUseCase, AddDependencyUseCaseImpl>()

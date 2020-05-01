@@ -1,7 +1,6 @@
-package smarthome.client.presentation.scripts.setup.graph.blockviews.factory
+package smarthome.client.presentation.scripts.setup.graph.blockviews.dependency
 
 import smarthome.client.presentation.scripts.setup.graph.view.GraphView
-import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.DependencyArrowView
 
 class DependencyArrowFactoryImpl(private val graphView: GraphView) : DependencyArrowFactory {
     override fun create(): DependencyArrowView {
