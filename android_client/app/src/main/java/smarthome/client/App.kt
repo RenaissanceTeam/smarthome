@@ -3,6 +3,7 @@ package smarthome.client
 import androidx.multidex.MultiDexApplication
 import com.facebook.stetho.Stetho
 import smarthome.client.arduino.scripts.data.ArduinoTypeAdapters
+import smarthome.client.data.scripts.ScriptTypeAdapters
 
 class App : MultiDexApplication() {
     override fun onCreate() {
@@ -16,5 +17,6 @@ class App : MultiDexApplication() {
     
     private fun configureTypeAdapters() {
         ArduinoTypeAdapters()
+        ScriptTypeAdapters()
     }
 }

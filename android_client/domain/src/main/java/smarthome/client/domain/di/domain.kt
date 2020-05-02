@@ -1,5 +1,6 @@
 package smarthome.client.domain.di
 
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import smarthome.client.domain.api.auth.usecases.*
@@ -9,6 +10,7 @@ import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCas
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveRecentServersUseCase
 import smarthome.client.domain.api.notifications.SaveNotificationTokenUseCase
+import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.domain.api.scripts.usecases.GetScriptByIdUseCase
 import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.*
@@ -20,6 +22,7 @@ import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImp
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveRecentServersUseCaseImpl
 import smarthome.client.domain.notifications.SaveNotificationTokenUseCaseImpl
+import smarthome.client.domain.scripts.blocks.notification.NotificationActionFromBlockResolver
 import smarthome.client.domain.scripts.usecases.GetScriptByIdUseCaseImpl
 import smarthome.client.domain.scripts.usecases.GetScriptsOverviewUseCaseImpl
 import smarthome.client.domain.scripts.usecases.dependency.*
@@ -87,6 +90,7 @@ val domain = module {
     factoryBy<ObserveSetupScriptUseCase, ObserveSetupScriptUseCaseImpl>()
     factoryBy<GetSetupScriptUseCase, GetSetupScriptUseCaseImpl>()
     factoryBy<GetScriptsOverviewUseCase, GetScriptsOverviewUseCaseImpl>()
+    factory<ActionFromBlockResolver>(named<NotificationActionFromBlockResolver>()) { NotificationActionFromBlockResolver() }
 
     // notifications
     factoryBy<SaveNotificationTokenUseCase, SaveNotificationTokenUseCaseImpl>()

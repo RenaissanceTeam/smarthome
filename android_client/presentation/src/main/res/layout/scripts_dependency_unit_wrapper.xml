@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/unit_wrapper"
     android:minHeight="100dp"
+    android:id="@+id/dependency_unit_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="4dp"
@@ -11,4 +11,10 @@
     android:paddingStart="12dp"
     app:cardCornerRadius="16dp"
     app:contentPadding="8dp"
-    app:cardBackgroundColor="#E8E8E8"/>
+    app:cardBackgroundColor="#E8E8E8">
+
+    <RelativeLayout
+        android:id="@+id/unit_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</androidx.cardview.widget.CardView>
