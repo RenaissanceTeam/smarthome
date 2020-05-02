@@ -5,6 +5,7 @@ dependencies {
     implementation library.kotlinReflection
     implementation library.coroutinesCore
     implementation library.springData
+    implementation library.firebaseAdmin
 
     // modules
     implementation library.entity
@@ -12,6 +13,7 @@ dependencies {
     implementation library.json
     implementation library.scripts_api
     implementation library.authentication_api
+    implementation library.notification_api
     implementation library.core
 
 

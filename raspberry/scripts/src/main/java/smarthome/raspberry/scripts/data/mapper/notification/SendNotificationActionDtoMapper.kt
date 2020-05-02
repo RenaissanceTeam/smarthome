@@ -21,7 +21,7 @@ class SendNotificationActionDtoMapper(
         return SendNotificationAction(
                 id = dto.id,
                 user = getUserByUsernameUseCase.execute(dto.user),
-                message = dto.user
+                message = dto.message
         )
     }
 
