@@ -46,7 +46,7 @@ class ControllerConditionValueView @JvmOverloads constructor(
     }
     
     private fun bindTitleText() {
-        if (title != title_value.text) title_value.text = "${title.orEmpty()} focus=${hasFocus()}, $sign, $value"
+        if (title != title_value.text) title_value.text = title.orEmpty()
     }
     
     private fun bindSign() {

@@ -21,12 +21,10 @@
     </style>
 
 
-
-
-
-
-
-
+    <style name="SemiTransparentInput">
+        <item name="cardBackgroundColor">@color/semitransparent</item>
+        <item name="backgroundTint">@color/semitransparent</item>
+    </style>
 
     <style name="Login">
         <item name="cardBackgroundColor">@color/semitransparent</item>
@@ -61,17 +59,11 @@
     </style>
 
 
-
-
-
-
     <style name="HomeServer">
-
     </style>
 
     <style name="HomeServer.Title">
         <item name="android:textSize">24sp</item>
-
     </style>
 
     <style name="HomeServer.Item">

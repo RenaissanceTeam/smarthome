@@ -11,12 +11,15 @@
         android:id="@+id/controller_item_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:minWidth="100dp">
+        android:minWidth="100dp"
+        android:minHeight="60dp">
 
         <FrameLayout
             android:id="@+id/block_content"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/drag_handle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,11 +37,13 @@
             android:id="@+id/drag_handle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="2dp"
+            android:layout_marginStart="4dp"
+            android:padding="4dp"
             android:src="@drawable/ic_drag_handle"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/block_content"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/gray" />
 

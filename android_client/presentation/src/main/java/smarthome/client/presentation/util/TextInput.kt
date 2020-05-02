@@ -23,7 +23,6 @@ class TextInput @JvmOverloads constructor(
             cardElevation = getDimension(R.styleable.CardView_cardElevation, 0f)
         }.recycle()
 
-
         attrs?.getAttributeValue(androidNamespace, "hint")?.let {
             input_layout.hint = it
         }

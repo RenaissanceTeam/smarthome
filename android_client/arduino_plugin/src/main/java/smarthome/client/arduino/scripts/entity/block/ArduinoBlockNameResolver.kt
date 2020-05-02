@@ -5,15 +5,16 @@ import smarthome.client.domain.api.scripts.resolver.BlockNameResolver
 import smarthome.client.entity.script.block.Block
 
 class ArduinoBlockNameResolver(
-    private val getControllerUseCase: GetControllerUseCase
+        private val getControllerUseCase: GetControllerUseCase
 ) : BlockNameResolver {
     override fun canResolve(item: Block): Boolean {
         return item is ArduinoControllerBlock
     }
-    
+
     override fun resolve(item: Block): String {
         require(item is ArduinoControllerBlock)
-    
-        return getControllerUseCase.execute(item.controllerId).name
+
+        val controller = getControllerUseCase.execute(item.controllerId)
+        return controller.name.ifEmpty { controller.type }
     }
 }
