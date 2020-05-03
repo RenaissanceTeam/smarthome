@@ -16,6 +16,7 @@ dependencies {
     implementation groups.spring
     implementation library.springSecurity
     implementation library.springData
+    implementation library.firebaseAdmin
     runtime library.postgres
 
     testImplementation groups.forTest
