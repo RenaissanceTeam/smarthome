@@ -16,7 +16,9 @@ import smarthome.client.domain.scripts.blocks.notification.NotificationActionFro
 import smarthome.client.presentation.scripts.resolver.ActionModelResolver
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.scripts.setup.dependency.action.notification.SendNotificationActionModelResolver
+import smarthome.client.presentation.scripts.setup.graph.blockviews.location.LocationBlockNameResolver
 import smarthome.client.presentation.scripts.setup.graph.blockviews.notifications.NotificationBlockNameResolver
+import smarthome.client.presentation.scripts.setup.graph.blockviews.time.TimeBlockNameResolver
 
 val plugingate = module {
     factory<ConditionFromBlockResolver> {
@@ -54,7 +56,9 @@ val plugingate = module {
     factory<BlockNameResolver> {
         BlockNameResolverImpl(listOf(
                 get(named<ArduinoBlockNameResolver>()),
-                get(named<NotificationBlockNameResolver>())
+                get(named<NotificationBlockNameResolver>()),
+                get(named<TimeBlockNameResolver>()),
+                get(named<LocationBlockNameResolver>())
         ))
     }
 }

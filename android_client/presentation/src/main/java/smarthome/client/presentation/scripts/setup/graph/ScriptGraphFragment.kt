@@ -54,6 +54,18 @@ class ScriptGraphFragment : Fragment() {
             fab_menu.close(true)
             viewModel.onAddNotification(script_graph.center)
         }
+
+        add_location.setOnClickListener {
+            fab_menu.close(true)
+            viewModel.onAddLocation(script_graph.center)
+        }
+
+        add_time.setOnClickListener {
+            fab_menu.close(true)
+            viewModel.onAddTime(script_graph.center)
+        }
+
+
     }
 
     private fun finishFlow() {

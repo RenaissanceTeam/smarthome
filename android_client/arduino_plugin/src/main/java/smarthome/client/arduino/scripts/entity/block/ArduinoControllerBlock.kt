@@ -1,7 +1,7 @@
 package smarthome.client.arduino.scripts.entity.block
 
 import smarthome.client.entity.script.block.Block
-import smarthome.client.entity.script.controller.ControllerBlock
+import smarthome.client.entity.script.block.ControllerBlock
 import smarthome.client.util.Position
 import smarthome.client.util.emptyPosition
 

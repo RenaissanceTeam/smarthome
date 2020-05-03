@@ -9,7 +9,7 @@ import smarthome.client.domain.api.devices.usecase.GetGeneralDevicesInfo
 import smarthome.client.domain.api.scripts.resolver.ControllerBlockResolver
 import smarthome.client.entity.Controller
 import smarthome.client.entity.script.block.Block
-import smarthome.client.entity.script.controller.ControllerBlock
+import smarthome.client.entity.script.block.ControllerBlock
 import smarthome.client.presentation.scripts.setup.SetupScriptViewModel
 import smarthome.client.presentation.scripts.setup.controllers.epoxy.ControllerState
 import smarthome.client.presentation.scripts.setup.controllers.epoxy.DeviceItemState
