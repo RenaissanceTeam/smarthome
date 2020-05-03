@@ -3,7 +3,7 @@ package smarthome.client.arduino.scripts.entity.block
 import smarthome.client.arduino.scripts.entity.*
 import smarthome.client.domain.api.scripts.resolver.ControllerBlockResolver
 import smarthome.client.entity.Controller
-import smarthome.client.entity.script.controller.ControllerBlock
+import smarthome.client.entity.script.block.ControllerBlock
 import smarthome.client.util.generateId
 
 class ArduinoControllerBlockResolver : ControllerBlockResolver {

@@ -2,7 +2,7 @@ package smarthome.client.plugingate
 
 import smarthome.client.domain.api.scripts.resolver.ControllerBlockResolver
 import smarthome.client.entity.Controller
-import smarthome.client.entity.script.controller.ControllerBlock
+import smarthome.client.entity.script.block.ControllerBlock
 
 class ControllerBlockResolverImpl(
     private val resolvers: List<ControllerBlockResolver>

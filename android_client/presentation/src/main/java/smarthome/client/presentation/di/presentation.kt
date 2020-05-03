@@ -33,8 +33,12 @@ import smarthome.client.presentation.scripts.setup.dependency.container.Containe
 import smarthome.client.presentation.scripts.setup.graph.blockviews.controller.ControllerBlockFactory
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.MovingDependency
 import smarthome.client.presentation.scripts.setup.graph.blockviews.factory.*
+import smarthome.client.presentation.scripts.setup.graph.blockviews.location.LocationBlockFactory
+import smarthome.client.presentation.scripts.setup.graph.blockviews.location.LocationBlockNameResolver
 import smarthome.client.presentation.scripts.setup.graph.blockviews.notifications.NotificationBlockFactory
 import smarthome.client.presentation.scripts.setup.graph.blockviews.notifications.NotificationBlockNameResolver
+import smarthome.client.presentation.scripts.setup.graph.blockviews.time.TimeBlockFactory
+import smarthome.client.presentation.scripts.setup.graph.blockviews.time.TimeBlockNameResolver
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DependencyEventsHandler
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DependencyEventsHandlerImpl
 import smarthome.client.presentation.scripts.setup.graph.eventhandler.DragBlockEventsHandler
@@ -79,9 +83,14 @@ val presentation = module {
 
     factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactory() }
     factory<GraphBlockFactory>(named(NOTIFICATION_FACTORY)) { NotificationBlockFactory() }
+    factory<GraphBlockFactory>(named(TIME_FACTORY)) { TimeBlockFactory() }
+    factory<GraphBlockFactory>(named(LOCATION_FACTORY)) { LocationBlockFactory() }
 
     factory<ActionModelResolver>(named<SendNotificationActionModelResolver>()) { SendNotificationActionModelResolver(get()) }
+
     factory<BlockNameResolver>(named<NotificationBlockNameResolver>()) { NotificationBlockNameResolver() }
+    factory<BlockNameResolver>(named<TimeBlockNameResolver>()) { TimeBlockNameResolver() }
+    factory<BlockNameResolver>(named<LocationBlockNameResolver>()) { LocationBlockNameResolver() }
 
     singleBy<DraggableHostHolder, DraggableHostHolderImpl>()
 

@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.usecases.setup.AddBlockUseCase
 import smarthome.client.domain.api.scripts.usecases.setup.GetSetupScriptUseCase
+import smarthome.client.entity.script.block.LocationBlock
 import smarthome.client.entity.script.block.NotificationBlock
+import smarthome.client.entity.script.block.TimeBlock
 import smarthome.client.presentation.scripts.setup.graph.events.GraphEventBus
 import smarthome.client.presentation.scripts.setup.graph.events.navigation.NavigationEvent
 import smarthome.client.presentation.scripts.setup.graph.events.navigation.OpenSetupDependency
@@ -44,4 +46,22 @@ class ScriptGraphViewModel : KoinViewModel() {
                 position = (position)
         ))
     }
+
+
+    fun onAddLocation(position: Position) {
+        addBlockUseCase.execute(LocationBlock(
+                id = generateId(),
+                position = (position)
+        ))
+    }
+
+
+    fun onAddTime(position: Position) {
+        addBlockUseCase.execute(TimeBlock(
+                id = generateId(),
+                position = (position)
+        ))
+    }
+
+
 }

@@ -24,11 +24,18 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/add_controller"
+            android:id="@+id/add_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_lamp"
-            app:fab_label="Controllers" />
+            android:src="@drawable/ic_location"
+            app:fab_label="Location" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_time"
+            app:fab_label="Time" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_notification"
@@ -36,6 +43,14 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_notifications"
             app:fab_label="Notification" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_controller"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_lamp"
+            app:fab_label="Controllers" />
+
     </com.github.clans.fab.FloatingActionMenu>
 
 
