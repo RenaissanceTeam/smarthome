@@ -13,33 +13,32 @@ import smarthome.client.domain.api.scripts.resolver.BlockNameResolver
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.ControllerBlockResolver
 import smarthome.client.domain.scripts.blocks.notification.NotificationActionFromBlockResolver
+import smarthome.client.domain.scripts.blocks.time.TimeConditionFromBlockResolver
 import smarthome.client.presentation.scripts.resolver.ActionModelResolver
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.scripts.setup.dependency.action.notification.SendNotificationActionModelResolver
+import smarthome.client.presentation.scripts.setup.dependency.condition.time.TimeConditionResolver
 import smarthome.client.presentation.scripts.setup.graph.blockviews.location.LocationBlockNameResolver
 import smarthome.client.presentation.scripts.setup.graph.blockviews.notifications.NotificationBlockNameResolver
 import smarthome.client.presentation.scripts.setup.graph.blockviews.time.TimeBlockNameResolver
 
-val plugingate = module {
+private val conditionModule = module {
     factory<ConditionFromBlockResolver> {
         ConditionFromBlockResolverImpl(listOf(
-                get(named<ArduinoConditionFromBlockResolver>()
-                ))
-        )
-    }
-
-    factory<ControllerBlockResolver> {
-        ControllerBlockResolverImpl(listOf(
-                get(named<ArduinoControllerBlockResolver>())
+                get(named<ArduinoConditionFromBlockResolver>()),
+                get(named<TimeConditionFromBlockResolver>())
         ))
     }
 
     factory<ConditionModelResolver> {
         ConditionModelResolverImpl(listOf(
-                get(named<ArduinoConditionModelResolver>())
+                get(named<ArduinoConditionModelResolver>()),
+                get(named<TimeConditionResolver>())
         ))
     }
+}
 
+private val actionModule = module {
     factory<ActionFromBlockResolver> {
         ActionFromBlockResolverImpl(listOf(
                 get(named<ArduinoActionFromBlockResolver>()),
@@ -53,6 +52,15 @@ val plugingate = module {
                 get(named<SendNotificationActionModelResolver>())
         ))
     }
+}
+
+private val blockModule = module {
+    factory<ControllerBlockResolver> {
+        ControllerBlockResolverImpl(listOf(
+                get(named<ArduinoControllerBlockResolver>())
+        ))
+    }
+
     factory<BlockNameResolver> {
         BlockNameResolverImpl(listOf(
                 get(named<ArduinoBlockNameResolver>()),
@@ -62,3 +70,9 @@ val plugingate = module {
         ))
     }
 }
+
+val plugingate = listOf(
+        conditionModule,
+        actionModule,
+        blockModule
+)

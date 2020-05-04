@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:minHeight="100dp"
     android:id="@+id/dependency_unit_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp"
-    android:paddingEnd="12dp"
+    android:minHeight="20dp"
     android:paddingStart="12dp"
+    android:paddingTop="4dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="4dp"
+    app:cardBackgroundColor="#E8E8E8"
     app:cardCornerRadius="16dp"
-    app:contentPadding="8dp"
-    app:cardBackgroundColor="#E8E8E8">
+    app:contentPadding="8dp">
 
     <RelativeLayout
         android:id="@+id/unit_wrapper"

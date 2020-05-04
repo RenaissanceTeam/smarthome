@@ -5,7 +5,7 @@ import org.koin.core.get
 import smarthome.client.data.api.typeadapter.ActionDataTypeAdapter
 import smarthome.client.data.api.typeadapter.BlockTypeAdapter
 import smarthome.client.data.api.typeadapter.ConditionTypeAdapter
-import smarthome.client.domain.api.scripts.blocks.SendNotificationAction
+import smarthome.client.domain.api.scripts.blocks.notification.SendNotificationAction
 import smarthome.client.entity.script.block.NotificationBlock
 
 class ScriptTypeAdapters : KoinComponent {

@@ -11,6 +11,7 @@ import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUs
 import smarthome.client.domain.api.homeserver.usecases.ObserveRecentServersUseCase
 import smarthome.client.domain.api.notifications.SaveNotificationTokenUseCase
 import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
+import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.domain.api.scripts.usecases.GetScriptByIdUseCase
 import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.*
@@ -23,6 +24,7 @@ import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCas
 import smarthome.client.domain.homeserver.usecases.ObserveRecentServersUseCaseImpl
 import smarthome.client.domain.notifications.SaveNotificationTokenUseCaseImpl
 import smarthome.client.domain.scripts.blocks.notification.NotificationActionFromBlockResolver
+import smarthome.client.domain.scripts.blocks.time.TimeConditionFromBlockResolver
 import smarthome.client.domain.scripts.usecases.GetScriptByIdUseCaseImpl
 import smarthome.client.domain.scripts.usecases.GetScriptsOverviewUseCaseImpl
 import smarthome.client.domain.scripts.usecases.dependency.*
@@ -91,6 +93,7 @@ val domain = module {
     factoryBy<GetSetupScriptUseCase, GetSetupScriptUseCaseImpl>()
     factoryBy<GetScriptsOverviewUseCase, GetScriptsOverviewUseCaseImpl>()
     factory<ActionFromBlockResolver>(named<NotificationActionFromBlockResolver>()) { NotificationActionFromBlockResolver() }
+    factory<ConditionFromBlockResolver>(named<TimeConditionFromBlockResolver>()) { TimeConditionFromBlockResolver() }
 
     // notifications
     factoryBy<SaveNotificationTokenUseCase, SaveNotificationTokenUseCaseImpl>()

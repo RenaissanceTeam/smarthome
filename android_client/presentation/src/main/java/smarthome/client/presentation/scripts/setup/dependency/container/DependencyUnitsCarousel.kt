@@ -2,6 +2,7 @@ package smarthome.client.presentation.scripts.setup.dependency.container
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.Carousel
