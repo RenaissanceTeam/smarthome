@@ -17,8 +17,8 @@ class TimeConditionFromBlockResolver : ConditionFromBlockResolver {
     override fun resolve(item: Block): List<Condition> {
         return listOf(
                 TimerCondition(generateId()),
-                EachDayCondition(generateId()),
-                WeekdaysCondition(generateId())
+                WeekdaysCondition(generateId()),
+                EachDayCondition(generateId())
         )
     }
 }

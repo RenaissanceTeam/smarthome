@@ -19,6 +19,8 @@ class DependencyUnitsCarousel @JvmOverloads constructor(
     var onScrolled: ((Int) -> Unit)? = null @CallbackProp set
     
     init {
+        setHasFixedSize(false)
+
         addOnScrollListener(SnapOnScrollListener(snapHelper) {
             onScrolled?.invoke(it)
         })

@@ -13,6 +13,7 @@ import org.joda.time.LocalTime
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.setup.dependency.DependencyUnitView
 import smarthome.client.presentation.util.inflate
+import smarthome.client.util.log
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class WeekdaysConditionView @JvmOverloads constructor(

@@ -55,6 +55,7 @@ class SetupDependencyFragment : BaseFragment() {
         viewModel.toolbarTitle.observe(viewLifecycleOwner, ::bindToolbarTitle)
         
         conditions_recycler.adapter = conditionsController.adapter
+        conditions_recycler.setHasFixedSize(false)
         actions_recycler.adapter = actionsController.adapter
         setupPopupMenuForConditions()
     }

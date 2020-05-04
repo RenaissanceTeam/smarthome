@@ -14,6 +14,7 @@ import smarthome.client.arduino_plugin.R
 import smarthome.client.presentation.scripts.setup.dependency.DependencyUnitView
 import smarthome.client.presentation.util.inflate
 import smarthome.client.util.invisible
+import smarthome.client.util.log
 import smarthome.client.util.show
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)

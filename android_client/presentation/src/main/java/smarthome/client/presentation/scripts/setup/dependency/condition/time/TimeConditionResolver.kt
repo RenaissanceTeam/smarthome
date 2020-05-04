@@ -31,20 +31,20 @@ class TimeConditionResolver(
 
     private fun constructEachDayViewModel(eachDay: EachDayCondition): EpoxyModel<EachDayConditionView> {
         return EachDayConditionViewModel_().apply {
-            id(eachDay.id)
+            id(eachDay.id.hashCode())
         }
     }
 
     private fun constructTimerViewModel(timer: TimerCondition): EpoxyModel<TimerConditionView> {
         return TimerConditionViewModel_().apply {
-            id(timer.id)
+            id(timer.id.hashCode())
 
         }
     }
 
     private fun constructWeekdaysViewModel(weekdays: WeekdaysCondition) =
             WeekdaysConditionViewModel_().apply {
-                id(weekdays.id)
+                id(weekdays.id.hashCode())
 
                 days(weekdays.days)
                 onChangeSelected { newSelected ->
