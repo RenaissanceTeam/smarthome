@@ -37,15 +37,15 @@ class WeekdaysConditionView @JvmOverloads constructor(
 
     @AfterPropsSet
     fun onPropsReady() {
-//        weekday_selector.setSelected(days)
-//        weekday_selector.onChangeSelected {
-//            this.onChangeSelected?.invoke(it)
-//        }
-//
-//        if (!timepicker.hasFocus()) timepicker.hour = time.hourOfDay
-//        if (!timepicker.hasFocus()) timepicker.minute = time.minuteOfHour
-//        timepicker.setOnTimeChangedListener { view, hourOfDay, minute ->
-//            onChangeTime?.invoke(LocalTime(hourOfDay, minute))
-//        }
+        weekday_selector.setSelected(days)
+        weekday_selector.onChangeSelected {
+            this.onChangeSelected?.invoke(it)
+        }
+
+        if (!timepicker.hasFocus()) timepicker.hour = time.hourOfDay
+        if (!timepicker.hasFocus()) timepicker.minute = time.minuteOfHour
+        timepicker.setOnTimeChangedListener { view, hourOfDay, minute ->
+            onChangeTime?.invoke(LocalTime(hourOfDay, minute))
+        }
     }
 }
