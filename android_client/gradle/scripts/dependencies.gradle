@@ -66,6 +66,8 @@ ext {
             rxView                   : 'com.jakewharton.rxbinding3:rxbinding:3.1.0',
             lottie                   : 'com.airbnb.android:lottie:3.4.0',
             jodaTime                 : 'joda-time:joda-time:2.10.6',
+            maps                     : 'com.google.android.gms:play-services-maps:17.0.0',
+            playServicesLocation     : 'com.google.android.gms:play-services-location:17.0.0',
 
             // modules
             presentation             : project(":presentation"),

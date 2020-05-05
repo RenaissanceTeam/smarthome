@@ -28,6 +28,7 @@ import smarthome.client.presentation.scripts.setup.SetupScriptViewModel
 import smarthome.client.presentation.scripts.setup.controllers.ControllersHubViewModel
 import smarthome.client.presentation.scripts.setup.dependency.ContainersViewModel
 import smarthome.client.presentation.scripts.setup.dependency.action.notification.SendNotificationActionModelResolver
+import smarthome.client.presentation.scripts.setup.dependency.condition.location.LocationConditionResolver
 import smarthome.client.presentation.scripts.setup.dependency.condition.time.TimeConditionResolver
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainerId
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainersController
@@ -93,6 +94,7 @@ val presentation = module {
 
     // conditions (register also at plugingate)
     factory<ConditionModelResolver>(named<TimeConditionResolver>()) { TimeConditionResolver(get()) }
+    factory<ConditionModelResolver>(named<LocationConditionResolver>()) { LocationConditionResolver(get()) }
 
     // block names (register also at plugingate)
     factory<BlockNameResolver>(named<NotificationBlockNameResolver>()) { NotificationBlockNameResolver() }
