@@ -3,6 +3,7 @@ package smarthome.client.presentation.scripts.setup.dependency.condition.locatio
 import android.content.Context
 import android.os.Bundle
 import android.util.AttributeSet
+import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -15,9 +16,14 @@ import com.airbnb.epoxy.ModelView
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import kotlinx.android.synthetic.main.scripts_home_geofence_condition.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.setup.dependency.DependencyUnitView
 import smarthome.client.presentation.util.inflate
+import smarthome.client.presentation.util.viewScope
+import smarthome.client.util.log
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class HomeGeofenceConditionView @JvmOverloads constructor(
@@ -32,10 +38,6 @@ class HomeGeofenceConditionView @JvmOverloads constructor(
 
     override fun onCreateView(viewGroup: ViewGroup) {
         viewGroup.inflate(R.layout.scripts_home_geofence_condition)
-
-        map.onCreate(Bundle.EMPTY)
-        map.getMapAsync(this)
-        findViewTreeLifecycleOwner()?.lifecycle?.addObserver(this)
     }
 
     @AfterPropsSet
@@ -50,14 +52,20 @@ class HomeGeofenceConditionView @JvmOverloads constructor(
         this.googleMap = googleMap
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        map.onCreate(null)
+        map.getMapAsync(this)
+        map.onStart()
         map.onResume()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
-        map.onPause()
-    }
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
 
+        map.onPause()
+        map.onStop()
+        map.onDestroy()
+    }
 }
