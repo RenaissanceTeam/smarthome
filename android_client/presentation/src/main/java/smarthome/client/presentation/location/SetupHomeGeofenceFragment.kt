@@ -1,26 +1,24 @@
 package smarthome.client.presentation.location
 
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.home_geofence_fragment.*
-import org.koin.core.inject
+import org.koin.android.ext.android.inject
 import smarthome.client.entity.location.HomeGeofence
 import smarthome.client.presentation.R
 import smarthome.client.presentation.core.BaseFragment
 import smarthome.client.presentation.main.toolbar.ToolbarController
-import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.extensions.setOnChangeListener
-import smarthome.client.presentation.util.extensions.updateWith
+import smarthome.client.util.fold
 
 class SetupHomeGeofenceFragment : BaseFragment() {
     private val viewModel: SetupHomeGeofenceViewModel by viewModels()
@@ -30,22 +28,28 @@ class SetupHomeGeofenceFragment : BaseFragment() {
     private lateinit var homeMarkerImage: Bitmap
     private lateinit var homeMarkerImageDescriptor: BitmapDescriptor
     private var homeCircle: Circle? = null
+    private val toolbarController: ToolbarController by inject()
+    private var initialZoomSet = false
 
     override fun getLayout() = R.layout.home_geofence_fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycle.addObserver(viewModel)
-
-        geofencce_radius.setOnChangeListener(viewModel::onChangeRadius)
-        viewModel.homeGeofence.observe(viewLifecycleOwner) {
-            val position = LatLng(it.lat, it.lon)
-
-            updateHomeMarker(position)
-            updateHomeCircle(position, it)
-
-            googleMap?.animateCamera(CameraUpdateFactory.newLatLng(position))
+        toolbarController.setTitle("Setup the home zone")
+        toolbarController.setMenu(R.menu.save) {
+            if (it != R.id.save) return@setMenu
+            viewModel.onSave()
         }
 
+        geofence_radius.setOnChangeListener(viewModel::onChangeRadius)
+        viewModel.homeGeofence.observe(viewLifecycleOwner) {
+            updateMap(it)
+            if (!geofence_radius.hasFocus()) geofence_radius.progress = it.radius
+        }
+
+        viewModel.close.onNavigate(viewLifecycleOwner) {
+            findNavController().popBackStack()
+        }
 
         map.onCreate(savedInstanceState)
         map.getMapAsync { readyMap ->
@@ -60,6 +64,23 @@ class SetupHomeGeofenceFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    private fun updateMap(it: HomeGeofence) {
+        val position = LatLng(it.lat, it.lon)
+
+        updateHomeMarker(position)
+        updateHomeCircle(position, it)
+
+        googleMap?.animateCamera(
+                initialZoomSet.fold(
+                        ifTrue = { CameraUpdateFactory.newLatLng(position) },
+                        ifFalse = {
+                            initialZoomSet = true
+                            CameraUpdateFactory.newLatLngZoom(position, 17f)
+                        }
+                )
+        )
     }
 
     private fun initializeHomeMarkerImage() {
@@ -113,26 +134,5 @@ class SetupHomeGeofenceFragment : BaseFragment() {
         super.onPause()
 
         map.onPause()
-    }
-}
-
-class SetupHomeGeofenceViewModel : KoinViewModel() {
-    private val toolbarController: ToolbarController by inject()
-    val homeGeofence = MutableLiveData<HomeGeofence>()
-
-    override fun onResume() {
-        toolbarController.setTitle("Setup the home zone")
-    }
-
-    fun setHomePosition(latitude: Double, longitude: Double) {
-        homeGeofence.updateWith {
-            (it ?: HomeGeofence()).copy(lat = latitude, lon = longitude)
-        }
-    }
-
-    fun onChangeRadius(newRadius: Int) {
-        homeGeofence.updateWith {
-            (it ?: HomeGeofence()).copy(radius = newRadius)
-        }
     }
 }
