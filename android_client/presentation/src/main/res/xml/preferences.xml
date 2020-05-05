@@ -7,6 +7,13 @@
         android:title="Home Server"
         app:summary="Change the URL of smart home server" />
 
+    <Preference
+        android:icon="@drawable/ic_location"
+
+        android:key="home_geofence"
+        android:title="Home Location"
+        app:summary="Define the home zone to trigger some actions when you are not at hoem" />
+
     <SwitchPreference
         android:icon="@drawable/ic_remove_circle_outline_accent"
         app:key="do_not_disturb"

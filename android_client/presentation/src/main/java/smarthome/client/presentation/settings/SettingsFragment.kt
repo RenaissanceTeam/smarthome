@@ -12,6 +12,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private val viewModel: SettingsViewModel by viewModels()
     private val homeServer by lazy { findPreference<Preference>("home_server") }
     private val signOut by lazy { findPreference<Preference>("sign_out") }
+    private val homeGeofence by lazy { findPreference<Preference>("home_geofence") }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)

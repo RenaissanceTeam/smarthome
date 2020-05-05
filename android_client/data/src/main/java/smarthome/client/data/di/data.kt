@@ -11,6 +11,7 @@ import smarthome.client.data.api.auth.LoginCommand
 import smarthome.client.data.api.auth.TokenRepo
 import smarthome.client.data.api.controllers.ControllersRepo
 import smarthome.client.data.api.devices.DevicesRepo
+import smarthome.client.data.api.location.LocationRepo
 import smarthome.client.data.api.notifications.NotificationRepository
 import smarthome.client.data.api.scripts.ScriptsRepo
 import smarthome.client.data.api.scripts.SetupDependencyRepo
@@ -21,6 +22,7 @@ import smarthome.client.data.controllers.ControllersRepoImpl
 import smarthome.client.data.devices.DevicesRepoImpl
 import smarthome.client.data.devices.mapper.DeviceDetailsToDeviceMapper
 import smarthome.client.data.devices.mapper.GeneralDeviceAndControllersInfoToGeneralDeviceInfoMapper
+import smarthome.client.data.location.LocationRepoImpl
 import smarthome.client.data.notifications.NotificationRepositoryImpl
 import smarthome.client.data.retrofit.HomeServerUrlHolder
 import smarthome.client.data.retrofit.RetrofitFactory
@@ -32,11 +34,9 @@ private val dataInnerModule = module {
     single { GsonBuilder().create() }
     single { RetrofitFactory(urlHolder = get(), getCurrentTokenUseCase = get(), typesConfigurator = get()) }
     single<AppDatabase> {
-        Room.databaseBuilder(
-                get(),
-                AppDatabase::class.java,
-                "appdb"
-        ).build()
+        Room.databaseBuilder(get(), AppDatabase::class.java, "appdb")
+                .fallbackToDestructiveMigration()
+                .build()
     }
 
     // auth
@@ -53,6 +53,10 @@ private val dataInnerModule = module {
 
     //controllers
     singleBy<ControllersRepo, ControllersRepoImpl>()
+
+    // location
+    singleBy<LocationRepo, LocationRepoImpl>()
+    factory { get<AppDatabase>().homeGeofenceRepo() }
 
     //scripts
     singleBy<ScriptsRepo, ScriptsRepoImpl>()

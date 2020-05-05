@@ -7,6 +7,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="preferenceTheme">@style/HomeSettings</item>
+    </style>
+
+    <style name="HomeSettings" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="android:tint">@color/colorAccent</item>
     </style>
 
     <style name="TitleTextStyle" parent="TextAppearance.AppCompat.Title" />
