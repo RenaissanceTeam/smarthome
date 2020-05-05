@@ -7,7 +7,7 @@ import smarthome.client.entity.location.HomeGeofence
 class SetupGeofenceUseCaseImpl(
         private val locationRepo: LocationRepo
 ) : SetupGeofenceUseCase {
-    override suspend fun execute(lat: Long, long: Long, radius: Int) {
+    override suspend fun execute(lat: Double, long: Double, radius: Int) {
         locationRepo.add(HomeGeofence(
                 lat = lat,
                 lon = long,

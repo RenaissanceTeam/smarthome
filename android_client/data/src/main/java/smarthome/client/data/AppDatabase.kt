@@ -11,7 +11,7 @@ import smarthome.client.entity.location.HomeGeofence
 
 @Database(
         entities = [User::class, HomeServer::class, HomeGeofence::class],
-        version = 2
+        version = 3
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun homeServerRepo(): HomeServerRepo

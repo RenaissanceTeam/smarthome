@@ -9,46 +9,46 @@
         android:id="@+id/deviceDetails"
         android:name="smarthome.client.presentation.devices.devicedetail.DeviceDetails"
         android:label="DeviceDetails"
-        tools:layout="@layout/fragment_device_details" >
+        tools:layout="@layout/fragment_device_details">
         <action
             android:id="@+id/action_deviceDetails_to_controllerDetails"
             app:destination="@id/controllerDetails"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
+            app:popExitAnim="@anim/exit_to_right" />
         <argument
             android:name="deviceGuid"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <argument
             android:name="show_tool_bar"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/additionFragment"
         android:name="smarthome.client.presentation.devices.deviceaddition.AdditionFragment"
         android:label="AdditionFragment"
-        tools:layout="@layout/fragment_device_addition" >
+        tools:layout="@layout/fragment_device_addition">
         <action
             android:id="@+id/action_additionFragment_to_deviceDetails"
             app:destination="@id/deviceDetails"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
+            app:popExitAnim="@anim/exit_to_right" />
         <action
             android:id="@+id/action_additionFragment_to_controllerDetails"
             app:destination="@id/controllerDetails"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
+            app:popExitAnim="@anim/exit_to_right" />
         <argument
             android:name="show_bottom_bar"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/controllerDetails"
@@ -57,36 +57,36 @@
         tools:layout="@layout/fragment_controller_details">
         <argument
             android:name="controllerGuid"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <argument
             android:name="show_tool_bar"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="smarthome.client.presentation.home.DashboardFragment"
         android:label="DashboardFragment"
-        tools:layout="@layout/fragment_dashboard" >
+        tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboardFragment_to_deviceDetails"
             app:destination="@id/deviceDetails"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
+            app:popExitAnim="@anim/exit_to_right" />
         <action
             android:id="@+id/action_dashboardFragment_to_controllerDetails"
             app:destination="@id/controllerDetails"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
+            app:popExitAnim="@anim/exit_to_right" />
         <argument
             android:name="show_bottom_bar"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -95,26 +95,33 @@
         tools:layout="@layout/fragment_settings">
         <argument
             android:name="show_bottom_bar"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_settingsFragment_to_homeServerFragment"
             app:destination="@id/homeServerFragment"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
+            app:popExitAnim="@anim/exit_to_right" />
+        <action
+            android:id="@+id/action_settingsFragment_to_setupHomeGeofenceFragment"
+            app:destination="@id/setupHomeGeofenceFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
 
     </fragment>
     <fragment
         android:id="@+id/deviceSelectorFragment"
         android:name="smarthome.client.presentation.devices.deviceaddition.DeviceSelectorFragment"
         android:label="fragment_device_selector"
-        tools:layout="@layout/fragment_device_selector" >
+        tools:layout="@layout/fragment_device_selector">
         <argument
             android:name="show_tool_bar"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/homeServerFragment"
@@ -128,7 +135,7 @@
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
+            app:popExitAnim="@anim/exit_to_right" />
         <argument
             android:name="show_bottom_bar"
             android:defaultValue="false"
@@ -136,26 +143,26 @@
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
+            app:popExitAnim="@anim/exit_to_right" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="smarthome.client.presentation.auth.LoginFragment"
-        android:label="LoginFragment" >
+        android:label="LoginFragment">
         <action
             android:id="@+id/action_loginFragment_to_homeServerFragment"
             app:destination="@id/homeServerFragment"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
+            app:popExitAnim="@anim/exit_to_right" />
         <action
             android:id="@+id/action_loginFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"/>
+            app:popExitAnim="@anim/exit_to_right" />
     </fragment>
     <fragment
         android:id="@+id/scriptsFragment"
@@ -213,11 +220,11 @@
             app:argType="boolean" />
         <action
             android:id="@+id/action_addControllersToScriptFragment_to_setupDependencyFragment"
+            app:destination="@id/setupDependencyFragment"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right"
-            app:destination="@id/setupDependencyFragment" />
+            app:popExitAnim="@anim/exit_to_right" />
     </fragment>
 
     <fragment
@@ -245,5 +252,20 @@
             android:name="dependency_id"
             app:argType="string" />
 
+    </fragment>
+    <fragment
+        android:id="@+id/setupHomeGeofenceFragment"
+        android:name="smarthome.client.presentation.location.SetupHomeGeofenceFragment"
+        android:label="SetupHomeGeofenceFragment"
+        tools:layout="@layout/home_geofence_fragment">
+        <argument
+            android:name="show_tool_bar"
+            android:defaultValue="true"
+            app:argType="boolean" />
+
+        <argument
+            android:name="show_bottom_bar"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
 </navigation>

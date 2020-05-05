@@ -11,6 +11,7 @@ class SettingsViewModel : KoinViewModel() {
     val logoutUseCase: LogoutUseCase by inject()
     val toLogin = NavigationLiveData()
     val toHomeServer = NavigationLiveData()
+    val toHomeLocation = NavigationLiveData()
 
     fun onSignOut() = viewModelScope.launch {
         logoutUseCase.execute()
@@ -19,5 +20,9 @@ class SettingsViewModel : KoinViewModel() {
 
     fun onChangeHomeServer() {
         toHomeServer.trigger()
+    }
+
+    fun onSetupHomeLocation() {
+        toHomeLocation.trigger()
     }
 }

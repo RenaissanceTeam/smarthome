@@ -31,7 +31,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
             findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToHomeServerFragment())
         }
 
+        viewModel.toHomeLocation.onNavigate(this) {
+            findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToSetupHomeGeofenceFragment())
+        }
+
         signOut?.setOnPreferenceClickListener { viewModel.onSignOut(); true }
         homeServer?.setOnPreferenceClickListener { viewModel.onChangeHomeServer(); true }
+        homeGeofence?.setOnPreferenceClickListener { viewModel.onSetupHomeLocation(); true }
     }
 }

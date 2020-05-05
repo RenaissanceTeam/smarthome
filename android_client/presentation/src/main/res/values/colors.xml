@@ -22,4 +22,7 @@
     <color name="graphBlockColor">#FFECB3</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="semitransparent">#86FFFFFF</color>
+
+    <color name="homeZone">#2D60B862</color>
+    <color name="homeZoneBorder">#924E9750</color>
 </resources>
