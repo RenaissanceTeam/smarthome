@@ -65,6 +65,7 @@ ext {
             pp                       : "com.tylerthrailkill.helpers:pretty-print:2.0.2",
             rxView                   : 'com.jakewharton.rxbinding3:rxbinding:3.1.0',
             lottie                   : 'com.airbnb.android:lottie:3.4.0',
+            jodaTime                 : 'joda-time:joda-time:2.10.6',
 
             // modules
             presentation             : project(":presentation"),

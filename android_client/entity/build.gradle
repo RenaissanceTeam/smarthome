@@ -6,4 +6,5 @@ dependencies {
 
     implementation groups.room
     kapt library.roomKapt
+    api library.jodaTime
 }

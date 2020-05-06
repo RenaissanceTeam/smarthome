@@ -3,4 +3,6 @@ apply plugin: "kotlin-jpa"
 
 dependencies {
     implementation library.springData
+    api library.jodaTime
+    implementation library.usertype
 }

@@ -1,7 +1,7 @@
 package smarthome.client.presentation.scripts.setup.dependency.action.notification
 
 import com.airbnb.epoxy.EpoxyModel
-import smarthome.client.domain.api.scripts.blocks.SendNotificationAction
+import smarthome.client.domain.api.scripts.blocks.notification.SendNotificationAction
 import smarthome.client.domain.api.scripts.usecases.dependency.ChangeSetupDependencyActionUseCase
 import smarthome.client.entity.script.dependency.action.Action
 import smarthome.client.presentation.scripts.resolver.ActionModelResolver

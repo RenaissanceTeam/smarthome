@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/labels_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/monday"
+        style="@style/WeekdaySelector.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mon" />
+
+    <TextView
+        android:id="@+id/tuesday"
+        style="@style/WeekdaySelector.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tue" />
+
+    <TextView
+        android:id="@+id/wednesday"
+        style="@style/WeekdaySelector.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wed" />
+
+    <TextView
+        android:id="@+id/thursday"
+        style="@style/WeekdaySelector.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thu" />
+
+    <TextView
+        android:id="@+id/friday"
+        style="@style/WeekdaySelector.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fri" />
+
+    <TextView
+        android:id="@+id/saturday"
+        style="@style/WeekdaySelector.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sat" />
+
+    <TextView
+        android:id="@+id/sunday"
+        style="@style/WeekdaySelector.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sun" />
+
+
+</LinearLayout>

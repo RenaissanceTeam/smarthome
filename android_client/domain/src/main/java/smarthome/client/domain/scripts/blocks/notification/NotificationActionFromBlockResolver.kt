@@ -1,6 +1,6 @@
 package smarthome.client.domain.scripts.blocks.notification
 
-import smarthome.client.domain.api.scripts.blocks.SendNotificationAction
+import smarthome.client.domain.api.scripts.blocks.notification.SendNotificationAction
 import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.entity.script.block.Block
 import smarthome.client.entity.script.block.NotificationBlock

@@ -28,6 +28,7 @@ import smarthome.client.presentation.scripts.setup.SetupScriptViewModel
 import smarthome.client.presentation.scripts.setup.controllers.ControllersHubViewModel
 import smarthome.client.presentation.scripts.setup.dependency.ContainersViewModel
 import smarthome.client.presentation.scripts.setup.dependency.action.notification.SendNotificationActionModelResolver
+import smarthome.client.presentation.scripts.setup.dependency.condition.time.TimeConditionResolver
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainerId
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainersController
 import smarthome.client.presentation.scripts.setup.graph.blockviews.controller.ControllerBlockFactory
@@ -81,13 +82,19 @@ val presentation = module {
     factory(named(CONDITION_CONTAINER_VIEWMODEL)) { ContainersViewModel(get<CreateEmptyConditionsForDependencyUseCase>()::execute) }
     factory(named(ACTION_CONTAINER_VIEWMODEL)) { ContainersViewModel(get<CreateEmptyActionForDependencyUseCase>()::execute) }
 
+    // blocks
     factory<GraphBlockFactory>(named(CONTROLLER_FACTORY)) { ControllerBlockFactory() }
     factory<GraphBlockFactory>(named(NOTIFICATION_FACTORY)) { NotificationBlockFactory() }
     factory<GraphBlockFactory>(named(TIME_FACTORY)) { TimeBlockFactory() }
     factory<GraphBlockFactory>(named(LOCATION_FACTORY)) { LocationBlockFactory() }
 
+    // actions (register also at plugingate)
     factory<ActionModelResolver>(named<SendNotificationActionModelResolver>()) { SendNotificationActionModelResolver(get()) }
 
+    // conditions (register also at plugingate)
+    factory<ConditionModelResolver>(named<TimeConditionResolver>()) { TimeConditionResolver(get()) }
+
+    // block names (register also at plugingate)
     factory<BlockNameResolver>(named<NotificationBlockNameResolver>()) { NotificationBlockNameResolver() }
     factory<BlockNameResolver>(named<TimeBlockNameResolver>()) { TimeBlockNameResolver() }
     factory<BlockNameResolver>(named<LocationBlockNameResolver>()) { LocationBlockNameResolver() }
