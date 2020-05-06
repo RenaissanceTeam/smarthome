@@ -17,6 +17,7 @@ class DependencyArrowView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
     private val paint = Paint()
+    private val borderIntersectionHelper = BorderIntersectionHelper()
 
     init {
         paint.color = Color.RED
@@ -41,8 +42,9 @@ class DependencyArrowView @JvmOverloads constructor(
 
 
     fun setPositions(start: DependencyTip, end: DependencyTip) {
-        startPosition = start.center
-        endPosition = end.center
+        val intersected = borderIntersectionHelper.tipPositionsWithIntersection(start, end)
+        startPosition = intersected.first
+        endPosition = intersected.second
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -57,16 +59,4 @@ class DependencyArrowView @JvmOverloads constructor(
     }
 }
 
-data class DependencyTip(
-        val position: Position,
-        val width: Int,
-        val height: Int
-) {
-    val center = position + Position(width / 2, height / 2)
-}
-//
-//class BorderIntersectionHelper {
-//    fun findIntersection(blockPosition: Position, width: Int, height: Int, dependencyEnd: Position): Position {
-//
-//    }
-//}
+

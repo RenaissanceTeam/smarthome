@@ -22,10 +22,10 @@ class DependencyEventsHandlerTest {
     
     private lateinit var handler: DependencyEventsHandler
     private val position1_1 = Position(1, 1)
-    private val blockId = MockBlockId()
-    private val otherBlockId = MockBlockId()
+    private val blockId = "blockId"
+    private val otherBlockId = "otherBlockId"
     
-    private val dependencyId = MockString()
+    private val dependencyId = "depId"
     private val dependency = Dependency(dependencyId, blockId, otherBlockId)
     private val dependencyState = DependencyState(dependency)
     private lateinit var dependencyLiveData: MutableLiveData<MovingDependency>
@@ -40,7 +40,7 @@ class DependencyEventsHandlerTest {
     }
     
     private fun createMovingDependency(id: String = dependencyId,
-                                       startBlock: BlockId? = blockId,
+                                       startBlock: String = blockId,
                                        status: String = IDLE,
                                        rawEndPosition: Position? = null): MovingDependency {
         return MovingDependency(id, startBlock, status, rawEndPosition)
@@ -49,11 +49,10 @@ class DependencyEventsHandlerTest {
     private fun createDependencyEvent(
         id: String = dependencyId,
         status: String = DEPENDENCY_START,
-        startId: BlockId,
-        endId: BlockId? = null,
+        startId: String,
         rawEndPosition: Position = position1_1
     ): DependencyEvent {
-        return DependencyEvent(id, status, startId, endId, rawEndPosition)
+        return DependencyEvent(id, status, startId, rawEndPosition)
     }
     
     @Test
