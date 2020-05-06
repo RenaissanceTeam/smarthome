@@ -29,6 +29,8 @@ dependencies {
     implementation library.fab
     implementation library.rxView
     implementation library.lottie
+    implementation library.maps
+    implementation library.playServicesLocation
 
     testImplementation groups.forTest
     testImplementation library.coroutinesTest

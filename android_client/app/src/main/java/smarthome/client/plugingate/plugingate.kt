@@ -12,11 +12,13 @@ import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.BlockNameResolver
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.ControllerBlockResolver
+import smarthome.client.domain.scripts.blocks.location.LocationConditionFromBlockResolver
 import smarthome.client.domain.scripts.blocks.notification.NotificationActionFromBlockResolver
 import smarthome.client.domain.scripts.blocks.time.TimeConditionFromBlockResolver
 import smarthome.client.presentation.scripts.resolver.ActionModelResolver
 import smarthome.client.presentation.scripts.resolver.ConditionModelResolver
 import smarthome.client.presentation.scripts.setup.dependency.action.notification.SendNotificationActionModelResolver
+import smarthome.client.presentation.scripts.setup.dependency.condition.location.LocationConditionResolver
 import smarthome.client.presentation.scripts.setup.dependency.condition.time.TimeConditionResolver
 import smarthome.client.presentation.scripts.setup.graph.blockviews.location.LocationBlockNameResolver
 import smarthome.client.presentation.scripts.setup.graph.blockviews.notifications.NotificationBlockNameResolver
@@ -26,14 +28,16 @@ private val conditionModule = module {
     factory<ConditionFromBlockResolver> {
         ConditionFromBlockResolverImpl(listOf(
                 get(named<ArduinoConditionFromBlockResolver>()),
-                get(named<TimeConditionFromBlockResolver>())
+                get(named<TimeConditionFromBlockResolver>()),
+                get(named<LocationConditionFromBlockResolver>())
         ))
     }
 
     factory<ConditionModelResolver> {
         ConditionModelResolverImpl(listOf(
                 get(named<ArduinoConditionModelResolver>()),
-                get(named<TimeConditionResolver>())
+                get(named<TimeConditionResolver>()),
+                get(named<LocationConditionResolver>())
         ))
     }
 }

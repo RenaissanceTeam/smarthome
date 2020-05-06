@@ -5,6 +5,7 @@ import org.koin.core.get
 import smarthome.client.data.api.typeadapter.ActionDataTypeAdapter
 import smarthome.client.data.api.typeadapter.BlockTypeAdapter
 import smarthome.client.data.api.typeadapter.ConditionTypeAdapter
+import smarthome.client.domain.api.scripts.blocks.location.HomeGeofenceCondition
 import smarthome.client.domain.api.scripts.blocks.notification.SendNotificationAction
 import smarthome.client.domain.api.scripts.blocks.time.EachDayCondition
 import smarthome.client.domain.api.scripts.blocks.time.TimerCondition
@@ -23,7 +24,8 @@ class ScriptTypeAdapters : KoinComponent {
         get<ConditionTypeAdapter>().setTypes(listOf(
                 WeekdaysCondition::class.java,
                 TimerCondition::class.java,
-                EachDayCondition::class.java
+                EachDayCondition::class.java,
+                HomeGeofenceCondition::class.java
         ))
         get<ActionDataTypeAdapter>().setTypes(listOf(
                 SendNotificationAction::class.java

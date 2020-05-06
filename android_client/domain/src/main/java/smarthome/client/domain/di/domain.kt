@@ -23,6 +23,7 @@ import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImp
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveRecentServersUseCaseImpl
 import smarthome.client.domain.notifications.SaveNotificationTokenUseCaseImpl
+import smarthome.client.domain.scripts.blocks.location.LocationConditionFromBlockResolver
 import smarthome.client.domain.scripts.blocks.notification.NotificationActionFromBlockResolver
 import smarthome.client.domain.scripts.blocks.time.TimeConditionFromBlockResolver
 import smarthome.client.domain.scripts.usecases.GetScriptByIdUseCaseImpl
@@ -94,6 +95,7 @@ val domain = module {
     factoryBy<GetScriptsOverviewUseCase, GetScriptsOverviewUseCaseImpl>()
     factory<ActionFromBlockResolver>(named<NotificationActionFromBlockResolver>()) { NotificationActionFromBlockResolver() }
     factory<ConditionFromBlockResolver>(named<TimeConditionFromBlockResolver>()) { TimeConditionFromBlockResolver() }
+    factory<ConditionFromBlockResolver>(named<LocationConditionFromBlockResolver>()) { LocationConditionFromBlockResolver() }
 
     // notifications
     factoryBy<SaveNotificationTokenUseCase, SaveNotificationTokenUseCaseImpl>()
