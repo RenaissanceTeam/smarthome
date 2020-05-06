@@ -226,10 +226,10 @@ private class MovingDependencyProcessor(
             || dependency.startBlock == null) return
         
         val droppedTo = findBlockOnDependencyTip(dependency.rawEndPosition)
-        
+
         when (droppedTo == null) {
             true -> viewModel.cancelCreatingDependency()
-            false -> viewModel.addDependency(
+            false -> viewModel.tryAddDependency(
                 dependency.id,
                 dependency.startBlock,
                 droppedTo.key

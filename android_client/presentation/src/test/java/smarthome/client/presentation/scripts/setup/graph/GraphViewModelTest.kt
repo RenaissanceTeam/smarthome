@@ -194,7 +194,7 @@ class GraphViewModelTest {
     
     @Test
     fun `when end creating dependency on other block should emit on eventbus`() {
-        viewModel.addDependency(dependencyId, otherBlockId, blockId)
+        viewModel.tryAddDependency(dependencyId, otherBlockId, blockId)
     
         verify(eventBus).addEvent(argThat {
             this is OpenSetupDependency && this.id == dependencyId
@@ -203,7 +203,7 @@ class GraphViewModelTest {
     
     @Test
     fun `when add dependency should call add dependency use case`() {
-        viewModel.addDependency(dependencyId, otherBlockId, blockId)
+        viewModel.tryAddDependency(dependencyId, otherBlockId, blockId)
     
     
         verify(addDependencyUseCase).execute(
@@ -243,7 +243,7 @@ class GraphViewModelTest {
         viewModel.dependencyTipOnBlock(otherBlockId, blockId)
         assertTrue(assertHasBlockValue(blockId).border.isVisible)
         
-        viewModel.addDependency(dependencyId, otherBlockId, blockId)
+        viewModel.tryAddDependency(dependencyId, otherBlockId, blockId)
         assertFalse(assertHasBlockValue(blockId).border.isVisible)
     }
     

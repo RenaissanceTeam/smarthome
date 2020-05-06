@@ -126,10 +126,15 @@ class GraphViewModel : KoinViewModel() {
         dependencyTipNotOnAnyBlock()
     }
     
-    fun addDependency(id: String, from: String, to: String) {
+    fun tryAddDependency(id: String, from: String, to: String) {
         setMovingDependencyToIdle()
         hideBorderOnBlock(to)
-    
+
+        if (!checkIfDependencyPossible.execute(from, to)) {
+            cancelCreatingDependency()
+            return
+        }
+
         addDependencyUseCase.execute(Dependency(id, from, to))
         eventBus.addEvent(OpenSetupDependency(id))
     }
