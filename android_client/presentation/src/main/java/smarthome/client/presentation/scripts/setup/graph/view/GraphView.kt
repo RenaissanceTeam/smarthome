@@ -22,6 +22,7 @@ import smarthome.client.presentation.util.doOnFirstLayout
 import smarthome.client.presentation.util.drag.Draggable
 import smarthome.client.presentation.util.drag.DraggableEvent
 import smarthome.client.presentation.util.drag.ViewGroupHost
+import smarthome.client.presentation.util.extensions.showToast
 import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.inflate
 import smarthome.client.presentation.util.rawPosition
@@ -74,6 +75,7 @@ class GraphView @JvmOverloads constructor(
         viewModel.blocks.observe(lifecycleOwner, this::bindBlocks)
         viewModel.dependencies.observe(lifecycleOwner, this::bindDependencies)
         viewModel.movingDependency.observe(lifecycleOwner, movingDependencyProcessor::onData)
+        viewModel.errors.onToast(lifecycleOwner) { context?.showToast(it) }
     }
     
     private fun setStartToCenterOfBlock(view: DependencyArrowView?, startBlock: String?) {
@@ -202,6 +204,7 @@ private class MovingDependencyProcessor(
                 movingDependencyView.visible = true
                 setMovingDependencyEnd(dependency)
                 setStartToCenterOfBlock(movingDependencyView, dependency.startBlock)
+                viewModel.startCreatingDependency(dependency.startBlock)
             }
             MOVING -> {
                 setMovingDependencyEnd(dependency)

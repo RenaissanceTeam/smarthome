@@ -101,6 +101,7 @@ val domain = module {
     factoryBy<ObserveSetupScriptUseCase, ObserveSetupScriptUseCaseImpl>()
     factoryBy<GetSetupScriptUseCase, GetSetupScriptUseCaseImpl>()
     factoryBy<GetScriptsOverviewUseCase, GetScriptsOverviewUseCaseImpl>()
+    factoryBy<CheckIfCanStartDependencyFromUseCase, CheckIfCanStartDependencyFromUseCaseImpl>()
     factory<ActionFromBlockResolver>(named<NotificationActionFromBlockResolver>()) { NotificationActionFromBlockResolver() }
     factory<ConditionFromBlockResolver>(named<TimeConditionFromBlockResolver>()) { TimeConditionFromBlockResolver() }
     factory<ConditionFromBlockResolver>(named<LocationConditionFromBlockResolver>()) { LocationConditionFromBlockResolver() }
