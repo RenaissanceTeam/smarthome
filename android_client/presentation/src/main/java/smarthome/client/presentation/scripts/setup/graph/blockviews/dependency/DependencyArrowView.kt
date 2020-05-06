@@ -9,6 +9,9 @@ import android.view.View
 import smarthome.client.presentation.R
 import smarthome.client.util.Position
 import smarthome.client.util.emptyPosition
+import kotlin.math.PI
+import kotlin.math.atan
+import kotlin.math.sign
 import kotlin.properties.Delegates
 
 class DependencyArrowView @JvmOverloads constructor(
@@ -56,7 +59,29 @@ class DependencyArrowView @JvmOverloads constructor(
                 endPosition.y.toFloat(),
                 paint
         )
+
+        canvas.save()
+        canvas.translate(endPosition.x.toFloat(), endPosition.y.toFloat())
+
+        val angle = calculateDependencyAngle()
+        canvas.rotate((angle * 180 / PI).toFloat())
+
+        canvas.drawLine(0f, 0f, 10f, 30f, paint)
+        canvas.drawLine(0f, 0f, -10f, 30f, paint)
+
+        canvas.restore()
     }
+
+    private fun calculateDependencyAngle(): Double {
+        val delta = startPosition - endPosition
+
+        if (delta.x == 0) return delta.y.sign.coerceIn(-1, 0) * PI
+        if (delta.y == 0) return PI * delta.x.sign + PI / 2
+        return atan(delta.y.toDouble() / delta.x) +
+                PI * (delta.y.sign * delta.x.sign.coerceIn(0, 1)) +
+                PI / 2
+    }
+
 }
 
 
