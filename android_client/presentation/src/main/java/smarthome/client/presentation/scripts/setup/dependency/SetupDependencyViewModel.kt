@@ -17,6 +17,7 @@ import smarthome.client.presentation.scripts.setup.dependency.container.Containe
 import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationLiveData
 import smarthome.client.presentation.util.extensions.updateWith
+import smarthome.client.util.log
 import smarthome.client.util.replaceAt
 import smarthome.client.util.truncate
 
@@ -58,14 +59,13 @@ class SetupDependencyViewModel : KoinViewModel() {
         this.isNew = isNew
     }
     
-    fun setString(id: String) {
+    fun setDependencyId(id: String) {
         dependencyId = id
+        disposable.add(
+                observeSetupDependencyUseCase.execute().subscribe(this::onSetupDependencyUpdated)
+        )
         startSetupDependencyUseCase.execute(dependencyId)
         updateSetupToolbarTitle()
-        
-        disposable.add(
-            observeSetupDependencyUseCase.execute().subscribe(this::onSetupDependencyUpdated)
-        )
     }
     
     private fun updateSetupToolbarTitle() {

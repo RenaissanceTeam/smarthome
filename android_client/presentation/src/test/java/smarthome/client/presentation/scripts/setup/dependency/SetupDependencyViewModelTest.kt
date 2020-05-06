@@ -103,7 +103,7 @@ class SetupDependencyViewModelTest {
     
     @Test
     fun `when set dependency id should get dependency details and emit conditions states`() {
-        viewModel.setString(dependencyId)
+        viewModel.setDependencyId(dependencyId)
         
         assertTrue {
             viewModel.conditionContainers.value != null
@@ -112,7 +112,7 @@ class SetupDependencyViewModelTest {
     
     @Test
     fun `when set dependency should start setup`() {
-        viewModel.setString(dependencyId)
+        viewModel.setDependencyId(dependencyId)
         verify(startSetupDependencyUseCase).execute(dependencyId)
     }
     
@@ -148,7 +148,7 @@ class SetupDependencyViewModelTest {
             observedSetupDependency.onNext(dependency)
             dependency
         }
-        viewModel.setString(dependencyId)
+        viewModel.setDependencyId(dependencyId)
         assertTrue {
             val containers = viewModel.conditionContainers.value!!
             containers.size == 1

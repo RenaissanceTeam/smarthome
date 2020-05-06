@@ -2,30 +2,32 @@ package smarthome.client.presentation.scripts.setup.dependency.container
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearSnapHelper
-import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.Carousel
-import com.airbnb.epoxy.ModelView
 import smarthome.client.presentation.util.SnapOnScrollListener
 
-@ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class DependencyUnitsCarousel @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
 ) : Carousel(context, attrs, defStyleAttr) {
-    
-    var onScrolled: ((Int) -> Unit)? = null @CallbackProp set
-    
+
+    private var listener: OnScrollListener? = null
+
     init {
         setHasFixedSize(false)
-
-        addOnScrollListener(SnapOnScrollListener(snapHelper) {
-            onScrolled?.invoke(it)
-        })
     }
-    
+
+    var onScrolled: ((Int) -> Unit)? = null
+        set(value) {
+            field = value
+
+            listener?.let { removeOnScrollListener(it) }
+            listener = SnapOnScrollListener(snapHelper) { value?.invoke(it) }
+                    .also(this@DependencyUnitsCarousel::addOnScrollListener)
+        }
+
+
     companion object {
         // WARNING!!! this is not set to Carousel, i've just created this one object for
         // finding center of currently snapped view. So it's just a helper singleton
