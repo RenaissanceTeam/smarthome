@@ -9,6 +9,8 @@ import smarthome.client.domain.api.devices.usecase.*
 import smarthome.client.domain.api.homeserver.usecases.ChangeHomeServerUrlUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveActiveHomeServerUseCase
 import smarthome.client.domain.api.homeserver.usecases.ObserveRecentServersUseCase
+import smarthome.client.domain.api.location.usecases.GetGeofenceUseCase
+import smarthome.client.domain.api.location.usecases.SetupGeofenceUseCase
 import smarthome.client.domain.api.notifications.SaveNotificationTokenUseCase
 import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
@@ -22,6 +24,8 @@ import smarthome.client.domain.devices.usecase.*
 import smarthome.client.domain.homeserver.usecases.ChangeHomeServerUrlUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveActiveHomeServerUseCaseImpl
 import smarthome.client.domain.homeserver.usecases.ObserveRecentServersUseCaseImpl
+import smarthome.client.domain.location.usecases.GetGeofenceUseCaseImpl
+import smarthome.client.domain.location.usecases.SetupGeofenceUseCaseImpl
 import smarthome.client.domain.notifications.SaveNotificationTokenUseCaseImpl
 import smarthome.client.domain.scripts.blocks.location.LocationConditionFromBlockResolver
 import smarthome.client.domain.scripts.blocks.notification.NotificationActionFromBlockResolver
@@ -60,6 +64,10 @@ val domain = module {
     factoryBy<WriteStateToControllerUseCase, WriteStateToControllerUseCaseImpl>()
     factoryBy<PipelineControllerToStorageUseCase, PipelineControllerToStorageUseCaseImpl>()
     factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
+
+    // location
+    factoryBy<SetupGeofenceUseCase, SetupGeofenceUseCaseImpl>()
+    factoryBy<GetGeofenceUseCase, GetGeofenceUseCaseImpl>()
 
     //scripts
     factoryBy<MoveBlockUseCase, MoveBlockUseCaseImpl>()

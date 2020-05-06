@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/geofence_checkbox" />
 
-    <smarthome.client.presentation.components.CustomMapView
+    <smarthome.client.presentation.components.HomeGeofenceMapView
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="250dp"
