@@ -81,9 +81,11 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:src="@drawable/delete"
+                    android:tint="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseAppTint" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -132,9 +134,11 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:src="@drawable/done"
+                    android:tint="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseAppTint" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -165,6 +169,7 @@
             android:paddingTop="4dp"
             android:paddingEnd="30dp"
             android:paddingBottom="4dp"
+            android:tint="@color/colorAccent"
             android:src="@drawable/expand_more"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
