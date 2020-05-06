@@ -2,11 +2,8 @@ package smarthome.client.presentation.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.get
@@ -24,27 +21,27 @@ import smarthome.client.util.visible
 class MainActivity : BaseActivity() {
     private val viewModel: MainViewModel by viewModels()
     private val toolbarController: ToolbarController by inject()
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    
+
         get<ToolbarSetter> { parametersOf(this, toolbar) }
 
         lifecycle.addObserver(viewModel)
-        
+
         val navController = findNavController(R.id.nav_host_fragment)
         bottom_navigation.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, _, args ->
             toolbarController.clearMenu()
-            
+
             bottom_navigation.visible = args?.getBoolean(SHOW_BOTTOM_BAR) ?: false
-            toolbar.visible = args?.getBoolean(SHOW_TOOL_BAR) ?: false
-    
+            toolbar_wrapper.visible = args?.getBoolean(SHOW_TOOL_BAR) ?: false
+
             toolbar.setNavigationOnClickListener { navController.navigateUp() }
         }
-        
+
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         toolbar.setupWithNavController(navController, appBarConfiguration)
     }
