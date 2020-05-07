@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dependency_unit_card"
+    style="@style/SetupDependency.DependencyUnit"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="20dp"
-    android:paddingStart="12dp"
-    android:paddingTop="4dp"
-    android:paddingEnd="12dp"
-    android:paddingBottom="4dp"
-    app:cardBackgroundColor="#E8E8E8"
-    app:cardCornerRadius="16dp"
-    app:contentPadding="8dp">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/unit_wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

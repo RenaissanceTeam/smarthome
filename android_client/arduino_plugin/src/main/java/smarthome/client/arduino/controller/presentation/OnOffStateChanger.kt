@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import smarthome.client.arduino_plugin.R
 import smarthome.client.domain.api.conrollers.usecases.ObserveControllerUseCase
+import smarthome.client.domain.api.conrollers.usecases.ReadControllerUseCase
 import smarthome.client.domain.api.conrollers.usecases.WriteStateToControllerUseCase
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.ControllerStateChanger
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.extensions.error
@@ -24,6 +25,7 @@ private const val off = "off"
 class OnOffStateChanger(
         private val id: Long,
         private val writeStateToControllerUseCase: WriteStateToControllerUseCase,
+        private val readControllerUseCase: ReadControllerUseCase,
         private val observeControllerUseCase: ObserveControllerUseCase
 ) : ControllerStateChanger {
     private var currentState: String? = null
@@ -38,21 +40,35 @@ class OnOffStateChanger(
         }
     }
 
-    fun onViewCreated(rootView: View) {
+    private fun onViewCreated(rootView: View) {
         observeController()
 
         rootView.change_button.setOnClickListener {
             uiScope.launch {
-                val wantedState = getOppositeState()
-
-                changeLoadingText()
-                view.change_button.loading()
-
-                writeStateToControllerUseCase.runCatching { execute(id, wantedState) }
-                        .onFailure { view.change_button.error() }
-                        .onSuccess { view.change_button.idle() }
+                when (currentState) {
+                    null -> readState()
+                    else -> changeStateToOpposite()
+                }
             }
         }
+    }
+
+    private suspend fun readState() {
+        view.change_button.loading()
+
+        readControllerUseCase.runCatching { execute(id) }
+                .onFailure { view.change_button.error() }
+                .onSuccess { view.change_button.idle() }
+    }
+
+    private suspend fun changeStateToOpposite() {
+        val wantedState = getOppositeState()
+
+        view.change_button.loading()
+
+        writeStateToControllerUseCase.runCatching { execute(id, wantedState) }
+                .onFailure { view.change_button.error() }
+                .onSuccess { view.change_button.idle() }
     }
 
     private fun observeController() {
@@ -62,6 +78,7 @@ class OnOffStateChanger(
                         val newState = it.data?.state ?: return@subscribe
                         currentState = newState
                         changeIdleText()
+                        changeLoadingText()
                     }
             )
         }
@@ -78,18 +95,18 @@ class OnOffStateChanger(
             }
 
     private fun changeLoadingText() {
-        if (currentState == on) {
-            view.change_button.loadingText = "Switching off"
-        } else {
-            view.change_button.loadingText = "Switching on"
+        when (currentState) {
+            on -> view.change_button.loadingText = "Switching off"
+            off -> view.change_button.loadingText = "Switching on"
+            else -> view.change_button.loadingText = "Reading"
         }
     }
 
     private fun changeIdleText() {
-        if (currentState == off) {
-            view.change_button.normalText = "Switch on"
-        } else {
-            view.change_button.normalText = "Switch off"
+        when (currentState) {
+            on -> view.change_button.normalText = "Switch off"
+            off -> view.change_button.normalText = "Switch on"
+            else -> view.change_button.normalText = "Read"
         }
     }
 }

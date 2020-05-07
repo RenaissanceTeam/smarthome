@@ -34,6 +34,11 @@ val controllerModule = module {
     }
 
     factory<ControllerStateChanger>(named(onoff)) { (controllerId: Long) ->
-        OnOffStateChanger(id = controllerId, writeStateToControllerUseCase = get(), observeControllerUseCase = get())
+        OnOffStateChanger(
+                id = controllerId,
+                writeStateToControllerUseCase = get(),
+                observeControllerUseCase = get(),
+                readControllerUseCase = get()
+        )
     }
 }
