@@ -28,11 +28,11 @@ class AdditionFragment : BaseFragment() {
         viewModel.refresh.observe(viewLifecycleOwner) {
             refresh_layout.isRefreshing = it
         }
-        viewModel.openDeviceDetails.onNavigate(this) {
+        viewModel.openDeviceDetails.onNavigate(viewLifecycleOwner) {
             view.findNavController()
                     .navigate(AdditionFragmentDirections.actionAdditionFragmentToDeviceDetails(it))
         }
-        viewModel.openControllerDetails.onNavigate(this) {
+        viewModel.openControllerDetails.onNavigate(viewLifecycleOwner) {
             view.findNavController()
                     .navigate(AdditionFragmentDirections.actionAdditionFragmentToControllerDetails(it))
         }
