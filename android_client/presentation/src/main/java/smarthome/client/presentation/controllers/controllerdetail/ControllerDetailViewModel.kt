@@ -38,6 +38,7 @@ class ControllerDetailViewModel : KoinViewModel() {
                 is ErrorStatus -> {
                     it.data?.let(controller::postValue)
                     refresh.postValue(false)
+                    errors.post(it.cause.message.orEmpty())
                     log(it.cause)
                 }
             }

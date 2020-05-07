@@ -17,6 +17,7 @@ import smarthome.client.presentation.controllers.controllerdetail.statechanger.S
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
 import smarthome.client.presentation.util.extensions.setTextOrEmptyPlaceholder
+import smarthome.client.presentation.util.extensions.showToast
 import smarthome.client.util.visible
 
 class ControllerDetails : Fragment() {
@@ -52,6 +53,7 @@ class ControllerDetails : Fragment() {
 
         viewModel.refresh.observe(viewLifecycleOwner) { progress_bar.visible = it }
         viewModel.controller.observe(viewLifecycleOwner, ::bindController)
+        viewModel.errors.onToast(viewLifecycleOwner) { context?.showToast(it) }
 
         controller_name?.setOnClickListener {
             createChangeControllerNameDialog(view)

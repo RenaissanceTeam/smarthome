@@ -99,6 +99,7 @@ class DeviceDetailViewModel : KoinViewModel() {
         updateDeviceNameUseCase.runInScopeLoading(viewModelScope, refresh) {
             runCatching { execute(deviceId, name) }
                     .onFailure { errors.post(it.message.orEmpty()) }
+                    .onSuccess { device.value = it }
         }
     }
 
@@ -106,6 +107,7 @@ class DeviceDetailViewModel : KoinViewModel() {
         updateDeviceDescriptionUseCase.runInScopeLoading(viewModelScope, refresh) {
             runCatching { execute(deviceId, description) }
                     .onFailure { errors.post(it.message.orEmpty()) }
+                    .onSuccess { device.value = it }
         }
     }
 
