@@ -1,10 +1,9 @@
 package smarthome.client.data.devices
 
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 import smarthome.client.data.devices.dto.DeviceDetails
 import smarthome.client.data.devices.dto.GeneralDeviceAndControllersInfo
+import smarthome.client.data.util.StringRequestBody
 import smarthome.client.domain.api.devices.dto.GeneralDeviceInfo
 
 interface DevicesApi {
@@ -25,4 +24,10 @@ interface DevicesApi {
     
     @POST("api/devices/{id}/decline")
     suspend fun decline(@Path("id") id: Long)
+
+    @PATCH("api/devices/{id}/name")
+    suspend fun updateName(@Path("id") id: Long, @Body name: StringRequestBody): DeviceDetails
+
+    @PATCH("api/devices/{id}/description")
+    suspend fun updateDescription(@Path("id") id: Long, @Body description: StringRequestBody): DeviceDetails
 }

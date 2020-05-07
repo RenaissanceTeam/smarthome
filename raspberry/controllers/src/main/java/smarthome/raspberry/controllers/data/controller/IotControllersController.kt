@@ -5,9 +5,11 @@ import smarthome.raspberry.controllers.api.data.dto.ControllerDetails
 import smarthome.raspberry.controllers.api.data.mapper.ControllerToControllerDetailsMapper
 import smarthome.raspberry.controllers.api.domain.GetControllerByIdUseCase
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
+import smarthome.raspberry.controllers.api.domain.UpdateControllerUseCase
 import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
 import smarthome.raspberry.controllers.data.StateDto
 import smarthome.raspberry.entity.controller.Controller
+import smarthome.raspberry.util.StringRequestBody
 import smarthome.raspberry.util.exceptions.notFound
 
 @RestController
@@ -16,7 +18,8 @@ class IotControllersController(
         private val getControllerByIdUseCase: GetControllerByIdUseCase,
         private val readControllerUseCase: ReadControllerUseCase,
         private val writeControllerUseCase: WriteControllerUseCase,
-        private val controllerDetailsMapper: ControllerToControllerDetailsMapper
+        private val controllerDetailsMapper: ControllerToControllerDetailsMapper,
+        private val updateControllerUseCase: UpdateControllerUseCase
 ) {
 
     @GetMapping("controllers/{id}")
@@ -35,6 +38,12 @@ class IotControllersController(
     fun writeState(@PathVariable id: Long, @RequestBody state: StateDto): StateDto {
         val newState = writeControllerUseCase.execute(getController(id), state.state)
         return StateDto(newState)
+    }
+
+    @PatchMapping("controllers/{id}/name")
+    fun updateName(@PathVariable id: Long, @RequestBody name: StringRequestBody): ControllerDetails {
+        return updateControllerUseCase.execute(id) { it.copy(name = name.value) }
+                .let(controllerDetailsMapper::map)
     }
 
     private fun getController(id: Long): Controller {

@@ -56,6 +56,8 @@ val domain = module {
     factoryBy<GetPendingDevicesUseCase, GetPendingDevicesUseCaseImpl>()
     factoryBy<DeclinePendingDeviceUseCase, DeclinePendingDeviceUseCaseImpl>()
     factoryBy<AcceptPendingDeviceUseCase, AcceptPendingDeviceUseCaseImpl>()
+    factoryBy<UpdateDeviceNameUseCase, UpdateDeviceNameUseCaseImpl>()
+    factoryBy<UpdateDeviceDescriptionUseCase, UpdateDeviceDescriptionUseCaseImpl>()
 
     // controllers
     factoryBy<ObserveControllerUseCase, ObserveControllerUseCaseImpl>()
@@ -64,6 +66,7 @@ val domain = module {
     factoryBy<WriteStateToControllerUseCase, WriteStateToControllerUseCaseImpl>()
     factoryBy<PipelineControllerToStorageUseCase, PipelineControllerToStorageUseCaseImpl>()
     factoryBy<GetControllerUseCase, GetControllerUseCaseImpl>()
+    factoryBy<UpdateControllerNameUseCase, UpdateControllerNameUseCaseImpl>()
 
     // location
     factoryBy<SetupGeofenceUseCase, SetupGeofenceUseCaseImpl>()

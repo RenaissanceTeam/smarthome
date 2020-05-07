@@ -59,7 +59,7 @@ class GraphView @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        addView(movingDependencyView)
+        addView(movingDependencyView.apply { visible = false })
         handleDroppingBlocksOntoGraph()
         ViewTreeLifecycleOwner.get(this)?.let(::observeViewModel)
     }

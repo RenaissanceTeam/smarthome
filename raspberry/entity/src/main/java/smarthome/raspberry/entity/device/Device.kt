@@ -5,7 +5,7 @@ import smarthome.raspberry.entity.controller.Controller
 import javax.persistence.*
 
 @Entity
-class Device(
+data class Device(
         @Id @GeneratedValue
         val id: Long = ID_NOT_DEFINED,
         val serial: Int,

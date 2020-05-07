@@ -7,6 +7,7 @@ import smarthome.raspberry.devices.api.domain.*
 import smarthome.raspberry.devices.data.mapper.DeviceToDeviceDetailsMapper
 import smarthome.raspberry.devices.data.mapper.DeviceToGeneralDeviceInfoMapper
 import smarthome.raspberry.entity.device.Device
+import smarthome.raspberry.util.StringRequestBody
 import smarthome.raspberry.util.exceptions.notFound
 
 @RestController
@@ -19,7 +20,8 @@ class DevicesController(
         private val declineUseCase: DeclinePendingDeviceUseCase,
         private val deviceGeneralInfoMapper: DeviceToGeneralDeviceInfoMapper,
         private val getDeviceByIdUseCase: GetDeviceByIdUseCase,
-        private val deviceDetailsMapper: DeviceToDeviceDetailsMapper
+        private val deviceDetailsMapper: DeviceToDeviceDetailsMapper,
+        private val updateDeviceUseCase: UpdateDeviceUseCase
 
 ) {
 
@@ -56,5 +58,17 @@ class DevicesController(
     @PostMapping("/devices/{id}/decline")
     fun decline(@PathVariable id: Long) {
         declineUseCase.execute(getDeviceById(id))
+    }
+
+    @PatchMapping("/devices/{id}/name")
+    fun updateName(@PathVariable id: Long, @RequestBody name: StringRequestBody): DeviceDetails {
+        return updateDeviceUseCase.execute(id) { it.copy(name = name.value) }
+                .let(deviceDetailsMapper::map)
+    }
+
+    @PatchMapping("/devices/{id}/description")
+    fun updateDescription(@PathVariable id: Long, @RequestBody description: StringRequestBody): DeviceDetails {
+        return updateDeviceUseCase.execute(id) { it.copy(description = description.value) }
+                .let(deviceDetailsMapper::map)
     }
 }
