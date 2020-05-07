@@ -1,9 +1,9 @@
-package smarthome.raspberry.scripts.domain
+package smarthome.raspberry.scripts.domain.usecase
 
 import org.springframework.stereotype.Component
 import smarthome.raspberry.entity.script.Block
 import smarthome.raspberry.entity.script.Script
-import smarthome.raspberry.scripts.api.domain.GetScriptByContainedBlockUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.GetScriptByContainedBlockUseCase
 import smarthome.raspberry.scripts.data.ScriptsRepository
 import smarthome.raspberry.util.exceptions.notFound
 

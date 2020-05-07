@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component
 import smarthome.raspberry.entity.script.Block
 import smarthome.raspberry.entity.script.Condition
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
-import smarthome.raspberry.scripts.api.domain.blocks.TimeBlock
-import smarthome.raspberry.scripts.api.domain.conditions.TimerCondition
+import smarthome.raspberry.scripts.api.domain.time.TimeBlock
+import smarthome.raspberry.scripts.api.domain.time.TimerCondition
 import java.util.*
 
 @Component

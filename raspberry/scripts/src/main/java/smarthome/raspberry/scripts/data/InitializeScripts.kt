@@ -3,7 +3,7 @@ package smarthome.raspberry.scripts.data
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.stereotype.Component
 import smarthome.raspberry.scripts.api.data.RegisteredProtocolsRepository
-import smarthome.raspberry.scripts.api.domain.GetAllScriptsUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.GetAllScriptsUseCase
 
 @Component
 class InitializeScripts(

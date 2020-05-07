@@ -5,7 +5,7 @@ import smarthome.raspberry.arduinodevices.script.domain.entity.ArduinoController
 import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
 import smarthome.raspberry.entity.script.Action
 import smarthome.raspberry.scripts.api.domain.ActionRunner
-import smarthome.raspberry.scripts.api.domain.GetBlockByIdUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.GetBlockByIdUseCase
 
 @Component
 class OnOffActionRunner(

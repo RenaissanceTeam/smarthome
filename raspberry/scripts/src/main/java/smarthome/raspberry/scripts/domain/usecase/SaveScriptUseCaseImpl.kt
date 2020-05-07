@@ -1,9 +1,9 @@
-package smarthome.raspberry.scripts.domain
+package smarthome.raspberry.scripts.domain.usecase
 
 import org.springframework.stereotype.Component
 import smarthome.raspberry.entity.script.Script
 import smarthome.raspberry.scripts.api.data.RegisteredProtocolsRepository
-import smarthome.raspberry.scripts.api.domain.SaveScriptUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.SaveScriptUseCase
 import smarthome.raspberry.scripts.data.ScriptsRepository
 
 @Component

@@ -5,9 +5,9 @@ import smarthome.raspberry.scripts.api.data.dto.ScriptDto
 import smarthome.raspberry.scripts.api.data.dto.ScriptItemDto
 import smarthome.raspberry.scripts.api.data.mapper.ScriptDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.ScriptItemDtoMapper
-import smarthome.raspberry.scripts.api.domain.SaveScriptUseCase
-import smarthome.raspberry.scripts.api.domain.GetAllScriptsUseCase
-import smarthome.raspberry.scripts.api.domain.GetScriptByIdUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.SaveScriptUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.GetAllScriptsUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.GetScriptByIdUseCase
 
 
 @RestController

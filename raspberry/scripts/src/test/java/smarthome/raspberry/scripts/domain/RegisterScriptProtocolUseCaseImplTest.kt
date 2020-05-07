@@ -12,7 +12,7 @@ import smarthome.raspberry.entity.script.*
 import smarthome.raspberry.scripts.api.domain.ActionRunner
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
 import smarthome.raspberry.scripts.api.domain.BlockObserver
-import smarthome.raspberry.scripts.api.domain.RunScriptActionUseCase
+import smarthome.raspberry.scripts.domain.usecase.RegisterScriptProtocolUseCaseImpl
 import java.util.*
 
 class RegisterScriptProtocolUseCaseImplTest {

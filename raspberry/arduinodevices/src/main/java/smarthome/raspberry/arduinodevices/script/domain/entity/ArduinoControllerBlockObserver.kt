@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 import smarthome.raspberry.controllers.api.domain.ObserveControllerStatesUseCase
 import smarthome.raspberry.entity.script.Block
 import smarthome.raspberry.scripts.api.domain.BlockObserver
-import smarthome.raspberry.scripts.api.domain.GetBlockByIdUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.GetBlockByIdUseCase
 import java.util.*
 
 @Component

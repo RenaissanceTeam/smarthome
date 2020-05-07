@@ -3,7 +3,7 @@ package smarthome.raspberry.scripts.data.mapper.time
 import org.springframework.stereotype.Component
 import smarthome.raspberry.scripts.api.data.mapper.ConditionDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.resolver.ConditionMapperResolver
-import smarthome.raspberry.scripts.api.domain.conditions.WeekdaysCondition
+import smarthome.raspberry.scripts.api.domain.time.WeekdaysCondition
 import smarthome.raspberry.scripts.data.dto.time.WeekdaysConditionDto
 
 @Component
