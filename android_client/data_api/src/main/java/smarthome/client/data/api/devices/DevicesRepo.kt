@@ -9,4 +9,6 @@ interface DevicesRepo {
     suspend fun getPending(): List<GeneralDeviceInfo>
     suspend fun acceptPending(id: Long)
     suspend fun declinePending(id: Long)
+    suspend fun updateName(deviceId: Long, name: String)
+    suspend fun updateDescription(deviceId: Long, description: String)
 }

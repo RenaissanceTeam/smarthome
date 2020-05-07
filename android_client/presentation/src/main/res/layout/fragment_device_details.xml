@@ -7,28 +7,41 @@
 
     <ImageView
         android:id="@+id/device_image"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
-        android:src="@drawable/settings"
-        app:tint="@android:color/darker_gray"
+        android:src="@drawable/ic_image_placeholder"
+        app:layout_constraintBottom_toTopOf="@id/image_delim"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@android:color/darker_gray" />
+
+    <View
+        android:id="@+id/image_delim"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/lightGray"
+        app:layout_constraintBottom_toTopOf="@id/device_name"
+        app:layout_constraintTop_toBottomOf="@id/device_name" />
 
     <TextView
         android:id="@+id/device_name"
+        style="@style/TitleTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/image_delim"
         tools:text="device name" />
 
     <TextView
         android:id="@+id/device_description"
+        style="@style/AdditionalTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -37,12 +50,23 @@
         tools:text="device description" />
 
     <TextView
-        android:id="@+id/type"
+        android:id="@+id/type_label"
+        style="@style/AdditionalTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/device_description"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/device_description"
+        android:layout_marginTop="16dp"
+        android:text="Device type:"
+        app:layout_constraintStart_toStartOf="@id/device_name"
+        app:layout_constraintTop_toBottomOf="@id/device_description" />
+
+    <TextView
+        android:id="@+id/type"
+        style="@style/AdditionalTextStyle.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/type_label"
+        app:layout_constraintStart_toEndOf="@id/type_label"
         tools:text="Some device type" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -50,10 +74,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/type"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:itemCount="3"
         tools:listitem="@layout/controller_item" />
 
@@ -61,7 +85,7 @@
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="136dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -26,7 +26,12 @@ class ControllersRepoImpl(
     override fun controllerUpdated(controller: Controller) {
         emitData(controller.id, controller)
     }
-    
+
+    override suspend fun updateName(id: Long, name: String) {
+        retrofitFactory.createApi(ControllersApi::class.java)
+                .updateName(id, name)
+    }
+
     override suspend fun setState(controllerId: Long, state: String): String {
         if (noController(controllerId)) {
             fetch(controllerId)

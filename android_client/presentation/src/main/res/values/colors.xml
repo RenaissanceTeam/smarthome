@@ -10,6 +10,7 @@
     <color name="colorAccentDark">#953400</color>
 
     <color name="colorTextPrimary">#191919</color>
+    <color name="colorTextEmpty">#888888</color>
 
     <color name="white">#ffffff</color>
     <color name="gray">#888</color>

@@ -48,4 +48,12 @@ class DevicesRepoImpl(
     override suspend fun declinePending(id: Long) {
         retrofitFactory.createApi(DevicesApi::class.java).decline(id)
     }
+
+    override suspend fun updateName(deviceId: Long, name: String) {
+        retrofitFactory.createApi(DevicesApi::class.java).updateName(deviceId, name)
+    }
+
+    override suspend fun updateDescription(deviceId: Long, description: String) {
+        retrofitFactory.createApi(DevicesApi::class.java).updateDescription(deviceId, description)
+    }
 }

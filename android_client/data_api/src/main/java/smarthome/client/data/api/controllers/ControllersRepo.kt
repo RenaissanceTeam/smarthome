@@ -11,4 +11,5 @@ interface ControllersRepo {
     suspend fun setState(controllerId: Long, state: String): String
     suspend fun readState(controllerId: Long): String
     fun controllerUpdated(controller: Controller)
+    suspend fun updateName(id: Long, name: String)
 }

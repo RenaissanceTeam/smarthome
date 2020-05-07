@@ -1,9 +1,6 @@
 package smarthome.client.data.controllers
 
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 import smarthome.client.data.controllers.dto.StateDto
 import smarthome.client.entity.Controller
 
@@ -17,4 +14,7 @@ interface ControllersApi {
     
     @POST("api/controllers/{id}/write")
     suspend fun changeState(@Path("id") id: Long, @Body state: StateDto): StateDto
+
+    @PATCH("api/controllers/{id]/name")
+    suspend fun updateName(@Path("id") id: Long, @Body name: String)
 }

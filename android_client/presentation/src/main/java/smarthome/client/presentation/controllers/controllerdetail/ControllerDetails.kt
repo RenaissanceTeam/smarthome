@@ -16,6 +16,7 @@ import smarthome.client.presentation.controllers.controllerdetail.statechanger.C
 import smarthome.client.presentation.controllers.controllerdetail.statechanger.StateChangerFactory
 import smarthome.client.presentation.ui.DialogParameters
 import smarthome.client.presentation.ui.EditTextDialog
+import smarthome.client.presentation.util.extensions.setTextOrEmptyPlaceholder
 import smarthome.client.util.visible
 
 class ControllerDetails : Fragment() {
@@ -26,9 +27,9 @@ class ControllerDetails : Fragment() {
 
 
     private fun bindController(controller: Controller) {
-        controller_name.text = controller.name
+        controller_name.setTextOrEmptyPlaceholder(controller.name, "Empty Name")
         controller_type.text = controller.type
-        state.text = controller.state
+        state.setTextOrEmptyPlaceholder(controller.state, "Unknown State")
 
         if (stateChanger == null) {
             stateChangerFactory
@@ -53,13 +54,18 @@ class ControllerDetails : Fragment() {
         viewModel.controller.observe(viewLifecycleOwner, ::bindController)
 
         controller_name?.setOnClickListener {
-            EditTextDialog.create(view.context,
-                    DialogParameters("controller name", currentValue = viewModel.controller.value?.name
-                            ?: "") {
-                        viewModel.controllerNameChanged(it)
-                    }
-            ).show()
+            createChangeControllerNameDialog(view)
         }
+    }
+
+    private fun createChangeControllerNameDialog(view: View) {
+        EditTextDialog.create(view.context,
+                DialogParameters(
+                        "controller name",
+                        currentValue = viewModel.getCurrentControllerName()) {
+                    viewModel.controllerNameChanged(it)
+                }
+        ).show()
     }
 
     override fun onDestroyView() {

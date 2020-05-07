@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
         <item name="preferenceTheme">@style/HomeSettings</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="textColorEmpty">@color/colorTextEmpty</item>
     </style>
 
     <style name="HomeSettings" parent="@style/PreferenceThemeOverlay.v14.Material">
@@ -20,6 +22,9 @@
     </style>
 
     <style name="AdditionalTextStyle" parent="TextAppearance.AppCompat.Caption" />
+    <style name="AdditionalTextStyle.Bold">
+        <item name="android:textFontWeight" tools:ignore="NewApi">700</item>
+    </style>
 
     <style name="DividerItemStyle">
         <item name="android:background">@color/lightGray</item>
