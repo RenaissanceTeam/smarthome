@@ -13,7 +13,6 @@ HttpClient client = HttpClient(wifiClient, RASPBERRY_IP, RASPBERRY_PORT); // 150
 PrintLengthCounter printLengthCounter;
 
 void baseResponse(WebServer& server, String val) {
-  Serial.println(val);
   server.httpSuccess();
 
   server.print(
@@ -340,6 +339,7 @@ void printServices(Print& out) {
     String s = serviceToJson(services[i]);
     if (i != all - 1) s += String(FPSTR(comma));
     out.print(s);
+    delay(10);
   }
   out.print(FPSTR(squareClose));
 }
@@ -392,6 +392,7 @@ void sendInitToServer() {
   doPost(FPSTR(initEndpoint), printLengthCounter.len());
 
   printInitBody(client);
+  client.flush();
   client.stop();
 }
 

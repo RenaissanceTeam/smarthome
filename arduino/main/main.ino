@@ -23,12 +23,19 @@ void setup()
    
 
   connectToWifi(esp_serial);        // blocking call, won't return until the wifi connection is established
+  
+  delay(100);
+  sendInitToServer();
+  delay(100);
+  
   runHttpServer(server);  
   
-#ifdef DIGITAL_ALERT 
+
+ 
+
+  #ifdef DIGITAL_ALERT 
   alertSetup();
 #endif
-  sendInitToServer();
 #if DEBUG > 0
   Serial.println("setup end");
 #endif
