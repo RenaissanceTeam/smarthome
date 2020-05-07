@@ -42,7 +42,7 @@ class SetupDependencyFragment : BaseFragment() {
         lifecycle.addObserver(viewModel)
         
         viewModel.setIsNew(navArgs.isNew)
-        viewModel.setString(navArgs.dependencyId)
+        viewModel.setDependencyId(navArgs.dependencyId)
         viewModel.setFlowViewModel(setupScriptViewModel)
         
         viewModel.close.onNavigate(this) {

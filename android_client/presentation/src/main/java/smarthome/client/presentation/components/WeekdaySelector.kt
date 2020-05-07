@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.weekday_selector.view.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.util.inflate
 import smarthome.client.util.log
-import smarthome.client.util.logObject
 
 class WeekdaySelector @JvmOverloads constructor(
         context: Context,
@@ -24,9 +23,26 @@ class WeekdaySelector @JvmOverloads constructor(
     private var changeSelected: ((List<Int>) -> Unit)? = null
     private val selected = mutableMapOf<Int, Boolean>()
     private val dayViews = mutableMapOf<Int, TextView>()
+    private val allDaysKeys = (0..6).toList()
 
     init {
         inflate(R.layout.weekday_selector)
+    }
+
+    fun onChangeSelected(listener: (List<Int>) -> Unit) {
+        changeSelected = listener
+    }
+
+    fun setSelected(selected: List<Int>) {
+        allDaysKeys.forEach { this.selected[it] = (it in selected) }
+        setOnClickListeners()
+
+        this.dayViews.keys.forEach { day ->
+            animateToSelection(day, day in selected)
+        }
+    }
+
+    private fun setOnClickListeners() {
         labels_container.children.forEachIndexed { i, view ->
             if (view !is TextView) return@forEachIndexed
 
@@ -37,16 +53,6 @@ class WeekdaySelector @JvmOverloads constructor(
                 })
             }
             dayViews[i] = view
-        }
-    }
-
-    fun onChangeSelected(listener: (List<Int>) -> Unit) {
-        changeSelected = listener
-    }
-
-    fun setSelected(selected: List<Int>) {
-        this.dayViews.keys.forEach { day ->
-            animateToSelection(day, day in selected)
         }
     }
 

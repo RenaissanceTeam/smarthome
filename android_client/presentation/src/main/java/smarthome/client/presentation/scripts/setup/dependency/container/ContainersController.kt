@@ -3,6 +3,7 @@ package smarthome.client.presentation.scripts.setup.dependency.container
 import com.airbnb.epoxy.Typed2EpoxyController
 import smarthome.client.entity.script.dependency.DependencyUnit
 import smarthome.client.presentation.scripts.setup.dependency.SetupDependencyViewModel
+import smarthome.client.util.log
 
 class ContainersController<T : DependencyUnit>(
     private val modelResolver: DependencyUnitModelResolver<T>,
@@ -17,7 +18,9 @@ class ContainersController<T : DependencyUnit>(
                 selectionMode(state.selectionMode)
                 select(state.isSelected)
                 onSelect { viewModel.onSelect(state.id, it) }
-                onScrolled { onScrolled(state.id, state.allData[it]) }
+                onScrolled {
+                    onScrolled(state.id, state.allData[it])
+                }
             }
         }
     }
