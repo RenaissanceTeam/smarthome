@@ -3,7 +3,7 @@ package smarthome.raspberry.scripts.data.mapper.notification
 import org.springframework.stereotype.Component
 import smarthome.raspberry.scripts.api.data.mapper.BlockDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.resolver.BlockMapperResolver
-import smarthome.raspberry.scripts.api.domain.blocks.NotificationBlock
+import smarthome.raspberry.scripts.api.domain.notification.NotificationBlock
 import smarthome.raspberry.scripts.data.dto.notification.NotificationBlockDto
 
 @Component

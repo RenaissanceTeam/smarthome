@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component
 import smarthome.raspberry.entity.script.Action
 import smarthome.raspberry.notification.api.domain.usecase.GetNotificationTokenForUserUseCase
 import smarthome.raspberry.scripts.api.domain.ActionRunner
-import smarthome.raspberry.scripts.api.domain.GetBlockByIdUseCase
-import smarthome.raspberry.scripts.api.domain.GetScriptByContainedBlockUseCase
-import smarthome.raspberry.scripts.api.domain.actions.SendNotificationAction
-import smarthome.raspberry.scripts.api.domain.blocks.NotificationBlock
+import smarthome.raspberry.scripts.api.domain.usecase.GetBlockByIdUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.GetScriptByContainedBlockUseCase
+import smarthome.raspberry.scripts.api.domain.notification.SendNotificationAction
+import smarthome.raspberry.scripts.api.domain.notification.NotificationBlock
 
 @Component
 class SendNotificationActionRunner(

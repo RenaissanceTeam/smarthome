@@ -1,4 +1,4 @@
-package smarthome.raspberry.scripts.domain
+package smarthome.raspberry.scripts.domain.usecase
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -7,7 +7,7 @@ import smarthome.raspberry.entity.script.*
 import smarthome.raspberry.scripts.api.domain.ActionRunner
 import smarthome.raspberry.scripts.api.domain.BlockObserver
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
-import smarthome.raspberry.scripts.api.domain.RegisterScriptProtocolUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.RegisterScriptProtocolUseCase
 import javax.transaction.Transactional
 
 @Component

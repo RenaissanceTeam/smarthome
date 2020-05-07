@@ -2,12 +2,10 @@ package smarthome.raspberry.arduinodevices.script.domain.entity.common
 
 import org.springframework.stereotype.Component
 import smarthome.raspberry.arduinodevices.script.domain.entity.ArduinoControllerBlock
-import smarthome.raspberry.arduinodevices.script.domain.entity.onoff.OnOffAction
 import smarthome.raspberry.controllers.api.domain.ReadControllerUseCase
-import smarthome.raspberry.controllers.api.domain.WriteControllerUseCase
 import smarthome.raspberry.entity.script.Action
 import smarthome.raspberry.scripts.api.domain.ActionRunner
-import smarthome.raspberry.scripts.api.domain.GetBlockByIdUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.GetBlockByIdUseCase
 
 @Component
 class ReadActionRunner(

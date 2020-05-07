@@ -3,7 +3,7 @@ package smarthome.raspberry.scripts.data.mapper.time
 import org.springframework.stereotype.Component
 import smarthome.raspberry.scripts.api.data.mapper.BlockDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.resolver.BlockMapperResolver
-import smarthome.raspberry.scripts.api.domain.blocks.TimeBlock
+import smarthome.raspberry.scripts.api.domain.time.TimeBlock
 import smarthome.raspberry.scripts.data.dto.time.TimeBlockDto
 
 @Component

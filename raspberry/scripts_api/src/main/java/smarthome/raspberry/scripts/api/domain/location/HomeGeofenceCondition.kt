@@ -1,10 +1,10 @@
-package smarthome.raspberry.scripts.api.domain.conditions
+package smarthome.raspberry.scripts.api.domain.location
 
 import smarthome.raspberry.entity.script.Condition
 import javax.persistence.Entity
 
 @Entity
-data class TimerCondition(
+data class HomeGeofenceCondition(
         override val id: String,
-        val timer: Int = 0
+        val inside: Boolean
 ) : Condition(id)

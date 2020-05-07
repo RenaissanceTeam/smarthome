@@ -3,8 +3,8 @@ package smarthome.raspberry.scripts.data
 import io.reactivex.disposables.Disposable
 import org.springframework.stereotype.Component
 import smarthome.raspberry.scripts.api.data.RegisteredProtocolsRepository
-import smarthome.raspberry.scripts.api.domain.GetScriptByIdUseCase
-import smarthome.raspberry.scripts.api.domain.RegisterScriptProtocolUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.GetScriptByIdUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.RegisterScriptProtocolUseCase
 import smarthome.raspberry.util.has
 
 @Component

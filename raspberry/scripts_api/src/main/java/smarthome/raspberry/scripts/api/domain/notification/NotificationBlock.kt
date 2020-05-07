@@ -1,4 +1,4 @@
-package smarthome.raspberry.scripts.api.domain.blocks
+package smarthome.raspberry.scripts.api.domain.notification
 
 import smarthome.raspberry.entity.script.Block
 import smarthome.raspberry.entity.script.Position

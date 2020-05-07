@@ -1,4 +1,4 @@
-package smarthome.raspberry.scripts.api.domain.actions
+package smarthome.raspberry.scripts.api.domain.notification
 
 import smarthome.raspberry.authentication.api.domain.entity.User
 import smarthome.raspberry.entity.script.Action

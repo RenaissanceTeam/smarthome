@@ -1,4 +1,4 @@
-package smarthome.raspberry.scripts.api.domain.conditions
+package smarthome.raspberry.scripts.api.domain.time
 
 import org.joda.time.LocalTime
 import smarthome.raspberry.entity.script.Condition

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import smarthome.raspberry.authentication.api.domain.usecase.GetUserByUsernameUseCase
 import smarthome.raspberry.scripts.api.data.mapper.ActionDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.resolver.ActionMapperResolver
-import smarthome.raspberry.scripts.api.domain.actions.SendNotificationAction
+import smarthome.raspberry.scripts.api.domain.notification.SendNotificationAction
 import smarthome.raspberry.scripts.data.dto.notification.SendNotificationActionDto
 
 @Component
