@@ -23,6 +23,8 @@ fun ViewGroup.inflate(layout: Int): View {
     return View.inflate(context, layout, this)
 }
 
+val View.position: Position get() = Position(x.toInt(), y.toInt())
+
 val View.center: Position get() = Position(width / 2, height / 2)
 
 fun View.isXInside(toTest: Int): Boolean {

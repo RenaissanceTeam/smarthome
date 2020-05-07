@@ -25,16 +25,17 @@ import smarthome.client.presentation.util.drag.ViewGroupHost
 import smarthome.client.presentation.util.extensions.showToast
 import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.inflate
+import smarthome.client.presentation.util.position
 import smarthome.client.presentation.util.rawPosition
 import smarthome.client.util.Position
 import smarthome.client.util.visible
 
 class GraphView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), KoinComponent {
-    
+
     private var blockViews = mutableMapOf<String, GraphBlockView>()
     private var dependencyViews = mutableMapOf<String, DependencyArrowView>()
     private var movingDependencyView = DependencyArrowView(context)
@@ -43,78 +44,90 @@ class GraphView @JvmOverloads constructor(
     private val dragHost = ViewGroupHost(this)
     private val movingDependencyProcessor by lazy {
         MovingDependencyProcessor(
-            movingDependencyView,
-            viewModel,
-            { blockViews },
-            { rawPosition },
-            ::setStartToCenterOfBlock
+                movingDependencyView,
+                viewModel,
+                { blockViews },
+                { rawPosition },
+                ::updateMovingDependency
         )
     }
-    
+
     init {
         inflate(R.layout.scripts_graph)
     }
-    
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        
+
         addView(movingDependencyView)
         handleDroppingBlocksOntoGraph()
         ViewTreeLifecycleOwner.get(this)?.let(::observeViewModel)
     }
-    
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        
+
         setOnDragListener(null)
     }
-    
+
     private fun observeViewModel(lifecycleOwner: LifecycleOwner) {
         lifecycleOwner.lifecycle.addObserver(viewModel)
-        
+
         viewModel.blocks.observe(lifecycleOwner, this::bindBlocks)
         viewModel.dependencies.observe(lifecycleOwner, this::bindDependencies)
         viewModel.movingDependency.observe(lifecycleOwner, movingDependencyProcessor::onData)
         viewModel.errors.onToast(lifecycleOwner) { context?.showToast(it) }
     }
-    
-    private fun setStartToCenterOfBlock(view: DependencyArrowView?, startBlock: String?) {
+
+    private fun updateMovingDependency(view: DependencyArrowView, startBlock: String?, endPosition: Position) {
         startBlock?.let { startId ->
-            val start = runCatching { getOrInflateBlockView(startId) }.getOrElse { return@let }
-            view?.setStart(start.centerPosition)
+            view.setPositions(
+                    getDependencyTipFor(startId),
+                    DependencyTip(endPosition, 1, 1)
+            )
         }
     }
-    
+
+    private fun getDependencyTipFor(blockId: String): DependencyTip {
+        val block = getOrInflateBlockView(blockId)
+
+        return DependencyTip(
+                block.position,
+                block.width,
+                block.height
+        )
+    }
+
     private fun bindBlocks(blocks: List<BlockState>) {
         retainOnlyPostedBlocks(blocks)
-        
+
         blocks.forEach { block ->
             getOrInflateBlockView(block).setData(block)
         }
     }
-    
-    
+
+
     private fun retainOnlyPostedBlocks(blocks: List<BlockState>) {
         (blockViews.keys - blocks.map { it.block.id }).forEach {
             (blockViews.remove(it)).let(this::removeView)
         }
     }
-    
+
     private fun retainOnlyPostedDependencies(dependencies: List<DependencyState>) {
         (dependencyViews.keys - dependencies.map { it.dependency.id })
-            .forEach { (dependencyViews.remove(it)).let(this::removeView) }
+                .forEach { (dependencyViews.remove(it)).let(this::removeView) }
     }
-    
+
     private fun getOrInflateBlockView(blockState: BlockState): GraphBlockView {
         return blockViews[blockState.block.id]
-            ?: inflateBlockView(blockState).also { blockViews[blockState.block.id] = it }
+                ?: inflateBlockView(blockState).also { blockViews[blockState.block.id] = it }
     }
-    
+
     private fun inflateBlockView(blockState: BlockState): GraphBlockView {
         return graphBlockFactoryResolver.resolve(blockState).inflate(graph, blockState).apply {
             doOnFirstLayout {
                 viewModel.dependencies.triggerRebuild()
-                
+
                 draggable?.let { draggable ->
                     dragHost.onAdd(draggable)
                     notifyViewModelOfDragEvents(draggable, blockState)
@@ -122,53 +135,49 @@ class GraphView @JvmOverloads constructor(
             }
         }
     }
-    
+
     @SuppressLint("CheckResult")
     private fun notifyViewModelOfDragEvents(draggable: Draggable, blockState: BlockState) {
         draggable.observeEvents().subscribe {
             if (it != DraggableEvent.MOVE) return@subscribe
-            
+
             draggable.currentHostPosition?.let { hostPosition ->
                 viewModel.onBlockMoved(blockState.block.id, hostPosition)
             }
         }
     }
-    
+
     private fun getOrInflateBlockView(blockId: String): GraphBlockView {
         return blockViews[blockId]
-            ?: {
-                val state = viewModel.getBlockState(blockId)
-                    ?: throw IllegalArgumentException("can't get block state for id = $blockId")
-                getOrInflateBlockView(state)
-            }.invoke()
+                ?: {
+                    val state = viewModel.getBlockState(blockId)
+                            ?: throw IllegalArgumentException("can't get block state for id = $blockId")
+                    getOrInflateBlockView(state)
+                }.invoke()
     }
-    
+
     private fun bindDependencies(dependencies: List<DependencyState>) {
         retainOnlyPostedDependencies(dependencies)
-        
+
         dependencies.forEach { state ->
             val view = getOrInflateDependency(state.dependency.id)
-            
-            setStartToCenterOfBlock(view, state.dependency.startBlock)
-            setEndToCenterOfBlock(view, state.dependency.endBlock)
+
+            view.setPositions(
+                    getDependencyTipFor(state.dependency.startBlock),
+                    getDependencyTipFor(state.dependency.endBlock)
+            )
         }
     }
-    
-    private fun setEndToCenterOfBlock(view: DependencyArrowView, id: String) {
-        val endBlock = runCatching { getOrInflateBlockView(id) }.getOrElse { return }
-        endBlock.centerPosition.let(view::setEnd)
-    }
-    
-    
+
     private fun getOrInflateDependency(id: String): DependencyArrowView {
         return dependencyViews[id]
-            ?: DependencyArrowView(context).also(this::addView).also { dependencyViews[id] = it }
+                ?: DependencyArrowView(context).also(this::addView).also { dependencyViews[id] = it }
     }
-    
+
     private fun handleDroppingBlocksOntoGraph() {
         setOnDragListener { _, event ->
             val drag = event.localState as? BlockDragEvent ?: return@setOnDragListener false
-            
+
             when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> true
                 DragEvent.ACTION_DRAG_ENDED -> {
@@ -187,27 +196,31 @@ class GraphView @JvmOverloads constructor(
 
 
 private class MovingDependencyProcessor(
-    private val movingDependencyView: DependencyArrowView,
-    private val viewModel: GraphViewModel,
-    private val blockViews: () -> Map<String, GraphBlockView>,
-    private val graphRawPosition: () -> Position,
-    private val setStartToCenterOfBlock: (DependencyArrowView, String?) -> Unit
+        private val movingDependencyView: DependencyArrowView,
+        private val viewModel: GraphViewModel,
+        private val blockViews: () -> Map<String, GraphBlockView>,
+        private val graphRawPosition: () -> Position,
+        private val updateDependency: (DependencyArrowView, String?, Position) -> Unit
+
 ) {
-    
+
     fun onData(dependency: MovingDependency) {
-        
+
         when (dependency.status) {
             IDLE -> {
                 movingDependencyView.visible = false
             }
             STARTED -> {
                 movingDependencyView.visible = true
-                setMovingDependencyEnd(dependency)
-                setStartToCenterOfBlock(movingDependencyView, dependency.startBlock)
+                getMovingDependencyTip(dependency)?.let { tip ->
+                    updateDependency(movingDependencyView, dependency.startBlock, tip)
+                }
                 viewModel.startCreatingDependency(dependency.startBlock)
             }
             MOVING -> {
-                setMovingDependencyEnd(dependency)
+                getMovingDependencyTip(dependency)?.let { tip ->
+                    updateDependency(movingDependencyView, dependency.startBlock, tip)
+                }
                 highlightBlockOnDependencyTip(dependency)
             }
             DROPPED -> {
@@ -215,34 +228,33 @@ private class MovingDependencyProcessor(
             }
         }
     }
-    
-    
-    private fun setMovingDependencyEnd(dependency: MovingDependency) {
-        dependency.rawEndPosition
-            ?.let(::convertRawToRelativePosition)
-            ?.let(movingDependencyView::setEnd)
+
+
+    private fun getMovingDependencyTip(dependency: MovingDependency): Position? {
+        return dependency.rawEndPosition
+                ?.let(::convertRawToRelativePosition)
     }
-    
+
     private fun addOrCancelDependency(dependency: MovingDependency) {
         if (dependency.rawEndPosition == null
-            || dependency.id == null
-            || dependency.startBlock == null) return
-        
+                || dependency.id == null
+                || dependency.startBlock == null) return
+
         val droppedTo = findBlockOnDependencyTip(dependency.rawEndPosition)
 
         when (droppedTo == null) {
             true -> viewModel.cancelCreatingDependency()
             false -> viewModel.tryAddDependency(
-                dependency.id,
-                dependency.startBlock,
-                droppedTo.key
+                    dependency.id,
+                    dependency.startBlock,
+                    droppedTo.key
             )
         }
     }
-    
+
     private fun highlightBlockOnDependencyTip(dependency: MovingDependency) {
         if (dependency.rawEndPosition == null) return
-        
+
         val movedTo = findBlockOnDependencyTip(dependency.rawEndPosition)
         when (movedTo == null) {
             true -> viewModel.dependencyTipNotOnAnyBlock()
@@ -251,16 +263,16 @@ private class MovingDependencyProcessor(
             }
         }
     }
-    
+
     private fun findBlockOnDependencyTip(rawPosition: Position): Map.Entry<String, GraphBlockView>? {
         return blockViews().asIterable().find { entry ->
             val block = entry.value
-            
+
             val tipPosition = convertRawToRelativePosition(rawPosition)
             block.contains(tipPosition)
         }
     }
-    
+
     private fun convertRawToRelativePosition(raw: Position): Position {
         return raw - graphRawPosition()
     }

@@ -21,9 +21,7 @@ import smarthome.client.domain.api.scripts.usecases.setup.ObserveBlocksUseCase
 import smarthome.client.domain.api.scripts.usecases.setup.ObserveDependenciesUseCase
 import smarthome.client.entity.Controller
 import smarthome.client.entity.script.block.Block
-
 import smarthome.client.entity.script.dependency.Dependency
-import smarthome.client.util.Position
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.IDLE
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.MOVING
 import smarthome.client.presentation.scripts.setup.graph.blockviews.dependency.MovingDependency
@@ -40,12 +38,15 @@ import smarthome.client.presentation.scripts.setup.graph.events.navigation.OpenS
 import smarthome.client.presentation.scripts.setup.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.presentation.scripts.setup.graph.view.GraphViewModel
 import smarthome.client.util.DataStatus
-import kotlin.test.*
+import smarthome.client.util.Position
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class GraphViewModelTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
-    
+
     private lateinit var observeControllerUseCase: ObserveControllerUseCase
     private lateinit var eventBus: GraphEventBus
     private lateinit var events: PublishSubject<GraphEvent>
@@ -60,26 +61,26 @@ class GraphViewModelTest {
     private lateinit var blockToNewGraphBlockStateMapper: BlockToNewGraphBlockStateMapper
     private lateinit var blocksObservable: PublishSubject<List<Block>>
     private lateinit var dependenciesObservable: PublishSubject<List<Dependency>>
-    private val blockId = MockBlockId()
-    private val otherBlockId = MockBlockId()
+    private val blockId = "blockId"
+    private val otherBlockId = "otherBlockId"
     private val block = MockBlock(blockId, position1_1)
     private val otherBlock = MockBlock(otherBlockId, position1_1)
     private val blockState = MockBlockState(block)
     private val otherBlockState = MockBlockState(otherBlock)
-    private val dependencyId = MockString()
-    private val scriptId: Long = 1L // todo
+    private val dependencyId = "depId"
+
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
         blocksObservable = PublishSubject.create()
         dependenciesObservable = PublishSubject.create()
         observeControllerUseCase =
-            mock { on { execute(any()) }.then { Observable.empty<DataStatus<Controller>>() } }
+                mock { on { execute(any()) }.then { Observable.empty<DataStatus<Controller>>() } }
         observeBlocksUseCase = mock {
-            on { execute(any()) }.then { blocksObservable }
+            on { execute() }.then { blocksObservable }
         }
         observeDependenciesUseCase = mock {
-            on { execute(any()) }.then { dependenciesObservable }
+            on { execute() }.then { dependenciesObservable }
         }
         events = PublishSubject.create()
         eventBus = mock { on { observe() }.then { events } }
@@ -87,7 +88,7 @@ class GraphViewModelTest {
         addDependencyUseCase = mock {}
         dependencyEventsHandler = mock {}
         checkIfDependencyPossibleUseCase = mock {
-            on { execute(any(), any(), any()) }.then { true }
+            on { execute(any(), any()) }.then { true }
         }
         blockToNewGraphBlockStateMapper = mock {
             on { map(any()) }.then { blockState }
@@ -105,150 +106,156 @@ class GraphViewModelTest {
                 single { addDependencyUseCase }
             })
         }
-        
+
         viewModel = GraphViewModel()
     }
-    
-    
+
+
     @After
     fun tearDown() {
         stopKoin()
     }
-    
+
     @Test
     fun `when call to drop should emit drop event for event bus`() {
         val event = createDragEvent(status = DRAG_START, from = CONTROLLERS_HUB)
         viewModel.onDropped(event, position1_1)
-        
+
         verify(eventBus).addEvent(argThat {
-            this is MockDragEvent
-                && this.dragInfo.id == blockId
-                && this.dragInfo.to == GRAPH
-                && this.dragInfo.status == DRAG_DROP
+            this is BlockDragEvent
+                    && this.from == blockId
+                    && this.to == GRAPH
+                    && this.status == DRAG_DROP
         })
     }
-    
+
     @Test
     fun `when drop block should calculate position as drop position minus touch position`() {
         val event = createDragEvent(status = DRAG_START, from = CONTROLLERS_HUB)
-        
+
         viewModel.onDropped(event, position1_1)
         verify(eventBus).addEvent(argThat {
-            this is MockDragEvent
-                && this.dragInfo.position == Position(0, 0)
+            this is BlockDragEvent
+                    && this.position == Position(0, 0)
         })
     }
-    
+
     private fun createDragEvent(
-        id: BlockId = blockId,
-        status: String,
-        from: String = UNKNOWN,
-        to: String = UNKNOWN,
-        touchPosition: Position = position1_1,
-        position: Position = position1_1): MockDragEvent {
-        return MockDragEvent(CommonDragInfo(id, status, from, to, touchPosition, position))
+            block: Block = this.block,
+            status: String,
+            from: String = UNKNOWN,
+            to: String = UNKNOWN,
+            touchPosition: Position = position1_1,
+            position: Position = position1_1): BlockDragEvent {
+        return BlockDragEvent(
+                block = block,
+                status = status,
+                from = from,
+                to = to,
+                dragTouch = touchPosition,
+                position = position
+        )
     }
-    
-    private fun assertHasBlockValue(id: BlockId = blockId): BlockState {
+
+    private fun assertHasBlockValue(id: String = blockId): BlockState {
         val blocks = viewModel.blocks.value
         assertNotNull(blocks)
-    
+
         val addedBlock = blocks.find { it.block.id == id }
         assertNotNull(addedBlock)
-        
+
         return addedBlock
     }
-    
+
     @Test
     fun `when dependency tip on some block should emit with visible border`() {
         addBlock()
         viewModel.dependencyTipOnBlock(from = otherBlockId, to = blockId)
-        
+
         val block = assertHasBlockValue(blockId)
         assertTrue(block.border.isVisible)
     }
-    
+
     private fun addBlock() {
         blocksObservable.onNext(listOf(block))
     }
-    
+
     private fun addTwoBlocks() {
         blocksObservable.onNext(listOf(block, otherBlock))
     }
-    
+
     @Test
     fun `when end creating dependency on graph then should emit idle moving dependency`() {
         viewModel.movingDependency.value = MovingDependency(
-            MockString(),
-            otherBlockId,
-            MOVING,
-            position1_1
+                "movingId",
+                otherBlockId,
+                MOVING,
+                position1_1
         )
-        
+
         viewModel.cancelCreatingDependency()
-        
+
         val dependency = viewModel.movingDependency.value
         assertNotNull(dependency)
         assertTrue { dependency.status == IDLE }
     }
-    
+
     @Test
     fun `when end creating dependency on other block should emit on eventbus`() {
         viewModel.tryAddDependency(dependencyId, otherBlockId, blockId)
-    
+
         verify(eventBus).addEvent(argThat {
             this is OpenSetupDependency && this.id == dependencyId
         })
     }
-    
+
     @Test
     fun `when add dependency should call add dependency use case`() {
         viewModel.tryAddDependency(dependencyId, otherBlockId, blockId)
-    
-    
+
+
         verify(addDependencyUseCase).execute(
-            eq(scriptId),
-            argThat {
-                this.id == dependencyId
-                    && this.startBlock == otherBlockId
-                    && this.endBlock == blockId
-            }
+                argThat {
+                    this.id == dependencyId
+                            && this.startBlock == otherBlockId
+                            && this.endBlock == blockId
+                }
         )
     }
-    
+
     private fun emitMoveDependencyFromOther() {
         events.onNext(DependencyEvent(
-            id = dependencyId,
-            startId = otherBlockId,
-            status = DEPENDENCY_MOVE,
-            rawEndPosition = Position(22, 22)
+                id = dependencyId,
+                startId = otherBlockId,
+                status = DEPENDENCY_MOVE,
+                rawEndPosition = Position(22, 22)
         ))
     }
-    
+
     private fun emitStartDependencyFromOther() {
         events.onNext(DependencyEvent(
-            id = dependencyId,
-            startId = otherBlockId,
-            status = DEPENDENCY_START,
-            rawEndPosition = position1_1
+                id = dependencyId,
+                startId = otherBlockId,
+                status = DEPENDENCY_START,
+                rawEndPosition = position1_1
         ))
     }
-    
+
     @Test
     fun `when add dependency should hide border on the added block`() {
         addBlock()
         emitStartDependencyFromOther()
         emitMoveDependencyFromOther()
-        
+
         viewModel.dependencyTipOnBlock(otherBlockId, blockId)
         assertTrue(assertHasBlockValue(blockId).border.isVisible)
-        
+
         viewModel.tryAddDependency(dependencyId, otherBlockId, blockId)
         assertFalse(assertHasBlockValue(blockId).border.isVisible)
     }
-    
+
     @Test
     fun `when remove block with dependency should remove associated dependencies`() {
-    
+
     }
 }

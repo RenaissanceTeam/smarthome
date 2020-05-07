@@ -49,86 +49,86 @@ class GraphViewModel : KoinViewModel() {
 
     override fun onResume() {
         disposable.add(eventBus.observe()
-            .subscribe {
-                if (it is BlockDragEvent) dragBlockHandler.handle(it)
-                if (it is DependencyEvent) dependencyEventsHandler.handle(it)
-            })
-        
+                .subscribe {
+                    if (it is BlockDragEvent) dragBlockHandler.handle(it)
+                    if (it is DependencyEvent) dependencyEventsHandler.handle(it)
+                })
+
         disposable.add(observeBlocksUseCase.execute().subscribe { newBlocks ->
             val currentBlocks = blocks.value.orEmpty()
             blocks.value = newBlocks.map { newBlock ->
                 currentBlocks.find { it.block == newBlock }
-                    ?.copyWithInfo(block = newBlock)
-                    ?: blockToNewGraphBlockMapper.map(newBlock)
+                        ?.copyWithInfo(block = newBlock)
+                        ?: blockToNewGraphBlockMapper.map(newBlock)
             }
             dependencies.triggerRebuild()
         })
-        
+
         disposable.add(observeDependenciesUseCase.execute().subscribe { dependencies ->
             this.dependencies.updateWith { current ->
                 dependencies.map { dependency ->
                     current.orEmpty().find { it.dependency.id == dependency.id }
-                        ?.copy(dependency = dependency)
-                        ?: dependencyToDependencyStateMapper.map(dependency)
+                            ?.copy(dependency = dependency)
+                            ?: dependencyToDependencyStateMapper.map(dependency)
                 }
             }
         })
     }
-    
+
     override fun onPause() {
         disposable.clear()
     }
-    
+
     fun onDropped(event: BlockDragEvent, dropPosition: Position) {
         eventBus.addEvent(event.copy(
-            status = DRAG_DROP,
-            to = GRAPH,
-            position = dropPosition - event.dragTouch
+                status = DRAG_DROP,
+                to = GRAPH,
+                position = dropPosition - event.dragTouch
         ))
     }
-    
+
     fun onBlockMoved(blockId: String, newPosition: Position) {
         moveBlockUseCase.execute(blockId, newPosition)
     }
-    
+
     fun onCanceled(event: BlockDragEvent) {
         eventBus.addEvent(event.copy(
-            status = DRAG_CANCEL,
-            to = GRAPH
+                status = DRAG_CANCEL,
+                to = GRAPH
         ))
     }
-    
+
     fun dependencyTipOnBlock(from: String, to: String) {
         blocks.updateWith {
             blocksWithHiddenBorders().findAndModify(
-                { it.block.id == to },
-                {
-                    it.copyWithInfo(
-                        border = BorderStatus(
-                            isVisible = true,
-                            isFailure = !checkIfDependencyPossible.execute(from, to)
+                    { it.block.id == to },
+                    {
+                        it.copyWithInfo(
+                                border = BorderStatus(
+                                        isVisible = true,
+                                        isFailure = !checkIfDependencyPossible.execute(from, to)
+                                )
                         )
-                    )
-                }
+                    }
             )
         }
     }
-    
+
     fun dependencyTipNotOnAnyBlock() {
         blocks.updateWith { blocksWithHiddenBorders() }
     }
-    
+
     private fun blocksWithHiddenBorders(): List<BlockState> {
         return blocks.value.orEmpty().map {
             it.copyWithInfo(border = BorderStatus(isVisible = false))
         }
     }
-    
+
     fun cancelCreatingDependency() {
         setMovingDependencyToIdle()
         dependencyTipNotOnAnyBlock()
     }
-    
+
     fun tryAddDependency(id: String, from: String, to: String) {
         setMovingDependencyToIdle()
         hideBorderOnBlock(to)
@@ -141,7 +141,7 @@ class GraphViewModel : KoinViewModel() {
         addDependencyUseCase.execute(Dependency(id, from, to))
         eventBus.addEvent(OpenSetupDependency(id))
     }
-    
+
     private fun hideBorderOnBlock(to: String) {
         blocks.updateWith { current ->
             current.orEmpty().findAndModify({ it.block.id == to }) {
@@ -149,17 +149,17 @@ class GraphViewModel : KoinViewModel() {
             }
         }
     }
-    
+
     private fun setMovingDependencyToIdle() {
         movingDependency.updateWith { it?.copy(status = IDLE) }
     }
-    
+
     fun getBlockState(blockId: String): BlockState? {
         return blocks.value?.find { it.block.id == blockId }
     }
 
     fun startCreatingDependency(startBlock: String?) {
-        startBlock?: return
+        startBlock ?: return
 
         if (!checkIfCanStartDependencyFromUseCase.execute(startBlock)) {
             cancelCreatingDependency()
