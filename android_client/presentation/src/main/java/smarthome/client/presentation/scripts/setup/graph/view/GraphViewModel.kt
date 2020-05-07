@@ -23,6 +23,7 @@ import smarthome.client.presentation.scripts.setup.graph.events.navigation.OpenS
 import smarthome.client.presentation.scripts.setup.graph.mapper.BlockToNewGraphBlockStateMapper
 import smarthome.client.presentation.scripts.setup.graph.mapper.DependencyToDependencyStateMapper
 import smarthome.client.presentation.util.KoinViewModel
+import smarthome.client.presentation.util.ToastLiveData
 import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.Position
@@ -39,11 +40,13 @@ class GraphViewModel : KoinViewModel() {
     private val dragBlockHandler: DragBlockEventsHandler by inject { parametersOf(blocks) }
     private val dependencyEventsHandler: DependencyEventsHandler by inject { parametersOf(movingDependency) }
     private val moveBlockUseCase: MoveBlockUseCase by inject()
-    
+    private val checkIfCanStartDependencyFromUseCase: CheckIfCanStartDependencyFromUseCase by inject()
+
     val movingDependency = MutableLiveData<MovingDependency>()
     val blocks = MutableLiveData<List<BlockState>>(emptyList())
     val dependencies = MutableLiveData<List<DependencyState>>(emptyList())
-    
+    val errors = ToastLiveData()
+
     override fun onResume() {
         disposable.add(eventBus.observe()
             .subscribe {
@@ -126,10 +129,15 @@ class GraphViewModel : KoinViewModel() {
         dependencyTipNotOnAnyBlock()
     }
     
-    fun addDependency(id: String, from: String, to: String) {
+    fun tryAddDependency(id: String, from: String, to: String) {
         setMovingDependencyToIdle()
         hideBorderOnBlock(to)
-    
+
+        if (!checkIfDependencyPossible.execute(from, to)) {
+            cancelCreatingDependency()
+            return
+        }
+
         addDependencyUseCase.execute(Dependency(id, from, to))
         eventBus.addEvent(OpenSetupDependency(id))
     }
@@ -148,5 +156,14 @@ class GraphViewModel : KoinViewModel() {
     
     fun getBlockState(blockId: String): BlockState? {
         return blocks.value?.find { it.block.id == blockId }
+    }
+
+    fun startCreatingDependency(startBlock: String?) {
+        startBlock?: return
+
+        if (!checkIfCanStartDependencyFromUseCase.execute(startBlock)) {
+            cancelCreatingDependency()
+            errors.post("This block does not support conditions")
+        }
     }
 }
