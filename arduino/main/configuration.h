@@ -12,7 +12,7 @@
 #include "osapi.h"
 #endif
 
-const IPAddress RASPBERRY_IP = IPAddress(192,168,0,102);
+const IPAddress RASPBERRY_IP = IPAddress(192,168,0,100);
 const int RASPBERRY_PORT  = 8080;
 const int ARDUINO_PORT = 80;
 

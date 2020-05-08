@@ -8,7 +8,7 @@
 
 #define DEBUG 0
 
-WiFiEspClient wifiClient; // 20b
+WiFiClient wifiClient; // 20b
 HttpClient client = HttpClient(wifiClient, RASPBERRY_IP, RASPBERRY_PORT); // 150b
 PrintLengthCounter printLengthCounter;
 
@@ -160,42 +160,50 @@ void digitalAlertGetRequest(WebServer& server, int serviceIndex) {
 int parseIntParam(char *from, int& shift, char key[], int &val) {
   int i;
   int toSkip = strlen(key);
+  Serial.print("Skip " + String(toSkip) + ": ");
   for (i = 0; i < toSkip; ++i) {
+   Serial.print(from[i+shift]);
     if (key[i] != from[i + shift]) {
+        Serial.println();
       return -1;
     }
   }
+  Serial.println();
+  
   char ch;
   val = 0;
   ch = from[i + shift];
-  //  Serial.print("Start reading: ");
-  //  Serial.print(ch);
+    Serial.print("Start reading: ");
+    Serial.print(ch);
   while (ch >= '0' && ch <= '9')
   {
     val = val * 10 + ch - '0';
     ch = from[++i + shift];
-    //        Serial.print(ch);
+            Serial.print(ch);
   }
-  //  Serial.println();
+    Serial.println();
   return i;
 }
 
 bool tryParseRequestValues(WebServer &server, WebServer::ConnectionType type,
                            char * params, int& serviceIndex, int& parsedValue) {
+  
+  for (int s=0;s<5;++s) Serial.print(params[s]);
+  Serial.println();
   int shift = 0;
   shift = parseIntParam(params, shift, indexLabel, serviceIndex);
-#if DEBUG > 1
+
   Serial.print(F("read index = "));
   Serial.println(serviceIndex);
-#endif
+
   if (type == WebServer::POST) {
     // skip '&'
     ++shift;
     shift = parseIntParam(params, shift, valueLabel, parsedValue);
     if (shift < 0) {
-#if DEBUG > 1
-      Serial.println("Failed to read value");
-#endif
+
+      Serial.println(F("Failed to read value"));
+
       server.httpFail();
       return false;
     }
@@ -215,11 +223,8 @@ bool tryParseRequestValues(WebServer &server, WebServer::ConnectionType type,
 
 void service(WebServer &server, WebServer::ConnectionType type, char * params, bool complete)
 {
-#if DEBUG > 1
-  Serial.print(F("service params="));
-  Serial.println(params);
-#endif
 
+  Serial.print(F("Is tail complete?")); Serial.println(complete);
   int serviceIndex = -1;
   int parsedValue = -1;
   if (!tryParseRequestValues(server, type, params, serviceIndex, parsedValue)) return;
@@ -393,7 +398,6 @@ void sendInitToServer() {
 
   printInitBody(client);
   client.flush();
-  client.stop();
 }
 
 

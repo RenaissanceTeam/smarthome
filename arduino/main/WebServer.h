@@ -29,7 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "WiFiEsp.h"
+#include "WiFiEspAT.h"
 
 /********************************************************************
  * CONFIGURATION
@@ -256,8 +256,8 @@ public:
   void reset(); 
 
 private:
-  WiFiEspServer m_server;
-  WiFiEspClient m_client;
+  WiFiServer m_server;
+  WiFiClient m_client;
   const char *m_urlPrefix;
 
   unsigned char m_pushback[32];
