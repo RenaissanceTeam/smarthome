@@ -8,6 +8,7 @@ import smarthome.raspberry.arduinodevices.controllers.domain.mapper.ArduinoState
 import smarthome.raspberry.arduinodevices.util.index
 import smarthome.raspberry.channel.api.domain.entity.DeviceChannel
 import smarthome.raspberry.entity.controller.Controller
+import smarthome.raspberry.util.exceptions.notFound
 
 class ArduinoDeviceChannel(
         private val addressRepository: ArduinoDeviceAddressRepository,
@@ -22,7 +23,7 @@ class ArduinoDeviceChannel(
     }
 
     private fun getApi(controller: Controller): ArduinoDeviceApi {
-        val device = addressRepository.findByDevice(controller.device)
+        val device = addressRepository.findByDevice(controller.device) ?: throw notFound
         return arduinoDeviceApiFactory.getForAddress(device.address, device.port)
     }
 
