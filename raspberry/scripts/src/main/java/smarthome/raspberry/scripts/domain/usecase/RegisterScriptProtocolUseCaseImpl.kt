@@ -61,7 +61,8 @@ open class RegisterScriptProtocolUseCaseImpl(
     private fun composeRunnerName(action: Action) = "${action::class.simpleName!!.decapitalize()}Runner"
 
     private fun findTopDependencies(script: Script): List<Dependency> {
-        val topBlocks = script.blocks.filter { !script.dependencies.map { it.end.id }.contains(it.id) }
+        val topBlocks = script.blocks
+                .filter { !script.dependencies.map { it.end.id }.contains(it.id) }
         return topBlocks.flatMap { findBlockDependencies(script, it) }
     }
 
