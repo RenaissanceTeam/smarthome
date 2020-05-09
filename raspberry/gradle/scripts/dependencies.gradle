@@ -30,7 +30,7 @@ ext {
             jackson                      : ("com.fasterxml.jackson.core:jackson-databind:2.10.2"),
             firebaseAdmin                : ('com.google.firebase:firebase-admin:6.12.2'),
             jodaTime                     : 'joda-time:joda-time:2.10.6',
-            usertype                     : 'jorg.jadira.usertype:usertype.core:7.0.0.CR1',
+            usertype                     : 'org.jadira.usertype:usertype.core:7.0.0.CR1',
 
 
             arduinoDevices    : project(":arduinodevices"),

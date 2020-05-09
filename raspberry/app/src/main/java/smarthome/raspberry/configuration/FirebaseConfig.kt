@@ -14,11 +14,14 @@ open class FirebaseConfig {
     @Value("\${firebaseDatabaseUrl}")
     private lateinit var url: String
 
+    @Value("\${firebaseServiceKeyPath}")
+    private lateinit var firebaseServiceKeyPath: String
+
     @Bean
     open fun createFirebaseApp(): FirebaseApp {
         return FirebaseApp.initializeApp(
                 FirebaseOptions.builder()
-                        .setCredentials(GoogleCredentials.fromStream(FileInputStream("ignored/fcmServiceKey.json")))
+                        .setCredentials(GoogleCredentials.fromStream(FileInputStream(firebaseServiceKeyPath)))
                         .setDatabaseUrl(url)
                         .build()
         )
