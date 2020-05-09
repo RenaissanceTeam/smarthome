@@ -311,17 +311,21 @@ void connectToWifi(Print& esp_serial) {
     while (true);
   }
 
+  WiFi.endAP(true); 
+  WiFi.setPersistent();
+  
   int connectionStatus = WL_IDLE_STATUS;
   // actual connection to wifi
   while (connectionStatus != WL_CONNECTED) {
     //#if DEBUG > 0
-    Serial.print("Attempting to connect to WPA SSID: ");
+    Serial.print(F("Attempting to connect to WPA SSID: "));
     Serial.println(WIFI_SSID);
     //#endif
     // Connect to WPA/WPA2 network
-
     connectionStatus = WiFi.begin(WIFI_SSID, PASSWORD);
   }
+  Serial.println(F("Connected, set auto connect"));
+  WiFi.setAutoConnect(true);
 }
 
 String serviceToJson(Service service) {
