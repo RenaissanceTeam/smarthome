@@ -1,4 +1,4 @@
-package smarthome.client.presentation.auth
+package smarthome.client.presentation.auth.login
 
 import android.os.Bundle
 import android.view.View
@@ -29,9 +29,11 @@ class LoginFragment : BaseFragment() {
         viewModel.showProgress.observe(viewLifecycleOwner) { progress.visible = it }
         viewModel.errors.onToast(viewLifecycleOwner) { context?.showToast(it) }
         viewModel.openHomeServer.onNavigate(viewLifecycleOwner) { navigateToHomeServerSetup() }
-        viewModel.close.onNavigate(this) { onClose() }
+        viewModel.close.onNavigate(this) { toDashboard() }
+        viewModel.toSignUp.onNavigate(this) { toSignUp() }
 
         change_server.setOnClickListener { viewModel.onHomeServerClick() }
+        signup.setOnClickListener { viewModel.onSignUpClick() }
         login_button.setOnClickListener {
             viewModel.login(
                     username.text,
@@ -41,12 +43,18 @@ class LoginFragment : BaseFragment() {
 
     }
 
-    private fun onClose() {
+    private fun toDashboard() {
         hideSoftKeyboard()
         findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToDashboardFragment())
     }
 
+    private fun toSignUp() {
+        hideSoftKeyboard()
+        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
+    }
+
     private fun navigateToHomeServerSetup() {
+        hideSoftKeyboard()
         findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeServerFragment())
     }
 }

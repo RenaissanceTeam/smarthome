@@ -49,6 +49,7 @@ val domain = module {
     factoryBy<SaveNewTokenUseCase, SaveNewTokenUseCaseImpl>()
     factoryBy<GetCurrentTokenUseCase, GetCurrentTokenUseCaseImpl>()
     factoryBy<LogoutUseCase, LogoutUseCaseImpl>()
+    factoryBy<SignUpUseCase, SignUpUseCaseImpl>()
 
     // devices
     factoryBy<GetGeneralDevicesInfo, GetAddedDevicesInfoImpl>()
