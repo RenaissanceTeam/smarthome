@@ -29,7 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "WiFiEsp.h"
+#include "WiFiEspAT.h"
 
 /********************************************************************
  * CONFIGURATION
@@ -208,10 +208,6 @@ public:
   // value or 0 if nothing was read.
   bool readInt(int &number);
 
-  // reads a header value, stripped of possible whitespace in front,
-  // from the server stream
-  void readHeader(char *value, int valueLen);
-
   // Read the next keyword parameter from the socket.  Assumes that other
   // code has already skipped over the headers,  and the next thing to
   // be read will be the start of a keyword.
@@ -256,8 +252,8 @@ public:
   void reset(); 
 
 private:
-  WiFiEspServer m_server;
-  WiFiEspClient m_client;
+  WiFiServer m_server;
+  WiFiClient m_client;
   const char *m_urlPrefix;
 
   unsigned char m_pushback[32];
@@ -423,11 +419,10 @@ bool WebServer::dispatchCommand(ConnectionType requestType, char *verb,
         bool tail_complete)
 {
 
-	#if WEBDUINO_SERIAL_DEBUGGING > 1
-      Serial.print("*** dispatch: verb=");
-      Serial.print(verb);
-      Serial.println(" ****");
-#endif
+//      Serial.print(F("*** dispatch: verb="));
+//      Serial.print(verb);
+//      Serial.println(F(" ****"));
+
   // if there is no URL, i.e. we have a prefix and it's requested without a
   // trailing slash or if the URL is just the slash
   if ((verb[0] == 0) || ((verb[0] == '/') && (verb[1] == 0)))
@@ -456,6 +451,7 @@ bool WebServer::dispatchCommand(ConnectionType requestType, char *verb,
     verb++;
     // Look for a "?" separating the filename part of the URL from the
     // parameters.  If it's not there, compare to the whole URL.
+    
     qm_loc = strchr(verb, '?');
     verb_len = (qm_loc == NULL) ? strlen(verb) : (qm_loc - verb);
     qm_offset = (qm_loc == NULL) ? 0 : 1;
@@ -528,14 +524,17 @@ void WebServer::processConnection(char *buff, int *bufflen)
     Serial.println("*** checking request ***");
 #endif
     getRequest(requestType, buff, bufflen);
-#if WEBDUINO_SERIAL_DEBUGGING > 1
-    Serial.print("*** requestType = ");
-    Serial.print((int)requestType);
-    Serial.print(", request = \"");
-    Serial.print(buff);
-    Serial.println("\" ***");
-#endif
+//
+//    Serial.print(F("*** requestType = "));
+//    Serial.print((int)requestType);
+//    Serial.print(F(", request = \""));
+//    Serial.print(buff);
+//    Serial.println(F("\" ***"));
 
+    char *buffCopy = new char[*bufflen + 2];
+    buffCopy[*bufflen+1] = 0;
+    for (int s=0;s<*bufflen+2;++s) buffCopy[s]=buff[s];
+    
     // don't even look further at invalid requests.
     // this is done to prevent Webduino from hanging
     // - when there are illegal requests,
@@ -548,6 +547,13 @@ void WebServer::processConnection(char *buff, int *bufflen)
       Serial.println("*** headers complete ***");
 #endif
     }
+
+//    Serial.print(F("*** requestType = "));
+//    Serial.print((int)requestType);
+//    Serial.print(F(", request = \""));
+//    Serial.print(buffCopy);
+//    Serial.println(F("\" ***"));
+    
     // Only try to dispatch command if request type and prefix are correct.
     // Fix by quarencia.
     if (requestType == INVALID ||
@@ -555,7 +561,7 @@ void WebServer::processConnection(char *buff, int *bufflen)
     {
       m_failureCmd(*this, requestType, buff, (*bufflen) >= 0);
     }
-    else if (!dispatchCommand(requestType, buff + urlPrefixLen,
+    else if (!dispatchCommand(requestType, buffCopy + urlPrefixLen,
              (*bufflen) >= 0))
     {
     	#if WEBDUINO_SERIAL_DEBUGGING > 1
@@ -564,6 +570,7 @@ void WebServer::processConnection(char *buff, int *bufflen)
       m_failureCmd(*this, requestType, buff, (*bufflen) >= 0);
     }
 
+    delete buffCopy;
     flushBuf();
 
 #if WEBDUINO_SERIAL_DEBUGGING > 1
@@ -763,31 +770,6 @@ bool WebServer::readInt(int &number)
   return gotNumber;
 }
 
-void WebServer::readHeader(char *value, int valueLen)
-{
-  int ch;
-  memset(value, 0, valueLen);
-  --valueLen;
-
-  // absorb whitespace
-  do
-  {
-    ch = read();
-  } while (ch == ' ' || ch == '\t');
-
-  // read rest of line
-  do
-  {
-    if (valueLen > 1)
-    {
-      *value++=ch;
-      --valueLen;
-    }
-    ch = read();
-  } while (ch != '\r');
-  push(ch);
-}
-
 // Read and parse the first line of the request header.
 // The "command" (GET/HEAD/POST) is translated into a numeric value in type.
 // The URL is stored in request,  up to the length passed in length
@@ -827,9 +809,11 @@ void WebServer::getRequest(WebServer::ConnectionType &type,
   else
     return;
 
+//  Serial.println(F("-------------"));
   int ch;
   while ((ch = read()) != -1)
   {
+
     // stop storing at first space or end of line
     if (ch == ' ' || ch == '\n' || ch == '\r')
     {
@@ -844,6 +828,11 @@ void WebServer::getRequest(WebServer::ConnectionType &type,
   }
   // NUL terminate
   *request = 0;
+
+//Serial.println(*length);
+//  Serial.println(request);
+
+//  Serial.println(F("\n-------------"));
 }
 void WebServer::processHeaders()
 {
