@@ -37,20 +37,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/username"
+        app:passwordToggleEnabled="true" />+
+
+    <smarthome.client.presentation.util.TextInput
+        android:id="@+id/registration_code"
+        style="@style/Login.Input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Registration Code"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password"
         app:passwordToggleEnabled="true" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/login_button"
+        android:id="@+id/signup_button"
         style="@style/Login.Shadow.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:paddingHorizontal="16dp"
-        android:text="LOGIN"
-        app:layout_constraintEnd_toEndOf="@id/password"
-        app:layout_constraintTop_toBottomOf="@id/password" />
-
+        android:text="SIGN UP"
+        app:layout_constraintEnd_toEndOf="@id/registration_code"
+        app:layout_constraintTop_toBottomOf="@id/registration_code" />
 
     <TextView
         android:id="@+id/change_server"
@@ -63,12 +75,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/signup"
+        android:id="@+id/login"
         style="@style/Login.Shadow.Link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Sign Up"
+        android:text="Login"
         app:layout_constraintBottom_toTopOf="@id/change_server"
         app:layout_constraintStart_toStartOf="parent" />
 
