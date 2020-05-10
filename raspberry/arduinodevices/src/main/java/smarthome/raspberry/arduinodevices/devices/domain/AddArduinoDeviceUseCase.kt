@@ -32,7 +32,9 @@ open class AddArduinoDeviceUseCase(
                 .onFailure {
                     if (it is DeviceAlreadyExists) {
                         val device = getDeviceBySerialUseCase.execute(arduino.serial) ?: return
-                        addressRepository.save(ArduinoDeviceAddress(device = device, address = ip))
+                        val updatedAddress = addressRepository.findByDevice(device)?.copy(address = ip) ?: return
+
+                        addressRepository.save(updatedAddress)
                     }
                 }
     }

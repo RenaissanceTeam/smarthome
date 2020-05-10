@@ -5,5 +5,5 @@ import smarthome.raspberry.arduinodevices.devices.domain.entity.ArduinoDeviceAdd
 import smarthome.raspberry.entity.device.Device
 
 interface ArduinoDeviceAddressRepository : JpaRepository<ArduinoDeviceAddress, Long> {
-    fun findByDevice(device: Device): ArduinoDeviceAddress
+    fun findByDevice(device: Device): ArduinoDeviceAddress?
 }
