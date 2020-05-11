@@ -10,7 +10,6 @@ import androidx.core.view.children
 import kotlinx.android.synthetic.main.scripts_dependency_unit_wrapper.view.*
 import smarthome.client.presentation.R
 import smarthome.client.presentation.util.inflate
-import smarthome.client.util.log
 
 abstract class DependencyUnitView @JvmOverloads constructor(
         context: Context,
@@ -28,8 +27,8 @@ abstract class DependencyUnitView @JvmOverloads constructor(
                     ?.apply { addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE) }
                     ?.let { childView.layoutParams = it }
         }
-
     }
+
 
     abstract fun onCreateView(viewGroup: ViewGroup)
     open fun onViewCreated(view: View) {}

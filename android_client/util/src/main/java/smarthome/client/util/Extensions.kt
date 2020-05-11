@@ -15,13 +15,21 @@ var View.visible
         }
     }
 
-fun View.fadeVisibility(visible: Boolean) {
+fun View.fadeVisibility(desiredVisible: Boolean, duration: Long = 500) {
     animate()
-            .apply { if (visible) withStartAction { this@fadeVisibility.visible = true } }
-            .alpha(if (visible) 1f else 0f)
-            .apply { this@fadeVisibility.alpha = if (visible) 0f else 1f }
-            .apply { if (!visible) withEndAction() { this@fadeVisibility.visible = false } }
-            .setDuration(600)
+            .apply {
+                when (desiredVisible) {
+                    true -> withStartAction {
+                        this@fadeVisibility.visible = true
+                        this@fadeVisibility.alpha = 0.01f
+                    }
+                    false -> withEndAction {
+                        this@fadeVisibility.visible = false
+                    }
+                }
+            }
+            .alpha(if (desiredVisible) 1f else 0f)
+            .setDuration(duration)
             .start()
 }
 
