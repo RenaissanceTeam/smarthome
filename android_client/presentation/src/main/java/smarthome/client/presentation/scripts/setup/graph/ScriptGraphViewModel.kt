@@ -16,7 +16,7 @@ import smarthome.client.util.Position
 import smarthome.client.util.generateId
 
 class ScriptGraphViewModel : KoinViewModel() {
-    val setupDependency = NavigationParamLiveData<String>()
+    val setupDependency = NavigationParamLiveData<OpenSetupDependency>()
     private val eventBus: GraphEventBus by inject()
     private val getSetupScriptUseCase: GetSetupScriptUseCase by inject()
     private val addBlockUseCase: AddBlockUseCase by inject()
@@ -29,7 +29,7 @@ class ScriptGraphViewModel : KoinViewModel() {
                 .map { it as NavigationEvent }
                 .subscribe { event ->
                     when (event) {
-                        is OpenSetupDependency -> setupDependency.trigger(event.id)
+                        is OpenSetupDependency -> setupDependency.trigger(event)
                     }
                 })
 
@@ -62,6 +62,4 @@ class ScriptGraphViewModel : KoinViewModel() {
                 position = (position)
         ))
     }
-
-
 }

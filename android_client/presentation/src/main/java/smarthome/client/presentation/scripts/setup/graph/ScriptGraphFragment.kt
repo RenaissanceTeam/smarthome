@@ -14,6 +14,7 @@ import smarthome.client.presentation.R
 import smarthome.client.presentation.main.toolbar.ToolbarController
 import smarthome.client.presentation.scripts.setup.SetupScriptViewModel
 import smarthome.client.presentation.scripts.setup.di.setupScope
+import smarthome.client.presentation.scripts.setup.graph.events.navigation.OpenSetupDependency
 import smarthome.client.presentation.util.center
 import smarthome.client.presentation.util.extensions.showToast
 import smarthome.client.util.visible
@@ -72,8 +73,11 @@ class ScriptGraphFragment : Fragment() {
         findNavController().popBackStack(R.id.addScriptInfoFragment, true)
     }
 
-    private fun setupDependency(id: String) {
+    private fun setupDependency(event: OpenSetupDependency) {
         findNavController().navigate(ScriptGraphFragmentDirections
-                .actionAddControllersToScriptFragmentToSetupDependencyFragment(dependencyId = id, isNew = true))
+                .actionAddControllersToScriptFragmentToSetupDependencyFragment(
+                        dependencyId = event.id,
+                        isNew = event.isNew
+                ))
     }
 }

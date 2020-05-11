@@ -170,8 +170,14 @@ class GraphView @JvmOverloads constructor(
     }
 
     private fun getOrInflateDependency(id: String): DependencyArrowView {
-        return dependencyViews[id]
-                ?: DependencyArrowView(context).also(this::addView).also { dependencyViews[id] = it }
+        return dependencyViews[id] ?: createDependency(id)
+    }
+
+    private fun createDependency(id: String): DependencyArrowView {
+        return DependencyArrowView(context)
+                .also(this::addView)
+                .also { dependencyViews[id] = it }
+                .also { it.setOnClick { viewModel.onDependencyClicked(id) } }
     }
 
     private fun handleDroppingBlocksOntoGraph() {
