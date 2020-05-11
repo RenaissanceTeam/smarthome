@@ -154,7 +154,12 @@ class SetupDependencyViewModel : KoinViewModel() {
                                  containerId: ContainerId): Int {
         return containers.orEmpty().indexOfFirst { it.id == containerId }
     }
-    
+
+    fun onDeleteDependency() {
+        removeDependency.execute(dependencyId)
+        close.trigger()
+    }
+
     companion object {
         private val DEFAULT_SELECTION_MODE = false
     }
