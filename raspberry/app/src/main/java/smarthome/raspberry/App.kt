@@ -12,3 +12,5 @@ fun main(args: Array<String>) {
     ObjectMapper().registerModule(KotlinModule())
     runApplication<RaspberryApplication>(*args)
 }
+
+

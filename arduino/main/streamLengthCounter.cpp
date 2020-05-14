@@ -3,7 +3,6 @@
 
 int c = 0;
 size_t PrintLengthCounter::write(uint8_t character) { 
-  Serial.print((char)character);
   c++;
   return 1;
 }

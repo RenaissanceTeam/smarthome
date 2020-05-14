@@ -48,4 +48,5 @@ dependencies {
     implementation library.core
 
     implementation library.arduinoDevices
+    implementation library.reflections
 }

@@ -147,7 +147,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="smarthome.client.presentation.auth.LoginFragment"
+        android:name="smarthome.client.presentation.auth.login.LoginFragment"
         android:label="LoginFragment">
         <action
             android:id="@+id/action_loginFragment_to_homeServerFragment"
@@ -159,6 +159,13 @@
         <action
             android:id="@+id/action_loginFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
@@ -267,5 +274,33 @@
             android:name="show_bottom_bar"
             android:defaultValue="false"
             app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="smarthome.client.presentation.auth.signup.SignUpFragment"
+        android:label="SignUpFragment">
+        <argument
+            android:name="show_tool_bar"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
+        <argument
+            android:name="show_bottom_bar"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_signUpFragment_to_homeServerFragment"
+            app:destination="@id/homeServerFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
+        <action
+            android:id="@+id/action_signUpFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
     </fragment>
 </navigation>
