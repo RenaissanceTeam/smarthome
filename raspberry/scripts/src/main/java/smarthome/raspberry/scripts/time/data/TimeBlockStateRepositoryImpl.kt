@@ -1,12 +1,9 @@
 package smarthome.raspberry.scripts.time.data
 
-import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.joda.time.LocalTime
 import org.springframework.stereotype.Component
 import smarthome.raspberry.entity.script.Block
-import smarthome.raspberry.entity.script.Condition
-import smarthome.raspberry.scripts.api.time.TimerCondition
 import smarthome.raspberry.scripts.api.time.data.TimeBlockStateRepository
 import java.util.*
 
@@ -14,10 +11,6 @@ import java.util.*
 class TimeBlockStateRepositoryImpl : TimeBlockStateRepository {
     private val observables = mutableMapOf<String, BehaviorSubject<Optional<Block>>>()
     private val timers = mutableMapOf<String, Timer>()
-
-    override fun observe(blockId: String): Observable<Optional<Block>> {
-        return getOrCreateObservable(blockId)
-    }
 
     private fun getOrCreateObservable(blockId: String): BehaviorSubject<Optional<Block>> {
         return observables[blockId] ?: BehaviorSubject.createDefault<Optional<Block>>(Optional.empty())
@@ -30,19 +23,16 @@ class TimeBlockStateRepositoryImpl : TimeBlockStateRepository {
 //        getOrCreateObservable(blockId).
     }
 
-    fun scheduleTimer(condition: TimerCondition, period: Long) {
-        val timer = createNewTimer(condition.id)
+//
+//    override fun scheduleNext(id: String, time: LocalTime): Observable<Long> {
+//        val timer = createNewTimer(id)
+//        val observable = PublishSubject.create<Long>()
+//        val time = time.toDateTimeToday().millis
+//        timer.schedule(Date(time)) {
+//            observable.onNext(time)
+//        }
+//    }
 
-        timer.sche
-        object : TimerTask() {
-            override fun run() {
-
-            }
-        }
-
-
-        getOrCreateTimer(condition.id).sch
-    }
 
     private fun createNewTimer(id: String): Timer {
         timers[id]?.apply { cancel() }?.also { timers.remove(id) }

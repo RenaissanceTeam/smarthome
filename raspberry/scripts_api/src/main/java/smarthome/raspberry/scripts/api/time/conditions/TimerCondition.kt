@@ -1,4 +1,4 @@
-package smarthome.raspberry.scripts.api.time
+package smarthome.raspberry.scripts.api.time.conditions
 
 import smarthome.raspberry.entity.script.Condition
 import javax.persistence.Entity

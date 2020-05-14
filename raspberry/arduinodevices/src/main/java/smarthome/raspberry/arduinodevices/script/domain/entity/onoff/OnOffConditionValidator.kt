@@ -1,25 +1,29 @@
 package smarthome.raspberry.arduinodevices.script.domain.entity.onoff
 
 import org.springframework.stereotype.Component
-import smarthome.raspberry.arduinodevices.script.domain.entity.ArduinoControllerBlock
-import smarthome.raspberry.entity.script.Block
+import smarthome.raspberry.scripts.api.controllers.ControllerConditionState
+import smarthome.raspberry.arduinodevices.script.domain.entity.dht.HumidityCondition
 import smarthome.raspberry.entity.script.Condition
+import smarthome.raspberry.scripts.api.domain.ConditionState
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
+import smarthome.raspberry.util.fold
 import java.util.*
 
 @Component
 class OnOffConditionValidator : ConditionValidator {
-    override fun validate(condition: Condition, block: Optional<Block>): Boolean {
-        if (!block.isPresent) return false
-        val blockValue = block.get()
+    override fun validate(condition: Condition, state: Optional<out ConditionState>): Boolean {
 
-        require(condition is OnOffCondition)
-        require(blockValue is ArduinoControllerBlock)
+        return state.fold(
+                onNone = { false },
+                onSome = {
+                    require(condition is HumidityCondition)
+                    require(it is ControllerConditionState)
 
 
-        val currentValue = blockValue.controller.state ?: return false
+                    val currentValue = it.controller.state ?: return@fold false
 
-        return currentValue == condition.value
+                    currentValue == condition.value
+                }
+        )
     }
-
 }

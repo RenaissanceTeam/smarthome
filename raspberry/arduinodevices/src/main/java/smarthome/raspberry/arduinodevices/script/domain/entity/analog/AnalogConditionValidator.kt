@@ -1,27 +1,30 @@
 package smarthome.raspberry.arduinodevices.script.domain.entity.analog
 
 import org.springframework.stereotype.Component
-import smarthome.raspberry.arduinodevices.script.domain.entity.ArduinoControllerBlock
-import smarthome.raspberry.entity.script.Block
+import smarthome.raspberry.scripts.api.controllers.ControllerConditionState
 import smarthome.raspberry.entity.script.Condition
+import smarthome.raspberry.scripts.api.domain.ConditionState
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
+import smarthome.raspberry.util.fold
 import java.util.*
 
 
 @Component
 class AnalogConditionValidator : ConditionValidator {
 
-    override fun validate(condition: Condition, block: Optional<Block>): Boolean {
-        if (!block.isPresent) return false
-        val blockValue = block.get()
+    override fun validate(condition: Condition, state: Optional<out ConditionState>): Boolean {
 
-        require(condition is AnalogCondition)
-        require(blockValue is ArduinoControllerBlock)
+        return state.fold(
+                onNone = { false },
+                onSome = {
+                    require(condition is AnalogCondition)
+                    require(it is ControllerConditionState)
 
+                    val conditionValue = condition.value.toDoubleOrNull() ?: return@fold false
+                    val currentValue = it.controller.state?.toDoubleOrNull() ?: return@fold false
 
-        val conditionValue = condition.value.toDoubleOrNull() ?: return false
-        val currentValue = blockValue.controller.state?.toDoubleOrNull() ?: return false
-
-        return currentValue == conditionValue
+                    currentValue == conditionValue
+                }
+        )
     }
 }

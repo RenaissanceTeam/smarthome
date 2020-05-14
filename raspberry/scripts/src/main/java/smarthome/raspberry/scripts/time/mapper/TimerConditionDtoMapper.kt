@@ -3,7 +3,7 @@ package smarthome.raspberry.scripts.time.mapper
 import org.springframework.stereotype.Component
 import smarthome.raspberry.scripts.api.data.mapper.ConditionDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.resolver.ConditionMapperResolver
-import smarthome.raspberry.scripts.api.time.TimerCondition
+import smarthome.raspberry.scripts.api.time.conditions.TimerCondition
 import smarthome.raspberry.scripts.time.dto.TimerConditionDto
 
 @Component

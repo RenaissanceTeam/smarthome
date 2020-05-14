@@ -12,14 +12,17 @@ import smarthome.raspberry.entity.script.*
 import smarthome.raspberry.scripts.api.domain.ActionRunner
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
 import smarthome.raspberry.scripts.api.domain.BlockObserver
+import smarthome.raspberry.scripts.api.domain.ConditionState
 import smarthome.raspberry.scripts.domain.usecase.RegisterScriptProtocolUseCaseImpl
 import java.util.*
+
+class MockConditionState: ConditionState()
 
 class RegisterScriptProtocolUseCaseImplTest {
 
     private lateinit var protocol: RegisterScriptProtocolUseCaseImpl
-    private lateinit var blockObserver: BlockObserver
-    private lateinit var blockObservers: Map<String, BlockObserver>
+    private lateinit var blockObserver: BlockObserver<MockConditionState>
+    private lateinit var blockObservers: Map<String, BlockObserver<*>>
     private lateinit var conditionValidators: Map<String, ConditionValidator>
     private lateinit var actionRunner: ActionRunner
     private lateinit var actionRunners: Map<String, ActionRunner>
@@ -137,8 +140,8 @@ class RegisterScriptProtocolUseCaseImplTest {
                 dependencies = listOf(dependency)
         )
 
-        val firstState = Block(a.id, a.position)
-        val secondState = Block(a.id, a.position)
+        val firstState = MockConditionState()
+        val secondState = MockConditionState()
 
         whenever(blockObserver.execute(a.id)).then { Observable.just(
                 firstState.toOptional(),
@@ -161,8 +164,8 @@ class RegisterScriptProtocolUseCaseImplTest {
                 dependencies = listOf(dependency)
         )
 
-        val firstState = Block(a.id, a.position)
-        val secondState = Block(a.id, a.position)
+        val firstState = MockConditionState()
+        val secondState = MockConditionState()
 
 
         whenever(blockObserver.execute(a.id)).then { Observable.just(

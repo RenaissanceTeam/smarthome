@@ -1,23 +1,27 @@
 package smarthome.raspberry.scripts.time
 
 import org.springframework.stereotype.Component
-import smarthome.raspberry.entity.script.Block
 import smarthome.raspberry.entity.script.Condition
+import smarthome.raspberry.scripts.api.domain.ConditionState
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
-import smarthome.raspberry.scripts.api.time.TimeBlock
-import smarthome.raspberry.scripts.api.time.TimerCondition
+import smarthome.raspberry.scripts.api.time.TimerStateValid
+import smarthome.raspberry.scripts.api.time.WeekdayStateValid
+import smarthome.raspberry.scripts.api.time.conditions.TimerCondition
+import smarthome.raspberry.scripts.api.time.conditions.WeekdaysCondition
+import smarthome.raspberry.util.fold
 import java.util.*
 
 @Component
-class TimerConditionValidator(
-) : ConditionValidator {
-    override fun validate(condition: Condition, block: Optional<Block>): Boolean {
-        if (!block.isPresent) return false
-        val blockValue = block.get()
+class TimerConditionValidator : ConditionValidator {
 
-        require(condition is TimerCondition)
-        require(blockValue is TimeBlock)
+    override fun validate(condition: Condition, state: Optional<out ConditionState>): Boolean {
+        return state.fold(
+                onNone = { false },
+                onSome = {
+                    require(condition is TimerCondition)
 
-        return false
+                    it is TimerStateValid && it.condition.id == condition.id
+                }
+        )
     }
 }
