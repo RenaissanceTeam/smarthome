@@ -25,6 +25,7 @@ import smarthome.client.presentation.scripts.setup.dependency.container.Containe
 import smarthome.client.presentation.scripts.setup.dependency.container.ContainersController
 import smarthome.client.presentation.scripts.setup.di.setupScope
 import smarthome.client.presentation.util.confirmAction
+import smarthome.client.util.visible
 
 class SetupDependencyFragment : BaseFragment() {
     private val viewModel: SetupDependencyViewModel by viewModels()
@@ -58,6 +59,9 @@ class SetupDependencyFragment : BaseFragment() {
         conditions_recycler.setHasFixedSize(false)
         actions_recycler.adapter = actionsController.adapter
         setupPopupMenuForConditions()
+
+        delete.visible = !viewModel.isNew
+        delete.setOnClickListener { viewModel.onDeleteDependency() }
     }
     
     private fun setupPopupMenuForConditions() {

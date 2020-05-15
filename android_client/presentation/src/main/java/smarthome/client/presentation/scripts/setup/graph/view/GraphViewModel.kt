@@ -139,7 +139,7 @@ class GraphViewModel : KoinViewModel() {
         }
 
         addDependencyUseCase.execute(Dependency(id, from, to))
-        eventBus.addEvent(OpenSetupDependency(id))
+        eventBus.addEvent(OpenSetupDependency(id, isNew = true))
     }
 
     private fun hideBorderOnBlock(to: String) {
@@ -165,5 +165,9 @@ class GraphViewModel : KoinViewModel() {
             cancelCreatingDependency()
             errors.post("This block does not support conditions")
         }
+    }
+
+    fun onDependencyClicked(id: String) {
+        eventBus.addEvent(OpenSetupDependency(id, isNew = false))
     }
 }

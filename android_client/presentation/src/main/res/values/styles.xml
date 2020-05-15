@@ -113,4 +113,13 @@
         <item name="android:paddingEnd">12dp</item>
         <item name="android:paddingStart">12dp</item>
     </style>
+
+
+    <style name="Graph">
+
+    </style>
+
+    <style name="Graph.Block">
+        <item name="cardCornerRadius">7dp</item>
+    </style>
 </resources>

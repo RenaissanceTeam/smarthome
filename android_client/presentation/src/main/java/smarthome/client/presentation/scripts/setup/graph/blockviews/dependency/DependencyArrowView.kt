@@ -5,13 +5,13 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import smarthome.client.presentation.R
+import smarthome.client.presentation.util.extensions.position
 import smarthome.client.util.Position
 import smarthome.client.util.emptyPosition
-import kotlin.math.PI
-import kotlin.math.atan
-import kotlin.math.sign
+import kotlin.math.*
 import kotlin.properties.Delegates
 
 class DependencyArrowView @JvmOverloads constructor(
@@ -29,6 +29,30 @@ class DependencyArrowView @JvmOverloads constructor(
         paint.isAntiAlias = true
 
         inflate(context, R.layout.scripts_dependency_arrow, null)
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (isNotInRange(event.position.x, startPosition.x, endPosition.x)
+                || isNotInRange(event.position.y, startPosition.y, endPosition.y)
+                || !onTheLine(event.position))
+            return false
+
+        return super.onTouchEvent(event)
+    }
+
+    fun setOnClick(listener: () -> Unit) {
+        setOnClickListener { listener() }
+    }
+
+    private fun isNotInRange(toCheck: Int, a: Int, b: Int): Boolean {
+        return !(toCheck > min(a, b) && toCheck < max(a, b))
+    }
+
+    private fun onTheLine(touchPosition: Position): Boolean {
+        val x = (startPosition.y - endPosition.y) * touchPosition.x
+        val y = (endPosition.x - startPosition.x) * touchPosition.y
+        val c = (startPosition.x * endPosition.y) - (endPosition.x * startPosition.y)
+        return abs(x + y + c) < 50000
     }
 
     private var startPosition: Position by Delegates.observable(emptyPosition) { _, old, new ->

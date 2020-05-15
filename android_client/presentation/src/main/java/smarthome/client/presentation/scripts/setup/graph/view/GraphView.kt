@@ -54,6 +54,8 @@ class GraphView @JvmOverloads constructor(
 
     init {
         inflate(R.layout.scripts_graph)
+
+        setOnClickListener { requestFocus() }
     }
 
     override fun onAttachedToWindow() {
@@ -109,7 +111,7 @@ class GraphView @JvmOverloads constructor(
 
     private fun retainOnlyPostedBlocks(blocks: List<BlockState>) {
         (blockViews.keys - blocks.map { it.block.id }).forEach {
-            (blockViews.remove(it)).let(this::removeView)
+            (blockViews.remove(it))?.let(graph::removeView)
         }
     }
 
@@ -170,8 +172,14 @@ class GraphView @JvmOverloads constructor(
     }
 
     private fun getOrInflateDependency(id: String): DependencyArrowView {
-        return dependencyViews[id]
-                ?: DependencyArrowView(context).also(this::addView).also { dependencyViews[id] = it }
+        return dependencyViews[id] ?: createDependency(id)
+    }
+
+    private fun createDependency(id: String): DependencyArrowView {
+        return DependencyArrowView(context)
+                .also(this::addView)
+                .also { dependencyViews[id] = it }
+                .also { it.setOnClick { viewModel.onDependencyClicked(id) } }
     }
 
     private fun handleDroppingBlocksOntoGraph() {
