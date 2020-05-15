@@ -8,7 +8,7 @@ import smarthome.raspberry.scripts.api.data.mapper.ScriptItemDtoMapper
 import smarthome.raspberry.scripts.api.domain.usecase.SaveScriptUseCase
 import smarthome.raspberry.scripts.api.domain.usecase.GetAllScriptsUseCase
 import smarthome.raspberry.scripts.api.domain.usecase.GetScriptByIdUseCase
-
+import smarthome.raspberry.scripts.api.domain.usecase.RemoveScriptUseCase
 
 @RestController
 @RequestMapping("api/scripts")
@@ -17,6 +17,7 @@ class ScriptsController(
         private val getAllScriptsUseCase: GetAllScriptsUseCase,
         private val scriptDtoMapper: ScriptDtoMapper,
         private val getScriptById: GetScriptByIdUseCase,
+        private val removeScript: RemoveScriptUseCase,
         private val scriptItemDtoMapper: ScriptItemDtoMapper
 ) {
 
@@ -38,5 +39,10 @@ class ScriptsController(
     fun getDetails(@PathVariable id: Long): ScriptDto {
         return getScriptById.execute(id)
                 .let(scriptDtoMapper::map)
+    }
+
+    @DeleteMapping("/{id}")
+    fun remove(@PathVariable id: Long) {
+        removeScript.execute(id)
     }
 }

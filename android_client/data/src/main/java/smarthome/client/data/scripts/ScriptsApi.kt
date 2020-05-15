@@ -1,9 +1,6 @@
 package smarthome.client.data.scripts
 
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 import smarthome.client.entity.script.Script
 import smarthome.client.entity.script.ScriptOverview
 
@@ -17,4 +14,7 @@ interface ScriptsApi {
 
     @POST("api/scripts")
     suspend fun save(@Body script: Script): Script
+
+    @DELETE("api/scripts/{id}")
+    suspend fun remove(@Path("id") id: Long)
 }

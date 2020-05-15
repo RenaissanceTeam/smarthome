@@ -19,6 +19,7 @@ class ScriptsController : Typed2EpoxyController<List<ScriptsItemState>, ScriptsV
                     scriptItemView {
                         val script = it.script
 
+                        scriptId(script.id)
                         id(script.id)
                         name(script.name)
                         description(script.description)

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import org.koin.core.inject
+import smarthome.client.domain.api.scripts.RemoveScriptUseCase
 import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
 import smarthome.client.entity.NOT_DEFINED_ID
 import smarthome.client.presentation.scripts.all.items.ScriptsItemState
@@ -11,9 +12,11 @@ import smarthome.client.presentation.util.KoinViewModel
 import smarthome.client.presentation.util.NavigationParamLiveData
 import smarthome.client.presentation.util.ToastLiveData
 import smarthome.client.presentation.util.extensions.runInScopeLoading
+import smarthome.client.presentation.util.extensions.triggerRebuild
 import smarthome.client.presentation.util.extensions.updateWith
 import smarthome.client.util.findAndModify
 import smarthome.client.util.runInScope
+import smarthome.client.util.withRemoved
 
 class ScriptsViewModel : KoinViewModel() {
 
@@ -22,6 +25,7 @@ class ScriptsViewModel : KoinViewModel() {
     val openSetup = NavigationParamLiveData<Long>()
     val errors = ToastLiveData()
     private val getScripts: GetScriptsOverviewUseCase by inject()
+    private val removeScriptUseCase: RemoveScriptUseCase by inject()
 
 
     override fun onResume() {
@@ -69,6 +73,19 @@ class ScriptsViewModel : KoinViewModel() {
                         }
                 )
             }
+        }
+    }
+
+    fun onRemove(scriptId: Long) {
+        runInScopeLoading(viewModelScope, refresh) {
+            kotlin.runCatching { removeScriptUseCase.execute(scriptId) }
+                    .onSuccess {
+                        scripts.updateWith { it?.withRemoved { it.script.id == scriptId } }
+                    }
+                    .onFailure {
+                        errors.post("Can't remove: $it")
+                        scripts.triggerRebuild()
+                    }
         }
     }
 }
