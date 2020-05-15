@@ -41,8 +41,8 @@ open class RegisterScriptProtocolUseCaseImpl(
                     ?: throw IllegalStateException("No block observer for ${dependency.start}")
 
             dependency.start.id.let(blockObserver::execute)
-                    .map { state -> validators.all { it.second.validate(it.first, state) } }
                     .distinct()
+                    .map { state -> validators.all { it.second.validate(it.first, state) } }
                     .filter { it }
                     .doOnNext {
                         dependency.actions.forEach { action ->

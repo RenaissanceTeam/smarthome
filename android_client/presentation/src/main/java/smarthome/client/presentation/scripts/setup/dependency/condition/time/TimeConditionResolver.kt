@@ -32,6 +32,13 @@ class TimeConditionResolver(
     private fun constructEachDayViewModel(eachDay: EachDayCondition): EpoxyModel<EachDayConditionView> {
         return EachDayConditionViewModel_().apply {
             id(eachDay.id.hashCode())
+
+            time(eachDay.time)
+            onChangeTime { newTime ->
+                changeCondition.execute(eachDay.id) {
+                    (it as? EachDayCondition)?.copy(time = newTime) ?: it
+                }
+            }
         }
     }
 
@@ -39,6 +46,12 @@ class TimeConditionResolver(
         return TimerConditionViewModel_().apply {
             id(timer.id.hashCode())
 
+            timer(timer.timer)
+            onChangeTimer { newTimer ->
+                changeCondition.execute(timer.id) {
+                    (it as? TimerCondition)?.copy(timer = newTimer) ?: it
+                }
+            }
         }
     }
 
