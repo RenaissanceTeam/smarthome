@@ -2,12 +2,13 @@ package smarthome.client.data.scripts
 
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import smarthome.client.data.api.scripts.SetupDependencyRepo
 import smarthome.client.entity.script.dependency.Dependency
 
 class SetupDependencyRepoImpl : SetupDependencyRepo {
     private var dependency: Dependency? = null
-    private val dependencyObservable = BehaviorSubject.create<Dependency>()
+    private val dependencyObservable = PublishSubject.create<Dependency>()
 
     override fun get(): Dependency {
         return dependency

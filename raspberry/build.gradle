@@ -45,7 +45,7 @@ def customGenerator = new Generator(
             dependency.getModuleGroup().startsWith("raspberry")
         }, // Only want Firebase.
         { dependency -> true }, // Include transitive dependencies.
-        { node, dependency -> node.add(Style.FILLED, Color.rgb("#ffcb2b")) }, // Give them some color.
+        { node, dependency -> node.add(Style.SOLID, Color.rgb("#000000")) }, // Give them some color.
 
 )
 

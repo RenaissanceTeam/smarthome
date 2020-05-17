@@ -19,10 +19,11 @@ open class RegisterScriptProtocolUseCaseImpl(
         private val actionRunners: Map<String, ActionRunner>,
         private val repo: RegisteredProtocolsRepository
 ) : RegisterScriptProtocolUseCase {
-    private val disposable = CompositeDisposable()
 
     override fun execute(script: Script) {
         if (repo.isRegistered(script.id)) repo.unregister(script.id)
+
+        val disposable = CompositeDisposable()
 
         findTopDependencies(script)
                 .map { dependency ->
