@@ -17,6 +17,7 @@ import smarthome.client.domain.api.scripts.resolver.ActionFromBlockResolver
 import smarthome.client.domain.api.scripts.resolver.ConditionFromBlockResolver
 import smarthome.client.domain.api.scripts.usecases.GetScriptByIdUseCase
 import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
+import smarthome.client.domain.api.scripts.usecases.SetScriptEnabledUseCase
 import smarthome.client.domain.api.scripts.usecases.dependency.*
 import smarthome.client.domain.api.scripts.usecases.setup.*
 import smarthome.client.domain.auth.usecases.*
@@ -34,6 +35,7 @@ import smarthome.client.domain.scripts.blocks.notification.NotificationActionFro
 import smarthome.client.domain.scripts.blocks.time.TimeConditionFromBlockResolver
 import smarthome.client.domain.scripts.usecases.GetScriptByIdUseCaseImpl
 import smarthome.client.domain.scripts.usecases.GetScriptsOverviewUseCaseImpl
+import smarthome.client.domain.scripts.usecases.SetScriptEnabledUseCaseImpl
 import smarthome.client.domain.scripts.usecases.dependency.*
 import smarthome.client.domain.scripts.usecases.setup.*
 
@@ -109,6 +111,7 @@ val domain = module {
     factoryBy<GetScriptsOverviewUseCase, GetScriptsOverviewUseCaseImpl>()
     factoryBy<CheckIfCanStartDependencyFromUseCase, CheckIfCanStartDependencyFromUseCaseImpl>()
     factoryBy<RemoveScriptUseCase, RemoveScriptUseCaseImpl>()
+    factoryBy<SetScriptEnabledUseCase, SetScriptEnabledUseCaseImpl>()
     factory<ActionFromBlockResolver>(named<NotificationActionFromBlockResolver>()) { NotificationActionFromBlockResolver() }
     factory<ConditionFromBlockResolver>(named<TimeConditionFromBlockResolver>()) { TimeConditionFromBlockResolver() }
     factory<ConditionFromBlockResolver>(named<LocationConditionFromBlockResolver>()) { LocationConditionFromBlockResolver() }

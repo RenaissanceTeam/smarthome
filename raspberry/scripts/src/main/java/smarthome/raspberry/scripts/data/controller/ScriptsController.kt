@@ -5,10 +5,7 @@ import smarthome.raspberry.scripts.api.data.dto.ScriptDto
 import smarthome.raspberry.scripts.api.data.dto.ScriptItemDto
 import smarthome.raspberry.scripts.api.data.mapper.ScriptDtoMapper
 import smarthome.raspberry.scripts.api.data.mapper.ScriptItemDtoMapper
-import smarthome.raspberry.scripts.api.domain.usecase.SaveScriptUseCase
-import smarthome.raspberry.scripts.api.domain.usecase.GetAllScriptsUseCase
-import smarthome.raspberry.scripts.api.domain.usecase.GetScriptByIdUseCase
-import smarthome.raspberry.scripts.api.domain.usecase.RemoveScriptUseCase
+import smarthome.raspberry.scripts.api.domain.usecase.*
 
 @RestController
 @RequestMapping("api/scripts")
@@ -18,6 +15,7 @@ class ScriptsController(
         private val scriptDtoMapper: ScriptDtoMapper,
         private val getScriptById: GetScriptByIdUseCase,
         private val removeScript: RemoveScriptUseCase,
+        private val setScriptEnabledUseCase: SetScriptEnabledUseCase,
         private val scriptItemDtoMapper: ScriptItemDtoMapper
 ) {
 
@@ -44,5 +42,10 @@ class ScriptsController(
     @DeleteMapping("/{id}")
     fun remove(@PathVariable id: Long) {
         removeScript.execute(id)
+    }
+
+    @PostMapping("/{id}/enabled")
+    fun setEnabled(@PathVariable id: Long, @RequestBody isEnabled: Boolean) {
+        setScriptEnabledUseCase.execute(id, isEnabled)
     }
 }

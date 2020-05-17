@@ -15,7 +15,7 @@ class SaveScriptUseCaseImpl(
 
     override fun execute(script: Script): Script {
         return repo.save(script).also {
-            registerScriptProtocolUseCase.execute(it)
+            if (it.enabled) registerScriptProtocolUseCase.execute(it)
         }
     }
 }

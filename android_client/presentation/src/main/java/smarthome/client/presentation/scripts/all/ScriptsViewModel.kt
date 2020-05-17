@@ -2,10 +2,10 @@ package smarthome.client.presentation.scripts.all
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
 import org.koin.core.inject
 import smarthome.client.domain.api.scripts.RemoveScriptUseCase
 import smarthome.client.domain.api.scripts.usecases.GetScriptsOverviewUseCase
+import smarthome.client.domain.api.scripts.usecases.SetScriptEnabledUseCase
 import smarthome.client.entity.NOT_DEFINED_ID
 import smarthome.client.presentation.scripts.all.items.ScriptsItemState
 import smarthome.client.presentation.util.KoinViewModel
@@ -26,6 +26,7 @@ class ScriptsViewModel : KoinViewModel() {
     val errors = ToastLiveData()
     private val getScripts: GetScriptsOverviewUseCase by inject()
     private val removeScriptUseCase: RemoveScriptUseCase by inject()
+    private val setScriptEnabledUseCase: SetScriptEnabledUseCase by inject()
 
 
     override fun onResume() {
@@ -54,25 +55,23 @@ class ScriptsViewModel : KoinViewModel() {
 
     fun onEnableClicked(id: Long, enable: Boolean) {
         runInScope(viewModelScope) {
-            scripts.updateWith { scripts ->
-                scripts ?: return@updateWith scripts
-                scripts.findAndModify({ it.script.id == id }, { it.copy(enableInProgress = true) })
-            }
+            updateScriptModel(id) { it.copy(enableInProgress = true) }
 
-            delay(1000)
-
-            scripts.updateWith { scripts ->
-                scripts ?: return@updateWith scripts
-                scripts.findAndModify(
-                        { it.script.id == id },
-                        {
-                            it.copy(
-                                    enableInProgress = false,
-                                    script = it.script.copy(enabled = !it.script.enabled)
-                            )
+            runCatching { setScriptEnabledUseCase.execute(id, enable) }
+                    .onSuccess {
+                        updateScriptModel(id) {
+                            it.copy(script = it.script.copy(enabled = enable))
                         }
-                )
-            }
+                    }
+
+            updateScriptModel(id) { it.copy(enableInProgress = false) }
+        }
+    }
+
+    private fun updateScriptModel(id: Long, partialUpdate: (ScriptsItemState) -> ScriptsItemState) {
+        scripts.updateWith { scripts ->
+            scripts ?: return@updateWith scripts
+            scripts.findAndModify({ it.script.id == id }, partialUpdate)
         }
     }
 

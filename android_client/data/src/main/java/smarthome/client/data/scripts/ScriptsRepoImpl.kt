@@ -19,6 +19,11 @@ class ScriptsRepoImpl(
                 .fetchDetails(id)
     }
 
+    override suspend fun setEnabled(id: Long, isEnabled: Boolean) {
+        retrofitFactory.createApi(ScriptsApi::class.java)
+                .setEnabled(id, isEnabled)
+    }
+
     override suspend fun save(script: Script): Script {
         return retrofitFactory.createApi(ScriptsApi::class.java)
                 .save(script)
