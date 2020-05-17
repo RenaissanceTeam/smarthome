@@ -38,7 +38,7 @@ class SignUpUseCaseImplTest {
         val login = "a"
         val cred = Credentials(login, "pass")
         whenever(authRepo.findByUsername(login)).thenReturn(mock())
-        assertFailsWith<UserExistsException> { useCase.execute(RegistrationInfo(cred, setOf(""))) }
+        assertFailsWith<UserExistsException> { useCase.execute(cred, 1) }
     }
     
     @Test
@@ -50,7 +50,7 @@ class SignUpUseCaseImplTest {
         
         whenever(authRepo.findByUsername(login)).thenReturn(null)
         
-        useCase.execute(RegistrationInfo(cred, role))
+        useCase.execute(cred, 1)
         
         verify(authRepo).save<User>(argThat { this.username == login && this.password == pass })
         verify(roleRepo).save<UserRoles>(argThat { this.username == login && this.roles == role })

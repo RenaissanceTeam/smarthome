@@ -13,7 +13,7 @@ import javax.transaction.Transactional
 @Component
 @Transactional
 open class RegisterScriptProtocolUseCaseImpl(
-        private val blockObservers: Map<String, BlockObserver>,
+        private val blockObservers: Map<String, BlockObserver<*>>,
         private val conditionValidators: Map<String, ConditionValidator>,
         private val actionRunners: Map<String, ActionRunner>
 ) : RegisterScriptProtocolUseCase {
@@ -41,7 +41,7 @@ open class RegisterScriptProtocolUseCaseImpl(
                     ?: throw IllegalStateException("No block observer for ${dependency.start}")
 
             dependency.start.id.let(blockObserver::execute)
-                    .map { block -> validators.all { it.second.validate(it.first, block) } }
+                    .map { state -> validators.all { it.second.validate(it.first, state) } }
                     .distinct()
                     .filter { it }
                     .doOnNext {
@@ -61,7 +61,8 @@ open class RegisterScriptProtocolUseCaseImpl(
     private fun composeRunnerName(action: Action) = "${action::class.simpleName!!.decapitalize()}Runner"
 
     private fun findTopDependencies(script: Script): List<Dependency> {
-        val topBlocks = script.blocks.filter { !script.dependencies.map { it.end.id }.contains(it.id) }
+        val topBlocks = script.blocks
+                .filter { !script.dependencies.map { it.end.id }.contains(it.id) }
         return topBlocks.flatMap { findBlockDependencies(script, it) }
     }
 
