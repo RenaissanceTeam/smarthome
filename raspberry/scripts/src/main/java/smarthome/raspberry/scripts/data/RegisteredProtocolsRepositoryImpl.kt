@@ -3,24 +3,19 @@ package smarthome.raspberry.scripts.data
 import io.reactivex.disposables.Disposable
 import org.springframework.stereotype.Component
 import smarthome.raspberry.scripts.api.data.RegisteredProtocolsRepository
-import smarthome.raspberry.scripts.api.domain.usecase.GetScriptByIdUseCase
-import smarthome.raspberry.scripts.api.domain.usecase.RegisterScriptProtocolUseCase
 import smarthome.raspberry.util.has
 
 @Component
-class RegisteredProtocolsRepositoryImpl(
-        private val registerScriptProtocolUseCase: RegisterScriptProtocolUseCase,
-        private val getScriptByIdUseCase: GetScriptByIdUseCase
-) : RegisteredProtocolsRepository {
+class RegisteredProtocolsRepositoryImpl : RegisteredProtocolsRepository {
     private val protocols = mutableMapOf<Long, Disposable>()
-
-    override fun register(scriptId: Long) {
-        if (protocols has scriptId) unregister(scriptId)
-
-        registerScriptProtocolUseCase.execute(getScriptByIdUseCase.execute(scriptId))
-    }
 
     override fun unregister(scriptId: Long) {
         protocols.remove(scriptId)?.also { it.dispose() }
     }
+
+    override fun register(scriptId: Long, disposable: Disposable) {
+        protocols[scriptId] = disposable
+    }
+
+    override fun isRegistered(id: Long) = protocols has id
 }

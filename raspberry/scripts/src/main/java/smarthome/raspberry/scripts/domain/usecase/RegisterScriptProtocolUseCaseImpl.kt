@@ -1,9 +1,10 @@
 package smarthome.raspberry.scripts.domain.usecase
 
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import org.springframework.stereotype.Component
 import smarthome.raspberry.entity.script.*
+import smarthome.raspberry.scripts.api.data.RegisteredProtocolsRepository
 import smarthome.raspberry.scripts.api.domain.ActionRunner
 import smarthome.raspberry.scripts.api.domain.BlockObserver
 import smarthome.raspberry.scripts.api.domain.ConditionValidator
@@ -15,45 +16,60 @@ import javax.transaction.Transactional
 open class RegisterScriptProtocolUseCaseImpl(
         private val blockObservers: Map<String, BlockObserver<*>>,
         private val conditionValidators: Map<String, ConditionValidator>,
-        private val actionRunners: Map<String, ActionRunner>
+        private val actionRunners: Map<String, ActionRunner>,
+        private val repo: RegisteredProtocolsRepository
 ) : RegisterScriptProtocolUseCase {
     private val disposable = CompositeDisposable()
 
-    override fun execute(script: Script): Disposable {
-        val topDependencies = findTopDependencies(script)
+    override fun execute(script: Script) {
+        if (repo.isRegistered(script.id)) repo.unregister(script.id)
 
-        topDependencies.map { dependency ->
-            val validators = dependency.conditions.map { condition ->
-                val validator = conditionValidators[composeValidatorName(condition)]
-                        ?: throw IllegalStateException("No condition validator for $condition")
+        findTopDependencies(script)
+                .map { dependency ->
+                    val blockObserver = blockObservers[composeObserverName(dependency.start)]
+                            ?: throw IllegalStateException("No block observer for ${dependency.start}")
 
-                condition to validator
-            }
+                    runActionOnValidCondition(dependency, blockObserver)
+                }
+                .map { it.subscribe({}, {}) }
+                .forEach { disposable.add(it) }
 
-            val runners = dependency.actions.map { action ->
-                val runner = actionRunners[composeRunnerName(action)]
-                        ?: throw IllegalStateException("No action runner for $action")
 
-                action to runner
-            }.toMap()
+        repo.register(script.id, disposable)
+    }
 
-            val blockObserver = blockObservers[composeObserverName(dependency.start)]
-                    ?: throw IllegalStateException("No block observer for ${dependency.start}")
-
-            dependency.start.id.let(blockObserver::execute)
-                    .map { state -> validators.all { it.second.validate(it.first, state) } }
-                    .distinct()
-                    .filter { it }
-                    .doOnNext {
-                        dependency.actions.forEach { action ->
-                            runners[action]?.runCatching { runAction(action, dependency.end.id) }
-                        }
+    private fun runActionOnValidCondition(
+            dependency: Dependency,
+            blockObserver: BlockObserver<*>
+    ): Observable<Boolean> {
+        return dependency.start.id.let(blockObserver::execute)
+                .distinct()
+                .map { state -> findValidators(dependency).entries.all { it.value.validate(it.key, state) } }
+                .filter { it }
+                .doOnNext {
+                    dependency.actions.forEach { action ->
+                        findActionRunners(dependency)[action]
+                                ?.runCatching { runAction(action, dependency.end.id) }
                     }
-        }.map {
-            it.subscribe({}, {})
-        }.forEach { disposable.add(it) }
+                }
+    }
 
-        return disposable
+    private fun findActionRunners(dependency: Dependency): Map<Action, ActionRunner> {
+        return dependency.actions.map { action ->
+            val runner = actionRunners[composeRunnerName(action)]
+                    ?: throw IllegalStateException("No action runner for $action")
+
+            action to runner
+        }.toMap()
+    }
+
+    private fun findValidators(dependency: Dependency): Map<Condition, ConditionValidator> {
+        return dependency.conditions.map { condition ->
+            val validator = conditionValidators[composeValidatorName(condition)]
+                    ?: throw IllegalStateException("No condition validator for $condition")
+
+            condition to validator
+        }.toMap()
     }
 
     private fun composeObserverName(block: Block) = "${block::class.simpleName!!.decapitalize()}Observer"

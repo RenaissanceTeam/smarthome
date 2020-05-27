@@ -4,11 +4,14 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import com.airbnb.epoxy.AfterPropsSet
+import com.airbnb.epoxy.CallbackProp
+import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
+import kotlinx.android.synthetic.main.scripts_weekdays_condition.view.*
+import org.joda.time.LocalTime
 import smarthome.client.presentation.R
 import smarthome.client.presentation.scripts.setup.dependency.DependencyUnitView
 import smarthome.client.presentation.util.inflate
-import smarthome.client.util.log
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class EachDayConditionView @JvmOverloads constructor(
@@ -21,7 +24,18 @@ class EachDayConditionView @JvmOverloads constructor(
         viewGroup.inflate(R.layout.scripts_each_day_condition)
     }
 
+    var onChangeTime: ((LocalTime) -> Unit)? = null @CallbackProp set
+
+    @ModelProp
+    lateinit var time: LocalTime
+
+
     @AfterPropsSet
     fun onPropsReady() {
+        if (!timepicker.hasFocus()) timepicker.hour = time.hourOfDay
+        if (!timepicker.hasFocus()) timepicker.minute = time.minuteOfHour
+        timepicker.setOnTimeChangedListener { view, hourOfDay, minute ->
+            onChangeTime?.invoke(LocalTime(hourOfDay, minute))
+        }
     }
 }

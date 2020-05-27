@@ -12,6 +12,7 @@ import com.airbnb.epoxy.ModelView
 import kotlinx.android.synthetic.main.analog_condition_view.view.*
 import smarthome.client.arduino_plugin.R
 import smarthome.client.presentation.scripts.setup.dependency.DependencyUnitView
+import smarthome.client.presentation.util.extensions.disallowInterceptTouchEvent
 import smarthome.client.presentation.util.extensions.setOnChangeListener
 import smarthome.client.presentation.util.inflate
 
@@ -24,6 +25,8 @@ class AnalogConditionView @JvmOverloads constructor(
 
     override fun onCreateView(viewGroup: ViewGroup) {
         viewGroup.inflate(R.layout.analog_condition_view)
+
+        seekbar.disallowInterceptTouchEvent()
     }
 
     var value: Int = 0 @ModelProp set

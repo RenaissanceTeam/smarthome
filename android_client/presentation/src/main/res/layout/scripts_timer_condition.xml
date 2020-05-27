@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="8dp">
 
     <TextView
@@ -13,11 +14,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/timer_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timer_label"
+        android:layout_marginTop="16dp"
+        tools:text="1m 23s"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <SeekBar
+        android:id="@+id/timer_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timer_label" />
+        app:layout_constraintTop_toBottomOf="@id/timer_text" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
