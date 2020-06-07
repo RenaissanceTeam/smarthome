@@ -17,4 +17,7 @@ interface ScriptsApi {
 
     @DELETE("api/scripts/{id}")
     suspend fun remove(@Path("id") id: Long)
+
+    @POST("api/scripts/{id}/enabled")
+    suspend fun setEnabled(@Path("id") id: Long, @Body enabled: Boolean)
 }

@@ -8,4 +8,5 @@ interface ScriptsRepo {
     suspend fun fetchOne(id: Long): Script
     suspend fun save(script: Script): Script
     suspend fun remove(id: Long)
+    suspend fun setEnabled(id: Long, isEnabled: Boolean)
 }
