@@ -23,4 +23,9 @@ class ScriptsRepoImpl(
         return retrofitFactory.createApi(ScriptsApi::class.java)
                 .save(script)
     }
+
+    override suspend fun remove(id: Long) {
+        retrofitFactory.createApi(ScriptsApi::class.java)
+                .remove(id)
+    }
 }

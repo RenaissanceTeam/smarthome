@@ -7,4 +7,5 @@ interface ScriptsRepo {
     suspend fun fetch(): List<ScriptOverview>
     suspend fun fetchOne(id: Long): Script
     suspend fun save(script: Script): Script
+    suspend fun remove(id: Long)
 }

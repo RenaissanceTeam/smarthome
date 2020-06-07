@@ -18,13 +18,17 @@ class EmptyItemView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
     init {
-        val view = inflate(R.layout.empty_item)
-    
+        inflate(R.layout.empty_item)
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
         RotateAnimation(0f, 720f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-            0.5f).apply {
+                0.5f).apply {
             duration = 5000
             interpolator = AccelerateDecelerateInterpolator()
             repeatCount = Animation.INFINITE
-        }.also(view.empty_image::startAnimation)
+        }.also(empty_image::startAnimation)
     }
 }

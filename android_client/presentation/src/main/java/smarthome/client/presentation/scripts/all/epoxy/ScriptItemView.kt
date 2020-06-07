@@ -22,6 +22,7 @@ class ScriptItemView @JvmOverloads constructor(
         inflate(R.layout.script_item)
     }
 
+    var scriptId: Long = 0 @ModelProp set
     lateinit var name: CharSequence @TextProp set
     lateinit var description: CharSequence @TextProp set
     var onClick: (() -> Unit)? = null @CallbackProp set
