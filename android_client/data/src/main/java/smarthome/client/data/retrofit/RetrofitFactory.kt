@@ -1,6 +1,5 @@
 package smarthome.client.data.retrofit
 
-import android.os.SystemClock
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -8,7 +7,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import smarthome.client.domain.api.auth.usecases.GetCurrentTokenUseCase
 import smarthome.client.util.Data
-import smarthome.client.util.log
 
 class RetrofitFactory(
     private val urlHolder: HomeServerUrlHolder,
@@ -20,19 +18,16 @@ class RetrofitFactory(
     
     fun getInstance(): Retrofit {
         val currentUrl = urlHolder.get()
-        
+
         if (url == currentUrl) { retrofit?.let { return it } }
-        
         url = currentUrl
-        
-        val httpClient = addAuthorizationHeaderInHttpClient()
-    
+
         val gson = GsonBuilder().let(typesConfigurator::configure).create()
         
         return Retrofit.Builder()
             .baseUrl(urlHolder.get())
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(httpClient)
+            .client(httpClientWithAuthHeader())
             .build()
             .also { retrofit = it }
     }
@@ -41,7 +36,7 @@ class RetrofitFactory(
         return getInstance().create(c)
     }
     
-    private fun addAuthorizationHeaderInHttpClient() = OkHttpClient.Builder()
+    private fun httpClientWithAuthHeader() = OkHttpClient.Builder()
         .addInterceptor { chain ->
 //            SystemClock.sleep(1000)
             val ongoing = chain.request().newBuilder()

@@ -1,5 +1,6 @@
 apply plugin: 'org.springframework.boot'
 apply from: "$rootDir/gradle/scripts/spring-module.gradle"
+apply plugin: "com.vanniktech.dependency.graph.generator"
 
 bootJar {
     enabled = true
@@ -50,3 +51,17 @@ dependencies {
     implementation library.arduinoDevices
     implementation library.reflections
 }
+
+
+
+
+//def firebaseGenerator = new Generator(
+//        "firebaseLibraries", // Suffix for our Gradle task.
+//        { dependency -> dependency.getModuleGroup().startsWith("smarthome") }, // Only want Firebase.
+//        { dependency -> true }, // Include transitive dependencies.
+//        { node, dependency -> node.add(Style.FILLED, Color.rgb("#ffcb2b")) }, // Give them some color.
+////)
+//
+//dependencyGraphGenerator {
+//    generators = [ firebaseGenerator ]
+//}

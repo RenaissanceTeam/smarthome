@@ -9,12 +9,15 @@ buildscript {
         google()
         jcenter()
         mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.1.RELEASE")
+        classpath "com.vanniktech:gradle-dependency-graph-generator-plugin:0.6.0-SNAPSHOT"
+
     }
 }
 
@@ -27,3 +30,25 @@ allprojects {
 }
 
 apply plugin: 'kotlin'
+
+import com.vanniktech.dependency.graph.generator.DependencyGraphGeneratorPlugin
+import com.vanniktech.dependency.graph.generator.DependencyGraphGeneratorExtension.Generator
+import guru.nidi.graphviz.attribute.Color
+import guru.nidi.graphviz.attribute.Style
+
+plugins.apply(DependencyGraphGeneratorPlugin)
+
+def customGenerator = new Generator(
+        "custom", // Suffix for our Gradle task.
+        { dependency ->
+            println(dependency.getModuleGroup())
+            dependency.getModuleGroup().startsWith("raspberry")
+        }, // Only want Firebase.
+        { dependency -> true }, // Include transitive dependencies.
+        { node, dependency -> node.add(Style.SOLID, Color.rgb("#000000")) }, // Give them some color.
+
+)
+
+dependencyGraphGenerator {
+    generators.add(customGenerator)
+}
